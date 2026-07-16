@@ -1,0 +1,315 @@
+import {
+  CATEGORY_ORDER,
+  type Category,
+  type ComponentEntry,
+  type PropSchema,
+  type TunedValues,
+} from "./types";
+
+// The registry. Sidebar nav, catalog, routes, and generateStaticParams all derive
+// from this array. Adding a component = one entry here + one canonical source file
+// + one preview module registered in components/registry/previews.ts.
+export const registry: ComponentEntry[] = [
+  {
+    slug: "threads",
+    name: "Threads",
+    category: "Backgrounds",
+    tier: "free",
+    description: "A woven field of flowing threads rendered on a WebGL line shader.",
+    dependencies: ["ogl"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/threads/Threads.tsx" }],
+    props: [
+      { name: "color", kind: "color", default: "#a855f7", description: "Line color of the threads." },
+      { name: "amplitude", kind: "number", default: 1.5, min: 0, max: 3, step: 0.05, description: "Wave displacement strength." },
+      { name: "distance", kind: "number", default: 0.2, min: 0, max: 1.5, step: 0.05, description: "Z-spread between the layered lines." },
+      { name: "saturation", kind: "number", default: 1, min: 0, max: 2, step: 0.05, description: "Color saturation of the field." },
+      { name: "opacity", kind: "number", default: 0.7, min: 0, max: 1, step: 0.05, description: "Overall opacity of the threads." },
+      { name: "enableMouseInteraction", kind: "boolean", default: true, description: "Let the cursor bend the field." },
+    ],
+  },
+  {
+    slug: "grainient",
+    name: "Grainient",
+    category: "Backgrounds",
+    tier: "free",
+    description: "An animated grainy mesh-gradient rendered on a WebGL2 shader.",
+    dependencies: ["ogl"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/grainient/Grainient.tsx" }],
+    props: [
+      { name: "timeSpeed", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Overall animation speed." },
+      { name: "warpStrength", kind: "number", default: 0.8, min: 0, max: 2, step: 0.05, description: "Domain-warp intensity." },
+      { name: "warpFrequency", kind: "number", default: 2, min: 0, max: 6, step: 0.1, description: "Warp detail frequency." },
+      { name: "blendSoftness", kind: "number", default: 0.5, min: 0, max: 1, step: 0.01, description: "Softness of the gradient blend." },
+      { name: "noiseScale", kind: "number", default: 1.2, min: 0.2, max: 4, step: 0.05, description: "Scale of the underlying noise." },
+      { name: "grainAmount", kind: "number", default: 0.12, min: 0, max: 0.5, step: 0.01, description: "Film-grain intensity." },
+      { name: "contrast", kind: "number", default: 1, min: 0.5, max: 2, step: 0.05, description: "Output contrast." },
+      { name: "saturation", kind: "number", default: 1.1, min: 0, max: 2, step: 0.05, description: "Output saturation." },
+      { name: "zoom", kind: "number", default: 1, min: 0.3, max: 3, step: 0.05, description: "Camera zoom." },
+      { name: "color1", kind: "color", default: "#a855f7", description: "First gradient color." },
+      { name: "color2", kind: "color", default: "#6d28d9", description: "Second gradient color." },
+      { name: "color3", kind: "color", default: "#22d3ee", description: "Third gradient color." },
+    ],
+  },
+  {
+    slug: "light-rays",
+    name: "LightRays",
+    category: "Backgrounds",
+    tier: "free",
+    description: "Volumetric god-rays from a configurable origin, optionally mouse-following.",
+    dependencies: ["ogl"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/light-rays/LightRays.tsx" }],
+    props: [
+      { name: "raysColor", kind: "color", default: "#a855f7", description: "Ray color." },
+      { name: "raysSpeed", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Animation speed." },
+      { name: "lightSpread", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Angular spread of the rays." },
+      { name: "rayLength", kind: "number", default: 2, min: 0.2, max: 4, step: 0.05, description: "Length of the rays." },
+      { name: "pulsating", kind: "boolean", default: false, description: "Pulse the ray intensity." },
+      { name: "fadeDistance", kind: "number", default: 1, min: 0.2, max: 2, step: 0.05, description: "Distance over which rays fade." },
+      { name: "saturation", kind: "number", default: 1, min: 0, max: 2, step: 0.05, description: "Color saturation." },
+      { name: "followMouse", kind: "boolean", default: true, description: "Aim the rays toward the cursor." },
+      { name: "mouseInfluence", kind: "number", default: 0.1, min: 0, max: 1, step: 0.05, description: "How much the cursor steers the rays." },
+      { name: "noiseAmount", kind: "number", default: 0.1, min: 0, max: 1, step: 0.05, description: "Noise texture over the rays." },
+      { name: "distortion", kind: "number", default: 0.2, min: 0, max: 2, step: 0.05, description: "Wavy distortion of the rays." },
+    ],
+  },
+  {
+    slug: "side-rays",
+    name: "SideRays",
+    category: "Backgrounds",
+    tier: "pro",
+    description: "Corner-anchored two-color light rays with adjustable tilt and blend.",
+    dependencies: ["ogl"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/side-rays/SideRays.tsx" }],
+    props: [
+      { name: "speed", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Animation speed." },
+      { name: "rayColor1", kind: "color", default: "#a855f7", description: "First ray color." },
+      { name: "rayColor2", kind: "color", default: "#22d3ee", description: "Second ray color." },
+      { name: "intensity", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Ray brightness." },
+      { name: "spread", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Angular spread." },
+      { name: "tilt", kind: "number", default: 0, min: -1, max: 1, step: 0.05, description: "Tilt of the ray bundle." },
+      { name: "saturation", kind: "number", default: 1, min: 0, max: 2, step: 0.05, description: "Color saturation." },
+      { name: "blend", kind: "number", default: 0.5, min: 0, max: 1, step: 0.05, description: "Blend between the two colors." },
+      { name: "falloff", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Edge falloff." },
+      { name: "opacity", kind: "number", default: 0.9, min: 0, max: 1, step: 0.05, description: "Overall opacity." },
+    ],
+  },
+  {
+    slug: "dot-field",
+    name: "DotField",
+    category: "Backgrounds",
+    tier: "free",
+    description: "An interactive dot grid that bulges and glows around the cursor.",
+    dependencies: [],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/dot-field/DotField.tsx" }],
+    props: [
+      { name: "dotRadius", kind: "number", default: 1.5, min: 0.5, max: 5, step: 0.5, unit: "px", description: "Radius of each dot." },
+      { name: "dotSpacing", kind: "number", default: 25, min: 10, max: 50, step: 1, unit: "px", description: "Spacing between dots." },
+      { name: "cursorRadius", kind: "number", default: 500, min: 100, max: 800, step: 10, unit: "px", description: "Cursor influence radius." },
+      { name: "cursorForce", kind: "number", default: 0.1, min: 0, max: 1, step: 0.01, description: "Strength of the cursor push." },
+      { name: "bulgeOnly", kind: "boolean", default: true, description: "Bulge toward the cursor only (no repel)." },
+      { name: "bulgeStrength", kind: "number", default: 67, min: 0, max: 150, step: 1, description: "Bulge displacement strength." },
+      { name: "glowRadius", kind: "number", default: 160, min: 0, max: 400, step: 10, unit: "px", description: "Radius of the cursor glow." },
+      { name: "sparkle", kind: "boolean", default: false, description: "Add a sparkle shimmer." },
+      { name: "waveAmplitude", kind: "number", default: 0, min: 0, max: 20, step: 0.5, description: "Ambient wave motion." },
+      { name: "gradientFrom", kind: "color", default: "#a855f7", description: "Dot gradient start." },
+      { name: "gradientTo", kind: "color", default: "#b497cf", description: "Dot gradient end." },
+      { name: "glowColor", kind: "color", default: "#ffffff", description: "Cursor glow color." },
+    ],
+  },
+  {
+    slug: "strands",
+    name: "Strands",
+    category: "Backgrounds",
+    tier: "pro",
+    description: "Glowing wavy light-strands with an optional glass refraction lens.",
+    dependencies: ["ogl"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/strands/Strands.tsx" }],
+    props: [
+      { name: "count", kind: "number", default: 12, min: 3, max: 40, step: 1, description: "Number of strands." },
+      { name: "speed", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Animation speed." },
+      { name: "amplitude", kind: "number", default: 0.6, min: 0, max: 2, step: 0.05, description: "Wave amplitude." },
+      { name: "waviness", kind: "number", default: 1, min: 0, max: 3, step: 0.05, description: "Waviness of the strands." },
+      { name: "thickness", kind: "number", default: 1, min: 0.2, max: 4, step: 0.05, description: "Strand thickness." },
+      { name: "glow", kind: "number", default: 0.6, min: 0, max: 2, step: 0.05, description: "Glow strength." },
+      { name: "spread", kind: "number", default: 1, min: 0, max: 2, step: 0.05, description: "Vertical spread." },
+      { name: "intensity", kind: "number", default: 1, min: 0, max: 2, step: 0.05, description: "Color intensity." },
+      { name: "saturation", kind: "number", default: 1, min: 0, max: 2, step: 0.05, description: "Color saturation." },
+      { name: "opacity", kind: "number", default: 0.9, min: 0, max: 1, step: 0.05, description: "Overall opacity." },
+      { name: "glass", kind: "boolean", default: false, description: "Overlay a glass refraction lens." },
+      { name: "refraction", kind: "number", default: 0.5, min: 0, max: 2, step: 0.05, description: "Glass refraction strength." },
+      { name: "dispersion", kind: "number", default: 0.5, min: 0, max: 2, step: 0.05, description: "Chromatic dispersion." },
+    ],
+  },
+  {
+    slug: "ribbons",
+    name: "Ribbons",
+    category: "Backgrounds",
+    tier: "pro",
+    description: "Flowing translucent ribbons drifting across a canvas.",
+    dependencies: [],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/ribbons/Ribbons.tsx" }],
+    props: [
+      { name: "color", kind: "color", default: "#a855f7", description: "Ribbon color." },
+      { name: "colorAlpha", kind: "number", default: 0.5, min: 0, max: 1, step: 0.05, description: "Ribbon opacity." },
+      { name: "ribbonCount", kind: "number", default: 5, min: 1, max: 12, step: 1, description: "Number of ribbons on screen." },
+      { name: "strokeSize", kind: "number", default: 4, min: 0, max: 20, step: 1, unit: "px", description: "Outline thickness." },
+      { name: "horizontalSpeed", kind: "number", default: 8, min: 1, max: 30, step: 1, description: "Drift speed across the canvas." },
+      { name: "parallaxAmount", kind: "number", default: 0, min: 0, max: 2, step: 0.05, description: "Scroll parallax factor." },
+      { name: "verticalPosition", kind: "enum", default: "random", options: ["top", "middle", "bottom", "random"], description: "Where ribbons spawn vertically." },
+      { name: "animateSections", kind: "boolean", default: true, description: "Wiggle ribbon segments over time." },
+    ],
+  },
+  {
+    slug: "morphing-text",
+    name: "MorphingText",
+    category: "Text Animations",
+    tier: "free",
+    description: "A gooey blur-morph that cross-dissolves between a list of words.",
+    dependencies: [],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/morphing-text/MorphingText.tsx" }],
+    props: [
+      { name: "auto", kind: "boolean", default: true, description: "Loop through the words forever (off = morph once)." },
+    ],
+  },
+  {
+    slug: "animated-number",
+    name: "AnimatedNumber",
+    category: "Text Animations",
+    tier: "free",
+    description: "Animated numeric transitions with flip, slide, fade, and bounce styles.",
+    dependencies: ["motion"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/animated-number/AnimatedNumber.tsx" }],
+    props: [
+      { name: "value", kind: "number", default: 42, min: 0, max: 9999, step: 1, description: "The value to display and animate to." },
+      { name: "animationType", kind: "enum", default: "flip", options: ["flip", "slide", "fade", "scale-bounce"], description: "Transition style between values." },
+      { name: "duration", kind: "number", default: 0.4, min: 0.1, max: 2, step: 0.05, unit: "s", description: "Transition duration." },
+    ],
+  },
+  {
+    slug: "marquee-text",
+    name: "MarqueeText",
+    category: "Text Animations",
+    tier: "free",
+    description: "A marquee that scrolls only when its text overflows the container.",
+    dependencies: [],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/marquee-text/MarqueeText.tsx" }],
+    props: [
+      { name: "speed", kind: "number", default: 35, min: 5, max: 120, step: 5, description: "Scroll speed (px/s)." },
+      { name: "gap", kind: "number", default: 40, min: 0, max: 120, step: 4, unit: "px", description: "Gap between repetitions." },
+      { name: "pause", kind: "number", default: 5, min: 0, max: 15, step: 0.5, unit: "s", description: "Pause at the start before scrolling." },
+    ],
+  },
+  {
+    slug: "variable-proximity",
+    name: "VariableProximity",
+    category: "Text Animations",
+    tier: "pro",
+    description: "Text whose letters interpolate font weight by cursor proximity.",
+    dependencies: ["motion"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/variable-proximity/VariableProximity.tsx" }],
+    props: [
+      { name: "radius", kind: "number", default: 80, min: 20, max: 200, step: 5, unit: "px", description: "Cursor influence radius." },
+      { name: "falloff", kind: "enum", default: "linear", options: ["linear", "exponential", "gaussian"], description: "How influence falls off with distance." },
+    ],
+  },
+  {
+    slug: "pixel-transition",
+    name: "PixelTransition",
+    category: "Micro-interactions",
+    tier: "free",
+    description: "Reveal a second layer through a random pixelated dissolve on hover.",
+    dependencies: ["gsap"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/pixel-transition/PixelTransition.tsx" }],
+    props: [
+      { name: "gridSize", kind: "number", default: 7, min: 2, max: 20, step: 1, description: "Pixel grid resolution." },
+      { name: "pixelColor", kind: "color", default: "#a855f7", description: "Color of the dissolve pixels." },
+      { name: "animationStepDuration", kind: "number", default: 0.3, min: 0.1, max: 1, step: 0.05, unit: "s", description: "Duration of the dissolve." },
+      { name: "once", kind: "boolean", default: false, description: "Play only once instead of on every hover." },
+    ],
+  },
+  {
+    slug: "border-glow",
+    name: "BorderGlow",
+    category: "Micro-interactions",
+    tier: "free",
+    description: "A cursor-proximity gradient border with an outer glow.",
+    dependencies: [],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/border-glow/BorderGlow.tsx" }],
+    props: [
+      { name: "glowColor", kind: "color", default: "#a855f7", description: "Glow color." },
+      { name: "glowRadius", kind: "number", default: 12, min: 0, max: 40, step: 1, unit: "px", description: "Outer glow radius." },
+      { name: "glowIntensity", kind: "number", default: 1, min: 0, max: 2, step: 0.05, description: "Glow brightness." },
+      { name: "coneSpread", kind: "number", default: 35, min: 5, max: 50, step: 1, description: "Angular spread of the glow cone." },
+      { name: "edgeSensitivity", kind: "number", default: 30, min: 0, max: 80, step: 1, description: "How close to the edge the glow activates." },
+      { name: "borderRadius", kind: "number", default: 16, min: 0, max: 40, step: 1, unit: "px", description: "Corner radius." },
+      { name: "fillOpacity", kind: "number", default: 0.5, min: 0, max: 1, step: 0.05, description: "Border fill opacity." },
+      { name: "animated", kind: "boolean", default: false, description: "Play an intro sweep on mount." },
+    ],
+  },
+  {
+    slug: "spotlight-shell",
+    name: "SpotlightShell",
+    category: "Micro-interactions",
+    tier: "free",
+    description: "A card shell with 3D magnetic tilt, radial glow, and a shimmer sweep.",
+    dependencies: ["motion"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/spotlight-shell/SpotlightShell.tsx" }],
+    props: [
+      { name: "accentColor", kind: "color", default: "#a855f7", description: "Accent color for the glow and accent line." },
+    ],
+  },
+  {
+    slug: "animated-hamburger",
+    name: "AnimatedHamburger",
+    category: "Micro-interactions",
+    tier: "free",
+    description: "A three-bar hamburger that morphs to an X, driven by an open prop.",
+    dependencies: ["motion"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/animated-hamburger/AnimatedHamburger.tsx" }],
+    props: [
+      { name: "open", kind: "boolean", default: false, description: "Toggle between the hamburger and the X." },
+    ],
+  },
+  {
+    slug: "command-palette",
+    name: "CommandPalette",
+    category: "Power-User Systems",
+    tier: "pro",
+    description: "A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
+    dependencies: ["cmdk", "motion", "lucide-react"],
+    variants: [{ lang: "ts", style: "tailwind", file: "components/registry/command-palette/CommandPalette.tsx" }],
+    props: [
+      { name: "hotkey", kind: "enum", default: "cmd+k", options: ["cmd+k", "ctrl+k", "/"], description: "Shortcut that opens the palette." },
+      { name: "loop", kind: "boolean", default: true, description: "Wrap keyboard selection at the list ends." },
+      { name: "glass", kind: "boolean", default: false, description: "Liquid-glass surface instead of a solid panel." },
+    ],
+  },
+];
+
+export function getEntry(slug: string): ComponentEntry | undefined {
+  return registry.find((entry) => entry.slug === slug);
+}
+
+export function getAllSlugs(): string[] {
+  return registry.map((entry) => entry.slug);
+}
+
+export interface CategoryGroup {
+  category: Category;
+  entries: ComponentEntry[];
+}
+
+/** Registry grouped by category in fixed order; empty categories are omitted. */
+export function groupByCategory(entries: ComponentEntry[] = registry): CategoryGroup[] {
+  return CATEGORY_ORDER.map((category) => ({
+    category,
+    entries: entries.filter((entry) => entry.category === category),
+  })).filter((group) => group.entries.length > 0);
+}
+
+/** Build the default tuned-values object from a prop schema. */
+export function defaultsFromSchema(props: PropSchema[]): TunedValues {
+  const out: TunedValues = {};
+  for (const prop of props) out[prop.name] = prop.default;
+  return out;
+}

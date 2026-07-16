@@ -1,26 +1,218 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* next-themes toggles `.dark` on <html>; drive the dark variant off it. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  Shadow Garden — an instrument-bench identity.
+  Graphite chrome, one Amethyst accent. The live component previews supply all
+  the real color; the shell stays chromatically quiet. Dark is the native
+  identity; a light "lab bench" theme slots in via the runtime tokens below.
+*/
+@theme {
+  /* Graphite ramp — the raw palette, theme-independent */
+  --color-bench-950: #0a0b0c;
+  --color-bench-900: #0e1012;
+  --color-bench-850: #131619;
+  --color-bench-800: #191d21;
+  --color-bench-750: #20242a;
+  --color-bench-700: #2a2f36;
+  --color-bench-600: #3a4048;
+  --color-bench-500: #4e555e;
+  --color-bench-400: #6c737c;
+  --color-bench-300: #939aa2;
+  --color-bench-200: #bcc2c8;
+  --color-bench-100: #e2e6e9;
+  --color-bench-50: #f3f5f6;
+
+  /* Type roles: mono display+readouts (Space Mono), sans body (Geist), mono code (Geist Mono) */
+  --font-display: var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
+/*
+  Semantic roles resolve to runtime custom properties (--sg-*) so a theme swap
+  re-tints the whole shell. `inline` keeps the utilities referencing the runtime
+  var rather than freezing today's value.
+*/
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--sg-surface);
+  --color-panel: var(--sg-panel);
+  --color-raised: var(--sg-raised);
+  --color-hairline: var(--sg-hairline);
+  --color-ink: var(--sg-ink);
+  --color-ink-dim: var(--sg-ink-dim);
+  --color-ink-mute: var(--sg-ink-mute);
+  --color-accent: var(--sg-accent);
+  --color-accent-hover: var(--sg-accent-hover);
+  --color-accent-active: var(--sg-accent-active);
+  --color-accent-muted: var(--sg-accent-muted);
+  --color-on-accent: var(--sg-on-accent);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Light — the lab bench under bright light (default when no class is present). */
+:root {
+  --sg-surface: #eceef1;
+  --sg-panel: #ffffff;
+  --sg-raised: #f1f3f6;
+  --sg-hairline: #d3d8de;
+  --sg-ink: #16191d;
+  --sg-ink-dim: #545b64;
+  --sg-ink-mute: #878e97;
+  --sg-accent: #7e22ce;
+  --sg-accent-hover: #6b21a8;
+  --sg-accent-active: #581c87;
+  --sg-accent-muted: #d8b4fe;
+  --sg-on-accent: #ffffff;
+  --sg-grid: color-mix(in oklab, var(--color-bench-500) 12%, transparent);
+  color-scheme: light;
+}
+
+/* Dark — the native graphite instrument. next-themes applies `.dark` pre-paint. */
+.dark {
+  --sg-surface: var(--color-bench-950);
+  --sg-panel: var(--color-bench-900);
+  --sg-raised: var(--color-bench-800);
+  --sg-hairline: var(--color-bench-700);
+  --sg-ink: var(--color-bench-100);
+  --sg-ink-dim: var(--color-bench-400);
+  --sg-ink-mute: var(--color-bench-500);
+  --sg-accent: #a855f7;
+  --sg-accent-hover: #b87df9;
+  --sg-accent-active: #9333ea;
+  --sg-accent-muted: #5b3a7a;
+  --sg-on-accent: var(--color-bench-950);
+  --sg-grid: color-mix(in oklab, var(--color-bench-600) 14%, transparent);
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    /* Faint measurement grid — reads as a workbench, stays under opaque panels */
+    background-image:
+      linear-gradient(to right, var(--sg-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--sg-grid) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--sg-accent) 26%, transparent);
+    color: var(--color-ink);
+  }
+
+  /* Accent focus ring on every keyboard-focused control (a11y floor) */
+  :focus-visible {
+    outline: 2px solid var(--sg-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* The signature control: detented slider with a squarish amethyst thumb. */
+  .bench-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--sg-hairline);
+    cursor: pointer;
+  }
+  .bench-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 14px;
+    width: 14px;
+    border-radius: 3px;
+    background: var(--sg-accent);
+    border: 1px solid var(--sg-accent-active);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--sg-accent) 16%, transparent);
+    transition: transform 0.08s ease;
+  }
+  .bench-range::-webkit-slider-thumb:hover {
+    transform: scale(1.12);
+  }
+  .bench-range::-moz-range-thumb {
+    height: 14px;
+    width: 14px;
+    border-radius: 3px;
+    background: var(--sg-accent);
+    border: 1px solid var(--sg-accent-active);
+  }
+  .bench-range::-moz-range-track {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--sg-hairline);
+  }
+
+  /*
+    Code surface stays graphite in both themes: Shiki highlights server-side with
+    a dark theme ("vesper"), so its tokens are only legible on a dark ground.
+  */
+  .shiki-wrap {
+    background: var(--color-bench-950);
+  }
+  .shiki-wrap pre.shiki {
+    margin: 0;
+    padding: 1rem;
+    background: transparent !important;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .shiki-wrap code {
+    font-family: var(--font-mono);
+  }
+
+  /* Compact react-colorful to fit the controls. */
+  .bench-colorpicker .react-colorful {
+    width: 100%;
+    height: 132px;
+  }
+  .bench-colorpicker .react-colorful__saturation {
+    border-radius: 6px 6px 0 0;
+  }
+  .bench-colorpicker .react-colorful__hue {
+    height: 14px;
+    border-radius: 0 0 6px 6px;
+  }
+  .bench-colorpicker .react-colorful__pointer {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Animated theme toggle (View Transitions). ThemeToggle wraps the theme swap in
+   document.startViewTransition() and animates a clip-path reveal of the new theme
+   expanding from the button. See lib/theme-transition.ts. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none; /* kill the default cross-fade */
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1; /* old theme stays underneath */
+}
+::view-transition-new(root) {
+  z-index: 2; /* new theme reveals on top */
+}
+/* Pin the collapsed clip-path until the JS clip-path animation runs so Firefox
+   does not paint the new theme unclipped between snapshot and animation start. */
+[data-magicui-theme-vt="active"]::view-transition-new(root) {
+  clip-path: var(--magicui-theme-vt-clip-from);
+}
+
+/* Honor prefers-reduced-motion globally as a backstop; components also gate individually. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
