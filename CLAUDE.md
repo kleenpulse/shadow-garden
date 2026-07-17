@@ -39,4 +39,5 @@ Commercial, animation-forward React component showcase (name from _The Eminence 
 
 - `bun run build` must stay PPR-clean (◐ Partial Prerender, no Cache Components violations). Offline install when npm is flaky: `bun add <pkg> --offline` (the bun cache holds many packages).
 - A dev server usually runs on `:3000`. Do **not** `next build` while it runs — they fight over `.next`. Smoke-test against `:3000`, or stop the dev server first.
+- Do **not** `bun install`/`bun add` while the dev server runs — turbopack compiles half-written node_modules mid-install → phantom parse errors in Next internals ("Expected '}', got '<eof>'" in layout-router.js), Fast Refresh reload loops, "Element type is invalid" crashes. Stop dev, install, restart; if it happened anyway, delete `.next` before restarting.
 - Verify loop: `bunx tsc --noEmit`, then curl `:3000` routes. Note: curl runs no JS, so it won't catch client-only render issues — eyeball those in a browser.

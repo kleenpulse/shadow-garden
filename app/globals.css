@@ -53,6 +53,7 @@
 	--color-accent-active: var(--sg-accent-active);
 	--color-accent-muted: var(--sg-accent-muted);
 	--color-on-accent: var(--sg-on-accent);
+	--color-danger: var(--sg-danger);
 }
 
 /* Light — the lab bench under bright light (default when no class is present). */
@@ -69,6 +70,7 @@
 	--sg-accent-active: #581c87;
 	--sg-accent-muted: #d8b4fe;
 	--sg-on-accent: #ffffff;
+	--sg-danger: #dc2626;
 	--sg-grid: color-mix(in oklab, var(--color-bench-500) 4%, transparent);
 	--sg-scroll: #c3c9cf;
 	color-scheme: light;
@@ -88,6 +90,7 @@
 	--sg-accent-active: #9333ea;
 	--sg-accent-muted: #5b3a7a;
 	--sg-on-accent: var(--color-bench-950);
+	--sg-danger: #f87171;
 	--sg-grid: color-mix(in oklab, var(--color-bench-600) 12%, transparent);
 	--sg-scroll: #464d56;
 	color-scheme: dark;
@@ -262,5 +265,63 @@
 		animation-iteration-count: 1 !important;
 		transition-duration: 0.01ms !important;
 		scroll-behavior: auto !important;
+	}
+}
+
+/* Living wordmark (components/Wordmark.tsx). The resting sweep migrates the
+   accent across the two words; the cursor blinks only during a burst. Both are
+   theme-aware via the semantic --color-* vars, and the reduced-motion backstop
+   above freezes them to a static gradient / hidden cursor. */
+@keyframes wordmark-sweep {
+	to {
+		background-position: -200% 0;
+	}
+}
+@keyframes wordmark-blink {
+	0%,
+	50% {
+		opacity: 1;
+	}
+	50.01%,
+	100% {
+		opacity: 0;
+	}
+}
+
+@layer components {
+	/* Gradient shimmer overlay (layer B of the wordmark). Absolutely stacked over
+	   the solid two-tone glyphs; only its opacity animates, so the switch between
+	   solid and gradient is a crossfade, not a paint-model snap. */
+	.wordmark-shimmer {
+		position: absolute;
+		left: 0;
+		top: 0;
+		white-space: nowrap;
+		pointer-events: none;
+		background: linear-gradient(
+			90deg,
+			var(--color-ink) 0%,
+			var(--color-accent) 25%,
+			var(--color-ink) 50%,
+			var(--color-accent) 75%,
+			var(--color-ink) 100%
+		);
+		background-size: 200% 100%;
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+		animation: wordmark-sweep 6s linear infinite;
+		transition: opacity 0.8s ease;
+	}
+	/* visibility (not opacity) so the resting bg-clip-text gradient on the parent
+	   doesn't fill the cursor's glyph shape — hidden text is excluded from the
+	   text clip, opacity:0 text is not. Width is still reserved → no reflow. */
+	.wordmark-cursor {
+		color: var(--color-accent);
+		visibility: hidden;
+	}
+	.wordmark-cursor[data-on="true"] {
+		visibility: visible;
+		animation: wordmark-blink 1s steps(1, end) infinite;
 	}
 }

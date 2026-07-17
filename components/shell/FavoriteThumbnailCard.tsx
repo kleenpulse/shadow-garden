@@ -6,6 +6,7 @@ import { useReducedMotion } from "motion/react";
 import type { ComponentEntry, PropSchema } from "@/lib/registry/types";
 import { defaultsFromSchema } from "@/lib/registry";
 import { previews } from "@/components/registry/previews";
+import PreviewBoundary from "./PreviewBoundary";
 import TierBadge from "./TierBadge";
 import FavoriteButton from "./FavoriteButton";
 import { useThumbnailSlot } from "./thumbnail-slots";
@@ -39,10 +40,17 @@ export default function FavoriteThumbnailCard({
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-raised">
         {showLive ? (
           <div className="pointer-events-none absolute inset-0">
-            <Preview
-              values={defaultsFromSchema(entry.props)}
-              reducedMotion={Boolean(reduced)}
-            />
+            <PreviewBoundary
+              slug={entry.slug}
+              label={entry.name}
+              variant="inline"
+              showRetry={false}
+            >
+              <Preview
+                values={defaultsFromSchema(entry.props)}
+                reducedMotion={Boolean(reduced)}
+              />
+            </PreviewBoundary>
           </div>
         ) : (
           <div

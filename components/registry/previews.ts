@@ -28,4 +28,5 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "grow-dialog": dynamic(() => import("./grow-dialog/GrowDialogPreview"), { ssr: false }),
   "sakura-tree": dynamic(() => import("./sakura-tree/SakuraTreePreview"), { ssr: false }),
   "command-palette": dynamic(() => import("./command-palette/CommandPalettePreview"), { ssr: false }),
+  "world-map-ascii": dynamic(() => import("./world-map-ascii/WorldMapAsciiPreview"), { ssr: false }),
 };

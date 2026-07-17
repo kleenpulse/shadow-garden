@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion, useInView, useReducedMotion } from "motion/react";
+import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
 const Threads = dynamic(() => import("@/components/registry/threads/Threads"), {
 	ssr: false,
@@ -54,15 +55,17 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 			{/* The field bends toward the cursor over open hero space; content above it
           keeps its own pointer events. */}
 			<div className="absolute inset-0 opacity-70">
-				<Threads
-					color={hero.color}
-					amplitude={hero.amplitude}
-					distance={hero.distance}
-					opacity={hero.opacity}
-					saturation={1}
-					enableMouseInteraction={!reduce}
-					paused={reduce || !inView}
-				/>
+				<PreviewBoundary slug="threads" label="Threads" variant="silent">
+					<Threads
+						color={hero.color}
+						amplitude={hero.amplitude}
+						distance={hero.distance}
+						opacity={hero.opacity}
+						saturation={1}
+						enableMouseInteraction={!reduce}
+						paused={reduce || !inView}
+					/>
+				</PreviewBoundary>
 			</div>
 
 			<motion.div

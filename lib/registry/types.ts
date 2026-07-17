@@ -28,6 +28,8 @@ type PropBase = {
   label?: string;
   /** One-line description, shown in the API table. */
   description: string;
+  /** Disable this control while another tuned prop equals the given value. */
+  disabledWhen?: { prop: string; equals: PropValue };
 };
 
 export type NumberProp = PropBase & {

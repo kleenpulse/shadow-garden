@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useReducedMotion } from "motion/react";
 import BorderGlow from "@/components/registry/border-glow/BorderGlow";
 import { AnimatedNumber } from "@/components/registry/animated-number/AnimatedNumber";
+import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import type { LandingData } from "@/components/landing/data";
 
 // BorderGlow's glowColor is an "H S L" triplet string; convert from the hex the
@@ -48,21 +49,23 @@ export default function TuningProof({ tuning }: { tuning: LandingData["tuning"] 
   return (
     <div className="grid items-center gap-10 lg:grid-cols-[1fr_320px]">
       <div className="flex items-center justify-center py-4">
-        <BorderGlow
-          glowColor={hexToHsl(tuning.glowColor)}
-          backgroundColor="var(--color-panel)"
-          glowRadius={values.glowRadius}
-          coneSpread={values.coneSpread}
-          glowIntensity={tuning.glowIntensity}
-          edgeSensitivity={tuning.edgeSensitivity}
-          borderRadius={tuning.borderRadius}
-          fillOpacity={tuning.fillOpacity}
-          animateInView={!reduce}
-        >
-          <div className="flex h-52 w-72 items-center justify-center p-6 text-center font-display text-xs uppercase tracking-[0.2em] text-ink-dim">
-            Move your cursor to the edges
-          </div>
-        </BorderGlow>
+        <PreviewBoundary slug="border-glow" label="BorderGlow" variant="stage">
+          <BorderGlow
+            glowColor={hexToHsl(tuning.glowColor)}
+            backgroundColor="var(--color-panel)"
+            glowRadius={values.glowRadius}
+            coneSpread={values.coneSpread}
+            glowIntensity={tuning.glowIntensity}
+            edgeSensitivity={tuning.edgeSensitivity}
+            borderRadius={tuning.borderRadius}
+            fillOpacity={tuning.fillOpacity}
+            animateInView={!reduce}
+          >
+            <div className="flex h-52 w-72 items-center justify-center p-6 text-center font-display text-xs uppercase tracking-[0.2em] text-ink-dim">
+              Move your cursor to the edges
+            </div>
+          </BorderGlow>
+        </PreviewBoundary>
       </div>
 
       <div className="flex flex-col gap-7">
@@ -71,12 +74,14 @@ export default function TuningProof({ tuning }: { tuning: LandingData["tuning"] 
             <span className="flex items-baseline justify-between font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute">
               <span>{slider.label}</span>
               <span className="flex items-baseline gap-1 text-ink">
-                <AnimatedNumber
-                  value={values[slider.name]}
-                  animationType="flip"
-                  duration={0.25}
-                  className="font-display text-sm"
-                />
+                <PreviewBoundary slug="animated-number" label="AnimatedNumber" variant="silent">
+                  <AnimatedNumber
+                    value={values[slider.name]}
+                    animationType="flip"
+                    duration={0.25}
+                    className="font-display text-sm"
+                  />
+                </PreviewBoundary>
                 {slider.unit ? <span>{slider.unit}</span> : null}
               </span>
             </span>

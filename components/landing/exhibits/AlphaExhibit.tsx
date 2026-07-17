@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import ExhibitFrame from "@/components/landing/ExhibitFrame";
+import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
 const DotField = dynamic(() => import("@/components/registry/dot-field/DotField"), {
   ssr: false,
@@ -14,7 +15,9 @@ export default function AlphaExhibit() {
     <ExhibitFrame plate className="h-90 sm:h-105">
       {({ active }) => (
         <div className="absolute inset-0">
-          <DotField sparkle={false} waveAmplitude={active ? 6 : 0} />
+          <PreviewBoundary slug="dot-field" label="DotField" variant="stage">
+            <DotField sparkle={false} waveAmplitude={active ? 6 : 0} />
+          </PreviewBoundary>
         </div>
       )}
     </ExhibitFrame>

@@ -9,10 +9,10 @@ export default function RibbonsPreview({ values, reducedMotion }: PreviewProps) 
   return (
     <Ribbons
       color={values.color as string}
-      colorSaturation="70%"
-      colorBrightness="60%"
+      colorSaturation="60%"
+      colorBrightness="50%"
       colorAlpha={values.colorAlpha as number}
-      colorCycleSpeed={0}
+      colorCycleSpeed={4}
       verticalPosition={values.verticalPosition as VerticalPosition}
       horizontalSpeed={reducedMotion ? 0 : (values.horizontalSpeed as number)}
       ribbonCount={values.ribbonCount as number}

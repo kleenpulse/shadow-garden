@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { useInView, useReducedMotion } from "motion/react";
+import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
 const LightRays = dynamic(() => import("@/components/registry/light-rays/LightRays"), {
   ssr: false,
@@ -31,16 +32,18 @@ export default function ProSection({
     <section ref={ref} className="exhibit-plate relative overflow-hidden">
       {mounted ? (
         <div className="absolute inset-0 opacity-60" aria-hidden>
-          <LightRays
-            raysColor={raysColor}
-            raysSpeed={inView && !reduce ? 1 : 0}
-            pulsating={false}
-            followMouse={false}
-            lightSpread={0.9}
-            rayLength={1.8}
-            noiseAmount={0.08}
-            distortion={0.2}
-          />
+          <PreviewBoundary slug="light-rays" label="LightRays" variant="silent">
+            <LightRays
+              raysColor={raysColor}
+              raysSpeed={inView && !reduce ? 1 : 0}
+              pulsating={false}
+              followMouse={false}
+              lightSpread={0.9}
+              rayLength={1.8}
+              noiseAmount={0.08}
+              distortion={0.2}
+            />
+          </PreviewBoundary>
         </div>
       ) : null}
       <div className="relative z-10">{children}</div>

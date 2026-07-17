@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ThemeToggle from "@/components/shell/ThemeToggle";
+import Wordmark from "@/components/Wordmark";
 import { cn } from "@/lib/utils";
 
 // Fixed landing header: wordmark + theme control in one bar. Transparent over
@@ -27,13 +28,8 @@ export default function LandingHeader() {
 					: "bg-transparent",
 			)}
 		>
-			<Link href="/components" className="flex items-baseline gap-0">
-				<span className="font-display text-sm uppercase tracking-[0.2em] text-ink">
-					Shadow
-				</span>
-				<span className="font-display text-sm font-medium uppercase tracking-[0.2em] text-accent">
-					Garden
-				</span>
+			<Link href="/components" className="inline-flex items-baseline">
+				<Wordmark size="sm" boldSecond />
 			</Link>
 			<ThemeToggle />
 		</div>

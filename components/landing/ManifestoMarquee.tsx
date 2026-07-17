@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MarqueeText } from "@/components/registry/marquee-text/MarqueeText";
+import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
 const CREED =
   "We operate in the dark · We render in the light · Every parameter accounted for · " +
@@ -19,13 +20,15 @@ export default function ManifestoMarquee() {
   return (
     <div className="flex h-10.5 items-center border-y border-hairline" aria-hidden>
       {mounted ? (
-        <MarqueeText
-          text={CREED}
-          speed={28}
-          gap={64}
-          pause={0}
-          className="font-display text-[11px] uppercase tracking-[0.3em] text-ink-mute"
-        />
+        <PreviewBoundary slug="marquee-text" label="MarqueeText" variant="silent">
+          <MarqueeText
+            text={CREED}
+            speed={28}
+            gap={64}
+            pause={0}
+            className="font-display text-[11px] uppercase tracking-[0.3em] text-ink-mute"
+          />
+        </PreviewBoundary>
       ) : null}
     </div>
   );

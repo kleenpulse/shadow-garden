@@ -11,11 +11,15 @@ export default function ControlsPanel({
   values,
   onChange,
   onReset,
+  dense = false,
 }: {
   props: PropSchema[];
   values: TunedValues;
   onChange: (name: string, value: PropValue) => void;
   onReset: () => void;
+  /** Single-column layout for narrow hosts (the fullscreen docked box) —
+      the default grid keys off viewport breakpoints, not container width. */
+  dense?: boolean;
 }) {
   if (props.length === 0) return null;
 
@@ -34,8 +38,18 @@ export default function ControlsPanel({
         </button>
       </header>
       {/* Full-width bench: controls flow in columns beneath the preview/code tabs. */}
-      <div className="grid grid-cols-1 items-start gap-x-8 gap-y-5 p-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div
+        className={
+          dense
+            ? "grid grid-cols-1 items-start gap-y-4 p-3"
+            : "grid grid-cols-1 items-start gap-x-8 gap-y-5 p-4 sm:grid-cols-2 lg:grid-cols-3"
+        }
+      >
         {props.map((schema) => {
+          // Cross-prop gating from the schema (e.g. petals disabled at zero bloom).
+          const disabled = schema.disabledWhen
+            ? values[schema.disabledWhen.prop] === schema.disabledWhen.equals
+            : false;
           switch (schema.kind) {
             case "number":
               return (
@@ -44,6 +58,7 @@ export default function ControlsPanel({
                   schema={schema}
                   value={values[schema.name] as number}
                   onChange={(value) => onChange(schema.name, value)}
+                  disabled={disabled}
                 />
               );
             case "enum":

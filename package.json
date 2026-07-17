@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "readme": "bun scripts/gen-readme.ts"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -29,6 +30,7 @@
     "react": "19.2.4",
     "react-colorful": "^5.8.0",
     "react-dom": "19.2.4",
+    "react-error-boundary": "^6.1.2",
     "react-resizable-panels": "^4.12.2",
     "rehype-pretty-code": "^0.14.4",
     "server-only": "^0.0.1",

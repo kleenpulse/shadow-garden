@@ -5,6 +5,7 @@ import { Heart, Search } from "lucide-react";
 import { useUIStore } from "@/lib/store";
 import { useFavoriteCount, useFavoritesHydrated } from "@/lib/favorites-store";
 import ThemeToggle from "./ThemeToggle";
+import Wordmark from "@/components/Wordmark";
 
 export default function MobileBar() {
   const toggleSidebar = useUIStore((state) => state.toggleSidebar);
@@ -24,8 +25,8 @@ export default function MobileBar() {
           ≡
         </span>
       </button>
-      <Link href="/" className="font-display text-xs uppercase tracking-[0.2em] text-ink">
-        Shadow <span className="text-accent">Garden</span>
+      <Link href="/" className="inline-flex items-baseline">
+        <Wordmark size="xs" />
       </Link>
 
       <div className="ml-auto flex items-center gap-2">

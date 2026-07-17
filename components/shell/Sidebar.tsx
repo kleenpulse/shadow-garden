@@ -16,6 +16,7 @@ import {
 import { useResizable } from "./use-resizable";
 import TierBadge from "./TierBadge";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
+import Wordmark from "@/components/Wordmark";
 
 export default function Sidebar() {
 	const pathname = usePathname();
@@ -184,12 +185,7 @@ export default function Sidebar() {
 						className="flex items-baseline gap-0"
 						onClick={() => setSidebarOpen(false)}
 					>
-						<span className="font-display text-sm uppercase tracking-[0.2em] text-ink ">
-							Shadow
-						</span>
-						<span className="font-display text-sm uppercase tracking-[0.2em] text-accent">
-							Garden
-						</span>
+						<Wordmark size="sm" />
 					</Link>
 				</div>
 
@@ -239,7 +235,7 @@ export default function Sidebar() {
 										className="flex w-full items-center gap-1.5 px-2.5 py-1 font-display text-[10px] uppercase tracking-[0.18em] text-ink-mute hover:text-ink-dim"
 									>
 										<span
-											className={`transition-transform ${isCollapsed ? "-rotate-90" : ""}`}
+											className={`transition-transform md:text-base ${isCollapsed ? "-rotate-90" : ""}`}
 										>
 											▾
 										</span>

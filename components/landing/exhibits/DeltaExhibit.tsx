@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import ExhibitFrame from "@/components/landing/ExhibitFrame";
+import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import type { CommandGroupDef } from "@/components/registry/command-palette/CommandPalette";
 
 const CommandPalette = dynamic(
@@ -36,13 +37,20 @@ export default function DeltaExhibit({ groups }: { groups: PaletteGroup[] }) {
     <ExhibitFrame plate className="h-[420px]">
       {() => (
         <div inert className="pointer-events-none absolute inset-0 select-none">
-          <CommandPalette
-            open
-            onOpenChange={noop}
-            groups={defs}
-            hotkey={[]}
-            placeholder="Type a command or search…"
-          />
+          <PreviewBoundary
+            slug="command-palette"
+            label="CommandPalette"
+            variant="stage"
+            showRetry={false}
+          >
+            <CommandPalette
+              open
+              onOpenChange={noop}
+              groups={defs}
+              hotkey={[]}
+              placeholder="Type a command or search…"
+            />
+          </PreviewBoundary>
         </div>
       )}
     </ExhibitFrame>

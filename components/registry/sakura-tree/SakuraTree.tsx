@@ -28,6 +28,7 @@ export interface SakuraTreeProps {
 
 const PETAL_POOL = 300;
 const TREE_X = 1.7;
+const TREE_Y = -0.24; // sink the root flare into the turf so the tree reads planted
 const TREE_SCALE = 2.1; // model is ~2.2 units tall; scene wants ~4.5
 const TREE_URL = "/models/sakura_tree-slim.glb";
 const FIELD_URL = "/models/green_field.glb";
@@ -184,6 +185,9 @@ function BlossomTree({
   const swayRef = useRef<THREE.Group>(null);
   const petalsRef = useRef<THREE.InstancedMesh>(null);
   const petalState = useRef<PetalState | null>(null);
+  // Petals fade with bloom: 0 bloom = no blossoms left to shed, so the pool
+  // eases to invisible; any bloom eases it back in.
+  const petalFade = useRef(bloomAmount > 0 ? 1 : 0);
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   const model = useMemo(() => {
@@ -274,7 +278,11 @@ function BlossomTree({
     const center = new THREE.Vector3();
     const anchors = bushes.map((b) => {
       box.setFromObject(b).getCenter(center);
-      return new THREE.Vector3(center.x * TREE_SCALE + TREE_X, center.y * TREE_SCALE, center.z * TREE_SCALE);
+      return new THREE.Vector3(
+        center.x * TREE_SCALE + TREE_X,
+        center.y * TREE_SCALE + TREE_Y,
+        center.z * TREE_SCALE,
+      );
     });
     return { scene, bushes, anchors, dispose: () => created.forEach((m) => m.dispose()) };
   }, [gltf, barkRamp]);
@@ -315,9 +323,21 @@ function BlossomTree({
     if (!mesh) return;
     if (!petalState.current) petalState.current = createPetalState(mulberry32(9001));
     const petals = petalState.current;
-    mesh.count = petalCount;
+    // No bloom, no petals: ease the pool's opacity out (or back in), then stop
+    // drawing entirely once fully faded. Paused (reduced motion) snaps instead.
+    const fadeTarget = bloomAmount > 0 ? 1 : 0;
+    if (paused) {
+      petalFade.current = fadeTarget;
+    } else {
+      petalFade.current += (fadeTarget - petalFade.current) * Math.min(1, dt * 2.2);
+      if (Math.abs(fadeTarget - petalFade.current) < 0.01) petalFade.current = fadeTarget;
+      else state.invalidate();
+    }
+    (mesh.material as THREE.MeshBasicMaterial).opacity = petalFade.current;
+    const liveCount = petalFade.current === 0 ? 0 : petalCount;
+    mesh.count = liveCount;
     const anchors = model.anchors;
-    for (let i = 0; i < petalCount; i++) {
+    for (let i = 0; i < liveCount; i++) {
       if (!paused) {
         petals.y[i] -= (0.35 + petals.speed[i] * 0.35) * (0.4 + wind * 0.1) * dt;
         petals.x[i] += windVec.x * wind * 0.18 * (0.5 + petals.speed[i] * 0.4) * dt;
@@ -354,7 +374,7 @@ function BlossomTree({
 
   return (
     <>
-      <group ref={swayRef} position={[TREE_X, 0.02, 0]} scale={TREE_SCALE}>
+      <group ref={swayRef} position={[TREE_X, TREE_Y, 0]} scale={TREE_SCALE}>
         <primitive object={model.scene} />
       </group>
       <instancedMesh
@@ -508,12 +528,21 @@ function SakuraScene({
       opacity: 0.15,
       depthWrite: false,
     });
+    // Soft radial contact shadow — dense at the center, fading out. Hard-edged
+    // low-opacity circles read as decals and leave the tree looking afloat.
+    const shadowMat = new THREE.MeshBasicMaterial({
+      color: "#3f4a3a",
+      alphaMap: discAlpha,
+      transparent: true,
+      opacity: 0.42,
+      depthWrite: false,
+    });
 
     return {
-      barkRamp, petalGeo, petalMat, stoneMat, glowMat, groundPetalMat,
+      barkRamp, petalGeo, petalMat, stoneMat, glowMat, groundPetalMat, shadowMat,
       dispose() {
         petalGeo.dispose();
-        [petalMat, stoneMat, glowMat, groundPetalMat].forEach((m) => m.dispose());
+        [petalMat, stoneMat, glowMat, groundPetalMat, shadowMat].forEach((m) => m.dispose());
         [barkRamp, stoneRamp, discAlpha, petalAlpha].forEach((t) => t.dispose());
       },
     };
@@ -560,13 +589,27 @@ function SakuraScene({
 
       {/* Contact shadows + fallen-petal wash */}
       {/* Decals float just above the field's highest turf bumps */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[TREE_X - 0.25, 0.07, 0.2]}>
-        <circleGeometry args={[2.2, 24]} />
-        <meshBasicMaterial color="#5f6a58" transparent opacity={0.1} depthWrite={false} />
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[TREE_X - 0.25, 0.065, 0.2]}
+        material={resources.shadowMat}
+      >
+        <circleGeometry args={[2.3, 24]} />
       </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1.15, 0.07, 0.5]}>
-        <circleGeometry args={[0.42, 16]} />
-        <meshBasicMaterial color="#5f6a58" transparent opacity={0.18} depthWrite={false} />
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[TREE_X, 0.07, 0.15]}
+        scale={[1.25, 1, 1]}
+        material={resources.shadowMat}
+      >
+        <circleGeometry args={[0.85, 20]} />
+      </mesh>
+      <mesh
+        rotation={[-Math.PI / 2, 0, 0]}
+        position={[-1.15, 0.07, 0.5]}
+        material={resources.shadowMat}
+      >
+        <circleGeometry args={[0.5, 16]} />
       </mesh>
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
