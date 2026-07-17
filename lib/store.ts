@@ -1,14 +1,28 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 // Ephemeral shell chrome only. Tunable component state lives in the URL (nuqs),
 // not here — this store never holds anything worth sharing or deep-linking.
 export type WorkspaceTab = "preview" | "code";
+
+// Desktop sidebar resize band. Default matches the historical `w-72` (288px).
+// The pre-paint script in app/layout.tsx reads the same clamps — keep in sync.
+export const SIDEBAR_MIN = 220;
+export const SIDEBAR_MAX = 480;
+export const SIDEBAR_DEFAULT = 288;
+
+const clampWidth = (w: number) =>
+  Math.min(SIDEBAR_MAX, Math.max(SIDEBAR_MIN, w));
 
 interface UIState {
   /** Mobile off-canvas sidebar. */
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
   toggleSidebar: () => void;
+
+  /** Desktop sidebar width (px), drag-resizable and persisted. */
+  sidebarWidth: number;
+  setSidebarWidth: (width: number) => void;
 
   /** Active workspace tab. */
   activeTab: WorkspaceTab;
@@ -17,16 +31,37 @@ interface UIState {
   /** Sidebar fuzzy-search query. */
   search: string;
   setSearch: (query: string) => void;
+
+  /** Global command palette overlay (ephemeral — never persisted). */
+  paletteOpen: boolean;
+  setPaletteOpen: (open: boolean) => void;
+  togglePalette: () => void;
 }
 
-export const useUIStore = create<UIState>((set) => ({
-  sidebarOpen: false,
-  setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
-  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+export const useUIStore = create<UIState>()(
+  persist(
+    (set) => ({
+      sidebarOpen: false,
+      setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
+      toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
 
-  activeTab: "preview",
-  setActiveTab: (activeTab) => set({ activeTab }),
+      sidebarWidth: SIDEBAR_DEFAULT,
+      setSidebarWidth: (width) => set({ sidebarWidth: clampWidth(width) }),
 
-  search: "",
-  setSearch: (search) => set({ search }),
-}));
+      activeTab: "preview",
+      setActiveTab: (activeTab) => set({ activeTab }),
+
+      search: "",
+      setSearch: (search) => set({ search }),
+
+      paletteOpen: false,
+      setPaletteOpen: (paletteOpen) => set({ paletteOpen }),
+      togglePalette: () => set((state) => ({ paletteOpen: !state.paletteOpen })),
+    }),
+    {
+      name: "sg-ui",
+      // Only the width is worth persisting; open/search/tab stay ephemeral.
+      partialize: (state) => ({ sidebarWidth: state.sidebarWidth }),
+    },
+  ),
+);

@@ -329,7 +329,9 @@ export default function Strands({
       uniforms: {
         uScene: { value: renderTarget.texture },
         uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
-        uRadius: { value: 0.46 * glassSize },
+        // Lens radius tracks the field scale so the glass hugs the strand
+        // field at any zoom instead of cropping it at a fixed screen radius.
+        uRadius: { value: 0.46 * glassSize * scale },
         uRefraction: { value: refraction },
         uDispersion: { value: dispersion },
       },
@@ -382,7 +384,8 @@ export default function Strands({
         glassProgram.uniforms.uScene.value = renderTarget.texture
         glassProgram.uniforms.uRefraction.value = current.refraction
         glassProgram.uniforms.uDispersion.value = current.dispersion
-        glassProgram.uniforms.uRadius.value = 0.46 * current.glassSize
+        glassProgram.uniforms.uRadius.value =
+          0.46 * current.glassSize * current.scale
         renderer.render({ scene: glassMesh })
       } else {
         renderer.render({ scene: mesh })

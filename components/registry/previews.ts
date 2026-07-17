@@ -24,5 +24,8 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "border-glow": dynamic(() => import("./border-glow/BorderGlowPreview"), { ssr: false }),
   "spotlight-shell": dynamic(() => import("./spotlight-shell/SpotlightShellPreview"), { ssr: false }),
   "animated-hamburger": dynamic(() => import("./animated-hamburger/AnimatedHamburgerPreview"), { ssr: false }),
+  "morph-dialog": dynamic(() => import("./morph-dialog/MorphDialogPreview"), { ssr: false }),
+  "grow-dialog": dynamic(() => import("./grow-dialog/GrowDialogPreview"), { ssr: false }),
+  "sakura-tree": dynamic(() => import("./sakura-tree/SakuraTreePreview"), { ssr: false }),
   "command-palette": dynamic(() => import("./command-palette/CommandPalettePreview"), { ssr: false }),
 };

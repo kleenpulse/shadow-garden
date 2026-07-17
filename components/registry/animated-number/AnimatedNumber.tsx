@@ -63,7 +63,8 @@ export function AnimatedNumber({
 		return variants[animationType];
 	}, [animationType, duration]);
 
-	const key = `number-${value}`;
+	// animationType is part of the key so switching styles replays the swap.
+	const key = `number-${value}-${animationType}`;
 
 	return (
 		<div className={`relative overflow-hidden ${className}`}>
@@ -148,11 +149,12 @@ export function AnimatedNumberAdvanced({
 	return (
 		<div className={`flex ${className}`}>
 			{/* popLayout (not "wait"): multiple digit children animate together,
-			    staggered; exiting chars leave the flow so siblings don't jump. */}
-			<AnimatePresence mode="popLayout" initial={false}>
+			    staggered; exiting chars leave the flow so siblings don't jump.
+			    Mount animates too, so a remount replays the entrance. */}
+			<AnimatePresence mode="popLayout">
 				{digits.map((digit, index) => (
 					<motion.div
-						key={`${initialValue}-${index}`}
+						key={`${initialValue}-${animationType}-${index}`}
 						initial="initial"
 						animate="animate"
 						exit="exit"

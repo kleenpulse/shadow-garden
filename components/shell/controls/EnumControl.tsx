@@ -1,6 +1,13 @@
 "use client";
 
 import type { EnumProp } from "@/lib/registry/types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function EnumControl({
   schema,
@@ -17,18 +24,18 @@ export default function EnumControl({
       <label htmlFor={`ctl-${schema.name}`} className="font-mono text-xs text-ink-dim">
         {label}
       </label>
-      <select
-        id={`ctl-${schema.name}`}
-        className="w-full rounded-md border border-hairline bg-raised px-2.5 py-1.5 font-mono text-xs text-ink outline-none focus-visible:border-accent"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      >
-        {schema.options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger id={`ctl-${schema.name}`} aria-label={label}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {schema.options.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

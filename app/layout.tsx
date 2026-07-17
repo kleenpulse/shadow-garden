@@ -45,6 +45,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
+        {/* Pre-paint: restore the persisted sidebar width into a CSS var before
+            first paint so a resized sidebar renders at its saved width, no flash.
+            Reads the same zustand-persist key/shape + clamps as lib/store.ts. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{var s=JSON.parse(localStorage.getItem('sg-ui'));var w=Math.min(480,Math.max(220,(s&&s.state&&+s.state.sidebarWidth)||288));document.documentElement.style.setProperty('--sg-sidebar-w',w+'px')}catch(e){}",
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

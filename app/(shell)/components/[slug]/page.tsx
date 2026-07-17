@@ -7,6 +7,7 @@ import CodePanel from "@/components/shell/CodePanel";
 import InstallSection from "@/components/shell/InstallSection";
 import PropsTable from "@/components/shell/PropsTable";
 import TierBadge from "@/components/shell/TierBadge";
+import FavoriteButton from "@/components/shell/FavoriteButton";
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -48,6 +49,12 @@ export default async function ComponentPage({
         <div className="mt-2 flex flex-wrap items-center gap-3">
           <h1 className="font-display text-2xl uppercase tracking-[0.08em] text-ink">{entry.name}</h1>
           <TierBadge tier={entry.tier} />
+          <FavoriteButton
+            slug={entry.slug}
+            name={entry.name}
+            iconSize={18}
+            className="border border-hairline"
+          />
         </div>
         <p className="mt-3 max-w-2xl font-sans text-sm text-ink-dim">{entry.description}</p>
       </header>

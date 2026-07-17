@@ -1,7 +1,6 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { groupByCategory } from "@/lib/registry";
-import TierBadge from "@/components/shell/TierBadge";
+import CatalogCard from "@/components/shell/CatalogCard";
 
 export const metadata: Metadata = {
   title: "Components",
@@ -29,19 +28,13 @@ export default function CatalogPage() {
             </h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {group.entries.map((entry) => (
-                <Link
+                <CatalogCard
                   key={entry.slug}
-                  href={`/components/${entry.slug}`}
-                  className="group flex flex-col gap-2 rounded-lg border border-hairline bg-panel p-4 transition-colors hover:border-accent-muted"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-display text-sm uppercase tracking-[0.08em] text-ink group-hover:text-accent">
-                      {entry.name}
-                    </span>
-                    <TierBadge tier={entry.tier} />
-                  </div>
-                  <p className="font-sans text-xs leading-relaxed text-ink-dim">{entry.description}</p>
-                </Link>
+                  slug={entry.slug}
+                  name={entry.name}
+                  description={entry.description}
+                  tier={entry.tier}
+                />
               ))}
             </div>
           </section>

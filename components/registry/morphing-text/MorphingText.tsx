@@ -136,11 +136,11 @@ const Texts: React.FC<Pick<MorphingTextProps, 'texts' | 'auto'>> = ({
   return (
     <>
       <span
-        className="absolute inset-x-0 top-0 m-auto inline-block w-full"
+        className="absolute inset-x-0 top-1/2 m-auto inline-block w-full -translate-y-1/2"
         ref={text1Ref}
       />
       <span
-        className="absolute inset-x-0 top-0 m-auto inline-block w-full"
+        className="absolute inset-x-0 top-1/2 m-auto inline-block w-full -translate-y-1/2"
         ref={text2Ref}
       />
     </>

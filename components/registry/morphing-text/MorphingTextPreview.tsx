@@ -3,7 +3,8 @@
 import type { PreviewProps } from "@/lib/registry/types";
 import { MorphingText } from "./MorphingText";
 
-const WORDS = ["SHADOW", "GARDEN", "ATOMIC", "EMINENCE", "VIOLET"];
+// The Seven Shadows — the first seven members of Shadow Garden.
+const WORDS = ["ALPHA", "BETA", "GAMMA", "DELTA", "EPSILON", "ZETA", "ETA"];
 
 export default function MorphingTextPreview({ values, reducedMotion }: PreviewProps) {
   return (

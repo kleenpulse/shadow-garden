@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import {
   motion,
   useMotionValue,
@@ -37,7 +37,12 @@ export function SpotlightShell({
   children: ReactNode
   className?: string
 }) {
-  const reduce = useReducedMotion()
+  // Resolve the motion preference only after hydration: SSR can't know it, so
+  // branching markup on it directly would mismatch the server HTML.
+  const prefersReducedMotion = useReducedMotion()
+  const [hydrated, setHydrated] = useState(false)
+  useEffect(() => setHydrated(true), [])
+  const reduce = hydrated ? prefersReducedMotion : false
   const ref = useRef<HTMLDivElement>(null)
 
   const normX = useMotionValue(0.5)

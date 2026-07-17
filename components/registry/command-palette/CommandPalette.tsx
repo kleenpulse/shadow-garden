@@ -3,6 +3,7 @@
 import { useEffect, type ComponentType } from "react";
 import { Command } from "cmdk";
 import { AnimatePresence, motion } from "motion/react";
+import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 
 export type CommandDef = {
   id: string;
@@ -26,16 +27,46 @@ export interface CommandPaletteProps {
   onOpenChange: (open: boolean) => void;
   groups: CommandGroupDef[];
   onSelect?: (command: CommandDef) => void;
-  hotkey?: Hotkey;
+  /** One hotkey, or several bound at once (e.g. ["cmd+k", "/"]). */
+  hotkey?: Hotkey | Hotkey[];
   loop?: boolean;
   /** Liquid-glass surface vs. a solid panel. */
   glass?: boolean;
   placeholder?: string;
+  /**
+   * Position as a viewport-fixed overlay instead of filling the nearest
+   * positioned ancestor. Default (false) keeps the preview scoped to its frame;
+   * the app shell passes true to use the palette as global chrome.
+   */
+  fixed?: boolean;
+}
+
+export function isMacPlatform(): boolean {
+  return /mac/i.test(navigator.platform || navigator.userAgent);
+}
+
+export function isEditableTarget(): boolean {
+  const el = document.activeElement as HTMLElement | null;
+  if (!el) return false;
+  const tag = el.tagName;
+  return (
+    tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || el.isContentEditable
+  );
 }
 
 function matchesHotkey(event: KeyboardEvent, hotkey: Hotkey): boolean {
-  if (hotkey === "/") return event.key === "/";
-  const mod = hotkey === "cmd+k" ? event.metaKey : event.ctrlKey;
+  if (hotkey === "/") {
+    // Never hijack "/" while a field is focused (sidebar search, the palette's
+    // own input, …) — let it type normally.
+    if (isEditableTarget()) return false;
+    return event.key === "/";
+  }
+  // "cmd+k" falls back to Ctrl on non-Apple platforms (⌘ has no equivalent
+  // there), so the default binding works everywhere. "ctrl+k" stays strict.
+  const mod =
+    hotkey === "cmd+k"
+      ? event.metaKey || (!isMacPlatform() && event.ctrlKey)
+      : event.ctrlKey;
   return mod && event.key.toLowerCase() === "k";
 }
 
@@ -48,10 +79,17 @@ export default function CommandPalette({
   loop = true,
   glass = false,
   placeholder = "Type a command or search…",
+  fixed = false,
 }: CommandPaletteProps) {
+  // Normalize to a stable string so a fresh array literal each render doesn't
+  // churn the listener subscription.
+  const hotkeyKey = Array.isArray(hotkey) ? hotkey.join(",") : hotkey;
   useEffect(() => {
+    // Empty hotkey list → bind no opener (an instance can "stand down" from the
+    // global hotkey), but keep Escape-to-close either way.
+    const hotkeys = hotkeyKey ? (hotkeyKey.split(",") as Hotkey[]) : [];
     const onKey = (event: KeyboardEvent) => {
-      if (matchesHotkey(event, hotkey)) {
+      if (hotkeys.length && hotkeys.some((h) => matchesHotkey(event, h))) {
         event.preventDefault();
         onOpenChange(!open);
       } else if (event.key === "Escape" && open) {
@@ -60,7 +98,7 @@ export default function CommandPalette({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, hotkey, onOpenChange]);
+  }, [open, hotkeyKey, onOpenChange]);
 
   const runCommand = (command: CommandDef) => {
     onSelect?.(command);
@@ -76,7 +114,7 @@ export default function CommandPalette({
     <AnimatePresence>
       {open && (
         <motion.div
-          className="absolute inset-0 z-50 flex items-start justify-center pt-[12%]"
+          className={`${fixed ? "fixed" : "absolute"} inset-0 z-50 flex items-start justify-center pt-[12%]`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -105,10 +143,11 @@ export default function CommandPalette({
                   className="h-12 w-full bg-transparent font-sans text-sm text-ink outline-none placeholder:text-ink-mute"
                 />
               </div>
-              <Command.List className="max-h-80 overflow-y-auto p-2">
-                <Command.Empty className="px-3 py-6 text-center font-mono text-xs text-ink-mute">
-                  No results.
-                </Command.Empty>
+              <AutoMaskVertical className="max-h-80">
+                <Command.List className="overflow-y-visible p-2">
+                  <Command.Empty className="px-3 py-6 text-center font-mono text-xs text-ink-mute">
+                    No results.
+                  </Command.Empty>
                 {groups.map((group) => (
                   <Command.Group
                     key={group.id}
@@ -135,7 +174,8 @@ export default function CommandPalette({
                     })}
                   </Command.Group>
                 ))}
-              </Command.List>
+                </Command.List>
+              </AutoMaskVertical>
             </Command>
           </motion.div>
         </motion.div>

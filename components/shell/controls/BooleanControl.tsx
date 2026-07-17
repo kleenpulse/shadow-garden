@@ -2,7 +2,7 @@
 
 import type { BooleanProp } from "@/lib/registry/types";
 
-// Panel-switch toggle — squarish thumb for the instrument feel. Native <button>
+// Panel-switch toggle — round thumb, evenly inset in the track. Native <button>
 // with role="switch" gives Enter/Space activation and focus for free.
 export default function BooleanControl({
   schema,
@@ -15,7 +15,9 @@ export default function BooleanControl({
 }) {
   const label = schema.label ?? schema.name;
   return (
-    <div className="flex items-center justify-between gap-3">
+    // No justify-between: in the full-width bench grid a cell can span a third
+    // of the workspace, which would strand the switch far from its label.
+    <div className="flex items-center gap-3">
       <label id={`lbl-${schema.name}`} className="font-mono text-xs text-ink-dim">
         {label}
       </label>
@@ -30,7 +32,7 @@ export default function BooleanControl({
         }`}
       >
         <span
-          className={`absolute top-0.5 h-3.5 w-3.5 rounded-sm transition-all ${
+          className={`absolute top-0.5 h-3.5 w-3.5 rounded-full transition-all ${
             value ? "left-[18px] bg-accent" : "left-0.5 bg-ink-mute"
           }`}
         />
