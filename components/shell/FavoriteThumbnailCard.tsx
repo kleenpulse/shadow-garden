@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useReducedMotion } from "motion/react";
 import type { ComponentEntry, PropSchema } from "@/lib/registry/types";
 import { defaultsFromSchema } from "@/lib/registry";
+import { displayName } from "@/lib/utils";
 import { previews } from "@/components/registry/previews";
 import PreviewBoundary from "./PreviewBoundary";
 import TierBadge from "./TierBadge";
@@ -89,7 +90,7 @@ export default function FavoriteThumbnailCard({
             href={href}
             className="font-display text-sm uppercase tracking-[0.08em] text-ink transition-colors hover:text-accent"
           >
-            {entry.name}
+            {displayName(entry.name)}
           </Link>
           <p className="mt-1 line-clamp-2 font-sans text-xs leading-relaxed text-ink-dim">
             {entry.description}

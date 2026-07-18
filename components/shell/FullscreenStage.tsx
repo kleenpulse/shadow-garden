@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import { Minimize2, SlidersHorizontal } from "lucide-react";
 import type { ComponentEntry } from "@/lib/registry/types";
+import { displayName } from "@/lib/utils";
 import { useTunedProps } from "@/lib/registry/useTunedProps";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { previews } from "@/components/registry/previews";
@@ -59,7 +60,7 @@ export default function FullscreenStage({ entry }: { entry: ComponentEntry }) {
 					<Minimize2 className="h-4 w-4" aria-hidden />
 				</Link>
 				<span className="rounded-md border border-hairline bg-surface/80 px-2 py-1 font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute backdrop-blur">
-					{entry.name}
+					{displayName(entry.name)}
 				</span>
 			</div>
 			{entry.props.length > 0 && (

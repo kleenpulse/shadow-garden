@@ -27,7 +27,10 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "animated-hamburger": dynamic(() => import("./animated-hamburger/AnimatedHamburgerPreview"), { ssr: false }),
   "morph-dialog": dynamic(() => import("./morph-dialog/MorphDialogPreview"), { ssr: false }),
   "grow-dialog": dynamic(() => import("./grow-dialog/GrowDialogPreview"), { ssr: false }),
+  "flip-card": dynamic(() => import("./flip-card/FlipCardPreview"), { ssr: false }),
+  "scroll-velocity": dynamic(() => import("./scroll-velocity/ScrollVelocityPreview"), { ssr: false }),
   "sakura-tree": dynamic(() => import("./sakura-tree/SakuraTreePreview"), { ssr: false }),
   "command-palette": dynamic(() => import("./command-palette/CommandPalettePreview"), { ssr: false }),
   "world-map-ascii": dynamic(() => import("./world-map-ascii/WorldMapAsciiPreview"), { ssr: false }),
+  "physics-engine": dynamic(() => import("./physics-engine/PhysicsEnginePreview"), { ssr: false }),
 };
