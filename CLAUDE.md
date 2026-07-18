@@ -15,8 +15,9 @@ Commercial, animation-forward React component showcase (name from _The Eminence 
 
 ## Registry-driven — one pattern, don't fork it
 
-- Each prop = one `PropSchema` in `lib/registry/index.ts`. Drives **both** the Controls panel and the Props API table. Never hand-write props docs twice.
-- Add a component = registry entry + `components/registry/<slug>/<Name>.tsx` + `<Name>Preview.tsx` + register in `components/registry/previews.ts` (`dynamic`, `ssr:false`). No new page or template.
+- Registry data is split by category under `lib/registry/categories/` (`backgrounds`, `text-animations`, `micro-interactions`, `power-user-systems`). `index.ts` is the barrel — it concatenates the four arrays into `registry` and exports the helpers (`getEntry`, `getAllSlugs`, `groupByCategory`, `defaultsFromSchema`). Import from `@/lib/registry`; types live in `lib/registry/types.ts`.
+- Each prop = one `PropSchema` in the component's entry under `lib/registry/categories/<category>.ts`. Drives **both** the Controls panel and the Props API table. Never hand-write props docs twice.
+- Add a component = registry entry in the matching `lib/registry/categories/<category>.ts` + `components/registry/<slug>/<Name>.tsx` + `<Name>Preview.tsx` + register in `components/registry/previews.ts` (`dynamic`, `ssr:false`). No new page or template.
 - Control kinds: number | enum | boolean | color. Array / ReactNode props → hardcode tasteful demo values in the Preview wrapper.
 - Code-tab source read from disk server-side (`lib/registry/source.ts`), gated by `lib/registry/entitlement.ts`. Pro source never crosses to the client. Unlock: env `SHADOW_GARDEN_PRO=1` or cookie `sg_pro=1`.
 - Anything reading cookies/URL (CodePanel, LiveWorkspace via nuqs) **must** render inside `<Suspense>`, else the Cache Components build breaks ("uncached data outside Suspense").
