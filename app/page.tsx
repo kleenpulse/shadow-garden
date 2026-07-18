@@ -55,7 +55,7 @@ export default function Home() {
 	};
 
 	return (
-		<main className="relative w-full">
+		<main className="relative w-full overflow-x-clip">
 			<div id="hero" />
 			<SmoothScroll />
 			<GotoTop />
@@ -71,7 +71,7 @@ export default function Home() {
 				<section
 					key={exhibit.category}
 					id={anchorFor(exhibit.category)}
-					className="mx-auto w-full max-w-7xl scroll-mt-10 px-6 py-20 sm:py-24"
+					className="mx-auto w-full max-w-7xl scroll-mt-10 px-3 py-14 sm:px-6 sm:py-24"
 				>
 					<Reveal>
 						<SpecimenPlate
@@ -114,7 +114,7 @@ export default function Home() {
 			))}
 
 			{/* ε — Calibration: the "tunable" promise, proven with real dials. */}
-			<section className="mx-auto w-full max-w-7xl px-6 py-20 sm:py-24">
+			<section className="mx-auto w-full max-w-7xl px-3 py-14 sm:px-6 sm:py-24">
 				<Reveal>
 					<SpecimenPlate
 						greek="ε"
@@ -141,8 +141,8 @@ export default function Home() {
 			{/* ζ — Sealed archive: pro tier. Static graphite ground in both themes,
           so text uses the static bench ramp (same rule as the code surface). */}
 			<ProSection raysColor={data.hero.color}>
-				<div className="mx-auto w-full max-w-7xl px-6 py-20 sm:py-28">
-					<div className="flex items-baseline gap-3 border-y border-bench-700 py-2 font-display text-[10px] uppercase tracking-[0.28em] text-bench-500">
+				<div className="mx-auto w-full max-w-7xl px-3 py-14 sm:px-6 sm:py-28">
+					<div className="flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-bench-700 py-2 font-display text-[9px] uppercase tracking-widest text-bench-500 sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
 						<span className="text-[#a855f7]">
 							Plate <span className="normal-case">ζ</span>-06
 						</span>

@@ -50,6 +50,9 @@ interface ThreadsProps {
   enableMouseInteraction?: boolean;
   saturation?: number;
   paused?: boolean;
+  /** Cap devicePixelRatio at render init — uncapped, a DPR-3 phone renders this
+   * 60-line shader at 9x the pixel work. Mirrors LightRays' maxDpr. */
+  maxDpr?: number;
   fallbackSrc?: string;
   className?: string;
 }
@@ -178,6 +181,7 @@ const Threads: React.FC<ThreadsProps> = ({
   saturation = 1.0,
   enableMouseInteraction = true,
   paused = false,
+  maxDpr = 2,
   fallbackSrc,
   className,
 }) => {
@@ -205,7 +209,7 @@ const Threads: React.FC<ThreadsProps> = ({
       const renderer = new Renderer({
         alpha: true,
         premultipliedAlpha: true,
-        dpr: window.devicePixelRatio || 1,
+        dpr: Math.min(window.devicePixelRatio || 1, maxDpr),
       });
       gl = renderer.gl;
       gl.clearColor(0, 0, 0, 0);
@@ -351,7 +355,7 @@ const Threads: React.FC<ThreadsProps> = ({
       return;
     }
     // color/amplitude/distance/opacity/saturation/paused are live via `live` ref.
-  }, [enableMouseInteraction, useFallback]);
+  }, [enableMouseInteraction, useFallback, maxDpr]);
 
   // Resume the render loop when unpausing — the loop self-halts once the
   // pause ease-out settles, so it needs an external kick to start again.

@@ -33,6 +33,10 @@
 	--font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
 	--font-mono:
 		var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+	/* Fluid hero display: one clamp across the wide 0-639px base range — a
+	   monospace unbreakable word can't be served by fixed steps. Ceiling = text-8xl. */
+	--text-hero: clamp(1.75rem, 8.5vw, 6rem);
 }
 
 /*

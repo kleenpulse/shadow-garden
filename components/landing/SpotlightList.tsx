@@ -96,7 +96,7 @@ export default function SpotlightList({
 							)}
 							<span
 								className={cn(
-									"relative z-10 flex items-baseline gap-3 transition-transform duration-300",
+									"relative z-10 flex flex-col items-start gap-1 transition-transform duration-300 sm:flex-row sm:items-baseline sm:gap-3",
 									isHovered && "translate-x-4 duration-500",
 								)}
 							>

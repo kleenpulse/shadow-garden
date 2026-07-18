@@ -44,7 +44,7 @@ export default function AlphaExhibit() {
 	const palette = isDark ? PALETTE.dark : PALETTE.light;
 
 	return (
-		<ExhibitFrame plate={isDark} className="h-90 sm:h-105">
+		<ExhibitFrame plate={isDark} className="h-72 sm:h-105">
 			{({ active }) => (
 				<div className="absolute inset-0">
 					<PreviewBoundary slug="dot-field" label="DotField" variant="stage">

@@ -34,7 +34,7 @@ export default function DeltaExhibit({ groups }: { groups: PaletteGroup[] }) {
   }));
 
   return (
-    <ExhibitFrame plate className="h-[420px]">
+    <ExhibitFrame plate className="h-80 sm:h-105">
       {() => (
         <div inert className="pointer-events-none absolute inset-0 select-none">
           <PreviewBoundary

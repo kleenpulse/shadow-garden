@@ -2,20 +2,20 @@
 
 import { useEffect, useRef } from "react";
 import GradualBlur from "@/components/registry/gradual-blur/GradualBlur";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 // Fixed frosted strip along the bottom of the viewport that blurs content
-// scrolling under it. Its vertical offset is driven directly by scroll position:
+// scrolling under it. Its vertical offset is driven by scroll position:
 //  - tucked below the fold while the hero (first svh) is in view,
-//  - risen into place through the content sections,
-//  - sunk back below the fold over the last stretch so the footer reads clean.
-// Everything is scroll-linked (1:1, reverses on the way up). We move it with the
-// `bottom` offset rather than `transform` on purpose — a transformed ancestor
-// becomes a backdrop root and the backdrop-filter would blur nothing.
-
-const SINK_RANGE = 200; // px from the page bottom over which the strip sinks away
+//  - risen into place, then cemented flush to the bottom for the rest of the page.
+// We move it with the `bottom` offset rather than `transform` on purpose — a
+// transformed ancestor becomes a backdrop root and the backdrop-filter would blur nothing.
 
 export default function PageBottomBlur() {
 	const ref = useRef<HTMLDivElement>(null);
+	// Trim the stacked backdrop-filter layers on phones — 6 full-width blur passes
+	// are costly on mobile GPUs; 3 is visually identical on a thin strip.
+	const compact = useMediaQuery("(max-width: 640px)");
 
 	useEffect(() => {
 		const el = ref.current;
@@ -28,21 +28,14 @@ export default function PageBottomBlur() {
 			ticking = false;
 			const scrollY = window.scrollY;
 			const innerH = window.innerHeight;
-			const docH = document.documentElement.scrollHeight;
-
-			// Rise out from under the hero: 0 while the hero fills the view, → 1 as its
-			// last quarter scrolls past.
+			// Rise out from under the hero (0 while it fills the view → 1 as its last
+			// quarter scrolls past), then stay cemented flush to the bottom for the rest
+			// of the page — no sink-away at the footer.
 			const revealStart = innerH * 0.75;
 			const revealEnd = innerH * 0.95;
 			const rise = clamp((scrollY - revealStart) / (revealEnd - revealStart));
 
-			// Sink toward the footer: 0 mid-page, → 1 over the last SINK_RANGE px.
-			const gap = docH - (scrollY + innerH);
-			const sink = clamp(1 - gap / SINK_RANGE);
-
-			// How far "up" the strip sits (1 = fully in place, 0 = fully tucked away).
-			const visible = rise * (1 - sink);
-			el.style.bottom = `${-(1 - visible) * sinkMax}px`;
+			el.style.bottom = `${-(1 - rise) * sinkMax}px`;
 		};
 
 		const onScroll = () => {
@@ -70,7 +63,7 @@ export default function PageBottomBlur() {
 				left: 0,
 				right: 0,
 				bottom: "-8rem", // start tucked away; the scroll handler takes over on mount
-				height: "5rem",
+				height: compact ? "3rem" : "5rem",
 				zIndex: 110,
 				pointerEvents: "none",
 			}}
@@ -80,9 +73,9 @@ export default function PageBottomBlur() {
 				position="bottom"
 				exponential
 				strength={3}
-				divCount={6}
+				divCount={compact ? 3 : 6}
 				opacity={1}
-				height="5rem"
+				height={compact ? "3rem" : "5rem"}
 			/>
 		</div>
 	);

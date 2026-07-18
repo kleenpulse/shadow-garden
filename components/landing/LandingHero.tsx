@@ -62,6 +62,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 						distance={hero.distance}
 						opacity={hero.opacity}
 						saturation={1}
+						maxDpr={1.5}
 						enableMouseInteraction={!reduce}
 						paused={reduce || !inView}
 					/>
@@ -72,7 +73,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 				variants={container}
 				initial="hidden"
 				animate="show"
-				className="pointer-events-none relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-6 pb-24 pt-24 sm:pb-32"
+				className="pointer-events-none relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-3 pb-16 pt-24 sm:px-6 sm:pb-32"
 			>
 				<motion.p
 					variants={rise}
@@ -83,7 +84,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 
 				<motion.h1
 					variants={rise}
-					className="mt-6 font-display text-5xl uppercase leading-[0.95] tracking-[0.02em] text-ink sm:text-7xl lg:text-8xl"
+					className="mt-6 font-display text-hero uppercase leading-[0.95] tracking-[0.02em] text-ink"
 				>
 					{stats.total} instruments.
 					<br />
@@ -119,12 +120,12 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 
 			{/* Instrument readout — the actual prop values driving the field above. */}
 			<div className="relative z-10 border-t border-hairline bg-surface/60 backdrop-blur-sm">
-				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-6 py-3 font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute">
-					<span>
+				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
+					<span className="hidden sm:inline">
 						Field: Threads · Amp {hero.amplitude.toFixed(2)} · Dist{" "}
 						{hero.distance.toFixed(2)}
 					</span>
-					<span>
+					<span className="w-full sm:w-auto">
 						Registry {stats.total} units [{stats.free} free / {stats.pro} pro]
 					</span>
 				</div>

@@ -18,7 +18,7 @@ export default function SpecimenPlate({
   return (
     <div
       className={cn(
-        "flex items-baseline gap-3 border-y border-hairline py-2 font-display text-[10px] uppercase tracking-[0.28em] text-ink-mute",
+        "flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-hairline py-2 font-display text-[9px] uppercase tracking-widest text-ink-mute sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]",
         className,
       )}
     >
