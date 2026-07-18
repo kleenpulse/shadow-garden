@@ -42,6 +42,9 @@ export default function ProSection({
               rayLength={1.8}
               noiseAmount={0.08}
               distortion={0.2}
+              // Decorative full-bleed backdrop — cap DPR below retina; the soft
+              // glow hides the resolution drop, ~1.8× fewer fragments per frame.
+              maxDpr={1.5}
             />
           </PreviewBoundary>
         </div>

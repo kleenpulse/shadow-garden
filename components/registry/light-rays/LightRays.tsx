@@ -26,10 +26,19 @@ interface LightRaysProps {
   mouseInfluence?: number
   noiseAmount?: number
   distortion?: number
+  /** Cap the drawing-buffer pixel ratio. Lower = fewer fragments per frame for
+   *  a decorative full-bleed layer (soft glow hides the resolution drop). */
+  maxDpr?: number
   className?: string
 }
 
 const DEFAULT_COLOR = '#ffffff'
+
+// Canvas opacity crossfade (ms). The rays fade in on their first painted frame
+// and out before the context is torn down, so mounting/unmounting on scroll
+// reads as a reveal, not a pop. Reduced motion zeroes this via the global
+// transition-duration backstop in app/globals.css.
+const FADE_MS = 700
 
 const hexToRgb = (hex: string): [number, number, number] => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
@@ -102,6 +111,7 @@ const LightRays: React.FC<LightRaysProps> = ({
   mouseInfluence = 0.1,
   noiseAmount = 0.0,
   distortion = 0.0,
+  maxDpr = 2,
   className = '',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -114,6 +124,15 @@ const LightRays: React.FC<LightRaysProps> = ({
   const cleanupFunctionRef = useRef<(() => void) | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
+  // Loop-control refs: the render loop reads these live so the WebGL context is
+  // never rebuilt on a prop change. speedRef ≤ 0 halts the loop (one static
+  // frame, then stop); startLoop() resumes it. followMouse/mouseInfluence are
+  // ref-driven so the init effect can depend on [isVisible] alone.
+  const runningRef = useRef(false)
+  const startLoopRef = useRef<(() => void) | null>(null)
+  const speedRef = useRef(raysSpeed)
+  const followMouseRef = useRef(followMouse)
+  const mouseInfluenceRef = useRef(mouseInfluence)
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -152,7 +171,7 @@ const LightRays: React.FC<LightRaysProps> = ({
       if (!containerRef.current) return
 
       const renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, 2),
+        dpr: Math.min(window.devicePixelRatio, maxDpr),
         alpha: true,
         // Premultiplied alpha (paired with the premultiplied gl_FragColor below).
         // Safari's compositor mishandles a premultipliedAlpha:false canvas — it
@@ -166,6 +185,10 @@ const LightRays: React.FC<LightRaysProps> = ({
       const gl = renderer.gl
       gl.canvas.style.width = '100%'
       gl.canvas.style.height = '100%'
+      // Start hidden; the loop fades it in once the first frame has painted, so
+      // the rays never snap on at full opacity when the context initializes.
+      gl.canvas.style.opacity = '0'
+      gl.canvas.style.transition = `opacity ${FADE_MS}ms ease`
 
       while (containerRef.current.firstChild) {
         containerRef.current.removeChild(containerRef.current.firstChild)
@@ -309,7 +332,7 @@ void main() {
       const updatePlacement = () => {
         if (!containerRef.current || !renderer) return
 
-        renderer.dpr = Math.min(window.devicePixelRatio, 2)
+        renderer.dpr = Math.min(window.devicePixelRatio, maxDpr)
 
         const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current
         renderer.setSize(wCSS, hCSS)
@@ -325,14 +348,16 @@ void main() {
         uniforms.rayDir.value = dir
       }
 
+      let faded = false
       const loop = (t: number) => {
         if (!rendererRef.current || !uniformsRef.current || !meshRef.current) {
+          runningRef.current = false
           return
         }
 
         uniforms.iTime.value = t * 0.001
 
-        if (followMouse && mouseInfluence > 0.0) {
+        if (followMouseRef.current && mouseInfluenceRef.current > 0.0) {
           const smoothing = 0.92
 
           smoothMouseRef.current.x =
@@ -350,18 +375,43 @@ void main() {
 
         try {
           renderer.render({ scene: mesh })
-          animationIdRef.current = requestAnimationFrame(loop)
         } catch (error) {
           console.warn('WebGL rendering error:', error)
+          runningRef.current = false
           return
         }
+
+        // Reveal on the first real frame (works even at speed 0, which renders
+        // one frame then halts — the static rays still fade in rather than pop).
+        if (!faded) {
+          faded = true
+          gl.canvas.style.opacity = '1'
+        }
+
+        // Speed 0 (reduced motion / scrolled-past "off") paints one static
+        // frame, then halts — the full-viewport fragment pass stops burning the
+        // GPU instead of freezing visually while still rendering. Resumes via
+        // startLoop() when the uniform effect sees speed return.
+        if (speedRef.current <= 0) {
+          runningRef.current = false
+          return
+        }
+        animationIdRef.current = requestAnimationFrame(loop)
       }
+
+      const startLoop = () => {
+        if (runningRef.current) return
+        runningRef.current = true
+        animationIdRef.current = requestAnimationFrame(loop)
+      }
+      startLoopRef.current = startLoop
 
       window.addEventListener('resize', updatePlacement)
       updatePlacement()
-      animationIdRef.current = requestAnimationFrame(loop)
+      startLoop()
 
       cleanupFunctionRef.current = () => {
+        runningRef.current = false
         if (animationIdRef.current) {
           cancelAnimationFrame(animationIdRef.current)
           animationIdRef.current = null
@@ -369,15 +419,14 @@ void main() {
 
         window.removeEventListener('resize', updatePlacement)
 
-        if (renderer) {
+        // Fade the last painted frame out, then dispose. The rAF is already
+        // stopped, so the canvas holds its final image while it fades — the
+        // rays ease away on scroll instead of vanishing the instant the
+        // IntersectionObserver drops the context.
+        const canvas = renderer.gl.canvas
+        const dispose = () => {
           try {
-            const canvas = renderer.gl.canvas
-            const loseContextExt =
-              renderer.gl.getExtension('WEBGL_lose_context')
-            if (loseContextExt) {
-              loseContextExt.loseContext()
-            }
-
+            renderer.gl.getExtension('WEBGL_lose_context')?.loseContext()
             if (canvas && canvas.parentNode) {
               canvas.parentNode.removeChild(canvas)
             }
@@ -385,8 +434,16 @@ void main() {
             console.warn('Error during WebGL cleanup:', error)
           }
         }
+        if (canvas) {
+          canvas.style.opacity = '0'
+          window.setTimeout(dispose, FADE_MS + 40)
+        } else {
+          dispose()
+        }
 
-        rendererRef.current = null
+        // Null the refs now (the loop is stopped); the delayed dispose keeps its
+        // own local handles. Guard so a fast re-init isn't clobbered.
+        if (rendererRef.current === renderer) rendererRef.current = null
         uniformsRef.current = null
         meshRef.current = null
       }
@@ -400,23 +457,20 @@ void main() {
         cleanupFunctionRef.current = null
       }
     }
-  }, [
-    isVisible,
-    raysOrigin,
-    raysColor,
-    raysSpeed,
-    lightSpread,
-    rayLength,
-    pulsating,
-    fadeDistance,
-    saturation,
-    followMouse,
-    mouseInfluence,
-    noiseAmount,
-    distortion,
-  ])
+    // Build/tear-down the WebGL context only on the visibility boundary. Every
+    // tunable prop flows through the live uniform-sync effect below (and the
+    // loop's refs), so a scroll-driven raysSpeed toggle no longer rebuilds the
+    // context, recompiles the shader, or re-runs the setTimeout init delay.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible])
 
   useEffect(() => {
+    // Keep the loop's ref-driven inputs current even before WebGL finishes its
+    // async init, so the first frame reads the right speed / mouse settings.
+    speedRef.current = raysSpeed
+    followMouseRef.current = followMouse
+    mouseInfluenceRef.current = mouseInfluence
+
     if (!uniformsRef.current || !containerRef.current || !rendererRef.current)
       return
 
@@ -439,6 +493,9 @@ void main() {
     const { anchor, dir } = getAnchorAndDir(raysOrigin, wCSS * dpr, hCSS * dpr)
     u.rayPos.value = anchor
     u.rayDir.value = dir
+
+    // The loop self-halts at speed 0; kick it back on when speed returns.
+    if (raysSpeed > 0) startLoopRef.current?.()
   }, [
     raysColor,
     raysSpeed,
@@ -448,6 +505,7 @@ void main() {
     pulsating,
     fadeDistance,
     saturation,
+    followMouse,
     mouseInfluence,
     noiseAmount,
     distortion,

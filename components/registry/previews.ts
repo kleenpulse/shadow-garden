@@ -12,6 +12,7 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   threads: dynamic(() => import("./threads/ThreadsPreview"), { ssr: false }),
   grainient: dynamic(() => import("./grainient/GrainientPreview"), { ssr: false }),
   "light-rays": dynamic(() => import("./light-rays/LightRaysPreview"), { ssr: false }),
+  "gradual-blur": dynamic(() => import("./gradual-blur/GradualBlurPreview"), { ssr: false }),
   "side-rays": dynamic(() => import("./side-rays/SideRaysPreview"), { ssr: false }),
   "dot-field": dynamic(() => import("./dot-field/DotFieldPreview"), { ssr: false }),
   strands: dynamic(() => import("./strands/StrandsPreview"), { ssr: false }),

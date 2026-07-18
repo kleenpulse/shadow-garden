@@ -183,6 +183,9 @@ const Threads: React.FC<ThreadsProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationFrameId = useRef<number>(0);
+  // Set inside the init effect; lets the paused effect resume the render loop
+  // after it self-halts (the loop stops issuing draw calls once paused settles).
+  const startLoopRef = useRef<(() => void) | null>(null);
   // Live-tunable values read each frame — the WebGL context is never rebuilt
   // while a control is dragged, so tuning stays smooth.
   const live = useRef({ color, amplitude, distance, opacity, saturation, paused });
@@ -272,6 +275,7 @@ const Threads: React.FC<ThreadsProps> = ({
       let accumulatedTime = 0;
       let lastTimestamp = -1;
       let timeScale = paused ? 0 : 1;
+      let running = false;
 
       function update(t: number) {
         const dt = lastTimestamp >= 0 ? (t - lastTimestamp) * 0.001 : 0;
@@ -305,11 +309,29 @@ const Threads: React.FC<ThreadsProps> = ({
         }
 
         renderer.render({ scene: mesh });
+
+        // Once paused and the ease-out has settled, stop the loop entirely so a
+        // scrolled-past hero stops issuing draw calls (it used to render a
+        // frozen frame forever). The paused effect calls startLoop to resume.
+        if (l.paused && timeScale < 1e-3) {
+          running = false;
+          lastTimestamp = -1;
+          return;
+        }
         animationFrameId.current = requestAnimationFrame(update);
       }
-      animationFrameId.current = requestAnimationFrame(update);
+
+      function startLoop() {
+        if (running) return;
+        running = true;
+        lastTimestamp = -1;
+        animationFrameId.current = requestAnimationFrame(update);
+      }
+      startLoopRef.current = startLoop;
+      startLoop();
 
       return () => {
+        running = false;
         if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
         resizeObserver.disconnect();
         if (enableMouseInteraction) {
@@ -330,6 +352,12 @@ const Threads: React.FC<ThreadsProps> = ({
     }
     // color/amplitude/distance/opacity/saturation/paused are live via `live` ref.
   }, [enableMouseInteraction, useFallback]);
+
+  // Resume the render loop when unpausing — the loop self-halts once the
+  // pause ease-out settles, so it needs an external kick to start again.
+  useEffect(() => {
+    if (!paused) startLoopRef.current?.();
+  }, [paused]);
 
   if (useFallback && fallbackSrc) {
     return (

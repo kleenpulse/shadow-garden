@@ -28,6 +28,9 @@ interface DotFieldProps {
   gradientFrom?: string
   gradientTo?: string
   glowColor?: string
+  /** Halt the canvas loop + speed interval (renders one final static frame).
+   *  Lets a wrapper stop offscreen/reduced-motion work without unmounting. */
+  paused?: boolean
   [key: string]: unknown
 }
 
@@ -45,6 +48,7 @@ const DotField = memo(
     gradientFrom = 'rgba(168, 85, 247, 0.35)',
     gradientTo = 'rgba(180, 151, 207, 0.25)',
     glowColor = '#a855f7',
+    paused = false,
     ...rest
   }: DotFieldProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -76,8 +80,10 @@ const DotField = memo(
       waveAmplitude,
       gradientFrom,
       gradientTo,
+      paused,
     }
     const rebuildRef = useRef<(() => void) | null>(null)
+    const startLoopRef = useRef<(() => void) | null>(null)
     const glowIdRef = useRef(
       `dot-field-glow-${Math.random().toString(36).slice(2, 9)}`
     )
@@ -165,6 +171,7 @@ const DotField = memo(
       }
 
       function updateMouseSpeed() {
+        if (propsRef.current.paused) return
         const m = mouseRef.current
         const dx = m.prevX - m.x
         const dy = m.prevY - m.y
@@ -178,6 +185,7 @@ const DotField = memo(
       const speedInterval = setInterval(updateMouseSpeed, 20)
 
       let frameCount = 0
+      let running = false
 
       function tick() {
         frameCount++
@@ -276,8 +284,22 @@ const DotField = memo(
 
         ctx!.fill()
 
+        // Paint one frame, then halt if paused — a scrolled-past / reduced-motion
+        // field freezes on a proper static grid instead of redrawing forever.
+        // startLoop resumes it when active again.
+        if (propsRef.current.paused) {
+          running = false
+          return
+        }
         rafRef.current = requestAnimationFrame(tick)
       }
+
+      function startLoop() {
+        if (running) return
+        running = true
+        rafRef.current = requestAnimationFrame(tick)
+      }
+      startLoopRef.current = startLoop
 
       doResize()
       window.addEventListener('resize', resize)
@@ -286,7 +308,7 @@ const DotField = memo(
       window.addEventListener('touchmove', onTouchMove, { passive: true })
       window.addEventListener('touchend', onTouchEnd, { passive: true })
       window.addEventListener('touchcancel', onTouchEnd, { passive: true })
-      rafRef.current = requestAnimationFrame(tick)
+      startLoop()
 
       rebuildRef.current = () => {
         const { w, h } = sizeRef.current
@@ -294,6 +316,7 @@ const DotField = memo(
       }
 
       return () => {
+        running = false
         if (rafRef.current) cancelAnimationFrame(rafRef.current)
         clearInterval(speedInterval)
         clearTimeout(resizeTimer)
@@ -311,6 +334,11 @@ const DotField = memo(
     useEffect(() => {
       rebuildRef.current?.()
     }, [dotRadius, dotSpacing])
+
+    // Resume the canvas loop when unpausing — tick self-halts while paused.
+    useEffect(() => {
+      if (!paused) startLoopRef.current?.()
+    }, [paused])
 
     return (
       <div className="relative h-full w-full" {...rest}>

@@ -18,6 +18,7 @@ import ProSection from "@/components/landing/ProSection";
 import LandingFooter from "@/components/landing/LandingFooter";
 import SmoothScroll from "@/components/landing/SmoothScroll";
 import SpotlightList from "@/components/landing/SpotlightList";
+import PageBottomBlur from "@/components/landing/PageBottomBlur";
 import GotoTop from "@/components/miscellaneous/goto-top";
 
 export default function Home() {
@@ -58,6 +59,7 @@ export default function Home() {
 			<div id="hero" />
 			<SmoothScroll />
 			<GotoTop />
+			<PageBottomBlur />
 
 			<LandingHeader />
 
