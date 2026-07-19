@@ -85,13 +85,39 @@ export function IntroOverlay() {
 		const unlock = () =>
 			document.documentElement.removeAttribute("data-sg-intro");
 
+		// Input-level scroll lock: overflow:clip stops native scrolling, but
+		// Lenis (SmoothScroll) accumulates wheel deltas in its virtual target
+		// and applies them once scroll unlocks — the page would reveal
+		// pre-scrolled. Intercept at window capture phase so no scroll handler
+		// (Lenis included) ever sees input while the intro owns the screen.
+		const blockScroll = (e: Event) => {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		};
+		window.addEventListener("wheel", blockScroll, {
+			capture: true,
+			passive: false,
+		});
+		window.addEventListener("touchmove", blockScroll, {
+			capture: true,
+			passive: false,
+		});
+		const unblockScroll = () => {
+			window.removeEventListener("wheel", blockScroll, { capture: true });
+			window.removeEventListener("touchmove", blockScroll, { capture: true });
+		};
+
 		const finish = () => {
 			if (finished) return;
 			finished = true;
 			unlock();
+			unblockScroll();
 			tl?.kill();
 			cancelAnimationFrame(rafId);
 			dust?.dispose();
+			// Backstop for the reveal window (scrollbar drag / keyboard while the
+			// halves are still sliding): the page always starts at the top.
+			if (window.scrollY !== 0) window.scrollTo({ top: 0, behavior: "instant" });
 			setPhase("done");
 		};
 
@@ -227,6 +253,7 @@ export function IntroOverlay() {
 			tl?.kill();
 			cancelAnimationFrame(rafId);
 			dust?.dispose();
+			unblockScroll();
 			window.removeEventListener("resize", onResize);
 		};
 	}, []);
