@@ -260,6 +260,33 @@
 	clip-path: var(--magicui-theme-vt-clip-from);
 }
 
+/* Intro overlay (components/intro/IntroOverlay.tsx): hidden unless the
+   pre-paint script in app/layout.tsx stamps html[data-sg-intro] — first load
+   of a session only. The attribute also locks scroll until the reveal begins;
+   the component removes it as the split starts, so the scrollbar reflow
+   happens while the halves still cover the page. */
+#sg-intro {
+	display: none;
+}
+html[data-sg-intro] #sg-intro {
+	display: flex;
+}
+html[data-sg-intro] {
+	/* hidden first: Safari ≤15 drops `clip` and keeps the fallback */
+	overflow: hidden;
+	overflow: clip;
+}
+/* Wordmark scale: Geist bold uppercase "SHADOWGARDEN" spans ~8.8× font-size
+   (measured) → ~86vw on desktop, ~95vw on phones. */
+#sg-intro-word {
+	font-size: clamp(2.25rem, 9.8vw, 8.5rem);
+}
+@media (max-width: 450px) {
+	#sg-intro-word {
+		font-size: 10.6vw;
+	}
+}
+
 /* Honor prefers-reduced-motion globally as a backstop; components also gate individually. */
 @media (prefers-reduced-motion: reduce) {
 	*,

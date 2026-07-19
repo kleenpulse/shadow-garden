@@ -31,6 +31,8 @@ Components are tiered **free** (14) or **pro** (10). Pro source is gated server-
 
 A dark graphite instrument bench with a single amethyst accent. The shell stays chromatically quiet so the live previews supply the color. Space Mono for display/readouts, Geist for body. Light and dark themes; dark is the default first impression. Every animated component respects `prefers-reduced-motion`, and the sidebar and all controls are fully keyboard-accessible.
 
+First visit each session opens with a wordmark intro overlay that splits apart to reveal the bench — skipped under reduced motion, replayable with `?sg-intro`.
+
 ## Stack
 
 - Next.js 16 App Router with Cache Components / PPR on, React 19, TypeScript strict, Bun.
