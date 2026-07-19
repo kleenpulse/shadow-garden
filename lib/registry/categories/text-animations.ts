@@ -132,6 +132,7 @@ export const textAnimations: ComponentEntry[] = [
 		name: "VariableProximity",
 		category: "Text Animations",
 		tier: "pro",
+		pausable: true,
 		description:
 			"Text whose letters interpolate font weight by cursor proximity.",
 		dependencies: ["motion"],

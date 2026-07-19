@@ -3,7 +3,11 @@
 import type { PreviewProps } from "@/lib/registry/types";
 import Threads from "./Threads";
 
-export default function ThreadsPreview({ values, reducedMotion }: PreviewProps) {
+export default function ThreadsPreview({
+  values,
+  reducedMotion,
+  paused,
+}: PreviewProps) {
   return (
     <Threads
       color={values.color as string}
@@ -12,7 +16,7 @@ export default function ThreadsPreview({ values, reducedMotion }: PreviewProps) 
       saturation={values.saturation as number}
       opacity={values.opacity as number}
       enableMouseInteraction={values.enableMouseInteraction as boolean}
-      paused={reducedMotion}
+      paused={paused || reducedMotion}
     />
   );
 }

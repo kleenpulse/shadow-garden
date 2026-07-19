@@ -3,7 +3,11 @@
 import type { PreviewProps } from "@/lib/registry/types";
 import SakuraTree, { type SakuraWeather } from "./SakuraTree";
 
-export default function SakuraTreePreview({ values, reducedMotion }: PreviewProps) {
+export default function SakuraTreePreview({
+  values,
+  reducedMotion,
+  paused,
+}: PreviewProps) {
   return (
     <SakuraTree
       windSpeed={values.windSpeed as number}
@@ -12,7 +16,7 @@ export default function SakuraTreePreview({ values, reducedMotion }: PreviewProp
       weather={values.weather as SakuraWeather}
       windDirection={values.windDirection as number}
       cameraDistance={values.cameraDistance as number}
-      paused={reducedMotion}
+      paused={paused || reducedMotion}
     />
   );
 }

@@ -25,7 +25,11 @@ const PALETTE = {
 	},
 } as const;
 
-export default function PhysicsEnginePreview({ values, reducedMotion }: PreviewProps) {
+export default function PhysicsEnginePreview({
+	values,
+	reducedMotion,
+	paused,
+}: PreviewProps) {
 	const { resolvedTheme } = useTheme();
 	const [mounted, setMounted] = useState(false);
 	useEffect(() => setMounted(true), []);
@@ -53,7 +57,7 @@ export default function PhysicsEnginePreview({ values, reducedMotion }: PreviewP
 				gridMajor={palette.gridMajor}
 				ink={palette.ink}
 				staticColor={palette.staticColor}
-				reducedMotion={reducedMotion}
+				reducedMotion={paused || reducedMotion}
 			/>
 		</div>
 	);

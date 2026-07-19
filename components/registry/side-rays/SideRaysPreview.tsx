@@ -3,10 +3,15 @@
 import type { PreviewProps } from "@/lib/registry/types";
 import SideRays from "./SideRays";
 
-export default function SideRaysPreview({ values, reducedMotion }: PreviewProps) {
+export default function SideRaysPreview({
+  values,
+  reducedMotion,
+  paused,
+}: PreviewProps) {
+  const still = paused || reducedMotion;
   return (
     <SideRays
-      speed={reducedMotion ? 0 : (values.speed as number)}
+      speed={still ? 0 : (values.speed as number)}
       rayColor1={values.rayColor1 as string}
       rayColor2={values.rayColor2 as string}
       intensity={values.intensity as number}
@@ -16,6 +21,7 @@ export default function SideRaysPreview({ values, reducedMotion }: PreviewProps)
       blend={values.blend as number}
       falloff={values.falloff as number}
       opacity={values.opacity as number}
+      paused={still}
     />
   );
 }

@@ -6,7 +6,11 @@ import VariableProximity from "./VariableProximity";
 
 type Falloff = "linear" | "exponential" | "gaussian";
 
-export default function VariableProximityPreview({ values }: PreviewProps) {
+export default function VariableProximityPreview({
+  values,
+  reducedMotion,
+  paused,
+}: PreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   return (
     <div
@@ -20,6 +24,7 @@ export default function VariableProximityPreview({ values }: PreviewProps) {
         containerRef={containerRef}
         radius={values.radius as number}
         falloff={values.falloff as Falloff}
+        paused={paused || reducedMotion}
         className="max-w-md text-center text-3xl text-ink sm:text-4xl"
         style={{ fontFamily: "var(--font-geist-sans), sans-serif" }}
       />

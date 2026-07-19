@@ -50,6 +50,7 @@ export default function FavoriteThumbnailCard({
               <Preview
                 values={defaultsFromSchema(entry.props)}
                 reducedMotion={Boolean(reduced)}
+                paused={false}
               />
             </PreviewBoundary>
           </div>

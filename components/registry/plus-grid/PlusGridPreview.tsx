@@ -6,6 +6,7 @@ import PlusGrid from "./PlusGrid";
 export default function PlusGridPreview({
 	values,
 	reducedMotion,
+	paused,
 }: PreviewProps) {
 	return (
 		<div className="relative h-full w-full">
@@ -20,8 +21,10 @@ export default function PlusGridPreview({
 					waveDecay: values.waveDecay as number,
 					color: values.color as string,
 				}}
-				autoPulse={reducedMotion ? false : (values.autoPulse as boolean)}
-				paused={reducedMotion}
+				autoPulse={
+					paused || reducedMotion ? false : (values.autoPulse as boolean)
+				}
+				paused={paused || reducedMotion}
 			/>
 			{!reducedMotion && (
 				<p className="pointer-events-none absolute bottom-2 right-3 font-display text-[9px] uppercase tracking-[0.28em] text-ink-mute">

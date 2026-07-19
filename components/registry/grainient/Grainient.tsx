@@ -26,6 +26,7 @@ interface GrainientProps {
   color1?: string
   color2?: string
   color3?: string
+  paused?: boolean
   className?: string
 }
 
@@ -164,9 +165,15 @@ const Grainient = ({
   warpSpeed = 2.0,
   warpStrength = 1.6,
   zoom = 0.95,
+  paused = false,
   className = '',
 }: GrainientProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
+  // Mirror `paused` for the loop's start/stop gate without rebuilding the context.
+  const pausedRef = useRef(paused)
+  pausedRef.current = paused
+  const startLoopRef = useRef<(() => void) | null>(null)
+  const stopLoopRef = useRef<(() => void) | null>(null)
 
   // Effect 1: build WebGL context once, pause when offscreen / tab hidden
   useEffect(() => {
@@ -249,7 +256,7 @@ const Grainient = ({
     }
 
     const tryStart = () => {
-      if (isVisible && isPageVisible && raf === 0)
+      if (isVisible && isPageVisible && !pausedRef.current && raf === 0)
         raf = requestAnimationFrame(loop)
     }
     const tryStop = () => {
@@ -258,6 +265,8 @@ const Grainient = ({
         raf = 0
       }
     }
+    startLoopRef.current = tryStart
+    stopLoopRef.current = tryStop
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -320,6 +329,10 @@ const Grainient = ({
     u.uColor1.value = new Float32Array(hexToRgb(color1))
     u.uColor2.value = new Float32Array(hexToRgb(color2))
     u.uColor3.value = new Float32Array(hexToRgb(color3))
+
+    // The loop is halted while paused — repaint one frame so tuning stays
+    // visible (matters for reduced-motion users, who are always paused).
+    if (pausedRef.current) ctx.renderer.render({ scene: ctx.mesh })
   }, [
     timeSpeed,
     colorBalance,
@@ -344,6 +357,13 @@ const Grainient = ({
     color2,
     color3,
   ])
+
+  // Halt the loop entirely while paused so it stops issuing draw calls, instead
+  // of spinning at speed 0 and painting a frozen frame forever.
+  useEffect(() => {
+    if (paused) stopLoopRef.current?.()
+    else startLoopRef.current?.()
+  }, [paused])
 
   return (
     <div

@@ -406,7 +406,19 @@ void main() {
       }
       startLoopRef.current = startLoop
 
-      window.addEventListener('resize', updatePlacement)
+      // Repaint after every resize: the loop self-halts at speed 0 (reduced
+      // motion / scrolled-past), so without a redraw the rays freeze stale and
+      // stretched at the old size until the next interaction.
+      const handleResize = () => {
+        updatePlacement()
+        startLoopRef.current?.()
+      }
+      window.addEventListener('resize', handleResize)
+      // The container can be resized without a window resize (e.g. a draggable
+      // resize handle changing the host panel's width). Observe it directly so
+      // the drawing buffer + iResolution stay in sync — twin of SideRays.
+      const ro = new ResizeObserver(handleResize)
+      if (containerRef.current) ro.observe(containerRef.current)
       updatePlacement()
       startLoop()
 
@@ -417,7 +429,8 @@ void main() {
           animationIdRef.current = null
         }
 
-        window.removeEventListener('resize', updatePlacement)
+        ro.disconnect()
+        window.removeEventListener('resize', handleResize)
 
         // Fade the last painted frame out, then dispose. The rAF is already
         // stopped, so the canvas holds its final image while it fades — the

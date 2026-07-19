@@ -77,6 +77,9 @@ export interface ComponentEntry {
   /** v1 populates one canonical (TS + Tailwind) entry; array kept extensible. */
   variants: Variant[];
   dependencies?: string[];
+  /** Has a free-running animation loop the global pause control can halt.
+      Set on WebGL/Canvas/rAF loopers; drives the header pause button's visibility. */
+  pausable?: boolean;
 }
 
 /** Props handed to every live preview component. */
@@ -84,4 +87,8 @@ export interface PreviewProps {
   values: TunedValues;
   /** True when the OS requests reduced motion — previews must quiesce. */
   reducedMotion: boolean;
+  /** True when the user has manually paused via the Controls header toggle.
+      Distinct from `reducedMotion` (which also gates entrance/one-shot animations);
+      loopers OR the two into one "effective still" signal. */
+  paused: boolean;
 }

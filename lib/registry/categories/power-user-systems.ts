@@ -7,6 +7,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "SakuraTree",
 		category: "Power-User Systems",
 		tier: "pro",
+		pausable: true,
 		description:
 			"A painterly toon-shaded 3D cherry-blossom scene with wind-driven falling petals.",
 		dependencies: ["three", "@react-three/fiber"],
@@ -125,6 +126,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "PhysicsEngine",
 		category: "Power-User Systems",
 		tier: "pro",
+		pausable: true,
 		description:
 			"A from-scratch 2D rigid-body physics lab — fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
 		variants: [
@@ -240,6 +242,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "BlackHole",
 		category: "Power-User Systems",
 		tier: "pro",
+		pausable: true,
 		description:
 			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
 		dependencies: ["ogl"],

@@ -3,7 +3,12 @@
 import type { PreviewProps } from "@/lib/registry/types";
 import DotField from "./DotField";
 
-export default function DotFieldPreview({ values, reducedMotion }: PreviewProps) {
+export default function DotFieldPreview({
+  values,
+  reducedMotion,
+  paused,
+}: PreviewProps) {
+  const still = paused || reducedMotion;
   return (
     <DotField
       dotRadius={values.dotRadius as number}
@@ -13,11 +18,12 @@ export default function DotFieldPreview({ values, reducedMotion }: PreviewProps)
       bulgeOnly={values.bulgeOnly as boolean}
       bulgeStrength={values.bulgeStrength as number}
       glowRadius={values.glowRadius as number}
-      sparkle={reducedMotion ? false : (values.sparkle as boolean)}
-      waveAmplitude={reducedMotion ? 0 : (values.waveAmplitude as number)}
+      sparkle={still ? false : (values.sparkle as boolean)}
+      waveAmplitude={still ? 0 : (values.waveAmplitude as number)}
       gradientFrom={values.gradientFrom as string}
       gradientTo={values.gradientTo as string}
       glowColor={values.glowColor as string}
+      paused={still}
     />
   );
 }

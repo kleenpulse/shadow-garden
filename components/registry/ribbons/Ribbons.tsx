@@ -14,6 +14,7 @@ interface RibbonsOptions {
   parallaxAmount: number
   animateSections: boolean
   color?: string
+  paused?: boolean
 }
 
 interface Point {
@@ -34,6 +35,10 @@ interface RibbonSection {
 
 const Ribbons: React.FC<RibbonsOptions> = (options) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  // Persist ribbons across effect re-runs — the effect re-runs on every option
+  // change (including pause), so keeping the field in a ref freezes it in place
+  // instead of clearing and respawning on each toggle.
+  const ribbonsRef = useRef<RibbonSection[][]>([])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -46,7 +51,7 @@ const Ribbons: React.FC<RibbonsOptions> = (options) => {
     let height = 0
     let scroll = 0
     let rafId = 0
-    const ribbons: RibbonSection[][] = []
+    const ribbons = ribbonsRef.current
 
     const random = (min: number, max: number): number => {
       return Math.random() * (max - min) + min
@@ -225,6 +230,9 @@ const Ribbons: React.FC<RibbonsOptions> = (options) => {
         addRibbon()
       }
 
+      // Freeze while paused — hold the drawn frame instead of re-requesting, so
+      // the loop stops issuing draw calls (it used to run forever at speed 0).
+      if (options.paused) return
       rafId = requestAnimationFrame(onDraw)
     }
 

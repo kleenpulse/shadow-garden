@@ -29,7 +29,7 @@ Components are tiered **free** (21) or **pro** (14). Pro source is gated server-
 
 ## Design
 
-A dark graphite instrument bench with a single amethyst accent. The shell stays chromatically quiet so the live previews supply the color. Space Mono for display/readouts, Geist for body. Light and dark themes; dark is the default first impression. Every animated component respects `prefers-reduced-motion`, and the sidebar and all controls are fully keyboard-accessible.
+A dark graphite instrument bench with a single amethyst accent. The shell stays chromatically quiet so the live previews supply the color. Space Mono for display/readouts, Geist for body. Light and dark themes; dark is the default first impression. Every animated component respects `prefers-reduced-motion`, and a pause toggle in the Controls header halts any animating preview's render loop on demand — it stops issuing frames rather than just freezing. The sidebar and all controls are fully keyboard-accessible.
 
 First visit each session opens with a wordmark intro overlay that splits apart to reveal the bench — skipped under reduced motion, replayable with `?sg-intro`.
 

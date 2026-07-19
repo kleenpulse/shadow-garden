@@ -5,7 +5,12 @@ import Ribbons from "./Ribbons";
 
 type VerticalPosition = "top" | "middle" | "bottom" | "random";
 
-export default function RibbonsPreview({ values, reducedMotion }: PreviewProps) {
+export default function RibbonsPreview({
+  values,
+  reducedMotion,
+  paused,
+}: PreviewProps) {
+  const still = paused || reducedMotion;
   return (
     <Ribbons
       color={values.color as string}
@@ -14,11 +19,12 @@ export default function RibbonsPreview({ values, reducedMotion }: PreviewProps) 
       colorAlpha={values.colorAlpha as number}
       colorCycleSpeed={4}
       verticalPosition={values.verticalPosition as VerticalPosition}
-      horizontalSpeed={reducedMotion ? 0 : (values.horizontalSpeed as number)}
+      horizontalSpeed={still ? 0 : (values.horizontalSpeed as number)}
       ribbonCount={values.ribbonCount as number}
       strokeSize={values.strokeSize as number}
       parallaxAmount={values.parallaxAmount as number}
-      animateSections={reducedMotion ? false : (values.animateSections as boolean)}
+      animateSections={still ? false : (values.animateSections as boolean)}
+      paused={still}
     />
   );
 }
