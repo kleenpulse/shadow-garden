@@ -11,8 +11,11 @@ import {
 } from 'react'
 import { motion } from 'motion/react'
 
-function useAnimationFrame(callback: () => void) {
+function useAnimationFrame(callback: () => void, paused = false) {
   useEffect(() => {
+    // Halt entirely while paused — this rAF used to run forever even when the
+    // cursor was still (the callback early-returns, but frames kept requesting).
+    if (paused) return
     let frameId: number
     const loop = () => {
       callback()
@@ -20,7 +23,7 @@ function useAnimationFrame(callback: () => void) {
     }
     frameId = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(frameId)
-  }, [callback])
+  }, [callback, paused])
 }
 
 function useMousePositionRef(containerRef: RefObject<HTMLElement | null>) {
@@ -61,6 +64,7 @@ interface VariableProximityProps extends HTMLAttributes<HTMLSpanElement> {
   containerRef: RefObject<HTMLElement | null>
   radius?: number
   falloff?: 'linear' | 'exponential' | 'gaussian'
+  paused?: boolean
   className?: string
   onClick?: () => void
   style?: CSSProperties
@@ -75,6 +79,7 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>(
       containerRef,
       radius = 50,
       falloff = 'linear',
+      paused = false,
       className = '',
       onClick,
       style,
@@ -171,7 +176,18 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>(
         interpolatedSettingsRef.current[index] = newSettings
         letterRef.style.fontVariationSettings = newSettings
       })
-    })
+    }, paused)
+
+    // While paused (or reduced motion), settle every letter back to its rest
+    // weight — the loop is halted, so nothing else will reset them.
+    useEffect(() => {
+      if (!paused) return
+      letterRefs.current.forEach(letterRef => {
+        if (letterRef) {
+          letterRef.style.fontVariationSettings = fromFontVariationSettings
+        }
+      })
+    }, [paused, fromFontVariationSettings])
 
     const words = label.split(' ')
     let letterIndex = 0

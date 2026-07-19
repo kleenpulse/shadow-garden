@@ -684,7 +684,15 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 				blurProgram.uniforms.uTexel.value[0] = 1 / hw;
 				blurProgram.uniforms.uTexel.value[1] = 1 / hh;
 			}
-			const resizeObserver = new ResizeObserver(() => resize());
+			// resize() reallocates the canvas + FBOs (which clears them) but draws
+			// nothing. When the loop has self-halted (paused / reduced motion), that
+			// leaves a blank stage until the next pointer grab. Re-arm the loop so a
+			// resize repaints one corrected frame — it self-halts again immediately
+			// if still paused (update draws, then checks the halt condition).
+			const resizeObserver = new ResizeObserver(() => {
+				resize();
+				startLoopRef.current?.();
+			});
 			resizeObserver.observe(container);
 			resize();
 

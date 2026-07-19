@@ -5,7 +5,12 @@ import Strands from "./Strands";
 
 const STRAND_COLORS = ["#a855f7", "#6d28d9", "#22d3ee"];
 
-export default function StrandsPreview({ values, reducedMotion }: PreviewProps) {
+export default function StrandsPreview({
+  values,
+  reducedMotion,
+  paused,
+}: PreviewProps) {
+  const still = paused || reducedMotion;
   return (
     // Deliberately unthemed (like .shiki-wrap): additive light strands are only
     // legible on a dark surface, so the stage stays graphite in both themes.
@@ -14,7 +19,7 @@ export default function StrandsPreview({ values, reducedMotion }: PreviewProps) 
         colors={STRAND_COLORS}
         count={values.count as number}
         scale={values.scale as number}
-        speed={reducedMotion ? 0 : (values.speed as number)}
+        speed={still ? 0 : (values.speed as number)}
         amplitude={values.amplitude as number}
         waviness={values.waviness as number}
         thickness={values.thickness as number}
@@ -27,6 +32,7 @@ export default function StrandsPreview({ values, reducedMotion }: PreviewProps) 
         glass={values.glass as boolean}
         refraction={values.refraction as number}
         dispersion={values.dispersion as number}
+        paused={still}
       />
     </div>
   );

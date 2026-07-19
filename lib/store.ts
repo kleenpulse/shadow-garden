@@ -36,6 +36,11 @@ interface UIState {
   paletteOpen: boolean;
   setPaletteOpen: (open: boolean) => void;
   togglePalette: () => void;
+
+  /** Manual pause of the previewed animation (ephemeral; reset per component). */
+  paused: boolean;
+  setPaused: (paused: boolean) => void;
+  togglePaused: () => void;
 }
 
 export const useUIStore = create<UIState>()(
@@ -57,6 +62,10 @@ export const useUIStore = create<UIState>()(
       paletteOpen: false,
       setPaletteOpen: (paletteOpen) => set({ paletteOpen }),
       togglePalette: () => set((state) => ({ paletteOpen: !state.paletteOpen })),
+
+      paused: false,
+      setPaused: (paused) => set({ paused }),
+      togglePaused: () => set((state) => ({ paused: !state.paused })),
     }),
     {
       name: "sg-ui",

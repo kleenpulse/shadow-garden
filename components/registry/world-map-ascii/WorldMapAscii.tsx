@@ -13,6 +13,8 @@ interface WorldMapAsciiProps {
 	mouseRadius: number;
 	/** Idle wobble amplitude; 0 freezes the map. */
 	drift: number;
+	/** Manually freeze the render loop (pause / reduced motion). */
+	paused?: boolean;
 }
 
 interface ParticleData {
@@ -58,8 +60,14 @@ export default function WorldMapAscii({
 	density,
 	mouseRadius,
 	drift,
+	paused = false,
 }: WorldMapAsciiProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+	// Mirror `paused` so the loop self-halts without re-running the effect
+	// (which would re-sample the map and reset every particle to its base).
+	const pausedRef = useRef(paused);
+	pausedRef.current = paused;
+	const startLoopRef = useRef<(() => void) | null>(null);
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -154,8 +162,20 @@ export default function WorldMapAscii({
 			}
 			ctx.fill();
 
+			// Halt while paused — render this frame, then stop issuing draw calls
+			// (the loop used to run forever even at drift 0). Resumed by the effect below.
+			if (pausedRef.current) {
+				animationFrameId = 0;
+				return;
+			}
 			animationFrameId = requestAnimationFrame(animate);
 		};
+
+		const startLoop = () => {
+			if (animationFrameId) return;
+			animationFrameId = requestAnimationFrame(animate);
+		};
+		startLoopRef.current = startLoop;
 
 		mapImage.onload = () => {
 			initMap();
@@ -204,6 +224,11 @@ export default function WorldMapAscii({
 			clearTimeout(resizeTimer);
 		};
 	}, [color, particleSize, density, mouseRadius, drift]);
+
+	// Resume the loop when unpausing — it self-halts inside `animate` while paused.
+	useEffect(() => {
+		if (!paused) startLoopRef.current?.();
+	}, [paused]);
 
 	return (
 		<div className="absolute inset-0 overflow-hidden">

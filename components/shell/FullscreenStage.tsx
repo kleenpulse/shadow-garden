@@ -9,6 +9,7 @@ import type { ComponentEntry } from "@/lib/registry/types";
 import { displayName } from "@/lib/utils";
 import { useTunedProps } from "@/lib/registry/useTunedProps";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
+import { usePauseState } from "@/hooks/use-pause-state";
 import { previews } from "@/components/registry/previews";
 import PlaceholderPreview from "./PlaceholderPreview";
 import PreviewBoundary from "./PreviewBoundary";
@@ -19,6 +20,7 @@ import ControlsPanel from "./ControlsPanel";
 export default function FullscreenStage({ entry }: { entry: ComponentEntry }) {
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
+	const paused = usePauseState(entry.slug);
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [controlsOpen, setControlsOpen] = useState(false);
@@ -49,7 +51,11 @@ export default function FullscreenStage({ entry }: { entry: ComponentEntry }) {
 				variant="stage"
 				resetKeys={[entry.slug, valuesKey]}
 			>
-				<Preview values={values} reducedMotion={reducedMotion} />
+				<Preview
+					values={values}
+					reducedMotion={reducedMotion}
+					paused={paused}
+				/>
 			</PreviewBoundary>
 			<div className="absolute left-3 top-3 z-10 flex items-center gap-2">
 				<Link
@@ -79,6 +85,7 @@ export default function FullscreenStage({ entry }: { entry: ComponentEntry }) {
 								values={values}
 								onChange={setValue}
 								onReset={reset}
+								pausable={entry.pausable}
 							/>
 						</motion.div>
 					)}

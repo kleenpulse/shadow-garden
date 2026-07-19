@@ -206,6 +206,7 @@ export interface StrandsProps {
   refraction?: number
   dispersion?: number
   glassSize?: number
+  paused?: boolean
   className?: string
   style?: CSSProperties
 }
@@ -241,10 +242,13 @@ export default function Strands({
   refraction = 1,
   dispersion = 1,
   glassSize = 1,
+  paused = false,
   className = '',
   style,
 }: StrandsProps) {
-  const propsRef = useRef<Required<Omit<StrandsProps, 'className' | 'style'>>>({
+  const propsRef = useRef<
+    Required<Omit<StrandsProps, 'className' | 'style' | 'paused'>>
+  >({
     colors,
     count,
     speed,
@@ -288,6 +292,10 @@ export default function Strands({
   }
 
   const ctnDom = useRef<HTMLDivElement>(null)
+  // Mirror `paused` so the render loop self-halts without a context rebuild.
+  const pausedRef = useRef(paused)
+  pausedRef.current = paused
+  const startLoopRef = useRef<(() => void) | null>(null)
 
   useEffect(() => {
     const ctn = ctnDom.current
@@ -374,14 +382,32 @@ export default function Strands({
       renderTarget.setSize(width, height)
       glassProgram.uniforms.uResolution.value = [width, height]
     }
-    window.addEventListener('resize', resize)
+    // Repaint after every resize: the loop self-halts when paused, so without
+    // a redraw a resize leaves a stale/stretched frozen frame until resumed.
+    const handleResize = () => {
+      resize()
+      startLoopRef.current?.()
+    }
+    window.addEventListener('resize', handleResize)
+    // The container can be resized without a window resize (e.g. a draggable
+    // resize handle changing the host panel's width). Observe it directly so
+    // the drawing buffer + uResolution stay in sync.
+    const ro = new ResizeObserver(handleResize)
+    ro.observe(ctn)
     resize()
 
     let animateId = 0
+    let running = false
+    let lastT = -1
+    let accum = 0
     const update = (t: number) => {
-      animateId = requestAnimationFrame(update)
+      const dt = lastT >= 0 ? t - lastT : 0
+      lastT = t
       const current = propsRef.current
-      program.uniforms.uTime.value = t * 0.001
+      // Accumulate the clock only while playing, so pausing freezes the phase
+      // and resuming continues without a jump.
+      if (!pausedRef.current) accum += dt
+      program.uniforms.uTime.value = accum * 0.001
       program.uniforms.uColors.value = buildPalette(current.colors)
       program.uniforms.uColorCount.value = Math.min(
         current.colors.length,
@@ -425,12 +451,30 @@ export default function Strands({
       } else {
         renderer.render({ scene: mesh })
       }
+
+      // Halt once paused — one final frozen frame renders, then the loop stops
+      // issuing draw calls (it used to spin at speed 0 forever). Resumed below.
+      if (pausedRef.current) {
+        running = false
+        lastT = -1
+        return
+      }
+      animateId = requestAnimationFrame(update)
     }
-    animateId = requestAnimationFrame(update)
+    const startLoop = () => {
+      if (running) return
+      running = true
+      lastT = -1
+      animateId = requestAnimationFrame(update)
+    }
+    startLoopRef.current = startLoop
+    startLoop()
 
     return () => {
+      running = false
       cancelAnimationFrame(animateId)
-      window.removeEventListener('resize', resize)
+      ro.disconnect()
+      window.removeEventListener('resize', handleResize)
       if (ctn && gl.canvas.parentNode === ctn) {
         ctn.removeChild(gl.canvas)
       }
@@ -438,6 +482,11 @@ export default function Strands({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Resume the loop when unpausing — it self-halts inside `update` while paused.
+  useEffect(() => {
+    if (!paused) startLoopRef.current?.()
+  }, [paused])
 
   return (
     <div

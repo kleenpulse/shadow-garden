@@ -121,6 +121,10 @@ const DotField = memo(
         }
 
         buildDots(w, h)
+
+        // Repaint after the (debounced) resize settles — the loop self-halts,
+        // so a resize otherwise leaves a stale frame at the old size.
+        startLoopRef.current?.()
       }
 
       function buildDots(w: number, h: number) {
@@ -303,6 +307,12 @@ const DotField = memo(
 
       doResize()
       window.addEventListener('resize', resize)
+      // The container can be resized without a window resize (e.g. a draggable
+      // resize handle changing the host panel's width). Observe the parent
+      // directly so the canvas backing store + dot grid rebuild too.
+      const ro = new ResizeObserver(resize)
+      const parent = canvas.parentElement
+      if (parent) ro.observe(parent)
       window.addEventListener('mousemove', onMouseMove, { passive: true })
       window.addEventListener('touchstart', onTouchMove, { passive: true })
       window.addEventListener('touchmove', onTouchMove, { passive: true })
@@ -321,6 +331,7 @@ const DotField = memo(
         clearInterval(speedInterval)
         clearTimeout(resizeTimer)
         if (moveTimeoutRef.current) clearTimeout(moveTimeoutRef.current)
+        ro.disconnect()
         window.removeEventListener('resize', resize)
         window.removeEventListener('mousemove', onMouseMove)
         window.removeEventListener('touchstart', onTouchMove)

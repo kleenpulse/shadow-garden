@@ -17,6 +17,7 @@ interface SideRaysProps {
   blend?: number
   falloff?: number
   opacity?: number
+  paused?: boolean
   className?: string
 }
 
@@ -56,9 +57,14 @@ const SideRays = ({
   blend = 0.75,
   falloff = 2.0,
   opacity = 1.0,
+  paused = false,
   className = '',
 }: SideRaysProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
+  // Mirror `paused` so the render loop can self-halt without a context rebuild.
+  const pausedRef = useRef(paused)
+  pausedRef.current = paused
+  const startLoopRef = useRef<(() => void) | null>(null)
   const uniformsRef = useRef<Record<
     string,
     { value: number | number[] }
@@ -239,18 +245,36 @@ void main() {
         uniforms.iTime.value = t * 0.001
         try {
           renderer.render({ scene: mesh })
+          // Render one frame then halt while paused — stops issuing draw calls
+          // instead of spinning at speed 0. Resumed by the pause effect below.
+          if (pausedRef.current) {
+            animationIdRef.current = null
+            return
+          }
           animationIdRef.current = requestAnimationFrame(loop)
         } catch {
           return
         }
       }
 
-      window.addEventListener('resize', updateSize)
+      const startLoop = () => {
+        if (animationIdRef.current != null) return
+        animationIdRef.current = requestAnimationFrame(loop)
+      }
+      startLoopRef.current = startLoop
+
+      // Repaint after resize: the loop halts one frame after pausing, so a
+      // resize-while-paused otherwise leaves a blank canvas until it resumes.
+      const handleResize = () => {
+        updateSize()
+        startLoopRef.current?.()
+      }
+      window.addEventListener('resize', handleResize)
       // The container can be resized without a window resize (e.g. a draggable
       // resize handle changing the host panel's width). Observe it directly so
       // the WebGL drawing buffer + iResolution stay in sync — otherwise the rays
       // stretch/squash until the next window resize.
-      const ro = new ResizeObserver(updateSize)
+      const ro = new ResizeObserver(handleResize)
       ro.observe(containerRef.current)
       updateSize()
       animationIdRef.current = requestAnimationFrame(loop)
@@ -261,7 +285,7 @@ void main() {
           animationIdRef.current = null
         }
         ro.disconnect()
-        window.removeEventListener('resize', updateSize)
+        window.removeEventListener('resize', handleResize)
         if (renderer) {
           try {
             const loseCtx = renderer.gl.getExtension('WEBGL_lose_context')
@@ -332,6 +356,11 @@ void main() {
     falloff,
     opacity,
   ])
+
+  // Resume the loop when unpausing — it self-halts inside `loop` while paused.
+  useEffect(() => {
+    if (!paused) startLoopRef.current?.()
+  }, [paused])
 
   return (
     <div

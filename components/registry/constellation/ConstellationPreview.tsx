@@ -6,6 +6,7 @@ import Constellation from "./Constellation";
 export default function ConstellationPreview({
 	values,
 	reducedMotion,
+	paused,
 }: PreviewProps) {
 	return (
 		// Deliberately unthemed (like .shiki-wrap): glowing particles are only
@@ -24,7 +25,7 @@ export default function ConstellationPreview({
 				repelForce={values.repelForce as number}
 				lineOpacity={values.lineOpacity as number}
 				glow={values.glow as number}
-				paused={reducedMotion}
+				paused={paused || reducedMotion}
 			/>
 		</div>
 	);

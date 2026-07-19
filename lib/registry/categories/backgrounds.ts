@@ -7,6 +7,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Threads",
 		category: "Backgrounds",
 		tier: "free",
+		pausable: true,
 		description:
 			"A woven field of flowing threads rendered on a WebGL line shader.",
 		dependencies: ["ogl"],
@@ -73,6 +74,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Grainient",
 		category: "Backgrounds",
 		tier: "free",
+		pausable: true,
 		description:
 			"An animated grainy mesh-gradient rendered on a WebGL2 shader.",
 		dependencies: ["ogl"],
@@ -190,6 +192,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "LightRays",
 		category: "Backgrounds",
 		tier: "free",
+		pausable: true,
 		description:
 			"Volumetric god-rays from a configurable origin, optionally mouse-following.",
 		dependencies: ["ogl"],
@@ -369,6 +372,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "SideRays",
 		category: "Backgrounds",
 		tier: "pro",
+		pausable: true,
 		description:
 			"Corner-anchored two-color light rays with adjustable tilt and blend.",
 		dependencies: ["ogl"],
@@ -471,6 +475,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "DotField",
 		category: "Backgrounds",
 		tier: "free",
+		pausable: true,
 		description:
 			"An interactive dot grid that bulges and glows around the cursor.",
 		dependencies: [],
@@ -586,6 +591,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Strands",
 		category: "Backgrounds",
 		tier: "pro",
+		pausable: true,
 		description:
 			"Glowing wavy light-strands with an optional glass refraction lens.",
 		dependencies: ["ogl"],
@@ -740,6 +746,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Ribbons",
 		category: "Backgrounds",
 		tier: "pro",
+		pausable: true,
 		description: "Flowing translucent ribbons drifting across a canvas.",
 		dependencies: [],
 		variants: [
@@ -822,6 +829,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "WorldMap ASCII",
 		category: "Backgrounds",
 		tier: "pro",
+		pausable: true,
 		description:
 			"A dot-matrix world map whose particles scatter from the cursor.",
 		dependencies: [],
@@ -884,6 +892,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Constellation",
 		category: "Backgrounds",
 		tier: "pro",
+		pausable: true,
 		description:
 			"A constellation network — drifting particles link by proximity, chase and flee the cursor, and glow.",
 		dependencies: [],
@@ -988,6 +997,7 @@ export const backgrounds: ComponentEntry[] = [
 		name: "PlusGrid",
 		category: "Backgrounds",
 		tier: "pro",
+		pausable: true,
 		description:
 			"A canvas field of '+' glyphs — scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
 		dependencies: ["gsap"],

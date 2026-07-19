@@ -1,6 +1,7 @@
 "use client";
 
 import type { PropSchema, PropValue, TunedValues } from "@/lib/registry/types";
+import { useUIStore } from "@/lib/store";
 import NumberControl from "./controls/NumberControl";
 import EnumControl from "./controls/EnumControl";
 import BooleanControl from "./controls/BooleanControl";
@@ -12,6 +13,7 @@ export default function ControlsPanel({
 	onChange,
 	onReset,
 	dense = false,
+	pausable = false,
 }: {
 	props: PropSchema[];
 	values: TunedValues;
@@ -20,7 +22,12 @@ export default function ControlsPanel({
 	/** Single-column layout for narrow hosts (the fullscreen docked box) —
       the default grid keys off viewport breakpoints, not container width. */
 	dense?: boolean;
+	/** Show the pause/play toggle — set for components with a halt-able loop. */
+	pausable?: boolean;
 }) {
+	const paused = useUIStore((s) => s.paused);
+	const togglePaused = useUIStore((s) => s.togglePaused);
+
 	if (props.length === 0) return null;
 
 	return (
@@ -29,13 +36,25 @@ export default function ControlsPanel({
 				<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-dim">
 					Controls
 				</h2>
-				<button
-					type="button"
-					onClick={onReset}
-					className="font-mono text-[11px] text-ink-mute transition-colors hover:text-accent"
-				>
-					reset
-				</button>
+				<div className="flex items-center gap-3">
+					{pausable && (
+						<button
+							type="button"
+							onClick={togglePaused}
+							aria-pressed={paused}
+							className="font-mono text-[11px] text-ink-mute transition-colors hover:text-accent"
+						>
+							{paused ? "play" : "pause"}
+						</button>
+					)}
+					<button
+						type="button"
+						onClick={onReset}
+						className="font-mono text-[11px] text-ink-mute transition-colors hover:text-accent"
+					>
+						reset
+					</button>
+				</div>
 			</header>
 			{/* Full-width bench: controls flow in columns beneath the preview/code tabs. */}
 			<div

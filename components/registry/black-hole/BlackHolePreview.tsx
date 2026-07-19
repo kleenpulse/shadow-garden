@@ -8,6 +8,7 @@ type DebugMode = "off" | "steps" | "disk" | "min-r" | "escape-dir" | "redshift";
 export default function BlackHolePreview({
 	values,
 	reducedMotion,
+	paused,
 }: PreviewProps) {
 	return (
 		<div className="relative h-full min-h-80 w-full">
@@ -30,7 +31,7 @@ export default function BlackHolePreview({
 				debug={values.debug as DebugMode}
 				tint={values.tint as string}
 				ringColor={values.ringColor as string}
-				paused={reducedMotion}
+				paused={paused || reducedMotion}
 			/>
 		</div>
 	);
