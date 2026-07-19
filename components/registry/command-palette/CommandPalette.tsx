@@ -133,7 +133,7 @@ export default function CommandPalette({
 		onOpenChange(false);
 	};
 
-	const renderItem = (command: CommandDef, pinned = false) => {
+	const renderItem = (command: CommandDef, pinned = false, lastPinned = false) => {
 		const Icon = command.icon;
 		return (
 			<Command.Item
@@ -144,22 +144,36 @@ export default function CommandPalette({
 				forceMount={pinned || undefined}
 				className={
 					pinned
-						? "flex cursor-pointer items-center gap-1.5 rounded-md px-2 py-1.5 font-sans text-xs text-ink-dim data-[selected=true]:bg-accent/15 data-[selected=true]:text-ink"
+						? // Pinned items grow to fill the footer row. Earlier items refuse to
+							// shrink so that only the last one truncates when space runs out.
+							`flex grow cursor-pointer items-center gap-1.5 rounded-md px-2 py-1.5 font-sans text-xs text-ink-dim data-[selected=true]:bg-accent/15 data-[selected=true]:text-ink ${lastPinned ? "min-w-0" : "shrink-0"}`
 						: "flex cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2 font-sans text-sm text-ink-dim data-[selected=true]:bg-accent/15 data-[selected=true]:text-ink"
 				}
 			>
 				{Icon && (
 					<Icon
 						className={
-							pinned ? "h-3.5 w-3.5 text-ink-mute" : "h-4 w-4 text-ink-mute"
+							pinned
+								? "h-3.5 w-3.5 shrink-0 text-ink-mute"
+								: "h-4 w-4 text-ink-mute"
 						}
 					/>
 				)}
-				<span className={pinned ? "whitespace-nowrap" : "flex-1"}>
+				<span
+					className={
+						pinned
+							? lastPinned
+								? "min-w-0 truncate"
+								: "whitespace-nowrap"
+							: "flex-1"
+					}
+				>
 					{command.label}
 				</span>
 				{command.hint && (
-					<span className="font-mono text-[11px] text-ink-mute">
+					<span
+						className={`shrink-0 font-mono text-[11px] ${pinned ? "text-current" : "text-ink-mute"}`}
+					>
 						{command.hint}
 					</span>
 				)}
@@ -231,15 +245,22 @@ export default function CommandPalette({
 								</Command.List>
 							</AutoMaskVertical>
 							{pinnedGroups.length > 0 && (
-								<div className="border-t border-hairline/60 p-2">
-									{pinnedGroups.map((group) => (
+								<div className="flex w-full items-center gap-1 overflow-hidden border-t border-hairline/60 p-2">
+									{/* `contents` erases the group wrappers from layout so every
+									    pinned item across all groups shares one flex row. */}
+									{pinnedGroups.map((group, groupIndex) => (
 										<Command.Group
 											key={group.id}
 											forceMount
-											className="[&_[cmdk-group-items]]:flex [&_[cmdk-group-items]]:flex-col [&_[cmdk-group-items]]:gap-1 sm:[&_[cmdk-group-items]]:flex-row sm:[&_[cmdk-group-items]]:flex-wrap sm:[&_[cmdk-group-items]]:items-center"
+											className="contents [&_[cmdk-group-items]]:contents"
 										>
-											{group.commands.map((command) =>
-												renderItem(command, true),
+											{group.commands.map((command, commandIndex) =>
+												renderItem(
+													command,
+													true,
+													groupIndex === pinnedGroups.length - 1 &&
+														commandIndex === group.commands.length - 1,
+												),
 											)}
 										</Command.Group>
 									))}
