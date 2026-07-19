@@ -5,56 +5,56 @@ import { Renderer, Program, Mesh, Triangle, Color } from "ogl";
 
 // Detect iOS (all iOS browsers share WebKit's WebGL limits) for the static fallback.
 function isIOS(): boolean {
-  if (typeof navigator === "undefined") return false;
-  return (
-    /iPhone|iPad|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
-  );
+	if (typeof navigator === "undefined") return false;
+	return (
+		/iPhone|iPad|iPod/.test(navigator.userAgent) ||
+		(navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+	);
 }
 
 // Real capability probe — catches blocklisted GPUs before OGL throws on a null context.
 function supportsWebGL(): boolean {
-  if (typeof document === "undefined") return false;
-  try {
-    const canvas = document.createElement("canvas");
-    return !!(
-      canvas.getContext("webgl2") ||
-      canvas.getContext("webgl") ||
-      canvas.getContext("experimental-webgl")
-    );
-  } catch {
-    return false;
-  }
+	if (typeof document === "undefined") return false;
+	try {
+		const canvas = document.createElement("canvas");
+		return !!(
+			canvas.getContext("webgl2") ||
+			canvas.getContext("webgl") ||
+			canvas.getContext("experimental-webgl")
+		);
+	} catch {
+		return false;
+	}
 }
 
 // Hex → normalized RGB for live uniform updates without recreating an ogl Color.
 function hexToRgb01(hex: string): [number, number, number] {
-  let h = hex.replace("#", "").trim();
-  if (h.length === 3)
-    h = h
-      .split("")
-      .map((c) => c + c)
-      .join("");
-  if (h.length !== 6) return [1, 1, 1];
-  const n = parseInt(h, 16);
-  if (Number.isNaN(n)) return [1, 1, 1];
-  return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
+	let h = hex.replace("#", "").trim();
+	if (h.length === 3)
+		h = h
+			.split("")
+			.map((c) => c + c)
+			.join("");
+	if (h.length !== 6) return [1, 1, 1];
+	const n = parseInt(h, 16);
+	if (Number.isNaN(n)) return [1, 1, 1];
+	return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
 }
 
 interface ThreadsProps {
-  /** Hex color (ogl Color also accepts hex). Adapted from the original RGB tuple. */
-  color?: string;
-  amplitude?: number;
-  opacity?: number;
-  distance?: number;
-  enableMouseInteraction?: boolean;
-  saturation?: number;
-  paused?: boolean;
-  /** Cap devicePixelRatio at render init — uncapped, a DPR-3 phone renders this
-   * 60-line shader at 9x the pixel work. Mirrors LightRays' maxDpr. */
-  maxDpr?: number;
-  fallbackSrc?: string;
-  className?: string;
+	/** Hex color (ogl Color also accepts hex). Adapted from the original RGB tuple. */
+	color?: string;
+	amplitude?: number;
+	opacity?: number;
+	distance?: number;
+	enableMouseInteraction?: boolean;
+	saturation?: number;
+	paused?: boolean;
+	/** Cap devicePixelRatio at render init — uncapped, a DPR-3 phone renders this
+	 * 60-line shader at 9x the pixel work. Mirrors LightRays' maxDpr. */
+	maxDpr?: number;
+	fallbackSrc?: string;
+	className?: string;
 }
 
 const vertexShader = `
@@ -174,211 +174,224 @@ void main() {
 `;
 
 const Threads: React.FC<ThreadsProps> = ({
-  color = "#a855f7",
-  amplitude = 1.5,
-  distance = 0.2,
-  opacity = 0.7,
-  saturation = 1.0,
-  enableMouseInteraction = true,
-  paused = false,
-  maxDpr = 2,
-  fallbackSrc,
-  className,
+	color = "#a855f7",
+	amplitude = 1.5,
+	distance = 0.2,
+	opacity = 0.7,
+	saturation = 1.0,
+	enableMouseInteraction = true,
+	paused = false,
+	maxDpr = 2,
+	fallbackSrc,
+	className,
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const animationFrameId = useRef<number>(0);
-  // Set inside the init effect; lets the paused effect resume the render loop
-  // after it self-halts (the loop stops issuing draw calls once paused settles).
-  const startLoopRef = useRef<(() => void) | null>(null);
-  // Live-tunable values read each frame — the WebGL context is never rebuilt
-  // while a control is dragged, so tuning stays smooth.
-  const live = useRef({ color, amplitude, distance, opacity, saturation, paused });
-  live.current = { color, amplitude, distance, opacity, saturation, paused };
+	const containerRef = useRef<HTMLDivElement>(null);
+	const animationFrameId = useRef<number>(0);
+	// Set inside the init effect; lets the paused effect resume the render loop
+	// after it self-halts (the loop stops issuing draw calls once paused settles).
+	const startLoopRef = useRef<(() => void) | null>(null);
+	// Live-tunable values read each frame — the WebGL context is never rebuilt
+	// while a control is dragged, so tuning stays smooth.
+	const live = useRef({
+		color,
+		amplitude,
+		distance,
+		opacity,
+		saturation,
+		paused,
+	});
+	live.current = { color, amplitude, distance, opacity, saturation, paused };
 
-  const [useFallback, setUseFallback] = useState(false);
-  useEffect(() => {
-    if (fallbackSrc && (isIOS() || !supportsWebGL())) setUseFallback(true);
-  }, [fallbackSrc]);
+	const [useFallback, setUseFallback] = useState(false);
+	useEffect(() => {
+		if (fallbackSrc && (isIOS() || !supportsWebGL())) setUseFallback(true);
+	}, [fallbackSrc]);
 
-  useEffect(() => {
-    if (useFallback || !containerRef.current) return;
-    const container = containerRef.current;
+	useEffect(() => {
+		if (useFallback || !containerRef.current) return;
+		const container = containerRef.current;
 
-    let gl: Renderer["gl"] | undefined;
-    try {
-      const renderer = new Renderer({
-        alpha: true,
-        premultipliedAlpha: true,
-        dpr: Math.min(window.devicePixelRatio || 1, maxDpr),
-      });
-      gl = renderer.gl;
-      gl.clearColor(0, 0, 0, 0);
-      gl.enable(gl.BLEND);
-      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-      container.appendChild(gl.canvas);
+		let gl: Renderer["gl"] | undefined;
+		try {
+			const renderer = new Renderer({
+				alpha: true,
+				premultipliedAlpha: true,
+				dpr: Math.min(window.devicePixelRatio || 1, maxDpr),
+			});
+			gl = renderer.gl;
+			gl.clearColor(0, 0, 0, 0);
+			gl.enable(gl.BLEND);
+			gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+			container.appendChild(gl.canvas);
 
-      const geometry = new Triangle(gl);
-      const program = new Program(gl, {
-        vertex: vertexShader,
-        fragment: fragmentShader,
-        uniforms: {
-          iTime: { value: 0 },
-          iResolution: {
-            value: new Color(
-              gl.canvas.width,
-              gl.canvas.height,
-              gl.canvas.width / gl.canvas.height,
-            ),
-          },
-          uColor: { value: new Color(color) },
-          uOpacity: { value: opacity },
-          uAmplitude: { value: amplitude },
-          uDistance: { value: distance },
-          uMouse: { value: new Float32Array([0.5, 0.5]) },
-          uSaturation: { value: saturation },
-        },
-      });
+			const geometry = new Triangle(gl);
+			const program = new Program(gl, {
+				vertex: vertexShader,
+				fragment: fragmentShader,
+				uniforms: {
+					iTime: { value: 0 },
+					iResolution: {
+						value: new Color(
+							gl.canvas.width,
+							gl.canvas.height,
+							gl.canvas.width / gl.canvas.height,
+						),
+					},
+					uColor: { value: new Color(color) },
+					uOpacity: { value: opacity },
+					uAmplitude: { value: amplitude },
+					uDistance: { value: distance },
+					uMouse: { value: new Float32Array([0.5, 0.5]) },
+					uSaturation: { value: saturation },
+				},
+			});
 
-      if (!gl.getProgramParameter(program.program, gl.LINK_STATUS)) {
-        throw new Error("Threads shader program failed to link");
-      }
+			if (!gl.getProgramParameter(program.program, gl.LINK_STATUS)) {
+				throw new Error("Threads shader program failed to link");
+			}
 
-      const mesh = new Mesh(gl, { geometry, program });
+			const mesh = new Mesh(gl, { geometry, program });
 
-      function resize() {
-        const { clientWidth, clientHeight } = container;
-        if (clientWidth === 0 || clientHeight === 0) return;
-        renderer.setSize(clientWidth, clientHeight);
-        const bw = renderer.gl.drawingBufferWidth;
-        const bh = renderer.gl.drawingBufferHeight;
-        program.uniforms.iResolution.value.r = bw;
-        program.uniforms.iResolution.value.g = bh;
-        program.uniforms.iResolution.value.b = bw / bh;
-      }
-      const resizeObserver = new ResizeObserver(() => resize());
-      resizeObserver.observe(container);
-      resize();
+			function resize() {
+				const { clientWidth, clientHeight } = container;
+				if (clientWidth === 0 || clientHeight === 0) return;
+				renderer.setSize(clientWidth, clientHeight);
+				const bw = renderer.gl.drawingBufferWidth;
+				const bh = renderer.gl.drawingBufferHeight;
+				program.uniforms.iResolution.value.r = bw;
+				program.uniforms.iResolution.value.g = bh;
+				program.uniforms.iResolution.value.b = bw / bh;
+			}
+			const resizeObserver = new ResizeObserver(() => resize());
+			resizeObserver.observe(container);
+			resize();
 
-      const currentMouse = [0.5, 0.5];
-      let targetMouse = [0.5, 0.5];
+			const currentMouse = [0.5, 0.5];
+			let targetMouse = [0.5, 0.5];
 
-      function handleMouseMove(e: MouseEvent) {
-        const rect = container.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = 1.0 - (e.clientY - rect.top) / rect.height;
-        targetMouse = [x, y];
-      }
-      function handleMouseLeave() {
-        targetMouse = [0.5, 0.5];
-      }
-      if (enableMouseInteraction) {
-        container.addEventListener("mousemove", handleMouseMove);
-        container.addEventListener("mouseleave", handleMouseLeave);
-      }
+			function handleMouseMove(e: MouseEvent) {
+				const rect = container.getBoundingClientRect();
+				const x = (e.clientX - rect.left) / rect.width;
+				const y = 1.0 - (e.clientY - rect.top) / rect.height;
+				targetMouse = [x, y];
+			}
+			function handleMouseLeave() {
+				targetMouse = [0.5, 0.5];
+			}
+			if (enableMouseInteraction) {
+				container.addEventListener("mousemove", handleMouseMove);
+				container.addEventListener("mouseleave", handleMouseLeave);
+			}
 
-      let accumulatedTime = 0;
-      let lastTimestamp = -1;
-      let timeScale = paused ? 0 : 1;
-      let running = false;
+			let accumulatedTime = 0;
+			let lastTimestamp = -1;
+			let timeScale = paused ? 0 : 1;
+			let running = false;
 
-      function update(t: number) {
-        const dt = lastTimestamp >= 0 ? (t - lastTimestamp) * 0.001 : 0;
-        lastTimestamp = t;
+			function update(t: number) {
+				const dt = lastTimestamp >= 0 ? (t - lastTimestamp) * 0.001 : 0;
+				lastTimestamp = t;
 
-        const l = live.current;
-        const target = l.paused ? 0 : 1;
-        timeScale += (target - timeScale) * 0.05;
-        accumulatedTime += dt * timeScale;
-        program.uniforms.iTime.value = accumulatedTime;
+				const l = live.current;
+				const target = l.paused ? 0 : 1;
+				timeScale += (target - timeScale) * 0.05;
+				accumulatedTime += dt * timeScale;
+				program.uniforms.iTime.value = accumulatedTime;
 
-        // Live uniform updates (no context rebuild).
-        const [r, g, b] = hexToRgb01(l.color);
-        program.uniforms.uColor.value.r = r;
-        program.uniforms.uColor.value.g = g;
-        program.uniforms.uColor.value.b = b;
-        program.uniforms.uOpacity.value = l.opacity;
-        program.uniforms.uAmplitude.value = l.amplitude;
-        program.uniforms.uDistance.value = l.distance;
-        program.uniforms.uSaturation.value = l.saturation;
+				// Live uniform updates (no context rebuild).
+				const [r, g, b] = hexToRgb01(l.color);
+				program.uniforms.uColor.value.r = r;
+				program.uniforms.uColor.value.g = g;
+				program.uniforms.uColor.value.b = b;
+				program.uniforms.uOpacity.value = l.opacity;
+				program.uniforms.uAmplitude.value = l.amplitude;
+				program.uniforms.uDistance.value = l.distance;
+				program.uniforms.uSaturation.value = l.saturation;
 
-        if (enableMouseInteraction) {
-          const smoothing = 0.05;
-          currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0]);
-          currentMouse[1] += smoothing * (targetMouse[1] - currentMouse[1]);
-          program.uniforms.uMouse.value[0] = currentMouse[0];
-          program.uniforms.uMouse.value[1] = currentMouse[1];
-        } else {
-          program.uniforms.uMouse.value[0] = 0.5;
-          program.uniforms.uMouse.value[1] = 0.5;
-        }
+				if (enableMouseInteraction) {
+					const smoothing = 0.05;
+					currentMouse[0] += smoothing * (targetMouse[0] - currentMouse[0]);
+					currentMouse[1] += smoothing * (targetMouse[1] - currentMouse[1]);
+					program.uniforms.uMouse.value[0] = currentMouse[0];
+					program.uniforms.uMouse.value[1] = currentMouse[1];
+				} else {
+					program.uniforms.uMouse.value[0] = 0.5;
+					program.uniforms.uMouse.value[1] = 0.5;
+				}
 
-        renderer.render({ scene: mesh });
+				renderer.render({ scene: mesh });
 
-        // Once paused and the ease-out has settled, stop the loop entirely so a
-        // scrolled-past hero stops issuing draw calls (it used to render a
-        // frozen frame forever). The paused effect calls startLoop to resume.
-        if (l.paused && timeScale < 1e-3) {
-          running = false;
-          lastTimestamp = -1;
-          return;
-        }
-        animationFrameId.current = requestAnimationFrame(update);
-      }
+				// Once paused and the ease-out has settled, stop the loop entirely so a
+				// scrolled-past hero stops issuing draw calls (it used to render a
+				// frozen frame forever). The paused effect calls startLoop to resume.
+				if (l.paused && timeScale < 1e-3) {
+					running = false;
+					lastTimestamp = -1;
+					return;
+				}
+				animationFrameId.current = requestAnimationFrame(update);
+			}
 
-      function startLoop() {
-        if (running) return;
-        running = true;
-        lastTimestamp = -1;
-        animationFrameId.current = requestAnimationFrame(update);
-      }
-      startLoopRef.current = startLoop;
-      startLoop();
+			function startLoop() {
+				if (running) return;
+				running = true;
+				lastTimestamp = -1;
+				animationFrameId.current = requestAnimationFrame(update);
+			}
+			startLoopRef.current = startLoop;
+			startLoop();
 
-      return () => {
-        running = false;
-        if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-        resizeObserver.disconnect();
-        if (enableMouseInteraction) {
-          container.removeEventListener("mousemove", handleMouseMove);
-          container.removeEventListener("mouseleave", handleMouseLeave);
-        }
-        if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
-        gl!.getExtension("WEBGL_lose_context")?.loseContext();
-      };
-    } catch (err) {
-      console.warn("Threads: WebGL init failed, falling back to static image", err);
-      if (gl) {
-        if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
-        gl.getExtension("WEBGL_lose_context")?.loseContext();
-      }
-      setUseFallback(true);
-      return;
-    }
-    // color/amplitude/distance/opacity/saturation/paused are live via `live` ref.
-  }, [enableMouseInteraction, useFallback, maxDpr]);
+			return () => {
+				running = false;
+				if (animationFrameId.current)
+					cancelAnimationFrame(animationFrameId.current);
+				resizeObserver.disconnect();
+				if (enableMouseInteraction) {
+					container.removeEventListener("mousemove", handleMouseMove);
+					container.removeEventListener("mouseleave", handleMouseLeave);
+				}
+				if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
+				gl!.getExtension("WEBGL_lose_context")?.loseContext();
+			};
+		} catch (err) {
+			console.warn(
+				"Threads: WebGL init failed, falling back to static image",
+				err,
+			);
+			if (gl) {
+				if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
+				gl.getExtension("WEBGL_lose_context")?.loseContext();
+			}
+			setUseFallback(true);
+			return;
+		}
+		// color/amplitude/distance/opacity/saturation/paused are live via `live` ref.
+	}, [enableMouseInteraction, useFallback, maxDpr]);
 
-  // Resume the render loop when unpausing — the loop self-halts once the
-  // pause ease-out settles, so it needs an external kick to start again.
-  useEffect(() => {
-    if (!paused) startLoopRef.current?.();
-  }, [paused]);
+	// Resume the render loop when unpausing — the loop self-halts once the
+	// pause ease-out settles, so it needs an external kick to start again.
+	useEffect(() => {
+		if (!paused) startLoopRef.current?.();
+	}, [paused]);
 
-  if (useFallback && fallbackSrc) {
-    return (
-      <div className={className ?? "relative h-full w-full"}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={fallbackSrc}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ opacity }}
-        />
-      </div>
-    );
-  }
+	if (useFallback && fallbackSrc) {
+		return (
+			<div className={className ?? "relative h-full w-full"}>
+				{/* eslint-disable-next-line @next/next/no-img-element */}
+				<img
+					src={fallbackSrc}
+					alt=""
+					aria-hidden
+					className="absolute inset-0 h-full w-full object-cover"
+					style={{ opacity }}
+				/>
+			</div>
+		);
+	}
 
-  return <div ref={containerRef} className={className ?? "relative h-full w-full"} />;
+	return (
+		<div ref={containerRef} className={className ?? "relative h-full w-full"} />
+	);
 };
 
 export default Threads;
