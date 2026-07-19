@@ -667,7 +667,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				name: "glow",
 				kind: "number",
-				default: 0.3,
+				default: 0.25,
 				min: 0,
 				max: 2,
 				step: 0.05,
