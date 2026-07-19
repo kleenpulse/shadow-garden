@@ -28,6 +28,11 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "morph-dialog": dynamic(() => import("./morph-dialog/MorphDialogPreview"), { ssr: false }),
   "grow-dialog": dynamic(() => import("./grow-dialog/GrowDialogPreview"), { ssr: false }),
   "flip-card": dynamic(() => import("./flip-card/FlipCardPreview"), { ssr: false }),
+  "blueprint-card": dynamic(() => import("./blueprint-card/BlueprintCardPreview"), { ssr: false }),
+  "corner-letters": dynamic(() => import("./corner-letters/CornerLettersPreview"), { ssr: false }),
+  "hover-list": dynamic(() => import("./hover-list/HoverListPreview"), { ssr: false }),
+  preloader: dynamic(() => import("./preloader/PreloaderPreview"), { ssr: false }),
+  "circle-menu": dynamic(() => import("./circle-menu/CircleMenuPreview"), { ssr: false }),
   "scroll-velocity": dynamic(() => import("./scroll-velocity/ScrollVelocityPreview"), { ssr: false }),
   "letters-pull": dynamic(() => import("./letters-pull/LettersPullPreview"), { ssr: false }),
   constellation: dynamic(() => import("./constellation/ConstellationPreview"), { ssr: false }),
@@ -38,4 +43,5 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "command-palette": dynamic(() => import("./command-palette/CommandPalettePreview"), { ssr: false }),
   "world-map-ascii": dynamic(() => import("./world-map-ascii/WorldMapAsciiPreview"), { ssr: false }),
   "physics-engine": dynamic(() => import("./physics-engine/PhysicsEnginePreview"), { ssr: false }),
+  "black-hole": dynamic(() => import("./black-hole/BlackHolePreview"), { ssr: false }),
 };
