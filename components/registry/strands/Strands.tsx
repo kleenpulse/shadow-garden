@@ -33,6 +33,8 @@ uniform float uIntensity;
 uniform float uOpacity;
 uniform float uScale;
 uniform float uSaturation;
+uniform float uEnvWidth;
+uniform float uBrightTaper;
 
 out vec4 fragColor;
 
@@ -62,7 +64,17 @@ void main() {
   uv /= max(uScale, 0.0001);
 
   float e = 0.06 + uIntensity * 0.94;
-  float env = pow(max(cos(uv.x * PI * 1.3), 0.0), uTaper);
+  // Envelope half-width in strand uv-space — when the glass is on it equals the
+  // lens rim, so strand tips land exactly on the glass edge. Amplitude keeps the
+  // full taper (waves converge to the center line, which meets the circle at
+  // x = ±r). Brightness falloff is mode-aware via uBrightTaper: a gentle power
+  // under glass so tips stay visible until they touch the rim, the full taper
+  // without glass so light dissolves in a soft gradient instead of hitting the
+  // envelope clamp at near-full strength.
+  float nx = clamp(abs(uv.x) / uEnvWidth, 0.0, 1.0);
+  float envCos = cos(nx * PI * 0.5);
+  float env = pow(envCos, uTaper);
+  float bright = pow(envCos, uBrightTaper);
 
   vec3 col = vec3(0.0);
 
@@ -87,7 +99,7 @@ void main() {
     g = g * g;
 
     float h = fi / float(uStrandCount) + uv.x * 0.30 + uTime * 0.04 + uHueShift;
-    col += strandColor(h) * g * env;
+    col += strandColor(h) * g * bright;
   }
 
   col *= 0.45 + 0.7 * e;
@@ -178,6 +190,10 @@ export interface StrandsProps {
   amplitude?: number
   waviness?: number
   thickness?: number
+  /** Horizontal reach of the strand field as a percentage — 100 spans to the
+   * glass rim (or the legacy field width without glass), lower pulls the tips
+   * inward proportionally. */
+  strandWidth?: number
   glow?: number
   taper?: number
   spread?: number
@@ -212,6 +228,7 @@ export default function Strands({
   amplitude = 1,
   waviness = 1,
   thickness = 0.7,
+  strandWidth = 100,
   glow = 2.6,
   taper = 3,
   spread = 1,
@@ -234,6 +251,7 @@ export default function Strands({
     amplitude,
     waviness,
     thickness,
+    strandWidth,
     glow,
     taper,
     spread,
@@ -254,6 +272,7 @@ export default function Strands({
     amplitude,
     waviness,
     thickness,
+    strandWidth,
     glow,
     taper,
     spread,
@@ -313,6 +332,12 @@ export default function Strands({
         uOpacity: { value: opacity },
         uScale: { value: scale },
         uSaturation: { value: saturation },
+        uEnvWidth: {
+          value:
+            (glass ? 0.46 * glassSize : 0.3846) *
+            Math.min(Math.max(strandWidth, 1), 100) * 0.01,
+        },
+        uBrightTaper: { value: taper * (glass ? 0.3 : 1) },
       },
     })
 
@@ -378,6 +403,16 @@ export default function Strands({
       program.uniforms.uOpacity.value = current.opacity
       program.uniforms.uScale.value = current.scale
       program.uniforms.uSaturation.value = current.saturation
+      // Glass rim is 0.46 * glassSize * scale in screen space; strand uv is
+      // divided by scale, so scale cancels and the rim sits at 0.46 * glassSize.
+      // strandWidth scales that reach as a percentage (100 = tips on the rim).
+      program.uniforms.uEnvWidth.value =
+        (current.glass ? 0.46 * current.glassSize : 0.3846) *
+        Math.min(Math.max(current.strandWidth, 1), 100) * 0.01
+      // Glass hides the strand endings behind its rim, so brightness may hold
+      // until contact; bare strands need the full taper to fade out gradually.
+      program.uniforms.uBrightTaper.value =
+        current.taper * (current.glass ? 0.3 : 1)
 
       if (current.glass) {
         renderer.render({ scene: mesh, target: renderTarget })

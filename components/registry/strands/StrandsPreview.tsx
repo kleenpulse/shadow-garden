@@ -18,6 +18,7 @@ export default function StrandsPreview({ values, reducedMotion }: PreviewProps) 
         amplitude={values.amplitude as number}
         waviness={values.waviness as number}
         thickness={values.thickness as number}
+        strandWidth={values.strandWidth as number}
         glow={values.glow as number}
         spread={values.spread as number}
         intensity={values.intensity as number}
