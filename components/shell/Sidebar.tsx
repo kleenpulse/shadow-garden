@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
+import {
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+	type KeyboardEvent,
+} from "react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -54,6 +60,16 @@ export default function Sidebar() {
 
 	const [collapsed, setCollapsed] = useState<Set<Category>>(new Set());
 	const [active, setActive] = useState(0);
+
+	// Snap the current page's entry into view on load. Centered so its
+	// neighbors stay visible; runs once — later navigation happens via clicks
+	// on already-visible items, where auto-scrolling would only be jarring.
+	const listRef = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		listRef.current
+			?.querySelector('[aria-current="page"]')
+			?.scrollIntoView({ block: "center" });
+	}, []);
 
 	const searching = search.trim().length > 0;
 
@@ -213,6 +229,7 @@ export default function Sidebar() {
 				{/* AutoMaskVertical fades the scroll edges and auto-hides the scrollbar
 			      (reveals on hover / while scrolling), same treatment as the palette. */}
 				<AutoMaskVertical
+					ref={listRef}
 					className="flex-1 px-3 pb-6 md:pb-12"
 					aria-label="Components"
 					role="navigation"
