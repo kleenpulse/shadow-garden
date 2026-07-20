@@ -380,11 +380,9 @@ void main() {
 		col += trans * bg * dim;
 	}
 
-	// Photon ring — the critical curve at the photon sphere (~1.5 Rs).
-	float m = (minR - 1.5) * 4.0;
-	float ring = exp(-m * m);
-	vec3 ringHue = mix(mix(vec3(1.0, 0.92, 0.80), uTint, 0.25), uRingColor, 0.35);
-	col += ring * ringHue * 0.9;
+	// Photon ring removed: the thin pale critical-curve band at ~1.5 Rs aliased
+	// into a white hairline outlining the shadow once the disk texture was clean.
+	// The lensed disk already defines the shadow edge; the disciform glow stays.
 
 	int dbg = int(uDebug + 0.5);
 	if (dbg == 1) col = vec3(stepsUsed / max(uSteps, 1.0));

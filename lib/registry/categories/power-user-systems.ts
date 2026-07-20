@@ -304,7 +304,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				name: "ringColor",
 				label: "Ring color",
 				kind: "color",
-				default: "#ffffff",
+				default: "#ff9e38",
 				description:
 					"Recolors the accretion disk. White keeps the physical blackbody gradient (gold → white → blue) and the Doppler asymmetry; pick a hue to tint the ring without dimming it.",
 			},
