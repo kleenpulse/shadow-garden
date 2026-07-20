@@ -142,6 +142,7 @@ out vec4 fragColor;
 
 const float RS = 1.0;
 const float PI = 3.14159265;
+const float TWO_PI = 6.28318530718;
 
 float hash21(vec2 p) {
 	p = fract(p * vec2(123.34, 345.45));
@@ -313,12 +314,27 @@ void main() {
 				flux = max(flux, 0.0);
 				float temp = pow(flux * 10.0, 0.25);
 
-				// Moving fibers: differential Keplerian swirl, faster near the hole.
+				// Differential Keplerian swirl drives the disk texture — but omega climbs
+				// steeply toward the hole, so a raw (ang - uTime*omega) shears the noise a
+				// little more every second, winding it into ever-finer radial structure
+				// that aliases into a concentric moire over the disk's lifetime (the reported
+				// decay). Fix: spin the texture at a rigid mid-radius BULK rate, and add the
+				// differential shear only through a saturating cap — the first ~7s (at speed
+				// 1) of shear bake in to give the sheared-streak look, then freeze, so the
+				// winding never runs away. The mod on the bulk term + the exp cap keep ph
+				// bounded, so cos/sin/noise stay precise for any runtime. Doppler & brightness
+				// below still use the true ang/rc, so the orbital physics is unchanged.
 				float omega = uRotSpeed * 1.1 * pow(3.0 / rc, 1.5);
-				float ph = ang - uTime * omega;
+				float omegaBulk = uRotSpeed * 1.1 * 0.35355339; // pow(3/6, 1.5) — rigid ref @ rc=6
+				float tShear = 7.0 / max(uRotSpeed, 0.15);       // speed-independent baked shear
+				float shear = (omega - omegaBulk) * tShear * (1.0 - exp(-uTime / tShear));
+				float ph = ang - mod(uTime * omegaBulk, TWO_PI) - shear;
 				vec2 qp = vec2(cos(ph), sin(ph)) * rc;
 				float warp = fbm(qp * 0.35 + uTime * 0.05);
 				float turb = fbm(qp * 0.8 + warp * 1.5);
+				// Fine angular striations. ph is bounded now (capped shear above), so the
+				// original linear sampling can no longer grow into the precision moire — keep
+				// the exact original streak character.
 				float streak = fbm(vec2(ph * 22.0, rc * 0.5));
 				float laneMask = smoothstep(0.15, 0.6, turb);
 				float detail = mix(1.0, turb, smoothstep(18.0, 4.0, rc));
