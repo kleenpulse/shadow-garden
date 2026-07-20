@@ -22,6 +22,24 @@ export interface LandingExhibit {
   entries: LandingEntry[];
 }
 
+/** Stable in-page anchor ids for the sections that aren't registry-derived (the
+ *  four category sections get theirs from anchorFor). Shared by the page markup
+ *  and the section rail so the ids can never drift apart. */
+export const SECTION_IDS = {
+  hero: "hero",
+  calibration: "calibration",
+  sealed: "sealed",
+  colophon: "colophon",
+} as const;
+
+/** One section-rail tick: the anchor id, the scramble-target label, and the
+ *  plate glyph. */
+export interface NavSection {
+  id: string;
+  label: string;
+  glyph: string;
+}
+
 export interface SliderSchema {
   name: string;
   label: string;
@@ -36,6 +54,8 @@ export interface LandingData {
   stats: { total: number; free: number; pro: number };
   hero: { amplitude: number; distance: number; color: string; opacity: number };
   exhibits: LandingExhibit[];
+  /** Ordered ticks for the section rail — Top + the seven plates α–η. */
+  navSections: NavSection[];
   /** Accent used by the SpotlightShell cards — its own registry default. */
   spotlightAccent: string;
   proEntries: Array<{ slug: string; name: string; category: Category }>;
@@ -103,6 +123,20 @@ export function buildLandingData(): LandingData {
     })),
   }));
 
+  // Rail ticks: Top, then the four registry-derived category plates (so they
+  // can't drift from the catalog), then the three framing plates ε/ζ/η.
+  const navSections: NavSection[] = [
+    { id: SECTION_IDS.hero, label: "TOP", glyph: "·" },
+    ...exhibits.map((e) => ({
+      id: anchorFor(e.category),
+      label: e.category.toUpperCase(),
+      glyph: e.greek,
+    })),
+    { id: SECTION_IDS.calibration, label: "CALIBRATION", glyph: "ε" },
+    { id: SECTION_IDS.sealed, label: "SEALED ARCHIVE", glyph: "ζ" },
+    { id: SECTION_IDS.colophon, label: "COLOPHON", glyph: "η" },
+  ];
+
   const toSlider = (slug: string, name: string, label: string): SliderSchema => {
     const prop = numberProp(slug, name);
     return {
@@ -125,6 +159,7 @@ export function buildLandingData(): LandingData {
       opacity: numberProp("threads", "opacity").default,
     },
     exhibits,
+    navSections,
     spotlightAccent: colorProp("spotlight-shell", "accentColor"),
     proEntries: registry
       .filter((entry) => entry.tier === "pro")
