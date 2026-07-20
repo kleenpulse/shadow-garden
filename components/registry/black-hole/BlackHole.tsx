@@ -89,7 +89,7 @@ interface BlackHoleProps {
 // at a fixed radius (no dolly in/out); a pointer drag takes over, and the orbit
 // resumes on its own once the pointer goes idle.
 const ORBIT_R = 16; // observer distance in Schwarzschild radii
-const ORBIT_INC = 87; // colatitude° — near edge-on so the disk lenses over the shadow
+const ORBIT_INC = 82; // colatitude° — ~8° above the plane, tilted down into the disk so it lenses over the shadow
 const BASE_SPIN = 9; // cinematic azimuth degrees/second at rotationSpeed 1
 const IDLE_MS = 1000; // pointer-idle delay before the cinematic orbit resumes
 const DEG = Math.PI / 180;

@@ -358,7 +358,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				name: "fov",
 				label: "Field of view",
 				kind: "number",
-				default: 70,
+				default: 85,
 				min: 30,
 				max: 150,
 				step: 1,
