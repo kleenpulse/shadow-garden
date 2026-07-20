@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { anchorFor, type LandingData } from "@/components/landing/data";
+import { anchorFor, SECTION_IDS, type LandingData } from "@/components/landing/data";
 import SmoothAnchor from "@/components/landing/SmoothAnchor";
 
 // Quiet colophon — the last of the page's seven plates (η).
@@ -11,7 +11,7 @@ export default function LandingFooter({
 	exhibits: LandingData["exhibits"];
 }) {
 	return (
-		<footer className="border-t border-hairline">
+		<footer id={SECTION_IDS.colophon} className="scroll-mt-10 border-t border-hairline">
 			<div className="mx-auto grid w-full max-w-7xl gap-10 px-3 py-14 sm:px-6 sm:grid-cols-[1fr_auto]">
 				<div>
 					<p className="font-display text-sm uppercase tracking-[0.28em] text-ink">

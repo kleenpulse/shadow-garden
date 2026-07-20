@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
+import { SCRAMBLE } from "@/lib/scramble";
 import { cn } from "@/lib/utils";
 
 // The living wordmark. Its DEFAULT resting state is the solid two-tone
@@ -28,7 +29,6 @@ import { cn } from "@/lib/utils";
 const TEXT = "ShadowGarden";
 const SECOND = 6; // first index of "Garden"
 const GLYPHS = [...TEXT];
-const SCRAMBLE = "!<>-_\\/[]{}=+*^?#§%";
 
 const INK = "var(--color-ink)";
 const ACCENT = "var(--color-accent)";
