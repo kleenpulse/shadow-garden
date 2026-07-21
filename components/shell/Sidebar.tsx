@@ -234,12 +234,14 @@ export default function Sidebar() {
 					aria-label="Components"
 					role="navigation"
 				>
-					{visibleFlat.length === 0 ? (
-						<p className="px-2.5 py-2 font-mono text-xs text-ink-mute">
-							No matches.
-						</p>
-					) : searching ? (
-						<ul className="space-y-0.5">{scored.map(entryLink)}</ul>
+					{searching ? (
+						scored.length === 0 ? (
+							<p className="px-2.5 py-2 font-mono text-xs text-ink-mute">
+								No matches.
+							</p>
+						) : (
+							<ul className="space-y-0.5">{scored.map(entryLink)}</ul>
+						)
 					) : (
 						groups.map((group) => {
 							const isCollapsed = collapsed.has(group.category);

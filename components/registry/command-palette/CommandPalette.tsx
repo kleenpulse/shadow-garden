@@ -133,7 +133,11 @@ export default function CommandPalette({
 		onOpenChange(false);
 	};
 
-	const renderItem = (command: CommandDef, pinned = false, lastPinned = false) => {
+	const renderItem = (
+		command: CommandDef,
+		pinned = false,
+		lastPinned = false,
+	) => {
 		const Icon = command.icon;
 		return (
 			<Command.Item
@@ -172,7 +176,7 @@ export default function CommandPalette({
 				</span>
 				{command.hint && (
 					<span
-						className={`shrink-0 font-mono text-[11px] ${pinned ? "text-current" : "text-ink-mute"}`}
+						className={`shrink-0 font-mono text-sm size-5 flex items-center justify-center border border-ink-mute ${pinned ? "text-current" : "text-ink-mute"}`}
 					>
 						{command.hint}
 					</span>

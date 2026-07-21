@@ -44,4 +44,5 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "world-map-ascii": dynamic(() => import("./world-map-ascii/WorldMapAsciiPreview"), { ssr: false }),
   "physics-engine": dynamic(() => import("./physics-engine/PhysicsEnginePreview"), { ssr: false }),
   "black-hole": dynamic(() => import("./black-hole/BlackHolePreview"), { ssr: false }),
+  "vortex-bloom": dynamic(() => import("./vortex-bloom/VortexBloomPreview"), { ssr: false }),
 };
