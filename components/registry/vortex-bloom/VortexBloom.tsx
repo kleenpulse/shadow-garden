@@ -91,6 +91,16 @@ const TWO_PI = Math.PI * 2;
 const PARTICLE_CAP = 700;
 const BLOOM_THRESHOLD = 1.0;
 
+// Internal render scale for the heavy volumetric pass. This shader is a true
+// per-pixel volumetric march — every ray through the medium runs the full step
+// count with 3 fbm calls each — so fill cost dominates and scales with the pixel
+// count. Marching at 0.7x the drawing buffer roughly halves that cost; the medium
+// is soft and the full-res composite (bloom + grain + chromatic split + ACES)
+// launders the LINEAR upscale, so the look is unchanged while the GPU does ~2x
+// less work. Only the scene/particle/bloom RTs shrink — the composite stays
+// full-res so grain and vignette keep their crisp per-device-pixel detail.
+const SCENE_SCALE = 0.7;
+
 function toCartesian(
 	r: number,
 	inc: number,
@@ -736,9 +746,15 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 
 			const iw = gl.canvas.width;
 			const ih = gl.canvas.height;
-			const sceneRT = makeRT(iw, ih);
-			const bloomA = makeRT(iw >> 1, ih >> 1);
-			const bloomB = makeRT(iw >> 1, ih >> 1);
+			// Scene/bloom RTs live at the reduced volumetric resolution; the composite
+			// still targets the full canvas. resize() is the source of truth for these.
+			const sw = Math.max(1, Math.round(iw * SCENE_SCALE));
+			const sh = Math.max(1, Math.round(ih * SCENE_SCALE));
+			const shw = Math.max(1, sw >> 1);
+			const shh = Math.max(1, sh >> 1);
+			const sceneRT = makeRT(sw, sh);
+			const bloomA = makeRT(shw, shh);
+			const bloomB = makeRT(shw, shh);
 
 			const geometry = new Triangle(gl);
 			const focal0 = 1 / Math.tan((fov * 0.5 * Math.PI) / 180);
@@ -747,7 +763,7 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 				vertex: VERT,
 				fragment: VORTEX_FRAG,
 				uniforms: {
-					uRes: { value: new Float32Array([iw, ih]) },
+					uRes: { value: new Float32Array([sw, sh]) },
 					uTime: { value: 0 },
 					uCamPos: { value: new Float32Array([0, 7, 5]) },
 					uCamTarget: { value: new Float32Array([0, 0, 0]) },
@@ -797,8 +813,10 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 					uCamPos: { value: new Float32Array([0, 7, 5]) },
 					uCamTarget: { value: new Float32Array([0, 0, 0]) },
 					uFocal: { value: focal0 },
-					uRes: { value: new Float32Array([iw, ih]) },
-					uDpr: { value: dpr },
+					uRes: { value: new Float32Array([sw, sh]) },
+					// Point size is measured in scene-RT pixels, so it must shrink with the
+					// reduced render scale to keep the dust the same apparent size on screen.
+					uDpr: { value: dpr * SCENE_SCALE },
 					uVOffset: { value: verticalOffset },
 					uParticleSpeed: { value: 1.4 },
 					uCurlPhase: { value: 0 },
@@ -827,7 +845,7 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 				fragment: BLUR_FRAG,
 				uniforms: {
 					tMap: { value: bloomA.texture },
-					uTexel: { value: new Float32Array([1 / (iw >> 1), 1 / (ih >> 1)]) },
+					uTexel: { value: new Float32Array([1 / shw, 1 / shh]) },
 					uDir: { value: new Float32Array([1, 0]) },
 					uRadius: { value: 1 },
 				},
@@ -863,15 +881,19 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 				renderer.setSize(clientWidth, clientHeight);
 				const bw = gl!.drawingBufferWidth;
 				const bh = gl!.drawingBufferHeight;
-				const hw = Math.max(1, bw >> 1);
-				const hh = Math.max(1, bh >> 1);
-				sceneRT.setSize(bw, bh);
+				// Volumetric scene + bloom march at the reduced scale; the composite reads
+				// them upscaled and renders at the full drawing buffer.
+				const rw = Math.max(1, Math.round(bw * SCENE_SCALE));
+				const rh = Math.max(1, Math.round(bh * SCENE_SCALE));
+				const hw = Math.max(1, rw >> 1);
+				const hh = Math.max(1, rh >> 1);
+				sceneRT.setSize(rw, rh);
 				bloomA.setSize(hw, hh);
 				bloomB.setSize(hw, hh);
-				vortexProgram.uniforms.uRes.value[0] = bw;
-				vortexProgram.uniforms.uRes.value[1] = bh;
-				particleProgram.uniforms.uRes.value[0] = bw;
-				particleProgram.uniforms.uRes.value[1] = bh;
+				vortexProgram.uniforms.uRes.value[0] = rw;
+				vortexProgram.uniforms.uRes.value[1] = rh;
+				particleProgram.uniforms.uRes.value[0] = rw;
+				particleProgram.uniforms.uRes.value[1] = rh;
 				compProgram.uniforms.uRes.value[0] = bw;
 				compProgram.uniforms.uRes.value[1] = bh;
 				blurProgram.uniforms.uTexel.value[0] = 1 / hw;
