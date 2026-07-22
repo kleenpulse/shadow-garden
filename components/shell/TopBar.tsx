@@ -1,20 +1,19 @@
 "use client";
 
-import Link from "next/link";
-import { Heart, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useUIStore } from "@/lib/store";
-import { useFavoriteCount, useFavoritesHydrated } from "@/lib/favorites-store";
 import { useIsMac } from "@/hooks/use-is-mac";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
+import FavoritesLink from "./FavoritesLink";
 import SoundControl from "./SoundControl";
+import AuthMenu from "./AuthMenu";
+import GoProButton from "./GoProButton";
 
 // Slim desktop chrome strip: palette trigger on the left, favorites + theme on
 // the right. Hidden on mobile — MobileBar carries the same affordances there.
 export default function TopBar() {
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
-	const hydrated = useFavoritesHydrated();
-	const count = useFavoriteCount();
 
 	// Show the right modifier hint per platform (SSR-safe, hydration-consistent).
 	const isMac = useIsMac();
@@ -36,24 +35,15 @@ export default function TopBar() {
 			</button>
 
 			<div className="ml-auto flex items-center gap-2">
-				<Link
-					href="/favorites"
-					aria-label={
-						hydrated && count > 0 ? `Favorites (${count})` : "Favorites"
-					}
+				<GoProButton />
+				<FavoritesLink
 					{...hoverProps()}
 					onClick={() => play("select")}
-					className="relative grid h-8 w-8 place-items-center rounded-md border border-hairline text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
-				>
-					<Heart className="h-4 w-4" aria-hidden />
-					{hydrated && count > 0 && (
-						<span className="absolute -right-1.5 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 font-mono text-[9px] font-bold text-on-accent">
-							{count}
-						</span>
-					)}
-				</Link>
+					className="h-8 w-8"
+				/>
 				<SoundControl />
 				<ThemeToggle />
+				<AuthMenu />
 			</div>
 		</div>
 	);

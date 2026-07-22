@@ -82,9 +82,9 @@ export default function MorphDialogPreview({
     : morphTransition(stiffness, damping);
 
   return (
-    <div className="grid h-full min-h-[320px] w-full place-items-center p-6">
+    <div className="grid h-full min-h-155 w-full place-items-center p-8">
       <MotionConfig transition={transition}>
-        <div className="grid w-full max-w-lg grid-cols-3 gap-3">
+        <div className="grid w-full max-w-2xl grid-cols-3 gap-4">
           {CARDS.map((c, i) => {
             const CardIcon = c.icon;
             return (
@@ -97,24 +97,24 @@ export default function MorphDialogPreview({
                   setActive(i);
                   setOpen(true);
                 }}
-                className="flex flex-col items-start gap-2 border border-hairline bg-raised p-3.5 text-left transition-colors hover:border-accent/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+                className="flex aspect-square flex-col items-start justify-center gap-3 border border-hairline bg-raised p-5 text-left transition-colors hover:border-accent/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
               >
                 <MorphShared
                   as="span"
                   layoutId={`morph-icon-${i}`}
                   reducedMotion={reducedMotion}
                 >
-                  <CardIcon className="size-4 text-accent" />
+                  <CardIcon className="size-6 text-accent" />
                 </MorphShared>
                 <MorphShared
                   as="h3"
                   layoutId={`morph-title-${i}`}
                   reducedMotion={reducedMotion}
-                  className="font-display text-xs text-ink"
+                  className="font-display text-sm text-ink"
                 >
                   {c.label}
                 </MorphShared>
-                <span className="font-sans text-[11px] leading-snug text-ink-mute">
+                <span className="font-sans text-xs leading-snug text-ink-mute">
                   {c.blurb}
                 </span>
               </motion.button>

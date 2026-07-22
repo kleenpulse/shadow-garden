@@ -1,15 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "@/lib/stats/track";
 
 export default function CodeBlock({
   html,
   raw,
   filename,
+  slug,
 }: {
   html: string;
   raw: string;
   filename?: string;
+  /** Registry slug of the source's component — used to count copy-source events. */
+  slug?: string;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -17,6 +21,8 @@ export default function CodeBlock({
     try {
       await navigator.clipboard.writeText(raw);
       setCopied(true);
+      // Copying the raw source is the highest-intent "I'm taking this" signal.
+      if (slug) trackEvent(slug, "copy");
       setTimeout(() => setCopied(false), 1400);
     } catch {
       // Clipboard unavailable (insecure context) — no-op.

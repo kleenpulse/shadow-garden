@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Maximize2 } from "lucide-react";
 import type { ComponentEntry } from "@/lib/registry/types";
+import { trackEvent } from "@/lib/stats/track";
 import { useTunedProps } from "@/lib/registry/useTunedProps";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { usePauseState } from "@/hooks/use-pause-state";
@@ -29,6 +30,12 @@ export default function LiveWorkspace({
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
+
+	// One view ping per component the user opens (fires once per slug, incl. on
+	// client-side nav between components). Fire-and-forget, anonymous.
+	useEffect(() => {
+		trackEvent(entry.slug, "view");
+	}, [entry.slug]);
 	const searchParams = useSearchParams();
 	const Preview = previews[entry.slug] ?? PlaceholderPreview;
 	// Stable key for resetKeys: re-running the boundary when the tuned values

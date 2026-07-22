@@ -38,6 +38,11 @@ class AudioEngine {
 
 	private enabled = false;
 	private volume = 0.6;
+	// Interaction sound is a Pro feature. Defaults closed (fail-closed) until the
+	// client's /api/entitlement check resolves — gated centrally here so every
+	// play() call site (hover, select, toggle, type…) is covered without each
+	// caller needing its own entitlement check.
+	private pro = false;
 
 	// One-shot gesture unlock. A context created outside a user gesture (e.g. a
 	// returning visitor whose preference rehydrates to "on") is born suspended;
@@ -132,6 +137,10 @@ class AudioEngine {
 		this.applyMaster();
 	}
 
+	setPro(pro: boolean) {
+		this.pro = pro;
+	}
+
 	setVolume(v: number) {
 		this.volume = Math.min(1, Math.max(0, v));
 		this.applyMaster();
@@ -148,7 +157,7 @@ class AudioEngine {
 	}
 
 	play(voice: Voice) {
-		if (!this.enabled) return;
+		if (!this.enabled || !this.pro) return;
 		if (!this.ensureContext()) return;
 		if (this.ctx?.state === "suspended") void this.ctx.resume();
 

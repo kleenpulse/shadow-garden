@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1784730238998,
+      "tag": "0000_exotic_ultimates",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784730256388,
+      "tag": "0001_auth_link_and_rls",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784755560542,
+      "tag": "0002_bouncy_steel_serpent",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784758248434,
+      "tag": "0003_unknown_clea",
+      "breakpoints": true
+    }
+  ]
+}

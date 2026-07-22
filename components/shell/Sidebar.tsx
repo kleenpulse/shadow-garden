@@ -18,18 +18,28 @@ import {
 	SIDEBAR_MIN,
 	SIDEBAR_MAX,
 	SIDEBAR_DEFAULT,
+	type TierFilter,
 } from "@/lib/store";
 import { useResizable } from "./use-resizable";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import TierBadge from "./TierBadge";
+import PillTabs, { type PillTabItem } from "./PillTabs";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
+
+const TIER_TABS: PillTabItem<TierFilter>[] = [
+	{ value: "all", label: "all" },
+	{ value: "free", label: "free" },
+	{ value: "pro", label: "pro" },
+];
 
 export default function Sidebar() {
 	const pathname = usePathname();
 	const router = useRouter();
 	const search = useUIStore((state) => state.search);
 	const setSearch = useUIStore((state) => state.setSearch);
+	const tierFilter = useUIStore((state) => state.tierFilter);
+	const setTierFilter = useUIStore((state) => state.setTierFilter);
 	const sidebarOpen = useUIStore((state) => state.sidebarOpen);
 	const setSidebarOpen = useUIStore((state) => state.setSidebarOpen);
 	const sidebarWidth = useUIStore((state) => state.sidebarWidth);
@@ -73,11 +83,16 @@ export default function Sidebar() {
 			?.scrollIntoView({ block: "center" });
 	}, []);
 
+	const tierFiltered = useMemo(() => {
+		if (tierFilter === "all") return registry;
+		return registry.filter((entry) => entry.tier === tierFilter);
+	}, [tierFilter]);
+
 	const searching = search.trim().length > 0;
 
 	const scored = useMemo(() => {
-		if (!searching) return registry;
-		return registry
+		if (!searching) return tierFiltered;
+		return tierFiltered
 			.map((entry) => ({
 				entry,
 				score: Math.max(
@@ -89,11 +104,11 @@ export default function Sidebar() {
 			.filter((row) => row.score > 0)
 			.sort((a, b) => b.score - a.score)
 			.map((row) => row.entry);
-	}, [search, searching]);
+	}, [search, searching, tierFiltered]);
 
 	const groups = useMemo(
-		() => groupByCategory(searching ? scored : registry),
-		[scored, searching],
+		() => groupByCategory(searching ? scored : tierFiltered),
+		[scored, searching, tierFiltered],
 	);
 
 	const visibleFlat = useMemo<ComponentEntry[]>(() => {
@@ -111,7 +126,7 @@ export default function Sidebar() {
 
 	useEffect(() => {
 		setActive(0);
-	}, [search]);
+	}, [search, tierFilter]);
 
 	const toggleCategory = (category: Category) => {
 		setCollapsed((prev) => {
@@ -218,8 +233,8 @@ export default function Sidebar() {
 						className="mb-1.5 px-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute"
 					>
 						{searching
-							? `${scored.length} / ${registry.length} components`
-							: `${registry.length} components`}
+							? `${scored.length} / ${tierFiltered.length} components`
+							: `${tierFiltered.length} components`}
 					</p>
 					<input
 						type="search"
@@ -232,6 +247,16 @@ export default function Sidebar() {
 						placeholder="Search components…"
 						aria-label="Search components"
 						className="w-full rounded-md border border-hairline bg-panel px-3 py-1.5 font-mono text-xs text-ink placeholder:text-ink-mute outline-none focus-visible:border-accent"
+					/>
+					<PillTabs<TierFilter>
+						aria-label="Filter by tier"
+						value={tierFilter}
+						onValueChange={setTierFilter}
+						items={TIER_TABS}
+						layoutId="sidebar-tier-filter"
+						fullWidth
+						size="md"
+						className="mt-2"
 					/>
 				</div>
 

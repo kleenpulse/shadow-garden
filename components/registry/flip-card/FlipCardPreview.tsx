@@ -52,6 +52,45 @@ const DEMOS: Demo[] = [
       ["STATUS", "SEALED"],
     ],
   },
+  {
+    id: "echo",
+    index: "04",
+    title: "ECHO",
+    gradient: "bg-gradient-to-tl from-accent/30 via-panel to-accent/20",
+    description:
+      "Passive listener stitched into the perimeter. Confirms nothing, denies nothing.",
+    meta: [
+      ["NODES", "7"],
+      ["DELAY", "4 MS"],
+      ["STATUS", "ACTIVE"],
+    ],
+  },
+  {
+    id: "vector",
+    index: "05",
+    title: "VECTOR",
+    gradient: "bg-gradient-to-r from-accent/45 via-accent/10 to-panel",
+    description:
+      "Extraction route computed on demand. Recalculates the instant a watcher blinks.",
+    meta: [
+      ["PATHS", "12"],
+      ["ETA", "90 S"],
+      ["STATUS", "STANDBY"],
+    ],
+  },
+  {
+    id: "null",
+    index: "06",
+    title: "NULL",
+    gradient: "bg-gradient-to-b from-accent/35 via-accent/5 to-panel",
+    description:
+      "Dead-drop signature for orders that never happened. Verifies once, then forgets.",
+    meta: [
+      ["DROPS", "1"],
+      ["TTL", "60 S"],
+      ["STATUS", "SEALED"],
+    ],
+  },
 ];
 
 const ITEMS: FlipCardItem[] = DEMOS.map((demo) => ({
@@ -102,10 +141,10 @@ export default function FlipCardPreview({
   reducedMotion,
 }: PreviewProps) {
   return (
-    <div className="flex h-full min-h-[320px] w-full items-center justify-center p-8">
+    <div className="flex h-full min-h-155 w-full items-center justify-center p-8">
       <FlipCard
         items={ITEMS}
-        className="grid w-full max-w-md grid-cols-3 gap-3"
+        className="grid w-full max-w-2xl grid-cols-3 gap-4"
         flipDuration={values.flipDuration as number}
         perspective={values.perspective as number}
         expandedWidth={values.expandedWidth as number}
