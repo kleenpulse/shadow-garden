@@ -5,6 +5,7 @@ import { Heart, Search } from "lucide-react";
 import { useUIStore } from "@/lib/store";
 import { useFavoriteCount, useFavoritesHydrated } from "@/lib/favorites-store";
 import ThemeToggle from "./ThemeToggle";
+import SoundToggle from "./SoundToggle";
 import Wordmark from "@/components/Wordmark";
 
 export default function MobileBar() {
@@ -52,6 +53,7 @@ export default function MobileBar() {
 						</span>
 					)}
 				</Link>
+				<SoundToggle />
 				<ThemeToggle />
 			</div>
 		</div>

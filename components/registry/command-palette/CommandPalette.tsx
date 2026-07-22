@@ -33,6 +33,10 @@ export interface CommandPaletteProps {
 	onOpenChange: (open: boolean) => void;
 	groups: CommandGroupDef[];
 	onSelect?: (command: CommandDef) => void;
+	/** Fires as the search query changes (each keystroke). */
+	onValueChange?: (search: string) => void;
+	/** Fires when a command is highlighted via pointer hover. */
+	onItemHover?: (command: CommandDef) => void;
 	/** One hotkey, or several bound at once (e.g. ["cmd+k", "/"]). */
 	hotkey?: Hotkey | Hotkey[];
 	loop?: boolean;
@@ -84,6 +88,8 @@ export default function CommandPalette({
 	onOpenChange,
 	groups,
 	onSelect,
+	onValueChange,
+	onItemHover,
 	hotkey = "cmd+k",
 	loop = true,
 	glass = false,
@@ -145,6 +151,7 @@ export default function CommandPalette({
 				value={command.label}
 				keywords={command.keywords}
 				onSelect={() => runCommand(command)}
+				onMouseEnter={() => onItemHover?.(command)}
 				forceMount={pinned || undefined}
 				className={
 					pinned
@@ -226,7 +233,8 @@ export default function CommandPalette({
 								<Command.Input
 									autoFocus
 									placeholder={placeholder}
-									onValueChange={() => {
+									onValueChange={(value) => {
+										onValueChange?.(value);
 										listRef.current?.scrollTo({ top: 0 });
 									}}
 									className="h-12 w-full bg-transparent font-sans text-sm text-ink outline-none placeholder:text-ink-mute"

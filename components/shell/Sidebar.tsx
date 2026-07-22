@@ -20,6 +20,7 @@ import {
 	SIDEBAR_DEFAULT,
 } from "@/lib/store";
 import { useResizable } from "./use-resizable";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import TierBadge from "./TierBadge";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
@@ -33,6 +34,7 @@ export default function Sidebar() {
 	const setSidebarOpen = useUIStore((state) => state.setSidebarOpen);
 	const sidebarWidth = useUIStore((state) => state.sidebarWidth);
 	const setSidebarWidth = useUIStore((state) => state.setSidebarWidth);
+	const { play, typeKey, hoverProps } = useInteractionSound();
 
 	// The persisted width differs from the SSR default, so defer the handle (which
 	// renders the live width into aria-valuenow) to after mount to avoid a
@@ -148,7 +150,11 @@ export default function Sidebar() {
 			<li key={entry.slug}>
 				<Link
 					href={href}
-					onClick={() => setSidebarOpen(false)}
+					{...hoverProps()}
+					onClick={() => {
+						if (!isActive) play("select"); // no cue re-selecting the current page
+						setSidebarOpen(false);
+					}}
 					aria-current={isActive ? "page" : undefined}
 					className={`relative flex items-center justify-between gap-2 rounded-sm px-2.5 py-1.5 text-sm transition-colors ${
 						isActive
@@ -218,7 +224,10 @@ export default function Sidebar() {
 					<input
 						type="search"
 						value={search}
-						onChange={(event) => setSearch(event.target.value)}
+						onChange={(event) => {
+							typeKey();
+							setSearch(event.target.value);
+						}}
 						onKeyDown={onSearchKeyDown}
 						placeholder="Search components…"
 						aria-label="Search components"
