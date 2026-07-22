@@ -53,4 +53,5 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "flock-field": dynamic(() => import("./flock-field/FlockFieldPreview"), { ssr: false }),
   "smoke-field": dynamic(() => import("./smoke-field/SmokeFieldPreview"), { ssr: false }),
   "ripple-field": dynamic(() => import("./ripple-field/RippleFieldPreview"), { ssr: false }),
+  "file-explorer": dynamic(() => import("./file-explorer/FileExplorerPreview"), { ssr: false }),
 };

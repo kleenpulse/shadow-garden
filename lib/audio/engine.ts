@@ -39,6 +39,16 @@ class AudioEngine {
 	private enabled = false;
 	private volume = 0.6;
 
+	// One-shot gesture unlock. A context created outside a user gesture (e.g. a
+	// returning visitor whose preference rehydrates to "on") is born suspended;
+	// resume() only sticks during a real activation event. So when audio is
+	// enabled we arm these listeners and resume on the first genuine gesture.
+	private unlockArmed = false;
+	private readonly onGesture = () => {
+		this.unlock();
+		if (this.ctx?.state === "running") this.disarmUnlock();
+	};
+
 	// Melodic memory: consecutive hovers walk up the scale, then reset after a
 	// pause so a fresh sweep starts low again.
 	private step = 0;
@@ -92,9 +102,33 @@ class AudioEngine {
 		void this.ctx?.resume();
 	}
 
+	// pointerenter/hover are NOT user-activation events, so only these can
+	// actually resume a suspended context. Capture + passive: we never cancel.
+	private armUnlock() {
+		if (this.unlockArmed || this.ctx?.state === "running") return;
+		this.unlockArmed = true;
+		const opts = { capture: true, passive: true } as const;
+		window.addEventListener("pointerdown", this.onGesture, opts);
+		window.addEventListener("keydown", this.onGesture, opts);
+		window.addEventListener("touchend", this.onGesture, opts);
+	}
+
+	private disarmUnlock() {
+		if (!this.unlockArmed) return;
+		this.unlockArmed = false;
+		const opts = { capture: true } as const;
+		window.removeEventListener("pointerdown", this.onGesture, opts);
+		window.removeEventListener("keydown", this.onGesture, opts);
+		window.removeEventListener("touchend", this.onGesture, opts);
+	}
+
 	setEnabled(on: boolean) {
 		this.enabled = on;
-		if (on) this.unlock();
+		// Arm rather than eagerly unlock: a load-time enable (rehydrate) has no
+		// active gesture, so creating the context now would only strand it
+		// suspended. The toggle path still fires instantly — SoundToggle's
+		// play("enable") runs inside the same click and unlocks there.
+		if (on) this.armUnlock();
 		this.applyMaster();
 	}
 
