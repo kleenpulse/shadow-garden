@@ -45,4 +45,12 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "physics-engine": dynamic(() => import("./physics-engine/PhysicsEnginePreview"), { ssr: false }),
   "black-hole": dynamic(() => import("./black-hole/BlackHolePreview"), { ssr: false }),
   "vortex-bloom": dynamic(() => import("./vortex-bloom/VortexBloomPreview"), { ssr: false }),
+  aurora: dynamic(() => import("./aurora/AuroraPreview"), { ssr: false }),
+  starfield: dynamic(() => import("./starfield/StarfieldPreview"), { ssr: false }),
+  "scramble-text": dynamic(() => import("./scramble-text/ScrambleTextPreview"), { ssr: false }),
+  "magnetic-button": dynamic(() => import("./magnetic-button/MagneticButtonPreview"), { ssr: false }),
+  "shadow-cursor": dynamic(() => import("./shadow-cursor/ShadowCursorPreview"), { ssr: false }),
+  "flock-field": dynamic(() => import("./flock-field/FlockFieldPreview"), { ssr: false }),
+  "smoke-field": dynamic(() => import("./smoke-field/SmokeFieldPreview"), { ssr: false }),
+  "ripple-field": dynamic(() => import("./ripple-field/RippleFieldPreview"), { ssr: false }),
 };
