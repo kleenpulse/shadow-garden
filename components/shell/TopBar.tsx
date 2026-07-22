@@ -24,10 +24,7 @@ export default function TopBar() {
 		<div className="sticky top-0 z-20 hidden h-10 md:h-14 items-center gap-3 border-b border-hairline bg-surface/80 px-4 backdrop-blur lg:flex lg:px-8">
 			<button
 				type="button"
-				onClick={() => {
-					play("open");
-					setPaletteOpen(true);
-				}}
+				onClick={() => setPaletteOpen(true)}
 				{...hoverProps()}
 				className="group flex h-9 w-full max-w-sm items-center gap-2 rounded-md border border-hairline bg-panel px-3 text-left text-ink-mute transition-colors hover:border-accent-muted hover:text-ink-dim"
 			>
