@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import { useUIStore, type WorkspaceTab } from "@/lib/store";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import PillTabs, { type PillTabItem } from "./PillTabs";
 
 const TABS: PillTabItem<WorkspaceTab>[] = [
@@ -20,6 +21,7 @@ export default function WorkspaceTabs({
 }) {
   const activeTab = useUIStore((state) => state.activeTab);
   const setActiveTab = useUIStore((state) => state.setActiveTab);
+  const { play } = useInteractionSound();
 
   // Reset to the preview tab when navigating to a different component.
   useEffect(() => {
@@ -31,7 +33,10 @@ export default function WorkspaceTabs({
       <PillTabs
         aria-label="Preview or source"
         value={activeTab}
-        onValueChange={setActiveTab}
+        onValueChange={(tab) => {
+          play(tab === "code" ? "toggle-on" : "toggle-off");
+          setActiveTab(tab);
+        }}
         items={TABS}
         layoutId="workspace-tabs"
         className="mb-4"
