@@ -72,7 +72,7 @@ export function SpotlightShell({
   return (
     <motion.div
       ref={ref}
-      className={cn('group', cardShellStatic, className)}
+      className={cn('group/card', cardShellStatic, className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
@@ -99,14 +99,14 @@ export function SpotlightShell({
       {!reduce && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[55%] -translate-x-full -skew-x-12 bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[280%] dark:via-white/10"
+          className="pointer-events-none absolute inset-y-0 left-0 z-20 w-[55%] -translate-x-full -skew-x-12 bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 ease-out group-hover/card:translate-x-[280%] dark:via-white/10"
         />
       )}
 
       {/* Growing bottom accent line. */}
       <div
         aria-hidden
-        className="absolute bottom-0 left-0 z-20 h-0.5 w-0 rounded-full transition-all duration-500 group-hover:w-full"
+        className="absolute bottom-0 left-0 z-20 h-0.5 w-0 rounded-full transition-all duration-500 group-hover/card:w-full"
         style={{
           background: `linear-gradient(to right, ${accentColor}80, transparent)`,
         }}
