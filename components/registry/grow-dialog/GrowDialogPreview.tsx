@@ -74,8 +74,8 @@ export default function GrowDialogPreview({
   const card = CARDS[active];
 
   return (
-    <div className="grid h-full min-h-[320px] w-full place-items-center p-6">
-      <div className="grid w-full max-w-lg grid-cols-3 gap-3">
+    <div className="grid h-full min-h-155 w-full place-items-center p-8">
+      <div className="grid w-full max-w-2xl grid-cols-3 gap-4">
         {/* Plain buttons — pure coordinate sources, no layoutId anywhere. */}
         {CARDS.map((c, i) => {
           const CardIcon = c.icon;
@@ -88,11 +88,11 @@ export default function GrowDialogPreview({
                 setOrigin(e.currentTarget.getBoundingClientRect());
                 setOpen(true);
               }}
-              className="flex flex-col items-start gap-2 rounded-xl border border-hairline bg-raised p-3.5 text-left transition-colors hover:border-accent/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+              className="flex aspect-square flex-col items-start justify-center gap-3 rounded-xl border border-hairline bg-raised p-5 text-left transition-colors hover:border-accent/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
             >
-              <CardIcon className="size-4 text-accent" />
-              <h3 className="font-display text-xs text-ink">{c.label}</h3>
-              <span className="font-sans text-[11px] leading-snug text-ink-mute">
+              <CardIcon className="size-6 text-accent" />
+              <h3 className="font-display text-sm text-ink">{c.label}</h3>
+              <span className="font-sans text-xs leading-snug text-ink-mute">
                 {c.blurb}
               </span>
             </button>

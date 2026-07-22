@@ -1,23 +1,72 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Volume2, VolumeX } from "lucide-react";
+import { Lock, Volume2, VolumeX } from "lucide-react";
 import { useAudioStore } from "@/lib/audio-store";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
+import { usePro } from "@/hooks/use-pro";
+import { getEngine } from "@/lib/audio/engine";
+import { IS_LOCAL_DEV } from "@/lib/env";
 import { cn } from "@/lib/utils";
 
-// Consent control for interaction audio, sits beside ThemeToggle. The click
-// that enables sound is itself the gesture that unlocks the AudioContext — so
-// the very first "on" plays a confirming cue with no extra interaction needed.
+// Consent control for interaction audio, sits beside ThemeToggle. Pro-gated:
+// the engine only ever sounds when both this toggle AND the entitlement check
+// say yes (lib/audio/engine.ts's `pro` flag), so a free/lapsed visitor can't
+// hear it even via a stale persisted "enabled" from before a downgrade.
+// Localhost (`next dev`) always unlocks sound only — the Pro *source code*
+// gate (lib/registry/entitlement.ts) is untouched, still real everywhere.
+// The click that enables sound is itself the gesture that unlocks the
+// AudioContext — so the very first "on" plays a confirming cue with no extra
+// interaction needed.
 export default function SoundToggle({ className }: { className?: string }) {
 	const enabled = useAudioStore((s) => s.enabled);
 	const toggle = useAudioStore((s) => s.toggle);
 	const { play } = useInteractionSound();
+	const pro = usePro();
+	const soundPro = IS_LOCAL_DEV || pro === true;
+	// Local dev never has to wait on the entitlement fetch to resolve.
+	const resolved = IS_LOCAL_DEV || pro !== null;
+
+	useEffect(() => {
+		getEngine()?.setPro(soundPro);
+	}, [soundPro]);
 
 	// Persisted state hydrates client-side; hold a neutral icon until mounted so
 	// SSR (always off) and client markup agree.
 	const [mounted, setMounted] = useState(false);
 	useEffect(() => setMounted(true), []);
+
+	// Loading (pro unresolved) or not mounted yet: neutral placeholder — same
+	// footprint, no icon — so nothing flashes as enabled before the entitlement
+	// check settles.
+	const boxClass = cn(
+		"grid size-7 md:size-8 place-items-center rounded-md border border-hairline text-ink-dim transition-colors hover:text-accent focus-visible:text-accent",
+		className,
+	);
+
+	if (!mounted || !resolved) {
+		return (
+			<span aria-hidden className={boxClass}>
+				<span className="h-4 w-4" />
+			</span>
+		);
+	}
+
+	if (!soundPro) {
+		return (
+			<button
+				type="button"
+				aria-label="Interaction sound is a Pro feature"
+				title="Interaction sound is a Pro feature"
+				onClick={() => {
+					window.location.hash = "subscribe";
+				}}
+				className={cn(boxClass, "text-ink-mute")}
+			>
+				<Lock className="h-4 w-4" aria-hidden />
+			</button>
+		);
+	}
 
 	const label = enabled ? "Mute interaction sounds" : "Enable interaction sounds";
 
@@ -32,18 +81,12 @@ export default function SoundToggle({ className }: { className?: string }) {
 				toggle();
 				if (next) play("enable"); // greet on enable (context now unlocked)
 			}}
-			className={cn(
-				"grid size-7 md:size-8 place-items-center rounded-md border border-hairline text-ink-dim transition-colors hover:text-accent focus-visible:text-accent",
-				enabled && "text-accent",
-				className,
-			)}
+			className={cn(boxClass, enabled && "text-accent")}
 		>
-			{mounted && enabled ? (
+			{enabled ? (
 				<Volume2 className="h-4 w-4" aria-hidden />
-			) : mounted ? (
-				<VolumeX className="h-4 w-4" aria-hidden />
 			) : (
-				<span className="h-4 w-4" aria-hidden />
+				<VolumeX className="h-4 w-4" aria-hidden />
 			)}
 		</button>
 	);

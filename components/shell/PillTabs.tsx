@@ -24,7 +24,14 @@ type PillTabsProps<V extends string = string> = {
   className?: string;
   /** Stretch to fill the container, distributing tabs evenly. */
   fullWidth?: boolean;
+  /** "md" matches the sidebar search input's height; "sm" (default) is the compact workspace-tab size. */
+  size?: "sm" | "md";
 };
+
+const SIZE_CLASSES = {
+  sm: { track: "p-1", tab: "py-1 text-[11px]" },
+  md: { track: "p-0.5", tab: "py-1 text-xs" },
+} as const;
 
 /**
  * Pill-style tab toggle with an animated sliding indicator (motion `layoutId`).
@@ -40,9 +47,11 @@ export default function PillTabs<V extends string = string>({
   "aria-label": ariaLabel,
   className,
   fullWidth = false,
+  size = "sm",
 }: PillTabsProps<V>) {
   const fallbackId = useId();
   const effectiveLayoutId = layoutId ?? fallbackId;
+  const sizeClasses = SIZE_CLASSES[size];
 
   const onKeyDown = (event: KeyboardEvent) => {
     const index = items.findIndex((t) => t.value === value);
@@ -63,7 +72,8 @@ export default function PillTabs<V extends string = string>({
       onKeyDown={onKeyDown}
       className={cn(
         // Shadow Garden radius (rounded-lg) + hairline panel chrome kept as-is.
-        "relative inline-flex items-center gap-1 rounded-lg border border-hairline bg-panel p-1",
+        "relative inline-flex items-center gap-1 rounded-lg border border-hairline bg-panel",
+        sizeClasses.track,
         fullWidth ? "w-full" : "w-fit",
         className,
       )}
@@ -78,7 +88,8 @@ export default function PillTabs<V extends string = string>({
             tabIndex={active ? 0 : -1}
             onClick={() => onValueChange(item.value)}
             className={cn(
-              "relative inline-flex items-center justify-center rounded-md px-3 py-1 font-display text-[11px] uppercase tracking-[0.15em] outline-none transition-colors",
+              "relative inline-flex items-center justify-center rounded-md px-3 font-display uppercase tracking-[0.15em] outline-none transition-colors",
+              sizeClasses.tab,
               fullWidth && "flex-1",
               active ? "text-accent" : "text-ink-dim hover:text-ink",
             )}

@@ -1,6 +1,7 @@
 import { getSource } from "@/lib/registry/source";
 import type { ComponentEntry } from "@/lib/registry/types";
 import CodeBlock from "./CodeBlock";
+import SubscribeButton from "./SubscribeButton";
 
 // Server component. The gated read happens here — for a locked Pro component the
 // raw source never crosses to the client. For Pro entries this reads cookies and
@@ -18,6 +19,7 @@ export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
           The source for {entry.name} is available on the Pro tier. The preview stays free —
           subscribe to view and copy the code.
         </p>
+        <SubscribeButton label="View the source →" className="mt-2" />
       </div>
     );
   }
@@ -33,5 +35,12 @@ export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
     );
   }
 
-  return <CodeBlock html={result.html} raw={result.raw} filename={entry.variants[0]?.file} />;
+  return (
+    <CodeBlock
+      html={result.html}
+      raw={result.raw}
+      filename={entry.variants[0]?.file}
+      slug={entry.slug}
+    />
+  );
 }

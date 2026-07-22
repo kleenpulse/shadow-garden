@@ -8,6 +8,7 @@ import {
   useIsFavorite,
   useFavoritesHydrated,
 } from "@/lib/favorites-store";
+import { trackEvent } from "@/lib/stats/track";
 import { cn } from "@/lib/utils";
 
 interface FavoriteButtonProps {
@@ -41,8 +42,14 @@ export default function FavoriteButton({
     event.stopPropagation();
     if (!hydrated) return;
     toggle(slug);
-    if (favorited) toast(`Removed ${label} from favorites`);
-    else toast.success(`Added ${label} to favorites`);
+    // `favorited` is the state BEFORE the toggle: true means we just removed it.
+    if (favorited) {
+      toast(`Removed ${label} from favorites`);
+      trackEvent(slug, "unfavorited");
+    } else {
+      toast.success(`Added ${label} to favorites`);
+      trackEvent(slug, "favorited");
+    }
   };
 
   return (

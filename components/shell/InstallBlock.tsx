@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { installCommand, PKG_MANAGERS, type PkgManager } from "@/lib/registry/install";
 import type { ComponentEntry } from "@/lib/registry/types";
+import { trackEvent } from "@/lib/stats/track";
 
 export default function InstallBlock({
   entry,
@@ -30,6 +31,7 @@ export default function InstallBlock({
     try {
       await navigator.clipboard.writeText(command);
       setCopied(true);
+      trackEvent(entry.slug, "install");
       setTimeout(() => setCopied(false), 1400);
     } catch {
       // Clipboard unavailable — no-op.
