@@ -170,7 +170,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				name: "color1",
 				kind: "color",
-				default: "#a855f7",
+				default: "#f754f1",
 				description: "First gradient color.",
 			},
 			{
@@ -1309,7 +1309,8 @@ export const backgrounds: ComponentEntry[] = [
 				min: 1,
 				max: 5,
 				step: 1,
-				description: "Parallax depth layers — nearer layers drift faster and brighter.",
+				description:
+					"Parallax depth layers — nearer layers drift faster and brighter.",
 			},
 			{
 				name: "driftSpeed",
