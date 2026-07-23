@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPolar, polarConfigured } from "@/lib/polar";
-import {
-  createSupabaseServerClient,
-  supabaseConfigured,
-} from "@/lib/supabase/server";
+import { supabaseConfigured } from "@/lib/supabase/server";
+import { currentUserId } from "@/lib/supabase/current-user";
 
 // Redirects a signed-in member to their pre-authenticated Polar Customer Portal —
 // which handles cancel, change payment method, invoices/receipts, and the renewal
@@ -18,9 +16,7 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${site}/components?portal_error=unconfigured`);
   }
 
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getClaims();
-  const userId = data?.claims?.sub;
+  const userId = await currentUserId();
   if (!userId) {
     return NextResponse.redirect(
       `${site}/components?portal_error=signin_required`,

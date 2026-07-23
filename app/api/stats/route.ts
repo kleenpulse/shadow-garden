@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getAllSlugs } from "@/lib/registry";
-import {
-  createSupabaseServerClient,
-  supabaseConfigured,
-} from "@/lib/supabase/server";
+import { getCurrentUserClaims } from "@/lib/supabase/current-user";
 
 // Per-component engagement counter. Fire-and-forget from the client (favorite,
 // install, copy-source, view). Anonymous by design — no auth — so every visitor's
@@ -104,16 +101,8 @@ async function increment(slug: string, event: StatEvent) {
 async function handleView(slug: string): Promise<NextResponse> {
   const res = new NextResponse(null, { status: 204 });
 
-  let visitorId: string | null = null;
-  if (supabaseConfigured()) {
-    try {
-      const supabase = await createSupabaseServerClient();
-      const { data } = await supabase.auth.getClaims();
-      visitorId = data?.claims?.sub ?? null;
-    } catch {
-      // Not signed in / auth hiccup → fall through to the anonymous cookie.
-    }
-  }
+  const claims = await getCurrentUserClaims();
+  let visitorId: string | null = claims?.sub ?? null;
 
   if (!visitorId) {
     const jar = await cookies();

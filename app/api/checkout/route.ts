@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPolar, polarConfigured } from "@/lib/polar";
-import {
-  createSupabaseServerClient,
-  supabaseConfigured,
-} from "@/lib/supabase/server";
+import { supabaseConfigured } from "@/lib/supabase/server";
+import { getCurrentUserClaims } from "@/lib/supabase/current-user";
 
 // Route handlers run on the Node runtime by default — no `export const runtime`
 // (Cache Components forbids the route-segment runtime config).
@@ -31,11 +29,9 @@ export async function GET(request: Request) {
   }
 
   // A purchase must be bound to a signed-in account.
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getClaims();
-  const userId = data?.claims?.sub;
-  const email =
-    typeof data?.claims?.email === "string" ? data.claims.email : undefined;
+  const claims = await getCurrentUserClaims();
+  const userId = claims?.sub;
+  const email = claims?.email;
   if (!userId) {
     return NextResponse.redirect(`${site}/components?checkout_error=signin_required`);
   }

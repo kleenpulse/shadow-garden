@@ -1,10 +1,8 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { eq } from "drizzle-orm";
-import {
-  createSupabaseServerClient,
-  supabaseConfigured,
-} from "@/lib/supabase/server";
+import { currentUserId } from "@/lib/supabase/current-user";
+import { deriveProStatus } from "@/lib/registry/entitlement";
 
 // Richer billing summary for the account dropdown. Separate from getEntitlement()
 // (which stays the cheap {pro} gate) — this exposes plan + next-payment details.
@@ -34,11 +32,9 @@ export async function getBilling(): Promise<BillingSummary> {
   const jar = await cookies();
   if (jar.get("sg_pro")?.value === "1") return { ...FREE, pro: true };
 
-  if (!supabaseConfigured() || !process.env.DATABASE_URL) return FREE;
+  if (!process.env.DATABASE_URL) return FREE;
 
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getClaims();
-  const userId = data?.claims?.sub;
+  const userId = await currentUserId();
   if (!userId) return FREE;
 
   const { db } = await import("@/lib/db");
@@ -57,9 +53,7 @@ export async function getBilling(): Promise<BillingSummary> {
 
   if (!row) return FREE;
 
-  const pro =
-    row.status === "active" &&
-    (row.currentPeriodEnd === null || row.currentPeriodEnd > new Date());
+  const pro = deriveProStatus(row);
 
   return {
     pro,
