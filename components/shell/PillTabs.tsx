@@ -29,6 +29,7 @@ type PillTabsProps<V extends string = string> = {
 };
 
 const SIZE_CLASSES = {
+	xs: { track: "p-0.5", tab: "py-0.5 text-[10px]" },
 	sm: { track: "p-1", tab: "py-1 text-[11px]" },
 	md: { track: "p-0.5", tab: "py-1 text-xs" },
 } as const;
