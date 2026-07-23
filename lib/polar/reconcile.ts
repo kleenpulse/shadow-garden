@@ -1,5 +1,7 @@
 import "server-only";
 import { getPolar } from "@/lib/polar";
+import { notifyUser } from "@/lib/email/notify";
+import { subscribeConfirmationEmail } from "@/lib/email/templates";
 
 // Polar → DB reconciliation, shared by two paths:
 //   1. the webhook (PUSH — async, best-effort; can be missed on tunnel/deploy/outage)
@@ -95,6 +97,12 @@ async function upsertEntitlement(input: {
   const { db } = await import("@/lib/db");
   const { entitlements } = await import("@/lib/db/schema");
 
+  // Snapshot Pro state BEFORE the write — drives the one-time confirmation email.
+  // This is the convergence point for every grant path (webhook sub, webhook
+  // lifetime order, and the checkout-return sync), so a single check here covers
+  // them all with no double-send.
+  const priorStatus = (await getExistingEntitlement(input.userId))?.status ?? null;
+
   const values = {
     userId: input.userId,
     type: input.type,
@@ -115,6 +123,15 @@ async function upsertEntitlement(input: {
       target: entitlements.userId,
       set: { ...values, updatedAt: new Date() },
     });
+
+  // Fire the congrats email only on a genuine not-active → active flip. Renewals
+  // (active → active) and lapses are silent here. Fire-and-forget; a mail failure
+  // must never roll back a paid entitlement.
+  if (priorStatus !== "active" && input.status === "active") {
+    await notifyUser(input.userId, (r) =>
+      subscribeConfirmationEmail({ name: r.name, plan: input.type }),
+    );
+  }
 }
 
 // Current row (thin projection) for the precedence rule below.
