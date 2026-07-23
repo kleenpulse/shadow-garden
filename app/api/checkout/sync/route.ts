@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { polarConfigured } from "@/lib/polar";
-import {
-  createSupabaseServerClient,
-  supabaseConfigured,
-} from "@/lib/supabase/server";
+import { supabaseConfigured } from "@/lib/supabase/server";
+import { currentUserId } from "@/lib/supabase/current-user";
 import { syncEntitlementForUser } from "@/lib/polar/reconcile";
 import { getBilling } from "@/lib/registry/billing";
 
@@ -20,9 +18,7 @@ export async function POST() {
     );
   }
 
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getClaims();
-  const userId = data?.claims?.sub;
+  const userId = await currentUserId();
   if (!userId) {
     return NextResponse.json(
       { pro: false, error: "signin_required" },

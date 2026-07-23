@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAllSlugs } from "@/lib/registry";
-import {
-  createSupabaseServerClient,
-  supabaseConfigured,
-} from "@/lib/supabase/server";
+import { currentUserId } from "@/lib/supabase/current-user";
 
 // Cross-device favorites — the server-backed mirror of the localStorage store.
 // The FavoritesSync island (client) drives all three verbs: merge-up on sign-in
@@ -15,13 +12,6 @@ import {
 //   DELETE /api/favorites { slug }   → remove, returns full { slugs }
 
 const NO_STORE = { "Cache-Control": "no-store" } as const;
-
-async function currentUserId(): Promise<string | null> {
-  if (!supabaseConfigured() || !process.env.DATABASE_URL) return null;
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase.auth.getClaims();
-  return data?.claims?.sub ?? null;
-}
 
 async function listSlugs(userId: string): Promise<string[]> {
   const { db } = await import("@/lib/db");
@@ -44,14 +34,14 @@ function extractSlugs(body: unknown): unknown[] {
 }
 
 export async function GET() {
-  const userId = await currentUserId();
+  const userId = process.env.DATABASE_URL ? await currentUserId() : null;
   if (!userId) return NextResponse.json({ slugs: [] }, { headers: NO_STORE });
   const slugs = await listSlugs(userId);
   return NextResponse.json({ slugs }, { headers: NO_STORE });
 }
 
 export async function POST(request: Request) {
-  const userId = await currentUserId();
+  const userId = process.env.DATABASE_URL ? await currentUserId() : null;
   if (!userId) {
     return NextResponse.json(
       { slugs: [], error: "signin_required" },
@@ -87,7 +77,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const userId = await currentUserId();
+  const userId = process.env.DATABASE_URL ? await currentUserId() : null;
   if (!userId) {
     return NextResponse.json(
       { slugs: [], error: "signin_required" },

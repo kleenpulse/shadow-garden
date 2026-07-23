@@ -1,13 +1,22 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { eq } from "drizzle-orm";
-import {
-  createSupabaseServerClient,
-  supabaseConfigured,
-} from "@/lib/supabase/server";
+import { currentUserId } from "@/lib/supabase/current-user";
 
 export interface Entitlement {
   pro: boolean;
+}
+
+// pro is DERIVED: active + (lifetime OR not past the current period end). The single
+// place the rule lives — getBilling() reuses it so the two never drift.
+export function deriveProStatus(row: {
+  status: string | null;
+  currentPeriodEnd: Date | null;
+}): boolean {
+  return (
+    row.status === "active" &&
+    (row.currentPeriodEnd === null || row.currentPeriodEnd > new Date())
+  );
 }
 
 // The single server-only entitlement seam. Reading cookies()/session makes callers
@@ -24,15 +33,9 @@ export async function getEntitlement(): Promise<Entitlement> {
   const jar = await cookies();
   if (jar.get("sg_pro")?.value === "1") return { pro: true };
 
-  if (!supabaseConfigured() || !process.env.DATABASE_URL) {
-    return { pro: false };
-  }
+  if (!process.env.DATABASE_URL) return { pro: false };
 
-  const supabase = await createSupabaseServerClient();
-  // getClaims verifies the JWT locally when signing keys are configured, avoiding a
-  // round-trip to the auth server in this latency-sensitive dynamic hole.
-  const { data } = await supabase.auth.getClaims();
-  const userId = data?.claims?.sub;
+  const userId = await currentUserId();
   if (!userId) return { pro: false };
 
   // Lazy import: keep the Node-only postgres-js client out of any edge bundle and
@@ -51,10 +54,5 @@ export async function getEntitlement(): Promise<Entitlement> {
 
   if (!row) return { pro: false };
 
-  // pro is DERIVED: active + (lifetime OR not past the current period end).
-  const pro =
-    row.status === "active" &&
-    (row.currentPeriodEnd === null || row.currentPeriodEnd > new Date());
-
-  return { pro };
+  return { pro: deriveProStatus(row) };
 }
