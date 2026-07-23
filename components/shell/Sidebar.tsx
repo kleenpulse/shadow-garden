@@ -218,7 +218,7 @@ export default function Sidebar() {
 			>
 				<div className="flex items-center border-b border-hairline px-4 h-10 md:h-14">
 					<Link
-						href="/"
+						href={pathname === "/components" ? "/" : "/components"}
 						className="flex items-baseline gap-0"
 						onClick={() => setSidebarOpen(false)}
 					>

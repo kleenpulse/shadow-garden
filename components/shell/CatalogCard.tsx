@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useBorderGlow } from "@/components/registry/border-glow/BorderGlow";
 import type { Tier } from "@/lib/registry/types";
-import { displayName } from "@/lib/utils";
+import { cn, displayName } from "@/lib/utils";
 import TierBadge from "./TierBadge";
 import FavoriteButton from "./FavoriteButton";
 
@@ -49,7 +49,14 @@ export default function CatalogCard({
 				className="absolute inset-0 z-0 rounded-lg"
 			/>
 			<div className="pointer-events-none relative z-10 flex items-center justify-between gap-2">
-				<span className="font-display text-sm uppercase tracking-[0.08em] text-ink group-hover:text-accent">
+				<span
+					className={cn(
+						"font-display text-sm uppercase tracking-[0.08em]",
+						slug === "grainient"
+							? "text-grainient"
+							: "text-ink group-hover:text-accent",
+					)}
+				>
 					{displayName(name)}
 				</span>
 				<div className="flex items-center gap-1.5">

@@ -344,6 +344,15 @@ html[data-sg-intro] {
 		animation: wordmark-sweep 6s linear infinite;
 		transition: opacity 0.8s ease;
 	}
+	/* Homage to the GRAINIENT mesh-gradient: its own title carries the gradient.
+	   Static (no sweep) so no reduced-motion guard is needed. Applied in place of
+	   the text-ink color utility, so nothing competes for `color`. */
+	.text-grainient {
+		background: linear-gradient(120deg, #f754f1 0%, #6d28d9 50%, #22d3ee 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
 	/* visibility (not opacity) so the resting bg-clip-text gradient on the parent
 	   doesn't fill the cursor's glyph shape — hidden text is excluded from the
 	   text clip, opacity:0 text is not. Width is still reserved → no reflow. */

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LogIn, Search } from "lucide-react";
 import { useUIStore } from "@/lib/store";
 import { useAuthUser } from "@/hooks/use-auth-user";
@@ -14,6 +15,7 @@ export default function MobileBar() {
 	const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
 	const { user, ready, signIn } = useAuthUser();
+	const pathname = usePathname();
 
 	return (
 		<div className="sticky top-0 z-20 flex items-center gap-3 border-b border-hairline bg-surface/90 px-3 py-3 backdrop-blur lg:hidden h-10">
@@ -27,7 +29,10 @@ export default function MobileBar() {
 					≡
 				</span>
 			</button>
-			<Link href="/" className="inline-flex items-baseline">
+			<Link
+				href={pathname === "/components" ? "/" : "/components"}
+				className="inline-flex items-baseline"
+			>
 				<Wordmark size="xs" />
 			</Link>
 

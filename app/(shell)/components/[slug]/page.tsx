@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getEntry } from "@/lib/registry";
-import { displayName } from "@/lib/utils";
+import { cn, displayName } from "@/lib/utils";
 import LiveWorkspace from "@/components/shell/LiveWorkspace";
 import CodePanel from "@/components/shell/CodePanel";
 import InstallSection from "@/components/shell/InstallSection";
@@ -48,7 +48,12 @@ export default async function ComponentPage({
 					{entry.category}
 				</p>
 				<div className="mt-2 flex flex-wrap items-center gap-3">
-					<h1 className="font-display text-2xl uppercase tracking-[0.08em] text-ink">
+					<h1
+						className={cn(
+							"font-display text-2xl uppercase tracking-[0.08em]",
+							entry.slug === "grainient" ? "text-grainient" : "text-ink",
+						)}
+					>
 						{displayName(entry.name)}
 					</h1>
 					<TierBadge tier={entry.tier} />
