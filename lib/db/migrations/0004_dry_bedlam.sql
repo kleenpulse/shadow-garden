@@ -1,0 +1,1 @@
+ALTER TABLE "profiles" ADD COLUMN "welcome_email_sent_at" timestamp with time zone;

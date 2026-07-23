@@ -35,6 +35,10 @@ export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(), // == auth.users(id); FK added via SQL migration
   email: text("email"),
   displayName: text("display_name"),
+  // Set the first time we send the welcome email. The auth callback claims it
+  // with a conditional UPDATE (WHERE ... IS NULL) so the welcome fires exactly
+  // once even though the callback runs on every login.
+  welcomeEmailSentAt: timestamp("welcome_email_sent_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
