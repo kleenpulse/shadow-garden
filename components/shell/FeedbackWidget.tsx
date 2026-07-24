@@ -19,7 +19,7 @@ type FeedbackType = "bug" | "idea" | "other";
 type Step = "choose" | "form";
 
 const MESSAGE_MIN = 10;
-const MESSAGE_MAX = 2000;
+const MESSAGE_MAX = 700;
 const SUBJECT_MAX = 120;
 
 const TYPES: {
