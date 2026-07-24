@@ -23,6 +23,7 @@ import {
 import { useResizable } from "./use-resizable";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import TierBadge from "./TierBadge";
+import NewBadge from "./NewBadge";
 import PillTabs, { type PillTabItem } from "./PillTabs";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
@@ -193,7 +194,12 @@ export default function Sidebar() {
 							<span className="absolute -bottom-px -right-px size-2.5 border-b border-r border-accent" />
 						</motion.span>
 					)}
-					<span className="relative z-10 truncate font-sans">{entry.name}</span>
+					<span className="relative z-10 min-w-0 flex-1">
+						{/* Tiny corner dot instead of the full pill — sidebar rows are
+						    narrow, and absolute positioning keeps the name column aligned. */}
+						<NewBadge addedAt={entry.addedAt} variant="tiny" />
+						<span className="block truncate font-sans">{entry.name}</span>
+					</span>
 					<span className="relative z-10">
 						<TierBadge tier={entry.tier} />
 					</span>

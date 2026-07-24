@@ -5,6 +5,7 @@ import { useBorderGlow } from "@/components/registry/border-glow/BorderGlow";
 import type { Tier } from "@/lib/registry/types";
 import { cn, displayName } from "@/lib/utils";
 import TierBadge from "./TierBadge";
+import NewBadge from "./NewBadge";
 import FavoriteButton from "./FavoriteButton";
 
 // Amethyst glow tuned down for chrome duty: the catalog card is shell, not a
@@ -24,11 +25,13 @@ export default function CatalogCard({
 	name,
 	description,
 	tier,
+	addedAt,
 }: {
 	slug: string;
 	name: string;
 	description: string;
 	tier: Tier;
+	addedAt?: string;
 }) {
 	const { cardRef, rootHandlers, overlays } = useBorderGlow(GLOW);
 
@@ -66,6 +69,7 @@ export default function CatalogCard({
 						iconSize={15}
 						className="pointer-events-auto opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
 					/>
+					<NewBadge addedAt={addedAt} />
 					<TierBadge tier={tier} />
 				</div>
 			</div>
