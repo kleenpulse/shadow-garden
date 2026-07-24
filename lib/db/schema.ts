@@ -2,6 +2,7 @@ import {
   boolean,
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -30,6 +31,10 @@ export const entitlementStatus = pgEnum("entitlement_status", [
   "expired",
   "incomplete",
 ]);
+
+// What a feedback submission is about. Stable domain → native pg enum (mirrors the
+// entitlement enums). Adding a value later needs an ALTER TYPE migration.
+export const feedbackType = pgEnum("feedback_type", ["bug", "idea", "other"]);
 
 export const profiles = pgTable("profiles", {
   id: uuid("id").primaryKey(), // == auth.users(id); FK added via SQL migration
@@ -121,6 +126,40 @@ export const componentViews = pgTable(
   (t) => [primaryKey({ columns: [t.slug, t.visitorId] })],
 );
 
+// User-submitted feedback + bug reports from the customer app. Anonymous-friendly:
+// `user_id` is nullable and SET NULL on account deletion (reports outlive accounts);
+// `visitor_id` (the sg_vid cookie) attributes anonymous submissions and backs the
+// per-identity submit throttle. `context` holds best-effort device/browser/locale/geo
+// telemetry captured at submit time. Operators triage `status` from the admin console.
+export const feedback = pgTable(
+  "feedback",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").references(() => profiles.id, {
+      onDelete: "set null",
+    }),
+    visitorId: text("visitor_id"),
+    email: text("email"),
+    type: feedbackType("type").notNull().default("bug"),
+    status: text("status").notNull().default("new"), // 'new' | 'triaged' | 'resolved'
+    subject: text("subject"),
+    message: text("message").notNull(),
+    page: text("page"),
+    context: jsonb("context"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [
+    index("feedback_created_idx").on(t.createdAt),
+    index("feedback_status_idx").on(t.status),
+    index("feedback_user_idx").on(t.userId),
+  ],
+);
+
 export const profilesRelations = relations(profiles, ({ one, many }) => ({
   entitlement: one(entitlements, {
     fields: [profiles.id],
@@ -139,6 +178,13 @@ export const entitlementsRelations = relations(entitlements, ({ one }) => ({
 export const favoritesRelations = relations(favorites, ({ one }) => ({
   profile: one(profiles, {
     fields: [favorites.userId],
+    references: [profiles.id],
+  }),
+}));
+
+export const feedbackRelations = relations(feedback, ({ one }) => ({
+  profile: one(profiles, {
+    fields: [feedback.userId],
     references: [profiles.id],
   }),
 }));
