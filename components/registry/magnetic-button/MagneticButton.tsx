@@ -16,6 +16,11 @@ import { AnimatePresence, motion, useMotionValue, useSpring } from "motion/react
  * blooms behind it, and clicks emit a fading ripple. All pointer listeners live
  * on the field container — no window listeners. Under reduced motion the button
  * stays put, ripples are suppressed, and only a faint static aura remains.
+ *
+ * On coarse pointers (touch) the magnetic lean is a no-op — there's no hovering
+ * cursor to follow — so the field padding collapses to 0 (otherwise `radius`
+ * would balloon the layout ~2*radius past the button and overflow on mobile).
+ * Taps still fire the ripple, and `touch-action: manipulation` keeps them crisp.
  */
 export interface MagneticButtonProps {
   /** Button label / content. */
@@ -65,6 +70,20 @@ export default function MagneticButton({
   const rippleId = useRef(0);
   const [ripples, setRipples] = useState<Ripple[]>([]);
 
+  // Coarse pointer = touch: no persistent cursor to lean toward, so the magnetic
+  // pull is disabled and the field padding collapses. Starts false to match SSR,
+  // then the effect corrects on the client (no hydration mismatch).
+  const [coarse, setCoarse] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: none), (pointer: coarse)");
+    const update = () => setCoarse(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const magnetic = !reducedMotion && !coarse;
+
   const spring = { stiffness, damping } as const;
   // Numeric initial (not a MotionValue source) so imperative `.set()` in the
   // pointer handlers actually drives the spring — a source-bound spring would
@@ -84,7 +103,7 @@ export default function MagneticButton({
   }, [reducedMotion, auraOpacity, x, y]);
 
   const handlePointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
-    if (reducedMotion) return;
+    if (!magnetic) return;
     const el = buttonRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -105,7 +124,7 @@ export default function MagneticButton({
   };
 
   const handlePointerLeave = () => {
-    if (reducedMotion) return;
+    if (!magnetic) return;
     x.set(0);
     y.set(0);
     auraOpacity.set(0);
@@ -138,8 +157,8 @@ export default function MagneticButton({
     <div
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      style={{ padding: radius }}
-      className="relative inline-flex items-center justify-center"
+      style={{ padding: magnetic ? radius : 0 }}
+      className="relative inline-flex max-w-full items-center justify-center"
     >
       {/* Wrapper hugs the button so the aura's `100%` resolves to the button
           box, not the padded field — auraSize alone drives the spread. */}
@@ -164,7 +183,10 @@ export default function MagneticButton({
           ref={buttonRef}
           type="button"
           onPointerDown={handleClick}
-          style={reducedMotion ? undefined : { x, y }}
+          // touch-action: manipulation kills the 300ms tap delay + double-tap
+          // zoom so ripples fire instantly on touch. x/y only bind when the
+          // magnetic pull is live — otherwise the button sits still.
+          style={{ touchAction: "manipulation", ...(magnetic ? { x, y } : {}) }}
           className={
             className ??
             "relative isolate cursor-pointer overflow-hidden rounded-md border border-hairline bg-panel px-6 py-3 font-display text-sm uppercase tracking-widest text-ink transition-colors hover:text-accent"
