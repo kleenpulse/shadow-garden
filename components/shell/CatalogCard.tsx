@@ -51,7 +51,7 @@ export default function CatalogCard({
 			<div className="pointer-events-none relative z-10 flex items-center justify-between gap-2">
 				<span
 					className={cn(
-						"font-display text-sm uppercase tracking-[0.08em]",
+						"font-display text-sm uppercase tracking-[0.08em] line-clamp-1 truncate",
 						slug === "grainient"
 							? "text-grainient"
 							: "text-ink group-hover:text-accent",
@@ -69,7 +69,7 @@ export default function CatalogCard({
 					<TierBadge tier={tier} />
 				</div>
 			</div>
-			<p className="pointer-events-none relative z-10 font-sans text-xs leading-relaxed text-ink-dim">
+			<p className="pointer-events-none relative z-10 font-sans text-xs leading-relaxed text-ink-dim line-clamp-3">
 				{description}
 			</p>
 		</article>
