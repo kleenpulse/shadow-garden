@@ -54,4 +54,12 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "smoke-field": dynamic(() => import("./smoke-field/SmokeFieldPreview"), { ssr: false }),
   "ripple-field": dynamic(() => import("./ripple-field/RippleFieldPreview"), { ssr: false }),
   "file-explorer": dynamic(() => import("./file-explorer/FileExplorerPreview"), { ssr: false }),
+  cinders: dynamic(() => import("./cinders/CindersPreview"), { ssr: false }),
+  shadowflame: dynamic(() => import("./shadowflame/ShadowflamePreview"), { ssr: false }),
+  "long-shadow": dynamic(() => import("./long-shadow/LongShadowPreview"), { ssr: false }),
+  specter: dynamic(() => import("./specter/SpecterPreview"), { ssr: false }),
+  torchlight: dynamic(() => import("./torchlight/TorchlightPreview"), { ssr: false }),
+  dissolve: dynamic(() => import("./dissolve/DissolvePreview"), { ssr: false }),
+  "umbral-orrery": dynamic(() => import("./umbral-orrery/UmbralOrreryPreview"), { ssr: false }),
+  "shadow-bloom": dynamic(() => import("./shadow-bloom/ShadowBloomPreview"), { ssr: false }),
 };

@@ -71,6 +71,9 @@ export interface ComponentEntry {
   name: string;
   category: Category;
   tier: Tier;
+  /** ISO date (YYYY-MM-DD) the component was added. Drives the transient "New"
+      badge (< 7 days old); absent means never-new. */
+  addedAt?: string;
   description: string;
   /** Drives the Controls panel and the Props API table. */
   props: PropSchema[];
