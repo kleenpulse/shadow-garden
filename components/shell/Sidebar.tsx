@@ -26,6 +26,7 @@ import TierBadge from "./TierBadge";
 import PillTabs, { type PillTabItem } from "./PillTabs";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
+import FeedbackWidget from "./FeedbackWidget";
 
 const TIER_TABS: PillTabItem<TierFilter>[] = [
 	{ value: "all", label: "all" },
@@ -264,7 +265,7 @@ export default function Sidebar() {
 			      (reveals on hover / while scrolling), same treatment as the palette. */}
 				<AutoMaskVertical
 					ref={listRef}
-					className="flex-1 px-3 pb-6 md:pb-12"
+					className="flex-1 px-3 pb-16 md:pb-20"
 					aria-label="Components"
 					role="navigation"
 				>
@@ -304,6 +305,13 @@ export default function Sidebar() {
 						})
 					)}
 				</AutoMaskVertical>
+
+				{/* Feedback trigger — pinned to the bottom, offset by the list padding
+				    above so the last nav items never hide behind it. Opens the two-step
+				    feedback/bug-report modal (portals out via GrowDialog). */}
+				<div className="absolute inset-x-0 bottom-0 z-20 border-t border-hairline bg-surface">
+					<FeedbackWidget />
+				</div>
 
 				{/* Desktop drag-to-resize handle — 1px hairline, widened hit area,
             amethyst on hover/drag. Double-click resets; arrows nudge. */}
