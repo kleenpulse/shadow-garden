@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ComponentType } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import { Command } from "cmdk";
 import { AnimatePresence, motion } from "motion/react";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
@@ -49,7 +49,17 @@ export interface CommandPaletteProps {
 	 * the app shell passes true to use the palette as global chrome.
 	 */
 	fixed?: boolean;
+	/**
+	 * Value (an item's label) to highlight when the palette opens. `undefined`
+	 * keeps cmdk's default (auto-select the first item — used by the standalone
+	 * demo); `null` highlights nothing; a string highlights that item.
+	 */
+	initialValue?: string | null;
 }
+
+// Non-empty sentinel that matches no item label, so cmdk highlights nothing.
+// Must be non-empty: an empty root value makes cmdk auto-select the first item.
+const NO_SELECTION = "__none__";
 
 export function isMacPlatform(): boolean {
 	return /mac/i.test(navigator.platform || navigator.userAgent);
@@ -95,7 +105,25 @@ export default function CommandPalette({
 	glass = false,
 	placeholder = "Type a command or search…",
 	fixed = false,
+	initialValue,
 }: CommandPaletteProps) {
+	// Controlled highlight: cmdk left uncontrolled auto-selects the first item
+	// (registry order → always "Threads"), ignoring the current route. Seed the
+	// selection from the caller each time the palette opens instead.
+	const [value, setValue] = useState("");
+	// Seed synchronously *during render* on the open transition (React's
+	// adjust-state-on-prop-change pattern), not in an effect: cmdk runs its
+	// auto-select-first pass when items mount, which is before an effect fires —
+	// an effect would let cmdk latch onto "Threads" first, then overwrite our seed
+	// via its onValueChange. Setting it now means the root mounts already seeded,
+	// so that pass is skipped. undefined → "" leaves cmdk's default (demo).
+	const [wasOpen, setWasOpen] = useState(open);
+	if (open !== wasOpen) {
+		setWasOpen(open);
+		if (open) {
+			setValue(initialValue === undefined ? "" : (initialValue ?? NO_SELECTION));
+		}
+	}
 	// Normalize to a stable string so a fresh array literal each render doesn't
 	// churn the listener subscription.
 	const hotkeyKey = Array.isArray(hotkey) ? hotkey.join(",") : hotkey;
@@ -228,7 +256,16 @@ export default function CommandPalette({
 						{glass && (
 							<div className="pointer-events-none absolute inset-0 bg-linear-to-b from-white/12 to-transparent" />
 						)}
-						<Command loop={loop} className="relative">
+						<Command
+							value={value}
+							onValueChange={setValue}
+							// cmdk keeps the last pointer-hovered item selected (it doubles as
+							// the keyboard-active row), so the highlight lingers after the cursor
+							// leaves. Clear it on exit — arrow keys re-enter from the top.
+							onMouseLeave={() => setValue(NO_SELECTION)}
+							loop={loop}
+							className="relative"
+						>
 							<div className="border-b border-hairline/60 px-3">
 								<Command.Input
 									autoFocus

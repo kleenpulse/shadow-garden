@@ -20,7 +20,7 @@ export default function TopBar() {
 	const { play, hoverProps } = useInteractionSound();
 
 	return (
-		<div className="sticky top-0 z-20 hidden h-10 md:h-14 items-center gap-3 border-b border-hairline bg-surface/80 px-4 backdrop-blur lg:flex lg:px-8">
+		<div className="sticky top-0 z-20 hidden h-10 md:h-14 items-center gap-3 border-b border-hairline bg-surface/80 px-3 backdrop-blur lg:flex lg:px-4">
 			<button
 				type="button"
 				onClick={() => setPaletteOpen(true)}
