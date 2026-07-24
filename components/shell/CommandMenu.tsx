@@ -35,7 +35,13 @@ export default function CommandMenu() {
 
   // On the palette's own demo page, yield the global hotkey to the live preview
   // instance so ⌘K / "/" opens one palette (the demo), not two stacked overlays.
-  const onPalettePage = currentComponentSlug(pathname) === "command-palette";
+  const currentSlug = currentComponentSlug(pathname);
+  const onPalettePage = currentSlug === "command-palette";
+
+  // Highlight the component you're viewing when the palette opens; on any other
+  // route (catalog, favorites, …) highlight nothing (null) rather than the first
+  // item. The seed is the item's label, which is how cmdk matches selection.
+  const initialValue = currentSlug ? (getEntry(currentSlug)?.name ?? null) : null;
 
   const toggleFavorite = useCallback(
     (slug: string) => {
@@ -114,6 +120,7 @@ export default function CommandMenu() {
       onOpenChange={setPaletteOpen}
       groups={groups}
       hotkey={onPalettePage ? [] : HOTKEYS}
+      initialValue={initialValue}
       onValueChange={typeKey}
       onItemHover={() => play("hover")}
       fixed
