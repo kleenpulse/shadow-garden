@@ -21,7 +21,9 @@ import SmoothScroll from "@/components/landing/SmoothScroll";
 import SectionRail from "@/components/landing/SectionRail";
 import SpotlightList from "@/components/landing/SpotlightList";
 import PageBottomBlur from "@/components/landing/PageBottomBlur";
+import PresenceDeck from "@/components/landing/PresenceDeck";
 import GotoTop from "@/components/miscellaneous/goto-top";
+import { supabaseConfigured } from "@/lib/supabase/server";
 
 // The sealed archive reveals only a curated few — the rest stay in shadow.
 const SEALED_LIMIT = 7;
@@ -71,6 +73,29 @@ export default function Home() {
 			<LandingHeader />
 
 			<LandingHero stats={data.stats} hero={data.hero} />
+
+			{/* Live presence band — members vs guests online now, over the Supabase
+          Realtime websocket. Server-gated so an unconfigured build omits it
+          entirely (no empty labeled band). Deliberately unregistered in the
+          section rail — a quiet status readout, not a numbered specimen plate. */}
+			{supabaseConfigured() ? (
+				<section className="mx-auto w-full max-w-7xl px-3 py-10 sm:px-6">
+					<Reveal>
+						{/* Plate microtype, minus SpecimenPlate's "Exhibit" prefix — this is a
+                live readout, not a numbered specimen. */}
+						<div className="flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-hairline py-2 font-display text-[9px] uppercase tracking-widest text-ink-mute sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
+							<span className="text-accent">Live</span>
+							<span aria-hidden>·</span>
+							<span className="text-ink-dim">The Garden</span>
+							<span aria-hidden>·</span>
+							<span>Online now</span>
+						</div>
+						<div className="mt-8">
+							<PresenceDeck />
+						</div>
+					</Reveal>
+				</section>
+			) : null}
 
 			<ManifestoMarquee />
 
