@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAllSlugs } from "@/lib/registry";
 import { currentUserId } from "@/lib/supabase/current-user";
+import { sanitize } from "@/lib/favorites/reconcile";
 
 // Cross-device favorites — the server-backed mirror of the localStorage store.
 // The FavoritesSync island (client) drives all three verbs: merge-up on sign-in
@@ -27,6 +28,9 @@ async function listSlugs(userId: string): Promise<string[]> {
   return rows.map((r) => r.slug);
 }
 
+// Both verbs accept either shape: { slugs } for the sign-in merge, { slug } for a
+// single toggle. Narrowing to one array here means the whitelist and dedupe rules
+// apply identically to both.
 function extractSlugs(body: unknown): unknown[] {
   if (!body || typeof body !== "object") return [];
   const b = body as { slug?: unknown; slugs?: unknown };
@@ -59,10 +63,10 @@ export async function POST(request: Request) {
   }
 
   // Whitelist against the registry so no junk slug can ever land in the table.
-  const allowed = new Set(getAllSlugs());
-  const incoming = extractSlugs(body).filter(
-    (s): s is string => typeof s === "string" && allowed.has(s),
-  );
+  // Same rule the client applies — sanitize also dedupes, which matters here:
+  // a body repeating a slug used to produce duplicate INSERT values in one
+  // statement, and onConflictDoNothing does not deduplicate within a batch.
+  const incoming = sanitize(extractSlugs(body), new Set(getAllSlugs()));
 
   if (incoming.length > 0) {
     const { getDb } = await import("@/lib/db");

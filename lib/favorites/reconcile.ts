@@ -56,21 +56,14 @@ export function toggle(slugs: readonly string[], slug: string): string[] {
 }
 
 /**
- * Sign-in: everything favourited offline is pushed up to the account. Local wins
- * the ordering because those are the more recent actions — the ones taken since
- * this browser last talked to the server.
- */
-export function mergeUp(
-  local: readonly string[],
-  server: readonly string[],
-): string[] {
-  return order([...local, ...server]);
-}
-
-/**
- * Take the server's set as authoritative, discarding local ordering. Runs after
- * mergeUp has been written up, so nothing offline is lost — and this is what
- * propagates a removal made on another device.
+ * Take the server's set as authoritative, discarding local ordering.
+ *
+ * There is deliberately no `mergeUp(local, server)` beside this. Sign-in works by
+ * POSTing the local slugs and adopting what comes back, so the union is computed
+ * exactly once — by the INSERT — and a client-side merge would be a second
+ * implementation of the rule this module exists to keep singular. Adoption is
+ * safe because the merge is written up first: nothing offline is lost, and a
+ * removal made on another device propagates.
  */
 export function adopt(server: readonly string[], allowed?: ReadonlySet<string>): string[] {
   return sanitize([...server], allowed);

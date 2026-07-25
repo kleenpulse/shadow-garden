@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import * as reconcile from "@/lib/favorites/reconcile";
 
 // Persisted, per-browser collection of favorited components, keyed by entry.slug.
 // Separate from useUIStore (ephemeral chrome) — favorites are durable user data.
@@ -21,18 +22,14 @@ export const useFavoritesStore = create<FavoritesState>()(
   persist(
     (set, get) => ({
       slugs: [],
-      add: (slug) =>
-        set((state) =>
-          state.slugs.includes(slug) ? state : { slugs: [slug, ...state.slugs] },
-        ),
+      // The store holds the list; lib/favorites/reconcile decides what the list
+      // should be. Ordering and dedupe rules live there so the sync island and
+      // the API route apply the identical ones.
+      add: (slug) => set((state) => ({ slugs: reconcile.add(state.slugs, slug) })),
       remove: (slug) =>
-        set((state) => ({ slugs: state.slugs.filter((s) => s !== slug) })),
+        set((state) => ({ slugs: reconcile.remove(state.slugs, slug) })),
       toggle: (slug) =>
-        set((state) =>
-          state.slugs.includes(slug)
-            ? { slugs: state.slugs.filter((s) => s !== slug) }
-            : { slugs: [slug, ...state.slugs] },
-        ),
+        set((state) => ({ slugs: reconcile.toggle(state.slugs, slug) })),
       has: (slug) => get().slugs.includes(slug),
       clear: () => set({ slugs: [] }),
     }),
@@ -40,6 +37,18 @@ export const useFavoritesStore = create<FavoritesState>()(
       name: "sg-favorites",
       version: 1,
       storage: createJSONStorage(() => localStorage),
+      // localStorage is user-writable, so what comes back is `unknown`, not
+      // string[]. Rehydration used to trust it outright — a hand-edited blob
+      // could put a duplicate or a non-string into the list and every consumer
+      // downstream inherited it. No registry check here on purpose: that would
+      // pull the whole registry into the shell bundle, and the API route already
+      // whitelists on the way in and returns the authoritative set.
+      merge: (persisted, current) => ({
+        ...current,
+        slugs: reconcile.sanitize(
+          (persisted as { slugs?: unknown } | undefined)?.slugs,
+        ),
+      }),
     },
   ),
 );
