@@ -32,12 +32,26 @@ function entry(over: Partial<ComponentEntry> = {}): ComponentEntry {
   };
 }
 
+/** A preview that reads exactly the props the entry declares. */
+function readsAll(registry: ComponentEntry[]) {
+  return (slug: string) => ({
+    registered: true,
+    found: true,
+    keys: new Set(
+      registry.find((e) => e.slug === slug)?.props.map((p) => p.name) ?? [],
+    ),
+    dynamicAccess: false,
+  });
+}
+
 function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): CheckContext {
   return {
     registry,
     dirs: new Set(registry.map((e) => e.slug)),
     fileExists: () => true,
     packageDeps: new Set(["ogl"]),
+    previewKeys: new Set(registry.map((e) => e.slug)),
+    previewReads: readsAll(registry),
     ...over,
   };
 }
@@ -134,6 +148,49 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
   {
     rule: "dependencies-declared",
     ctx: context([entry({ dependencies: ["not-a-real-package"] })]),
+  },
+  {
+    rule: "preview-registered",
+    ctx: context([entry()], {
+      previewKeys: new Set<string>(),
+      previewReads: () => ({
+        registered: false,
+        found: false,
+        keys: new Set(),
+        dynamicAccess: false,
+      }),
+    }),
+  },
+  {
+    rule: "preview-reads-every-prop",
+    ctx: context(
+      [
+        entry({
+          props: [
+            { name: "unread", kind: "boolean", default: true, description: "dead control" },
+          ],
+        }),
+      ],
+      {
+        previewReads: () => ({
+          registered: true,
+          found: true,
+          keys: new Set<string>(),
+          dynamicAccess: false,
+        }),
+      },
+    ),
+  },
+  {
+    rule: "preview-reads-only-declared-props",
+    ctx: context([entry()], {
+      previewReads: () => ({
+        registered: true,
+        found: true,
+        keys: new Set(["ghost"]),
+        dynamicAccess: false,
+      }),
+    }),
   },
 ];
 

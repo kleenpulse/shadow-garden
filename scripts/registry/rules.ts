@@ -231,6 +231,91 @@ const dependenciesDeclared: Rule = {
   },
 };
 
+const previewRegistered: Rule = {
+  id: "preview-registered",
+  severity: "error",
+  what: "every slug has a preview registered in components/registry/previews.ts",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const reads = ctx.previewReads(entry.slug);
+      if (!reads.registered) {
+        out.push({
+          slug: entry.slug,
+          detail:
+            "no key in previews.ts — LiveWorkspace silently falls back to PlaceholderPreview and the page still returns 200",
+        });
+      } else if (!reads.found) {
+        out.push({
+          slug: entry.slug,
+          detail: "registered in previews.ts but the imported module is not on disk",
+        });
+      }
+    }
+    // A registration with no entry is dead weight and will never be reached.
+    const slugs = new Set(ctx.registry.map((e) => e.slug));
+    for (const key of ctx.previewKeys) {
+      if (!slugs.has(key)) {
+        out.push({
+          slug: key,
+          detail: "registered in previews.ts but no registry entry has this slug",
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const previewReadsEveryProp: Rule = {
+  id: "preview-reads-every-prop",
+  severity: "error",
+  what: "every tuned prop is actually read by its preview (no dead controls)",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const reads = ctx.previewReads(entry.slug);
+      // Registration failures are previewRegistered's business, not this rule's.
+      if (!reads.found || reads.dynamicAccess) continue;
+      for (const prop of entry.props) {
+        if (!reads.keys.has(prop.name)) {
+          out.push({
+            slug: entry.slug,
+            prop: prop.name,
+            detail:
+              "never read by the preview — the control renders and does nothing",
+          });
+        }
+      }
+    }
+    return out;
+  },
+};
+
+const previewReadsOnlyDeclaredProps: Rule = {
+  id: "preview-reads-only-declared-props",
+  severity: "error",
+  what: "a preview only reads values.* keys the entry declares",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const reads = ctx.previewReads(entry.slug);
+      if (!reads.found) continue;
+      const declared = new Set(entry.props.map((p) => p.name));
+      for (const key of reads.keys) {
+        if (!declared.has(key)) {
+          out.push({
+            slug: entry.slug,
+            prop: key,
+            detail:
+              "read from values but not declared in the entry — resolves to undefined at runtime",
+          });
+        }
+      }
+    }
+    return out;
+  },
+};
+
 /** Walk every variant of every entry, keeping non-null findings. */
 function eachVariant(
   ctx: CheckContext,
@@ -264,4 +349,7 @@ export const RULES: Rule[] = [
   disabledWhenTarget,
   addedAtFormat,
   dependenciesDeclared,
+  previewRegistered,
+  previewReadsEveryProp,
+  previewReadsOnlyDeclaredProps,
 ];
