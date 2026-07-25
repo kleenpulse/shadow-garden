@@ -385,6 +385,8 @@ const Cinders = memo(
       <div ref={containerRef} className="relative h-full w-full" {...rest}>
         <canvas
           ref={canvasRef}
+          // touch-none: a finger drag stirs the embers instead of scrolling the page.
+          className="touch-none"
           style={{
             position: "absolute",
             inset: 0,

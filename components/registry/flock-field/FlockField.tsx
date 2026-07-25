@@ -485,7 +485,8 @@ export default function FlockField({
 		<div ref={containerRef} className={`relative h-full w-full ${className}`}>
 			<canvas
 				ref={canvasRef}
-				className="cursor-crosshair"
+				// touch-none: a finger drag steers the flock instead of scrolling the page.
+				className="cursor-crosshair touch-none"
 				style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
 			/>
 		</div>

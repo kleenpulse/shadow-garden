@@ -351,7 +351,8 @@ const Constellation = memo(
 			<div ref={containerRef} className="relative h-full w-full" {...rest}>
 				<canvas
 					ref={canvasRef}
-					className="cursor-crosshair"
+					// touch-none: a finger drag steers the field instead of scrolling the page.
+					className="cursor-crosshair touch-none"
 					style={{
 						position: "absolute",
 						inset: 0,

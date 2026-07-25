@@ -53,7 +53,9 @@ export function SpotlightShell({
   const rotateY = useSpring(rawRotateY, TILT_SPRING)
   const glowOpacity = useSpring(0, GLOW_SPRING)
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  // Pointer, not mouse: a touch drag emits no `mousemove`, so a mouse-only
+  // binding leaves the tilt inert on a phone.
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (reduce) return
     const el = ref.current
     if (!el) return
@@ -62,8 +64,8 @@ export function SpotlightShell({
     normY.set((e.clientY - rect.top) / rect.height)
   }
 
-  const handleMouseEnter = () => glowOpacity.set(1)
-  const handleMouseLeave = () => {
+  const handlePointerEnter = () => glowOpacity.set(1)
+  const handlePointerLeave = () => {
     normX.set(0.5)
     normY.set(0.5)
     glowOpacity.set(0)
@@ -72,10 +74,12 @@ export function SpotlightShell({
   return (
     <motion.div
       ref={ref}
-      className={cn('group/card', cardShellStatic, className)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onMouseMove={handleMouseMove}
+      // touch-none: a finger drag tilts the card instead of scrolling the page.
+      className={cn('group/card touch-none', cardShellStatic, className)}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+      onPointerCancel={handlePointerLeave}
+      onPointerMove={handlePointerMove}
       style={
         reduce ? undefined : { rotateX, rotateY, transformPerspective: 900 }
       }

@@ -286,7 +286,8 @@ export const backgrounds: ComponentEntry[] = [
 				name: "followMouse",
 				kind: "boolean",
 				default: true,
-				description: "Aim the rays toward the cursor.",
+				description:
+					"Aim the rays toward the pointer. While on, the overlay claims touch input (a finger drag steers the rays instead of scrolling) and so intercepts clicks beneath it; off restores click-through.",
 			},
 			{
 				name: "mouseInfluence",
