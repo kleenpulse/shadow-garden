@@ -109,7 +109,7 @@ T14|x|patch source defaults → registry: text-animations|V8,C4
 T15|x|patch source defaults → registry: micro-interactions|V8,C4
 T16|x|patch source defaults → registry: power-user-systems|V8,C4
 T17|x|default-drift rule WARN → ERROR; pausable⇔paused rule added WARN-only|V8,V9
-T18|.|hooks/use-animation-loop.ts: host seam. ⊥ animation body|V10,V11,C1a
+T18|x|hooks/use-animation-loop.ts: host seam. ⊥ animation body|V10,V11,C1a
 T19|.|types.ts Variant += role?/label?; source.ts → per-variant list, 2 static roots, traversal guard|V12,V6,C1b
 T20|.|CodeTabs client wrapper + CodePanel tab ∀ variant; InstallBlock file manifest|V12,C1b
 T21|.|side-rays: migrate to host + 2nd Variant. reference migration ∴ proves C1a/C1b|V10,V11,V12
