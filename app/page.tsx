@@ -21,9 +21,7 @@ import SmoothScroll from "@/components/landing/SmoothScroll";
 import SectionRail from "@/components/landing/SectionRail";
 import SpotlightList from "@/components/landing/SpotlightList";
 import PageBottomBlur from "@/components/landing/PageBottomBlur";
-import PresenceDeck from "@/components/landing/PresenceDeck";
 import GotoTop from "@/components/miscellaneous/goto-top";
-import { supabaseConfigured } from "@/lib/supabase/server";
 
 // The sealed archive reveals only a curated few — the rest stay in shadow.
 const SEALED_LIMIT = 7;
@@ -73,29 +71,6 @@ export default function Home() {
 			<LandingHeader />
 
 			<LandingHero stats={data.stats} hero={data.hero} />
-
-			{/* Live presence band — members vs guests online now, over the Supabase
-          Realtime websocket. Server-gated so an unconfigured build omits it
-          entirely (no empty labeled band). Deliberately unregistered in the
-          section rail — a quiet status readout, not a numbered specimen plate. */}
-			{supabaseConfigured() ? (
-				<section className="mx-auto w-full max-w-7xl px-3 py-10 sm:px-6">
-					<Reveal>
-						{/* Plate microtype, minus SpecimenPlate's "Exhibit" prefix — this is a
-                live readout, not a numbered specimen. */}
-						<div className="flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-hairline py-2 font-display text-[9px] uppercase tracking-widest text-ink-mute sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
-							<span className="text-accent">Live</span>
-							<span aria-hidden>·</span>
-							<span className="text-ink-dim">The Garden</span>
-							<span aria-hidden>·</span>
-							<span>Online now</span>
-						</div>
-						<div className="mt-8">
-							<PresenceDeck />
-						</div>
-					</Reveal>
-				</section>
-			) : null}
 
 			<ManifestoMarquee />
 
@@ -177,39 +152,40 @@ export default function Home() {
           so text uses the static bench ramp (same rule as the code surface). */}
 			<div id={SECTION_IDS.sealed} className="scroll-mt-10">
 				<ProSection raysColor={data.hero.color}>
-				<div className="mx-auto w-full max-w-7xl px-3 py-14 sm:px-6 sm:py-28">
-					<div className="flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-bench-700 py-2 font-display text-[9px] uppercase tracking-widest text-bench-500 sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
-						<span className="text-[#a855f7]">
-							Plate <span className="normal-case">ζ</span>-06
-						</span>
-						<span aria-hidden>·</span>
-						<span className="text-bench-400">Sealed archive</span>
-						<span aria-hidden>·</span>
-						<span>{sealedEntries.length} units</span>
+					<div className="mx-auto w-full max-w-7xl px-3 py-14 sm:px-6 sm:py-28">
+						<div className="flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-bench-700 py-2 font-display text-[9px] uppercase tracking-widest text-bench-500 sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
+							<span className="text-[#a855f7]">
+								Plate <span className="normal-case">ζ</span>-06
+							</span>
+							<span aria-hidden>·</span>
+							<span className="text-bench-400">Sealed archive</span>
+							<span aria-hidden>·</span>
+							<span>{sealedEntries.length} units</span>
+						</div>
+						<h2 className="mt-10 max-w-2xl font-display text-3xl uppercase leading-tight tracking-[0.04em] text-bench-100 sm:text-5xl">
+							Some source stays in shadow.
+						</h2>
+						<p className="mt-6 max-w-xl font-sans text-sm leading-relaxed text-bench-300">
+							Free specimens ship with full source. Pro specimens render live on
+							this page — the implementation stays sealed until you hold the
+							key.
+						</p>
+						<SpotlightList
+							variant="sealed"
+							className="mt-10"
+							items={sealedEntries.map((entry) => ({
+								slug: entry.slug,
+								name: entry.name,
+								tag: entry.category,
+							}))}
+						/>
+						<Link
+							href="/components"
+							className="mt-10 inline-block rounded-md bg-[#a855f7] px-5 py-2.5 font-display text-[11px] uppercase tracking-[0.15em] text-bench-950 transition-opacity hover:opacity-90"
+						>
+							Unlock pro source
+						</Link>
 					</div>
-					<h2 className="mt-10 max-w-2xl font-display text-3xl uppercase leading-tight tracking-[0.04em] text-bench-100 sm:text-5xl">
-						Some source stays in shadow.
-					</h2>
-					<p className="mt-6 max-w-xl font-sans text-sm leading-relaxed text-bench-300">
-						Free specimens ship with full source. Pro specimens render live on
-						this page — the implementation stays sealed until you hold the key.
-					</p>
-					<SpotlightList
-						variant="sealed"
-						className="mt-10"
-						items={sealedEntries.map((entry) => ({
-							slug: entry.slug,
-							name: entry.name,
-							tag: entry.category,
-						}))}
-					/>
-					<Link
-						href="/components"
-						className="mt-10 inline-block rounded-md bg-[#a855f7] px-5 py-2.5 font-display text-[11px] uppercase tracking-[0.15em] text-bench-950 transition-opacity hover:opacity-90"
-					>
-						Unlock pro source
-					</Link>
-				</div>
 				</ProSection>
 			</div>
 

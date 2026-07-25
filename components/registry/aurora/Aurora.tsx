@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle } from "ogl";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 interface AuroraProps {
   baseColor?: string;
@@ -172,8 +173,25 @@ const Aurora = ({
     reducedMotion,
   };
 
-  const startLoopRef = useRef<(() => void) | null>(null);
   const renderStillRef = useRef<(() => void) | null>(null);
+  const drawRef = useRef<((now: number) => void | false) | null>(null);
+  const measureRef = useRef<((m: Metrics) => void) | null>(null);
+  const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+    null,
+  );
+
+  // `halted` stays false: motion eases to a stop and the frame body decides
+  // when it has settled. `gl` is supplied so the context is dropped on
+  // teardown — this component leaked one per unmount, while its structural
+  // twin Shadowflame did not.
+  const loop = useAnimationLoop({
+    target: containerRef,
+    halted: false,
+    dpr: "auto",
+    onResize: (metrics) => measureRef.current?.(metrics),
+    onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+    gl: () => glRef.current,
+  });
 
   // Effect 1: build the WebGL2 context once, drive the self-halting loop.
   useEffect(() => {
@@ -194,6 +212,7 @@ const Aurora = ({
       dpr: Math.min(window.devicePixelRatio || 1, 2),
     });
     const gl = renderer.gl;
+    glRef.current = gl;
     const canvas = gl.canvas as HTMLCanvasElement;
     canvas.style.width = "100%";
     canvas.style.height = "100%";
@@ -224,8 +243,6 @@ const Aurora = ({
     let simTime = 0;
     // eased motion scalar: 1 = running, 0 = fully still. Pausing eases it to a stop.
     let motion = live.current.paused || live.current.reducedMotion ? 0 : 1;
-    let raf = 0;
-    let running = false;
     let last = performance.now();
     let isVisible = true;
     let isPageVisible = !document.hidden;
@@ -250,17 +267,15 @@ const Aurora = ({
     };
     renderStillRef.current = renderStill;
 
-    const setSize = () => {
-      const rect = container.getBoundingClientRect();
-      const w = Math.max(1, Math.floor(rect.width));
-      const h = Math.max(1, Math.floor(rect.height));
-      renderer.setSize(w, h);
+    measureRef.current = ({ width, height, dpr }) => {
+      renderer.dpr = dpr;
+      renderer.setSize(Math.max(1, Math.floor(width)), Math.max(1, Math.floor(height)));
       const res = (u.iResolution as { value: Float32Array }).value;
       res[0] = gl.drawingBufferWidth;
       res[1] = gl.drawingBufferHeight;
-      // repaint one corrected frame, then re-arm so a halted canvas isn't stale
+      // Bake one corrected still so a halted canvas is never stale; the host
+      // then paints a frame of its own.
       renderStill();
-      startLoop();
     };
 
     const frame = (now: number) => {
@@ -279,29 +294,14 @@ const Aurora = ({
       renderer.render({ scene: mesh });
 
       // Self-halt: once eased to a full stop, stop scheduling frames.
-      if (wantMotion === 0 && motion === 0) {
-        running = false;
-        raf = 0;
-        return;
-      }
-      raf = requestAnimationFrame(frame);
+      if (wantMotion === 0 && motion === 0) return false;
     };
-
-    const startLoop = () => {
-      if (running) return;
-      running = true;
-      last = performance.now();
-      raf = requestAnimationFrame(frame);
-    };
-    startLoopRef.current = startLoop;
-
-    const ro = new ResizeObserver(setSize);
-    ro.observe(container);
+    drawRef.current = frame;
 
     const io = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
-        if (isVisible) startLoop();
+        if (isVisible) loop.start();
       },
       { threshold: 0 },
     );
@@ -309,18 +309,18 @@ const Aurora = ({
 
     const onVisibility = () => {
       isPageVisible = !document.hidden;
-      if (isPageVisible) startLoop();
+      if (isPageVisible) loop.start();
     };
     document.addEventListener("visibilitychange", onVisibility);
 
-    setSize(); // sizes, bakes a still frame, and arms the loop
+    loop.resize();
+    loop.start();
 
     return () => {
-      if (raf) cancelAnimationFrame(raf);
-      ro.disconnect();
+      drawRef.current = null;
+      measureRef.current = null;
       io.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
-      startLoopRef.current = null;
       renderStillRef.current = null;
       try {
         container.removeChild(canvas);
@@ -347,12 +347,11 @@ const Aurora = ({
     grain,
   ]);
 
-  // Effect 3: re-arm on unpause / reduced-motion change. startLoop is idempotent
-  // (no-op while running); when re-armed under a still state it bakes one frame
-  // and self-halts.
+  // Effect 3: re-arm on unpause / reduced-motion change. start() is idempotent;
+  // re-armed under a still state it bakes one frame and self-halts.
   useEffect(() => {
-    startLoopRef.current?.();
-  }, [paused, reducedMotion]);
+    loop.start();
+  }, [paused, reducedMotion, loop]);
 
   if (fallback) {
     const style: React.CSSProperties = {
