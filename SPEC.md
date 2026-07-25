@@ -113,7 +113,7 @@ T18|x|hooks/use-animation-loop.ts: host seam. ⊥ animation body|V10,V11,C1a
 T19|x|types.ts Variant += role?/label?; source.ts → per-variant list, 2 static roots, traversal guard|V12,V6,C1b
 T20|x|CodeTabs client wrapper + CodePanel tab ∀ variant; InstallBlock file manifest|V12,C1b
 T21|x|side-rays: migrate to host + 2nd Variant. reference migration ∴ proves C1a/C1b|V10,V11,V12
-T22|.|migrate+fix: threads, constellation, plus-grid (⊥ repaint on resize)|V2,V10,V11
+T22|x|migrate+fix: threads, constellation, plus-grid (⊥ repaint on resize)|V2,V10,V11
 T23|.|migrate+fix: ribbons (⊥ repaint + [options] rebuild), starfield (orphan rAF)|V2,V10,V11
 T24|.|migrate+fix: world-map-ascii (re-arm post unmount), light-rays (uncleared timer)|V10,V11
 T25|.|migrate+fix: aurora, grainient (⊥ loseContext; twin shadowflame:476 correct)|V11

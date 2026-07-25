@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, Color } from "ogl";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 // Detect iOS (all iOS browsers share WebKit's WebGL limits) for the static fallback.
 function isIOS(): boolean {
@@ -186,10 +187,11 @@ const Threads: React.FC<ThreadsProps> = ({
 	className,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const animationFrameId = useRef<number>(0);
-	// Set inside the init effect; lets the paused effect resume the render loop
-	// after it self-halts (the loop stops issuing draw calls once paused settles).
-	const startLoopRef = useRef<(() => void) | null>(null);
+	// The runtime host calls these; they are assigned once the GL context is up,
+	// which keeps all per-frame state local to the init effect below.
+	const drawRef = useRef<((dt: number) => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+	const glRef = useRef<Renderer["gl"] | null>(null);
 	// Live-tunable values read each frame — the WebGL context is never rebuilt
 	// while a control is dragged, so tuning stays smooth.
 	const live = useRef({
@@ -201,6 +203,18 @@ const Threads: React.FC<ThreadsProps> = ({
 		paused,
 	});
 	live.current = { color, amplitude, distance, opacity, saturation, paused };
+
+	// `halted` stays false: pausing eases timeScale toward 0 and the frame body
+	// decides when it has settled, so the loop must keep running through the
+	// fade-out. onFrame returns false at that point.
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: false,
+		dpr: maxDpr,
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: ({ dt }) => drawRef.current?.(dt) ?? false,
+		gl: () => glRef.current,
+	});
 
 	const [useFallback, setUseFallback] = useState(false);
 	useEffect(() => {
@@ -222,6 +236,13 @@ const Threads: React.FC<ThreadsProps> = ({
 			gl.clearColor(0, 0, 0, 0);
 			gl.enable(gl.BLEND);
 			gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+			// Take the canvas out of flow. ogl's setSize writes an explicit pixel width
+			// onto it; in flow that raises the container's min-content width, so the
+			// container stops shrinking, the ResizeObserver never fires, and the canvas
+			// is stuck at whatever size it first got.
+			gl.canvas.style.position = "absolute";
+			gl.canvas.style.top = "0";
+			gl.canvas.style.left = "0";
 			container.appendChild(gl.canvas);
 
 			const geometry = new Triangle(gl);
@@ -252,19 +273,17 @@ const Threads: React.FC<ThreadsProps> = ({
 
 			const mesh = new Mesh(gl, { geometry, program });
 
-			function resize() {
-				const { clientWidth, clientHeight } = container;
-				if (clientWidth === 0 || clientHeight === 0) return;
-				renderer.setSize(clientWidth, clientHeight);
+			glRef.current = gl;
+			measureRef.current = ({ width, height, dpr }) => {
+				if (width === 0 || height === 0) return;
+				renderer.dpr = dpr;
+				renderer.setSize(width, height);
 				const bw = renderer.gl.drawingBufferWidth;
 				const bh = renderer.gl.drawingBufferHeight;
 				program.uniforms.iResolution.value.r = bw;
 				program.uniforms.iResolution.value.g = bh;
 				program.uniforms.iResolution.value.b = bw / bh;
-			}
-			const resizeObserver = new ResizeObserver(() => resize());
-			resizeObserver.observe(container);
-			resize();
+			};
 
 			const currentMouse = [0.5, 0.5];
 			let targetMouse = [0.5, 0.5];
@@ -284,14 +303,9 @@ const Threads: React.FC<ThreadsProps> = ({
 			}
 
 			let accumulatedTime = 0;
-			let lastTimestamp = -1;
 			let timeScale = paused ? 0 : 1;
-			let running = false;
 
-			function update(t: number) {
-				const dt = lastTimestamp >= 0 ? (t - lastTimestamp) * 0.001 : 0;
-				lastTimestamp = t;
-
+			drawRef.current = (dt) => {
 				const l = live.current;
 				const target = l.paused ? 0 : 1;
 				timeScale += (target - timeScale) * 0.05;
@@ -321,37 +335,26 @@ const Threads: React.FC<ThreadsProps> = ({
 
 				renderer.render({ scene: mesh });
 
-				// Once paused and the ease-out has settled, stop the loop entirely so a
-				// scrolled-past hero stops issuing draw calls (it used to render a
-				// frozen frame forever). The paused effect calls startLoop to resume.
-				if (l.paused && timeScale < 1e-3) {
-					running = false;
-					lastTimestamp = -1;
-					return;
-				}
-				animationFrameId.current = requestAnimationFrame(update);
-			}
+				// Once paused and the ease-out has settled, halt so a scrolled-past hero
+				// stops issuing draw calls (it used to render a frozen frame forever).
+				// Returning false is how a caller halts from inside the frame; the
+				// unpause effect below restarts it.
+				if (l.paused && timeScale < 1e-3) return false;
+			};
 
-			function startLoop() {
-				if (running) return;
-				running = true;
-				lastTimestamp = -1;
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-			startLoopRef.current = startLoop;
-			startLoop();
+			loop.resize();
+			loop.start();
 
 			return () => {
-				running = false;
-				if (animationFrameId.current)
-					cancelAnimationFrame(animationFrameId.current);
-				resizeObserver.disconnect();
+				drawRef.current = null;
+				measureRef.current = null;
+				glRef.current = null;
 				if (enableMouseInteraction) {
 					container.removeEventListener("mousemove", handleMouseMove);
 					container.removeEventListener("mouseleave", handleMouseLeave);
 				}
+				// The host drops the GL context; this only detaches the canvas.
 				if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
-				gl!.getExtension("WEBGL_lose_context")?.loseContext();
 			};
 		} catch (err) {
 			console.warn(
@@ -366,13 +369,15 @@ const Threads: React.FC<ThreadsProps> = ({
 			return;
 		}
 		// color/amplitude/distance/opacity/saturation/paused are live via `live` ref.
+		// `loop`'s identity is stable, so it is not a dependency in practice.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [enableMouseInteraction, useFallback, maxDpr]);
 
-	// Resume the render loop when unpausing — the loop self-halts once the
-	// pause ease-out settles, so it needs an external kick to start again.
+	// Resume when unpausing — the frame body halts itself once the ease-out
+	// settles, so it needs an external kick to start again.
 	useEffect(() => {
-		if (!paused) startLoopRef.current?.();
-	}, [paused]);
+		if (!paused) loop.start();
+	}, [paused, loop]);
 
 	if (useFallback && fallbackSrc) {
 		return (

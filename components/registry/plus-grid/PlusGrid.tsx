@@ -1,7 +1,7 @@
 "use client";
 
-import gsap from "gsap";
 import { useEffect, useRef, type RefObject } from "react";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 // ── Tunable Config ────────────────────────────────────────────────────────────
 export interface PlusGridConfig {
@@ -103,7 +103,17 @@ export default function PlusGrid({
 	flagsRef.current = { pointerEnergy, paused };
 	const waveRef = useRef<WaveState>({ energy: 0, direction: 1, phase: 0 });
 	const rebuildRef = useRef<(() => void) | null>(null);
-	const startLoopRef = useRef<(() => void) | null>(null);
+	// Assigned once the 2D context is up; the runtime host calls them.
+	const drawRef = useRef<(() => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: paused,
+		dpr: "auto",
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: () => drawRef.current?.() ?? false,
+	});
 
 	useEffect(() => {
 		const container = containerRef.current;
@@ -113,13 +123,14 @@ export default function PlusGrid({
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
 
-		const dpr = window.devicePixelRatio || 1;
-
 		// ── Shared mutable state (no re-renders needed) ──────────────────────────
 		let particles: Particle[] = [];
 		let ambientPhase = 0;
 		let fontFamily = "ui-monospace";
-		let running = false;
+		// Applied dpr, kept for the tick's CSS-pixel maths. The host caps it —
+		// this used to read window.devicePixelRatio uncapped, so a DPR-3 phone
+		// rendered nine times the pixel work.
+		let dpr = 1;
 
 		const wave = waveRef.current;
 		const scroller = scrollContainerRef?.current ?? null;
@@ -156,12 +167,10 @@ export default function PlusGrid({
 		};
 
 		// ── HiDPI-aware resize + particle rebuild ────────────────────────────────
-		const handleResize = () => {
-			const w = container.clientWidth;
-			const h = container.clientHeight;
-
-			canvas.width = w * dpr;
-			canvas.height = h * dpr;
+		measureRef.current = ({ width: w, height: h, dpr: nextDpr, bufferWidth, bufferHeight }) => {
+			dpr = nextDpr;
+			canvas.width = bufferWidth;
+			canvas.height = bufferHeight;
 			canvas.style.width = `${w}px`;
 			canvas.style.height = `${h}px`;
 
@@ -176,10 +185,6 @@ export default function PlusGrid({
 
 			buildParticles(w, h);
 		};
-
-		const ro = new ResizeObserver(handleResize);
-		ro.observe(container);
-		handleResize();
 
 		// ── Energy injection: scroll delta on the scroller (or window) ───────────
 		const injectEnergy = (delta: number, sensitivity: number) => {
@@ -214,7 +219,8 @@ export default function PlusGrid({
 			passive: true,
 		});
 
-		// ── GSAP ticker — single rAF-synced loop ──────────────────────────────────
+		// ── Frame body. The runtime host schedules it (it used to run on
+		//    gsap.ticker, a second rAF scheduler for the same job). ─────────────
 		const tick = () => {
 			const cfg = cfgRef.current;
 			const isPaused = flagsRef.current.paused;
@@ -266,20 +272,13 @@ export default function PlusGrid({
 			ctx.globalAlpha = 1;
 
 			// Paint one frame, then halt while paused — the mottled grid reads
-			// well frozen. startLoop resumes on unpause.
-			if (isPaused) {
-				gsap.ticker.remove(tick);
-				running = false;
-			}
+			// well frozen. The host resumes on unpause.
+			if (isPaused) return false;
 		};
+		drawRef.current = tick;
 
-		const startLoop = () => {
-			if (running) return;
-			running = true;
-			gsap.ticker.add(tick);
-		};
-		startLoopRef.current = startLoop;
-		startLoop();
+		loop.resize();
+		loop.start();
 
 		rebuildRef.current = () => {
 			const w = container.clientWidth;
@@ -288,9 +287,8 @@ export default function PlusGrid({
 		};
 
 		return () => {
-			running = false;
-			gsap.ticker.remove(tick);
-			ro.disconnect();
+			drawRef.current = null;
+			measureRef.current = null;
 			scrollTarget.removeEventListener("scroll", onScroll);
 			container.removeEventListener("pointermove", onPointerMove);
 			container.removeEventListener("pointerleave", onPointerLeave);
@@ -316,16 +314,15 @@ export default function PlusGrid({
 		rebuildRef.current?.();
 	}, [merged.gapX, merged.gapY, merged.cols, merged.rows]);
 
-	// Resume the ticker when unpausing — tick self-halts while paused.
-	useEffect(() => {
-		if (!paused) startLoopRef.current?.();
-	}, [paused]);
-
 	return (
 		<div ref={containerRef} className={className ?? "h-full w-full"}>
 			<canvas
 				ref={canvasRef}
-				className="size-full"
+				// Absolutely positioned so the explicit pixel size we give the backing
+				// store never feeds back into layout. In flow, a wide canvas raises the
+				// container's min-content width, the container stops shrinking, the
+				// ResizeObserver never fires, and the canvas is stuck at its old size.
+				className="absolute inset-0 size-full"
 				style={{ display: "block" }}
 			/>
 		</div>

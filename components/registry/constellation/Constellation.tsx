@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, memo } from "react";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 const TWO_PI = Math.PI * 2;
 
@@ -100,17 +101,28 @@ const Constellation = memo(
 			paused,
 		};
 		const rebuildRef = useRef<(() => void) | null>(null);
-		const startLoopRef = useRef<(() => void) | null>(null);
+		const containerRef = useRef<HTMLDivElement>(null);
+		// Assigned once the 2D context is up; the host calls them.
+		const drawRef = useRef<(() => void | false) | null>(null);
+		const measureRef = useRef<((m: Metrics) => void) | null>(null);
+
+		const loop = useAnimationLoop({
+			target: containerRef,
+			halted: paused,
+			dpr: 2,
+			// Was a hand-rolled 100ms debounce whose timer the cleanup had to
+			// remember to clear; the host owns it now.
+			resizeDebounceMs: 100,
+			onResize: (metrics) => measureRef.current?.(metrics),
+			onFrame: () => drawRef.current?.() ?? false,
+		});
 
 		useEffect(() => {
 			const canvas = canvasRef.current;
 			if (!canvas) return;
 			const ctx = canvas.getContext("2d", { alpha: true });
 			if (!ctx) return;
-			const dpr = Math.min(window.devicePixelRatio || 1, 2);
-			let resizeTimer: ReturnType<typeof setTimeout>;
 			let frame = 0;
-			let running = false;
 
 			function initParticles() {
 				const { w, h } = sizeRef.current;
@@ -140,18 +152,15 @@ const Constellation = memo(
 				particlesRef.current = particles;
 			}
 
-			function doResize() {
-				const rect = canvas!.parentElement!.getBoundingClientRect();
-				const w = rect.width;
-				const h = rect.height;
-				canvas!.width = w * dpr;
-				canvas!.height = h * dpr;
-				canvas!.style.width = `${w}px`;
-				canvas!.style.height = `${h}px`;
+			measureRef.current = ({ width, height, dpr, bufferWidth, bufferHeight }) => {
+				canvas!.width = bufferWidth;
+				canvas!.height = bufferHeight;
+				canvas!.style.width = `${width}px`;
+				canvas!.style.height = `${height}px`;
 				ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-				sizeRef.current = { w, h };
+				sizeRef.current = { w: width, h: height };
 				initParticles();
-			}
+			};
 
 			function tick() {
 				frame++;
@@ -287,21 +296,8 @@ const Constellation = memo(
 					}
 				}
 
-				// Paint one frame, then halt while paused — reduced-motion still shows
-				// a populated constellation. startLoop resumes on unpause.
-				if (propsRef.current.paused) {
-					running = false;
-					return;
-				}
-				rafRef.current = requestAnimationFrame(tick);
 			}
-
-			function startLoop() {
-				if (running) return;
-				running = true;
-				rafRef.current = requestAnimationFrame(tick);
-			}
-			startLoopRef.current = startLoop;
+			drawRef.current = tick;
 
 			// Window-level pointer tracking (DotField pattern) — the showcase stage
 			// overlays the canvas, so element-level listeners never fire there.
@@ -322,28 +318,19 @@ const Constellation = memo(
 				if (e.pointerType !== "mouse") onPointerGone();
 			}
 
-			const parent = canvas.parentElement!;
-			const observer = new ResizeObserver(() => {
-				clearTimeout(resizeTimer);
-				resizeTimer = setTimeout(doResize, 100);
-			});
-
-			doResize();
-			observer.observe(parent);
 			window.addEventListener("pointermove", onPointerMove, { passive: true });
 			window.addEventListener("pointerup", onPointerUp, { passive: true });
 			document.documentElement.addEventListener("pointerleave", onPointerGone);
-			startLoop();
+			loop.resize();
+			loop.start();
 
 			rebuildRef.current = () => {
 				if (sizeRef.current.w > 0) initParticles();
 			};
 
 			return () => {
-				running = false;
-				if (rafRef.current) cancelAnimationFrame(rafRef.current);
-				clearTimeout(resizeTimer);
-				observer.disconnect();
+				drawRef.current = null;
+				measureRef.current = null;
 				window.removeEventListener("pointermove", onPointerMove);
 				window.removeEventListener("pointerup", onPointerUp);
 				document.documentElement.removeEventListener(
@@ -360,13 +347,8 @@ const Constellation = memo(
 			rebuildRef.current?.();
 		}, [density]);
 
-		// Resume the canvas loop when unpausing — tick self-halts while paused.
-		useEffect(() => {
-			if (!paused) startLoopRef.current?.();
-		}, [paused]);
-
 		return (
-			<div className="relative h-full w-full" {...rest}>
+			<div ref={containerRef} className="relative h-full w-full" {...rest}>
 				<canvas
 					ref={canvasRef}
 					className="cursor-crosshair"

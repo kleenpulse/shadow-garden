@@ -110,11 +110,19 @@ async function shot(sessionId, slug, name) {
   return buf.length;
 }
 
+// The largest canvas, not the first: the sidebar renders thumbnail canvases that
+// come earlier in document order, and measuring one of those would silently
+// report "no resize happened" for every entry.
 const CANVAS_PROBE = `(() => {
-  const c = document.querySelector('canvas');
-  if (!c) return null;
+  const all = [...document.querySelectorAll('canvas')];
+  if (all.length === 0) return null;
+  const c = all.reduce((best, x) => {
+    const a = x.getBoundingClientRect();
+    const b = best.getBoundingClientRect();
+    return a.width * a.height > b.width * b.height ? x : best;
+  });
   const r = c.getBoundingClientRect();
-  return { w: c.width, h: c.height, cssW: Math.round(r.width), cssH: Math.round(r.height) };
+  return { w: c.width, h: c.height, cssW: Math.round(r.width), cssH: Math.round(r.height), count: all.length };
 })()`;
 
 const CLICK_PAUSE = `(() => {
