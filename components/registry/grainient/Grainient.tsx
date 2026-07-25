@@ -187,7 +187,7 @@ const Grainient = ({
     halted: false,
     dpr: 'auto',
     onResize: (metrics) => measureRef.current?.(metrics),
-    onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+    onFrame: ({ now }) => (drawRef.current ? drawRef.current(now) : false),
     gl: () => glRef.current,
   })
 

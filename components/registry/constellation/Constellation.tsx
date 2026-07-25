@@ -114,7 +114,7 @@ const Constellation = memo(
 			// remember to clear; the host owns it now.
 			resizeDebounceMs: 100,
 			onResize: (metrics) => measureRef.current?.(metrics),
-			onFrame: () => drawRef.current?.() ?? false,
+			onFrame: () => (drawRef.current ? drawRef.current() : false),
 		});
 
 		useEffect(() => {

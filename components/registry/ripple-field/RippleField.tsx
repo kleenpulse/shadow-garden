@@ -263,7 +263,7 @@ const RippleField: React.FC<RippleFieldProps> = ({
 		halted: paused || reducedMotion,
 		dpr: "auto",
 		onResize: (metrics) => measureRef.current?.(metrics),
-		onFrame: () => drawRef.current?.() ?? false,
+		onFrame: () => (drawRef.current ? drawRef.current() : false),
 		gl: () => glRef.current,
 	});
 

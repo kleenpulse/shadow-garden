@@ -80,7 +80,7 @@ const Cinders = memo(
       dpr: 2,
       resizeDebounceMs: 100,
       onResize: (metrics) => measureRef.current?.(metrics),
-      onFrame: () => drawRef.current?.() ?? false,
+      onFrame: () => (drawRef.current ? drawRef.current() : false),
     });
 
     const propsRef = useRef<Record<string, unknown>>({});

@@ -212,7 +212,7 @@ const Threads: React.FC<ThreadsProps> = ({
 		halted: false,
 		dpr: maxDpr,
 		onResize: (metrics) => measureRef.current?.(metrics),
-		onFrame: ({ dt }) => drawRef.current?.(dt) ?? false,
+		onFrame: ({ dt }) => (drawRef.current ? drawRef.current(dt) : false),
 		gl: () => glRef.current,
 	});
 
