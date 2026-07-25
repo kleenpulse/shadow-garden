@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef } from 'react'
+import { useAnimationLoop, type Metrics } from '@/hooks/use-animation-loop'
 
 interface RibbonsOptions {
   colorSaturation: string
@@ -35,6 +36,27 @@ interface RibbonSection {
 
 const Ribbons: React.FC<RibbonsOptions> = (options) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  // Live options for the frame body. The init effect below runs once now, so it
+  // cannot close over props — it used to depend on the whole options object and
+  // rebuilt the entire runtime on every parent render.
+  const optionsRef = useRef(options)
+  useEffect(() => {
+    optionsRef.current = options
+  })
+
+  const drawRef = useRef<(() => void | false) | null>(null)
+  const measureRef = useRef<((m: Metrics) => void) | null>(null)
+
+  const loop = useAnimationLoop({
+    target: containerRef,
+    halted: options.paused ?? false,
+    // Ribbon geometry is computed in CSS pixels, so the backing store stays 1:1
+    // exactly as before.
+    dpr: 1,
+    onResize: (metrics) => measureRef.current?.(metrics),
+    onFrame: () => drawRef.current?.() ?? false,
+  })
   // Persist ribbons across effect re-runs — the effect re-runs on every option
   // change (including pause), so keeping the field in a ref freezes it in place
   // instead of clearing and respawning on each toggle.
@@ -226,46 +248,47 @@ const Ribbons: React.FC<RibbonsOptions> = (options) => {
         }
       }
 
-      if (ribbons.filter(Boolean).length < options.ribbonCount) {
+      if (ribbons.filter(Boolean).length < optionsRef.current.ribbonCount) {
         addRibbon()
       }
 
       // Freeze while paused — hold the drawn frame instead of re-requesting, so
       // the loop stops issuing draw calls (it used to run forever at speed 0).
-      if (options.paused) return
-      rafId = requestAnimationFrame(onDraw)
+      if (optionsRef.current.paused) return false
     }
+    drawRef.current = onDraw
 
-    // Bound to the parent stage rather than the whole window.
-    const onResize = () => {
-      const rect = canvas.getBoundingClientRect()
-      width = rect.width || canvas.clientWidth
-      height = rect.height || canvas.clientHeight
-      canvas.width = width
-      canvas.height = height
-      context.globalAlpha = options.colorAlpha
+    // Measures the container, not the canvas. Observing the canvas whose size
+    // you are setting is a feedback loop.
+    measureRef.current = ({ width: w, height: h }) => {
+      width = w
+      height = h
+      canvas.width = w
+      canvas.height = h
+      context.globalAlpha = optionsRef.current.colorAlpha
     }
 
     const onScroll = () => {
       scroll = screenInfo().scrolly
     }
 
-    onResize()
-    const resizeObserver = new ResizeObserver(onResize)
-    resizeObserver.observe(canvas)
     window.addEventListener('scroll', onScroll)
-
-    onDraw()
+    loop.resize()
+    loop.start()
 
     return () => {
-      cancelAnimationFrame(rafId)
-      resizeObserver.disconnect()
+      drawRef.current = null
+      measureRef.current = null
       window.removeEventListener('scroll', onScroll)
     }
-  }, [options])
+    // Runs once: every live value is read through optionsRef inside the frame.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
-    <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" />
+    <div ref={containerRef} className="absolute inset-0">
+      <canvas ref={canvasRef} className="absolute inset-0 block h-full w-full" />
+    </div>
   )
 }
 

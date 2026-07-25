@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 const TWO_PI = Math.PI * 2;
 // Fixed diagonal drift direction — stars stream up-and-to-the-right.
@@ -83,7 +84,6 @@ export default function Starfield({
 	const starsRef = useRef<Star[]>([]);
 	const shotsRef = useRef<Shot[]>([]);
 	const sizeRef = useRef({ w: 0, h: 0 });
-	const rafRef = useRef<number | null>(null);
 
 	// Live props mirror — read per-frame so dragging a control never rebuilds GL.
 	const live = useRef({
@@ -112,16 +112,24 @@ export default function Starfield({
 	};
 
 	const rebuildRef = useRef<(() => void) | null>(null);
-	const startLoopRef = useRef<(() => void) | null>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const drawRef = useRef<(() => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: paused || reducedMotion,
+		dpr: 2,
+		resizeDebounceMs: 100,
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: () => drawRef.current?.() ?? false,
+	});
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
 		const ctx = canvas.getContext("2d", { alpha: true });
 		if (!ctx) return;
-		const dpr = Math.min(window.devicePixelRatio || 1, 2);
-		let resizeTimer: ReturnType<typeof setTimeout>;
-		let running = false;
 		// Bounded accumulator feeding trig — kept small to avoid float32 decay.
 		let t = 0;
 
@@ -168,18 +176,15 @@ export default function Starfield({
 			}
 		}
 
-		function doResize() {
-			const rect = canvas!.parentElement!.getBoundingClientRect();
-			const w = rect.width;
-			const h = rect.height;
-			canvas!.width = w * dpr;
-			canvas!.height = h * dpr;
+		measureRef.current = ({ width: w, height: h, dpr, bufferWidth, bufferHeight }) => {
+			canvas!.width = bufferWidth;
+			canvas!.height = bufferHeight;
 			canvas!.style.width = `${w}px`;
 			canvas!.style.height = `${h}px`;
 			ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 			sizeRef.current = { w, h };
 			initStars();
-		}
+		};
 
 		function spawnShot(shot: Shot) {
 			const { w, h } = sizeRef.current;
@@ -286,52 +291,32 @@ export default function Starfield({
 			if (still) {
 				// One static populated frame — no drift, no twinkle, no streaks.
 				drawStars(false);
-				running = false;
-				return;
+				return false;
 			}
 
 			t += 0.04;
 			if (t > TWO_PI) t -= TWO_PI;
 			drawStars(true);
 			drawShots();
-			rafRef.current = requestAnimationFrame(tick);
 		}
+		drawRef.current = tick;
 
-		function startLoop() {
-			if (running) return;
-			running = true;
-			rafRef.current = requestAnimationFrame(tick);
-		}
-		startLoopRef.current = startLoop;
-
-		const parent = canvas.parentElement!;
-		const observer = new ResizeObserver(() => {
-			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(() => {
-				doResize();
-				// Repaint one corrected frame even while halted.
-				running = false;
-				startLoop();
-			}, 100);
-		});
-
-		doResize();
-		observer.observe(parent);
-		startLoop();
+		loop.resize();
+		loop.start();
 
 		rebuildRef.current = () => {
+			// paint() is idempotent. The old code set `running = false` and then
+			// re-armed, which left the previous frame pending and ran two rAF
+			// chains at once — the field drifted at double speed.
 			if (sizeRef.current.w > 0) {
 				initStars();
-				running = false;
-				startLoop();
+				loop.paint();
 			}
 		};
 
 		return () => {
-			running = false;
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
-			clearTimeout(resizeTimer);
-			observer.disconnect();
+			drawRef.current = null;
+			measureRef.current = null;
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
@@ -341,13 +326,12 @@ export default function Starfield({
 		rebuildRef.current?.();
 	}, [density, layers]);
 
-	// Resume the loop when unpausing / re-enabling motion — tick self-halts still.
-	useEffect(() => {
-		if (!paused && !reducedMotion) startLoopRef.current?.();
-	}, [paused, reducedMotion]);
-
 	return (
-		<div className={className} style={{ position: "relative", height: "100%", width: "100%" }}>
+		<div
+			ref={containerRef}
+			className={className}
+			style={{ position: "relative", height: "100%", width: "100%" }}
+		>
 			<canvas
 				ref={canvasRef}
 				style={{

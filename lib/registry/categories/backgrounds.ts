@@ -769,6 +769,13 @@ export const backgrounds: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/ribbons/Ribbons.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
 		],
 		props: [
 			{
@@ -1303,6 +1310,13 @@ export const backgrounds: ComponentEntry[] = [
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/starfield/Starfield.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
 			},
 		],
 		props: [
