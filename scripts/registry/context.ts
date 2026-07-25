@@ -5,6 +5,7 @@ import { registry } from "../../lib/registry/index";
 import type { CheckContext, PreviewReads } from "./check";
 import { parsePreviewRegistrations, parseValueReads } from "./read-keys";
 import { parseSourceDefaults, type SourceDefault } from "./source-defaults";
+import { parseLoopUsage, type LoopUsage } from "./loop-usage";
 
 // The one place the check touches disk. Everything the rules need arrives here so
 // the rules themselves stay pure. lib/registry/index.ts and categories/*.ts are
@@ -93,6 +94,28 @@ export function buildContext(): CheckContext {
     return result;
   }
 
+  const usageCache = new Map<string, LoopUsage | null>();
+
+  function loopUsage(slug: string): LoopUsage | null {
+    if (usageCache.has(slug)) return usageCache.get(slug) ?? null;
+
+    const entry = registry.find((e) => e.slug === slug);
+    // Only the component itself — the peer hook variant is the host, and it
+    // legitimately owns both primitives.
+    const variant = entry?.variants.find((v) => (v.role ?? "component") === "component");
+    let result: LoopUsage | null = null;
+
+    if (variant) {
+      const abs = path.join(ROOT, ...variant.file.split(/[\\/]/));
+      if (existsSync(abs)) {
+        result = parseLoopUsage(abs, readFileSync(abs, "utf8"));
+      }
+    }
+
+    usageCache.set(slug, result);
+    return result;
+  }
+
   return {
     registry,
     dirs,
@@ -103,6 +126,7 @@ export function buildContext(): CheckContext {
     previewKeys: new Set(registrations.keys()),
     previewReads,
     sourceDefaults,
+    loopUsage,
   };
 }
 

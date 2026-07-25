@@ -54,6 +54,7 @@ function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): 
     previewKeys: new Set(registry.map((e) => e.slug)),
     previewReads: readsAll(registry),
     sourceDefaults: () => new Map(),
+    loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false }),
     ...over,
   };
 }
@@ -230,6 +231,29 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
         dynamicAccess: false,
         usesPaused: false,
       }),
+    }),
+  },
+  {
+    rule: "no-hand-rolled-loop",
+    ctx: context([entry()], {
+      loopUsage: () => ({ rafCalls: 3, resizeObservers: 1, usesHost: false }),
+    }),
+  },
+  {
+    rule: "loop-host-ships-the-hook",
+    // Uses the host but declares only the component variant.
+    ctx: context([entry()], {
+      loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: true }),
+    }),
+  },
+  {
+    // The allowlist rule fires against the real repo, not a synthetic entry:
+    // its whole job is to describe entries named in the two maps.
+    rule: "loop-allowlist-current",
+    ctx: context([entry({ slug: "physics-engine" })], {
+      dirs: new Set(["physics-engine"]),
+      previewKeys: new Set(["physics-engine"]),
+      loopUsage: () => ({ rafCalls: 2, resizeObservers: 1, usesHost: false }),
     }),
   },
 ];
