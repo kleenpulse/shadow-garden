@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { Renderer, Program, Mesh, Triangle } from 'ogl'
+import { useAnimationLoop, type Metrics } from '@/hooks/use-animation-loop'
 
 interface GrainientProps {
   timeSpeed?: number
@@ -172,8 +173,23 @@ const Grainient = ({
   // Mirror `paused` for the loop's start/stop gate without rebuilding the context.
   const pausedRef = useRef(paused)
   pausedRef.current = paused
-  const startLoopRef = useRef<(() => void) | null>(null)
-  const stopLoopRef = useRef<(() => void) | null>(null)
+  const drawRef = useRef<((t: number) => void | false) | null>(null)
+  const measureRef = useRef<((m: Metrics) => void) | null>(null)
+  const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+    null
+  )
+
+  // `halted` stays false — the frame body halts on off-screen, backgrounded or
+  // paused, three conditions the host has no business knowing about. `gl` is
+  // supplied because this component leaked a context per unmount.
+  const loop = useAnimationLoop({
+    target: containerRef,
+    halted: false,
+    dpr: 'auto',
+    onResize: (metrics) => measureRef.current?.(metrics),
+    onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+    gl: () => glRef.current,
+  })
 
   // Effect 1: build WebGL context once, pause when offscreen / tab hidden
   useEffect(() => {
@@ -188,6 +204,7 @@ const Grainient = ({
     })
 
     const gl = renderer.gl
+    glRef.current = gl
     const canvas = gl.canvas as HTMLCanvasElement
     canvas.style.width = '100%'
     canvas.style.height = '100%'
@@ -228,11 +245,9 @@ const Grainient = ({
     const mesh = new Mesh(gl, { geometry, program })
     ctxMap.set(container, { renderer, program, mesh })
 
-    const setSize = () => {
-      const rect = container.getBoundingClientRect()
-      const w = Math.max(1, Math.floor(rect.width))
-      const h = Math.max(1, Math.floor(rect.height))
-      renderer.setSize(w, h)
+    measureRef.current = ({ width, height, dpr }) => {
+      renderer.dpr = dpr
+      renderer.setSize(Math.max(1, Math.floor(width)), Math.max(1, Math.floor(height)))
       const res = (program.uniforms.iResolution as { value: Float32Array })
         .value
       res[0] = gl.drawingBufferWidth
@@ -240,38 +255,21 @@ const Grainient = ({
       renderer.render({ scene: mesh })
     }
 
-    const ro = new ResizeObserver(setSize)
-    ro.observe(container)
-    setSize()
-
-    let raf = 0
     let isVisible = true
     let isPageVisible = !document.hidden
     const t0 = performance.now()
 
-    const loop = (t: number) => {
+    drawRef.current = (t) => {
       ;(program.uniforms.iTime as { value: number }).value = (t - t0) * 0.001
       renderer.render({ scene: mesh })
-      raf = requestAnimationFrame(loop)
+      // Halt from inside the frame when off-screen, backgrounded or paused.
+      if (!isVisible || !isPageVisible || pausedRef.current) return false
     }
-
-    const tryStart = () => {
-      if (isVisible && isPageVisible && !pausedRef.current && raf === 0)
-        raf = requestAnimationFrame(loop)
-    }
-    const tryStop = () => {
-      if (raf !== 0) {
-        cancelAnimationFrame(raf)
-        raf = 0
-      }
-    }
-    startLoopRef.current = tryStart
-    stopLoopRef.current = tryStop
 
     const io = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting
-        isVisible ? tryStart() : tryStop()
+        if (isVisible) loop.start()
       },
       { threshold: 0 }
     )
@@ -279,15 +277,16 @@ const Grainient = ({
 
     const onVisibility = () => {
       isPageVisible = !document.hidden
-      isPageVisible ? tryStart() : tryStop()
+      if (isPageVisible) loop.start()
     }
     document.addEventListener('visibilitychange', onVisibility)
 
-    tryStart()
+    loop.resize()
+    loop.start()
 
     return () => {
-      tryStop()
-      ro.disconnect()
+      drawRef.current = null
+      measureRef.current = null
       io.disconnect()
       document.removeEventListener('visibilitychange', onVisibility)
       ctxMap.delete(container)
@@ -297,6 +296,7 @@ const Grainient = ({
         /* ignore */
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // renderer created once
 
   // Effect 2: sync props to uniforms — zero GPU cost, no teardown
@@ -358,12 +358,12 @@ const Grainient = ({
     color3,
   ])
 
-  // Halt the loop entirely while paused so it stops issuing draw calls, instead
-  // of spinning at speed 0 and painting a frozen frame forever.
+  // Resume on unpause. Pausing needs no action: the frame body reads pausedRef
+  // and halts itself after painting, so it stops issuing draw calls instead of
+  // spinning at speed 0 on a frozen frame.
   useEffect(() => {
-    if (paused) stopLoopRef.current?.()
-    else startLoopRef.current?.()
-  }, [paused])
+    if (!paused) loop.start()
+  }, [paused, loop])
 
   return (
     <div
