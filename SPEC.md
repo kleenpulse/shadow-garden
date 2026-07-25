@@ -45,8 +45,10 @@ Pro seam:
 
 - srv: `getPro()` → `Promise<ProState>` — ∃! ladder. `getEntitlement` | `getBilling` = projections
 - type: `ProState` → `{ pro, source:"env"|"cookie"|"db"|"none", type, status, currentPeriodEnd, cancelAtPeriodEnd, hasSubscription }`
-- hook: `usePro()` → `BillingSummary|null` — ∃! client cache. `useIsPro()` → `boolean|null` = projection
-- fn: `invalidatePro()` → `void` — drop cache + notify mounted consumers. called ∀ session change, ∀ polar return
+- mod: `lib/pro-client.ts` → ∃! client cache. ⊥ React ∴ lib/ ⊥ import hooks/
+- fn: `loadPro()`, `proSnapshot()` → `BillingSummary|null`, `subscribePro(fn)` → unsub, `invalidatePro()` → `void`
+- hook: `usePro()` → `BillingSummary|null`; `useIsPro()` → `boolean|null` = projection — ⊥ own state
+- `invalidatePro` called ∀ session change (`use-auth-user`), ∀ polar return (`CheckoutResult`)
 - ⊥ `/api/entitlement` — deleted. ∃! client route `/api/billing` (post-T29 same query)
 
 Favourites reconcile (`lib/favorites/reconcile.ts`, pure):
@@ -93,7 +95,8 @@ V13: ∃! Pro read seam (server) ∧ ∃! Pro cache (client). ⊥ 2nd resolution
 V14: ∃! favourites reconcile module, pure (⊥ fetch ⊥ store ⊥ db ⊥ React). ∀ merge|diff|order rule → from it
 V15: ∃! capability predicate module, 1 shape. ⊥ inline `process.env` truthiness at call site
 V16: ∃! kind table keyed PropKind, total. new kind → tsc error ∀ site. ⊥ open switch on kind
-V17: audio Pro gate ∈ engine. ⊥ external `setPro` writer. caller learns ≤ {enabled, volume, play}
+V17: audio Pro gate ∈ engine — engine subscribes `lib/pro-client`. ⊥ external `setPro` writer.
+     caller learns ≤ {enabled, volume, play, availability:boolean|null}. unresolved → fail closed
 V18: ∃! feedback submit seam. error modes = closed union returned as data (⊥ thrown string)
 V19: vendored registry copy (admin) → byte-identical | drift check exit ≠ 0
 
@@ -135,7 +138,7 @@ T32|x|favorites-store, FavoritesSync, api/favorites → reconcile module only|V1
 T33|x|lib/capabilities.ts: ∃! predicate set (db\|supabase\|polar\|polarWebhook\|email)|V15
 T34|x|repoint ~22 guards; supabase predicate 3× → 1 (server.ts, client.ts, proxy.ts)|V15
 T35|x|lib/registry/kinds.ts: PropKind + total KIND_TABLE; 4 consumers read it|V16
-T36|.|audio: engine subscribes Pro seam. ⊥ SoundToggle setPro. facade = {enabled,volume,play}|V17,V13
+T36|x|audio: engine subscribes Pro seam. ⊥ SoundToggle setPro. facade = {enabled,volume,play}|V17,V13
 T37|.|lib/feedback/submit.ts: closed SubmitResult union + reason→copy table; widget ⊥ taxonomy|V18
 T38|.|admin: check-schema-drift.ts exit≠0 on drift; re-copy 6 vendored files|V19
 

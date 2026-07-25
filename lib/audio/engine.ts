@@ -3,6 +3,8 @@
 // client only; every method is a safe no-op before a user gesture unlocks audio
 // (browser autoplay policy). The store drives enabled/volume through here.
 
+import { IS_LOCAL_DEV } from "@/lib/env";
+import { subscribePro } from "@/lib/pro-client";
 import { INSTRUMENTS } from "./manifest";
 import { renderPianoBuffer, renderStringBuffer } from "./procedural";
 import { renderImpulseResponse } from "./reverb";
@@ -38,11 +40,23 @@ class AudioEngine {
 
 	private enabled = false;
 	private volume = 0.6;
-	// Interaction sound is a Pro feature. Defaults closed (fail-closed) until the
-	// client's Pro check resolves — gated centrally here so every
-	// play() call site (hover, select, toggle, type…) is covered without each
-	// caller needing its own entitlement check.
-	private pro = false;
+
+	// Interaction sound is a Pro feature, and the engine owns that gate.
+	//
+	// It used to be pushed in from SoundToggle via setPro(), which meant the
+	// engine's answer depended on a particular button being mounted, and the
+	// rule "localhost unlocks sound" was restated in two components. Now the
+	// engine subscribes to the Pro cache itself: no caller can set it, and no
+	// caller has to know it.
+	//
+	// `null` = unresolved, and play() fails closed until it settles — a visitor
+	// must never hear a Pro feature while the check is still in flight. Localhost
+	// (`next dev`) unlocks sound only; the Pro *source code* gate
+	// (lib/registry/entitlement.ts) is untouched and still real everywhere.
+	private available: boolean | null = IS_LOCAL_DEV ? true : null;
+	private readonly availabilityListeners = new Set<
+		(available: boolean | null) => void
+	>();
 
 	// One-shot gesture unlock. A context created outside a user gesture (e.g. a
 	// returning visitor whose preference rehydrates to "on") is born suspended;
@@ -137,8 +151,31 @@ class AudioEngine {
 		this.applyMaster();
 	}
 
-	setPro(pro: boolean) {
-		this.pro = pro;
+	/**
+	 * Can this browser make sound? `null` while the entitlement check is still
+	 * resolving. Fires immediately with the current answer, then on every change.
+	 * Returns an unsubscribe.
+	 *
+	 * This is all a caller learns about entitlement — enough to render a lock and
+	 * an upsell, not enough to make the gate its business.
+	 */
+	subscribeAvailability(listener: (available: boolean | null) => void) {
+		this.availabilityListeners.add(listener);
+		listener(this.available);
+		return () => {
+			this.availabilityListeners.delete(listener);
+		};
+	}
+
+	/** Called only by the module's own Pro subscription — never by a component. */
+	applyEntitlement(pro: boolean) {
+		this.setAvailable(IS_LOCAL_DEV || pro);
+	}
+
+	private setAvailable(next: boolean) {
+		if (this.available === next) return;
+		this.available = next;
+		for (const listener of this.availabilityListeners) listener(next);
 	}
 
 	setVolume(v: number) {
@@ -157,7 +194,8 @@ class AudioEngine {
 	}
 
 	play(voice: Voice) {
-		if (!this.enabled || !this.pro) return;
+		// `available === null` (unresolved) falls through here too — fail closed.
+		if (!this.enabled || this.available !== true) return;
 		if (!this.ensureContext()) return;
 		if (this.ctx?.state === "suspended") void this.ctx.resume();
 
@@ -239,6 +277,15 @@ let engine: AudioEngine | null = null;
 /** Client-only singleton. Returns null during SSR so callers stay safe. */
 export function getEngine(): AudioEngine | null {
 	if (typeof window === "undefined") return null;
-	if (!engine) engine = new AudioEngine();
+	if (!engine) {
+		engine = new AudioEngine();
+		// The gate wires itself the moment the engine exists — it does not wait
+		// for a UI component to push entitlement in. On localhost the engine is
+		// already unlocked, so this only ever confirms it.
+		if (!IS_LOCAL_DEV) {
+			const live = engine;
+			subscribePro((state) => live.applyEntitlement(state.pro));
+		}
+	}
 	return engine;
 }
