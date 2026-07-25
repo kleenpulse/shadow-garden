@@ -3,15 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import type { ColorProp } from "@/lib/registry/types";
+import { cn } from "@/lib/utils";
 
 export default function ColorControl({
   schema,
   value,
   onChange,
+  disabled = false,
 }: {
   schema: ColorProp;
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -34,7 +37,10 @@ export default function ColorControl({
   }, [open]);
 
   return (
-    <div className="space-y-1.5" ref={ref}>
+    <div
+      className={cn("space-y-1.5 transition-opacity", disabled && "opacity-40")}
+      ref={ref}
+    >
       <div className="flex items-center justify-between gap-3">
         <label className="font-mono text-xs text-ink-dim">{label}</label>
         <div className="flex items-center gap-2">
@@ -43,13 +49,14 @@ export default function ColorControl({
             type="button"
             aria-label={`Edit ${label}`}
             aria-expanded={open}
+            disabled={disabled}
             onClick={() => setOpen((prev) => !prev)}
             className="h-5 w-5 rounded-sm border border-hairline"
             style={{ backgroundColor: value }}
           />
         </div>
       </div>
-      {open && (
+      {open && !disabled && (
         <div className="bench-colorpicker relative z-10 pt-1">
           <HexColorPicker color={value} onChange={onChange} />
           <input

@@ -1,5 +1,6 @@
 import type { CheckContext, Finding, Rule } from "./check";
 import { defaultsAgree } from "./source-defaults";
+import { validateDefault } from "../../lib/registry/kinds";
 
 // The cheap rules — pure data plus one readdir and one package.json read. Each
 // one closes an invariant that used to fail silently at runtime: a wrong entry
@@ -107,60 +108,18 @@ const propNamesUnique: Rule = {
   },
 };
 
-const numberDefaultInRange: Rule = {
-  id: "number-default-in-range",
+const defaultInDomain: Rule = {
+  id: "default-in-domain",
   severity: "error",
-  what: "a number prop's default lies within [min, max]",
+  what: "every prop's documented default lies inside its own domain",
   run(ctx) {
     const out: Finding[] = [];
     for (const entry of ctx.registry) {
       for (const prop of entry.props) {
-        if (prop.kind !== "number") continue;
-        if (prop.min > prop.max) {
-          out.push({
-            slug: entry.slug,
-            prop: prop.name,
-            detail: `min ${prop.min} exceeds max ${prop.max}`,
-          });
-          continue;
-        }
-        if (prop.default < prop.min || prop.default > prop.max) {
-          out.push({
-            slug: entry.slug,
-            prop: prop.name,
-            detail: `default ${prop.default} outside [${prop.min}, ${prop.max}] — the slider clamps and disagrees with the props table`,
-          });
-        }
-      }
-    }
-    return out;
-  },
-};
-
-const enumDefaultInOptions: Rule = {
-  id: "enum-default-in-options",
-  severity: "error",
-  what: "an enum prop's default is one of its options",
-  run(ctx) {
-    const out: Finding[] = [];
-    for (const entry of ctx.registry) {
-      for (const prop of entry.props) {
-        if (prop.kind !== "enum") continue;
-        if (prop.options.length === 0) {
-          out.push({
-            slug: entry.slug,
-            prop: prop.name,
-            detail: "enum prop has no options",
-          });
-          continue;
-        }
-        if (!prop.options.includes(prop.default)) {
-          out.push({
-            slug: entry.slug,
-            prop: prop.name,
-            detail: `default "${prop.default}" not in options [${prop.options.join(", ")}] — nuqs will never round-trip it`,
-          });
-        }
+        // What "inside its domain" means per kind is the kind table's business,
+        // so the bench and the check can never disagree about a valid default.
+        const problem = validateDefault(prop);
+        if (problem) out.push({ slug: entry.slug, prop: prop.name, detail: problem });
       }
     }
     return out;
@@ -527,8 +486,7 @@ export const RULES: Rule[] = [
   variantFileExists,
   variantFileRoot,
   propNamesUnique,
-  numberDefaultInRange,
-  enumDefaultInOptions,
+  defaultInDomain,
   disabledWhenTarget,
   addedAtFormat,
   dependenciesDeclared,

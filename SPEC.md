@@ -64,7 +64,10 @@ Capability predicate (`lib/capabilities.ts`):
 
 Prop kind table (`lib/registry/kinds.ts`):
 
-- type: `KIND_TABLE` → `Record<PropKind, { parser, Control, typeLabel, formatDefault, validateDefault }>` — total ∴ new kind = tsc error at 1 site
+- type: `KIND_TABLE` → `Record<PropKind, { typeLabel, formatDefault, validateDefault }>` — pure, ⊥ React ⊥ nuqs ∴ headless-importable (C5)
+- `CONTROLS` ∈ `ControlsPanel.tsx`, `PARSERS` ∈ `useTunedProps.ts` → `satisfies Record<PropKind,…>` — framework-side, same totality
+- consumers: PropsTable, ControlsPanel, useTunedProps, `scripts/registry/rules.ts` (rule `default-in-domain`)
+- new kind → tsc error ∀ 3 tables
 
 Feedback submit (`lib/feedback/submit.ts`):
 
@@ -131,7 +134,7 @@ T31|x|lib/favorites/reconcile.ts: pure order/sanitize/add/remove/toggle/adopt/di
 T32|x|favorites-store, FavoritesSync, api/favorites → reconcile module only|V14
 T33|x|lib/capabilities.ts: ∃! predicate set (db\|supabase\|polar\|polarWebhook\|email)|V15
 T34|x|repoint ~22 guards; supabase predicate 3× → 1 (server.ts, client.ts, proxy.ts)|V15
-T35|.|lib/registry/kinds.ts: PropKind + total KIND_TABLE; 4 consumers read it|V16
+T35|x|lib/registry/kinds.ts: PropKind + total KIND_TABLE; 4 consumers read it|V16
 T36|.|audio: engine subscribes Pro seam. ⊥ SoundToggle setPro. facade = {enabled,volume,play}|V17,V13
 T37|.|lib/feedback/submit.ts: closed SubmitResult union + reason→copy table; widget ⊥ taxonomy|V18
 T38|.|admin: check-schema-drift.ts exit≠0 on drift; re-copy 6 vendored files|V19

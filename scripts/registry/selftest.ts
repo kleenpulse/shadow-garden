@@ -94,7 +94,8 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     ]),
   },
   {
-    rule: "number-default-in-range",
+    // One rule, one table — but it must still catch each kind's own domain.
+    rule: "default-in-domain",
     ctx: context([
       entry({
         props: [
@@ -111,7 +112,7 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     ]),
   },
   {
-    rule: "enum-default-in-options",
+    rule: "default-in-domain",
     ctx: context([
       entry({
         props: [
@@ -121,6 +122,21 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
             default: "ghost",
             options: ["solid", "dashed"],
             description: "not an option",
+          },
+        ],
+      }),
+    ]),
+  },
+  {
+    rule: "default-in-domain",
+    ctx: context([
+      entry({
+        props: [
+          {
+            name: "tint",
+            kind: "color",
+            default: "rebeccapurple",
+            description: "not a hex colour — the picker cannot render it",
           },
         ],
       }),
