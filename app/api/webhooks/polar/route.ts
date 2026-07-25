@@ -4,6 +4,7 @@ import {
   reconcileLifetimeOrder,
   reconcileSubscription,
 } from "@/lib/polar/reconcile";
+import { has } from "@/lib/capabilities";
 
 // Polar webhook adapter (PUSH path). The @polar-sh/nextjs adapter verifies the
 // standard-webhooks signature over the raw body; this route is Node-runtime (Drizzle)
@@ -12,19 +13,16 @@ import {
 // forbids it). All reconciliation lives in lib/polar/reconcile.ts, shared with the
 // checkout-return sync so a missed delivery here is self-healed on redirect.
 
-const webhookSecret = process.env.POLAR_WEBHOOK_SECRET;
-
 // Reconciliation writes the entitlements row, so a configured webhook with no
 // DATABASE_URL cannot do its job. Refuse up front with 503 rather than letting
 // reconcile throw mid-delivery: Polar retries a 5xx, and an opaque 500 from a
 // deployment that will never have a DB is an infinite retry loop (§B.B4).
 // 503 is still a retry signal — correct here, since the fix is configuration.
-// Inlined rather than hoisted to a const so TS still narrows `webhookSecret`
-// to `string` inside the true branch.
+// The `!` is guarded by the has("polarWebhook") one line above.
 export const POST =
-  webhookSecret && process.env.DATABASE_URL
+  has("polarWebhook") && has("db")
     ? Webhooks({
-        webhookSecret,
+        webhookSecret: process.env.POLAR_WEBHOOK_SECRET!,
         onSubscriptionCreated: async (p) => reconcileSubscription(p.data),
         onSubscriptionActive: async (p) => reconcileSubscription(p.data),
         onSubscriptionUpdated: async (p) => reconcileSubscription(p.data),
@@ -38,7 +36,7 @@ export const POST =
         NextResponse.json(
           {
             received: false,
-            error: webhookSecret
+            error: has("polarWebhook")
               ? "Polar webhook configured but DATABASE_URL is not set"
               : "Polar webhook not configured",
           },

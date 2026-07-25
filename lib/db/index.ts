@@ -1,6 +1,7 @@
 import "server-only";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { has } from "@/lib/capabilities";
 import * as schema from "./schema";
 
 // App-runtime DB client over the Supabase transaction pooler (Supavisor, port 6543).
@@ -35,7 +36,7 @@ export type Db = ReturnType<typeof connect>;
 
 /** Whether a connection string is present. Sync, never throws. */
 export function dbConfigured(): boolean {
-  return Boolean(process.env.DATABASE_URL);
+  return has("db");
 }
 
 let handle: Db | undefined;

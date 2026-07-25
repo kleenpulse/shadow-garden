@@ -1,4 +1,5 @@
 import "server-only";
+import { has } from "@/lib/capabilities";
 
 // The one send seam. No DATA_MODE here (customer app has no seed mode); instead
 // it degrades gracefully like polarConfigured() — when Gmail credentials are
@@ -23,7 +24,7 @@ export interface SendResult {
 
 /** True when Gmail credentials are present. Sends no-op (skipped) otherwise. */
 export function emailConfigured(): boolean {
-  return Boolean(process.env.NODEMAILER_EMAIL && process.env.NODEMAILER_PW);
+  return has("email");
 }
 
 const FROM = process.env.EMAIL_FROM ?? process.env.NODEMAILER_EMAIL ?? "Shadow Garden";

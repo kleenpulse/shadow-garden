@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { has } from "@/lib/capabilities";
 import { cookies } from "next/headers";
 import { getCurrentUserClaims } from "@/lib/supabase/current-user";
 
@@ -45,7 +46,7 @@ function serverGeo(req: Request) {
 export async function POST(req: Request) {
   // Dev without a DB configured → accept but don't persist, so the form still
   // "works" offline (mirrors the seed short-circuit on the admin side).
-  if (!process.env.DATABASE_URL) {
+  if (!has("db")) {
     return NextResponse.json(
       { ok: true, simulated: true },
       { headers: NO_STORE },

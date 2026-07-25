@@ -2,6 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { eq } from "drizzle-orm";
 import { currentUserId } from "@/lib/supabase/current-user";
+import { has } from "@/lib/capabilities";
 import { IS_LOCAL_DEV } from "@/lib/env";
 
 // THE server-side Pro seam. One resolution ladder, one place. Everything that
@@ -79,7 +80,7 @@ export async function getPro(): Promise<ProState> {
   if (IS_LOCAL_DEV && jar.get("sg_pro")?.value === "1")
     return override("cookie");
 
-  if (!process.env.DATABASE_URL) return NOT_PRO;
+  if (!has("db")) return NOT_PRO;
 
   const userId = await currentUserId();
   if (!userId) return NOT_PRO;

@@ -4,6 +4,7 @@ import { supabaseConfigured } from "@/lib/supabase/server";
 import { currentUserId } from "@/lib/supabase/current-user";
 import { syncEntitlementForUser } from "@/lib/polar/reconcile";
 import { getBilling } from "@/lib/registry/billing";
+import { has } from "@/lib/capabilities";
 
 // Checkout-return reconcile (PULL). The client hits this the moment the user lands
 // back from Polar, so entitlement is granted from Polar's own API even if the webhook
@@ -11,7 +12,7 @@ import { getBilling } from "@/lib/registry/billing";
 // re-hit. Node runtime by default (no runtime export under Cache Components).
 //   POST /api/checkout/sync → { pro, ... billing summary }
 export async function POST() {
-  if (!polarConfigured() || !supabaseConfigured() || !process.env.DATABASE_URL) {
+  if (!polarConfigured() || !supabaseConfigured() || !has("db")) {
     return NextResponse.json(
       { pro: false, error: "unconfigured" },
       { status: 200, headers: { "Cache-Control": "no-store" } },

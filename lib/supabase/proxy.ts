@@ -1,19 +1,16 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { has, supabaseKey, supabaseUrl } from "@/lib/capabilities";
 
 // Runs in the Proxy (edge). Refreshes the Supabase auth session and rewrites the
 // auth cookies onto the response. Never import Drizzle/postgres-js here — edge runtime.
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key =
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   // Not configured yet — pass the request through unchanged.
-  if (!url || !key) return response;
+  if (!has("supabase")) return response;
 
-  const supabase = createServerClient(url, key, {
+  const supabase = createServerClient(supabaseUrl()!, supabaseKey()!, {
     cookies: {
       getAll() {
         return request.cookies.getAll();

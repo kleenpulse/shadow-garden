@@ -129,8 +129,8 @@ T29|x|lib/pro.ts: ∃! server Pro seam. entitlement.ts/billing.ts → projection
 T30|x|hooks/use-pro.ts owns THE client cache (+invalidate); AuthMenu, CheckoutResult read it|V13
 T31|x|lib/favorites/reconcile.ts: pure order/sanitize/add/remove/toggle/adopt/diff|V14
 T32|x|favorites-store, FavoritesSync, api/favorites → reconcile module only|V14
-T33|.|lib/capabilities.ts: ∃! predicate set (db\|supabase\|polar\|polarWebhook\|email)|V15
-T34|.|repoint ~22 guards; supabase predicate 3× → 1 (server.ts, client.ts, proxy.ts)|V15
+T33|x|lib/capabilities.ts: ∃! predicate set (db\|supabase\|polar\|polarWebhook\|email)|V15
+T34|x|repoint ~22 guards; supabase predicate 3× → 1 (server.ts, client.ts, proxy.ts)|V15
 T35|.|lib/registry/kinds.ts: PropKind + total KIND_TABLE; 4 consumers read it|V16
 T36|.|audio: engine subscribes Pro seam. ⊥ SoundToggle setPro. facade = {enabled,volume,play}|V17,V13
 T37|.|lib/feedback/submit.ts: closed SubmitResult union + reason→copy table; widget ⊥ taxonomy|V18
