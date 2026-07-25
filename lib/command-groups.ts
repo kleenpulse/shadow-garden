@@ -127,7 +127,7 @@ export function buildCommandGroups(
 			label: isFav ? `Unfavorite: ${entry.name}` : `Favorite: ${entry.name}`,
 			icon: Heart,
 			keywords: ["favorite", "save", "bookmark", "toggle", entry.name],
-			hint: "F",
+
 			onRun: () => actions.toggleFavorite(openSlug),
 		});
 	}
