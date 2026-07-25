@@ -11,6 +11,14 @@ export interface LoopUsage {
   resizeObservers: number;
   /** Imports the shared runtime host. */
   usesHost: boolean;
+  /**
+   * `onFrame` bodies that coalesce a nullish value to `false` — `x ?? false`
+   * or `x || false`. The draw functions return `void | false`, so a frame that
+   * drew successfully returns `undefined`; coalescing that to `false` hands the
+   * host its halt signal on every good frame. Nineteen entries shipped frozen
+   * this way (§B.B7).
+   */
+  nullishHalts: number;
 }
 
 export function parseLoopUsage(fileName: string, text: string): LoopUsage {
@@ -25,8 +33,37 @@ export function parseLoopUsage(fileName: string, text: string): LoopUsage {
   let rafCalls = 0;
   let resizeObservers = 0;
   let usesHost = false;
+  let nullishHalts = 0;
+
+  // `?? false` / `|| false` anywhere inside an `onFrame` property's value.
+  // Scoped to onFrame because the same expression is perfectly reasonable
+  // elsewhere — it is only a bug where `undefined` means "carry on".
+  const countNullishHalts = (node: ts.Node): number => {
+    let found = 0;
+    const walk = (n: ts.Node) => {
+      if (
+        ts.isBinaryExpression(n) &&
+        (n.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken ||
+          n.operatorToken.kind === ts.SyntaxKind.BarBarToken) &&
+        n.right.kind === ts.SyntaxKind.FalseKeyword
+      ) {
+        found++;
+      }
+      ts.forEachChild(n, walk);
+    };
+    walk(node);
+    return found;
+  };
 
   const visit = (node: ts.Node): void => {
+    if (
+      ts.isPropertyAssignment(node) &&
+      (ts.isIdentifier(node.name) || ts.isStringLiteral(node.name)) &&
+      node.name.text === "onFrame"
+    ) {
+      nullishHalts += countNullishHalts(node.initializer);
+    }
+
     if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
       if (node.moduleSpecifier.text.endsWith("use-animation-loop")) usesHost = true;
     }
@@ -53,5 +90,5 @@ export function parseLoopUsage(fileName: string, text: string): LoopUsage {
   };
 
   visit(source);
-  return { rafCalls, resizeObservers, usesHost };
+  return { rafCalls, resizeObservers, usesHost, nullishHalts };
 }

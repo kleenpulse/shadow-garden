@@ -54,7 +54,7 @@ function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): 
     previewKeys: new Set(registry.map((e) => e.slug)),
     previewReads: readsAll(registry),
     sourceDefaults: () => new Map(),
-    loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false }),
+    loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false, nullishHalts: 0 }),
     ...over,
   };
 }
@@ -252,14 +252,26 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
   {
     rule: "no-hand-rolled-loop",
     ctx: context([entry()], {
-      loopUsage: () => ({ rafCalls: 3, resizeObservers: 1, usesHost: false }),
+      loopUsage: () => ({ rafCalls: 3, resizeObservers: 1, usesHost: false, nullishHalts: 0 }),
     }),
   },
   {
     rule: "loop-host-ships-the-hook",
     // Uses the host but declares only the component variant.
     ctx: context([entry()], {
-      loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: true }),
+      loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: true, nullishHalts: 0 }),
+    }),
+  },
+  {
+    // The freeze of §B.B7: an onFrame that coalesces its void draw to `false`.
+    rule: "no-nullish-halt",
+    ctx: context([entry()], {
+      loopUsage: () => ({
+        rafCalls: 0,
+        resizeObservers: 0,
+        usesHost: true,
+        nullishHalts: 1,
+      }),
     }),
   },
   {
@@ -269,7 +281,7 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     ctx: context([entry({ slug: "physics-engine" })], {
       dirs: new Set(["physics-engine"]),
       previewKeys: new Set(["physics-engine"]),
-      loopUsage: () => ({ rafCalls: 2, resizeObservers: 1, usesHost: false }),
+      loopUsage: () => ({ rafCalls: 2, resizeObservers: 1, usesHost: false, nullishHalts: 0 }),
     }),
   },
 ];

@@ -360,6 +360,30 @@ const noHandRolledLoop: Rule = {
   },
 };
 
+// §B.B7. The draw functions are typed `void | false`: a frame that drew returns
+// `undefined`, and the host reads a literal `false` as "halt". Coalescing the
+// two — `drawRef.current?.(dt) ?? false` — hands the host its halt signal after
+// every successful frame, so the component renders once and freezes. It reads
+// as a null-guard, which is why it survived review in nineteen files and why a
+// person is not a reliable place to keep this rule.
+const noNullishHalt: Rule = {
+  id: "no-nullish-halt",
+  severity: "error",
+  what: "an onFrame body never coalesces a void draw into the host's halt signal",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const usage = ctx.loopUsage(entry.slug);
+      if (!usage || usage.nullishHalts === 0) continue;
+      out.push({
+        slug: entry.slug,
+        detail: `onFrame coalesces to \`false\` (${usage.nullishHalts}×) — a draw that succeeds returns undefined, so this halts the loop after one frame. Use \`ref.current ? ref.current(x) : false\``,
+      });
+    }
+    return out;
+  },
+};
+
 const loopHostShipsTheHook: Rule = {
   id: "loop-host-ships-the-hook",
   severity: "error",
@@ -496,6 +520,7 @@ export const RULES: Rule[] = [
   documentedDefaultMatchesSource,
   pausableMatchesPreview,
   noHandRolledLoop,
+  noNullishHalt,
   loopHostShipsTheHook,
   loopAllowlistCurrent,
 ];
