@@ -327,6 +327,8 @@ const DotField = memo(
       <div ref={containerRef} className="relative h-full w-full" {...rest}>
         <canvas
           ref={canvasRef}
+          // touch-none: a finger drag pushes the dots instead of scrolling the page.
+          className="touch-none"
           style={{
             position: 'absolute',
             inset: 0,

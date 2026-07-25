@@ -502,7 +502,9 @@ void main() {
   ])
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    // Pointer, not mouse: a touch drag emits no `mousemove`, so a mouse-only
+    // binding leaves the rays inert on a phone.
+    const handlePointerMove = (e: PointerEvent) => {
       if (!containerRef.current || !rendererRef.current) return
       const rect = containerRef.current.getBoundingClientRect()
       const x = (e.clientX - rect.left) / rect.width
@@ -511,15 +513,20 @@ void main() {
     }
 
     if (followMouse) {
-      window.addEventListener('mousemove', handleMouseMove)
-      return () => window.removeEventListener('mousemove', handleMouseMove)
+      window.addEventListener('pointermove', handlePointerMove)
+      return () => window.removeEventListener('pointermove', handlePointerMove)
     }
   }, [followMouse])
 
   return (
     <div
       ref={containerRef}
-      className={`pointer-events-none relative z-[3] h-full w-full overflow-hidden ${className}`.trim()}
+      // An element with `pointer-events: none` is never the hit target, so
+      // `touch-action` on it would be a no-op. With followMouse on, the overlay
+      // claims the gesture (touch-none) so a finger drag steers the rays instead
+      // of scrolling the page — the trade is that it then intercepts clicks on
+      // whatever sits beneath it. With followMouse off it stays click-through.
+      className={`${followMouse ? 'touch-none' : 'pointer-events-none'} relative z-[3] h-full w-full overflow-hidden ${className}`.trim()}
     />
   )
 }

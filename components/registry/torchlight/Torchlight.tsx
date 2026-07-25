@@ -3,6 +3,11 @@
 import { useCallback, useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+// The root sets `touch-action: none` so sweeping a finger moves the torch instead
+// of scrolling the page, and `user-select: none` so a slow sweep across body copy
+// doesn't raise the iOS selection callout. Touch behaviour is the intersection of
+// every ancestor up to the nearest scroller, so a child cannot re-enable panning:
+// don't nest a scrollable region inside Torchlight.
 export interface TorchlightProps {
   children?: ReactNode;
   className?: string;
@@ -104,7 +109,10 @@ export default function Torchlight({
       onTouchMove={onTouchMove}
       onTouchEnd={park}
       onTouchCancel={park}
-      className={cn("relative isolate overflow-hidden", className)}
+      className={cn(
+        "relative isolate touch-none select-none overflow-hidden",
+        className,
+      )}
       style={
         {
           "--torch-x": "-9999px",

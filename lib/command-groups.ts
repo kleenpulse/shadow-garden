@@ -49,6 +49,11 @@ export function buildCommandGroups(
 ): CommandGroupDef[] {
 	const groups: CommandGroupDef[] = [];
 
+	// Mark the component you're already looking at wherever it appears — the
+	// Components list and its Favorites twin are the same destination, so both
+	// carry the "you are here" mark.
+	const openSlug = currentComponentSlug(pathname);
+
 	const favEntries = favoriteSlugs
 		.map((slug) => getEntry(slug))
 		.filter((entry): entry is ComponentEntry => Boolean(entry));
@@ -62,6 +67,7 @@ export function buildCommandGroups(
 				label: entry.name,
 				icon: Heart,
 				keywords: [entry.category, "favorite", "saved"],
+				active: entry.slug === openSlug,
 				onRun: () => actions.navigate(`/components/${entry.slug}`),
 			})),
 		});
@@ -75,6 +81,7 @@ export function buildCommandGroups(
 			label: entry.name,
 			icon: CATEGORY_ICON[entry.category],
 			keywords: [entry.category, entry.tier],
+			active: entry.slug === openSlug,
 			onRun: () => actions.navigate(`/components/${entry.slug}`),
 		})),
 	});
@@ -85,6 +92,7 @@ export function buildCommandGroups(
 			label: "Catalog",
 			icon: LayoutGrid,
 			keywords: ["catalog", "components", "browse", "all"],
+			active: pathname === "/components",
 			onRun: () => actions.navigate("/components"),
 		},
 		{
@@ -92,6 +100,7 @@ export function buildCommandGroups(
 			label: "Favorites",
 			icon: Heart,
 			keywords: ["favorites", "saved", "collection"],
+			active: pathname === "/favorites",
 			onRun: () => actions.navigate("/favorites"),
 		},
 		{
@@ -110,17 +119,16 @@ export function buildCommandGroups(
 		},
 	];
 
-	const currentSlug = currentComponentSlug(pathname);
-	if (currentSlug) {
-		const entry = getEntry(currentSlug)!;
-		const isFav = favoriteSlugs.includes(currentSlug);
+	if (openSlug) {
+		const entry = getEntry(openSlug)!;
+		const isFav = favoriteSlugs.includes(openSlug);
 		actionCommands.push({
 			id: "action:favorite-current",
 			label: isFav ? `Unfavorite: ${entry.name}` : `Favorite: ${entry.name}`,
 			icon: Heart,
 			keywords: ["favorite", "save", "bookmark", "toggle", entry.name],
 			hint: "F",
-			onRun: () => actions.toggleFavorite(currentSlug),
+			onRun: () => actions.toggleFavorite(openSlug),
 		});
 	}
 

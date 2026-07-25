@@ -142,6 +142,7 @@ interface UseBorderGlowResult {
     onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void
     onPointerEnter: () => void
     onPointerLeave: () => void
+    onPointerCancel: () => void
   }
   /** The three layered glow elements — render as children of the bordered root. */
   overlays: ReactNode
@@ -472,6 +473,8 @@ export function useBorderGlow({
       onPointerMove: handlePointerMove,
       onPointerEnter: () => setIsHovered(true),
       onPointerLeave: () => setIsHovered(false),
+      // A touch can be torn away without a leave; without this the glow sticks on.
+      onPointerCancel: () => setIsHovered(false),
     },
     overlays,
     reset,
@@ -496,7 +499,11 @@ const BorderGlow: React.FC<BorderGlowProps> = ({
     <div
       ref={cardRef}
       {...rootHandlers}
-      className={`border-border/60 relative isolate grid border dark:border-white/12 ${className}`}
+      // touch-none: a finger drag tracks the glow instead of scrolling the page.
+      // Touch behaviour is the intersection of every ancestor up to the nearest
+      // scroller, so a child cannot re-enable panning — don't nest a scrollable
+      // region inside BorderGlow.
+      className={`border-border/60 relative isolate grid touch-none border dark:border-white/12 ${className}`}
       style={{
         background: backgroundColor,
         borderRadius: `${borderRadius}px`,

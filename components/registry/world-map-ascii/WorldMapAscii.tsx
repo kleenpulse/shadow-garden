@@ -191,32 +191,37 @@ export default function WorldMapAscii({
 			loop.start();
 		}
 
-		const handleMouseMove = (e: MouseEvent) => {
+		// Pointer, not mouse: a touch drag emits no `mousemove`, so a mouse-only
+		// binding leaves the reveal inert on a phone.
+		const handlePointerMove = (e: PointerEvent) => {
 			mouseX = e.offsetX;
 			mouseY = e.offsetY;
 		};
 
-		const handleMouseLeave = () => {
+		const handlePointerLeave = () => {
 			mouseX = -1000;
 			mouseY = -1000;
 		};
 
-		canvas.addEventListener("mousemove", handleMouseMove);
-		canvas.addEventListener("mouseleave", handleMouseLeave);
+		canvas.addEventListener("pointermove", handlePointerMove);
+		canvas.addEventListener("pointerleave", handlePointerLeave);
+		canvas.addEventListener("pointercancel", handlePointerLeave);
 
 		return () => {
 			drawRef.current = null;
 			measureRef.current = null;
 			// Detach so a late-resolving image cannot reach back in.
 			mapImage.onload = null;
-			canvas.removeEventListener("mousemove", handleMouseMove);
-			canvas.removeEventListener("mouseleave", handleMouseLeave);
+			canvas.removeEventListener("pointermove", handlePointerMove);
+			canvas.removeEventListener("pointerleave", handlePointerLeave);
+			canvas.removeEventListener("pointercancel", handlePointerLeave);
 		};
 	}, [color, particleSize, density, mouseRadius, drift, paused, loop]);
 
 	return (
 		<div ref={containerRef} className="absolute inset-0 overflow-hidden">
-			<canvas ref={canvasRef} className="block h-full w-full" />
+			{/* touch-none: a finger drag reveals the map instead of scrolling the page. */}
+			<canvas ref={canvasRef} className="block h-full w-full touch-none" />
 		</div>
 	);
 }

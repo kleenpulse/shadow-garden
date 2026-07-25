@@ -288,18 +288,21 @@ const Threads: React.FC<ThreadsProps> = ({
 			const currentMouse = [0.5, 0.5];
 			let targetMouse = [0.5, 0.5];
 
-			function handleMouseMove(e: MouseEvent) {
+			// Pointer, not mouse: a touch drag emits no `mousemove`, so a mouse-only
+			// binding leaves the component inert on a phone.
+			function handlePointerMove(e: PointerEvent) {
 				const rect = container.getBoundingClientRect();
 				const x = (e.clientX - rect.left) / rect.width;
 				const y = 1.0 - (e.clientY - rect.top) / rect.height;
 				targetMouse = [x, y];
 			}
-			function handleMouseLeave() {
+			function handlePointerLeave() {
 				targetMouse = [0.5, 0.5];
 			}
 			if (enableMouseInteraction) {
-				container.addEventListener("mousemove", handleMouseMove);
-				container.addEventListener("mouseleave", handleMouseLeave);
+				container.addEventListener("pointermove", handlePointerMove);
+				container.addEventListener("pointerleave", handlePointerLeave);
+				container.addEventListener("pointercancel", handlePointerLeave);
 			}
 
 			let accumulatedTime = 0;
@@ -350,8 +353,9 @@ const Threads: React.FC<ThreadsProps> = ({
 				measureRef.current = null;
 				glRef.current = null;
 				if (enableMouseInteraction) {
-					container.removeEventListener("mousemove", handleMouseMove);
-					container.removeEventListener("mouseleave", handleMouseLeave);
+					container.removeEventListener("pointermove", handlePointerMove);
+					container.removeEventListener("pointerleave", handlePointerLeave);
+					container.removeEventListener("pointercancel", handlePointerLeave);
 				}
 				// The host drops the GL context; this only detaches the canvas.
 				if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
@@ -394,8 +398,13 @@ const Threads: React.FC<ThreadsProps> = ({
 		);
 	}
 
+	// The canvas is appended imperatively by OGL, so the touch lock is scoped to it
+	// through the container: a finger drag distorts the threads, page stays put.
 	return (
-		<div ref={containerRef} className={className ?? "relative h-full w-full"} />
+		<div
+			ref={containerRef}
+			className={`[&_canvas]:touch-none ${className ?? "relative h-full w-full"}`}
+		/>
 	);
 };
 

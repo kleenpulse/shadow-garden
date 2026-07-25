@@ -11,6 +11,13 @@ export type CommandDef = {
 	icon?: ComponentType<{ className?: string }>;
 	keywords?: string[];
 	hint?: string;
+	/**
+	 * "You are here" — the command whose destination is already open. Drawn as a
+	 * persistent accent mark, deliberately separate from cmdk's selection: that
+	 * one is a cursor and the pointer steals it on hover, so it cannot double as
+	 * a location marker.
+	 */
+	active?: boolean;
 	onRun?: () => void;
 };
 
@@ -173,6 +180,13 @@ export default function CommandPalette({
 		lastPinned = false,
 	) => {
 		const Icon = command.icon;
+		// The active row keeps accent text in every state, so it stays legible as
+		// "where you are" even while the cursor sits on it. A normal row only turns
+		// bright under the cursor. Both keep the same selected background — the
+		// two marks stack instead of replacing one another.
+		const tone = command.active
+			? "text-accent before:absolute before:left-0 before:top-1/2 before:h-4 before:w-0.5 before:-translate-y-1/2 before:rounded-full before:bg-accent"
+			: "text-ink-dim data-[selected=true]:text-ink";
 		return (
 			<Command.Item
 				key={command.id}
@@ -185,16 +199,16 @@ export default function CommandPalette({
 					pinned
 						? // Pinned items grow to fill the footer row. Earlier items refuse to
 							// shrink so that only the last one truncates when space runs out.
-							`flex grow cursor-pointer items-center gap-1.5 rounded-md px-2 py-1.5 font-sans text-xs text-ink-dim data-[selected=true]:bg-accent/15 data-[selected=true]:text-ink ${lastPinned ? "min-w-0" : "shrink-0"}`
-						: "flex cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2 font-sans text-sm text-ink-dim data-[selected=true]:bg-accent/15 data-[selected=true]:text-ink"
+							`relative flex grow cursor-pointer items-center gap-1.5 rounded-md px-2 py-1.5 font-sans text-xs data-[selected=true]:bg-accent/15 ${tone} ${lastPinned ? "min-w-0" : "shrink-0"}`
+						: `relative flex cursor-pointer items-center gap-2.5 rounded-md px-2.5 py-2 font-sans text-sm data-[selected=true]:bg-accent/15 ${tone}`
 				}
 			>
 				{Icon && (
 					<Icon
 						className={
 							pinned
-								? "h-3.5 w-3.5 shrink-0 text-ink-mute"
-								: "h-4 w-4 text-ink-mute"
+								? `h-3.5 w-3.5 shrink-0 ${command.active ? "text-accent" : "text-ink-mute"}`
+								: `h-4 w-4 ${command.active ? "text-accent" : "text-ink-mute"}`
 						}
 					/>
 				)}
@@ -210,10 +224,17 @@ export default function CommandPalette({
 					{command.label}
 				</span>
 				{command.hint && (
-					<span
-						className={`shrink-0 font-mono text-sm size-5 flex items-center justify-center border border-ink-mute ${pinned ? "text-current" : "text-ink-mute"}`}
-					>
-						{command.hint}
+					// Split on whitespace so a chord ("G C", "⌘ C") reads as one chip per
+					// key instead of overflowing a single fixed-size box.
+					<span className="flex shrink-0 items-center gap-1">
+						{command.hint.split(/\s+/).map((key, index) => (
+							<kbd
+								key={`${key}-${index}`}
+								className={`inline-flex h-5 min-w-5 items-center justify-center rounded border border-hairline px-1 font-mono text-[10px] leading-none ${pinned ? "text-current" : "text-ink-mute"}`}
+							>
+								{key}
+							</kbd>
+						))}
 					</span>
 				)}
 			</Command.Item>
@@ -226,6 +247,22 @@ export default function CommandPalette({
 	// Typing re-filters the list; snap the scroll region back to the top so the
 	// best matches aren't hidden below a stale scroll offset.
 	const listRef = useRef<HTMLDivElement>(null);
+
+	// A seeded selection can sit far below the fold. cmdk scrolls it in on mount,
+	// but only `block: "nearest"` — the row lands flush against an edge with no
+	// neighbours visible. Re-center it, same treatment as the sidebar's active
+	// entry. Deferred a macrotask: cmdk only marks the row `aria-selected` on a
+	// later commit (item registration → store emit → re-render), so an effect
+	// running on the open commit would find nothing selected yet.
+	useEffect(() => {
+		if (!open || !initialValue) return;
+		const timer = setTimeout(() => {
+			listRef.current
+				?.querySelector('[aria-selected="true"]')
+				?.scrollIntoView({ block: "center" });
+		}, 0);
+		return () => clearTimeout(timer);
+	}, [open, initialValue]);
 
 	const surface = glass
 		? "border-white/15 bg-white/10 backdrop-blur-xl"

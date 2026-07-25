@@ -322,7 +322,9 @@ export default function PlusGrid({
 				// store never feeds back into layout. In flow, a wide canvas raises the
 				// container's min-content width, the container stops shrinking, the
 				// ResizeObserver never fires, and the canvas is stuck at its old size.
-				className="absolute inset-0 size-full"
+				// touch-none: a finger drag drives the pointer wave instead of scrolling the
+				// page. The scroll wave still fires from window scroll outside the grid.
+				className="absolute inset-0 size-full touch-none"
 				style={{ display: "block" }}
 			/>
 		</div>
