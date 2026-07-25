@@ -119,7 +119,7 @@ T24|x|migrate+fix: world-map-ascii (re-arm post unmount), light-rays (uncleared 
 T25|x|migrate+fix: aurora, grainient (⊥ loseContext; twin shadowflame:476 correct)|V11
 T26|x|migrate loopers batch A (5 clean entries)|V10,V11,V12
 T27|x|migrate loopers batch B (5 clean entries)|V10,V11,V12
-T28|.|check rule: ⊥ raw `requestAnimationFrame`\|`new ResizeObserver` ∈ components/registry ∉ allowlist|V10
+T28|x|check rule: ⊥ raw `requestAnimationFrame`\|`new ResizeObserver` ∈ components/registry ∉ allowlist|V10
 T29|.|lib/pro.ts: ∃! server Pro seam. entitlement.ts/billing.ts → projections|V13
 T30|.|hooks/use-pro.ts owns THE client cache (+invalidate); AuthMenu, CheckoutResult read it|V13
 T31|.|lib/favorites/reconcile.ts: pure sanitize/mergeUp/adopt/diff/order|V14

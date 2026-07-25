@@ -351,6 +351,113 @@ const pausableMatchesPreview: Rule = {
 // exists to halt a free-running loop, so those are correct as they stand.
 
 /**
+ * Entries that use rAF or a ResizeObserver for something that is not a
+ * free-running render loop. These are permanent exceptions — forcing them onto
+ * the runtime host would be worse, not better.
+ */
+const NOT_A_LOOP = new Map<string, string>([
+  ["blueprint-card", "one rAF to flip a drawn flag on mount; no loop"],
+  ["circle-menu", "RO measures layout geometry for the arc; no canvas"],
+  ["dissolve", "RO measures for a one-shot particle burst"],
+  ["marquee-text", "RO measures text width; the marquee itself is CSS"],
+  ["scroll-velocity", "RO measures for a scroll-driven transform"],
+  ["border-glow", "bounded easing tweens that terminate themselves"],
+  [
+    "morphing-text",
+    "text morph tween; loops only in auto mode and drives no canvas",
+  ],
+]);
+
+/**
+ * Entries that ARE free-running loops and have simply not been migrated yet.
+ * Separate from NOT_A_LOOP on purpose: these warn on every run so the debt
+ * stays visible instead of being quietly blessed by an allowlist.
+ */
+const PENDING_MIGRATION = new Map<string, string>([
+  ["physics-engine", "pausable canvas sim with its own rAF loop and RO"],
+  ["variable-proximity", "pausable, free-running rAF pointer follow"],
+]);
+
+const noHandRolledLoop: Rule = {
+  id: "no-hand-rolled-loop",
+  severity: "error",
+  what: "registry components drive animation through the runtime host, not raw rAF/ResizeObserver",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      if (NOT_A_LOOP.has(entry.slug) || PENDING_MIGRATION.has(entry.slug)) continue;
+      const usage = ctx.loopUsage(entry.slug);
+      if (!usage) continue;
+      const parts: string[] = [];
+      if (usage.rafCalls > 0) parts.push(`${usage.rafCalls} requestAnimationFrame call(s)`);
+      if (usage.resizeObservers > 0) parts.push(`${usage.resizeObservers} ResizeObserver(s)`);
+      if (parts.length === 0) continue;
+      out.push({
+        slug: entry.slug,
+        detail: `${parts.join(" and ")} — use hooks/use-animation-loop.ts, or add the slug to NOT_A_LOOP with a reason`,
+      });
+    }
+    return out;
+  },
+};
+
+const loopHostShipsTheHook: Rule = {
+  id: "loop-host-ships-the-hook",
+  severity: "error",
+  what: "an entry using the runtime host ships it as a peer variant",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const usage = ctx.loopUsage(entry.slug);
+      if (!usage?.usesHost) continue;
+      if (!entry.variants.some((v) => v.role === "hook")) {
+        out.push({
+          slug: entry.slug,
+          detail:
+            "imports the runtime host but declares no hook variant — the customer would copy a component that cannot compile",
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const loopAllowlistCurrent: Rule = {
+  id: "loop-allowlist-current",
+  severity: "warn",
+  what: "the loop allowlists still describe reality",
+  run(ctx) {
+    const out: Finding[] = [];
+    // Only slugs the registry actually contains — an allowlist naming an entry
+    // that no longer exists is inert, and reporting it here would fire against
+    // every synthetic context in the selftest.
+    const present = new Set(ctx.registry.map((e) => e.slug));
+    for (const [slug, reason] of PENDING_MIGRATION) {
+      if (!present.has(slug)) continue;
+      const usage = ctx.loopUsage(slug);
+      if (!usage) continue;
+      if (usage.rafCalls === 0 && usage.resizeObservers === 0) {
+        out.push({ slug, detail: "migrated — remove it from PENDING_MIGRATION" });
+      } else {
+        out.push({ slug, detail: `not yet on the runtime host (${reason})` });
+      }
+    }
+    for (const [slug] of NOT_A_LOOP) {
+      if (!present.has(slug)) continue;
+      const usage = ctx.loopUsage(slug);
+      if (!usage) continue;
+      if (usage.rafCalls === 0 && usage.resizeObservers === 0) {
+        out.push({
+          slug,
+          detail: "no longer uses either primitive — remove it from NOT_A_LOOP",
+        });
+      }
+    }
+    return out;
+  },
+};
+
+/**
  * Props whose documented and shipped defaults legitimately differ because the
  * preview transforms the value on the way down. Keep this set small and visible:
  * every entry is a place the check has been told to look away.
@@ -430,4 +537,7 @@ export const RULES: Rule[] = [
   previewReadsOnlyDeclaredProps,
   documentedDefaultMatchesSource,
   pausableMatchesPreview,
+  noHandRolledLoop,
+  loopHostShipsTheHook,
+  loopAllowlistCurrent,
 ];

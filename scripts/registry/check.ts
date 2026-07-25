@@ -1,5 +1,6 @@
 import type { ComponentEntry } from "../../lib/registry/types";
 import type { SourceDefault } from "./source-defaults";
+import type { LoopUsage } from "./loop-usage";
 
 // The registry check core. Pure: every piece of IO arrives on the context, so
 // the same rules run against the real repo (scripts/check-registry.ts) or against
@@ -51,6 +52,8 @@ export interface CheckContext {
    * in the source at all.
    */
   sourceDefaults(slug: string): Map<string, SourceDefault> | null;
+  /** Hand-rolled runtime primitives in a slug's component source. */
+  loopUsage(slug: string): LoopUsage | null;
 }
 
 export interface Rule {
