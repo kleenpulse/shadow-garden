@@ -41,8 +41,10 @@ export async function getBilling(): Promise<BillingSummary> {
   const userId = await currentUserId();
   if (!userId) return FREE;
 
-  const { db } = await import("@/lib/db");
+  const { getDb } = await import("@/lib/db");
   const { entitlements } = await import("@/lib/db/schema");
+  const db = getDb();
+  if (!db) return FREE;
   const [row] = await db
     .select({
       type: entitlements.type,

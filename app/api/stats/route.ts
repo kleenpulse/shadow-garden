@@ -29,9 +29,11 @@ type StatEvent =
 // computed key would widen to a string index and break Drizzle's set type).
 // Rows are created lazily on first event; `unfavorited` floors the count at 0.
 async function increment(slug: string, event: StatEvent) {
-  const { db } = await import("@/lib/db");
+  const { getDb } = await import("@/lib/db");
   const { componentStats } = await import("@/lib/db/schema");
   const { sql } = await import("drizzle-orm");
+  const db = getDb();
+  if (!db) return;
   const now = new Date();
   const target = componentStats.slug;
 
@@ -122,14 +124,17 @@ async function handleView(slug: string): Promise<NextResponse> {
   }
 
   try {
-    const { db } = await import("@/lib/db");
+    const { getDb } = await import("@/lib/db");
     const { componentViews } = await import("@/lib/db/schema");
+    const db = getDb();
     // Insert the (slug, visitor) pair; a conflict means this viewer already counted.
-    const inserted = await db
-      .insert(componentViews)
-      .values({ slug, visitorId })
-      .onConflictDoNothing()
-      .returning({ slug: componentViews.slug });
+    const inserted = db
+      ? await db
+          .insert(componentViews)
+          .values({ slug, visitorId })
+          .onConflictDoNothing()
+          .returning({ slug: componentViews.slug })
+      : [];
     if (inserted.length > 0) await increment(slug, "view");
   } catch (err) {
     console.error("[stats] view dedup failed:", err);

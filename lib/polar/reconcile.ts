@@ -33,6 +33,19 @@ export interface PolarOrderLike {
 
 const lifetimeProductId = process.env.POLAR_PRODUCT_ID_LIFETIME;
 
+/**
+ * Raised when reconciliation is asked to run without a DB. This path writes paid
+ * entitlements, so refusing loudly is correct — a silent no-op would 200 the
+ * webhook and lose the grant. Callers that can refuse earlier should do so: the
+ * webhook route returns 503 up front rather than reaching this (§V.V4, §B.B4).
+ */
+export class DbUnavailableError extends Error {
+  constructor() {
+    super("DATABASE_URL is not set — cannot reconcile entitlements");
+    this.name = "DbUnavailableError";
+  }
+}
+
 export type EntStatus =
   | "active"
   | "canceled"
@@ -94,8 +107,11 @@ async function upsertEntitlement(input: {
 }) {
   // Lazy import keeps the Node-only DB client out of the module graph until a real
   // reconcile fires. The DATABASE_URL connection owns the tables → bypasses RLS.
-  const { db } = await import("@/lib/db");
+  const { getDb } = await import("@/lib/db");
   const { entitlements } = await import("@/lib/db/schema");
+
+  const db = getDb();
+  if (!db) throw new DbUnavailableError();
 
   // Snapshot Pro state BEFORE the write — drives the one-time confirmation email.
   // This is the convergence point for every grant path (webhook sub, webhook
@@ -136,9 +152,11 @@ async function upsertEntitlement(input: {
 
 // Current row (thin projection) for the precedence rule below.
 async function getExistingEntitlement(userId: string) {
-  const { db } = await import("@/lib/db");
+  const { getDb } = await import("@/lib/db");
   const { entitlements } = await import("@/lib/db/schema");
   const { eq } = await import("drizzle-orm");
+  const db = getDb();
+  if (!db) throw new DbUnavailableError();
   const [row] = await db
     .select({
       type: entitlements.type,

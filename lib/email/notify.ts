@@ -27,9 +27,13 @@ export async function notifyUser(
 }
 
 async function lookupRecipient(userId: string): Promise<Recipient | null> {
-  const { db } = await import("@/lib/db");
+  const { getDb } = await import("@/lib/db");
   const { profiles } = await import("@/lib/db/schema");
   const { eq } = await import("drizzle-orm");
+  // No DB → no recipient to resolve. notifyUser already treats null as "skip",
+  // which keeps dispatch fire-and-forget instead of throwing into the caller.
+  const db = getDb();
+  if (!db) return null;
   const [row] = await db
     .select({ email: profiles.email, name: profiles.displayName })
     .from(profiles)
