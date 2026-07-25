@@ -41,7 +41,7 @@ ${total} components across ${CATEGORY_ORDER.length} categories:
 
 ${bullets}
 
-Components are tiered **free** (${free}) or **pro** (${pro}). Pro source is gated server-side and never crosses to the client unless unlocked (env \`SHADOW_GARDEN_PRO=1\` or cookie \`sg_pro=1\`).
+Components are tiered **free** (${free}) or **pro** (${pro}). Pro source is gated server-side and never crosses to the client unless unlocked. The dev overrides (env \`SHADOW_GARDEN_PRO=1\`, cookie \`sg_pro=1\`) only apply in local development — in production the gate is entitlement-only.
 ${END}`;
 
 const readmePath = join(dirname(fileURLToPath(import.meta.url)), "..", "README.md");

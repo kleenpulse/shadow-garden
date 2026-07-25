@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { eq } from "drizzle-orm";
 import { currentUserId } from "@/lib/supabase/current-user";
 import { deriveProStatus } from "@/lib/registry/entitlement";
+import { IS_LOCAL_DEV } from "@/lib/env";
 
 // Richer billing summary for the account dropdown. Separate from getEntitlement()
 // (which stays the cheap {pro} gate) — this exposes plan + next-payment details.
@@ -27,10 +28,13 @@ const FREE: BillingSummary = {
 
 export async function getBilling(): Promise<BillingSummary> {
   // Mirror getEntitlement's dev overrides so SHADOW_GARDEN_PRO still previews Pro
-  // (no plan details — it's a dev toggle, not a real purchase).
-  if (process.env.SHADOW_GARDEN_PRO === "1") return { ...FREE, pro: true };
+  // (no plan details — it's a dev toggle, not a real purchase). Gated on
+  // IS_LOCAL_DEV for the same reason as getEntitlement — see the note there.
+  if (IS_LOCAL_DEV && process.env.SHADOW_GARDEN_PRO === "1")
+    return { ...FREE, pro: true };
   const jar = await cookies();
-  if (jar.get("sg_pro")?.value === "1") return { ...FREE, pro: true };
+  if (IS_LOCAL_DEV && jar.get("sg_pro")?.value === "1")
+    return { ...FREE, pro: true };
 
   if (!process.env.DATABASE_URL) return FREE;
 
