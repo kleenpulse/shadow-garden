@@ -71,7 +71,6 @@ export default function WorldMapAscii({
 	const loop = useAnimationLoop({
 		target: containerRef,
 		halted: paused,
-		// Particle coordinates are in CSS pixels, matching the previous sizing.
 		dpr: 1,
 		resizeDebounceMs: 150,
 		onResize: (metrics) => measureRef.current?.(metrics),
@@ -165,8 +164,7 @@ export default function WorldMapAscii({
 			}
 			ctx.fill();
 
-			// Halt while paused — render this frame, then stop issuing draw calls
-			// (the loop used to run forever even at drift 0).
+			// Halt while paused — render this frame, then stop issuing draw calls.
 			if (paused) return false;
 		};
 		drawRef.current = animate;
@@ -177,9 +175,8 @@ export default function WorldMapAscii({
 			initMap();
 		};
 
-		// The image may resolve after unmount. The old code re-armed a rAF from
-		// here with a handle nothing tracked, so cleanup could not cancel it and
-		// the loop resurrected itself past teardown.
+		// The image may resolve after unmount, so a rAF armed from its onload is
+		// untracked by cleanup and would resurrect the loop past teardown.
 		mapImage.onload = () => {
 			loop.resize();
 			loop.start();

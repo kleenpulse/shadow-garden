@@ -53,11 +53,9 @@ export default function ScrambleText({
 }: ScrambleTextProps) {
 	const [display, setDisplay] = useState(text);
 	const [flashing, setFlashing] = useState<Set<number>>(() => new Set());
-	// Hover mode arms a trigger the JSX calls on mouseenter.
 	const triggerRef = useRef<(() => void) | null>(null);
 
 	useEffect(() => {
-		// Reduced motion: resolved string, no timers, no flash.
 		if (reducedMotion) {
 			setDisplay(text);
 			setFlashing(new Set());
@@ -71,9 +69,8 @@ export default function ScrambleText({
 		const glyphs = [...text];
 		const roll = () => safePool[(Math.random() * safePool.length) | 0];
 
-		// Burst timers (rerolls + flash clears) — cleared between runs so rapid
-		// hovers or overlapping glitches never stack. The scheduler (below) lives
-		// outside this set so a burst restart doesn't cancel it.
+		// Burst timers (rerolls + flash clears), cleared between runs so rapid
+		// hovers never stack. The scheduler below sits outside this set deliberately.
 		const intervals = new Set<number>();
 		const timeouts = new Set<number>();
 		const clearBursts = () => {
@@ -163,7 +160,6 @@ export default function ScrambleText({
 		}
 
 		if (mode === "scramble-on-hover") {
-			// Resolved at rest; re-run the cascade each mouseenter.
 			setDisplay(text);
 			setFlashing(new Set());
 			triggerRef.current = () => runScramble(allIndices, duration);
@@ -173,7 +169,6 @@ export default function ScrambleText({
 			};
 		}
 
-		// continuous-glitch: resolved at rest, a random subset glitches on a beat.
 		triggerRef.current = null;
 		setDisplay(text);
 		setFlashing(new Set());

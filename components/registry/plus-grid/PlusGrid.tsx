@@ -103,7 +103,6 @@ export default function PlusGrid({
 	flagsRef.current = { pointerEnergy, paused };
 	const waveRef = useRef<WaveState>({ energy: 0, direction: 1, phase: 0 });
 	const rebuildRef = useRef<(() => void) | null>(null);
-	// Assigned once the 2D context is up; the runtime host calls them.
 	const drawRef = useRef<(() => void | false) | null>(null);
 	const measureRef = useRef<((m: Metrics) => void) | null>(null);
 
@@ -127,9 +126,8 @@ export default function PlusGrid({
 		let particles: Particle[] = [];
 		let ambientPhase = 0;
 		let fontFamily = "ui-monospace";
-		// Applied dpr, kept for the tick's CSS-pixel maths. The host caps it —
-		// this used to read window.devicePixelRatio uncapped, so a DPR-3 phone
-		// rendered nine times the pixel work.
+		// Applied dpr, kept for the tick's CSS-pixel maths. The host caps it — read
+		// window.devicePixelRatio uncapped and a DPR-3 phone does 9x the pixel work.
 		let dpr = 1;
 
 		const wave = waveRef.current;
@@ -219,8 +217,7 @@ export default function PlusGrid({
 			passive: true,
 		});
 
-		// ── Frame body. The runtime host schedules it (it used to run on
-		//    gsap.ticker, a second rAF scheduler for the same job). ─────────────
+		// ── Frame body, scheduled by the runtime host ───────────────────────────
 		const tick = () => {
 			const cfg = cfgRef.current;
 			const isPaused = flagsRef.current.paused;

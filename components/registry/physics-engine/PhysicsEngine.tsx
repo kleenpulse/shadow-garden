@@ -1362,7 +1362,7 @@ const PhysicsEngine = memo(function PhysicsEngine({
 				ctx!.textBaseline = "alphabetic";
 			}
 
-			// interaction hint — top center, mirror of the old bottom position
+			// interaction hint — top center
 			ctx!.fillStyle = pr.ink;
 			ctx!.globalAlpha = 0.45;
 			ctx!.font = '10px ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace';

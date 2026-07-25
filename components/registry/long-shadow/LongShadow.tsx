@@ -96,8 +96,8 @@ export default function LongShadow({
 	const angleRef = useRef(angleStart + angleSweep / 2);
 	const dirRef = useRef(1);
 
-	// Live-tuned props, refreshed every render and read inside the frame loop so
-	// a slider drag never needs the loop to be re-subscribed.
+	// Live-tuned props read inside the frame loop, so a slider drag never has to
+	// re-subscribe it.
 	const live = useRef({ shadowLength, sweepSpeed, angleStart, angleSweep, pingPong, fade, skew, shadowColor });
 	live.current = { shadowLength, sweepSpeed, angleStart, angleSweep, pingPong, fade, skew, shadowColor };
 
@@ -116,9 +116,8 @@ export default function LongShadow({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// When still (paused or reduced motion): settle the sun mid-arc and paint one
-	// final frame. Re-runs on any shadow-affecting tweak so the frozen preview
-	// still reflects control changes. The frame loop early-returns while still.
+	// While still (paused or reduced motion): settle the sun mid-arc and paint one
+	// final frame, so the frozen preview still reflects control changes.
 	useEffect(() => {
 		if (!still) return;
 		const settled = angleStart + angleSweep / 2;

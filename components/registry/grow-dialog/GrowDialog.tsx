@@ -111,12 +111,10 @@ export function GrowPanel({
     return () => setMounted(false);
   }, []);
 
-  // Remember who opened us so focus can return there on close.
   useEffect(() => {
     if (open) openerRef.current = document.activeElement as HTMLElement | null;
   }, [open]);
 
-  // Escape to close + Tab focus-trap, only while open.
   useEffect(() => {
     if (!open) return;
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -152,7 +150,6 @@ export function GrowPanel({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, onOpenChange]);
 
-  // Scroll-lock + initial focus while open.
   useEffect(() => {
     if (!open) return;
     document.body.classList.add("overflow-hidden");
@@ -164,7 +161,6 @@ export function GrowPanel({
     return () => document.body.classList.remove("overflow-hidden");
   }, [open, autoFocus]);
 
-  // Restore focus to the opener once closed.
   useEffect(() => {
     if (!open) openerRef.current?.focus?.();
   }, [open]);

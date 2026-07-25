@@ -62,7 +62,7 @@ uniform vec3 uAuroraColor;
 uniform vec3 uAuroraColor2;
 out vec4 fragColor;
 
-// hash / value-noise helpers shared with Grainient's envelope
+// hash / value-noise helpers
 vec2 hash(vec2 p){p=vec2(dot(p,vec2(2127.1,81.17)),dot(p,vec2(1269.5,283.37)));return fract(sin(p)*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.0-2.0*f);float n=mix(mix(dot(-1.0+2.0*hash(i+vec2(0.0,0.0)),f-vec2(0.0,0.0)),dot(-1.0+2.0*hash(i+vec2(1.0,0.0)),f-vec2(1.0,0.0)),u.x),mix(dot(-1.0+2.0*hash(i+vec2(0.0,1.0)),f-vec2(0.0,1.0)),dot(-1.0+2.0*hash(i+vec2(1.0,1.0)),f-vec2(1.0,1.0)),u.x),u.y);return 0.5+0.5*n;}
 float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p=p*2.0+vec2(37.1,17.7);a*=0.5;}return v;}
@@ -181,9 +181,7 @@ const Aurora = ({
   );
 
   // `halted` stays false: motion eases to a stop and the frame body decides
-  // when it has settled. `gl` is supplied so the context is dropped on
-  // teardown — this component leaked one per unmount, while its structural
-  // twin Shadowflame did not.
+  // when it has settled. `gl` is supplied so the context is dropped on teardown.
   const loop = useAnimationLoop({
     target: containerRef,
     halted: false,

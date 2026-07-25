@@ -72,8 +72,6 @@ const SideRays = ({
   const [isVisible, setIsVisible] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
-  // The runtime host owns the rAF loop, the ResizeObserver, dpr and teardown.
-  // Everything below it is the animation body: the shader and its uniforms.
   const loop = useAnimationLoop({
     target: containerRef,
     halted: paused,
@@ -256,8 +254,7 @@ void main() {
       const mesh = new Mesh(gl, { geometry, program })
       meshRef.current = mesh
 
-      // The context is live: measure it and put a frame on screen. From here
-      // the loop host owns sizing, arming and teardown.
+      // The context is live: measure it and put a frame on screen.
       loop.resize()
       loop.start()
 
@@ -283,8 +280,7 @@ void main() {
       }
     }
     // Only visibility rebuilds the context. Every prop here is a uniform, and
-    // the effect below pushes those without a rebuild — the old dep list tore
-    // down and recreated the whole GL program on every slider drag.
+    // the effect below pushes those without a rebuild.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible])
 

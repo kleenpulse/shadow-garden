@@ -91,7 +91,6 @@ const useMorphingText = (texts: string[], auto: boolean = true) => {
     timeRef.current = new Date()
 
     const animate = () => {
-      // Auto: loop forever. One-shot: stop once we've fully landed on texts[1].
       if (!auto && textIndexRef.current >= 1) {
         doCooldown()
         return

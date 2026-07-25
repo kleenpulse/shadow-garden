@@ -102,7 +102,6 @@ const Constellation = memo(
 		};
 		const rebuildRef = useRef<(() => void) | null>(null);
 		const containerRef = useRef<HTMLDivElement>(null);
-		// Assigned once the 2D context is up; the host calls them.
 		const drawRef = useRef<(() => void | false) | null>(null);
 		const measureRef = useRef<((m: Metrics) => void) | null>(null);
 
@@ -110,8 +109,6 @@ const Constellation = memo(
 			target: containerRef,
 			halted: paused,
 			dpr: 2,
-			// Was a hand-rolled 100ms debounce whose timer the cleanup had to
-			// remember to clear; the host owns it now.
 			resizeDebounceMs: 100,
 			onResize: (metrics) => measureRef.current?.(metrics),
 			onFrame: () => (drawRef.current ? drawRef.current() : false),
@@ -299,10 +296,9 @@ const Constellation = memo(
 			}
 			drawRef.current = tick;
 
-			// Window-level pointer tracking (DotField pattern) — the showcase stage
-			// overlays the canvas, so element-level listeners never fire there.
-			// Coordinates convert through the canvas rect; a pointer outside the
-			// pane is simply too far from every particle to matter.
+			// Window-level pointer tracking: a stage overlaying the canvas would keep
+			// element-level listeners from ever firing. Coordinates convert through the
+			// canvas rect; a pointer outside the pane is simply too far to matter.
 			function onPointerMove(e: PointerEvent) {
 				const rect = canvas!.getBoundingClientRect();
 				mouseRef.current.x = e.clientX - rect.left;

@@ -304,7 +304,7 @@ const Shadowflame = ({
     // --- Fire-spark overlay: tiny discrete embers rising over the flame, drawn
     // on a 2D canvas above the WebGL canvas and driven by this same frame loop
     // (so pause / reduced-motion settle flame and sparks together). Keep them
-    // SMALL and additive — big glows would wash to white like the old Cinders. ---
+    // SMALL and additive — big glows wash out to white. ---
     const sparkCanvas = sparkCanvasRef.current;
     const sctx = sparkCanvas ? sparkCanvas.getContext("2d") : null;
     const sparkDpr = Math.min(window.devicePixelRatio || 1, 2);

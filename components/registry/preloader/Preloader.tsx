@@ -57,7 +57,6 @@ export default function Preloader({
 		}
 	};
 
-	// Simulate mode: one timeline — count, hold, fade, hide.
 	useEffect(() => {
 		if (!simulate || reducedMotion) return;
 		const ctx = gsap.context(() => {
@@ -85,7 +84,6 @@ export default function Preloader({
 		return () => ctx.revert();
 	}, [simulate, reducedMotion, duration, holdDelay, fadeDuration]);
 
-	// Controlled mode: ease the counter toward the reported progress.
 	useEffect(() => {
 		if (simulate || reducedMotion) return;
 		const proxy = { v: Number(counterRef.current?.textContent) || 0 };
@@ -100,7 +98,6 @@ export default function Preloader({
 		};
 	}, [simulate, reducedMotion, progress]);
 
-	// Controlled mode: fade out on completion.
 	useEffect(() => {
 		if (simulate || reducedMotion || !isComplete) return;
 		const tween = gsap.to(rootRef.current, {

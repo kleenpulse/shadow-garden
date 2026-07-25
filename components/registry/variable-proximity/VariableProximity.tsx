@@ -13,8 +13,7 @@ import { motion } from 'motion/react'
 
 function useAnimationFrame(callback: () => void, paused = false) {
   useEffect(() => {
-    // Halt entirely while paused — this rAF used to run forever even when the
-    // cursor was still (the callback early-returns, but frames kept requesting).
+    // Halt entirely while paused: a still cursor otherwise still costs a frame.
     if (paused) return
     let frameId: number
     const loop = () => {

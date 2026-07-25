@@ -5,7 +5,7 @@
 // a swirling volumetric medium that fills the frame and winds toward a central
 // SDF core (lotus / gem / flame); a separate GPU dust field sprays along the
 // flow toward the eye, all under a full 360° draggable orbit and a two-pass FBO
-// bloom. Structural skeleton mirrors BlackHole.tsx.
+// bloom.
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget, Geometry } from "ogl";
@@ -274,8 +274,8 @@ float sdIcosahedron(vec3 p, float r) {
 	return d - r;
 }
 float sdFlame(vec3 p) {
-	// Bounded flicker time (precision rule): two rates advect the turbulence upward so
-	// the plume writhes organically instead of scrolling rigidly.
+	// Bounded flicker time: two rates advect the turbulence upward so the plume
+	// writhes organically instead of scrolling rigidly.
 	float t1 = mod(uTime * 1.7, 240.0);
 	float t2 = mod(uTime * 0.9, 240.0);
 	// Tall teardrop: fat rounded base tapering to a sharp tip near y = +0.95.
@@ -334,7 +334,7 @@ void main() {
 	// The swirl spin is a RIGID ROTATION of the sample field, not an additive phase
 	// fed into (non-periodic) fbm. Rotating by a mod-2π angle is seamless at the
 	// wrap — cos(2π)=cos(0), sin(2π)=sin(0) — so the loop never jumps, while the mod
-	// keeps the argument bounded for float precision (WebGL time-precision rule).
+	// keeps the argument bounded for float precision.
 	float swirlPhase = uSwirlPhase;
 	float cs = cos(swirlPhase), sn = sin(swirlPhase);
 
@@ -644,8 +644,8 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 		null,
 	);
 
-	// Same shape as BlackHole: pausing eases out and a live drag keeps drawing,
-	// so the frame body owns the halt decision.
+	// Pausing eases out and a live drag keeps drawing, so the frame body owns
+	// the halt decision.
 	const loop = useAnimationLoop({
 		target: containerRef,
 		halted: false,
@@ -656,7 +656,7 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 	});
 
 	// Live-tunable values read each frame — the GL context is never rebuilt while
-	// a control is dragged, so tuning stays smooth (BlackHole/Threads idiom).
+	// a control is dragged, so tuning stays smooth.
 	const live = useRef({
 		primary,
 		secondary,

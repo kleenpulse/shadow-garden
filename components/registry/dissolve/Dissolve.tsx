@@ -132,8 +132,6 @@ export default function Dissolve({
 		paint,
 	};
 
-	// --- canvas helpers (ref-only reads → safe to close over from any effect) ---
-
 	function sizeCanvas(w: number, h: number) {
 		const canvas = canvasRef.current;
 		const ctx = ctxRef.current;
@@ -169,7 +167,6 @@ export default function Dissolve({
 		const p = propsRef.current;
 		const dpr = dprRef.current;
 
-		// Author the pixels ourselves — no snapshot library.
 		ctx.clearRect(0, 0, w, h);
 		p.paint(ctx, w, h);
 
@@ -352,7 +349,6 @@ export default function Dissolve({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// Trigger: dissolve / reform on `dismissed`, honoring reduced motion.
 	useEffect(() => {
 		const wrap = wrapperRef.current;
 		const canvas = canvasRef.current;

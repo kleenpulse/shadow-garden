@@ -2,14 +2,13 @@
 
 import { MotionConfig, motion as m } from 'motion/react'
 
-// Three-bar hamburger that morphs into an X. Presentational only — driven by
-// the `open` prop (the surrounding trigger owns the click + toggle state).
-// Bars use `bg-current` so they inherit the parent's text color in light/dark.
+// Three-bar hamburger that morphs into an X. Presentational only — the `open`
+// prop drives it, the surrounding trigger owns the click. Bars use `bg-current`
+// so they inherit the parent's text color.
 //
-// CLOSED_INSET is the single knob for closed-state bar spacing: distance of the
-// top/bottom bars from each edge of the 24px box. Lower = wider gaps, higher
-// (toward 50%) = tighter. It feeds both the resting `style` and the matching
-// `closed` keyframe end-value, so the two stay in sync.
+// CLOSED_INSET is the one knob for closed-state spacing: the top/bottom bars'
+// distance from each edge of the 24px box. It feeds both the resting `style`
+// and the matching `closed` keyframe end-value, so the two stay in sync.
 const CLOSED_INSET = '30%'
 
 const HAMBURGER_VARIANTS = {

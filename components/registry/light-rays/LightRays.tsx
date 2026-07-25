@@ -449,8 +449,7 @@ void main() {
     }
     // Build/tear-down the WebGL context only on the visibility boundary. Every
     // tunable prop flows through the live uniform-sync effect below (and the
-    // loop's refs), so a scroll-driven raysSpeed toggle no longer rebuilds the
-    // context, recompiles the shader, or re-runs the setTimeout init delay.
+    // loop's refs), so a scroll-driven raysSpeed toggle never rebuilds it.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible])
 

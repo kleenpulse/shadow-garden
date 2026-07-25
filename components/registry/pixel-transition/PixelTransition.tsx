@@ -39,8 +39,7 @@ export function PixelTransition({
   const delayedCallRef = useRef<gsap.core.Tween | null>(null)
 
   const [isActive, setIsActive] = useState(false)
-  // Computed in an effect so the server render (this is a client component, but
-  // still pre-rendered) never touches `window`/`navigator`.
+  // Computed in an effect so the pre-render never touches `window`/`navigator`.
   const [isTouchDevice, setIsTouchDevice] = useState(false)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
@@ -89,8 +88,6 @@ export function PixelTransition({
     const activeEl = activeRef.current
     if (!pixelGridEl || !activeEl) return
 
-    // Reduced motion: skip the pixel stagger and toggle the active layer
-    // instantly.
     if (prefersReducedMotion) {
       activeEl.style.display = activate ? 'block' : 'none'
       activeEl.style.pointerEvents = activate ? 'none' : ''

@@ -23,7 +23,6 @@ export function MarqueeText({
 }: MarqueeTextProps) {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const probeRef = useRef<HTMLSpanElement>(null)
-  // Measures the actual rendered track width for duration calc only
   const trackRef = useRef<HTMLDivElement>(null)
 
   const [isMarquee, setIsMarquee] = useState(false)
