@@ -13,8 +13,15 @@
  * with real WebGL and asserts:
  *
  *   1. the canvas has a non-zero backing store after load
- *   2. resizing the container resizes that backing store   (V1)
- *   3. a resize WHILE PAUSED still repaints                (V2)
+ *   2. the loop KEEPS drawing, frame after frame            (V20)
+ *   3. resizing the container resizes that backing store   (V1)
+ *   4. a resize WHILE PAUSED still repaints                (V2)
+ *
+ * Check 2 was missing until §B.B7, and its absence is why that bug shipped: a
+ * loop that renders exactly one frame and then halts passes every other
+ * assertion here. The single frame satisfies "not blank", and the halted
+ * repaint path is precisely what V2 exercises. Nineteen entries were frozen and
+ * this script called them verified.
  *
  * Blankness is judged from the composited screenshot's byte size — a cleared
  * buffer compresses to almost nothing, a rendered shader does not. Frames are
@@ -53,6 +60,28 @@ mkdirSync(OUT, { recursive: true });
 /** Below this a PNG is a flat fill — i.e. the buffer was cleared and not redrawn. */
 const NOT_BLANK_BYTES = 20000;
 
+/** How long to watch a running loop, and the fewest draw calls that window must
+ *  produce.
+ *
+ *  This is a liveness assertion, NOT a frame-rate one, and the floor is low on
+ *  purpose. Headless runs on swiftshader with no GPU, where a heavy raymarched
+ *  shader manages single-digit fps — threads and aurora legitimately draw 6–7
+ *  times a second here. A frozen loop, by contrast, draws exactly zero more
+ *  times no matter how long you watch. The signal is zero-versus-nonzero, so
+ *  widen the window rather than raise the bar. */
+const CONTINUITY_MS = 2000;
+const MIN_DRAWS = 3;
+
+/** Entries whose continuity cannot be judged on swiftshader. Skipped loudly, not
+ *  quietly passed — an expected failure trains people to ignore the whole run,
+ *  which is how §B.B6 went unnoticed for weeks. Verified with VERIFY_GPU=1. */
+const NEEDS_GPU = new Map([
+  [
+    "black-hole",
+    "WebGL2 float render targets — swiftshader links the shaders and reports no error, then issues no draws at all (630/2s on a real GPU)",
+  ],
+]);
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const chrome = spawn(
@@ -64,10 +93,14 @@ const chrome = spawn(
     "--no-first-run",
     "--no-default-browser-check",
     "--window-size=1400,900",
-    // Headless has no real GPU and every one of these entries is a shader.
-    "--use-gl=angle",
-    "--use-angle=swiftshader",
-    "--enable-unsafe-swiftshader",
+    // Headless has no real GPU and every one of these entries is a shader, so
+    // swiftshader is the portable default. VERIFY_GPU=1 hands the run to the
+    // real driver instead — needed when an entry uses a WebGL2 feature
+    // swiftshader implements poorly, where a software failure would otherwise
+    // read as a frozen loop.
+    ...(process.env.VERIFY_GPU === "1"
+      ? []
+      : ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"]),
     "about:blank",
   ],
   { stdio: "ignore" },
@@ -110,6 +143,36 @@ async function shot(sessionId, slug, name) {
   return buf.length;
 }
 
+// Draw calls are counted PER CANVAS, tagged onto the element itself, not into a
+// single page-wide total. The sidebar renders its own live canvases, so a global
+// counter would keep climbing while the entry under test sat frozen — the exact
+// false pass this check exists to prevent.
+//
+// Installed via Page.addScriptToEvaluateOnNewDocument so the patch is in place
+// before any component script runs and survives every navigation.
+const DRAW_INSTRUMENT = `(() => {
+  if (window.__sgDrawPatched) return;
+  window.__sgDrawPatched = true;
+  const patch = (proto, names) => {
+    if (!proto) return;
+    for (const name of names) {
+      const original = proto[name];
+      if (typeof original !== 'function') continue;
+      proto[name] = function (...args) {
+        const c = this.canvas;
+        if (c) c.__sgDraws = (c.__sgDraws || 0) + 1;
+        return original.apply(this, args);
+      };
+    }
+  };
+  patch(window.WebGLRenderingContext && WebGLRenderingContext.prototype,
+        ['drawArrays', 'drawElements']);
+  patch(window.WebGL2RenderingContext && WebGL2RenderingContext.prototype,
+        ['drawArrays', 'drawElements', 'drawArraysInstanced', 'drawElementsInstanced']);
+  patch(window.CanvasRenderingContext2D && CanvasRenderingContext2D.prototype,
+        ['clearRect', 'fillRect', 'drawImage', 'stroke', 'fill', 'putImageData']);
+})()`;
+
 // The largest canvas, not the first: the sidebar renders thumbnail canvases that
 // come earlier in document order, and measuring one of those would silently
 // report "no resize happened" for every entry.
@@ -139,6 +202,11 @@ const CANVAS_PROBE = `(() => {
     cssW: Math.round(r.width), cssH: Math.round(r.height),
     parentW: Math.round(p.width), parentH: Math.round(p.height),
     count: all.length,
+    draws: c.__sgDraws || 0,
+    // Every canvas on the page, for diagnosis: a measured canvas sitting at zero
+    // while the page total climbs means the probe picked the wrong element.
+    pageDraws: [...document.querySelectorAll('canvas')]
+      .reduce((n, x) => n + (x.__sgDraws || 0), 0),
   };
 })()`;
 
@@ -150,6 +218,7 @@ const CLICK_PAUSE = `(() => {
 })()`;
 
 let failures = 0;
+let skipped = 0;
 
 function check(ok, label, detail) {
   console.log(`  ${ok ? "PASS" : "FAIL"}  ${label}${detail ? ` — ${detail}` : ""}`);
@@ -205,9 +274,42 @@ async function verify(sessionId, slug) {
     `canvas ${initial.cssW}x${initial.cssH} vs container ${initial.parentW}x${initial.parentH}`,
   );
 
+  // V20 — the loop must still be drawing, not showing one stranded frame.
+  const gpuOnly = NEEDS_GPU.get(slug);
+  if (gpuOnly && process.env.VERIFY_GPU !== "1") {
+    console.log(`  SKIP  V20 — needs VERIFY_GPU=1 — ${gpuOnly}`);
+    skipped++;
+  } else {
+    const before = await evaluate(sessionId, CANVAS_PROBE);
+    await sleep(CONTINUITY_MS);
+    const later = await evaluate(sessionId, CANVAS_PROBE);
+    // A negative delta means the canvas element was swapped mid-window (a
+    // re-init), not that drawing went backwards — say so rather than fail on it.
+    const drawn = later && before ? later.draws - before.draws : -1;
+    check(
+      drawn >= MIN_DRAWS,
+      "V20 — loop keeps drawing",
+      drawn < 0
+        ? "canvas was replaced mid-measurement"
+        : `${drawn} draw calls in ${CONTINUITY_MS}ms (need ${MIN_DRAWS}); page total +${
+            later.pageDraws - before.pageDraws
+          }`,
+    );
+  }
+
   const paused = await evaluate(sessionId, CLICK_PAUSE);
   check(paused === true, "pause control found and clicked");
   await sleep(900);
+
+  // The other half of the halt path. Reported, not asserted: an entry may ease
+  // to a stop over its own timescale, and light-rays halts on raysSpeed rather
+  // than on `paused` at all. A number here that never settles is worth a look.
+  const pausedFrom = await evaluate(sessionId, CANVAS_PROBE);
+  await sleep(700);
+  const pausedTo = await evaluate(sessionId, CANVAS_PROBE);
+  const whilePaused =
+    pausedTo && pausedFrom ? pausedTo.draws - pausedFrom.draws : -1;
+  console.log(`  note  ${whilePaused} draw calls in 700ms while paused`);
 
   await send("Emulation.setDeviceMetricsOverride", { width: 900, height: 760, deviceScaleFactor: 1, mobile: false }, sessionId);
   await sleep(600);
@@ -259,6 +361,11 @@ try {
   const { sessionId } = await send("Target.attachToTarget", { targetId, flatten: true });
   await send("Page.enable", {}, sessionId);
   await send("Runtime.enable", {}, sessionId);
+  await send(
+    "Page.addScriptToEvaluateOnNewDocument",
+    { source: DRAW_INSTRUMENT },
+    sessionId,
+  );
 
   for (const slug of slugs) {
     try {
@@ -278,9 +385,13 @@ try {
   chrome.kill();
 }
 
+// Skips are surfaced in the summary, not just mid-scroll, so a run can never be
+// read as "everything checked" when a V20 assertion was stood down.
+const note =
+  skipped > 0 ? ` ${skipped} V20 check(s) SKIPPED — re-run with VERIFY_GPU=1.` : "";
 console.log(
   failures === 0
-    ? `\n${slugs.length} entr${slugs.length === 1 ? "y" : "ies"} verified. Frames in ${OUT}\n`
-    : `\n${failures} failure(s). Frames in ${OUT}\n`,
+    ? `\n${slugs.length} entr${slugs.length === 1 ? "y" : "ies"} verified.${note} Frames in ${OUT}\n`
+    : `\n${failures} failure(s).${note} Frames in ${OUT}\n`,
 );
 process.exit(failures === 0 ? 0 : 1);
