@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { Renderer, Program, Triangle, Mesh } from 'ogl'
+import { useAnimationLoop } from '@/hooks/use-animation-loop'
 
 type Origin = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left'
 
@@ -61,20 +62,45 @@ const SideRays = ({
   className = '',
 }: SideRaysProps) => {
   const containerRef = useRef<HTMLDivElement>(null)
-  // Mirror `paused` so the render loop can self-halt without a context rebuild.
-  const pausedRef = useRef(paused)
-  pausedRef.current = paused
-  const startLoopRef = useRef<(() => void) | null>(null)
   const uniformsRef = useRef<Record<
     string,
     { value: number | number[] }
   > | null>(null)
   const rendererRef = useRef<Renderer | null>(null)
-  const animationIdRef = useRef<number | null>(null)
   const meshRef = useRef<Mesh | null>(null)
   const cleanupFunctionRef = useRef<(() => void) | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
+
+  // The runtime host owns the rAF loop, the ResizeObserver, dpr and teardown.
+  // Everything below it is the animation body: the shader and its uniforms.
+  const loop = useAnimationLoop({
+    target: containerRef,
+    halted: paused,
+    dpr: 2,
+    onResize: ({ width, height, dpr, bufferWidth, bufferHeight }) => {
+      const renderer = rendererRef.current
+      const uniforms = uniformsRef.current
+      if (!renderer || !uniforms) return
+      renderer.dpr = dpr
+      renderer.setSize(width, height)
+      uniforms.iResolution.value = [bufferWidth, bufferHeight]
+    },
+    onFrame: ({ now }) => {
+      const renderer = rendererRef.current
+      const mesh = meshRef.current
+      const uniforms = uniformsRef.current
+      // Not initialised yet, or the context went away — halt rather than spin.
+      if (!renderer || !mesh || !uniforms) return false
+      uniforms.iTime.value = now * 0.001
+      try {
+        renderer.render({ scene: mesh })
+      } catch {
+        return false
+      }
+    },
+    gl: () => rendererRef.current?.gl,
+  })
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -230,73 +256,17 @@ void main() {
       const mesh = new Mesh(gl, { geometry, program })
       meshRef.current = mesh
 
-      const updateSize = () => {
-        if (!containerRef.current || !renderer) return
-        renderer.dpr = Math.min(window.devicePixelRatio, 2)
-        const { clientWidth: w, clientHeight: h } = containerRef.current
-        renderer.setSize(w, h)
-        uniforms.iResolution.value = [w * renderer.dpr, h * renderer.dpr]
-      }
-
-      const loop = (t: number) => {
-        if (!rendererRef.current || !uniformsRef.current || !meshRef.current) {
-          return
-        }
-        uniforms.iTime.value = t * 0.001
-        try {
-          renderer.render({ scene: mesh })
-          // Render one frame then halt while paused — stops issuing draw calls
-          // instead of spinning at speed 0. Resumed by the pause effect below.
-          if (pausedRef.current) {
-            animationIdRef.current = null
-            return
-          }
-          animationIdRef.current = requestAnimationFrame(loop)
-        } catch {
-          return
-        }
-      }
-
-      const startLoop = () => {
-        if (animationIdRef.current != null) return
-        animationIdRef.current = requestAnimationFrame(loop)
-      }
-      startLoopRef.current = startLoop
-
-      // Repaint after resize: the loop halts one frame after pausing, so a
-      // resize-while-paused otherwise leaves a blank canvas until it resumes.
-      const handleResize = () => {
-        updateSize()
-        startLoopRef.current?.()
-      }
-      window.addEventListener('resize', handleResize)
-      // The container can be resized without a window resize (e.g. a draggable
-      // resize handle changing the host panel's width). Observe it directly so
-      // the WebGL drawing buffer + iResolution stay in sync — otherwise the rays
-      // stretch/squash until the next window resize.
-      const ro = new ResizeObserver(handleResize)
-      ro.observe(containerRef.current)
-      updateSize()
-      animationIdRef.current = requestAnimationFrame(loop)
+      // The context is live: measure it and put a frame on screen. From here
+      // the loop host owns sizing, arming and teardown.
+      loop.resize()
+      loop.start()
 
       cleanupFunctionRef.current = () => {
-        if (animationIdRef.current) {
-          cancelAnimationFrame(animationIdRef.current)
-          animationIdRef.current = null
-        }
-        ro.disconnect()
-        window.removeEventListener('resize', handleResize)
-        if (renderer) {
-          try {
-            const loseCtx = renderer.gl.getExtension('WEBGL_lose_context')
-            if (loseCtx) loseCtx.loseContext()
-            const canvas = renderer.gl.canvas
-            if (canvas && canvas.parentNode) {
-              canvas.parentNode.removeChild(canvas)
-            }
-          } catch {
-            // ignore cleanup errors
-          }
+        try {
+          const canvas = renderer.gl.canvas
+          if (canvas && canvas.parentNode) canvas.parentNode.removeChild(canvas)
+        } catch {
+          // ignore cleanup errors
         }
         rendererRef.current = null
         uniformsRef.current = null
@@ -312,20 +282,11 @@ void main() {
         cleanupFunctionRef.current = null
       }
     }
-  }, [
-    isVisible,
-    speed,
-    rayColor1,
-    rayColor2,
-    intensity,
-    spread,
-    origin,
-    tilt,
-    saturation,
-    blend,
-    falloff,
-    opacity,
-  ])
+    // Only visibility rebuilds the context. Every prop here is a uniform, and
+    // the effect below pushes those without a rebuild — the old dep list tore
+    // down and recreated the whole GL program on every slider drag.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible])
 
   useEffect(() => {
     if (!uniformsRef.current) return
@@ -356,11 +317,6 @@ void main() {
     falloff,
     opacity,
   ])
-
-  // Resume the loop when unpausing — it self-halts inside `loop` while paused.
-  useEffect(() => {
-    if (!paused) startLoopRef.current?.()
-  }, [paused])
 
   return (
     <div
