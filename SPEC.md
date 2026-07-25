@@ -39,7 +39,16 @@ Animation runtime host (`hooks/use-animation-loop.ts`, `"use client"`):
 - hook: `useAnimationLoop(opts)` → `{ start, stop, paint, resize, running }`
 - opts → `{ target, halted, dpr:"auto"|number, onResize(m), onFrame(f): void|false, paintWhenHalted?=true, gl?(), onDispose?(), deps?=[] }`
 - type: `Metrics` → `{ width, height, dpr, bufferWidth, bufferHeight }`; `FrameInfo` → `{ now, dt, elapsed, frame }`
-- `onFrame` returns `false` → halt from inside body. host ⊥ name `paused` ⊥ name `reducedMotion`
+- `onFrame` returns literal `false` → halt from inside body. ⊥ return → continue. host ⊥ name `paused` ⊥ name `reducedMotion`
+- ⊥ `drawRef.current?.(x) ?? false` — void draw → `undefined` → coalesces to halt. ∴ `drawRef.current ? drawRef.current(x) : false`
+
+Loop verifier (`scripts/verify-loop.mjs`, real browser over CDP):
+
+- cmd: `bun run verify:loop <slug…>` → exit ≠ 0 on failure. ! dev server up
+- asserts: backing store ∧ ⊥ blank ∧ fills container ∧ V20 continuity ∧ V1 resize ∧ V2 repaint-while-paused
+- V20 probe: patch `drawArrays|drawElements|clearRect|fillRect|drawImage|stroke|fill|putImageData` → tag count on `canvas` element (∀ canvas, ⊥ page-wide: sidebar draws too)
+- floor: ≥3 draws / 2000ms = liveness ⊥ frame-rate. swiftshader → heavy shader 6-9 fps; frozen → ∃! 0
+- `VERIFY_GPU=1` → real driver. `NEEDS_GPU` map → SKIP + reason + summary count (⊥ silent pass)
 
 Pro seam:
 
@@ -101,6 +110,8 @@ V17: audio Pro gate ∈ engine — engine subscribes `lib/pro-client`. ⊥ exter
      caller learns ≤ {enabled, volume, play, availability:boolean|null}. unresolved → fail closed
 V18: ∃! feedback submit seam. error modes = closed union returned as data (⊥ thrown string)
 V19: vendored registry copy (admin) → content-identical (⊥ byte: CRLF ≠ LF across repos) | drift check exit ≠ 0
+V20: `onFrame` → `undefined` = continue; ∃! literal `false` halts. ⊥ nullish-coalesce void draw → `false`.
+     ∀ hosted entry → sustained draw calls ∀ 2s window (⊥ 1 stranded frame)
 
 ## §T
 
@@ -143,6 +154,9 @@ T35|x|lib/registry/kinds.ts: PropKind + total KIND_TABLE; 4 consumers read it|V1
 T36|x|audio: engine subscribes Pro seam. ⊥ SoundToggle setPro. facade = {enabled,volume,play}|V17,V13
 T37|x|lib/feedback/submit.ts: closed SubmitResult union + reason→copy table; widget ⊥ taxonomy|V18
 T38|x|admin: check-schema-drift.ts exit≠0 on drift; re-copy 6 vendored files|V19
+T39|x|verify-loop.mjs: draw-call continuity probe + `VERIFY_GPU` + `NEEDS_GPU` skip|V20
+T40|x|19 entries: `?? false` → ternary. ⊥ draw-body change|V20,B7
+T41|x|`no-nullish-halt` rule (loop-usage `nullishHalts`) + selftest; onFrame doc|V20,G2
 
 ## §B
 
@@ -151,5 +165,6 @@ B1|2026-07-19|LightRays/DotField/Strands window-resize only → stale/stretched 
 B2|2026-07-19|BlackHole resize() clears canvas+FBO, no redraw while loop halted → blank/off-center after resize|V2
 B3|2026-07-25|entitlement.ts:34 accepts `sg_pro=1` unconditionally in prod → unauth Pro source unlock via source.ts:22|V3
 B4|2026-07-25|db/index.ts:12 throws at import; reconcile.ts:97/:139, notify.ts:30, auth/callback:40 unguarded → polar webhook 500-retries forever|V4
-B6|2026-07-25|admin `check-schema-drift.ts:46` `process.exit(0)` unconditional ∴ warned ∀ run, failed ⊥ run. 5/6 vendored files stale (incl. whole entry `long-shadow` added upstream). 2nd cause: byte-hash over CRLF-vs-LF checkouts → ∀ file reported drifted ∴ signal worthless|V19
 B5|2026-07-25|OPEN. build warns "whole project traced unintentionally": `source.ts:59` `readFile(absolute)` arg fully dynamic ∴ turbopack ⊥ scope trace despite literal roots (`:17-18`). build ✓, PPR ✓ — bundle size only. ⊥ regression (∈ since T19). `turbopackIgnore` ⊥ fix — would drop the files Pro reads need|—
+B6|2026-07-25|admin `check-schema-drift.ts:46` `process.exit(0)` unconditional ∴ warned ∀ run, failed ⊥ run. 5/6 vendored files stale (incl. whole entry `long-shadow` added upstream). 2nd cause: byte-hash over CRLF-vs-LF checkouts → ∀ file reported drifted ∴ signal worthless|V19
+B7|2026-07-25|19 entries frozen ∀ 1 frame. `onFrame: drawRef.current?.(x) ?? false` — draw typed `void \| false` ∴ good frame → `undefined` → `?? false` → `false` = host halt signal. reads as null-guard ∴ survived review 19×. 2nd-order: `verify-loop.mjs` asserted 1st frame + V1 + V2, ⊥ continuity — frozen loop passed ∀ assertion. control: `side-rays` ∃! entry ⊥ wrapper ∧ ∃! entry still animating|V20
