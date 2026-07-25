@@ -2,6 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { eq } from "drizzle-orm";
 import { currentUserId } from "@/lib/supabase/current-user";
+import { IS_LOCAL_DEV } from "@/lib/env";
 
 export interface Entitlement {
   pro: boolean;
@@ -22,16 +23,24 @@ export function deriveProStatus(row: {
 // The single server-only entitlement seam. Reading cookies()/session makes callers
 // dynamic, so gated UI must sit inside a <Suspense> boundary (it already does).
 // Resolution order, each a fast exit:
-//   1. Env override (local/demo).
-//   2. Dev cookie (backward-compat with the original stub).
+//   1. Env override (local/demo) — dev only.
+//   2. Dev cookie (backward-compat with the original stub) — dev only.
 //   3. Real lookup: Supabase session → entitlements row → derived `pro`.
 // Steps 1–2 keep the app fully usable before any credentials exist; step 3 is
 // guarded so an unconfigured environment simply resolves { pro: false }.
+//
+// Both overrides are gated on IS_LOCAL_DEV. `sg_pro` is a plain cookie any
+// visitor can set, so honouring it in production hands out every Pro source
+// file via getSource(). The env var is server-set and not attacker-reachable,
+// but .env.example has always documented it as "env unlock for local runs" —
+// so it follows the same rule rather than becoming the one live prod bypass.
+// The cookie is still read unconditionally: skipping it in production would
+// change when this function goes dynamic, and PPR depends on that shape.
 export async function getEntitlement(): Promise<Entitlement> {
-  if (process.env.SHADOW_GARDEN_PRO === "1") return { pro: true };
+  if (IS_LOCAL_DEV && process.env.SHADOW_GARDEN_PRO === "1") return { pro: true };
 
   const jar = await cookies();
-  if (jar.get("sg_pro")?.value === "1") return { pro: true };
+  if (IS_LOCAL_DEV && jar.get("sg_pro")?.value === "1") return { pro: true };
 
   if (!process.env.DATABASE_URL) return { pro: false };
 
