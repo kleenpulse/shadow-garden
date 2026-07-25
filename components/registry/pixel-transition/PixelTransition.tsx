@@ -27,7 +27,7 @@ export function PixelTransition({
   firstContent,
   secondContent,
   gridSize = 7,
-  pixelColor = '#ffffff',
+  pixelColor = '#a855f7',
   animationStepDuration = 0.3,
   once = false,
   disabled = false,
