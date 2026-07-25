@@ -19,6 +19,17 @@ export interface Violation extends Finding {
   severity: Severity;
 }
 
+/** What a preview module reads off its `values` prop. */
+export interface PreviewReads {
+  /** Absent when the slug has no registration in previews.ts. */
+  registered: boolean;
+  /** Absent when the registered module could not be read from disk. */
+  found: boolean;
+  keys: Set<string>;
+  /** True if the preview uses `values[expr]`, which defeats static extraction. */
+  dynamicAccess: boolean;
+}
+
 export interface CheckContext {
   registry: ComponentEntry[];
   /** Directory names present directly under components/registry/. */
@@ -27,6 +38,10 @@ export interface CheckContext {
   fileExists(relative: string): boolean;
   /** Every package name declared in package.json (deps + devDeps). */
   packageDeps: Set<string>;
+  /** Slugs registered in components/registry/previews.ts. */
+  previewKeys: Set<string>;
+  /** Static read of a slug's preview module. */
+  previewReads(slug: string): PreviewReads;
 }
 
 export interface Rule {
