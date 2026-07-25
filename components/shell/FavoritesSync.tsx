@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { useFavoritesStore } from "@/lib/favorites-store";
+import { adopt, diff, isEmpty } from "@/lib/favorites/reconcile";
 
 // The bridge between the offline-first localStorage favorites store and the
 // server-backed `favorites` table. Renders nothing; mounted once in the shell.
@@ -16,9 +17,9 @@ export default function FavoritesSync() {
   const { user, ready } = useAuthUser();
   const userId = user?.id ?? null;
 
-  // The server's known slug set — the baseline the store is diffed against. Null
+  // The server's known slugs — the baseline the store is diffed against. Null
   // until the initial merge lands (writes are held back until then).
-  const snapshot = useRef<Set<string> | null>(null);
+  const snapshot = useRef<string[] | null>(null);
   const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Merge-then-replace on sign-in; tear down on sign-out.
@@ -39,12 +40,15 @@ export default function FavoritesSync() {
       body: JSON.stringify({ slugs: localSlugs }),
     })
       .then((r) => (r.ok ? r.json() : null))
-      .then((data: { slugs?: string[] } | null) => {
-        if (cancelled || !data || !Array.isArray(data.slugs)) return;
+      .then((data: { slugs?: unknown } | null) => {
+        if (cancelled || !data) return;
+        const server = adopt(
+          Array.isArray(data.slugs) ? (data.slugs as string[]) : [],
+        );
         // Set the snapshot BEFORE the store update so the subscription below sees
         // no diff for this adoption (server === store) and stays quiet.
-        snapshot.current = new Set(data.slugs);
-        useFavoritesStore.setState({ slugs: data.slugs });
+        snapshot.current = server;
+        useFavoritesStore.setState({ slugs: server });
       })
       .catch(() => {
         // Offline / unconfigured — leave the local store untouched.
@@ -62,11 +66,10 @@ export default function FavoritesSync() {
     const sync = () => {
       const snap = snapshot.current;
       if (!snap) return; // initial merge hasn't landed yet
-      const current = new Set(useFavoritesStore.getState().slugs);
+      const current = useFavoritesStore.getState().slugs;
 
-      const added = [...current].filter((s) => !snap.has(s));
-      const removed = [...snap].filter((s) => !current.has(s));
-      if (added.length === 0 && removed.length === 0) return;
+      const { added, removed } = diff(snap, current);
+      if (isEmpty({ added, removed })) return;
 
       // Advance the snapshot up front so overlapping toggles don't double-send.
       snapshot.current = current;

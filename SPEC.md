@@ -51,8 +51,11 @@ Pro seam:
 
 Favourites reconcile (`lib/favorites/reconcile.ts`, pure):
 
-- fn: `sanitize(input, allowed)` → `string[]`; `mergeUp(local, server)` → `string[]`; `adopt(server)` → `string[]`
-- fn: `diff(prev, next)` → `{ added, removed }`; `order(slugs)` → `string[]` newest-first
+- fn: `order(slugs)` → `string[]` — canonical shape: newest-first, deduped. ∀ other fn returns it
+- fn: `sanitize(input: unknown, allowed?)` → `string[]`; `adopt(server, allowed?)` → `string[]`
+- fn: `add|remove|toggle(slugs, slug)` → `string[]` — ordering rules ∴ store ⊥ own them
+- fn: `diff(prev, next)` → `Delta {added, removed}`; `isEmpty(delta)` → `boolean`
+- ⊥ `mergeUp` — union computed ∃! by INSERT (POST local → adopt response). client merge = 2nd impl
 
 Capability predicate (`lib/capabilities.ts`):
 
@@ -124,8 +127,8 @@ T27|x|migrate loopers batch B (5 clean entries)|V10,V11,V12
 T28|x|check rule: ⊥ raw `requestAnimationFrame`\|`new ResizeObserver` ∈ components/registry ∉ allowlist|V10
 T29|x|lib/pro.ts: ∃! server Pro seam. entitlement.ts/billing.ts → projections|V13
 T30|x|hooks/use-pro.ts owns THE client cache (+invalidate); AuthMenu, CheckoutResult read it|V13
-T31|.|lib/favorites/reconcile.ts: pure sanitize/mergeUp/adopt/diff/order|V14
-T32|.|favorites-store, FavoritesSync, api/favorites → reconcile module only|V14
+T31|x|lib/favorites/reconcile.ts: pure order/sanitize/add/remove/toggle/adopt/diff|V14
+T32|x|favorites-store, FavoritesSync, api/favorites → reconcile module only|V14
 T33|.|lib/capabilities.ts: ∃! predicate set (db\|supabase\|polar\|polarWebhook\|email)|V15
 T34|.|repoint ~22 guards; supabase predicate 3× → 1 (server.ts, client.ts, proxy.ts)|V15
 T35|.|lib/registry/kinds.ts: PropKind + total KIND_TABLE; 4 consumers read it|V16
