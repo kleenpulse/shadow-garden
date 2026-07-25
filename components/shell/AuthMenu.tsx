@@ -1,13 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-	ArrowUpRight,
-	CreditCard,
-	LogIn,
-	LogOut,
-	Sparkles,
-} from "lucide-react";
+import { ArrowUpRight, CreditCard, LogOut, Sparkles } from "lucide-react";
+import { useAudioAvailable } from "@/hooks/use-audio-available";
 import { supabaseConfiguredClient } from "@/lib/supabase/client";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { usePro } from "@/hooks/use-pro";
@@ -58,6 +53,7 @@ export default function AuthMenu() {
 	// a cold pooler), and useAuthUser invalidates it whenever the session changes,
 	// which is what the local reset-on-userId-change used to approximate.
 	const billing = usePro();
+	const soundAvailable = useAudioAvailable() === true;
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	// Close on click-outside + Escape.
@@ -228,7 +224,10 @@ export default function AuthMenu() {
 					<div className="absolute inset-x-0 bottom-0 flex items-center justify-around gap-1 rounded-b-xl border-t border-hairline bg-panel p-1.5 lg:hidden">
 						<ThemeToggle />
 						<FavoritesLink />
-						{billing?.pro && <SoundToggle />}
+						{/* Ask the engine, not the billing summary — otherwise this row
+						    disagrees with the desktop toggle wherever the engine unlocks
+						    sound for a reason billing doesn't know about (localhost). */}
+						{soundAvailable && <SoundToggle />}
 					</div>
 				</div>
 			)}

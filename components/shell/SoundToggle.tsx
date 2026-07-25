@@ -4,17 +4,14 @@ import { useEffect, useState } from "react";
 import { Lock, Volume2, VolumeX } from "lucide-react";
 import { useAudioStore } from "@/lib/audio-store";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
-import { useIsPro } from "@/hooks/use-pro";
-import { getEngine } from "@/lib/audio/engine";
-import { IS_LOCAL_DEV } from "@/lib/env";
+import { useAudioAvailable } from "@/hooks/use-audio-available";
 import { cn } from "@/lib/utils";
 
 // Consent control for interaction audio, sits beside ThemeToggle. Pro-gated:
 // the engine only ever sounds when both this toggle AND the entitlement check
-// say yes (lib/audio/engine.ts's `pro` flag), so a free/lapsed visitor can't
-// hear it even via a stale persisted "enabled" from before a downgrade.
-// Localhost (`next dev`) always unlocks sound only — the Pro *source code*
-// gate (lib/registry/entitlement.ts) is untouched, still real everywhere.
+// say yes, so a free/lapsed visitor can't hear it even via a stale persisted
+// "enabled" from before a downgrade. The gate itself lives in the engine — this
+// button only asks whether sound is available so it can render the right icon.
 // The click that enables sound is itself the gesture that unlocks the
 // AudioContext — so the very first "on" plays a confirming cue with no extra
 // interaction needed.
@@ -22,14 +19,9 @@ export default function SoundToggle({ className }: { className?: string }) {
 	const enabled = useAudioStore((s) => s.enabled);
 	const toggle = useAudioStore((s) => s.toggle);
 	const { play } = useInteractionSound();
-	const pro = useIsPro();
-	const soundPro = IS_LOCAL_DEV || pro === true;
-	// Local dev never has to wait on the entitlement fetch to resolve.
-	const resolved = IS_LOCAL_DEV || pro !== null;
-
-	useEffect(() => {
-		getEngine()?.setPro(soundPro);
-	}, [soundPro]);
+	const available = useAudioAvailable();
+	const soundPro = available === true;
+	const resolved = available !== null;
 
 	// Persisted state hydrates client-side; hold a neutral icon until mounted so
 	// SSR (always off) and client markup agree.
