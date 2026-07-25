@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { has } from "@/lib/capabilities";
 import { cookies } from "next/headers";
 import { getCurrentUserClaims } from "@/lib/supabase/current-user";
+import { LIMITS, type FeedbackType } from "@/lib/feedback/submit";
 
 // User feedback / bug reports from the sidebar widget. Anonymous by design — the
 // sidebar renders for logged-out visitors too — so auth is optional: we attribute
@@ -12,12 +13,10 @@ import { getCurrentUserClaims } from "@/lib/supabase/current-user";
 
 const NO_STORE = { "Cache-Control": "no-store" } as const;
 
-type FeedbackType = "bug" | "idea" | "other";
 const TYPES = new Set<string>(["bug", "idea", "other"]);
-const MESSAGE_MIN = 10;
-const MESSAGE_MAX = 700;
-const SUBJECT_MAX = 120;
-const EMAIL_MAX = 254;
+// Lengths come from the submit seam so the widget can't offer a message the
+// route will refuse. The error codes below are that module's SubmitReason union.
+const { messageMin: MESSAGE_MIN, messageMax: MESSAGE_MAX, subjectMax: SUBJECT_MAX, emailMax: EMAIL_MAX } = LIMITS;
 const CONTEXT_MAX_BYTES = 8192;
 const THROTTLE_WINDOW_MS = 10 * 60 * 1000;
 const THROTTLE_MAX = 5; // submissions per identity per window
@@ -78,7 +77,7 @@ export async function POST(req: Request) {
   const message = typeof body.message === "string" ? body.message.trim() : "";
   if (message.length < MESSAGE_MIN || message.length > MESSAGE_MAX) {
     return NextResponse.json(
-      { error: "invalid_message" },
+      { error: message.length < MESSAGE_MIN ? "too_short" : "too_long" },
       { status: 400, headers: NO_STORE },
     );
   }
