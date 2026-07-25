@@ -17,6 +17,13 @@ export const backgrounds: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/threads/Threads.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
 		],
 		props: [
 			{
@@ -909,6 +916,13 @@ export const backgrounds: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/constellation/Constellation.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
 		],
 		props: [
 			{
@@ -1007,12 +1021,18 @@ export const backgrounds: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"A canvas field of '+' glyphs — scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
-		dependencies: ["gsap"],
 		variants: [
 			{
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/plus-grid/PlusGrid.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
 			},
 		],
 		props: [
