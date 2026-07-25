@@ -120,7 +120,7 @@ T25|x|migrate+fix: aurora, grainient (⊥ loseContext; twin shadowflame:476 corr
 T26|x|migrate loopers batch A (5 clean entries)|V10,V11,V12
 T27|x|migrate loopers batch B (5 clean entries)|V10,V11,V12
 T28|x|check rule: ⊥ raw `requestAnimationFrame`\|`new ResizeObserver` ∈ components/registry ∉ allowlist|V10
-T29|.|lib/pro.ts: ∃! server Pro seam. entitlement.ts/billing.ts → projections|V13
+T29|x|lib/pro.ts: ∃! server Pro seam. entitlement.ts/billing.ts → projections|V13
 T30|.|hooks/use-pro.ts owns THE client cache (+invalidate); AuthMenu, CheckoutResult read it|V13
 T31|.|lib/favorites/reconcile.ts: pure sanitize/mergeUp/adopt/diff/order|V14
 T32|.|favorites-store, FavoritesSync, api/favorites → reconcile module only|V14
