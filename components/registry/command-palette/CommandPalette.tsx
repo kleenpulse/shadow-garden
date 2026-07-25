@@ -114,16 +114,15 @@ export default function CommandPalette({
 	fixed = false,
 	initialValue,
 }: CommandPaletteProps) {
-	// Controlled highlight: cmdk left uncontrolled auto-selects the first item
-	// (registry order → always "Threads"), ignoring the current route. Seed the
-	// selection from the caller each time the palette opens instead.
+	// Controlled highlight: left uncontrolled, cmdk auto-selects the first item,
+	// ignoring the current route. Seed the selection from the caller each time
+	// the palette opens instead.
 	const [value, setValue] = useState("");
 	// Seed synchronously *during render* on the open transition (React's
 	// adjust-state-on-prop-change pattern), not in an effect: cmdk runs its
-	// auto-select-first pass when items mount, which is before an effect fires —
-	// an effect would let cmdk latch onto "Threads" first, then overwrite our seed
-	// via its onValueChange. Setting it now means the root mounts already seeded,
-	// so that pass is skipped. undefined → "" leaves cmdk's default (demo).
+	// auto-select-first pass when items mount, before an effect fires. Seeding
+	// now means the root mounts already seeded, so that pass is skipped.
+	// undefined → "" leaves cmdk's default.
 	const [wasOpen, setWasOpen] = useState(open);
 	if (open !== wasOpen) {
 		setWasOpen(open);
@@ -250,10 +249,10 @@ export default function CommandPalette({
 
 	// A seeded selection can sit far below the fold. cmdk scrolls it in on mount,
 	// but only `block: "nearest"` — the row lands flush against an edge with no
-	// neighbours visible. Re-center it, same treatment as the sidebar's active
-	// entry. Deferred a macrotask: cmdk only marks the row `aria-selected` on a
-	// later commit (item registration → store emit → re-render), so an effect
-	// running on the open commit would find nothing selected yet.
+	// neighbours visible. Re-center it. Deferred a macrotask: cmdk only marks the
+	// row `aria-selected` on a later commit (item registration → store emit →
+	// re-render), so an effect running on the open commit would find nothing
+	// selected yet.
 	useEffect(() => {
 		if (!open || !initialValue) return;
 		const timer = setTimeout(() => {

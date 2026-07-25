@@ -93,7 +93,7 @@ export default function MagneticButton({
   const auraOpacity = useSpring(reducedMotion ? 0.35 : 0, spring);
 
   // Bake the faint static aura whenever reduced motion is active — not only at
-  // mount, since the docs bench toggles `reducedMotion` at runtime.
+  // mount, since `reducedMotion` can flip at runtime.
   useEffect(() => {
     auraOpacity.set(reducedMotion ? 0.35 : 0);
     if (reducedMotion) {

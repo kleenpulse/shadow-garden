@@ -235,9 +235,8 @@ export function useBorderGlow({
     if (hasSwept.current) return
     hasSwept.current = true
 
-    // Honour the session-once flag in production only: skip the sweep if already
-    // played this session, but still mark it so the proximity glow remains
-    // available. In dev the sweep always plays so it's easy to iterate on.
+    // Session-once: skip the sweep if it already played, but still mark it so
+    // the proximity glow stays available. Dev always sweeps, for iteration.
     if (sessionKey && process.env.NODE_ENV === 'production') {
       try {
         if (window.sessionStorage.getItem(sessionKey) === '1') return
@@ -292,7 +291,6 @@ export function useBorderGlow({
     else play()
   }, [sessionKey, introDelayMs])
 
-  // Manual mount-trigger (parity with the original `animated` prop).
   useEffect(() => {
     if (animated) runSweep()
   }, [animated, runSweep])
@@ -317,14 +315,12 @@ export function useBorderGlow({
     return () => observer.disconnect()
   }, [animateInView, runSweep])
 
-  // Continuous autoplay loop — runs for as long as `autoplay` stays true (e.g.
-  // an install in progress). Independent of the one-time `runSweep`/`hasSwept`
-  // path; rotates the cone and holds proximity high, then fades out via the
-  // overlays' opacity transition once `autoplay` flips false.
+  // Continuous autoplay loop, independent of the one-time sweep path: rotates
+  // the cone and holds proximity high, then fades out via the overlays' opacity
+  // transition once `autoplay` flips false.
   useEffect(() => {
     if (!autoplay) return
 
-    // Reduced motion: show a static glow, no rotation.
     if (prefersReducedMotion()) {
       setSweepActive(true)
       setCursorAngle(45)

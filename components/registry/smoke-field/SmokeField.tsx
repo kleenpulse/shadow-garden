@@ -6,9 +6,7 @@
 // makes the field divergence-free, buoyancy, and back-traced advection. An auto
 // plume rises from the base; a pointer drag stirs the smoke. The sim runs on a
 // fixed grid decoupled from canvas DPR — only the final display pass runs at
-// screen resolution. Capability-probe / pause / resize skeleton mirrors
-// BlackHole.tsx (WebGL2 + EXT_color_buffer_float float FBOs, live-ref, self-halt,
-// resize re-arm, static fallback).
+// screen resolution.
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget } from "ogl";
@@ -318,7 +316,7 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 	const startLoopRef = useRef<(() => void) | null>(null);
 
 	// Live-tunable values read each frame — the GL context is never rebuilt while
-	// a control is dragged (BlackHole idiom). Only `quality` (resolution) rebuilds.
+	// a control is dragged. Only `quality` (resolution) rebuilds.
 	const live = useRef({
 		dyeColor,
 		backgroundColor,
@@ -745,8 +743,8 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 				loop.start();
 			}
 
-			// Pointer-drag stir — grab on the canvas, track on window (BlackHole
-			// idiom). Ignored while paused / reduced-motion (sim is frozen).
+			// Pointer-drag stir — grab on the canvas, track on window. Ignored while
+			// paused / reduced-motion (sim is frozen).
 			const canvas = gl.canvas as HTMLCanvasElement;
 			let dragging = false;
 			let lastX = 0;
@@ -835,7 +833,6 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 		}
 		// Only `quality` (grid resolution) and the fallback flag rebuild GL.
 	}, [useFallback, quality]);
-
 
 	const baseClass = "relative h-full w-full";
 

@@ -47,7 +47,6 @@ export default function ShadowCursor({
   const stageRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
-  // Lead dot — set directly, no smoothing.
   const dotX = useMotionValue(0);
   const dotY = useMotionValue(0);
 

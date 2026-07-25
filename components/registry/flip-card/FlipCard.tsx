@@ -265,7 +265,6 @@ export default function FlipCard({
     }
   }, [activeId, isAnimating, flipDuration, reduce]);
 
-  // Scroll lock, Escape, and click-outside while a card is open.
   useEffect(() => {
     if (!activeId) return;
 

@@ -418,7 +418,6 @@ export default function FileExplorer({
 		[state, displayed, orderedPaths, dispatch, requestDelete, openNode, paste, allowDelete],
 	);
 
-	// Cleanup the delete timer on unmount.
 	useEffect(() => {
 		return () => {
 			if (deleteTimer.current) clearTimeout(deleteTimer.current);

@@ -37,9 +37,8 @@ interface RibbonSection {
 const Ribbons: React.FC<RibbonsOptions> = (options) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  // Live options for the frame body. The init effect below runs once now, so it
-  // cannot close over props — it used to depend on the whole options object and
-  // rebuilt the entire runtime on every parent render.
+  // Live options for the frame body. The init effect below runs once, so it
+  // must not close over props.
   const optionsRef = useRef(options)
   useEffect(() => {
     optionsRef.current = options
@@ -51,8 +50,7 @@ const Ribbons: React.FC<RibbonsOptions> = (options) => {
   const loop = useAnimationLoop({
     target: containerRef,
     halted: options.paused ?? false,
-    // Ribbon geometry is computed in CSS pixels, so the backing store stays 1:1
-    // exactly as before.
+    // Ribbon geometry is computed in CSS pixels, so the backing store stays 1:1.
     dpr: 1,
     onResize: (metrics) => measureRef.current?.(metrics),
     onFrame: () => (drawRef.current ? drawRef.current() : false),
@@ -253,7 +251,7 @@ const Ribbons: React.FC<RibbonsOptions> = (options) => {
       }
 
       // Freeze while paused — hold the drawn frame instead of re-requesting, so
-      // the loop stops issuing draw calls (it used to run forever at speed 0).
+      // the loop stops issuing draw calls.
       if (optionsRef.current.paused) return false
     }
     drawRef.current = onDraw

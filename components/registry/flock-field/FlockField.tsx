@@ -442,8 +442,8 @@ export default function FlockField({
 			}
 		};
 
-		// Window-level pointer tracking (the showcase stage overlays the canvas,
-		// so element listeners never fire). Coordinates convert through the rect.
+		// Window-level pointer tracking: an overlay above the canvas would keep
+		// element listeners from ever firing. Coordinates convert through the rect.
 		function onPointerMove(e: PointerEvent) {
 			const rect = canvas!.getBoundingClientRect();
 			mouseRef.current.x = e.clientX - rect.left;

@@ -9,19 +9,16 @@ import {
   useReducedMotion,
 } from 'motion/react'
 import { cn } from '@/lib/utils'
-// Inlined from the original ellumAI shared card class string.
 const cardShellStatic =
   'relative isolate overflow-hidden rounded-md border border-hairline bg-panel transition-colors'
 
 /**
- * Spotlight card surface — the visual language of
- * `components/kokonutui/spotlight-cards.tsx` (3D magnetic tilt, radial aurora
- * tint, hover glow, diagonal shimmer sweep, growing bottom accent line) made
- * content-agnostic. Wrap any card content; decorative layers sit BEHIND the
- * content (`z-10`) so opaque media stays clean, matching the listing's
- * "no gradient over photos" rule — the effects bloom through the text/footer.
+ * Spotlight card surface: 3D magnetic tilt, radial aurora tint, hover glow,
+ * diagonal shimmer sweep and a growing bottom accent line. Wrap any card
+ * content; the decorative layers sit BEHIND it (`z-10`) so opaque media stays
+ * clean and the effects bloom through the text instead.
  *
- * `accentColor` is a hex string; the gradients reuse it at low alpha. Tilt and
+ * `accentColor` is a hex string the gradients reuse at low alpha. Tilt and
  * shimmer are disabled under `prefers-reduced-motion`.
  */
 const TILT_MAX = 0.5

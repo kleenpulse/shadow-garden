@@ -305,9 +305,8 @@ export default function Starfield({
 		loop.start();
 
 		rebuildRef.current = () => {
-			// paint() is idempotent. The old code set `running = false` and then
-			// re-armed, which left the previous frame pending and ran two rAF
-			// chains at once — the field drifted at double speed.
+			// paint() is idempotent; clearing `running` and re-arming by hand would
+			// leave the pending frame in place and run two rAF chains at once.
 			if (sizeRef.current.w > 0) {
 				initStars();
 				loop.paint();

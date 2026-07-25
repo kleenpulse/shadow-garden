@@ -68,10 +68,9 @@ export default function Specter({
 	const dx = Math.cos(rad) * drift;
 	const dy = Math.sin(rad) * drift;
 
-	// Declarative variants: motion reads these on each render, so a slider drag
-	// re-targets the running animation without any manual rAF/ref plumbing.
-	// The "still" variant carries no repeat, so selecting it cancels the loop
-	// entirely rather than leaving a frozen animation spinning.
+	// Declarative variants: motion re-targets the running animation on a prop
+	// change. The "still" variant carries no repeat, so selecting it cancels the
+	// loop rather than leaving a frozen animation spinning.
 	const variants: Variants = useMemo(
 		() => ({
 			still: {

@@ -43,7 +43,7 @@ function hexToRgb01(hex: string): [number, number, number] {
 }
 
 interface ThreadsProps {
-	/** Hex color (ogl Color also accepts hex). Adapted from the original RGB tuple. */
+	/** Hex color (ogl Color also accepts hex). */
 	color?: string;
 	amplitude?: number;
 	opacity?: number;
@@ -187,8 +187,6 @@ const Threads: React.FC<ThreadsProps> = ({
 	className,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	// The runtime host calls these; they are assigned once the GL context is up,
-	// which keeps all per-frame state local to the init effect below.
 	const drawRef = useRef<((dt: number) => void | false) | null>(null);
 	const measureRef = useRef<((m: Metrics) => void) | null>(null);
 	const glRef = useRef<Renderer["gl"] | null>(null);
@@ -315,7 +313,6 @@ const Threads: React.FC<ThreadsProps> = ({
 				accumulatedTime += dt * timeScale;
 				program.uniforms.iTime.value = accumulatedTime;
 
-				// Live uniform updates (no context rebuild).
 				const [r, g, b] = hexToRgb01(l.color);
 				program.uniforms.uColor.value.r = r;
 				program.uniforms.uColor.value.g = g;
@@ -339,9 +336,8 @@ const Threads: React.FC<ThreadsProps> = ({
 				renderer.render({ scene: mesh });
 
 				// Once paused and the ease-out has settled, halt so a scrolled-past hero
-				// stops issuing draw calls (it used to render a frozen frame forever).
-				// Returning false is how a caller halts from inside the frame; the
-				// unpause effect below restarts it.
+				// stops issuing draw calls. Returning false is how a caller halts from
+				// inside the frame; the unpause effect below restarts it.
 				if (l.paused && timeScale < 1e-3) return false;
 			};
 

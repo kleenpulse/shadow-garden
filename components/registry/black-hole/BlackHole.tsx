@@ -3,10 +3,10 @@
 // GARGANTUA — a Schwarzschild black hole raytraced per-pixel in a WebGL2
 // fragment shader. Null geodesics are integrated on the GPU, bending a lensed
 // accretion disk over the event horizon, with relativistic Doppler beaming,
-// gravitational redshift, a photon ring, and a lensed starfield. A CPU-side
+// gravitational redshift and a lensed starfield. A CPU-side
 // cinematic camera flies a looping eight-keyframe orbit; the disk glow is a
 // real two-pass FBO bloom. No sphere, no flat ring — the shape you see is the
-// geodesics themselves. Structural skeleton mirrors Threads.tsx.
+// geodesics themselves.
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget } from "ogl";
@@ -317,14 +317,13 @@ void main() {
 
 				// Differential Keplerian swirl drives the disk texture — but omega climbs
 				// steeply toward the hole, so a raw (ang - uTime*omega) shears the noise a
-				// little more every second, winding it into ever-finer radial structure
-				// that aliases into a concentric moire over the disk's lifetime (the reported
-				// decay). Fix: spin the texture at a rigid mid-radius BULK rate, and add the
-				// differential shear only through a saturating cap — the first ~7s (at speed
-				// 1) of shear bake in to give the sheared-streak look, then freeze, so the
-				// winding never runs away. The mod on the bulk term + the exp cap keep ph
-				// bounded, so cos/sin/noise stay precise for any runtime. Doppler & brightness
-				// below still use the true ang/rc, so the orbital physics is unchanged.
+				// little more every second, winding it into ever-finer radial structure that
+				// aliases into a concentric moire. So: spin the texture at a rigid mid-radius
+				// BULK rate and add the differential shear only through a saturating cap —
+				// the first ~7s (at speed 1) of shear bakes in for the sheared-streak look,
+				// then freezes. The mod on the bulk term + the exp cap keep ph bounded, so
+				// cos/sin/noise stay precise for any runtime. Doppler & brightness below
+				// still use the true ang/rc, so the orbital physics is unchanged.
 				float omega = uRotSpeed * 1.1 * pow(3.0 / rc, 1.5);
 				float omegaBulk = uRotSpeed * 1.1 * 0.35355339; // pow(3/6, 1.5) — rigid ref @ rc=6
 				float tShear = 7.0 / max(uRotSpeed, 0.15);       // speed-independent baked shear
@@ -333,9 +332,8 @@ void main() {
 				vec2 qp = vec2(cos(ph), sin(ph)) * rc;
 				float warp = fbm(qp * 0.35 + uTime * 0.05);
 				float turb = fbm(qp * 0.8 + warp * 1.5);
-				// Fine angular striations. ph is bounded now (capped shear above), so the
-				// original linear sampling can no longer grow into the precision moire — keep
-				// the exact original streak character.
+				// Fine angular striations. ph is bounded by the capped shear above, so the
+				// linear sampling can no longer grow into the precision moire.
 				float streak = fbm(vec2(ph * 22.0, rc * 0.5));
 				float laneMask = smoothstep(0.15, 0.6, turb);
 				float detail = mix(1.0, turb, smoothstep(18.0, 4.0, rc));
@@ -380,10 +378,6 @@ void main() {
 		float dim = clamp((lastR - 1.03) * 0.45, 0.45, 1.0);
 		col += trans * bg * dim;
 	}
-
-	// Photon ring removed: the thin pale critical-curve band at ~1.5 Rs aliased
-	// into a white hairline outlining the shadow once the disk texture was clean.
-	// The lensed disk already defines the shadow edge; the disciform glow stays.
 
 	int dbg = int(uDebug + 0.5);
 	if (dbg == 1) col = vec3(stepsUsed / max(uSteps, 1.0));
@@ -516,7 +510,7 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 	});
 
 	// Live-tunable values read each frame — the GL context is never rebuilt
-	// while a control is dragged, so tuning stays smooth (Threads idiom).
+	// while a control is dragged, so tuning stays smooth.
 	const live = useRef({
 		steps,
 		diskInner,
@@ -721,8 +715,7 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 				blurProgram.uniforms.uTexel.value[1] = 1 / hh;
 			};
 			// Measuring reallocates the canvas + FBOs, which clears them, and draws
-			// nothing. The host repaints one corrected frame afterwards — B2 was
-			// exactly this gap, and paintWhenHalted now closes it structurally.
+			// nothing. The host repaints one corrected frame afterwards.
 
 			// Camera + clock state (no per-frame allocation).
 			const camPos = new Float32Array(3);
@@ -889,9 +882,9 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 			loop.resize();
 			loop.start();
 
-			// Pointer-drag orbit (SakuraTree idiom): pointerdown on the canvas grabs,
-			// move/up on window so a drag that leaves the canvas keeps tracking. First
-			// grab seeds from the current pose and breaks the cinematic flythrough.
+			// Pointer-drag orbit: pointerdown on the canvas grabs, move/up on window so
+			// a drag that leaves the canvas keeps tracking. First grab seeds from the
+			// current pose and breaks the cinematic flythrough.
 			const canvas = gl.canvas as HTMLCanvasElement;
 			function onPointerDown(e: PointerEvent) {
 				if (e.pointerType === "mouse" && e.button !== 0) return;

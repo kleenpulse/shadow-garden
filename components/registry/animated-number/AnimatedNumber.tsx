@@ -87,13 +87,7 @@ export function AnimatedNumber({
 	);
 }
 
-/**
- * Advanced animated number display with digit-by-digit animation
- * Useful for displaying multi-digit numbers with staggered animations
- * @param value - The number to display
- * @param animationType - slide | flip | fade | scale-bounce
- * @returns
- */
+/** Digit-by-digit animated number — each digit swaps on its own stagger. */
 export function AnimatedNumberAdvanced({
 	value: initialValue,
 	animationType = "slide",
@@ -177,13 +171,7 @@ export function AnimatedNumberAdvanced({
 	);
 }
 
-/**
- * Lightweight counter component with smooth number transitions
- * Optimized for frequent updates with minimal re-
- * @param value - The number to display
- * @param animationType - slide | flip | fade | scale-bounce
- * @returns
- */
+/** Lightweight counter with smooth number transitions. */
 export function SmoothCounter({
 	value,
 	animationType = "slide",

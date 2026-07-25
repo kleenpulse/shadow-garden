@@ -7,9 +7,7 @@
 // + Gray-Scott kinetics), draining a splat queue that injects V gaussians where
 // the pointer drags. A display pass maps V through `contrast` into a
 // background→tint ramp, so living tendrils of darkness grow with an amethyst
-// glow. Capability-probe / pause / resize skeleton mirrors SmokeField.tsx
-// (WebGL2 + EXT_color_buffer_float float FBOs, live-ref, self-halt, resize
-// re-seed, static fallback).
+// glow.
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget } from "ogl";
@@ -217,7 +215,7 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 	});
 
 	// Live-tunable values read each frame — the GL context is never rebuilt while
-	// a control is dragged (SmokeField idiom). Nothing here rebuilds GL.
+	// a control is dragged. Nothing here rebuilds GL.
 	const live = useRef({
 		feed,
 		kill,
@@ -528,8 +526,8 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 				loop.start();
 			}
 
-			// Pointer-drag stir — grab on the canvas, track on window (SmokeField
-			// idiom). Ignored while paused / reduced-motion (sim is frozen).
+			// Pointer-drag stir — grab on the canvas, track on window. Ignored while
+			// paused / reduced-motion (sim is frozen).
 			const canvas = gl.canvas as HTMLCanvasElement;
 			let dragging = false;
 

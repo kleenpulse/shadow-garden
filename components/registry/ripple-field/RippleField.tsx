@@ -8,8 +8,7 @@
 // gradient normals drive refraction of the pool floor, curvature focuses
 // caustic threads, and Fresnel rims glint on every wavefront. The sim runs on a
 // fixed grid decoupled from canvas DPR; only the display pass runs at screen
-// resolution. Capability-probe / live-ref / self-halt / resize re-arm / static
-// fallback skeleton mirrors SmokeField.tsx.
+// resolution.
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget } from "ogl";
@@ -268,7 +267,7 @@ const RippleField: React.FC<RippleFieldProps> = ({
 	});
 
 	// Live-tunable values read each frame — the GL context is never rebuilt while
-	// a control is dragged (SmokeField idiom). Only `quality` (resolution) rebuilds.
+	// a control is dragged. Only `quality` (resolution) rebuilds.
 	const live = useRef({
 		waterColor,
 		deepColor,
@@ -580,11 +579,11 @@ const RippleField: React.FC<RippleFieldProps> = ({
 			}
 
 			// Pointer wake — a bare hover disturbs the pool; no button required. The
-			// pointer is tracked on window (element listeners can be swallowed by the
-			// showcase stage overlay — FlockField idiom) and its position mapped
-			// through the canvas rect, so a dimple is injected once per HOVER_STEP of
-			// travel: fast motion carves a strong wake, a still cursor leaves it calm.
-			// A press drops a heavier stone. Ignored while paused / reduced-motion.
+			// pointer is tracked on window (an overlay above the canvas can swallow
+			// element listeners) and mapped through the canvas rect, so a dimple is
+			// injected once per HOVER_STEP of travel: fast motion carves a strong wake,
+			// a still cursor leaves it calm. A press drops a heavier stone. Ignored
+			// while paused / reduced-motion.
 			const canvas = gl.canvas as HTMLCanvasElement;
 			let lastRelX = -1;
 			let lastRelY = -1;
@@ -668,7 +667,6 @@ const RippleField: React.FC<RippleFieldProps> = ({
 		}
 		// Only `quality` (grid resolution) and the fallback flag rebuild GL.
 	}, [useFallback, quality]);
-
 
 	const baseClass = "relative h-full w-full";
 

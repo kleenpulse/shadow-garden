@@ -3,33 +3,23 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 
 /**
- * The animation runtime host: rAF arm/halt, ResizeObserver, devicePixelRatio,
+ * Animation runtime host: rAF arm/halt, ResizeObserver, devicePixelRatio,
  * resize debounce and teardown. The animation *body* — shader, physics, particle
- * math, draw calls — stays in the component (SPEC §C1/§C1a).
+ * math, draw calls — stays in the component.
  *
- * It never names `paused` or `reducedMotion`. Callers own the decision and pass
- * one boolean, because the halt predicate genuinely varies across entries:
+ * Callers own the halt decision and pass one boolean, since the predicate varies:
  *
- *   halted: paused                          // most loopers
- *   halted: paused || reducedMotion         // loopers that also quiesce on OS pref
- *   halted: speed <= 0                      // LightRays halts on its own speed
+ *   halted: paused
+ *   halted: paused || reducedMotion
+ *   halted: speed <= 0
  *   halted: false + onFrame returns false    // decide inside the frame
  *
- * What it guarantees, which is exactly where the hand-rolled copies diverged:
- *   - at most one live rAF, ever (SPEC §V.V11)
- *   - a resize repaints at least one frame even while halted (§V.V2) — the loop
- *     runs one frame, then self-halts again
- *   - the ResizeObserver watches the container, never `window` (§V.V1)
- *   - devicePixelRatio is re-read on every resize, not captured once at init
- *   - after unmount nothing re-arms: a latch is checked *inside* the callback,
- *     because cancelAnimationFrame cannot stop a frame requested from an
- *     img.onload or a setTimeout that fires later
- *   - the debounce timer is owned here, so it cannot be left uncleared
- *   - dispose runs once and, when `gl` is supplied, drops the GL context
+ * Guarantees: at most one live rAF; a resize repaints one frame even while
+ * halted; the ResizeObserver watches the container, never `window`;
+ * devicePixelRatio is re-read on every resize; nothing re-arms after unmount.
  *
  * Options live in a ref and the setup effect depends on `deps` (default `[]`),
- * so passing an inline object does not tear down and rebuild the runtime on
- * every parent render.
+ * so an inline options object does not rebuild the runtime every render.
  */
 
 export interface Metrics {
@@ -80,20 +70,17 @@ export interface AnimationLoopOptions {
   /** Apply new dimensions: renderer.setSize, resolution uniforms, canvas.width. */
   onResize?(metrics: Metrics): void;
   /**
-   * Draw one frame.
+   * Draw one frame. Return **literally `false`** to halt from inside the body;
+   * returning nothing means "keep going".
    *
-   * Return **literally `false`** to halt from inside the body. Returning nothing
-   * means "keep going" — which is what a function that just drew a frame does.
+   * Mind the difference when the draw call is behind a ref — `undefined ?? false`
+   * is `false`, so the null-guard form freezes after one frame:
    *
-   * Mind the difference when the draw call is behind a ref. This looks like a
-   * null-guard and is a freeze, because a successful frame returns `undefined`
-   * and `undefined ?? false` is `false`:
-   *
-   *     onFrame: ({ dt }) => drawRef.current?.(dt) ?? false        // ✗ one frame, then stops
+   *     onFrame: ({ dt }) => drawRef.current?.(dt) ?? false                    // ✗
    *     onFrame: ({ dt }) => (drawRef.current ? drawRef.current(dt) : false)   // ✓
    */
   onFrame?(info: FrameInfo): void | false;
-  /** Repaint once after a resize even while halted. Default true (§V.V2). */
+  /** Repaint once after a resize even while halted. Default true. */
   paintWhenHalted?: boolean;
   /** Coalesce resize bursts. Default 0 (none). The timer is cleared on unmount. */
   resizeDebounceMs?: number;
@@ -112,8 +99,6 @@ export function useAnimationLoop(
   options: AnimationLoopOptions,
 ): AnimationLoopHandle {
   const opts = useRef(options);
-  // Layout effect, not an assignment during render: the loop only reads this
-  // from callbacks that run after commit.
   useLayoutEffect(() => {
     opts.current = options;
   });
@@ -145,11 +130,9 @@ export function useAnimationLoop(
     };
   }, []);
 
-  // Named function expression so the recursive schedule refers to the function
-  // itself rather than reaching back out to the binding.
   const tick = useCallback(function tick(now: number) {
-    // The latch, checked here rather than only at cancel time: a frame requested
-    // from an image load or a timer can land after unmount.
+    // Latched here, not only at cancel time: a frame requested from an image
+    // load or a timer can land after unmount.
     if (disposed.current) return;
 
     if (startedAt.current === 0) startedAt.current = now;
@@ -167,8 +150,8 @@ export function useAnimationLoop(
 
     if (disposed.current) return;
 
-    // Halt *after* drawing, so a resize while halted still leaves a painted
-    // frame on screen instead of a cleared buffer (§V.V2).
+    // Halt *after* drawing, so a resize while halted leaves a painted frame on
+    // screen instead of a cleared buffer.
     if (verdict === false || opts.current.halted) {
       running.current = false;
       raf.current = null;
@@ -192,7 +175,6 @@ export function useAnimationLoop(
     }
   }, []);
 
-  // One frame, then tick's own halt check stops it again if still halted.
   const paint = useCallback(() => start(), [start]);
 
   const resize = useCallback(() => {
@@ -229,8 +211,6 @@ export function useAnimationLoop(
     });
     observer.observe(el);
 
-    // Initial measure, then start unless the caller is already halted — in
-    // which case resize()'s repaint has still put one frame on screen.
     resize();
     if (!opts.current.halted) start();
 
@@ -253,8 +233,7 @@ export function useAnimationLoop(
       last.current = 0;
       frame.current = 0;
     };
-    // Intentionally not reacting to the options object: it is held in a ref so an
-    // inline literal cannot rebuild the runtime every render.
+    // Options live in a ref, so an inline literal cannot rebuild the runtime.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
@@ -265,8 +244,8 @@ export function useAnimationLoop(
     if (!halted) start();
   }, [halted, start]);
 
-  // `running` is read through a getter so callers see live state without the
-  // handle itself changing identity between renders.
+  // `running` is a getter so callers see live state without the handle
+  // changing identity between renders.
   return useMemo<AnimationLoopHandle>(
     () => ({
       start,

@@ -141,8 +141,7 @@ type GrainientCtx = {
 }
 const ctxMap = new WeakMap<HTMLDivElement, GrainientCtx>()
 
-// Defaults baked from the tuned Knowledge-Center palette (see the slider
-// config in the design hand-off). `<Grainient />` with no props reproduces it.
+// Defaults reproduce the tuned reference palette: `<Grainient />` with no props.
 const Grainient = ({
   blendAngle = 0.0,
   blendSoftness = 0.5,
@@ -181,7 +180,7 @@ const Grainient = ({
 
   // `halted` stays false — the frame body halts on off-screen, backgrounded or
   // paused, three conditions the host has no business knowing about. `gl` is
-  // supplied because this component leaked a context per unmount.
+  // supplied so the context is dropped on unmount.
   const loop = useAnimationLoop({
     target: containerRef,
     halted: false,

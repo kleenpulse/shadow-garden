@@ -458,7 +458,7 @@ export default function Strands({
       }
 
       // Halt once paused — one final frozen frame renders, then the loop stops
-      // issuing draw calls (it used to spin at speed 0 forever).
+      // issuing draw calls.
       if (pausedRef.current) return false
     }
     drawRef.current = update
