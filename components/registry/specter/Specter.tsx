@@ -49,12 +49,12 @@ function resolveBlend(): "plus-lighter" | "screen" {
 
 export default function Specter({
 	text = "SPECTER",
-	ghostCount = 4,
-	drift = 14,
+	ghostCount = 3,
+	drift = 24,
 	speed = 1,
-	angle = 0,
-	stagger = 0.12,
-	blur = 6,
+	angle = 90,
+	stagger = 0.15,
+	blur = 2,
 	splitColor1 = "#a855f7",
 	splitColor2 = "#22d3ee",
 	reducedMotion = false,
