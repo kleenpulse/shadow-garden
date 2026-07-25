@@ -84,7 +84,7 @@ export default function FlockField({
 	cohesion = 1,
 	neighborRadius = 60,
 	separationRadius = 24,
-	cursorMode = "attract",
+	cursorMode = "repel",
 	cursorForce = 1.5,
 	cursorRadius = 160,
 	trail = 0.85,
