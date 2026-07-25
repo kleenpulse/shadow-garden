@@ -79,7 +79,19 @@ export interface AnimationLoopOptions {
   dpr?: number | "auto";
   /** Apply new dimensions: renderer.setSize, resolution uniforms, canvas.width. */
   onResize?(metrics: Metrics): void;
-  /** Draw one frame. Return `false` to halt from inside the body. */
+  /**
+   * Draw one frame.
+   *
+   * Return **literally `false`** to halt from inside the body. Returning nothing
+   * means "keep going" — which is what a function that just drew a frame does.
+   *
+   * Mind the difference when the draw call is behind a ref. This looks like a
+   * null-guard and is a freeze, because a successful frame returns `undefined`
+   * and `undefined ?? false` is `false`:
+   *
+   *     onFrame: ({ dt }) => drawRef.current?.(dt) ?? false        // ✗ one frame, then stops
+   *     onFrame: ({ dt }) => (drawRef.current ? drawRef.current(dt) : false)   // ✓
+   */
   onFrame?(info: FrameInfo): void | false;
   /** Repaint once after a resize even while halted. Default true (§V.V2). */
   paintWhenHalted?: boolean;
