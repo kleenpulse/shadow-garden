@@ -209,6 +209,13 @@ export const backgrounds: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/light-rays/LightRays.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
 		],
 		props: [
 			{
@@ -859,6 +866,13 @@ export const backgrounds: ComponentEntry[] = [
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/world-map-ascii/WorldMapAscii.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
 			},
 		],
 		props: [
