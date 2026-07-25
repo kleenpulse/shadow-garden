@@ -1,0 +1,178 @@
+/**
+ * Proves the rules detect. `bun run check:registry` passing tells you the repo is
+ * clean; it does not tell you the rules can fail. This feeds checkRegistry a
+ * synthetic context with one deliberate breakage per rule and asserts each one
+ * fires — and that a clean context stays silent.
+ *
+ *   bun run check:registry:selftest
+ *
+ * No test runner needed: exit code is the assertion. This is what the injected
+ * CheckContext buys — the rules never touch disk, so a fake registry is enough.
+ */
+import type { ComponentEntry } from "../../lib/registry/types";
+import { checkRegistry, type CheckContext } from "./check";
+import { RULES } from "./rules";
+
+function entry(over: Partial<ComponentEntry> = {}): ComponentEntry {
+  return {
+    slug: "ok-entry",
+    name: "OkEntry",
+    category: "Backgrounds",
+    tier: "free",
+    description: "fine",
+    props: [],
+    variants: [
+      {
+        lang: "ts",
+        style: "tailwind",
+        file: "components/registry/ok-entry/OkEntry.tsx",
+      },
+    ],
+    ...over,
+  };
+}
+
+function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): CheckContext {
+  return {
+    registry,
+    dirs: new Set(registry.map((e) => e.slug)),
+    fileExists: () => true,
+    packageDeps: new Set(["ogl"]),
+    ...over,
+  };
+}
+
+const cases: Array<{ rule: string; ctx: CheckContext }> = [
+  {
+    rule: "slug-unique",
+    ctx: context([entry(), entry()]),
+  },
+  {
+    rule: "slug-matches-dir",
+    ctx: context([entry()], { dirs: new Set<string>() }),
+  },
+  {
+    rule: "variant-file-exists",
+    ctx: context([entry()], { fileExists: () => false }),
+  },
+  {
+    rule: "variant-file-root",
+    ctx: context([
+      entry({
+        variants: [
+          { lang: "ts", style: "tailwind", file: "lib/elsewhere/Thing.tsx" },
+        ],
+      }),
+    ]),
+  },
+  {
+    rule: "prop-names-unique",
+    ctx: context([
+      entry({
+        props: [
+          { name: "dup", kind: "boolean", default: true, description: "a" },
+          { name: "dup", kind: "boolean", default: false, description: "b" },
+        ],
+      }),
+    ]),
+  },
+  {
+    rule: "number-default-in-range",
+    ctx: context([
+      entry({
+        props: [
+          {
+            name: "count",
+            kind: "number",
+            default: 99,
+            min: 0,
+            max: 10,
+            description: "out of range",
+          },
+        ],
+      }),
+    ]),
+  },
+  {
+    rule: "enum-default-in-options",
+    ctx: context([
+      entry({
+        props: [
+          {
+            name: "mode",
+            kind: "enum",
+            default: "ghost",
+            options: ["solid", "dashed"],
+            description: "not an option",
+          },
+        ],
+      }),
+    ]),
+  },
+  {
+    rule: "disabled-when-target",
+    ctx: context([
+      entry({
+        props: [
+          {
+            name: "speed",
+            kind: "number",
+            default: 1,
+            min: 0,
+            max: 2,
+            description: "gated on a prop that does not exist",
+            disabledWhen: { prop: "nosuch", equals: true },
+          },
+        ],
+      }),
+    ]),
+  },
+  {
+    rule: "added-at-format",
+    ctx: context([entry({ addedAt: "25-07-2026" })]),
+  },
+  {
+    rule: "dependencies-declared",
+    ctx: context([entry({ dependencies: ["not-a-real-package"] })]),
+  },
+];
+
+let failed = 0;
+
+// Every rule must have a case, or a rule could rot undetected.
+const covered = new Set(cases.map((c) => c.rule));
+for (const rule of RULES) {
+  if (!covered.has(rule.id)) {
+    console.log(`UNCOVERED  ${rule.id} — no selftest case`);
+    failed++;
+  }
+}
+
+for (const { rule, ctx } of cases) {
+  const fired = checkRegistry(ctx, RULES).map((v) => v.rule);
+  if (!fired.includes(rule)) {
+    console.log(`MISS       ${rule} — did not fire on its broken context`);
+    failed++;
+  } else {
+    console.log(`detects    ${rule}`);
+  }
+}
+
+const cleanViolations = checkRegistry(context([entry()]), RULES);
+if (cleanViolations.length > 0) {
+  console.log(
+    `FALSE POSITIVE on a clean entry: ${cleanViolations
+      .map((v) => v.rule)
+      .join(", ")}`,
+  );
+  failed++;
+} else {
+  console.log("detects    nothing on a clean entry");
+}
+
+if (failed > 0) {
+  console.log(`\n${failed} selftest failure(s).\n`);
+  process.exit(1);
+}
+
+console.log(`\n${RULES.length} rules, all proven to detect.\n`);
