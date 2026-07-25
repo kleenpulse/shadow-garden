@@ -498,7 +498,7 @@ function SakuraScene({
   bloomAmount = 0.85,
   weather = "clear",
   windDirection = 45,
-  cameraDistance = 7,
+  cameraDistance = 8,
   paused = false,
 }: Omit<SakuraTreeProps, "className">) {
   const wx = WEATHER[weather];

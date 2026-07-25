@@ -269,14 +269,14 @@ function CameraRig({ distance }: { distance: number }) {
 
 function OrreryScene({
   moonCount = 3,
-  orbitSpeed = 0.6,
-  sunIntensity = 2.2,
-  tilt = 0.35,
-  planetSize = 1.1,
-  moonSize = 0.32,
-  sunColor = "#ffcf6e",
+  orbitSpeed = 1,
+  sunIntensity = 2,
+  tilt = 0.3,
+  planetSize = 1,
+  moonSize = 0.35,
+  sunColor = "#f0a830",
   glowColor = "#a855f7",
-  cameraDistance = 9,
+  cameraDistance = 8,
   background = "#05060a",
   paused = false,
 }: Omit<UmbralOrreryProps, "className">) {

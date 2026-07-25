@@ -185,15 +185,15 @@ function gridDims(res: number, bw: number, bh: number): { w: number; h: number }
 }
 
 const ShadowBloom: React.FC<ShadowBloomProps> = ({
-	feed = 0.055,
-	kill = 0.062,
+	feed = 0.037,
+	kill = 0.06,
 	growthSpeed = 12,
-	seedRadius = 0.05,
-	brushStrength = 0.7,
-	contrast = 1.4,
+	seedRadius = 0.03,
+	brushStrength = 1,
+	contrast = 1,
 	autoSeed = true,
 	tint = "#a855f7",
-	backgroundColor = "#07030d",
+	backgroundColor = "#05010a",
 	paused = false,
 	reducedMotion = false,
 	fallbackSrc,
