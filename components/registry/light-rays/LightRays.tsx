@@ -143,7 +143,7 @@ const LightRays: React.FC<LightRaysProps> = ({
     halted: raysSpeed <= 0,
     dpr: maxDpr,
     onResize: (metrics) => measureRef.current?.(metrics),
-    onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+    onFrame: ({ now }) => (drawRef.current ? drawRef.current(now) : false),
   })
 
   useEffect(() => {

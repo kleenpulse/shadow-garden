@@ -75,7 +75,7 @@ export default function WorldMapAscii({
 		dpr: 1,
 		resizeDebounceMs: 150,
 		onResize: (metrics) => measureRef.current?.(metrics),
-		onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+		onFrame: ({ now }) => (drawRef.current ? drawRef.current(now) : false),
 	});
 
 	useEffect(() => {

@@ -312,7 +312,7 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 		halted: paused || reducedMotion,
 		dpr: "auto",
 		onResize: (metrics) => measureRef.current?.(metrics),
-		onFrame: ({ dt }) => drawRef.current?.(dt) ?? false,
+		onFrame: ({ dt }) => (drawRef.current ? drawRef.current(dt) : false),
 		gl: () => glRef.current,
 	});
 	const startLoopRef = useRef<(() => void) | null>(null);

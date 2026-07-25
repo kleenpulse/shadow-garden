@@ -55,7 +55,7 @@ const Ribbons: React.FC<RibbonsOptions> = (options) => {
     // exactly as before.
     dpr: 1,
     onResize: (metrics) => measureRef.current?.(metrics),
-    onFrame: () => drawRef.current?.() ?? false,
+    onFrame: () => (drawRef.current ? drawRef.current() : false),
   })
   // Persist ribbons across effect re-runs — the effect re-runs on every option
   // change (including pause), so keeping the field in a ref freezes it in place

@@ -112,7 +112,7 @@ export default function PlusGrid({
 		halted: paused,
 		dpr: "auto",
 		onResize: (metrics) => measureRef.current?.(metrics),
-		onFrame: () => drawRef.current?.() ?? false,
+		onFrame: () => (drawRef.current ? drawRef.current() : false),
 	});
 
 	useEffect(() => {

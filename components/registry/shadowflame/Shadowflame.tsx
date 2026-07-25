@@ -239,7 +239,7 @@ const Shadowflame = ({
     halted: false,
     dpr: "auto",
     onResize: (metrics) => measureRef.current?.(metrics),
-    onFrame: ({ dt }) => drawRef.current?.(dt) ?? false,
+    onFrame: ({ dt }) => (drawRef.current ? drawRef.current(dt) : false),
     gl: () => glRef.current,
   });
 
