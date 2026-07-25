@@ -14,9 +14,11 @@ import { currentUserId } from "@/lib/supabase/current-user";
 const NO_STORE = { "Cache-Control": "no-store" } as const;
 
 async function listSlugs(userId: string): Promise<string[]> {
-  const { db } = await import("@/lib/db");
+  const { getDb } = await import("@/lib/db");
   const { favorites } = await import("@/lib/db/schema");
   const { eq, desc } = await import("drizzle-orm");
+  const db = getDb();
+  if (!db) return [];
   const rows = await db
     .select({ slug: favorites.slug })
     .from(favorites)
@@ -63,11 +65,11 @@ export async function POST(request: Request) {
   );
 
   if (incoming.length > 0) {
-    const { db } = await import("@/lib/db");
+    const { getDb } = await import("@/lib/db");
     const { favorites } = await import("@/lib/db/schema");
     // Idempotent on the (user_id, slug) unique index → repeated merges are safe.
-    await db
-      .insert(favorites)
+    await getDb()
+      ?.insert(favorites)
       .values(incoming.map((slug) => ({ userId, slug })))
       .onConflictDoNothing();
   }
@@ -94,11 +96,11 @@ export async function DELETE(request: Request) {
   }
 
   if (typeof slug === "string") {
-    const { db } = await import("@/lib/db");
+    const { getDb } = await import("@/lib/db");
     const { favorites } = await import("@/lib/db/schema");
     const { and, eq } = await import("drizzle-orm");
-    await db
-      .delete(favorites)
+    await getDb()
+      ?.delete(favorites)
       .where(and(eq(favorites.userId, userId), eq(favorites.slug, slug)));
   }
 

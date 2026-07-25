@@ -121,9 +121,19 @@ export async function POST(req: Request) {
   const ip = clientIp(req);
   const geo = serverGeo(req);
 
-  const { db } = await import("@/lib/db");
+  const { getDb } = await import("@/lib/db");
   const { feedback } = await import("@/lib/db/schema");
   const { and, or, eq, gte, sql } = await import("drizzle-orm");
+
+  // Unreachable in practice — the DATABASE_URL short-circuit above already
+  // returned. Kept so the handle stays non-null for the checker, not asserted.
+  const db = getDb();
+  if (!db) {
+    return NextResponse.json(
+      { ok: true, simulated: true },
+      { headers: NO_STORE },
+    );
+  }
 
   // Per-identity throttle. visitorId always exists (we mint one above); userId is
   // an extra key when signed in so a user can't dodge the cap by clearing cookies.

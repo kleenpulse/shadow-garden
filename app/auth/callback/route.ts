@@ -37,9 +37,12 @@ async function maybeSendWelcome(
     const userId = data?.claims?.sub;
     if (!userId) return;
 
-    const { db } = await import("@/lib/db");
+    const { getDb } = await import("@/lib/db");
     const { profiles } = await import("@/lib/db/schema");
     const { and, eq, isNull } = await import("drizzle-orm");
+
+    const db = getDb();
+    if (!db) return;
 
     // Race-free single-fire claim: only one caller flips NULL → now().
     const [claimed] = await db

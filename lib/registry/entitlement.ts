@@ -49,8 +49,11 @@ export async function getEntitlement(): Promise<Entitlement> {
 
   // Lazy import: keep the Node-only postgres-js client out of any edge bundle and
   // out of the module graph entirely until a real lookup is actually needed.
-  const { db } = await import("@/lib/db");
+  const { getDb } = await import("@/lib/db");
   const { entitlements } = await import("@/lib/db/schema");
+
+  const db = getDb();
+  if (!db) return { pro: false };
 
   const [row] = await db
     .select({
