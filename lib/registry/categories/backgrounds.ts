@@ -382,6 +382,13 @@ export const backgrounds: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/side-rays/SideRays.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
 		],
 		props: [
 			{

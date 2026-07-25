@@ -10,6 +10,7 @@
     "readme": "bun scripts/gen-readme.ts",
     "check:registry": "bun scripts/check-registry.ts",
     "check:registry:selftest": "bun scripts/registry/selftest.ts",
+    "verify:loop": "node scripts/verify-loop.mjs",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
