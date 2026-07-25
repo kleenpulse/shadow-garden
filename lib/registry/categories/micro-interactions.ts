@@ -835,7 +835,7 @@ export const microInteractions: ComponentEntry[] = [
 				name: "rippleColor",
 				label: "Ripple",
 				kind: "color",
-				default: "#0a0a0c",
+				default: "#d2abfd",
 				description: "Color of the click ripple.",
 				disabledWhen: { prop: "ripple", equals: false },
 			},
