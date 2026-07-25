@@ -100,7 +100,7 @@ V16: ∃! kind table keyed PropKind, total. new kind → tsc error ∀ site. ⊥
 V17: audio Pro gate ∈ engine — engine subscribes `lib/pro-client`. ⊥ external `setPro` writer.
      caller learns ≤ {enabled, volume, play, availability:boolean|null}. unresolved → fail closed
 V18: ∃! feedback submit seam. error modes = closed union returned as data (⊥ thrown string)
-V19: vendored registry copy (admin) → byte-identical | drift check exit ≠ 0
+V19: vendored registry copy (admin) → content-identical (⊥ byte: CRLF ≠ LF across repos) | drift check exit ≠ 0
 
 ## §T
 
@@ -142,7 +142,7 @@ T34|x|repoint ~22 guards; supabase predicate 3× → 1 (server.ts, client.ts, pr
 T35|x|lib/registry/kinds.ts: PropKind + total KIND_TABLE; 4 consumers read it|V16
 T36|x|audio: engine subscribes Pro seam. ⊥ SoundToggle setPro. facade = {enabled,volume,play}|V17,V13
 T37|x|lib/feedback/submit.ts: closed SubmitResult union + reason→copy table; widget ⊥ taxonomy|V18
-T38|.|admin: check-schema-drift.ts exit≠0 on drift; re-copy 6 vendored files|V19
+T38|x|admin: check-schema-drift.ts exit≠0 on drift; re-copy 6 vendored files|V19
 
 ## §B
 
@@ -151,4 +151,5 @@ B1|2026-07-19|LightRays/DotField/Strands window-resize only → stale/stretched 
 B2|2026-07-19|BlackHole resize() clears canvas+FBO, no redraw while loop halted → blank/off-center after resize|V2
 B3|2026-07-25|entitlement.ts:34 accepts `sg_pro=1` unconditionally in prod → unauth Pro source unlock via source.ts:22|V3
 B4|2026-07-25|db/index.ts:12 throws at import; reconcile.ts:97/:139, notify.ts:30, auth/callback:40 unguarded → polar webhook 500-retries forever|V4
+B6|2026-07-25|admin `check-schema-drift.ts:46` `process.exit(0)` unconditional ∴ warned ∀ run, failed ⊥ run. 5/6 vendored files stale (incl. whole entry `long-shadow` added upstream). 2nd cause: byte-hash over CRLF-vs-LF checkouts → ∀ file reported drifted ∴ signal worthless|V19
 B5|2026-07-25|OPEN. build warns "whole project traced unintentionally": `source.ts:59` `readFile(absolute)` arg fully dynamic ∴ turbopack ⊥ scope trace despite literal roots (`:17-18`). build ✓, PPR ✓ — bundle size only. ⊥ regression (∈ since T19). `turbopackIgnore` ⊥ fix — would drop the files Pro reads need|—
