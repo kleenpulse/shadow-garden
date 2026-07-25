@@ -14,6 +14,7 @@ import {
   PORTAL_ERROR_MESSAGES,
   type CheckoutErrorMessage,
 } from "@/lib/checkout/messages";
+import { invalidatePro } from "@/hooks/use-pro";
 import SuccessOverlay from "./SuccessOverlay";
 
 // Reads the checkout-result query params set by the Polar redirect, fires the
@@ -82,8 +83,12 @@ export default function CheckoutResult() {
       // Returned from the customer portal (or a stray Polar token) with no explicit
       // result — reconcile silently so portal-side changes (cancel/uncancel/payment
       // method) reflect on return without waiting on the webhook. No overlay, no
-      // reload; the account menu re-fetches /api/billing on next open.
-      void fetch("/api/checkout/sync", { method: "POST" }).catch(() => null);
+      // reload: dropping the Pro cache once the reconcile lands re-renders the plan
+      // in place. Before the cache was shared this path had no way to reach the
+      // account menu's private copy, so a cancel looked like it hadn't taken.
+      void fetch("/api/checkout/sync", { method: "POST" })
+        .catch(() => null)
+        .finally(() => invalidatePro());
     }
 
     // Strip every Polar/result param (client-only, shallow) so F5 lands on a clean URL.

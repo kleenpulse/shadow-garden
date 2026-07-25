@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { supabaseConfiguredClient } from "@/lib/supabase/client";
 import { useAuthUser } from "@/hooks/use-auth-user";
+import { usePro } from "@/hooks/use-pro";
 import type { BillingSummary } from "@/lib/registry/billing";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
@@ -52,37 +53,12 @@ function planView(
 export default function AuthMenu() {
 	const { user, ready, signIn, signOut: signOutUser } = useAuthUser();
 	const [menuOpen, setMenuOpen] = useState(false);
-	const [billing, setBilling] = useState<BillingSummary | null>(null);
+	// The shared Pro cache — not a private snapshot. It fetches on mount (so the
+	// dropdown shows the plan instantly rather than stalling on "Loading…" against
+	// a cold pooler), and useAuthUser invalidates it whenever the session changes,
+	// which is what the local reset-on-userId-change used to approximate.
+	const billing = usePro();
 	const containerRef = useRef<HTMLDivElement>(null);
-
-	// Auth state changes (sign in/out) invalidate any billing snapshot fetched
-	// under the previous session — reset during render (no effect) so the next
-	// menu open re-fetches it.
-	const userId = user?.id ?? null;
-	const [billingForUserId, setBillingForUserId] = useState(userId);
-	if (billingForUserId !== userId) {
-		setBillingForUserId(userId);
-		setBilling(null);
-	}
-
-	// Prefetch billing the moment the session is known (sign-in, or a page load with an
-	// existing session) — NOT on menu-open. The first /api/billing hits a cold pooler +
-	// Drizzle lookup; doing it eagerly means the dropdown shows the plan instantly
-	// instead of stalling on "Loading…". `menuOpen` stays a dependency so that if the
-	// prefetch failed while the menu was closed, opening it retries (billing still null).
-	useEffect(() => {
-		if (!userId || billing) return;
-		let active = true;
-		fetch("/api/billing", { cache: "no-store" })
-			.then((r) => (r.ok ? r.json() : null))
-			.then((d) => {
-				if (active && d) setBilling(d as BillingSummary);
-			})
-			.catch(() => {});
-		return () => {
-			active = false;
-		};
-	}, [userId, billing, menuOpen]);
 
 	// Close on click-outside + Escape.
 	useEffect(() => {
@@ -104,7 +80,6 @@ export default function AuthMenu() {
 	const signOut = async () => {
 		setMenuOpen(false);
 		await signOutUser();
-		setBilling(null);
 	};
 
 	if (!supabaseConfiguredClient) return null;

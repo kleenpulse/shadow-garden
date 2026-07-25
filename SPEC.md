@@ -45,7 +45,9 @@ Pro seam:
 
 - srv: `getPro()` → `Promise<ProState>` — ∃! ladder. `getEntitlement` | `getBilling` = projections
 - type: `ProState` → `{ pro, source:"env"|"cookie"|"db"|"none", type, status, currentPeriodEnd, cancelAtPeriodEnd, hasSubscription }`
-- hook: `usePro()` → `ProState|null`; `invalidatePro()` → `void` — ∃! client cache
+- hook: `usePro()` → `BillingSummary|null` — ∃! client cache. `useIsPro()` → `boolean|null` = projection
+- fn: `invalidatePro()` → `void` — drop cache + notify mounted consumers. called ∀ session change, ∀ polar return
+- ⊥ `/api/entitlement` — deleted. ∃! client route `/api/billing` (post-T29 same query)
 
 Favourites reconcile (`lib/favorites/reconcile.ts`, pure):
 
@@ -121,7 +123,7 @@ T26|x|migrate loopers batch A (5 clean entries)|V10,V11,V12
 T27|x|migrate loopers batch B (5 clean entries)|V10,V11,V12
 T28|x|check rule: ⊥ raw `requestAnimationFrame`\|`new ResizeObserver` ∈ components/registry ∉ allowlist|V10
 T29|x|lib/pro.ts: ∃! server Pro seam. entitlement.ts/billing.ts → projections|V13
-T30|.|hooks/use-pro.ts owns THE client cache (+invalidate); AuthMenu, CheckoutResult read it|V13
+T30|x|hooks/use-pro.ts owns THE client cache (+invalidate); AuthMenu, CheckoutResult read it|V13
 T31|.|lib/favorites/reconcile.ts: pure sanitize/mergeUp/adopt/diff/order|V14
 T32|.|favorites-store, FavoritesSync, api/favorites → reconcile module only|V14
 T33|.|lib/capabilities.ts: ∃! predicate set (db\|supabase\|polar\|polarWebhook\|email)|V15
