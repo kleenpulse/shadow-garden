@@ -46,13 +46,13 @@ const TORCH_CSS = `
 export default function Torchlight({
   children,
   className,
-  radius = 120,
-  softness = 0.55,
+  radius = 140,
+  softness = 0.5,
   darkness = 0.92,
-  restReveal = 0.06,
-  smoothing = 0.18,
-  flicker = 0.4,
-  torchColor = "#ffb457",
+  restReveal = 0,
+  smoothing = 0.15,
+  flicker = 0.15,
+  torchColor = "#a855f7",
   reducedMotion = false,
 }: TorchlightProps) {
   const rootRef = useRef<HTMLDivElement>(null);

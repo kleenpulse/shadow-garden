@@ -106,7 +106,7 @@ T11|x|read-keys.ts (TS API): previews.ts key parse + `values.<ident>` extraction
 T12|x|source-defaults.ts (TS API): binding-pattern initializers, const resolve, Number() compare. WARN-only|V8
 T13|x|patch source defaults → registry: backgrounds|V8,C4
 T14|x|patch source defaults → registry: text-animations|V8,C4
-T15|.|patch source defaults → registry: micro-interactions|V8,C4
+T15|x|patch source defaults → registry: micro-interactions|V8,C4
 T16|.|patch source defaults → registry: power-user-systems|V8,C4
 T17|.|default-drift rule WARN → ERROR; pausable⇔paused rule added WARN-only|V8,V9
 T18|.|hooks/use-animation-loop.ts: host seam. ⊥ animation body|V10,V11,C1a
