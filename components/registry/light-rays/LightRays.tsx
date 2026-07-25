@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { Renderer, Program, Triangle, Mesh } from 'ogl'
+import { useAnimationLoop, type Metrics } from '@/hooks/use-animation-loop'
 
 export type RaysOrigin =
   | 'top-center'
@@ -119,20 +120,31 @@ const LightRays: React.FC<LightRaysProps> = ({
   const rendererRef = useRef<Renderer | null>(null)
   const mouseRef = useRef({ x: 0.5, y: 0.5 })
   const smoothMouseRef = useRef({ x: 0.5, y: 0.5 })
-  const animationIdRef = useRef<number | null>(null)
   const meshRef = useRef<Mesh | null>(null)
   const cleanupFunctionRef = useRef<(() => void) | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
   // Loop-control refs: the render loop reads these live so the WebGL context is
   // never rebuilt on a prop change. speedRef ≤ 0 halts the loop (one static
-  // frame, then stop); startLoop() resumes it. followMouse/mouseInfluence are
-  // ref-driven so the init effect can depend on [isVisible] alone.
-  const runningRef = useRef(false)
-  const startLoopRef = useRef<(() => void) | null>(null)
+  // frame, then stop). followMouse/mouseInfluence are ref-driven so the init
+  // effect can depend on [isVisible] alone.
   const speedRef = useRef(raysSpeed)
   const followMouseRef = useRef(followMouse)
   const mouseInfluenceRef = useRef(mouseInfluence)
+
+  const drawRef = useRef<((t: number) => void | false) | null>(null)
+  const measureRef = useRef<((m: Metrics) => void) | null>(null)
+
+  // No `gl` handed to the host: disposal here is deliberately deferred so the
+  // last painted frame fades out before the context is dropped. The component
+  // keeps that timing in its own cleanup.
+  const loop = useAnimationLoop({
+    target: containerRef,
+    halted: raysSpeed <= 0,
+    dpr: maxDpr,
+    onResize: (metrics) => measureRef.current?.(metrics),
+    onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+  })
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -329,30 +341,25 @@ void main() {
       const mesh = new Mesh(gl, { geometry, program })
       meshRef.current = mesh
 
-      const updatePlacement = () => {
-        if (!containerRef.current || !renderer) return
+      measureRef.current = ({ width, height, dpr, bufferWidth, bufferHeight }) => {
+        renderer.dpr = dpr
+        renderer.setSize(width, height)
 
-        renderer.dpr = Math.min(window.devicePixelRatio, maxDpr)
+        uniforms.iResolution.value = [bufferWidth, bufferHeight]
 
-        const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current
-        renderer.setSize(wCSS, hCSS)
-
-        const dpr = renderer.dpr
-        const w = wCSS * dpr
-        const h = hCSS * dpr
-
-        uniforms.iResolution.value = [w, h]
-
-        const { anchor, dir } = getAnchorAndDir(raysOrigin, w, h)
+        const { anchor, dir } = getAnchorAndDir(
+          raysOrigin,
+          bufferWidth,
+          bufferHeight,
+        )
         uniforms.rayPos.value = anchor
         uniforms.rayDir.value = dir
       }
 
       let faded = false
-      const loop = (t: number) => {
+      const frame = (t: number) => {
         if (!rendererRef.current || !uniformsRef.current || !meshRef.current) {
-          runningRef.current = false
-          return
+          return false
         }
 
         uniforms.iTime.value = t * 0.001
@@ -377,8 +384,7 @@ void main() {
           renderer.render({ scene: mesh })
         } catch (error) {
           console.warn('WebGL rendering error:', error)
-          runningRef.current = false
-          return
+          return false
         }
 
         // Reveal on the first real frame (works even at speed 0, which renders
@@ -390,47 +396,18 @@ void main() {
 
         // Speed 0 (reduced motion / scrolled-past "off") paints one static
         // frame, then halts — the full-viewport fragment pass stops burning the
-        // GPU instead of freezing visually while still rendering. Resumes via
-        // startLoop() when the uniform effect sees speed return.
-        if (speedRef.current <= 0) {
-          runningRef.current = false
-          return
-        }
-        animationIdRef.current = requestAnimationFrame(loop)
+        // GPU instead of freezing visually while still rendering. The host
+        // restarts it when `halted` flips back.
+        if (speedRef.current <= 0) return false
       }
+      drawRef.current = frame
 
-      const startLoop = () => {
-        if (runningRef.current) return
-        runningRef.current = true
-        animationIdRef.current = requestAnimationFrame(loop)
-      }
-      startLoopRef.current = startLoop
-
-      // Repaint after every resize: the loop self-halts at speed 0 (reduced
-      // motion / scrolled-past), so without a redraw the rays freeze stale and
-      // stretched at the old size until the next interaction.
-      const handleResize = () => {
-        updatePlacement()
-        startLoopRef.current?.()
-      }
-      window.addEventListener('resize', handleResize)
-      // The container can be resized without a window resize (e.g. a draggable
-      // resize handle changing the host panel's width). Observe it directly so
-      // the drawing buffer + iResolution stay in sync — twin of SideRays.
-      const ro = new ResizeObserver(handleResize)
-      if (containerRef.current) ro.observe(containerRef.current)
-      updatePlacement()
-      startLoop()
+      loop.resize()
+      loop.start()
 
       cleanupFunctionRef.current = () => {
-        runningRef.current = false
-        if (animationIdRef.current) {
-          cancelAnimationFrame(animationIdRef.current)
-          animationIdRef.current = null
-        }
-
-        ro.disconnect()
-        window.removeEventListener('resize', handleResize)
+        drawRef.current = null
+        measureRef.current = null
 
         // Fade the last painted frame out, then dispose. The rAF is already
         // stopped, so the canvas holds its final image while it fades — the
@@ -507,8 +484,8 @@ void main() {
     u.rayPos.value = anchor
     u.rayDir.value = dir
 
-    // The loop self-halts at speed 0; kick it back on when speed returns.
-    if (raysSpeed > 0) startLoopRef.current?.()
+    // The loop self-halts at speed 0; the host restarts it when speed returns.
+    if (raysSpeed > 0) loop.start()
   }, [
     raysColor,
     raysSpeed,

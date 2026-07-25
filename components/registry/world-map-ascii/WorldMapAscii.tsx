@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 interface WorldMapAsciiProps {
 	/** Particle color (any CSS color). */
@@ -63,11 +64,19 @@ export default function WorldMapAscii({
 	paused = false,
 }: WorldMapAsciiProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-	// Mirror `paused` so the loop self-halts without re-running the effect
-	// (which would re-sample the map and reset every particle to its base).
-	const pausedRef = useRef(paused);
-	pausedRef.current = paused;
-	const startLoopRef = useRef<(() => void) | null>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const drawRef = useRef<((now: number) => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: paused,
+		// Particle coordinates are in CSS pixels, matching the previous sizing.
+		dpr: 1,
+		resizeDebounceMs: 150,
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+	});
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
@@ -76,7 +85,6 @@ export default function WorldMapAscii({
 		const ctx = canvas.getContext("2d", { alpha: true });
 		if (!ctx) return;
 
-		let animationFrameId: number;
 		let mouseX = -1000;
 		let mouseY = -1000;
 		let particles: ParticleData[] = [];
@@ -84,11 +92,6 @@ export default function WorldMapAscii({
 		const mapImage = new Image();
 
 		const initMap = () => {
-			// Bound to the parent stage rather than the whole window.
-			const rect = canvas.getBoundingClientRect();
-			canvas.width = rect.width || canvas.clientWidth;
-			canvas.height = rect.height || canvas.clientHeight;
-
 			if (canvas.width === 0 || canvas.height === 0) return;
 
 			const imgW = mapImage.naturalWidth || mapImage.width;
@@ -163,31 +166,29 @@ export default function WorldMapAscii({
 			ctx.fill();
 
 			// Halt while paused — render this frame, then stop issuing draw calls
-			// (the loop used to run forever even at drift 0). Resumed by the effect below.
-			if (pausedRef.current) {
-				animationFrameId = 0;
-				return;
-			}
-			animationFrameId = requestAnimationFrame(animate);
+			// (the loop used to run forever even at drift 0).
+			if (paused) return false;
 		};
+		drawRef.current = animate;
 
-		const startLoop = () => {
-			if (animationFrameId) return;
-			animationFrameId = requestAnimationFrame(animate);
-		};
-		startLoopRef.current = startLoop;
-
-		mapImage.onload = () => {
+		measureRef.current = ({ width, height }) => {
+			canvas.width = width;
+			canvas.height = height;
 			initMap();
-			animationFrameId = requestAnimationFrame(animate);
+		};
+
+		// The image may resolve after unmount. The old code re-armed a rAF from
+		// here with a handle nothing tracked, so cleanup could not cancel it and
+		// the loop resurrected itself past teardown.
+		mapImage.onload = () => {
+			loop.resize();
+			loop.start();
 		};
 		mapImage.src = "/world-map.svg";
 
 		if (mapImage.complete) {
-			requestAnimationFrame(() => {
-				initMap();
-				animationFrameId = requestAnimationFrame(animate);
-			});
+			loop.resize();
+			loop.start();
 		}
 
 		const handleMouseMove = (e: MouseEvent) => {
@@ -203,35 +204,18 @@ export default function WorldMapAscii({
 		canvas.addEventListener("mousemove", handleMouseMove);
 		canvas.addEventListener("mouseleave", handleMouseLeave);
 
-		let resizeTimer: ReturnType<typeof setTimeout>;
-		const handleResize = () => {
-			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(() => {
-				cancelAnimationFrame(animationFrameId);
-				initMap();
-				animationFrameId = requestAnimationFrame(animate);
-			}, 150);
-		};
-
-		const resizeObserver = new ResizeObserver(handleResize);
-		resizeObserver.observe(canvas);
-
 		return () => {
-			resizeObserver.disconnect();
+			drawRef.current = null;
+			measureRef.current = null;
+			// Detach so a late-resolving image cannot reach back in.
+			mapImage.onload = null;
 			canvas.removeEventListener("mousemove", handleMouseMove);
 			canvas.removeEventListener("mouseleave", handleMouseLeave);
-			cancelAnimationFrame(animationFrameId);
-			clearTimeout(resizeTimer);
 		};
-	}, [color, particleSize, density, mouseRadius, drift]);
-
-	// Resume the loop when unpausing — it self-halts inside `animate` while paused.
-	useEffect(() => {
-		if (!paused) startLoopRef.current?.();
-	}, [paused]);
+	}, [color, particleSize, density, mouseRadius, drift, paused, loop]);
 
 	return (
-		<div className="absolute inset-0 overflow-hidden">
+		<div ref={containerRef} className="absolute inset-0 overflow-hidden">
 			<canvas ref={canvasRef} className="block h-full w-full" />
 		</div>
 	);
