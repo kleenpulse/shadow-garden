@@ -70,6 +70,20 @@ export default function InstallBlock({
       <pre className="overflow-x-auto px-4 py-3">
         <code className="font-mono text-xs text-ink">{command}</code>
       </pre>
+      {entry.variants.length > 1 ? (
+        <div className="border-t border-hairline px-4 py-3">
+          <p className="font-mono text-[11px] text-ink-mute">
+            Then copy {entry.variants.length} files into your project:
+          </p>
+          <ul className="mt-1.5 space-y-0.5">
+            {entry.variants.map((variant) => (
+              <li key={variant.file} className="font-mono text-[11px] text-ink-dim">
+                {variant.file}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </div>
   );
 }
