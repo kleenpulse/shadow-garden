@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, memo } from "react";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 const TWO_PI = Math.PI * 2;
 
@@ -58,7 +59,6 @@ const Cinders = memo(
     const embersRef = useRef<Ember[]>([]);
     const spriteRef = useRef<HTMLCanvasElement | null>(null);
     const spriteHalfRef = useRef(0);
-    const rafRef = useRef<number | null>(null);
     const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
     const mouseRef = useRef({
       x: -9999,
@@ -69,8 +69,19 @@ const Cinders = memo(
       inside: false,
     });
     const restingRef = useRef(1); // 0 = fully running, 1 = fully settled (dim)
-    const startLoopRef = useRef<(() => void) | null>(null);
     const rebuildSpriteRef = useRef<(() => void) | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const drawRef = useRef<(() => void | false) | null>(null);
+    const measureRef = useRef<((m: Metrics) => void) | null>(null);
+
+    const loop = useAnimationLoop({
+      target: containerRef,
+      halted: paused,
+      dpr: 2,
+      resizeDebounceMs: 100,
+      onResize: (metrics) => measureRef.current?.(metrics),
+      onFrame: () => drawRef.current?.() ?? false,
+    });
 
     const propsRef = useRef<Record<string, unknown>>({});
     propsRef.current = {
@@ -90,24 +101,13 @@ const Cinders = memo(
       if (!canvas) return;
       const ctx = canvas.getContext("2d", { alpha: false });
       if (!ctx) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      let resizeTimer: ReturnType<typeof setTimeout>;
-
-      function resize() {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(doResize, 100);
-      }
-
-      function doResize() {
+      measureRef.current = ({ width: w, height: h, dpr, bufferWidth, bufferHeight }) => {
         const parent = canvas!.parentElement;
-        if (!parent) return;
+        if (!parent || w <= 0 || h <= 0) return;
         const rect = parent.getBoundingClientRect();
-        const w = rect.width;
-        const h = rect.height;
-        if (w <= 0 || h <= 0) return;
 
-        canvas!.width = Math.floor(w * dpr);
-        canvas!.height = Math.floor(h * dpr);
+        canvas!.width = bufferWidth;
+        canvas!.height = bufferHeight;
         canvas!.style.width = `${w}px`;
         canvas!.style.height = `${h}px`;
         ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -120,10 +120,7 @@ const Cinders = memo(
         };
 
         buildEmbers();
-        // Loop self-halts while still; repaint one frame so a resize doesn't
-        // leave a stale backing store at the old size.
-        startLoopRef.current?.();
-      }
+      };
 
       function makeEmber(w: number, h: number, atBottom: boolean): Ember {
         const p = propsRef.current;
@@ -227,8 +224,6 @@ const Cinders = memo(
       const speedInterval = setInterval(updateMouseSpeed, 20);
 
       let frameCount = 0;
-      let running = false;
-
       function paintBackground() {
         const { w, h } = sizeRef.current;
         ctx!.globalCompositeOperation = "source-over";
@@ -269,13 +264,9 @@ const Cinders = memo(
           ctx!.fillRect(0, h - poolH, w, poolH);
         }
 
+        // Sprite not baked yet — keep the loop alive unless fully settled.
         if (!sprite) {
-          if (still && rest >= 1) {
-            running = false;
-            return;
-          }
-          rafRef.current = requestAnimationFrame(tick);
-          return;
+          return still && rest >= 1 ? false : undefined;
         }
 
         const rise = (p.riseSpeed as number) * activity;
@@ -354,27 +345,13 @@ const Cinders = memo(
         ctx!.globalAlpha = 1;
         ctx!.globalCompositeOperation = "source-over";
 
-        if (still && rest >= 1) {
-          running = false;
-          return;
-        }
-        rafRef.current = requestAnimationFrame(tick);
+        if (still && rest >= 1) return false;
       }
-
-      function startLoop() {
-        if (running) return;
-        running = true;
-        rafRef.current = requestAnimationFrame(tick);
-      }
-      startLoopRef.current = startLoop;
+      drawRef.current = tick;
 
       buildSprite();
-      doResize();
+      loop.resize();
 
-      window.addEventListener("resize", resize);
-      const ro = new ResizeObserver(resize);
-      const parent = canvas.parentElement;
-      if (parent) ro.observe(parent);
       window.addEventListener("mousemove", onMouseMove, { passive: true });
       window.addEventListener("touchstart", onTouchMove, { passive: true });
       window.addEventListener("touchmove", onTouchMove, { passive: true });
@@ -382,15 +359,12 @@ const Cinders = memo(
       window.addEventListener("touchcancel", onLeave, { passive: true });
       window.addEventListener("mouseout", onLeave, { passive: true });
 
-      startLoop();
+      loop.start();
 
       return () => {
-        running = false;
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        drawRef.current = null;
+        measureRef.current = null;
         clearInterval(speedInterval);
-        clearTimeout(resizeTimer);
-        ro.disconnect();
-        window.removeEventListener("resize", resize);
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("touchstart", onTouchMove);
         window.removeEventListener("touchmove", onTouchMove);
@@ -404,16 +378,11 @@ const Cinders = memo(
     // Rebuild the pre-baked sprite when its keys change, then repaint.
     useEffect(() => {
       rebuildSpriteRef.current?.();
-      startLoopRef.current?.();
-    }, [emberColor, emberSize, glow]);
-
-    // Resume the loop when unpausing — tick self-halts once settled.
-    useEffect(() => {
-      if (!paused) startLoopRef.current?.();
-    }, [paused]);
+      loop.paint();
+    }, [emberColor, emberSize, glow, loop]);
 
     return (
-      <div className="relative h-full w-full" {...rest}>
+      <div ref={containerRef} className="relative h-full w-full" {...rest}>
         <canvas
           ref={canvasRef}
           style={{

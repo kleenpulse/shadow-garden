@@ -10,6 +10,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget, Geometry } from "ogl";
 import { cn } from "@/lib/utils";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 // Detect iOS (all iOS browsers share WebKit's WebGL limits) for the static fallback.
 function isIOS(): boolean {
@@ -637,8 +638,22 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 	className,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const animationFrameId = useRef<number>(0);
-	const startLoopRef = useRef<(() => void) | null>(null);
+	const drawRef = useRef<((t: number) => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+	const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+		null,
+	);
+
+	// Same shape as BlackHole: pausing eases out and a live drag keeps drawing,
+	// so the frame body owns the halt decision.
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: false,
+		dpr: maxDpr,
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+		gl: () => glRef.current,
+	});
 
 	// Live-tunable values read each frame — the GL context is never rebuilt while
 	// a control is dragged, so tuning stays smooth (BlackHole/Threads idiom).
@@ -725,6 +740,11 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 				throw new Error("VortexBloom requires a WebGL2 context");
 			}
 			gl.clearColor(0, 0, 0, 1);
+			// Out of flow — an in-flow canvas with an explicit pixel width holds the
+			// container open, so it never shrinks and the observer never fires.
+			gl.canvas.style.position = "absolute";
+			gl.canvas.style.top = "0";
+			gl.canvas.style.left = "0";
 			container.appendChild(gl.canvas);
 
 			const glc = renderer.gl;
@@ -875,10 +895,11 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 			const blurMesh = new Mesh(gl, { geometry, program: blurProgram });
 			const compMesh = new Mesh(gl, { geometry, program: compProgram });
 
-			function resize() {
-				const { clientWidth, clientHeight } = container;
-				if (clientWidth === 0 || clientHeight === 0) return;
-				renderer.setSize(clientWidth, clientHeight);
+			glRef.current = gl;
+			measureRef.current = ({ width, height, dpr }) => {
+				if (width === 0 || height === 0) return;
+				renderer.dpr = dpr;
+				renderer.setSize(width, height);
 				const bw = gl!.drawingBufferWidth;
 				const bh = gl!.drawingBufferHeight;
 				// Volumetric scene + bloom march at the reduced scale; the composite reads
@@ -898,13 +919,7 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 				compProgram.uniforms.uRes.value[1] = bh;
 				blurProgram.uniforms.uTexel.value[0] = 1 / hw;
 				blurProgram.uniforms.uTexel.value[1] = 1 / hh;
-			}
-			const resizeObserver = new ResizeObserver(() => {
-				resize();
-				startLoopRef.current?.();
-			});
-			resizeObserver.observe(container);
-			resize();
+			};
 
 			const camPos = new Float32Array(3);
 			let accumulatedTime = 0;
@@ -912,7 +927,6 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 			let timeScale = paused ? 0 : 1;
 			let bloomClock = 0; // lotus bud→bloom intro; resets on mount + core swap
 			let lastCore = CORE_INDEX[live.current.coreObject] ?? 0;
-			let running = false;
 			let swirlDir = 1; // whole-vortex spin direction; eases toward the drag's spinDir
 			let swirlPhase = 0;
 			let curlPhase = 0;
@@ -1104,22 +1118,12 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 				const restless = updateCamera(cdt, t);
 				renderPasses();
 
-				if (l.paused && timeScale < 1e-3 && !restless) {
-					running = false;
-					lastTimestamp = -1;
-					return;
-				}
-				animationFrameId.current = requestAnimationFrame(update);
+				if (l.paused && timeScale < 1e-3 && !restless) return false;
 			}
+			drawRef.current = update;
 
-			function startLoop() {
-				if (running) return;
-				running = true;
-				lastTimestamp = -1;
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-			startLoopRef.current = startLoop;
-			startLoop();
+			loop.resize();
+			loop.start();
 
 			const canvas = gl.canvas as HTMLCanvasElement;
 			function onPointerDown(e: PointerEvent) {
@@ -1143,7 +1147,8 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 				} catch {
 					// pointer already gone
 				}
-				startLoop();
+				// A grab must wake a halted loop so the orbit tracks the pointer.
+				loop.start();
 			}
 			function onPointerMove(e: PointerEvent) {
 				if (!dragging) return;
@@ -1178,16 +1183,14 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 			window.addEventListener("pointercancel", onPointerUp);
 
 			return () => {
-				running = false;
-				if (animationFrameId.current)
-					cancelAnimationFrame(animationFrameId.current);
-				resizeObserver.disconnect();
+				drawRef.current = null;
+				measureRef.current = null;
 				canvas.removeEventListener("pointerdown", onPointerDown);
 				window.removeEventListener("pointermove", onPointerMove);
 				window.removeEventListener("pointerup", onPointerUp);
 				window.removeEventListener("pointercancel", onPointerUp);
+				// The host drops the context; this only detaches the canvas.
 				if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
-				gl!.getExtension("WEBGL_lose_context")?.loseContext();
 			};
 		} catch (err) {
 			console.warn(
@@ -1205,14 +1208,15 @@ const VortexBloom: React.FC<VortexBloomProps> = ({
 	}, [useFallback, maxDpr]);
 
 	useEffect(() => {
-		if (!paused) startLoopRef.current?.();
-	}, [paused]);
+		if (!paused) loop.start();
+	}, [paused, loop]);
 
 	// Re-arm one frame on any tunable change so a paused/halted loop (reduced
 	// motion) still repaints — e.g. a coreObject swap must show, and re-blooms.
 	useEffect(() => {
-		startLoopRef.current?.();
+		loop.paint();
 	}, [
+		loop,
 		primary,
 		secondary,
 		accent,

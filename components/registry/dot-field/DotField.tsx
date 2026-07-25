@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, memo } from 'react'
+import { useAnimationLoop, type Metrics } from '@/hooks/use-animation-loop'
 
 const TWO_PI = Math.PI * 2
 
@@ -62,7 +63,6 @@ const DotField = memo(
       prevY: -9999,
       speed: 0,
     })
-    const rafRef = useRef<number | null>(null)
     const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 })
     const glowOpacity = useRef(0)
     const engagement = useRef(0)
@@ -83,7 +83,19 @@ const DotField = memo(
       paused,
     }
     const rebuildRef = useRef<(() => void) | null>(null)
-    const startLoopRef = useRef<(() => void) | null>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
+    const drawRef = useRef<(() => void | false) | null>(null)
+    const measureRef = useRef<((m: Metrics) => void) | null>(null)
+
+    const loop = useAnimationLoop({
+      target: containerRef,
+      halted: paused,
+      dpr: 2,
+      resizeDebounceMs: 100,
+      onResize: (metrics) => measureRef.current?.(metrics),
+      onFrame: () => drawRef.current?.() ?? false,
+    })
+
     const glowIdRef = useRef(
       `dot-field-glow-${Math.random().toString(36).slice(2, 9)}`
     )
@@ -94,21 +106,11 @@ const DotField = memo(
       if (!canvas) return
       const ctx = canvas.getContext('2d', { alpha: true })
       if (!ctx) return
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      let resizeTimer: ReturnType<typeof setTimeout>
-
-      function resize() {
-        clearTimeout(resizeTimer)
-        resizeTimer = setTimeout(doResize, 100)
-      }
-
-      function doResize() {
+      measureRef.current = ({ width: w, height: h, dpr, bufferWidth, bufferHeight }) => {
         const rect = canvas!.parentElement!.getBoundingClientRect()
-        const w = rect.width
-        const h = rect.height
 
-        canvas!.width = w * dpr
-        canvas!.height = h * dpr
+        canvas!.width = bufferWidth
+        canvas!.height = bufferHeight
         canvas!.style.width = `${w}px`
         canvas!.style.height = `${h}px`
         ctx!.setTransform(dpr, 0, 0, dpr, 0, 0)
@@ -121,10 +123,6 @@ const DotField = memo(
         }
 
         buildDots(w, h)
-
-        // Repaint after the (debounced) resize settles — the loop self-halts,
-        // so a resize otherwise leaves a stale frame at the old size.
-        startLoopRef.current?.()
       }
 
       function buildDots(w: number, h: number) {
@@ -189,7 +187,6 @@ const DotField = memo(
       const speedInterval = setInterval(updateMouseSpeed, 20)
 
       let frameCount = 0
-      let running = false
 
       function tick() {
         frameCount++
@@ -291,34 +288,17 @@ const DotField = memo(
         // Paint one frame, then halt if paused — a scrolled-past / reduced-motion
         // field freezes on a proper static grid instead of redrawing forever.
         // startLoop resumes it when active again.
-        if (propsRef.current.paused) {
-          running = false
-          return
-        }
-        rafRef.current = requestAnimationFrame(tick)
+        if (propsRef.current.paused) return false
       }
+      drawRef.current = tick
 
-      function startLoop() {
-        if (running) return
-        running = true
-        rafRef.current = requestAnimationFrame(tick)
-      }
-      startLoopRef.current = startLoop
-
-      doResize()
-      window.addEventListener('resize', resize)
-      // The container can be resized without a window resize (e.g. a draggable
-      // resize handle changing the host panel's width). Observe the parent
-      // directly so the canvas backing store + dot grid rebuild too.
-      const ro = new ResizeObserver(resize)
-      const parent = canvas.parentElement
-      if (parent) ro.observe(parent)
+      loop.resize()
+      loop.start()
       window.addEventListener('mousemove', onMouseMove, { passive: true })
       window.addEventListener('touchstart', onTouchMove, { passive: true })
       window.addEventListener('touchmove', onTouchMove, { passive: true })
       window.addEventListener('touchend', onTouchEnd, { passive: true })
       window.addEventListener('touchcancel', onTouchEnd, { passive: true })
-      startLoop()
 
       rebuildRef.current = () => {
         const { w, h } = sizeRef.current
@@ -326,13 +306,10 @@ const DotField = memo(
       }
 
       return () => {
-        running = false
-        if (rafRef.current) cancelAnimationFrame(rafRef.current)
+        drawRef.current = null
+        measureRef.current = null
         clearInterval(speedInterval)
-        clearTimeout(resizeTimer)
         if (moveTimeoutRef.current) clearTimeout(moveTimeoutRef.current)
-        ro.disconnect()
-        window.removeEventListener('resize', resize)
         window.removeEventListener('mousemove', onMouseMove)
         window.removeEventListener('touchstart', onTouchMove)
         window.removeEventListener('touchmove', onTouchMove)
@@ -346,13 +323,8 @@ const DotField = memo(
       rebuildRef.current?.()
     }, [dotRadius, dotSpacing])
 
-    // Resume the canvas loop when unpausing — tick self-halts while paused.
-    useEffect(() => {
-      if (!paused) startLoopRef.current?.()
-    }, [paused])
-
     return (
-      <div className="relative h-full w-full" {...rest}>
+      <div ref={containerRef} className="relative h-full w-full" {...rest}>
         <canvas
           ref={canvasRef}
           style={{

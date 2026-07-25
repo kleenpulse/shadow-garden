@@ -513,6 +513,13 @@ export const backgrounds: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/dot-field/DotField.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
 		],
 		props: [
 			{
@@ -628,6 +635,13 @@ export const backgrounds: ComponentEntry[] = [
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/strands/Strands.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
 			},
 		],
 		props: [
@@ -1438,6 +1452,13 @@ export const backgrounds: ComponentEntry[] = [
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/cinders/Cinders.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
 			},
 		],
 		props: [
