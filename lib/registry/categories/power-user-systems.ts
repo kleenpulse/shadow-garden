@@ -680,6 +680,13 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/flock-field/FlockField.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
 		],
 		props: [
 			{
@@ -819,6 +826,13 @@ export const powerUserSystems: ComponentEntry[] = [
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/smoke-field/SmokeField.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
 			},
 		],
 		props: [
@@ -961,6 +975,13 @@ export const powerUserSystems: ComponentEntry[] = [
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/ripple-field/RippleField.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
 			},
 		],
 		props: [
@@ -1313,6 +1334,13 @@ export const powerUserSystems: ComponentEntry[] = [
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/shadow-bloom/ShadowBloom.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
 			},
 		],
 		props: [

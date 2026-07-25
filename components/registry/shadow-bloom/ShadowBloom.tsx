@@ -13,6 +13,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget } from "ogl";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 // This shader stack needs WebGL2 (#version 300 es) + renderable float targets.
 function supportsWebGL2(): boolean {
@@ -200,8 +201,20 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 	className,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const animationFrameId = useRef<number>(0);
-	const startLoopRef = useRef<(() => void) | null>(null);
+	const drawRef = useRef<((dt: number) => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+	const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+		null,
+	);
+
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: paused || reducedMotion,
+		dpr: "auto",
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: ({ dt }) => drawRef.current?.(dt) ?? false,
+		gl: () => glRef.current,
+	});
 
 	// Live-tunable values read each frame — the GL context is never rebuilt while
 	// a control is dragged (SmokeField idiom). Nothing here rebuilds GL.
@@ -259,6 +272,11 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 				throw new Error("ShadowBloom requires a WebGL2 context");
 			}
 			gl.clearColor(0, 0, 0, 1);
+			// Out of flow — an in-flow canvas with an explicit pixel width holds the
+			// container open, so it never shrinks and the observer never fires.
+			gl.canvas.style.position = "absolute";
+			gl.canvas.style.top = "0";
+			gl.canvas.style.left = "0";
 			container.appendChild(gl.canvas);
 
 			const glc = renderer.gl;
@@ -449,21 +467,13 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 				renderer.render({ scene: dispMesh });
 			}
 
-			let running = false;
-			let lastTimestamp = -1;
-
-			function update(t: number) {
+			drawRef.current = (dt: number) => {
 				const l = live.current;
-				const dt = lastTimestamp >= 0 ? (t - lastTimestamp) * 0.001 : 0;
-				lastTimestamp = t;
 
 				// Paused / reduced-motion: freeze the fields, re-blit once, self-halt.
-				// A [still] effect re-arms the loop.
 				if (l.paused || l.reducedMotion) {
 					blit();
-					running = false;
-					lastTimestamp = -1;
-					return;
+					return false;
 				}
 
 				accumulatedTime += Math.min(dt, 0.05);
@@ -471,23 +481,14 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 				const iters = Math.max(1, Math.round(l.growthSpeed));
 				runReactions(iters);
 				blit();
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-
-			function startLoop() {
-				if (running) return;
-				running = true;
-				lastTimestamp = -1;
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-			startLoopRef.current = startLoop;
+			};
 
 			// Re-size canvas + grid. The grid only changes when aspect changes;
 			// resizing an FBO clears it, so re-seed the field after a real change.
-			function resize(): boolean {
-				const { clientWidth, clientHeight } = container;
-				if (clientWidth === 0 || clientHeight === 0) return false;
-				renderer.setSize(clientWidth, clientHeight);
+			function resize({ width, height, dpr }: Metrics): boolean {
+				if (width === 0 || height === 0) return false;
+				renderer.dpr = dpr;
+				renderer.setSize(width, height);
 				const bw = gl!.drawingBufferWidth;
 				const bh = gl!.drawingBufferHeight;
 				const s = gridDims(SIM_BASE, bw, bh);
@@ -501,20 +502,17 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 			}
 
 			// A resize clears the field; re-init + re-seed + (if halted) warm-up so a
-			// paused canvas repaints a bloom, then re-arm — the loop self-halts again
-			// if still paused (it draws one corrected frame first).
-			const resizeObserver = new ResizeObserver(() => {
-				const changed = resize();
-				if (changed) {
-					initState();
-					seedField();
-					if (live.current.paused || live.current.reducedMotion) warmUp(900);
-					blit();
-				}
-				startLoopRef.current?.();
-			});
-			resizeObserver.observe(container);
-			resize();
+			// paused canvas repaints a bloom. The host then paints one frame.
+			measureRef.current = (metrics) => {
+				if (!resize(metrics)) return;
+				initState();
+				seedField();
+				if (live.current.paused || live.current.reducedMotion) warmUp(900);
+				blit();
+			};
+
+			glRef.current = gl;
+			loop.resize();
 
 			// Initial state: seed, then either run or bake-and-halt.
 			initState();
@@ -527,7 +525,7 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 				// Warm up to a developed bloom so the opening frame reads as living
 				// tendrils rather than scattered seeds — the loop grows on from here.
 				warmUp(600);
-				startLoop();
+				loop.start();
 			}
 
 			// Pointer-drag stir — grab on the canvas, track on window (SmokeField
@@ -561,7 +559,8 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 				} catch {
 					// setPointerCapture can throw if the pointer is already gone.
 				}
-				startLoop();
+				// A stir must wake a halted loop.
+				loop.start();
 			}
 			function onPointerMove(e: PointerEvent) {
 				if (!dragging) return;
@@ -582,15 +581,14 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 			window.addEventListener("pointercancel", onPointerUp);
 
 			return () => {
-				running = false;
-				if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-				resizeObserver.disconnect();
+				drawRef.current = null;
+				measureRef.current = null;
 				canvas.removeEventListener("pointerdown", onPointerDown);
 				window.removeEventListener("pointermove", onPointerMove);
 				window.removeEventListener("pointerup", onPointerUp);
 				window.removeEventListener("pointercancel", onPointerUp);
+				// The host drops the context; this only detaches the canvas.
 				if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
-				gl!.getExtension("WEBGL_lose_context")?.loseContext();
 			};
 		} catch (err) {
 			console.warn(
@@ -606,11 +604,6 @@ const ShadowBloom: React.FC<ShadowBloomProps> = ({
 		}
 		// Nothing live-tuned rebuilds GL; only the fallback flag re-runs this effect.
 	}, [useFallback]);
-
-	// Resume the loop when unpausing — it self-halts once the pause settles.
-	useEffect(() => {
-		if (!(paused || reducedMotion)) startLoopRef.current?.();
-	}, [paused, reducedMotion]);
 
 	const baseClass = "relative h-full w-full";
 

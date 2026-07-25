@@ -12,6 +12,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget } from "ogl";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 type Quality = "low" | "medium" | "high";
 
@@ -300,7 +301,20 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 	className,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const animationFrameId = useRef<number>(0);
+	const drawRef = useRef<((dt: number) => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+	const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+		null,
+	);
+
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: paused || reducedMotion,
+		dpr: "auto",
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: ({ dt }) => drawRef.current?.(dt) ?? false,
+		gl: () => glRef.current,
+	});
 	const startLoopRef = useRef<(() => void) | null>(null);
 
 	// Live-tunable values read each frame — the GL context is never rebuilt while
@@ -365,6 +379,11 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 				throw new Error("SmokeField requires a WebGL2 context");
 			}
 			gl.clearColor(0, 0, 0, 1);
+			// Out of flow — an in-flow canvas with an explicit pixel width holds the
+			// container open, so it never shrinks and the observer never fires.
+			gl.canvas.style.position = "absolute";
+			gl.canvas.style.top = "0";
+			gl.canvas.style.left = "0";
 			container.appendChild(gl.canvas);
 
 			const glc = renderer.gl;
@@ -663,43 +682,27 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 				renderer.render({ scene: dispMesh });
 			}
 
-			let running = false;
-			let lastTimestamp = -1;
-
-			function update(t: number) {
+			drawRef.current = (dt: number) => {
 				const l = live.current;
-				const dt = lastTimestamp >= 0 ? (t - lastTimestamp) * 0.001 : 0;
-				lastTimestamp = t;
 
 				// Paused / reduced-motion: freeze the fields, re-blit the frozen dye
-				// once, then self-halt. A [paused] effect re-arms the loop.
+				// once, then self-halt.
 				if (l.paused || l.reducedMotion) {
 					blit();
-					running = false;
-					lastTimestamp = -1;
-					return;
+					return false;
 				}
 
 				accumulatedTime += Math.min(dt, 0.05);
 				step(liveInject);
 				blit();
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-
-			function startLoop() {
-				if (running) return;
-				running = true;
-				lastTimestamp = -1;
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-			startLoopRef.current = startLoop;
+			};
 
 			// Re-size canvas + grids. Grid dims change only when aspect changes;
 			// resizing an FBO clears it, so re-seed a plume after a real change.
-			function resize(): boolean {
-				const { clientWidth, clientHeight } = container;
-				if (clientWidth === 0 || clientHeight === 0) return false;
-				renderer.setSize(clientWidth, clientHeight);
+			function resize({ width, height, dpr }: Metrics): boolean {
+				if (width === 0 || height === 0) return false;
+				renderer.dpr = dpr;
+				renderer.setSize(width, height);
 				const bw = gl!.drawingBufferWidth;
 				const bh = gl!.drawingBufferHeight;
 				const s = gridDims(base.sim, bw, bh);
@@ -722,19 +725,16 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 			}
 
 			// A resize clears the fluid; re-seed + (if halted) warm-up so a paused
-			// canvas repaints a plume, then re-arm — the loop self-halts again if
-			// still paused (it draws one corrected frame first).
-			const resizeObserver = new ResizeObserver(() => {
-				const changed = resize();
-				if (changed) {
-					seedPlume();
-					if (live.current.paused || live.current.reducedMotion) warmUp(48);
-					blit();
-				}
-				startLoopRef.current?.();
-			});
-			resizeObserver.observe(container);
-			resize();
+			// canvas repaints a plume. The host then paints one frame.
+			measureRef.current = (metrics) => {
+				if (!resize(metrics)) return;
+				seedPlume();
+				if (live.current.paused || live.current.reducedMotion) warmUp(48);
+				blit();
+			};
+
+			glRef.current = gl;
+			loop.resize();
 
 			// Initial state: seed a plume, then either run or bake-and-halt.
 			seedPlume();
@@ -742,7 +742,7 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 				warmUp(64);
 				blit();
 			} else {
-				startLoop();
+				loop.start();
 			}
 
 			// Pointer-drag stir — grab on the canvas, track on window (BlackHole
@@ -790,7 +790,8 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 				} catch {
 					// setPointerCapture can throw if the pointer is already gone.
 				}
-				startLoop();
+				// A stir must wake a halted loop.
+				loop.start();
 			}
 			function onPointerMove(e: PointerEvent) {
 				if (!dragging) return;
@@ -811,15 +812,14 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 			window.addEventListener("pointercancel", onPointerUp);
 
 			return () => {
-				running = false;
-				if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-				resizeObserver.disconnect();
+				drawRef.current = null;
+				measureRef.current = null;
 				canvas.removeEventListener("pointerdown", onPointerDown);
 				window.removeEventListener("pointermove", onPointerMove);
 				window.removeEventListener("pointerup", onPointerUp);
 				window.removeEventListener("pointercancel", onPointerUp);
+				// The host drops the context; this only detaches the canvas.
 				if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
-				gl!.getExtension("WEBGL_lose_context")?.loseContext();
 			};
 		} catch (err) {
 			console.warn(
@@ -836,10 +836,6 @@ const SmokeField: React.FC<SmokeFieldProps> = ({
 		// Only `quality` (grid resolution) and the fallback flag rebuild GL.
 	}, [useFallback, quality]);
 
-	// Resume the loop when unpausing — it self-halts once the pause settles.
-	useEffect(() => {
-		if (!(paused || reducedMotion)) startLoopRef.current?.();
-	}, [paused, reducedMotion]);
 
 	const baseClass = "relative h-full w-full";
 

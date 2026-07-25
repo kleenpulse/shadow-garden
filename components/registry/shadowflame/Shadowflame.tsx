@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle } from "ogl";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 interface ShadowflameProps {
   coreColor?: string;
@@ -224,8 +225,23 @@ const Shadowflame = ({
     reducedMotion,
   };
 
-  const startLoopRef = useRef<(() => void) | null>(null);
   const renderStillRef = useRef<(() => void) | null>(null);
+  const drawRef = useRef<((dt: number) => void | false) | null>(null);
+  const measureRef = useRef<((m: Metrics) => void) | null>(null);
+  const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+    null,
+  );
+
+  // `halted` stays false — motion eases to a stop and the frame body decides
+  // when it has settled, and it also halts when off-screen or backgrounded.
+  const loop = useAnimationLoop({
+    target: containerRef,
+    halted: false,
+    dpr: "auto",
+    onResize: (metrics) => measureRef.current?.(metrics),
+    onFrame: ({ dt }) => drawRef.current?.(dt) ?? false,
+    gl: () => glRef.current,
+  });
 
   // Effect 1: build the WebGL2 context once, drive the self-halting loop.
   useEffect(() => {
@@ -256,6 +272,11 @@ const Shadowflame = ({
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     canvas.style.display = "block";
+    // Out of flow — an in-flow canvas with an explicit pixel width holds the
+    // container open, so it never shrinks and the observer never fires.
+    canvas.style.position = "absolute";
+    canvas.style.top = "0";
+    canvas.style.left = "0";
     container.appendChild(canvas);
 
     const geometry = new Triangle(gl);
@@ -359,9 +380,6 @@ const Shadowflame = ({
     let simTime = 0;
     // eased motion scalar: 1 = running, 0 = fully still. Pausing eases it to a stop.
     let motion = live.current.paused || live.current.reducedMotion ? 0 : 1;
-    let raf = 0;
-    let running = false;
-    let last = performance.now();
     let isVisible = true;
     let isPageVisible = !document.hidden;
 
@@ -387,11 +405,12 @@ const Shadowflame = ({
     };
     renderStillRef.current = renderStill;
 
-    const setSize = () => {
-      const rect = container.getBoundingClientRect();
-      const w = Math.max(1, Math.floor(rect.width));
-      const h = Math.max(1, Math.floor(rect.height));
+    glRef.current = gl;
+    measureRef.current = ({ width, height, dpr }) => {
+      const w = Math.max(1, Math.floor(width));
+      const h = Math.max(1, Math.floor(height));
       if (w === 0 || h === 0) return;
+      renderer.dpr = dpr;
       renderer.setSize(w, h);
       const res = (u.iResolution as { value: Float32Array }).value;
       res[0] = gl.drawingBufferWidth;
@@ -403,14 +422,12 @@ const Shadowflame = ({
         sparkH = h;
         sctx.setTransform(sparkDpr, 0, 0, sparkDpr, 0, 0);
       }
-      // repaint one corrected frame, then re-arm so a halted canvas isn't stale
+      // Bake one corrected still so a halted canvas is never stale; the host
+      // paints a frame of its own straight after.
       renderStill();
-      startLoop();
     };
 
-    const frame = (now: number) => {
-      const dt = Math.min(0.05, (now - last) / 1000);
-      last = now;
+    const frame = (dt: number) => {
       const L = live.current;
       const wantMotion =
         !isVisible || !isPageVisible || L.paused || L.reducedMotion ? 0 : 1;
@@ -425,29 +442,14 @@ const Shadowflame = ({
       stepAndDrawSparks(dt, motion);
 
       // Self-halt: once eased to a full stop, stop scheduling frames.
-      if (wantMotion === 0 && motion === 0) {
-        running = false;
-        raf = 0;
-        return;
-      }
-      raf = requestAnimationFrame(frame);
+      if (wantMotion === 0 && motion === 0) return false;
     };
-
-    const startLoop = () => {
-      if (running) return;
-      running = true;
-      last = performance.now();
-      raf = requestAnimationFrame(frame);
-    };
-    startLoopRef.current = startLoop;
-
-    const ro = new ResizeObserver(setSize);
-    ro.observe(container);
+    drawRef.current = frame;
 
     const io = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
-        if (isVisible) startLoop();
+        if (isVisible) loop.start();
       },
       { threshold: 0 },
     );
@@ -455,25 +457,24 @@ const Shadowflame = ({
 
     const onVisibility = () => {
       isPageVisible = !document.hidden;
-      if (isPageVisible) startLoop();
+      if (isPageVisible) loop.start();
     };
     document.addEventListener("visibilitychange", onVisibility);
 
-    setSize(); // sizes, bakes a still frame, and arms the loop
+    loop.resize();
+    loop.start();
 
     return () => {
-      if (raf) cancelAnimationFrame(raf);
-      ro.disconnect();
+      drawRef.current = null;
+      measureRef.current = null;
       io.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
-      startLoopRef.current = null;
       renderStillRef.current = null;
       try {
         container.removeChild(canvas);
       } catch {
         /* ignore */
       }
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // renderer created once
@@ -498,12 +499,11 @@ const Shadowflame = ({
     sparkSpeed,
   ]);
 
-  // Effect 3: re-arm on unpause / reduced-motion change. startLoop is idempotent
-  // (no-op while running); when re-armed under a still state it bakes one frame
-  // and self-halts.
+  // Effect 3: re-arm on unpause / reduced-motion change. start() is idempotent;
+  // re-armed under a still state it bakes one frame and self-halts.
   useEffect(() => {
-    startLoopRef.current?.();
-  }, [paused, reducedMotion]);
+    loop.start();
+  }, [paused, reducedMotion, loop]);
 
   if (fallback) {
     const style: React.CSSProperties = {

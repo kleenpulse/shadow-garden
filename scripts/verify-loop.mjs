@@ -113,8 +113,19 @@ async function shot(sessionId, slug, name) {
 // The largest canvas, not the first: the sidebar renders thumbnail canvases that
 // come earlier in document order, and measuring one of those would silently
 // report "no resize happened" for every entry.
+//
+// Fixed-position canvases are excluded. The intro overlay is a full-viewport
+// fixed canvas that only appears on a first visit, so it wins "largest" on a
+// fresh browser profile — measuring it made an entry look like it resized when
+// it never did. That produced one false pass before this filter existed.
 const CANVAS_PROBE = `(() => {
-  const all = [...document.querySelectorAll('canvas')];
+  const fixed = (el) => {
+    for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
+      if (getComputedStyle(n).position === 'fixed') return true;
+    }
+    return false;
+  };
+  const all = [...document.querySelectorAll('canvas')].filter((c) => !fixed(c));
   if (all.length === 0) return null;
   const c = all.reduce((best, x) => {
     const a = x.getBoundingClientRect();
@@ -122,7 +133,13 @@ const CANVAS_PROBE = `(() => {
     return a.width * a.height > b.width * b.height ? x : best;
   });
   const r = c.getBoundingClientRect();
-  return { w: c.width, h: c.height, cssW: Math.round(r.width), cssH: Math.round(r.height), count: all.length };
+  const p = c.parentElement ? c.parentElement.getBoundingClientRect() : r;
+  return {
+    w: c.width, h: c.height,
+    cssW: Math.round(r.width), cssH: Math.round(r.height),
+    parentW: Math.round(p.width), parentH: Math.round(p.height),
+    count: all.length,
+  };
 })()`;
 
 const CLICK_PAUSE = `(() => {
@@ -139,14 +156,31 @@ function check(ok, label, detail) {
   if (!ok) failures++;
 }
 
+/** Poll until `ok(probe)` holds, so heavy entries are not judged mid-init. */
+async function settle(sessionId, ok, budgetMs = 20000) {
+  const deadline = Date.now() + budgetMs;
+  let last = null;
+  while (Date.now() < deadline) {
+    last = await evaluate(sessionId, CANVAS_PROBE);
+    if (last && ok(last)) return last;
+    await sleep(400);
+  }
+  return last;
+}
+
 async function verify(sessionId, slug) {
   console.log(`\n${slug}`);
   await send("Emulation.setDeviceMetricsOverride", { width: 1400, height: 900, deviceScaleFactor: 1, mobile: false }, sessionId);
   await send("Page.navigate", { url: `${ORIGIN}/components/${slug}` }, sessionId);
-  // Load, then IntersectionObserver, then async GL init, then a few frames.
-  await sleep(6000);
+  await sleep(2500); // load + IntersectionObserver + async GL init
 
-  const initial = await evaluate(sessionId, CANVAS_PROBE);
+  // Wait for a laid-out container with a sized canvas rather than a fixed
+  // sleep — the fluid sims take markedly longer than the shader entries, and a
+  // fixed wait judged them mid-init.
+  const initial = await settle(
+    sessionId,
+    (p) => p.parentW > 0 && p.w > 0 && Math.abs(p.cssW - p.parentW) <= 2,
+  );
   check(
     initial !== null && initial.w > 0 && initial.h > 0,
     "canvas has a backing store",
@@ -159,14 +193,28 @@ async function verify(sessionId, slug) {
     "initial frame is not blank",
   );
 
+  // A canvas still at its 300x150 default, or otherwise not filling its
+  // container, means the first measure never landed. A zero-sized container is
+  // a failure too, not a free pass — it means nothing ever laid out.
+  check(
+    initial.parentW > 0 &&
+      initial.parentH > 0 &&
+      Math.abs(initial.cssW - initial.parentW) <= 2 &&
+      Math.abs(initial.cssH - initial.parentH) <= 2,
+    "canvas fills its container",
+    `canvas ${initial.cssW}x${initial.cssH} vs container ${initial.parentW}x${initial.parentH}`,
+  );
+
   const paused = await evaluate(sessionId, CLICK_PAUSE);
   check(paused === true, "pause control found and clicked");
   await sleep(900);
 
   await send("Emulation.setDeviceMetricsOverride", { width: 900, height: 760, deviceScaleFactor: 1, mobile: false }, sessionId);
-  await sleep(1600);
+  await sleep(600);
 
-  const after = await evaluate(sessionId, CANVAS_PROBE);
+  // Poll rather than sleep: a debounced entry needs longer than an undebounced
+  // one, and a fixed wait made the heavier entries flake.
+  const after = await settle(sessionId, (p) => p.w !== initial.w, 8000);
   check(
     after !== null && after.w !== initial.w,
     "V1 — backing store followed the container resize",

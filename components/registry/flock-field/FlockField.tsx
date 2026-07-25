@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 /**
  * FlockField — a Reynolds boids flock on a Canvas 2D field.
@@ -98,7 +99,9 @@ export default function FlockField({
 	const boidsRef = useRef<Boid[]>([]);
 	const mouseRef = useRef({ x: -1e5, y: -1e5 });
 	const sizeRef = useRef({ w: 0, h: 0 });
-	const rafRef = useRef<number | null>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+	const drawRef = useRef<(() => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
 
 	// All tunable props mirrored into a ref every render — the loop reads
 	// live.current per frame, so dragging a control never rebuilds the canvas
@@ -137,16 +140,21 @@ export default function FlockField({
 	};
 
 	const rebuildRef = useRef<(() => void) | null>(null);
-	const startLoopRef = useRef<(() => void) | null>(null);
+
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: paused || reducedMotion,
+		dpr: 2,
+		resizeDebounceMs: 100,
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: () => drawRef.current?.() ?? false,
+	});
 
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		if (!canvas) return;
 		const ctx = canvas.getContext("2d", { alpha: false });
 		if (!ctx) return;
-		const dpr = Math.min(window.devicePixelRatio || 1, 2);
-		let resizeTimer: ReturnType<typeof setTimeout>;
-		let running = false;
 		const grid = new Map<string, number[]>();
 
 		function initBoids() {
@@ -397,12 +405,11 @@ export default function FlockField({
 			}
 		}
 
-		function doResize() {
-			const rect = canvas!.parentElement!.getBoundingClientRect();
-			const w = Math.max(rect.width, 1);
-			const h = Math.max(rect.height, 1);
-			canvas!.width = w * dpr;
-			canvas!.height = h * dpr;
+		measureRef.current = ({ width, height, dpr, bufferWidth, bufferHeight }) => {
+			const w = Math.max(width, 1);
+			const h = Math.max(height, 1);
+			canvas!.width = bufferWidth;
+			canvas!.height = bufferHeight;
 			canvas!.style.width = `${w}px`;
 			canvas!.style.height = `${h}px`;
 			ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -410,31 +417,18 @@ export default function FlockField({
 			initBoids();
 			warmUp();
 			render(true);
-		}
+		};
 
-		function tick() {
+		drawRef.current = () => {
 			if (!live.current.paused) simulate();
 			render(false);
 			if (live.current.paused) {
 				// bake a crisp still frame (trails would otherwise leave a smear
 				// when the loop stops), then halt.
 				render(true);
-				running = false;
-				return;
+				return false;
 			}
-			rafRef.current = requestAnimationFrame(tick);
-		}
-
-		function startLoop() {
-			if (running) return;
-			if (live.current.paused) {
-				render(true);
-				return;
-			}
-			running = true;
-			rafRef.current = requestAnimationFrame(tick);
-		}
-		startLoopRef.current = startLoop;
+		};
 
 		// Rebuild the flock on count change. While the loop runs, skip the warm-up
 		// (the flock re-forms live and a 1000-boid warm-up would hitch a slider
@@ -442,7 +436,7 @@ export default function FlockField({
 		rebuildRef.current = () => {
 			if (sizeRef.current.w === 0) return;
 			initBoids();
-			if (!running) {
+			if (!loop.running) {
 				warmUp();
 				render(true);
 			}
@@ -463,32 +457,18 @@ export default function FlockField({
 			if (e.pointerType !== "mouse") onPointerGone();
 		}
 
-		const parent = canvas.parentElement!;
-		const observer = new ResizeObserver(() => {
-			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(() => {
-				doResize();
-				// repaint one corrected frame, resuming the loop if it wasn't paused
-				startLoop();
-			}, 100);
-		});
-
-		doResize();
-		observer.observe(parent);
 		window.addEventListener("pointermove", onPointerMove, { passive: true });
 		window.addEventListener("pointerup", onPointerUp, { passive: true });
 		document.documentElement.addEventListener("pointerleave", onPointerGone);
-		startLoop();
+		loop.resize();
+		loop.start();
 
 		return () => {
-			running = false;
-			if (rafRef.current) cancelAnimationFrame(rafRef.current);
-			clearTimeout(resizeTimer);
-			observer.disconnect();
+			drawRef.current = null;
+			measureRef.current = null;
 			window.removeEventListener("pointermove", onPointerMove);
 			window.removeEventListener("pointerup", onPointerUp);
 			document.documentElement.removeEventListener("pointerleave", onPointerGone);
-			startLoopRef.current = null;
 			rebuildRef.current = null;
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -501,13 +481,8 @@ export default function FlockField({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [count]);
 
-	// Resume the loop on unpause — tick self-halts while paused.
-	useEffect(() => {
-		if (!(paused || reducedMotion)) startLoopRef.current?.();
-	}, [paused, reducedMotion]);
-
 	return (
-		<div className={`relative h-full w-full ${className}`}>
+		<div ref={containerRef} className={`relative h-full w-full ${className}`}>
 			<canvas
 				ref={canvasRef}
 				className="cursor-crosshair"

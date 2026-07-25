@@ -217,6 +217,12 @@ const Aurora = ({
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     canvas.style.display = "block";
+    // Out of flow — ogl's setSize replaces the 100% above with an explicit pixel
+    // width, and in flow that raises the container's min-content width, so the
+    // container stops shrinking and the observer never fires.
+    canvas.style.position = "absolute";
+    canvas.style.top = "0";
+    canvas.style.left = "0";
     container.appendChild(canvas);
 
     const geometry = new Triangle(gl);
