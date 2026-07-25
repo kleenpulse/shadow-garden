@@ -1549,6 +1549,13 @@ export const backgrounds: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/shadowflame/Shadowflame.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
 		],
 		props: [
 			{

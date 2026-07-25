@@ -13,6 +13,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget } from "ogl";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 type Quality = "low" | "medium" | "high";
 
@@ -251,8 +252,20 @@ const RippleField: React.FC<RippleFieldProps> = ({
 	className,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const animationFrameId = useRef<number>(0);
-	const startLoopRef = useRef<(() => void) | null>(null);
+	const drawRef = useRef<(() => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+	const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+		null,
+	);
+
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: paused || reducedMotion,
+		dpr: "auto",
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: () => drawRef.current?.() ?? false,
+		gl: () => glRef.current,
+	});
 
 	// Live-tunable values read each frame — the GL context is never rebuilt while
 	// a control is dragged (SmokeField idiom). Only `quality` (resolution) rebuilds.
@@ -316,6 +329,11 @@ const RippleField: React.FC<RippleFieldProps> = ({
 				throw new Error("RippleField requires a WebGL2 context");
 			}
 			gl.clearColor(0, 0, 0, 1);
+			// Out of flow — an in-flow canvas with an explicit pixel width holds the
+			// container open, so it never shrinks and the observer never fires.
+			gl.canvas.style.position = "absolute";
+			gl.canvas.style.top = "0";
+			gl.canvas.style.left = "0";
 			container.appendChild(gl.canvas);
 
 			const glc = renderer.gl;
@@ -510,38 +528,26 @@ const RippleField: React.FC<RippleFieldProps> = ({
 				renderer.render({ scene: dispMesh });
 			}
 
-			let running = false;
-
-			function update() {
+			drawRef.current = () => {
 				const l = live.current;
 
 				// Paused / reduced-motion: freeze the field, re-blit once, self-halt.
-				// A [paused] effect re-arms the loop.
 				if (l.paused || l.reducedMotion) {
 					blit();
-					running = false;
-					return;
+					return false;
 				}
 
 				accumulatedTime += 0.016;
 				step(true);
 				blit();
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-
-			function startLoop() {
-				if (running) return;
-				running = true;
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-			startLoopRef.current = startLoop;
+			};
 
 			// Re-size canvas + grid. Grid dims change only when aspect changes;
 			// resizing an FBO clears it, so re-seed drops after a real change.
-			function resize(): boolean {
-				const { clientWidth, clientHeight } = container;
-				if (clientWidth === 0 || clientHeight === 0) return false;
-				renderer.setSize(clientWidth, clientHeight);
+			function resize({ width, height, dpr }: Metrics): boolean {
+				if (width === 0 || height === 0) return false;
+				renderer.dpr = dpr;
+				renderer.setSize(width, height);
 				const d = gridDims(baseRes, gl!.drawingBufferWidth, gl!.drawingBufferHeight);
 				if (d.w === simW && d.h === simH) return false;
 				simW = d.w;
@@ -553,19 +559,16 @@ const RippleField: React.FC<RippleFieldProps> = ({
 			}
 
 			// A resize clears the field; re-seed + (if halted) warm-up so a paused
-			// canvas repaints a rippled pool, then re-arm — the loop self-halts again
-			// if still paused (it draws one corrected frame first).
-			const resizeObserver = new ResizeObserver(() => {
-				const changed = resize();
-				if (changed) {
-					seedDrops();
-					if (live.current.paused || live.current.reducedMotion) warmUp(64);
-					blit();
-				}
-				startLoopRef.current?.();
-			});
-			resizeObserver.observe(container);
-			resize();
+			// canvas repaints a rippled pool. The host then paints one frame.
+			measureRef.current = (metrics) => {
+				if (!resize(metrics)) return;
+				seedDrops();
+				if (live.current.paused || live.current.reducedMotion) warmUp(64);
+				blit();
+			};
+
+			glRef.current = gl;
+			loop.resize();
 
 			// Initial state: seed drops, then either run or bake-and-halt.
 			seedDrops();
@@ -573,7 +576,7 @@ const RippleField: React.FC<RippleFieldProps> = ({
 				warmUp(80);
 				blit();
 			} else {
-				startLoop();
+				loop.start();
 			}
 
 			// Pointer wake — a bare hover disturbs the pool; no button required. The
@@ -644,13 +647,12 @@ const RippleField: React.FC<RippleFieldProps> = ({
 			window.addEventListener("pointermove", onPointerMove);
 
 			return () => {
-				running = false;
-				if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
-				resizeObserver.disconnect();
+				drawRef.current = null;
+				measureRef.current = null;
 				canvas.removeEventListener("pointerdown", onPointerDown);
 				window.removeEventListener("pointermove", onPointerMove);
+				// The host drops the context; this only detaches the canvas.
 				if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
-				gl!.getExtension("WEBGL_lose_context")?.loseContext();
 			};
 		} catch (err) {
 			console.warn(
@@ -667,10 +669,6 @@ const RippleField: React.FC<RippleFieldProps> = ({
 		// Only `quality` (grid resolution) and the fallback flag rebuild GL.
 	}, [useFallback, quality]);
 
-	// Resume the loop when unpausing — it self-halts once the pause settles.
-	useEffect(() => {
-		if (!(paused || reducedMotion)) startLoopRef.current?.();
-	}, [paused, reducedMotion]);
 
 	const baseClass = "relative h-full w-full";
 
