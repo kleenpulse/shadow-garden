@@ -87,7 +87,7 @@ export default function PlusGrid({
 	className,
 	scrollContainerRef,
 	pointerEnergy = true,
-	autoPulse = false,
+	autoPulse = true,
 	paused = false,
 }: PlusGridProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
