@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { has } from "@/lib/capabilities";
 import { cookies } from "next/headers";
 import { getAllSlugs } from "@/lib/registry";
 import { getCurrentUserClaims } from "@/lib/supabase/current-user";
@@ -144,7 +145,7 @@ async function handleView(slug: string): Promise<NextResponse> {
 }
 
 export async function POST(request: Request) {
-  if (!process.env.DATABASE_URL) return new NextResponse(null, { status: 204 });
+  if (!has("db")) return new NextResponse(null, { status: 204 });
 
   let slug: unknown;
   let event: unknown;

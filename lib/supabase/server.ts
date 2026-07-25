@@ -1,18 +1,12 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-
-// New-style publishable key (`sb_publishable_…`) is preferred; legacy anon (JWT) key
-// is accepted as a fallback for compatibility.
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const SUPABASE_KEY =
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { has, supabaseKey, supabaseUrl } from "@/lib/capabilities";
 
 // True once Supabase creds are in the environment. Callers guard on this so the app
 // runs normally (no auth, Pro via dev override only) before credentials are dropped in.
 export function supabaseConfigured() {
-  return Boolean(SUPABASE_URL && SUPABASE_KEY);
+  return has("supabase");
 }
 
 // Cookie-bound server client for RSCs, Server Actions, and Route Handlers.
@@ -22,8 +16,8 @@ export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
 
   return createServerClient(
-    SUPABASE_URL!,
-    SUPABASE_KEY!,
+    supabaseUrl()!,
+    supabaseKey()!,
     {
       cookies: {
         getAll() {

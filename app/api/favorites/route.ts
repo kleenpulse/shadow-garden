@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { has } from "@/lib/capabilities";
 import { getAllSlugs } from "@/lib/registry";
 import { currentUserId } from "@/lib/supabase/current-user";
 import { sanitize } from "@/lib/favorites/reconcile";
@@ -40,14 +41,14 @@ function extractSlugs(body: unknown): unknown[] {
 }
 
 export async function GET() {
-  const userId = process.env.DATABASE_URL ? await currentUserId() : null;
+  const userId = has("db") ? await currentUserId() : null;
   if (!userId) return NextResponse.json({ slugs: [] }, { headers: NO_STORE });
   const slugs = await listSlugs(userId);
   return NextResponse.json({ slugs }, { headers: NO_STORE });
 }
 
 export async function POST(request: Request) {
-  const userId = process.env.DATABASE_URL ? await currentUserId() : null;
+  const userId = has("db") ? await currentUserId() : null;
   if (!userId) {
     return NextResponse.json(
       { slugs: [], error: "signin_required" },
@@ -83,7 +84,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const userId = process.env.DATABASE_URL ? await currentUserId() : null;
+  const userId = has("db") ? await currentUserId() : null;
   if (!userId) {
     return NextResponse.json(
       { slugs: [], error: "signin_required" },
