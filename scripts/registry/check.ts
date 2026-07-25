@@ -29,6 +29,8 @@ export interface PreviewReads {
   keys: Set<string>;
   /** True if the preview uses `values[expr]`, which defeats static extraction. */
   dynamicAccess: boolean;
+  /** True if the preview references the `paused` PreviewProps field at all. */
+  usesPaused: boolean;
 }
 
 export interface CheckContext {

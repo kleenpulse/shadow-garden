@@ -317,6 +317,35 @@ const previewReadsOnlyDeclaredProps: Rule = {
   },
 };
 
+const pausableMatchesPreview: Rule = {
+  id: "pausable-matches-preview",
+  // Heuristic — it reads the preview, not the component, so it stays a warning
+  // until an audit shows no false positives.
+  severity: "warn",
+  what: "a pausable entry's preview actually forwards `paused`",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      if (!entry.pausable) continue;
+      const reads = ctx.previewReads(entry.slug);
+      if (!reads.found) continue;
+      if (!reads.usesPaused) {
+        out.push({
+          slug: entry.slug,
+          detail:
+            "pausable: true but the preview never forwards `paused` — the header pause button renders and does nothing",
+        });
+      }
+    }
+    return out;
+  },
+};
+// Only this direction is checked. The reverse — a preview forwarding `paused`
+// on a non-pausable entry — flagged five entries (barcode, scramble-text,
+// magnetic-button, shadow-cursor, file-explorer) that quiesce an entrance
+// animation without running a loop. `pausable` gates the header button, which
+// exists to halt a free-running loop, so those are correct as they stand.
+
 /**
  * Props whose documented and shipped defaults legitimately differ because the
  * preview transforms the value on the way down. Keep this set small and visible:
@@ -331,8 +360,9 @@ const KNOWN_TRANSFORMS = new Map<string, string>([
 
 const documentedDefaultMatchesSource: Rule = {
   id: "documented-default-matches-source",
-  // WARN until the four patch tasks land, then promoted to error (T17).
-  severity: "warn",
+  // Promoted to error once T13-T16 cleared all 88 (T17). Drift here means the
+  // props table is describing a component the customer will not receive.
+  severity: "error",
   what: "the documented default equals the one the source file actually ships",
   run(ctx) {
     const out: Finding[] = [];
@@ -395,4 +425,5 @@ export const RULES: Rule[] = [
   previewReadsEveryProp,
   previewReadsOnlyDeclaredProps,
   documentedDefaultMatchesSource,
+  pausableMatchesPreview,
 ];

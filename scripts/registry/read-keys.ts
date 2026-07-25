@@ -85,12 +85,20 @@ function findImportSpecifier(node: ts.Node): string | null {
 export function parseValueReads(fileName: string, text: string): {
   keys: Set<string>;
   dynamicAccess: boolean;
+  usesPaused: boolean;
 } {
   const source = parse(fileName, text);
   const keys = new Set<string>();
   let dynamicAccess = false;
+  let usesPaused = false;
 
   const visit = (node: ts.Node): void => {
+    // Any mention of the `paused` PreviewProps field. Previews forward it in
+    // several shapes (`paused={paused}`, `const still = paused || reducedMotion`,
+    // `speed={still ? 0 : …}`), so presence of the identifier is the signal.
+    if (ts.isIdentifier(node) && node.text === "paused") {
+      usesPaused = true;
+    }
     if (
       ts.isPropertyAccessExpression(node) &&
       ts.isIdentifier(node.expression) &&
@@ -109,5 +117,5 @@ export function parseValueReads(fileName: string, text: string): {
   };
 
   visit(source);
-  return { keys, dynamicAccess };
+  return { keys, dynamicAccess, usesPaused };
 }

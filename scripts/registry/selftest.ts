@@ -41,6 +41,7 @@ function readsAll(registry: ComponentEntry[]) {
       registry.find((e) => e.slug === slug)?.props.map((p) => p.name) ?? [],
     ),
     dynamicAccess: false,
+    usesPaused: registry.find((e) => e.slug === slug)?.pausable === true,
   });
 }
 
@@ -159,6 +160,7 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
         found: false,
         keys: new Set(),
         dynamicAccess: false,
+        usesPaused: false,
       }),
     }),
   },
@@ -178,6 +180,7 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
           found: true,
           keys: new Set<string>(),
           dynamicAccess: false,
+          usesPaused: false,
         }),
       },
     ),
@@ -190,6 +193,7 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
         found: true,
         keys: new Set(["ghost"]),
         dynamicAccess: false,
+        usesPaused: false,
       }),
     }),
   },
@@ -215,6 +219,18 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
           new Map([["count", { kind: "literal", value: 3 }]]),
       },
     ),
+  },
+  {
+    rule: "pausable-matches-preview",
+    ctx: context([entry({ pausable: true })], {
+      previewReads: () => ({
+        registered: true,
+        found: true,
+        keys: new Set<string>(),
+        dynamicAccess: false,
+        usesPaused: false,
+      }),
+    }),
   },
 ];
 

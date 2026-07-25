@@ -47,7 +47,11 @@ export function buildContext(): CheckContext {
     const cached = readsCache.get(slug);
     if (cached) return cached;
 
-    const empty = { keys: new Set<string>(), dynamicAccess: false };
+    const empty = {
+      keys: new Set<string>(),
+      dynamicAccess: false,
+      usesPaused: false,
+    };
     const specifier = registrations.get(slug);
     let result: PreviewReads;
 
