@@ -1,4 +1,5 @@
 import type { CheckContext, Finding, Rule } from "./check";
+import { defaultsAgree } from "./source-defaults";
 
 // The cheap rules — pure data plus one readdir and one package.json read. Each
 // one closes an invariant that used to fail silently at runtime: a wrong entry
@@ -316,6 +317,47 @@ const previewReadsOnlyDeclaredProps: Rule = {
   },
 };
 
+/**
+ * Props whose documented and shipped defaults legitimately differ because the
+ * preview transforms the value on the way down. Keep this set small and visible:
+ * every entry is a place the check has been told to look away.
+ */
+const KNOWN_TRANSFORMS = new Map<string, string>([
+  [
+    "border-glow.glowColor",
+    "registry stores hex for the colour control; BorderGlowPreview applies hexToHsl and the hook's default is an HSL triplet",
+  ],
+]);
+
+const documentedDefaultMatchesSource: Rule = {
+  id: "documented-default-matches-source",
+  // WARN until the four patch tasks land, then promoted to error (T17).
+  severity: "warn",
+  what: "the documented default equals the one the source file actually ships",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const shipped = ctx.sourceDefaults(entry.slug);
+      if (!shipped) continue; // file missing — variantFileExists owns that
+      for (const prop of entry.props) {
+        if (KNOWN_TRANSFORMS.has(`${entry.slug}.${prop.name}`)) continue;
+        const actual = shipped.get(prop.name);
+        // No default in the source is not drift: the prop may be required, or
+        // destructured without one. Only a resolved literal can disagree.
+        if (!actual || actual.kind !== "literal") continue;
+        if (!defaultsAgree(prop.default, actual.value)) {
+          out.push({
+            slug: entry.slug,
+            prop: prop.name,
+            detail: `documented ${JSON.stringify(prop.default)}, source ships ${JSON.stringify(actual.value)} — the customer pastes the second one`,
+          });
+        }
+      }
+    }
+    return out;
+  },
+};
+
 /** Walk every variant of every entry, keeping non-null findings. */
 function eachVariant(
   ctx: CheckContext,
@@ -352,4 +394,5 @@ export const RULES: Rule[] = [
   previewRegistered,
   previewReadsEveryProp,
   previewReadsOnlyDeclaredProps,
+  documentedDefaultMatchesSource,
 ];

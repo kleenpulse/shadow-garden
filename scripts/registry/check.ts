@@ -1,4 +1,5 @@
 import type { ComponentEntry } from "../../lib/registry/types";
+import type { SourceDefault } from "./source-defaults";
 
 // The registry check core. Pure: every piece of IO arrives on the context, so
 // the same rules run against the real repo (scripts/check-registry.ts) or against
@@ -42,6 +43,12 @@ export interface CheckContext {
   previewKeys: Set<string>;
   /** Static read of a slug's preview module. */
   previewReads(slug: string): PreviewReads;
+  /**
+   * Destructuring defaults shipped by the entry's canonical source file, or
+   * `null` when it could not be read. Keys absent from the map have no default
+   * in the source at all.
+   */
+  sourceDefaults(slug: string): Map<string, SourceDefault> | null;
 }
 
 export interface Rule {

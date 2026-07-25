@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { registry } from "../../lib/registry/index";
 import type { CheckContext, PreviewReads } from "./check";
 import { parsePreviewRegistrations, parseValueReads } from "./read-keys";
+import { parseSourceDefaults, type SourceDefault } from "./source-defaults";
 
 // The one place the check touches disk. Everything the rules need arrives here so
 // the rules themselves stay pure. lib/registry/index.ts and categories/*.ts are
@@ -68,6 +69,26 @@ export function buildContext(): CheckContext {
     return result;
   }
 
+  const defaultsCache = new Map<string, Map<string, SourceDefault> | null>();
+
+  function sourceDefaults(slug: string): Map<string, SourceDefault> | null {
+    if (defaultsCache.has(slug)) return defaultsCache.get(slug) ?? null;
+
+    const entry = registry.find((e) => e.slug === slug);
+    const file = entry?.variants[0]?.file;
+    let result: Map<string, SourceDefault> | null = null;
+
+    if (file) {
+      const abs = path.join(ROOT, ...file.split(/[\\/]/));
+      if (existsSync(abs)) {
+        result = parseSourceDefaults(abs, readFileSync(abs, "utf8"));
+      }
+    }
+
+    defaultsCache.set(slug, result);
+    return result;
+  }
+
   return {
     registry,
     dirs,
@@ -77,6 +98,7 @@ export function buildContext(): CheckContext {
     packageDeps,
     previewKeys: new Set(registrations.keys()),
     previewReads,
+    sourceDefaults,
   };
 }
 

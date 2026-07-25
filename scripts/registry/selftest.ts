@@ -52,6 +52,7 @@ function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): 
     packageDeps: new Set(["ogl"]),
     previewKeys: new Set(registry.map((e) => e.slug)),
     previewReads: readsAll(registry),
+    sourceDefaults: () => new Map(),
     ...over,
   };
 }
@@ -191,6 +192,29 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
         dynamicAccess: false,
       }),
     }),
+  },
+  {
+    rule: "documented-default-matches-source",
+    ctx: context(
+      [
+        entry({
+          props: [
+            {
+              name: "count",
+              kind: "number",
+              default: 13,
+              min: 0,
+              max: 20,
+              description: "documented 13, shipped 3",
+            },
+          ],
+        }),
+      ],
+      {
+        sourceDefaults: () =>
+          new Map([["count", { kind: "literal", value: 3 }]]),
+      },
+    ),
   },
 ];
 
