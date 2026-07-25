@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Lock, Volume2, VolumeX } from "lucide-react";
 import { useAudioStore } from "@/lib/audio-store";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
-import { usePro } from "@/hooks/use-pro";
+import { useIsPro } from "@/hooks/use-pro";
 import { getEngine } from "@/lib/audio/engine";
 import { IS_LOCAL_DEV } from "@/lib/env";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,7 @@ export default function SoundToggle({ className }: { className?: string }) {
 	const enabled = useAudioStore((s) => s.enabled);
 	const toggle = useAudioStore((s) => s.toggle);
 	const { play } = useInteractionSound();
-	const pro = usePro();
+	const pro = useIsPro();
 	const soundPro = IS_LOCAL_DEV || pro === true;
 	// Local dev never has to wait on the entitlement fetch to resolve.
 	const resolved = IS_LOCAL_DEV || pro !== null;

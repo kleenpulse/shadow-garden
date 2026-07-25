@@ -16,6 +16,13 @@ export interface BillingSummary {
 }
 
 export async function getBilling(): Promise<BillingSummary> {
-  const { source: _source, ...summary } = await getPro();
-  return summary;
+  const state = await getPro();
+  return {
+    pro: state.pro,
+    type: state.type,
+    status: state.status,
+    currentPeriodEnd: state.currentPeriodEnd,
+    cancelAtPeriodEnd: state.cancelAtPeriodEnd,
+    hasSubscription: state.hasSubscription,
+  };
 }

@@ -39,7 +39,7 @@ class AudioEngine {
 	private enabled = false;
 	private volume = 0.6;
 	// Interaction sound is a Pro feature. Defaults closed (fail-closed) until the
-	// client's /api/entitlement check resolves — gated centrally here so every
+	// client's Pro check resolves — gated centrally here so every
 	// play() call site (hover, select, toggle, type…) is covered without each
 	// caller needing its own entitlement check.
 	private pro = false;

@@ -1,13 +1,13 @@
 "use client";
 
 import { Sparkles } from "lucide-react";
-import { usePro } from "@/hooks/use-pro";
+import { useIsPro } from "@/hooks/use-pro";
 
 // TopBar CTA island. Renders the "Go Pro" pill ONLY for free users — hidden
 // while loading and for Pro users, so there's no flash of a CTA they don't
 // need. Opens the shared PricingModal via hash.
 export default function GoProButton() {
-  const pro = usePro();
+  const pro = useIsPro();
 
   // null = loading, true = Pro → render nothing. Only confirmed free users see it.
   if (pro !== false) return null;

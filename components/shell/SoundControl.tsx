@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAudioStore } from "@/lib/audio-store";
-import { usePro } from "@/hooks/use-pro";
+import { useIsPro } from "@/hooks/use-pro";
 import { IS_LOCAL_DEV } from "@/lib/env";
 import SoundToggle from "./SoundToggle";
 import VolumeControl from "./VolumeControl";
@@ -15,7 +15,7 @@ import VolumeControl from "./VolumeControl";
 // actually make sound for a free visitor.
 export default function SoundControl() {
 	const enabled = useAudioStore((s) => s.enabled);
-	const pro = usePro();
+	const pro = useIsPro();
 	const soundPro = IS_LOCAL_DEV || pro === true;
 
 	// Persisted `enabled` hydrates client-side; hold the volume UI back until
