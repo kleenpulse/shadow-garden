@@ -1,11 +1,42 @@
 "use client";
 
+import type { PropKind, PropOfKind } from "@/lib/registry/kinds";
 import type { PropSchema, PropValue, TunedValues } from "@/lib/registry/types";
 import { useUIStore } from "@/lib/store";
 import NumberControl from "./controls/NumberControl";
 import EnumControl from "./controls/EnumControl";
 import BooleanControl from "./controls/BooleanControl";
 import ColorControl from "./controls/ColorControl";
+
+// One control per kind, keyed by the kind. React can't live in
+// lib/registry/kinds.ts (the headless check imports that module), so the mapping
+// sits here — but it is a total Record, so a fifth PropKind fails to compile
+// instead of rendering nothing where its control should be. A switch returning
+// JSX would have fallen through to undefined, which React renders as a hole.
+// A control's value type is exactly its kind's default type — number for number,
+// string for enum and color, boolean for boolean. Saying it that way means the
+// table can't be wired up crosswise.
+type ControlProps<K extends PropKind> = {
+	schema: PropOfKind<K>;
+	value: PropOfKind<K>["default"];
+	onChange: (value: PropOfKind<K>["default"]) => void;
+	disabled?: boolean;
+};
+
+const CONTROLS = {
+	number: NumberControl,
+	enum: EnumControl,
+	boolean: BooleanControl,
+	color: ColorControl,
+} satisfies { [K in PropKind]: (props: ControlProps<K>) => React.ReactNode };
+
+/** The erased shape a single call site can invoke. */
+type AnyControl = (props: {
+	schema: PropSchema;
+	value: PropValue;
+	onChange: (value: PropValue) => void;
+	disabled?: boolean;
+}) => React.ReactNode;
 
 export default function ControlsPanel({
 	props,
@@ -69,45 +100,19 @@ export default function ControlsPanel({
 					const disabled = schema.disabledWhen
 						? values[schema.disabledWhen.prop] === schema.disabledWhen.equals
 						: false;
-					switch (schema.kind) {
-						case "number":
-							return (
-								<NumberControl
-									key={schema.name}
-									schema={schema}
-									value={values[schema.name] as number}
-									onChange={(value) => onChange(schema.name, value)}
-									disabled={disabled}
-								/>
-							);
-						case "enum":
-							return (
-								<EnumControl
-									key={schema.name}
-									schema={schema}
-									value={values[schema.name] as string}
-									onChange={(value) => onChange(schema.name, value)}
-								/>
-							);
-						case "boolean":
-							return (
-								<BooleanControl
-									key={schema.name}
-									schema={schema}
-									value={values[schema.name] as boolean}
-									onChange={(value) => onChange(schema.name, value)}
-								/>
-							);
-						case "color":
-							return (
-								<ColorControl
-									key={schema.name}
-									schema={schema}
-									value={values[schema.name] as string}
-									onChange={(value) => onChange(schema.name, value)}
-								/>
-							);
-					}
+						// `as never` — the lookup is keyed by the same discriminant the
+						// schema carries, but TS can't correlate an indexed access with a
+						// narrowed union member. Same escape the kind table documents.
+						const Control = CONTROLS[schema.kind] as AnyControl;
+						return (
+							<Control
+								key={schema.name}
+								schema={schema}
+								value={values[schema.name]}
+								onChange={(value) => onChange(schema.name, value)}
+								disabled={disabled}
+							/>
+						);
 				})}
 			</div>
 		</section>

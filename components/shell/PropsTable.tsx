@@ -1,22 +1,8 @@
-import type { ComponentEntry, PropSchema } from "@/lib/registry/types";
+import type { ComponentEntry } from "@/lib/registry/types";
+import { formatDefault, typeLabel } from "@/lib/registry/kinds";
 
-// Generated from the SAME schema that drives the Controls panel — one source of truth.
-function typeLabel(prop: PropSchema): string {
-  switch (prop.kind) {
-    case "number":
-      return "number";
-    case "boolean":
-      return "boolean";
-    case "color":
-      return "string (hex)";
-    case "enum":
-      return prop.options.map((option) => `"${option}"`).join(" | ");
-  }
-}
-
-function defaultLabel(prop: PropSchema): string {
-  return prop.kind === "color" || prop.kind === "enum" ? `"${prop.default}"` : String(prop.default);
-}
+// Generated from the SAME schema that drives the Controls panel — one source of
+// truth. How each kind prints is the kind table's business, not this table's.
 
 export default function PropsTable({ entry }: { entry: ComponentEntry }) {
   return (
@@ -40,7 +26,7 @@ export default function PropsTable({ entry }: { entry: ComponentEntry }) {
               <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-accent">{prop.name}</td>
               <td className="px-4 py-2.5 font-mono text-xs text-ink-dim">{typeLabel(prop)}</td>
               <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-ink-dim">
-                {defaultLabel(prop)}
+                {formatDefault(prop)}
               </td>
               <td className="px-4 py-2.5 font-sans text-xs text-ink-dim">{prop.description}</td>
             </tr>
