@@ -13,14 +13,23 @@ import {
 import GrowDialog from "@/components/registry/grow-dialog/GrowDialog";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { collectClientContext } from "@/lib/feedback/context";
+import {
+  LIMITS,
+  REASON_COPY,
+  submitFeedback,
+  type FeedbackType,
+} from "@/lib/feedback/submit";
 import { cn } from "@/lib/utils";
 
-type FeedbackType = "bug" | "idea" | "other";
 type Step = "choose" | "form";
 
-const MESSAGE_MIN = 10;
-const MESSAGE_MAX = 700;
-const SUBJECT_MAX = 120;
+// Lengths and failure copy both come from the submit seam — this widget knows
+// how to lay out a form, not what "too long" means or how to say it.
+const {
+  messageMin: MESSAGE_MIN,
+  messageMax: MESSAGE_MAX,
+  subjectMax: SUBJECT_MAX,
+} = LIMITS;
 
 const TYPES: {
   value: FeedbackType;
@@ -103,46 +112,29 @@ export default function FeedbackWidget({ className }: { className?: string }) {
 
   async function submit(e: FormEvent) {
     e.preventDefault();
-    const msg = message.trim();
-    if (msg.length < MESSAGE_MIN) {
-      toast.error(`Tell us a little more — at least ${MESSAGE_MIN} characters.`);
+    setPending(true);
+    // submitFeedback never throws, so there is no catch and no chance of a raw
+    // server code reaching the toast — every outcome arrives as a known reason.
+    const result = await submitFeedback({
+      type,
+      subject: subject.trim() || undefined,
+      message,
+      email: !user ? email.trim() || undefined : undefined,
+      page: typeof window !== "undefined" ? window.location.pathname : undefined,
+      company: company || undefined,
+      context: collectClientContext(),
+    });
+    setPending(false);
+
+    if (!result.ok) {
+      const copy = REASON_COPY[result.reason];
+      toast.error(copy.title, { description: copy.description });
       return;
     }
-    setPending(true);
-    try {
-      const res = await fetch("/api/feedback", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          type,
-          subject: subject.trim() || undefined,
-          message: msg,
-          email: !user ? email.trim() || undefined : undefined,
-          page:
-            typeof window !== "undefined" ? window.location.pathname : undefined,
-          company: company || undefined,
-          context: collectClientContext(),
-        }),
-      });
-      if (res.status === 429) {
-        toast.error("That's a lot of feedback fast — give it a minute, then retry.");
-        return;
-      }
-      const body = (await res.json().catch(() => ({}))) as {
-        ok?: boolean;
-        error?: string;
-      };
-      if (!res.ok || !body.ok) throw new Error(body.error ?? "Request failed");
-      toast.success("Thank you — your feedback reached the shadows.");
-      setOpen(false);
-      resetSoon();
-    } catch (err) {
-      toast.error("Couldn't send that", {
-        description: err instanceof Error ? err.message : String(err),
-      });
-    } finally {
-      setPending(false);
-    }
+
+    toast.success("Thank you — your feedback reached the shadows.");
+    setOpen(false);
+    resetSoon();
   }
 
   const over = message.length > MESSAGE_MAX;

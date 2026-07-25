@@ -73,9 +73,11 @@ Prop kind table (`lib/registry/kinds.ts`):
 
 Feedback submit (`lib/feedback/submit.ts`):
 
-- fn: `submitFeedback(i)` → `Promise<SubmitResult>` — ⊥ throw
+- fn: `submitFeedback(input)` → `Promise<SubmitResult>` — ⊥ throw ∀ path (⊥ network ⊥ parse)
 - type: `SubmitResult` → `{ ok:true } | { ok:false, reason }`; reason ∈ `too_short|too_long|rate_limited|invalid_body|network|server`
-- const: `REASON_COPY` → `Record<Reason, string>` — widget renders from table
+- const: `REASON_COPY` → `Record<Reason, {title, description}>` — total ∴ new reason ! ship copy
+- const: `LIMITS` → `{messageMin, messageMax, subjectMax, emailMax}` — route & widget ∀ read it
+- fn: `validate(message)` → `Reason|null`; unknown server code → `server` (⊥ render verbatim)
 
 ## §V
 
@@ -139,7 +141,7 @@ T33|x|lib/capabilities.ts: ∃! predicate set (db\|supabase\|polar\|polarWebhook
 T34|x|repoint ~22 guards; supabase predicate 3× → 1 (server.ts, client.ts, proxy.ts)|V15
 T35|x|lib/registry/kinds.ts: PropKind + total KIND_TABLE; 4 consumers read it|V16
 T36|x|audio: engine subscribes Pro seam. ⊥ SoundToggle setPro. facade = {enabled,volume,play}|V17,V13
-T37|.|lib/feedback/submit.ts: closed SubmitResult union + reason→copy table; widget ⊥ taxonomy|V18
+T37|x|lib/feedback/submit.ts: closed SubmitResult union + reason→copy table; widget ⊥ taxonomy|V18
 T38|.|admin: check-schema-drift.ts exit≠0 on drift; re-copy 6 vendored files|V19
 
 ## §B
