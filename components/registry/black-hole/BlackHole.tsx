@@ -11,6 +11,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, RenderTarget } from "ogl";
 import { cn } from "@/lib/utils";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 // Detect iOS (all iOS browsers share WebKit's WebGL limits) for the static fallback.
 function isIOS(): boolean {
@@ -496,8 +497,23 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 	className,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const animationFrameId = useRef<number>(0);
-	const startLoopRef = useRef<(() => void) | null>(null);
+	const drawRef = useRef<((t: number) => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+	const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+		null,
+	);
+
+	// `halted` stays false: pausing eases timeScale toward 0, and a live pointer
+	// drag must keep drawing even under reduced motion. The frame body owns that
+	// judgement and returns false when it has genuinely settled.
+	const loop = useAnimationLoop({
+		target: containerRef,
+		halted: false,
+		dpr: maxDpr,
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+		gl: () => glRef.current,
+	});
 
 	// Live-tunable values read each frame — the GL context is never rebuilt
 	// while a control is dragged, so tuning stays smooth (Threads idiom).
@@ -588,6 +604,11 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 				throw new Error("BlackHole requires a WebGL2 context");
 			}
 			gl.clearColor(0, 0, 0, 1);
+			// Out of flow — an in-flow canvas with an explicit pixel width holds the
+			// container open, so it never shrinks and the observer never fires.
+			gl.canvas.style.position = "absolute";
+			gl.canvas.style.top = "0";
+			gl.canvas.style.left = "0";
 			container.appendChild(gl.canvas);
 
 			// The ogl-augmented context (carries `.renderer`) is what RenderTarget
@@ -680,10 +701,11 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 			const blurMesh = new Mesh(gl, { geometry, program: blurProgram });
 			const compMesh = new Mesh(gl, { geometry, program: compProgram });
 
-			function resize() {
-				const { clientWidth, clientHeight } = container;
-				if (clientWidth === 0 || clientHeight === 0) return;
-				renderer.setSize(clientWidth, clientHeight);
+			glRef.current = gl;
+			measureRef.current = ({ width, height, dpr }) => {
+				if (width === 0 || height === 0) return;
+				renderer.dpr = dpr;
+				renderer.setSize(width, height);
 				const bw = gl!.drawingBufferWidth;
 				const bh = gl!.drawingBufferHeight;
 				const hw = Math.max(1, bw >> 1);
@@ -697,25 +719,16 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 				compProgram.uniforms.uRes.value[1] = bh;
 				blurProgram.uniforms.uTexel.value[0] = 1 / hw;
 				blurProgram.uniforms.uTexel.value[1] = 1 / hh;
-			}
-			// resize() reallocates the canvas + FBOs (which clears them) but draws
-			// nothing. When the loop has self-halted (paused / reduced motion), that
-			// leaves a blank stage until the next pointer grab. Re-arm the loop so a
-			// resize repaints one corrected frame — it self-halts again immediately
-			// if still paused (update draws, then checks the halt condition).
-			const resizeObserver = new ResizeObserver(() => {
-				resize();
-				startLoopRef.current?.();
-			});
-			resizeObserver.observe(container);
-			resize();
+			};
+			// Measuring reallocates the canvas + FBOs, which clears them, and draws
+			// nothing. The host repaints one corrected frame afterwards — B2 was
+			// exactly this gap, and paintWhenHalted now closes it structurally.
 
 			// Camera + clock state (no per-frame allocation).
 			const camPos = new Float32Array(3);
 			let accumulatedTime = 0;
 			let lastTimestamp = -1;
 			let timeScale = paused ? 0 : 1;
-			let running = false;
 			let dragging = false;
 			let dragStartX = 0;
 			let dragStartY = 0;
@@ -869,22 +882,12 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 				// Self-halt once paused settles — a scrolled-past hero stops issuing
 				// draw calls. Keep drawing while a drag is live or the pose is still
 				// easing, so pointer control works even under reduced motion.
-				if (l.paused && timeScale < 1e-3 && !restless) {
-					running = false;
-					lastTimestamp = -1;
-					return;
-				}
-				animationFrameId.current = requestAnimationFrame(update);
+				if (l.paused && timeScale < 1e-3 && !restless) return false;
 			}
+			drawRef.current = update;
 
-			function startLoop() {
-				if (running) return;
-				running = true;
-				lastTimestamp = -1;
-				animationFrameId.current = requestAnimationFrame(update);
-			}
-			startLoopRef.current = startLoop;
-			startLoop();
+			loop.resize();
+			loop.start();
 
 			// Pointer-drag orbit (SakuraTree idiom): pointerdown on the canvas grabs,
 			// move/up on window so a drag that leaves the canvas keeps tracking. First
@@ -913,7 +916,8 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 				} catch {
 					// setPointerCapture can throw if the pointer is already gone.
 				}
-				startLoop();
+				// A grab must wake a halted loop so the orbit tracks the pointer.
+				loop.start();
 			}
 			function onPointerMove(e: PointerEvent) {
 				if (!dragging) return;
@@ -949,16 +953,14 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 			window.addEventListener("pointercancel", onPointerUp);
 
 			return () => {
-				running = false;
-				if (animationFrameId.current)
-					cancelAnimationFrame(animationFrameId.current);
-				resizeObserver.disconnect();
+				drawRef.current = null;
+				measureRef.current = null;
 				canvas.removeEventListener("pointerdown", onPointerDown);
 				window.removeEventListener("pointermove", onPointerMove);
 				window.removeEventListener("pointerup", onPointerUp);
 				window.removeEventListener("pointercancel", onPointerUp);
+				// The host drops the context; this only detaches the canvas.
 				if (container.contains(gl!.canvas)) container.removeChild(gl!.canvas);
-				gl!.getExtension("WEBGL_lose_context")?.loseContext();
 			};
 		} catch (err) {
 			console.warn(
@@ -977,8 +979,8 @@ const BlackHole: React.FC<BlackHoleProps> = ({
 
 	// Resume the loop when unpausing — it self-halts once the pause ease settles.
 	useEffect(() => {
-		if (!paused) startLoopRef.current?.();
-	}, [paused]);
+		if (!paused) loop.start();
+	}, [paused, loop]);
 
 	// Toggling the cinematic control back on re-arms the orbit immediately,
 	// releasing any manual drag takeover.

@@ -117,7 +117,7 @@ T22|x|migrate+fix: threads, constellation, plus-grid (⊥ repaint on resize)|V2,
 T23|x|migrate+fix: ribbons (⊥ repaint + [options] rebuild), starfield (orphan rAF)|V2,V10,V11
 T24|x|migrate+fix: world-map-ascii (re-arm post unmount), light-rays (uncleared timer)|V10,V11
 T25|x|migrate+fix: aurora, grainient (⊥ loseContext; twin shadowflame:476 correct)|V11
-T26|.|migrate loopers batch A (5 clean entries)|V10,V11,V12
+T26|x|migrate loopers batch A (5 clean entries)|V10,V11,V12
 T27|.|migrate loopers batch B (5 clean entries)|V10,V11,V12
 T28|.|check rule: ⊥ raw `requestAnimationFrame`\|`new ResizeObserver` ∈ components/registry ∉ allowlist|V10
 T29|.|lib/pro.ts: ∃! server Pro seam. entitlement.ts/billing.ts → projections|V13

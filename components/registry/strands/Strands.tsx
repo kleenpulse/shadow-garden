@@ -2,6 +2,7 @@
 
 import { Renderer, Program, Mesh, Color, Triangle, RenderTarget } from 'ogl'
 import { useEffect, useRef, CSSProperties } from 'react'
+import { useAnimationLoop, type Metrics } from '@/hooks/use-animation-loop'
 
 const MAX_STRANDS = 12
 const MAX_COLORS = 8
@@ -295,7 +296,20 @@ export default function Strands({
   // Mirror `paused` so the render loop self-halts without a context rebuild.
   const pausedRef = useRef(paused)
   pausedRef.current = paused
-  const startLoopRef = useRef<(() => void) | null>(null)
+  const drawRef = useRef<((t: number) => void | false) | null>(null)
+  const measureRef = useRef<((m: Metrics) => void) | null>(null)
+  const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+    null
+  )
+
+  const loop = useAnimationLoop({
+    target: ctnDom,
+    halted: paused,
+    dpr: 2,
+    onResize: (metrics) => measureRef.current?.(metrics),
+    onFrame: ({ now }) => drawRef.current?.(now) ?? false,
+    gl: () => glRef.current,
+  })
 
   useEffect(() => {
     const ctn = ctnDom.current
@@ -371,33 +385,24 @@ export default function Strands({
     })
     const glassMesh = new Mesh(gl, { geometry, program: glassProgram })
 
+    // Out of flow: ogl's setSize writes an explicit pixel width onto the canvas,
+    // and in flow that raises the container's min-content width — the container
+    // then stops shrinking, the ResizeObserver never fires, and the canvas is
+    // pinned at its first size.
+    gl.canvas.style.position = 'absolute'
+    gl.canvas.style.top = '0'
+    gl.canvas.style.left = '0'
     ctn.appendChild(gl.canvas)
 
-    function resize() {
-      if (!ctn) return
-      const width = ctn.offsetWidth
-      const height = ctn.offsetHeight
+    glRef.current = gl
+    measureRef.current = ({ width, height, dpr }) => {
+      renderer.dpr = dpr
       renderer.setSize(width, height)
       program.uniforms.uResolution.value = [width, height]
       renderTarget.setSize(width, height)
       glassProgram.uniforms.uResolution.value = [width, height]
     }
-    // Repaint after every resize: the loop self-halts when paused, so without
-    // a redraw a resize leaves a stale/stretched frozen frame until resumed.
-    const handleResize = () => {
-      resize()
-      startLoopRef.current?.()
-    }
-    window.addEventListener('resize', handleResize)
-    // The container can be resized without a window resize (e.g. a draggable
-    // resize handle changing the host panel's width). Observe it directly so
-    // the drawing buffer + uResolution stay in sync.
-    const ro = new ResizeObserver(handleResize)
-    ro.observe(ctn)
-    resize()
 
-    let animateId = 0
-    let running = false
     let lastT = -1
     let accum = 0
     const update = (t: number) => {
@@ -453,40 +458,23 @@ export default function Strands({
       }
 
       // Halt once paused — one final frozen frame renders, then the loop stops
-      // issuing draw calls (it used to spin at speed 0 forever). Resumed below.
-      if (pausedRef.current) {
-        running = false
-        lastT = -1
-        return
-      }
-      animateId = requestAnimationFrame(update)
+      // issuing draw calls (it used to spin at speed 0 forever).
+      if (pausedRef.current) return false
     }
-    const startLoop = () => {
-      if (running) return
-      running = true
-      lastT = -1
-      animateId = requestAnimationFrame(update)
-    }
-    startLoopRef.current = startLoop
-    startLoop()
+    drawRef.current = update
+
+    loop.resize()
+    loop.start()
 
     return () => {
-      running = false
-      cancelAnimationFrame(animateId)
-      ro.disconnect()
-      window.removeEventListener('resize', handleResize)
+      drawRef.current = null
+      measureRef.current = null
       if (ctn && gl.canvas.parentNode === ctn) {
         ctn.removeChild(gl.canvas)
       }
-      gl.getExtension('WEBGL_lose_context')?.loseContext()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  // Resume the loop when unpausing — it self-halts inside `update` while paused.
-  useEffect(() => {
-    if (!paused) startLoopRef.current?.()
-  }, [paused])
 
   return (
     <div
