@@ -32,7 +32,7 @@ interface LightRaysProps {
   className?: string
 }
 
-const DEFAULT_COLOR = '#ffffff'
+const DEFAULT_COLOR = '#a855f7'
 
 // Canvas opacity crossfade (ms). The rays fade in on their first painted frame
 // and out before the context is torn down, so mounting/unmounting on scroll
@@ -109,8 +109,8 @@ const LightRays: React.FC<LightRaysProps> = ({
   saturation = 1.0,
   followMouse = true,
   mouseInfluence = 0.1,
-  noiseAmount = 0.0,
-  distortion = 0.0,
+  noiseAmount = 0.1,
+  distortion = 0.2,
   maxDpr = 2,
   className = '',
 }) => {

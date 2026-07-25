@@ -104,7 +104,7 @@ T9|x|scripts/registry/: CheckContext + Rule[] core, injected io. cheap rules onl
 T10|x|scripts/check-registry.ts runner + `check:registry` script; exit≠0 on error severity|V5,I.check
 T11|x|read-keys.ts (TS API): previews.ts key parse + `values.<ident>` extraction; wire 2 rules|V6,V8
 T12|x|source-defaults.ts (TS API): binding-pattern initializers, const resolve, Number() compare. WARN-only|V8
-T13|.|patch source defaults → registry: backgrounds|V8,C4
+T13|x|patch source defaults → registry: backgrounds|V8,C4
 T14|.|patch source defaults → registry: text-animations|V8,C4
 T15|.|patch source defaults → registry: micro-interactions|V8,C4
 T16|.|patch source defaults → registry: power-user-systems|V8,C4

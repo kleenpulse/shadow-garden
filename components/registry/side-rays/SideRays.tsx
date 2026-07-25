@@ -46,17 +46,17 @@ const originToFlip = (origin: Origin): [number, number] => {
 }
 
 const SideRays = ({
-  speed = 2.5,
-  rayColor1 = '#EAB308',
-  rayColor2 = '#96c8ff',
+  speed = 1,
+  rayColor1 = '#a855f7',
+  rayColor2 = '#22d3ee',
   intensity = 2,
-  spread = 2,
+  spread = 1,
   origin = 'top-right',
   tilt = 0,
-  saturation = 1.5,
-  blend = 0.75,
-  falloff = 2.0,
-  opacity = 1.0,
+  saturation = 1,
+  blend = 0.5,
+  falloff = 1,
+  opacity = 0.9,
   paused = false,
   className = '',
 }: SideRaysProps) => {

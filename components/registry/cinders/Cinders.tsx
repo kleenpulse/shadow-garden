@@ -43,14 +43,14 @@ function hexToRgb(hex: string): [number, number, number] {
 
 const Cinders = memo(
   ({
-    emberCount = 160,
+    emberCount = 140,
     riseSpeed = 1,
-    turbulence = 1,
-    emberSize = 2.4,
-    glow = 1,
+    turbulence = 0.6,
+    emberSize = 2,
+    glow = 8,
     draftStrength = 1,
-    emberColor = "#ff8a2e",
-    backgroundColor = "#0b0808",
+    emberColor = "#a855f7",
+    backgroundColor = "#0a0510",
     paused = false,
     ...rest
   }: CindersProps) => {
