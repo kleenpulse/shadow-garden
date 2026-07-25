@@ -64,6 +64,14 @@ export type Variant = {
   style: "css" | "tailwind";
   /** Path to the canonical source file on disk, relative to the repo root. */
   file: string;
+  /**
+   * What this file is to the customer. `"component"` is the entry itself and is
+   * always variants[0]; `"hook"` is a peer file they must copy alongside it —
+   * the animation runtime host (SPEC §C1b). Defaults to `"component"`.
+   */
+  role?: "component" | "hook";
+  /** Tab label in the Code panel. Falls back to the file's basename. */
+  label?: string;
 };
 
 export interface ComponentEntry {

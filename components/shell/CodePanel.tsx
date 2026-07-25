@@ -1,6 +1,7 @@
 import { getSource } from "@/lib/registry/source";
 import type { ComponentEntry } from "@/lib/registry/types";
 import CodeBlock from "./CodeBlock";
+import CodeTabs from "./CodeTabs";
 import SubscribeButton from "./SubscribeButton";
 
 // Server component. The gated read happens here — for a locked Pro component the
@@ -35,12 +36,20 @@ export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
     );
   }
 
-  return (
-    <CodeBlock
-      html={result.html}
-      raw={result.raw}
-      filename={entry.variants[0]?.file}
-      slug={entry.slug}
-    />
-  );
+  // One file stays a bare block; a peer hook adds a tab strip. Both are already
+  // highlighted server-side, so this stays inside the existing <Suspense> and
+  // nothing new becomes dynamic.
+  if (result.files.length === 1) {
+    const only = result.files[0]!;
+    return (
+      <CodeBlock
+        html={only.html}
+        raw={only.raw}
+        filename={only.file}
+        slug={entry.slug}
+      />
+    );
+  }
+
+  return <CodeTabs files={result.files} slug={entry.slug} />;
 }

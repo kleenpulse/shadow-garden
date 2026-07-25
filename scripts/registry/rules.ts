@@ -9,8 +9,12 @@ import { defaultsAgree } from "./source-defaults";
 // The expensive rules (preview read-keys, documented-vs-shipped defaults) need a
 // TypeScript pass and arrive in T11/T12.
 
-/** Paths a variant may point at. T19 adds "hooks/" when the loop host ships. */
-const VARIANT_ROOTS = ["components/registry/"];
+/**
+ * Roots getSource() can resolve a variant against. `hooks/` carries the
+ * animation runtime host, shipped as a peer file alongside the component (§C1b).
+ * Keep in sync with ROOTS in lib/registry/source.ts.
+ */
+const VARIANT_ROOTS = ["components/registry/", "hooks/"];
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
