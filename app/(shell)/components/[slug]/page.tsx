@@ -5,6 +5,7 @@ import { getAllSlugs, getEntry } from "@/lib/registry";
 import { cn, displayName } from "@/lib/utils";
 import LiveWorkspace from "@/components/shell/LiveWorkspace";
 import CodePanel from "@/components/shell/CodePanel";
+import PromptButton from "@/components/shell/PromptButton";
 import InstallSection from "@/components/shell/InstallSection";
 import PropsTable from "@/components/shell/PropsTable";
 import TierBadge from "@/components/shell/TierBadge";
@@ -29,6 +30,14 @@ export async function generateMetadata({
 function PanelSkeleton() {
 	return (
 		<div className="min-h-[220px] animate-pulse rounded-lg border border-hairline bg-panel" />
+	);
+}
+
+// Matches the Copy Prompt button's footprint so the tab row doesn't jump when
+// the gated control streams in.
+function PromptButtonSkeleton() {
+	return (
+		<div className="h-8 w-38 shrink-0 animate-pulse rounded-md border border-hairline bg-panel" />
 	);
 }
 
@@ -73,13 +82,19 @@ export default async function ComponentPage({
 
 			{/* The workspace reads tuned values from the URL (nuqs) — dynamic under
           Cache Components, so it streams as a hole in the static shell. The Code
-          tab's gated source (also dynamic) is rendered server-side and passed in. */}
+          tab's gated source and the gated Copy Prompt control (both dynamic) are
+          rendered server-side and passed in. */}
 			<Suspense fallback={<PanelSkeleton />}>
 				<LiveWorkspace
 					entry={entry}
 					code={
 						<Suspense fallback={<PanelSkeleton />}>
 							<CodePanel entry={entry} />
+						</Suspense>
+					}
+					promptSlot={
+						<Suspense fallback={<PromptButtonSkeleton />}>
+							<PromptButton entry={entry} />
 						</Suspense>
 					}
 				/>

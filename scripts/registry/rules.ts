@@ -175,6 +175,20 @@ const addedAtFormat: Rule = {
   },
 };
 
+const promptOverlaySlug: Rule = {
+  id: "prompt-overlay-slug",
+  severity: "error",
+  what: "every prompts/<slug>.md names a real registry slug",
+  run(ctx) {
+    const slugs = new Set(ctx.registry.map((entry) => entry.slug));
+    return [...ctx.promptOverlays]
+      .filter((name) => !slugs.has(name))
+      .map((name) => ({
+        detail: `prompts/${name}.md does not match any registry slug — the overlay is silently dropped from that component's AI prompt`,
+      }));
+  },
+};
+
 const dependenciesDeclared: Rule = {
   id: "dependencies-declared",
   severity: "error",
@@ -513,6 +527,7 @@ export const RULES: Rule[] = [
   defaultInDomain,
   disabledWhenTarget,
   addedAtFormat,
+  promptOverlaySlug,
   dependenciesDeclared,
   previewRegistered,
   previewReadsEveryProp,

@@ -30,9 +30,10 @@ Registry check (`scripts/registry/`, headless):
 
 - cmd: `bun scripts/check-registry.ts` → stdout violations; exit 0 ⇔ ⊥ error-severity
 - fn: `checkRegistry(ctx, rules)` → `Violation[]` — pure, io injected
-- type: `CheckContext` → `{ registry, previewKeys:Set, dirs:Set, fileExists(rel), readKeys(slug), sourceDefaults(slug), packageDeps:Set, today }`
-- type: `Rule` → `{ id, severity:"error"|"warn", run(ctx): Violation[] }`
-- type: `Violation` → `{ rule, severity, slug?, prop?, detail }`
+- type: `CheckContext` → `{ registry, previewKeys:Set, dirs:Set, fileExists(rel), previewReads(slug), sourceDefaults(slug), loopUsage(slug), packageDeps:Set, promptOverlays:Set }`
+- type: `Rule` → `{ id, severity:"error"|"warn", what, run(ctx): Finding[] }`
+- type: `Violation` → `Finding & { rule, severity }`; `Finding` → `{ slug?, prop?, detail }`
+- new rule → ! selftest case (uncovered rule → selftest exit ≠ 0) ∧ ! default ∈ selftest `context()` factory
 
 Animation runtime host (`hooks/use-animation-loop.ts`, `"use client"`):
 
@@ -80,6 +81,19 @@ Prop kind table (`lib/registry/kinds.ts`):
 - consumers: PropsTable, ControlsPanel, useTunedProps, `scripts/registry/rules.ts` (rule `default-in-domain`)
 - new kind → tsc error ∀ 3 tables
 
+AI prompt (`lib/registry/prompt.ts`, server-only):
+
+- fn: `getPrompt(entry)` → `Promise<PromptResult>`; type: `PromptResult` → `{status:"ok",text} | {status:"locked"} | {status:"pending"}`
+- gate inherited ∃! `getSource` — ⊥ 2nd entitlement read. locked | pending → pass through
+- text derived: entry meta + `installCommand("bun",entry)` + ∀ `SourceFile.raw` (incl `role:"hook"` peer) + props table via KIND_TABLE + usage from documented defaults + conditional contract lines
+- overlay ? `prompts/<slug>.md` → appended as "Component-specific notes". ⊥ file = normal case
+- fence width = longest backtick run + 1. ⊥ fixed 3 — source | overlay ∋ ``` → block truncates silently
+- `getSource` = `cache()`d ∴ ∃! disk read ∧ ∃! Shiki run / entry / request (CodePanel ∧ prompt both call it)
+- ui: `PromptButton` (srv, own Suspense) → `CopyPromptButton` | `PromptLocked` | ⊥ (pending)
+- fx: copy ok → sparkle burst + `play("select")`. tab → `"code"` → `useBorderGlow` sweep (`autoplay` 1400ms pulse ≈ 230° @ 2200ms/rev).
+  ∀ fx reduced-motion gated at call site. glow shell owns border+bg (button transparent) — button border would occlude ring
+- api: POST `/api/stats` `{slug, event:"prompt"}` → 204; col `component_stats.prompt_count` ≠ `copy_count`
+
 Feedback submit (`lib/feedback/submit.ts`):
 
 - fn: `submitFeedback(input)` → `Promise<SubmitResult>` — ⊥ throw ∀ path (⊥ network ⊥ parse)
@@ -112,6 +126,12 @@ V18: ∃! feedback submit seam. error modes = closed union returned as data (⊥
 V19: vendored registry copy (admin) → content-identical (⊥ byte: CRLF ≠ LF across repos) | drift check exit ≠ 0
 V20: `onFrame` → `undefined` = continue; ∃! literal `false` halts. ⊥ nullish-coalesce void draw → `false`.
      ∀ hosted entry → sustained draw calls ∀ 2s window (⊥ 1 stranded frame)
+V21: prompt text ∉ `ComponentEntry` — entry client-serialized ∀ visitor (Sidebar, command-groups, LiveWorkspace props).
+     ∴ ∃! gate = `getSource` ⇒ tier pro ∧ ¬pro → locked ∧ ⊥ source bytes cross
+V22: ∀ `prompts/*.md` → basename ∈ slugs | check exit ≠ 0 (⊥ silently-dropped overlay)
+V23: ∀ clipboard write → text in hand pre-click (prop, ⊥ fetch on click) — await before write → ⊥ user-gesture @ Safari.
+     ∀ success FX (sparkle, sound, trackEvent) ∈ try post-await. ⊥ fire on click ∴ failed copy ⊥ celebrates
+V24: JS-driven motion → ! own reduced-motion gate. globals.css `@media (prefers-reduced-motion)` backstop reaches CSS ⊥ motion/react ⊥ gsap ⊥ rAF ⊥ canvas
 
 ## §T
 
@@ -157,6 +177,15 @@ T38|x|admin: check-schema-drift.ts exit≠0 on drift; re-copy 6 vendored files|V
 T39|x|verify-loop.mjs: draw-call continuity probe + `VERIFY_GPU` + `NEEDS_GPU` skip|V20
 T40|x|19 entries: `?? false` → ternary. ⊥ draw-body change|V20,B7
 T41|x|`no-nullish-halt` rule (loop-usage `nullishHalts`) + selftest; onFrame doc|V20,G2
+T42|x|`lib/registry/prompt.ts`: derived AI brief + `prompts/<slug>.md` overlay + dynamic fence|V21,G3
+T43|x|`getSource` → `cache()` ∴ ⊥ 2× Shiki / page (CodePanel + prompt)|I.AI prompt
+T44|x|`PromptButton` srv 3-way (ok\|locked\|pending) → `CopyPromptButton`\|`PromptLocked`; own Suspense|V21,V13
+T45|x|`SparkleBurst`: hook + renderer, burst ∈ click handler ⊥ effect; reduced-motion → ⊥ spawn|V23,V24
+T46|x|`promptSlot` chain page → LiveWorkspace → WorkspaceTabs; stub replaced, `mb-4` → row|V21
+T47|x|stat event `prompt` + `prompt_count` col + migration 0006 + admin schema mirror|I.AI prompt
+T48|x|`prompt-overlay-slug` rule + `promptOverlays` ∈ CheckContext + selftest case|V22,V5
+T49|x|magnetic-button `rippleColor` source `#0a0a0c` → `#d2abfd` (registry = truth)|V8,C4
+T50|x|prompt button: code-tab sweep. reuse `useBorderGlow` `autoplay` pulsed 1400ms (⊥ edit registry src). border+bg → shell wrapper ∴ ring ∉ occluded. trigger = zustand `subscribe` prev→next (⊥ setState-in-effect)|V24,G3
 
 ## §B
 
@@ -165,6 +194,7 @@ B1|2026-07-19|LightRays/DotField/Strands window-resize only → stale/stretched 
 B2|2026-07-19|BlackHole resize() clears canvas+FBO, no redraw while loop halted → blank/off-center after resize|V2
 B3|2026-07-25|entitlement.ts:34 accepts `sg_pro=1` unconditionally in prod → unauth Pro source unlock via source.ts:22|V3
 B4|2026-07-25|db/index.ts:12 throws at import; reconcile.ts:97/:139, notify.ts:30, auth/callback:40 unguarded → polar webhook 500-retries forever|V4
-B5|2026-07-25|OPEN. build warns "whole project traced unintentionally": `source.ts:59` `readFile(absolute)` arg fully dynamic ∴ turbopack ⊥ scope trace despite literal roots (`:17-18`). build ✓, PPR ✓ — bundle size only. ⊥ regression (∈ since T19). `turbopackIgnore` ⊥ fix — would drop the files Pro reads need|—
+B5|2026-07-25|OPEN. build warns "whole project traced unintentionally": `source.ts:59` `readFile(absolute)` arg fully dynamic ∴ turbopack ⊥ scope trace despite literal roots (`:17-18`). build ✓, PPR ✓ — bundle size only. ⊥ regression (∈ since T19). `turbopackIgnore` ⊥ fix — would drop the files Pro reads need. T42 adds a 2nd dynamic `readFile` (`prompt.ts` overlay, literal `PROMPTS_ROOT`) — same cause, ⊥ new class|—
 B6|2026-07-25|admin `check-schema-drift.ts:46` `process.exit(0)` unconditional ∴ warned ∀ run, failed ⊥ run. 5/6 vendored files stale (incl. whole entry `long-shadow` added upstream). 2nd cause: byte-hash over CRLF-vs-LF checkouts → ∀ file reported drifted ∴ signal worthless|V19
 B7|2026-07-25|19 entries frozen ∀ 1 frame. `onFrame: drawRef.current?.(x) ?? false` — draw typed `void \| false` ∴ good frame → `undefined` → `?? false` → `false` = host halt signal. reads as null-guard ∴ survived review 19×. 2nd-order: `verify-loop.mjs` asserted 1st frame + V1 + V2, ⊥ continuity — frozen loop passed ∀ assertion. control: `side-rays` ∃! entry ⊥ wrapper ∧ ∃! entry still animating|V20
+B8|2026-07-26|magnetic-button `rippleColor` source `#0a0a0c` vs registry `#d2abfd` → bench shows amethyst, customer paste ships near-black. `documented-default-matches-source` already detected ∴ ⊥ new invariant — gap = check ⊥ run before commit. amplified by T42: prompt embeds `raw` ∴ drifted default reaches LLM too|V8,C4

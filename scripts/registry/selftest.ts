@@ -55,6 +55,7 @@ function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): 
     previewReads: readsAll(registry),
     sourceDefaults: () => new Map(),
     loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false, nullishHalts: 0 }),
+    promptOverlays: new Set<string>(),
     ...over,
   };
 }
@@ -163,6 +164,10 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
   {
     rule: "added-at-format",
     ctx: context([entry({ addedAt: "25-07-2026" })]),
+  },
+  {
+    rule: "prompt-overlay-slug",
+    ctx: context([entry()], { promptOverlays: new Set(["not-a-slug"]) }),
   },
   {
     rule: "dependencies-declared",

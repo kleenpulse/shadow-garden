@@ -116,6 +116,16 @@ export function buildContext(): CheckContext {
     return result;
   }
 
+  // Optional directory — a repo with no overlays authored yet is perfectly valid.
+  const promptsDir = path.join(ROOT, "prompts");
+  const promptOverlays = new Set(
+    existsSync(promptsDir)
+      ? readdirSync(promptsDir)
+          .filter((name) => name.endsWith(".md"))
+          .map((name) => name.slice(0, -".md".length))
+      : [],
+  );
+
   return {
     registry,
     dirs,
@@ -127,6 +137,7 @@ export function buildContext(): CheckContext {
     previewReads,
     sourceDefaults,
     loopUsage,
+    promptOverlays,
   };
 }
 

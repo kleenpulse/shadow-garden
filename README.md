@@ -2,7 +2,7 @@
 
 An animation-forward React component showcase — a dark, instrument-bench docs shell for browsing, tuning, and copying production-ready motion components. The name is borrowed from *The Eminence in the Shadow*.
 
-Each component ships with a live preview, a Controls panel that tunes every prop in real time, the source on a Code tab, an install block, and a Props API table — all generated from a single registry entry per prop, so the docs never drift from the component.
+Each component ships with a live preview, a Controls panel that tunes every prop in real time, the source on a Code tab, an install block, a Props API table, and a one-click **AI integration prompt** — all generated from a single registry entry per prop, so the docs never drift from the component.
 
 ## What's inside
 
@@ -25,6 +25,7 @@ Components are tiered **free** (27) or **pro** (26). Pro source is gated server-
 - **Tunable, shareable state.** Control values live in the URL via nuqs, so a tuned preview is a link you can share.
 - **Fullscreen stage.** Every preview opens on a chrome-free fullscreen route with a docked floating controls box — same URL state, so a tuning deep-links between the workspace and fullscreen byte-for-byte.
 - **Server-highlighted code.** Source is read from disk server-side and highlighted with Shiki (`vesper` theme); entitlement gates which source you can see.
+- **Copy Prompt.** One click puts a complete, paste-ready brief on the clipboard — full source of every file (including any peer hook), the dependency install, the props table, a usage example and the behavioural contract — so an LLM can wire the component into your app without you assembling context by hand. Derived from the same registry entry, gated by the same seam as the source, and extendable per component with an optional `prompts/<slug>.md` overlay.
 - **Resilient previews.** Every live component renders inside its own error boundary, so one crashing animation shows a contained fallback instead of blanking the page.
 
 ## Design

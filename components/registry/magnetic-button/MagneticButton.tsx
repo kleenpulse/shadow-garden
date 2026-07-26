@@ -62,7 +62,7 @@ export default function MagneticButton({
   auraColor = "#a855f7",
   auraSize = 80,
   ripple = true,
-  rippleColor = "#0a0a0c",
+  rippleColor = "#d2abfd",
   reducedMotion = false,
   className,
 }: MagneticButtonProps) {

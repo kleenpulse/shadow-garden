@@ -6,47 +6,54 @@ import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import PillTabs, { type PillTabItem } from "./PillTabs";
 
 const TABS: PillTabItem<WorkspaceTab>[] = [
-  { value: "preview", label: "preview" },
-  { value: "code", label: "code" },
+	{ value: "preview", label: "preview" },
+	{ value: "code", label: "code" },
 ];
 
 export default function WorkspaceTabs({
-  slug,
-  preview,
-  code,
+	slug,
+	preview,
+	code,
+	promptSlot,
 }: {
-  slug: string;
-  preview: ReactNode;
-  code: ReactNode;
+	slug: string;
+	preview: ReactNode;
+	code: ReactNode;
+	/** Server-rendered Copy Prompt control (gated). Absent while it streams in. */
+	promptSlot?: ReactNode;
 }) {
-  const activeTab = useUIStore((state) => state.activeTab);
-  const setActiveTab = useUIStore((state) => state.setActiveTab);
-  const { play } = useInteractionSound();
+	const activeTab = useUIStore((state) => state.activeTab);
+	const setActiveTab = useUIStore((state) => state.setActiveTab);
+	const { play } = useInteractionSound();
 
-  // Reset to the preview tab when navigating to a different component.
-  useEffect(() => {
-    setActiveTab("preview");
-  }, [slug, setActiveTab]);
+	// Reset to the preview tab when navigating to a different component.
+	useEffect(() => {
+		setActiveTab("preview");
+	}, [slug, setActiveTab]);
 
-  return (
-    <div>
-      <PillTabs
-        aria-label="Preview or source"
-        value={activeTab}
-        onValueChange={(tab) => {
-          play(tab === "code" ? "toggle-on" : "toggle-off");
-          setActiveTab(tab);
-        }}
-        items={TABS}
-        layoutId="workspace-tabs"
-        className="mb-4"
-      />
-      <div role="tabpanel" hidden={activeTab !== "preview"}>
-        {preview}
-      </div>
-      <div role="tabpanel" hidden={activeTab !== "code"}>
-        {code}
-      </div>
-    </div>
-  );
+	return (
+		<div>
+			{/* The row carries the margin, not the pill track — hanging it on PillTabs
+			    left the right-hand control sitting 1rem below the tabs. */}
+			<div className="mb-4 flex w-full items-center justify-between gap-3">
+				<PillTabs
+					aria-label="Preview or source"
+					value={activeTab}
+					onValueChange={(tab) => {
+						play(tab === "code" ? "toggle-on" : "toggle-off");
+						setActiveTab(tab);
+					}}
+					items={TABS}
+					layoutId="workspace-tabs"
+				/>
+				{promptSlot}
+			</div>
+			<div role="tabpanel" hidden={activeTab !== "preview"}>
+				{preview}
+			</div>
+			<div role="tabpanel" hidden={activeTab !== "code"}>
+				{code}
+			</div>
+		</div>
+	);
 }
