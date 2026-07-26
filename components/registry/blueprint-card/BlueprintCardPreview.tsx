@@ -27,6 +27,7 @@ export default function BlueprintCardPreview({
 				dotSize={values.dotSize as number}
 				glowIntensity={values.glowIntensity as number}
 				animated={animated}
+				duration={values.duration as number}
 				reducedMotion={reducedMotion}
 				className="w-full max-w-sm"
 			>
