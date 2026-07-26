@@ -3,6 +3,7 @@ export type StatEvent =
   | "unfavorited"
   | "install"
   | "copy"
+  | "prompt"
   | "view";
 
 // Fire-and-forget engagement ping to /api/stats. `keepalive` lets the request

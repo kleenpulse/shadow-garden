@@ -17,6 +17,7 @@ const EVENTS = new Set([
   "unfavorited",
   "install",
   "copy",
+  "prompt",
   "view",
 ]);
 type StatEvent =
@@ -24,6 +25,7 @@ type StatEvent =
   | "unfavorited"
   | "install"
   | "copy"
+  | "prompt"
   | "view";
 
 // Explicit per-event upsert. Literal column keys keep this fully type-safe (a
@@ -80,6 +82,19 @@ async function increment(slug: string, event: StatEvent) {
           target,
           set: {
             copyCount: sql`${componentStats.copyCount} + 1`,
+            updatedAt: now,
+          },
+        });
+    // Kept distinct from `copy`: one is "I took the source", the other is
+    // "I asked an LLM to wire it in". Folding them would make both unreadable.
+    case "prompt":
+      return db
+        .insert(componentStats)
+        .values({ slug, promptCount: 1 })
+        .onConflictDoUpdate({
+          target,
+          set: {
+            promptCount: sql`${componentStats.promptCount} + 1`,
             updatedAt: now,
           },
         });

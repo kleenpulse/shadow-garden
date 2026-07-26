@@ -18,14 +18,17 @@ import WorkspaceTabs from "./WorkspaceTabs";
 // Owns the tuned-state source (the URL, via nuqs) shared by the preview stage and
 // the controls. The Preview/Code tabs sit on top; the controls run full-width
 // underneath so dragging a control updates the preview directly above it.
-// `code` is a server-rendered node (the gated source panel) passed straight
-// through to the Code tab.
+// `code` and `promptSlot` are server-rendered nodes (the gated source panel and
+// the gated Copy Prompt control) passed straight through — both read cookies, so
+// resolving them on the server keeps the entitlement answer out of the client.
 export default function LiveWorkspace({
 	entry,
 	code,
+	promptSlot,
 }: {
 	entry: ComponentEntry;
 	code: ReactNode;
+	promptSlot?: ReactNode;
 }) {
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
@@ -79,6 +82,7 @@ export default function LiveWorkspace({
 					</div>
 				}
 				code={code}
+				promptSlot={promptSlot}
 			/>
 			<ControlsPanel
 				props={entry.props}

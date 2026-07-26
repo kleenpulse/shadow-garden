@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { highlightToHtml } from "@/lib/shiki";
@@ -77,7 +78,7 @@ async function readVariant(variant: Variant): Promise<SourceFile | null> {
 // returned only when the caller is entitled. For a locked Pro component nothing
 // but a `locked` marker crosses to the client. One gate per entry — a peer hook
 // is part of the same purchase, not separately gated.
-export async function getSource(entry: ComponentEntry): Promise<SourceResult> {
+async function readSource(entry: ComponentEntry): Promise<SourceResult> {
   if (entry.tier === "pro") {
     const { pro } = await getEntitlement();
     if (!pro) return { status: "locked" };
@@ -97,3 +98,10 @@ export async function getSource(entry: ComponentEntry): Promise<SourceResult> {
 
   return { status: "ok", files };
 }
+
+// Request-scoped memo. The Code panel and the AI prompt both need the same bytes
+// on the same page, and Shiki highlighting is the expensive half — without this
+// every component page pays for it twice. Keyed on the entry reference, which is
+// stable: `registry` is a module singleton, so getEntry(slug) hands both callers
+// the same object.
+export const getSource = cache(readSource);

@@ -104,6 +104,7 @@ export const componentStats = pgTable("component_stats", {
   favoriteCount: integer("favorite_count").default(0).notNull(),
   installCount: integer("install_count").default(0).notNull(),
   copyCount: integer("copy_count").default(0).notNull(), // raw-source copy (Pro intent)
+  promptCount: integer("prompt_count").default(0).notNull(), // AI integration brief copied
   viewCount: integer("view_count").default(0).notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()

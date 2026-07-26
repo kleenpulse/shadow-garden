@@ -54,6 +54,8 @@ export interface CheckContext {
   sourceDefaults(slug: string): Map<string, SourceDefault> | null;
   /** Hand-rolled runtime primitives in a slug's component source. */
   loopUsage(slug: string): LoopUsage | null;
+  /** Basenames (no extension) of the AI-prompt overlays in prompts/. */
+  promptOverlays: Set<string>;
 }
 
 export interface Rule {
