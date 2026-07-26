@@ -331,12 +331,15 @@ export default function Strands({
       delete geometry.attributes.uv
     }
 
+    const bw = gl.drawingBufferWidth || ctn.offsetWidth
+    const bh = gl.drawingBufferHeight || ctn.offsetHeight
+
     const program = new Program(gl, {
       vertex: VERT,
       fragment: FRAG,
       uniforms: {
         uTime: { value: 0 },
-        uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
+        uResolution: { value: [bw, bh] },
         uColors: { value: buildPalette(propsRef.current.colors) },
         uColorCount: {
           value: Math.min(propsRef.current.colors.length, MAX_COLORS),
@@ -366,8 +369,8 @@ export default function Strands({
     const mesh = new Mesh(gl, { geometry, program })
 
     const renderTarget = new RenderTarget(gl, {
-      width: ctn.offsetWidth,
-      height: ctn.offsetHeight,
+      width: bw,
+      height: bh,
     })
 
     const glassProgram = new Program(gl, {
@@ -375,7 +378,7 @@ export default function Strands({
       fragment: GLASS_FRAG,
       uniforms: {
         uScene: { value: renderTarget.texture },
-        uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
+        uResolution: { value: [bw, bh] },
         // Lens radius tracks the field scale so the glass hugs the strand
         // field at any zoom instead of cropping it at a fixed screen radius.
         uRadius: { value: 0.46 * glassSize * scale },
@@ -395,12 +398,14 @@ export default function Strands({
     ctn.appendChild(gl.canvas)
 
     glRef.current = gl
-    measureRef.current = ({ width, height, dpr }) => {
+    measureRef.current = ({ width, height, dpr, bufferWidth, bufferHeight }) => {
       renderer.dpr = dpr
       renderer.setSize(width, height)
-      program.uniforms.uResolution.value = [width, height]
-      renderTarget.setSize(width, height)
-      glassProgram.uniforms.uResolution.value = [width, height]
+      const targetBw = gl.drawingBufferWidth || bufferWidth
+      const targetBh = gl.drawingBufferHeight || bufferHeight
+      program.uniforms.uResolution.value = [targetBw, targetBh]
+      renderTarget.setSize(targetBw, targetBh)
+      glassProgram.uniforms.uResolution.value = [targetBw, targetBh]
     }
 
     let lastT = -1

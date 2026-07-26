@@ -428,6 +428,18 @@ export const microInteractions: ComponentEntry[] = [
 				default: true,
 				description: "Draw the frame in on mount.",
 			},
+			{
+				name: "duration",
+				label: "Duration",
+				kind: "number",
+				default: 0.6,
+				min: 0.2,
+				max: 5,
+				step: 0.05,
+				unit: "s",
+				description: "Draw-in animation duration.",
+				disabledWhen: { prop: "animated", equals: false },
+			},
 		],
 	},
 	{

@@ -13,6 +13,8 @@ export interface BlueprintCardProps {
 	glowIntensity?: number;
 	/** Draw the frame in on mount. */
 	animated?: boolean;
+	/** Total draw-in duration in seconds. */
+	duration?: number;
 	reducedMotion?: boolean;
 	className?: string;
 	children: React.ReactNode;
@@ -34,6 +36,7 @@ export default function BlueprintCard({
 	dotSize = 4,
 	glowIntensity = 0.15,
 	animated = true,
+	duration = 0.6,
 	reducedMotion = false,
 	className,
 	children,
@@ -54,7 +57,7 @@ export default function BlueprintCard({
 	const line = `color-mix(in srgb, ${accentColor} 90%, transparent)`;
 	const ease = "cubic-bezier(0.22, 0.61, 0.36, 1)";
 	const transition = (prop: string, delay: number) =>
-		skip ? undefined : `${prop} 0.6s ${ease} ${delay}s`;
+		skip ? undefined : `${prop} ${duration}s ${ease} ${delay}s`;
 
 	return (
 		<div
