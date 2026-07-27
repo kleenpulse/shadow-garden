@@ -42,7 +42,7 @@ export default function PhilosophyPage() {
 	);
 
 	return (
-		<div className="mx-auto max-w-7xl pb-[10svh]">
+		<div className="mx-auto max-w-7xl ">
 			<PhilosophyFlame />
 			<PageBottomBlur className="lg:hidden" />
 			<GotoTop />

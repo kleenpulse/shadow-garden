@@ -148,6 +148,34 @@ V29: composited child ∈ rounded `overflow-hidden` ancestor → ⊥ permanent `
 V30: stale-composited-frame bug ⊥ observable by `Page.captureScreenshot` — capture forces the repaint that clears it ∴ ∀ green = ⊥ signal.
      swiftshader ⊥ reproduces damage-rect bugs (∴ `VERIFY_GPU` exists). CDP synthetic pointer ⊥ reproduced it @ real GPU, headful, presented-frame diff.
      ∴ ∀ compositor artifact → human eye @ real hardware = ∃! proof. harness ⊥ substitute
+V31: ∀ JS-measured layout ∈ page ∃ programmatic scroll-to-anchor → ! pack synchronously ∈ `useLayoutEffect`.
+     child layout effect ≺ parent passive effect ∴ scroll measures final geometry.
+     ⊥ pack ∈ RO callback | rAF — RO delivery ⊥ ordered vs React passive flush ∴ §B10 again.
+     RO|rAF = async height change only (image, font, rewrap post column-count change)
+V32: ∀ measure-then-position layout → ∀ read ≺ ∀ write, 1 pass each. ⊥ measure-move-measure per item = layout thrashing.
+     ⊥ `content-visibility:auto` on measured items — placeholder size ⊥ real height.
+     RO on own container → width only; height = own output ∴ feedback loop.
+     tie-break argmin strictly-shorter (⊥ `≤`) ∴ 2 equal columns ⊥ swap item ∀ repack.
+     stagger = `transition-delay`, ⊥ `setTimeout` — timer orphaned by re-run mid-flight ∴ item stranded @ opacity 0.
+     `will-change` ∀ in-flight tween only, cleared on timer (§V25, §V29).
+     IO reveal → ⊥ negative `rootMargin` — item ∈ trimmed band @ max scroll ⊥ intersects ∴ invisible ∀ good.
+     stagger index ! capped — batch = ∀ item crossing @ once ∴ uncapped 30-item batch = >1s tail in plain sight.
+     reveal ∃ travel ∧ page ∃ anchor scroll → rise = transform on ancestor ∈ box `scrollIntoView` measures
+     ∴ land, then drift `revealDistance` above stop (≡ §B11 symptom).
+     ∴ ! settle target reveal ≺ ∀ measure (`settleMasonryReveal`), ⊥ ban travel. target loses own rise, ∀ peer still animates
+V34: ∀ component that hides own content → `reducedMotion` ⊥ optional @ call site.
+     omitted → entrance armed ∀ reduced-motion user: 73/91 cards @ opacity 0 until scrolled to (/philosophy, measured).
+     globals.css backstop crushes duration ⊥ opacity ∴ masks symptom, ⊥ fixes
+V35: ∀ programmatic smooth scroll → animate ≤ ~1 viewport. distance = jank, ⊥ frame budget.
+     7400px @ browser-allotted ~1.1s = ~300px/frame @ peak ∴ 1 slow frame → ~1900px lurch (median step 30, max 1900).
+     ⊥ page's fault: identical @ reveal disabled ∧ WebGL backdrop disabled.
+     ∴ close gap > SMOOTH_MAX instantly, animate last APPROACH only → max step 22-68px.
+     browser owns final leg ∴ `scroll-margin-top` still decides rest (§V28)
+V33: ∀ masonry-ish layout → ∃! parent, items move by `transform`. ⊥ DOM-column-per-column.
+     reparent = remount ∴ focus | playing media | open popover | local state dies ∀ resize.
+     ∧ DOM order ≡ reading order ∴ Tab ≡ eye. CSS `columns` ⊥ (fills col 1 top→bottom first).
+     pre-hydration paint → CSS `columns` fallback (`column-width` + `column-count` ≡ same arithmetic), absolute ← 1st layout effect.
+     parent re-render ∀ keystroke → key-signature dep, ⊥ `children` identity ∴ ⊥ forced remeasure ∀ keystroke
 
 ## §T
 
@@ -206,6 +234,9 @@ T51|x|approach rewrite: 2 rAF deleted (park→flush→travel 1 task) ∴ V10 ✓
 T52|x|philosophy filter: `query` (popup) ≠ `committed` (grid) split, ⊥ `useDeferredValue`, jump effect abandons on anchor miss, Enter ⊥ popup → commit raw text, readout `↵ to filter`|V27,B9
 T53|x|philosophy anchors: `ANCHOR_STOP` = `scroll-mt-24 sm:scroll-mt-28` ∀ section + article (⊥ `scroll-mt-20`), READING_LINE 88 → 120|V28,B10
 T54|~|approach round 2: drop `will-change-transform`; `filter` declaration + transition leg gated on `blur > 0` (⊥ animate identity filter). ⊥ harness-reproducible ∴ awaiting user eye @ real hw|V29,V30,B12
+T55|x|masonry (pro, Power-User Systems): ∃! parent + absolute + `translate3d`, container-derived column count, CSS-`columns` pre-hydration fallback, sync pack ∈ layout effect, RO ∀ async height, IO reveal w/ `transition-delay` stagger. `NOT_A_LOOP` entry|V31,V32,V33,V6
+T56|x|/philosophy §terms: `grid gap-3 sm:grid-cols-2` → `<Masonry minColumnWidth=240 maxColumns=3 gap=12 revealDistance=20 reducedMotion>` ∀ section. ANCHOR_STOP ∧ `id` ∀ article unchanged ∴ V27/V28 hold|V31,V33,V27,V28
+T57|x|`scrollToAnchor`: settle target reveal ≺ measure; stage instantly when > SMOOTH_MAX(1.4) vh, animate APPROACH(0.55) vh only. proven: drift 0 ∀ fresh-load term pick (target `revealed:-` ∧ opacity 0 pre-click), max step 1900→68px|V33,V34,V35
 
 ## §B
 

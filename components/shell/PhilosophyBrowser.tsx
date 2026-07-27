@@ -12,6 +12,12 @@ import {
 import { cn } from "@/lib/utils";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { useScrollSpy } from "@/hooks/use-scroll-spy";
+// Imported, not forked. It packs synchronously in a layout effect, which runs
+// before this component's passive jump effect — so the scroll below always
+// measures final geometry (§V27, §V31).
+import Masonry, {
+	settleMasonryReveal,
+} from "@/components/registry/masonry/Masonry";
 import PhilosophyFilter from "./PhilosophyFilter";
 import PhilosophySectionNav from "./PhilosophySectionNav";
 import TierBadge from "./TierBadge";
@@ -23,6 +29,57 @@ import TierBadge from "./TierBadge";
 // to the next spacing step. Reserving only the TopBar hides the heading behind
 // the filter.
 const ANCHOR_STOP = "scroll-mt-24 sm:scroll-mt-28"; // 96px / 112px
+
+// Travel that gets animated, as a fraction of the viewport. Anything further
+// than SMOOTH_MAX away is closed instantly first, leaving only APPROACH to
+// animate.
+//
+// Long smooth scrolls are the jank, and it is not a frame-budget problem — this
+// page is ~8700px tall, so a jump to the last section asks the browser to cover
+// 7400px in the ~1.1s it allots. That is ~300px per frame at the peak of the
+// easing curve: unreadable while it runs, and a single slow frame turns into a
+// ~1900px lurch (measured: median step 30px, max step 1900px). Profiling the
+// same jump with the reveal animation disabled and with the WebGL backdrop
+// disabled produced identical numbers, so nothing on the page is at fault —
+// the distance is.
+//
+// So don't travel it. Close the gap instantly to just short of the target and
+// animate only the final screenful. Arrival still reads as movement, and the
+// part the eye can actually follow is the only part that animates.
+const SMOOTH_MAX = 1.4;
+const APPROACH = 0.55;
+
+function scrollToAnchor(el: HTMLElement, reduced: boolean) {
+	// Before anything measures the target: a card mid-entrance is still
+	// `revealDistance` low, and that offset is inside the box `scrollIntoView`
+	// reads. Land on it un-settled and the card finishes rising afterwards,
+	// carrying itself that far above its stop and back under the filter bar
+	// (§B11's symptom). Settling first costs the target its own rise; every
+	// other card still animates in around it.
+	settleMasonryReveal(el);
+
+	if (reduced) {
+		el.scrollIntoView({ block: "start", behavior: "auto" });
+		return;
+	}
+
+	const vh = window.innerHeight;
+	const from = window.scrollY;
+	const targetY = from + el.getBoundingClientRect().top;
+
+	if (Math.abs(targetY - from) > vh * SMOOTH_MAX) {
+		// Staged on the near side of the target so the animated leg still runs in
+		// the direction of travel — landing past it and easing backwards reads as
+		// an overshoot being corrected.
+		const stage =
+			targetY > from ? targetY - vh * APPROACH : targetY + vh * APPROACH;
+		window.scrollTo({ top: Math.max(0, stage), behavior: "auto" });
+	}
+
+	// The browser owns the final leg, so `scroll-margin-top` still decides where
+	// the heading comes to rest (§V28) — the staging above only has to get close.
+	el.scrollIntoView({ block: "start", behavior: "smooth" });
+}
 
 // A hair below the deepest stop (112), never above it. A reading line shallower
 // than the landing point would hand the rail straight back to the previous
@@ -167,10 +224,7 @@ export default function PhilosophyBrowser({
 		// block:"start" needs no manual offset. `behavior` has to be gated by hand —
 		// the global reduced-motion block neutralizes CSS scroll-behavior only, not
 		// the JS argument.
-		el.scrollIntoView({
-			block: "start",
-			behavior: reduced ? "auto" : "smooth",
-		});
+		scrollToAnchor(el, reduced);
 		jumpTo(pending.sectionAnchor);
 		setPulse(pending.anchor);
 		// `filtered` is *not* a dep: the tick and the commit land in one batch, so
@@ -263,7 +317,7 @@ export default function PhilosophyBrowser({
 				</ul>
 			</nav>
 
-			<div className="min-w-0 flex-1">
+			<div className="min-w-0 flex-1 pb-[10svh]">
 				<div className="mb-4 md:mb-8 flex gap-2 items-center top-10 sticky sm:top-14 z-10 bg-panel/80 backdrop-blur py-2">
 					<PhilosophyFilter
 						query={query}
@@ -302,7 +356,25 @@ export default function PhilosophyBrowser({
 								{section.blurb}
 							</p>
 
-							<div className="mt-4 grid gap-3 sm:grid-cols-2">
+							{/* Card heights here disagree structurally, not incidentally: a
+							    description runs one to four wrapped lines and the "See it"
+							    chip row grows in row-height steps — `Loop` carries 27 chips,
+							    its neighbour carries none. A row-baseline grid leaves that
+							    difference on screen as dead space. */}
+							{/* The rise is safe here only because `scrollToAnchor` settles the
+							    target first — a card mid-entrance measures `revealDistance` low,
+							    and a jump that trusts that offset lands under the filter bar
+							    (§V33). `reducedMotion` is not optional either: without it the
+							    entrance stays armed for people who asked for no motion, and the
+							    page is a grid of invisible cards until each one is scrolled to. */}
+							<Masonry
+								className="mt-4"
+								minColumnWidth={240}
+								maxColumns={3}
+								gap={12}
+								revealDistance={20}
+								reducedMotion={reduced}
+							>
 								{section.terms.map((row) => (
 									<article
 										key={row.term}
@@ -342,7 +414,7 @@ export default function PhilosophyBrowser({
 										)}
 									</article>
 								))}
-							</div>
+							</Masonry>
 						</section>
 					))}
 				</div>
