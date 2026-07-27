@@ -10,6 +10,10 @@ import TierBadge from "./TierBadge";
  * The glossary's filter, as a real combobox.
  *
  * Presentation and interaction only — every ranked suggestion arrives as a prop.
+ * Typing never filters the page: it moves `query`, which moves the popup. The
+ * list behind it changes only on a commit — a picked suggestion or Enter — so a
+ * suggestion click has a still page to scroll into (§V27).
+ *
  * This is the repo's first `role="combobox"`, so the ARIA here is the reference
  * implementation rather than a copy of one: input owns `aria-activedescendant`,
  * the listbox never takes focus, and the visual cursor and the announced cursor
@@ -46,12 +50,15 @@ function Marked({ text, ranges }: { text: string; ranges: readonly Range[] }) {
 export default function PhilosophyFilter({
 	query,
 	onQueryChange,
+	onCommitQuery,
 	suggestions,
 	onSelect,
 	className,
 }: {
 	query: string;
 	onQueryChange: (value: string) => void;
+	/** Enter with nothing to pick — apply the raw text as the list filter. */
+	onCommitQuery: (value: string) => void;
 	suggestions: Suggestion[];
 	onSelect: (suggestion: Suggestion) => void;
 	className?: string;
@@ -145,11 +152,17 @@ export default function PhilosophyFilter({
 				setActive((i) => (i <= 0 ? count - 1 : i - 1));
 				return;
 			case "Enter":
-				if (!visible) return;
 				event.preventDefault();
-				// No cursor yet → the top-ranked row. Type-and-Enter should do the
-				// obvious thing rather than nothing.
-				commit(suggestions[active >= 0 ? active : 0]);
+				if (visible) {
+					// No cursor yet → the top-ranked row. Type-and-Enter should do the
+					// obvious thing rather than nothing.
+					commit(suggestions[active >= 0 ? active : 0]);
+					return;
+				}
+				// Nothing to pick, so Enter means the literal text. This is the only
+				// route to the empty state and to description-only matches, which
+				// never earn a suggestion row.
+				onCommitQuery(query);
 				return;
 			case "Escape":
 				// Two-stage: dismiss the popup first, clear the query only if it is

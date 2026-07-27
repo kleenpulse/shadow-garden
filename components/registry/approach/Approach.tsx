@@ -66,134 +66,229 @@ export default function Approach({
 }: ApproachProps) {
 	const rootRef = useRef<HTMLDivElement>(null);
 	const panelRef = useRef<HTMLDivElement>(null);
-	/** Tracks whether the pointer is currently inside the tile. */
-	const insideRef = useRef(false);
+
+	// Hover and focus are tracked separately and OR'd together. One shared flag
+	// meant a blur while the cursor was still inside the tile blanked the overlay
+	// with no way back — no `pointerenter` will fire for a pointer that never left.
+	const hovered = useRef(false);
+	const focused = useRef(false);
+	/** What `shown` currently resolves to. The guard against re-entrant work. */
+	const shown = useRef(false);
+	const edge = useRef(0);
+	const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	// `blur(0px)` is not a no-op. Any non-`none` filter puts the element on its own
+	// filter render surface and changes how its damage rect is computed — and this
+	// panel is a composited child clipped by a rounded `overflow-hidden` ancestor,
+	// which is the one place that reconciliation goes wrong. At the default
+	// `blur = 0` that surface bought nothing and cost stale compositor tiles, so the
+	// declaration is dropped entirely rather than animated to zero. Same shape as
+	// FlipCard's `backdropFilter: activeId ? … : undefined`.
+	const filtered = blur > 0;
 
 	// Built once and reapplied by hand after the park below — clearing
 	// `style.transition` would drop the inline value React set, not fall back to it.
-	const transition = `transform ${duration}ms ${EASE}, opacity ${duration}ms ${EASE}, filter ${duration}ms ${EASE}`;
+	const transition =
+		`transform ${duration}ms ${EASE}, opacity ${duration}ms ${EASE}` +
+		(filtered ? `, filter ${duration}ms ${EASE}` : "");
 
-	const place = useCallback(
-		(edge: number, away: boolean, animate: boolean) => {
+	const clearHide = useCallback(() => {
+		if (hideTimer.current !== null) {
+			clearTimeout(hideTimer.current);
+			hideTimer.current = null;
+		}
+	}, []);
+
+	/**
+	 * Write one complete, self-consistent set of values. Every appearance the
+	 * panel can have goes through here, so there is exactly one place the answer
+	 * to "what should this look like" is computed.
+	 */
+	const apply = useCallback(
+		(away: boolean, animate: boolean) => {
 			const panel = panelRef.current;
 			if (!panel) return;
-			const [dx, dy] = AXIS[edge] ?? AXIS[0];
+			const [dx, dy] = AXIS[edge.current] ?? AXIS[0];
 			const d = away ? offsetDistance : 0;
 
-			if (!animate) {
-				// Park the panel off-tile with no transition, then flush the style so the
-				// browser treats the next write as a change worth animating. Reading
-				// offsetWidth is the flush — cheap here because it happens once per
-				// pointerenter, not once per frame, and it keeps the whole component free
-				// of requestAnimationFrame.
-				panel.style.transition = "none";
-				panel.style.setProperty("--sg-ap-x", `${dx * offsetDistance}%`);
-				panel.style.setProperty("--sg-ap-y", `${dy * offsetDistance}%`);
-				panel.style.setProperty("--sg-ap-skew", `${dx * skew}deg`);
-				panel.style.setProperty("--sg-ap-blur", `${blur}px`);
-				panel.style.setProperty("--sg-ap-opacity", "0");
-				void panel.offsetWidth;
-				return;
-			}
-
-			// Re-enable transition before animating
-			panel.style.transition = transition;
+			panel.style.transition = animate ? transition : "none";
 			panel.style.setProperty("--sg-ap-x", `${dx * d}%`);
 			panel.style.setProperty("--sg-ap-y", `${dy * d}%`);
-			panel.style.setProperty(
-				"--sg-ap-skew",
-				away ? `${dx * skew}deg` : "0deg",
-			);
+			panel.style.setProperty("--sg-ap-skew", away ? `${dx * skew}deg` : "0deg");
 			panel.style.setProperty("--sg-ap-blur", away ? `${blur}px` : "0px");
 			panel.style.setProperty(
 				"--sg-ap-opacity",
 				away ? "0" : `${overlayOpacity}`,
 			);
+
+			// Flush, so the parked position becomes a discrete before-state that the
+			// travel written next can transition *from*.
+			if (!animate) void panel.offsetWidth;
 		},
 		[offsetDistance, skew, blur, overlayOpacity, transition],
 	);
 
+	/**
+	 * Park off-tile, flush, travel in — all in one task.
+	 *
+	 * Deliberately no `requestAnimationFrame` between the park and the travel.
+	 * The flush is what makes the park a discrete before-state; the deferred
+	 * frame added nothing and cost everything. It was a window for a leave to
+	 * land in, and a leave landing there wrote the *same* off-tile values the
+	 * park had just written — byte-identical, since park and exit share the one
+	 * `away` formula. Nothing changed, so no transition started, no
+	 * `transitionend` fired, and nothing invalidated. Meanwhile `transition:none`
+	 * had already cancelled the travel that was in flight, and a cancelled
+	 * transition on a `will-change` layer leaves its last rasterised frame on
+	 * screen. The result was an overlay frozen part-way across the tile that no
+	 * subsequent write could clear, because every later write was also a no-op.
+	 */
+	const reveal = useCallback(() => {
+		const panel = panelRef.current;
+		if (!panel) return;
+		clearHide();
+		panel.style.visibility = "";
+		apply(true, false);
+		apply(false, true);
+	}, [apply, clearHide]);
+
+	const dismiss = useCallback(() => {
+		apply(true, true);
+		// Guaranteed backstop for the visibility latch. `transitionend` is an
+		// optimisation here, never the only way home: it does not fire for a
+		// cancelled transition, nor when a write changes nothing, and both are
+		// ordinary events on a tile the pointer is crossing quickly.
+		clearHide();
+		hideTimer.current = setTimeout(() => {
+			hideTimer.current = null;
+			if (shown.current) return;
+			const panel = panelRef.current;
+			if (panel) panel.style.visibility = "hidden";
+		}, duration + 80);
+	}, [apply, clearHide, duration]);
+
+	/** Resolve hover+focus to one target state. A no-op when nothing changed. */
+	const sync = useCallback(() => {
+		const want = hovered.current || focused.current;
+		// Re-entering while already shown must not re-park — that would restart
+		// the travel from off-tile. It also makes a duplicate `pointerenter` from
+		// a second pointer type harmless.
+		if (want === shown.current) return;
+		shown.current = want;
+		if (want) reveal();
+		else dismiss();
+	}, [reveal, dismiss]);
+
 	const onPointerEnter = useCallback(
 		(e: React.PointerEvent<HTMLDivElement>) => {
-			insideRef.current = true;
-			const panel = panelRef.current;
-			if (panel) panel.style.visibility = "";
 			const el = rootRef.current;
 			if (!el) return;
-			const edge = reducedMotion
+			hovered.current = true;
+			edge.current = reducedMotion
 				? 0
 				: edgeFrom(el.getBoundingClientRect(), e.clientX, e.clientY);
-			
-			// Park the element instantly
-			place(edge, true, false);
-
-			// Start the animation in the next frame to avoid compositor glitches
-			// on rapid enter/leave movements.
-			requestAnimationFrame(() => {
-				if (!insideRef.current) return;
-				place(edge, false, true);
-			});
+			sync();
 		},
-		[place, reducedMotion],
+		[sync, reducedMotion],
 	);
 
 	const onPointerLeave = useCallback(
 		(e: React.PointerEvent<HTMLDivElement>) => {
-			insideRef.current = false;
 			const el = rootRef.current;
 			if (!el) return;
-			const edge = reducedMotion
+			hovered.current = false;
+			edge.current = reducedMotion
 				? 0
 				: edgeFrom(el.getBoundingClientRect(), e.clientX, e.clientY);
-			place(edge, true, true);
+			sync();
 		},
-		[place, reducedMotion],
+		[sync, reducedMotion],
 	);
 
-	// Keyboard focus has no direction, so it always arrives from the top.
-	const onFocus = useCallback(() => {
-		insideRef.current = true;
-		const panel = panelRef.current;
-		if (panel) panel.style.visibility = "";
-		
-		place(0, true, false);
-		requestAnimationFrame(() => {
-			if (!insideRef.current) return;
-			place(0, false, true);
-		});
-	}, [place]);
-	const onBlur = useCallback(() => {
-		insideRef.current = false;
-		place(0, true, true);
-	}, [place]);
+	// A cancel is not a departure — the browser has simply taken the pointer away
+	// (a touch turning into a scroll). Reading coordinates off it is meaningless,
+	// so the exit reuses whichever edge is already recorded.
+	const onPointerCancel = useCallback(() => {
+		hovered.current = false;
+		sync();
+	}, [sync]);
+
+	// `focusin`/`focusout` bubble, which is what makes a card with a link inside
+	// reveal on Tab — worth keeping. Moves *within* the tile are ignored so
+	// tabbing between two children doesn't exit and re-enter.
+	const onFocus = useCallback(
+		(e: React.FocusEvent<HTMLDivElement>) => {
+			if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) return;
+			focused.current = true;
+			// Keyboard focus has no direction, so it always arrives from the top —
+			// unless the pointer is already here and has established one.
+			if (!hovered.current) edge.current = 0;
+			sync();
+		},
+		[sync],
+	);
+
+	const onBlur = useCallback(
+		(e: React.FocusEvent<HTMLDivElement>) => {
+			if (e.relatedTarget && e.currentTarget.contains(e.relatedTarget)) return;
+			focused.current = false;
+			sync();
+		},
+		[sync],
+	);
 
 	/**
-	 * Once the leave-out animation finishes, hide the panel entirely so no
-	 * sub-pixel colour from `background` can bleed through at near-zero opacity.
-	 * We only act on the `opacity` property to avoid firing once per property.
+	 * Hide early once the exit finishes, so no sub-pixel colour from `background`
+	 * bleeds through at near-zero opacity. Purely an optimisation over the timer
+	 * in `dismiss` — if it never fires, the timer still lands.
 	 */
 	const onTransitionEnd = useCallback(
 		(e: React.TransitionEvent<HTMLDivElement>) => {
+			// The panel wraps arbitrary `overlay` content, whose own transitions bubble.
+			if (e.target !== panelRef.current) return;
 			if (e.propertyName !== "opacity") return;
-			if (insideRef.current) return;
+			if (shown.current) return;
+			clearHide();
 			const panel = panelRef.current;
 			if (panel) panel.style.visibility = "hidden";
 		},
-		[],
+		[clearHide],
 	);
 
+	// A pointer that leaves the window never delivers `pointerleave` to the tile
+	// it was over, which would strand the overlay open. Same backstop the canvas
+	// entries use for their pointer fields.
 	useEffect(() => {
-		if (panelRef.current && !insideRef.current) {
-			panelRef.current.style.visibility = "hidden";
-		}
+		const onDocumentLeave = () => {
+			if (!hovered.current) return;
+			hovered.current = false;
+			sync();
+		};
+		const root = document.documentElement;
+		root.addEventListener("pointerleave", onDocumentLeave);
+		return () => root.removeEventListener("pointerleave", onDocumentLeave);
+	}, [sync]);
+
+	// Re-apply when a control changes. Without this a parked panel keeps the old
+	// `offsetDistance` until the next pointer event — and at anything under 100%
+	// "parked" is still partly over the tile, so the stale value is visible.
+	useEffect(() => {
+		apply(!shown.current, shown.current);
+	}, [apply]);
+
+	useEffect(() => {
+		const panel = panelRef.current;
+		if (panel && !shown.current) panel.style.visibility = "hidden";
 	}, []);
+
+	useEffect(() => clearHide, [clearHide]);
 
 	return (
 		<div
 			ref={rootRef}
 			onPointerEnter={onPointerEnter}
 			onPointerLeave={onPointerLeave}
-			onPointerCancel={onPointerLeave}
+			onPointerCancel={onPointerCancel}
 			onFocus={onFocus}
 			onBlur={onBlur}
 			className={cn("relative isolate overflow-hidden select-none", className)}
@@ -204,7 +299,12 @@ export default function Approach({
 				ref={panelRef}
 				aria-hidden
 				onTransitionEnd={onTransitionEnd}
-				className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-end p-5 will-change-transform"
+				// No `will-change`. It promoted this layer for the element's whole
+				// lifetime, so a stale raster inside the rounded clip was never
+				// discarded — `visibility: hidden` does not force a re-raster of the
+				// clip region on a promoted layer. `spotlight-shell` runs the same
+				// clipped skew-translate transition without it.
+				className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-end p-5"
 				style={
 					{
 						"--sg-ap-x": "0%",
@@ -219,7 +319,10 @@ export default function Approach({
 						transform: reducedMotion
 							? undefined
 							: "translate(var(--sg-ap-x), var(--sg-ap-y)) skewX(var(--sg-ap-skew))",
-						filter: reducedMotion ? undefined : "blur(var(--sg-ap-blur))",
+						filter:
+							reducedMotion || !filtered
+								? undefined
+								: "blur(var(--sg-ap-blur))",
 						transition,
 					} as React.CSSProperties
 				}

@@ -132,6 +132,22 @@ V22: ∀ `prompts/*.md` → basename ∈ slugs | check exit ≠ 0 (⊥ silently-
 V23: ∀ clipboard write → text in hand pre-click (prop, ⊥ fetch on click) — await before write → ⊥ user-gesture @ Safari.
      ∀ success FX (sparkle, sound, trackEvent) ∈ try post-await. ⊥ fire on click ∴ failed copy ⊥ celebrates
 V24: reduced-motion gate ? optional per §C2. ∃ gate → ! own it in JS: globals.css `@media (prefers-reduced-motion)` backstop reaches CSS ⊥ motion/react ⊥ gsap ⊥ rAF ⊥ canvas
+V25: ∀ hover|focus reveal → resting state reachable ⊥ completion event. `transitionend` ⊥ fires on cancel ∧ ⊥ fires when write ≡ current value ∴ ∃ latch → ! timer backstop ≥ duration.
+     park → travel ∈ same task (flush = before-state). ⊥ deferred frame between: leave lands in gap ∧ park writes ≡ exit writes ∴ ⊥ invalidation ∴ `will-change` layer holds last frame
+V26: hover ∧ focus → 2 flags OR'd, ⊥ 1 shared. focusin/focusout bubble ∴ ! ignore relatedTarget ∈ currentTarget.
+     1 flag → blur @ pointer-still-inside clears it ∧ ⊥ pointerenter ∀ pointer that never left ∴ ⊥ recovery
+V27: ∀ programmatic scroll-to-anchor → ! measure after the render that produced the target list commits.
+     ⊥ scroll against a `useDeferredValue`/`useTransition` copy — stale layout ∴ right anchor, wrong offset.
+     ∴ jump state ∈ same batch as list state | gate the jump on deferred ≡ source
+V28: ∀ anchor target → `scroll-margin-top` ≥ bottom edge of ∀ sticky layer above it, ⊥ topmost only.
+     stop = Σ(each layer `top` + height), ! re-derived ∀ breakpoint the layers vary at.
+     ∴ reading line ≥ deepest stop — shallower ∴ jump lands ∧ spy hands rail to previous section
+V29: composited child ∈ rounded `overflow-hidden` ancestor → ⊥ permanent `will-change` ∧ ⊥ identity `filter`.
+     `blur(0px)` ≠ no-op: ∀ non-`none` filter = own render surface ∧ redefines damage rect. drop the declaration, ⊥ animate → 0.
+     `visibility:hidden` ⊥ forces re-raster of clip region on a promoted layer ∴ stale tiles survive a correct DOM
+V30: stale-composited-frame bug ⊥ observable by `Page.captureScreenshot` — capture forces the repaint that clears it ∴ ∀ green = ⊥ signal.
+     swiftshader ⊥ reproduces damage-rect bugs (∴ `VERIFY_GPU` exists). CDP synthetic pointer ⊥ reproduced it @ real GPU, headful, presented-frame diff.
+     ∴ ∀ compositor artifact → human eye @ real hardware = ∃! proof. harness ⊥ substitute
 
 ## §T
 
@@ -186,6 +202,10 @@ T47|x|stat event `prompt` + `prompt_count` col + migration 0006 + admin schema m
 T48|x|`prompt-overlay-slug` rule + `promptOverlays` ∈ CheckContext + selftest case|V22,V5
 T49|x|magnetic-button `rippleColor` source `#0a0a0c` → `#d2abfd` (registry = truth)|V8,C4
 T50|x|prompt button: code-tab sweep. reuse `useBorderGlow` `autoplay` pulsed 1400ms (⊥ edit registry src). border+bg → shell wrapper ∴ ring ∉ occluded. trigger = zustand `subscribe` prev→next (⊥ setState-in-effect)|V24,G3
+T51|x|approach rewrite: 2 rAF deleted (park→flush→travel 1 task) ∴ V10 ✓. ∃! `apply()` writes complete set. hover/focus split. timer backstop; `transitionend` → optimisation + `e.target` guard. documentElement pointerleave. re-apply ∀ prop change|V25,V26,V10
+T52|x|philosophy filter: `query` (popup) ≠ `committed` (grid) split, ⊥ `useDeferredValue`, jump effect abandons on anchor miss, Enter ⊥ popup → commit raw text, readout `↵ to filter`|V27,B9
+T53|x|philosophy anchors: `ANCHOR_STOP` = `scroll-mt-24 sm:scroll-mt-28` ∀ section + article (⊥ `scroll-mt-20`), READING_LINE 88 → 120|V28,B10
+T54|~|approach round 2: drop `will-change-transform`; `filter` declaration + transition leg gated on `blur > 0` (⊥ animate identity filter). ⊥ harness-reproducible ∴ awaiting user eye @ real hw|V29,V30,B12
 
 ## §B
 
@@ -198,3 +218,7 @@ B5|2026-07-25|OPEN. build warns "whole project traced unintentionally": `source.
 B6|2026-07-25|admin `check-schema-drift.ts:46` `process.exit(0)` unconditional ∴ warned ∀ run, failed ⊥ run. 5/6 vendored files stale (incl. whole entry `long-shadow` added upstream). 2nd cause: byte-hash over CRLF-vs-LF checkouts → ∀ file reported drifted ∴ signal worthless|V19
 B7|2026-07-25|19 entries frozen ∀ 1 frame. `onFrame: drawRef.current?.(x) ?? false` — draw typed `void \| false` ∴ good frame → `undefined` → `?? false` → `false` = host halt signal. reads as null-guard ∴ survived review 19×. 2nd-order: `verify-loop.mjs` asserted 1st frame + V1 + V2, ⊥ continuity — frozen loop passed ∀ assertion. control: `side-rays` ∃! entry ⊥ wrapper ∧ ∃! entry still animating|V20
 B8|2026-07-26|magnetic-button `rippleColor` source `#0a0a0c` vs registry `#d2abfd` → bench shows amethyst, customer paste ships near-black. `documented-default-matches-source` already detected ∴ ⊥ new invariant — gap = check ⊥ run before commit. amplified by T42: prompt embeds `raw` ∴ drifted default reaches LLM too|V8,C4
+B9|2026-07-27|approach overlay frozen mid-travel ∀ fast pointer, ⊥ self-clears. park+flush then rAF-deferred travel: fast re-cross of SAME edge → `transition:"none"` cancels in-flight travel, ∧ park writes ≡ exit writes (`d = away ? offsetDistance : 0` ∴ both = away formula) ∴ ⊥ computed-value change ∴ ⊥ style invalidation ∴ `will-change` layer keeps last rasterized frame. painted state ∄ specified state ∴ ∀ later write also no-op. `transitionend` = ∃! recovery ∧ ⊥ fires on cancel|no-op ∴ visibility latch left open. repro: CDP edge-oscillation, 4/4 tiles unlatched 3/3 runs; DOM read clean ∴ computed-style assert ⊥ sufficient — ! screenshot ∧ forced-repaint diff. rAF was added to hide a 1-frame park flicker the flush already made unnecessary ∴ cure ≡ cause. 2nd cause: V10 flagged the 2 rAF as error pre-commit, check ⊥ run (≡ B8)|V25,V26,V10
+B10|2026-07-27|/philosophy: pick section suggestion → scroll lands wrong + rail lies 1500ms. `filtered` ← `useDeferredValue(result)` ∴ click render still paints the pre-clear 3-section list; effect resolves anchor @ stale offset, scrolls, nulls `pendingRef`. deferred render then expands 3→11 sections ∴ target slides down, ⊥ re-jump. `useScrollSpy` pin holds until `SETTLE_TIMEOUT_MS`. term/component picks = same cause, list shrinks ∴ less visible. 2nd cause: live grid filter under open popup = 2 narrowing mechanisms ∀ keystroke ∴ 91 cards reflow beneath a floating listbox|V27
+B11|2026-07-27|/philosophy: heading lands under the filter bar ∀ jump. `scroll-mt-20` (80) reserved the shell TopBar only; page's own sticky filter sits below it @ `top-10`/`sm:top-14` + ~50 height ∴ real stop = 90 \| 106. masked by B10 — while the scroll landed wrong anyway the 10-26px shortfall read as part of that|V28
+B12|2026-07-27|approach: round-1 fix (B9) landed ∧ artifact PERSISTED — 2nd, distinct cause @ compositor, ⊥ DOM. purple fragments ⊥ full-tile-width (∃ ~75% width bar; ∃ 40px strip carrying the card radius; ∃ multi-fragment tile) ∴ damage-rect granularity, ⊥ any specified transform. user: scroll|resize|devtools-toggle ∀ clear it ∴ DOM healthy, painted output stale. cause: ∃! entry stacking permanent `will-change` + animated `filter` + rounded `overflow-hidden` on ancestor. `blur` default 0 ∴ `filter: blur(0px)` bought a render surface ∀ 0 visual ∧ redefined damage rect; `will-change` kept layer promoted ∴ stale raster never discarded. controls ∈ repo: spotlight-shell = same clip + skew-translate, ⊥ will-change ⊥ filter, ⊥ artifacts; tilt = will-change + radius but clip on static child. fix: drop both. 2nd-order: round 1 declared "fixed ∧ proven" on a harness run under swiftshader ∴ green was ⊥ signal (V30); real-GPU + headful + presented-frame diff ALSO ⊥ reproduce ∴ ⊥ harness-verified — user eye = ∃! proof|V29,V30

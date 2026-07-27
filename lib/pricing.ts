@@ -31,7 +31,7 @@ export const PLANS: Plan[] = [
   {
     slug: "subscription",
     name: "Membership",
-    price: "$9",
+    price: "$4.99",
     cadence: "/month",
     tagline: "Full access, billed monthly.",
     cta: "Subscribe",

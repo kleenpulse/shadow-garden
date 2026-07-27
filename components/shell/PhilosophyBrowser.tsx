@@ -1,6 +1,6 @@
 "use client";
 
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import { termAnchor } from "@/lib/philosophy";
@@ -16,9 +16,18 @@ import PhilosophyFilter from "./PhilosophyFilter";
 import PhilosophySectionNav from "./PhilosophySectionNav";
 import TierBadge from "./TierBadge";
 
-// Matches the sections' `scroll-mt-20` (5rem) plus a hair, so the rail flips to
-// a section at the moment its heading clears the sticky top bar.
-const READING_LINE = 88;
+// Where an anchored heading has to come to rest. Two sticky layers are stacked
+// above it, not one: the shell's TopBar, and this page's own filter bar parked
+// under it at `top-10` / `sm:top-14`. The stop is that bar's *bottom* edge — its
+// own top (40 / 56) plus its height (~50) = 90 below `sm`, 106 above — rounded up
+// to the next spacing step. Reserving only the TopBar hides the heading behind
+// the filter.
+const ANCHOR_STOP = "scroll-mt-24 sm:scroll-mt-28"; // 96px / 112px
+
+// A hair below the deepest stop (112), never above it. A reading line shallower
+// than the landing point would hand the rail straight back to the previous
+// section the moment a jump settles.
+const READING_LINE = 120;
 
 // Only what the page needs crosses the boundary — the full ComponentEntry carries
 // prop schemas and variant paths the glossary has no use for.
@@ -48,21 +57,31 @@ export default function PhilosophyBrowser({
 }: {
 	sections: PhilosophySectionRow[];
 }) {
+	// Two values, not one. `query` is what is in the box and it drives the
+	// suggestion popup; `committed` is what the card grid is actually filtered by
+	// and only moves on an explicit commit (pick a suggestion, Enter, clear).
+	//
+	// Splitting them is not a nicety. While the popup is open the grid must hold
+	// still: a suggestion click has to scroll to a card, and a list that reflows
+	// underneath the scroll sends it to the wrong offset (§B10).
 	const [query, setQuery] = useState("");
+	const [committed, setCommitted] = useState("");
 
 	// Normalized once, at mount. Every keystroke after that is a handful of
 	// indexOf calls over ~140 short strings, which is why nothing here is debounced.
 	const index = useMemo(() => buildSearchIndex(sections), [sections]);
 	const result = useMemo(() => searchPhilosophy(index, query), [index, query]);
+	const gridResult = useMemo(
+		() => searchPhilosophy(index, committed),
+		[index, committed],
+	);
 
-	// The popup reads `result` (immediate) and the card grid reads the deferred
-	// copy. Suggestions stay honest to the keystroke while re-rendering 91 cards
-	// is allowed to land a frame late — the split is the whole point of deferring
-	// the result object rather than the query string.
-	const deferred = useDeferredValue(result);
-
+	// No useDeferredValue here, deliberately. The grid now re-renders only on a
+	// discrete commit rather than per keystroke, so there is nothing left to
+	// smooth — and a deferred render is exactly what used to leave the jump effect
+	// measuring a layout that was one frame from changing (§V27).
 	const filtered = useMemo(() => {
-		const matched = deferred.matchedTerms;
+		const matched = gridResult.matchedTerms;
 		// null means "no query" — which is not the same as an empty set.
 		if (!matched) return sections;
 		return sections
@@ -71,7 +90,7 @@ export default function PhilosophyBrowser({
 				terms: section.terms.filter((row) => matched.has(row.term)),
 			}))
 			.filter((section) => section.terms.length > 0);
-	}, [sections, deferred]);
+	}, [sections, gridResult]);
 
 	const shown = filtered.reduce((n, s) => n + s.terms.length, 0);
 
@@ -102,7 +121,9 @@ export default function PhilosophyBrowser({
 		// A section suggestion clears the query instead of setting it: committing
 		// the title as a filter would hide the very section we are about to scroll
 		// to unless one of its terms happened to contain it.
-		setQuery(suggestion.kind === "section" ? "" : suggestion.label);
+		const next = suggestion.kind === "section" ? "" : suggestion.label;
+		setQuery(next);
+		setCommitted(next);
 		pendingRef.current = {
 			anchor: suggestion.anchor,
 			sectionAnchor: suggestion.sectionAnchor,
@@ -115,20 +136,34 @@ export default function PhilosophyBrowser({
 		// can't fire against an unrelated later render.
 		pendingRef.current = null;
 		setQuery(next);
+		// An empty box is unambiguous — no filter, no Enter needed. One rule covers
+		// the clear button, the second Escape, and backspacing the last character.
+		if (!next.trim()) setCommitted("");
 	};
 
-	// Deliberately an effect, not the click handler: setQuery re-filters the list,
-	// so at commit time the target article may not be in the DOM yet. `filtered`
-	// is a dep because it lags behind `query` — when the deferred list catches up
-	// the effect re-runs and the still-set ref completes the jump.
+	// Enter with no popup to pick from. The only route to the empty state, and the
+	// only way to filter on a description-only match ("perf" reaches Blur through
+	// "imperfections", which never earns a suggestion row).
+	const onCommitQuery = (value: string) => {
+		pendingRef.current = null;
+		setCommitted(value);
+	};
+
+	// Deliberately an effect, not the click handler: `setCommitted` re-filters the
+	// list, and inside the handler that render hasn't committed yet — the target
+	// article may not be in the DOM, or may be at an offset about to change.
+	// By the time an effect runs, the grid this state produced is on screen.
 	useEffect(() => {
 		const pending = pendingRef.current;
 		if (!pending) return;
+		// The DOM is authoritative now that nothing about the grid is deferred: a
+		// missing anchor is genuinely absent rather than late, so abandon instead of
+		// retrying. A ref left set could only fire against an unrelated later render.
+		pendingRef.current = null;
 		const el = document.getElementById(pending.anchor);
 		if (!el) return;
-		pendingRef.current = null;
 
-		// `scroll-mt-20` on the target already accounts for the sticky top bar, so
+		// `ANCHOR_STOP` on the target already clears both sticky layers, so
 		// block:"start" needs no manual offset. `behavior` has to be gated by hand —
 		// the global reduced-motion block neutralizes CSS scroll-behavior only, not
 		// the JS argument.
@@ -138,7 +173,10 @@ export default function PhilosophyBrowser({
 		});
 		jumpTo(pending.sectionAnchor);
 		setPulse(pending.anchor);
-	}, [pendingTick, filtered, reduced, jumpTo]);
+		// `filtered` is *not* a dep: the tick and the commit land in one batch, so
+		// this already runs against the final grid. It used to be here to retry after
+		// the deferred list caught up — a retry that no longer exists.
+	}, [pendingTick, reduced, jumpTo]);
 
 	// State-held rather than a CSS keyframe: the global reduced-motion rule crushes
 	// animation-duration to 0.01ms, which would erase the confirmation entirely.
@@ -230,6 +268,7 @@ export default function PhilosophyBrowser({
 					<PhilosophyFilter
 						query={query}
 						onQueryChange={onQueryChange}
+						onCommitQuery={onCommitQuery}
 						suggestions={result.suggestions}
 						onSelect={onSelect}
 					/>
@@ -237,7 +276,11 @@ export default function PhilosophyBrowser({
 						aria-live="polite"
 						className="font-mono text-[8px] whitespace-nowrap sm:text-[10px] uppercase sm:tracking-[0.18em] text-ink-mute"
 					>
-						{shown} term{shown === 1 ? "" : "s"}
+						{/* Typed but uncommitted, so the grid still shows everything — say
+						    why, or the untouched count reads as a broken filter. */}
+						{query.trim() && query !== committed
+							? "↵ to filter"
+							: `${shown} term${shown === 1 ? "" : "s"}`}
 					</p>
 				</div>
 
@@ -250,7 +293,7 @@ export default function PhilosophyBrowser({
 						<section
 							key={section.title}
 							id={termAnchor(section.title)}
-							className="scroll-mt-20"
+							className={ANCHOR_STOP}
 						>
 							<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-accent">
 								{section.title}
@@ -265,7 +308,8 @@ export default function PhilosophyBrowser({
 										key={row.term}
 										id={termAnchor(row.term)}
 										className={cn(
-											"scroll-mt-20 rounded-xl border border-hairline bg-linear-to-b from-panel via-panel/70 to-panel/40 backdrop-blur-2xl p-4 transition-shadow",
+											ANCHOR_STOP,
+											"rounded-xl border border-hairline bg-linear-to-b from-panel via-panel/70 to-panel/40 backdrop-blur-2xl p-4 transition-shadow",
 											pulse === termAnchor(row.term) && "ring-1 ring-accent",
 										)}
 									>
