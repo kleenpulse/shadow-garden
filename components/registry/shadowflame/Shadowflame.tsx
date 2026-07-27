@@ -13,7 +13,11 @@ interface ShadowflameProps {
   /** fbm octaves, 1-6 (integer). Higher = more filigree in the flame. */
   detail?: number;
   shimmer?: number;
-  /** How far up the frame the flame rises before tapering out, 0.2-1. */
+  /**
+   * How far up the frame the flame rises before tapering out, 0.2-1.6. Past 1
+   * the taper never completes inside the frame, so the flame runs off the top
+   * edge rather than dying out.
+   */
   height?: number;
   grain?: number;
   /** Horizontal spread of the flame, 0.3-2. */
@@ -60,6 +64,42 @@ type Spark = {
   maxLife: number;
   seed: number;
 };
+
+/** Where embers detach, as a fraction of frame height. Real ones break off the
+ *  flame tips, not the floor. */
+const SPARK_ORIGIN = 0.45;
+const SPARK_ORIGIN_JITTER = 0.14;
+
+/**
+ * One ember, drawn once into an offscreen canvas and blitted per spark — a
+ * drawImage instead of two arc fills per spark per frame.
+ *
+ * A radial falloff rather than stacked discs, and a hot centre lifted from
+ * coreColor rather than pure white: a hard-edged dot with a white core reads as
+ * a grey speck at ember scale no matter what colour surrounds it.
+ */
+const SPRITE_PX = 32;
+function buildSparkSprite(coreHex: string): HTMLCanvasElement {
+  const c = document.createElement("canvas");
+  c.width = SPRITE_PX;
+  c.height = SPRITE_PX;
+  const g = c.getContext("2d");
+  if (!g) return c;
+  const mid = SPRITE_PX / 2;
+  const [cr, cg, cb] = hexToRgb(coreHex);
+  const to255 = (v: number) => Math.round(v * 255);
+  const lift = (v: number) => Math.round((v + (1 - v) * 0.6) * 255);
+  const core = `${to255(cr)},${to255(cg)},${to255(cb)}`;
+
+  const grad = g.createRadialGradient(mid, mid, 0, mid, mid, mid);
+  grad.addColorStop(0, `rgb(${lift(cr)},${lift(cg)},${lift(cb)})`);
+  grad.addColorStop(0.22, `rgba(${core},1)`);
+  grad.addColorStop(0.5, `rgba(${core},0.55)`);
+  grad.addColorStop(1, `rgba(${core},0)`);
+  g.fillStyle = grad;
+  g.fillRect(0, 0, SPRITE_PX, SPRITE_PX);
+  return c;
+}
 
 const vertex = `#version 300 es
 in vec2 position;
@@ -121,8 +161,11 @@ void main(){
   float shim = sin(vy * 22.0 - t * uSpeed * 1.5) * uShimmer * 0.03 * vy;
   vec2 p = vec2((uv.x - 0.5) * aspect + shim, vy);
 
-  // Flame field scrolls upward over time.
-  vec2 fp = vec2(p.x * 3.0, p.y * 3.2 - t * uSpeed * 1.2);
+  // Flame field scrolls upward over time. Sampled anisotropically — high
+  // frequency across x, stretched along y — because fire is vertically
+  // elongated. An isotropic field reads as round puffs of fog, and the extra
+  // cells across the width are what separate the body into distinct tongues.
+  vec2 fp = vec2(p.x * 4.6, p.y * 2.2 - t * uSpeed * 1.3);
 
   // Domain warp — the signature swirling licks of flame.
   vec2 warped = fp + uWarp * vec2(
@@ -140,8 +183,13 @@ void main(){
   float wide = mix(0.62, 0.06, smoothstep(0.0, uHeight, vy)) * uWidth;
   float horiz = 1.0 - smoothstep(wide * 0.55, wide, abs(p.x));
 
-  float flame = clamp(density * taper * horiz, 0.0, 1.0);
-  flame = pow(flame, 1.25);
+  // Carve tongues out of the noise before shaping it. fbm returns a soft field
+  // centred near 0.5; with no contrast window every value survives into the
+  // colour ramp and the flame reads as haze with no edges.
+  float body = smoothstep(0.33, 0.63, density);
+
+  float flame = clamp(body * taper * horiz, 0.0, 1.0);
+  flame = pow(flame, 1.1);
 
   // Colour ramp: background -> dark flame body -> amethyst core near the base.
   vec3 col = uBgColor;
@@ -174,7 +222,7 @@ const Shadowflame = ({
   warp = 1,
   detail = 4,
   shimmer = 0.5,
-  height = 0.7,
+  height = 0.95,
   grain = 0.05,
   flameWidth = 1,
   sparkCount = 60,
@@ -311,21 +359,33 @@ const Shadowflame = ({
     let sparkW = 0;
     let sparkH = 0;
     let sparks: Spark[] = [];
+    let sprite: HTMLCanvasElement | null = null;
+    let spriteKey = "";
 
     const makeSpark = (fresh: boolean): Spark => {
       const L = live.current;
       const halfW = sparkW * 0.3 * (L.flameWidth as number);
       const rx = Math.random() + Math.random() - 1; // triangular, centre-biased
-      return {
+      const originVy =
+        SPARK_ORIGIN + (Math.random() * 2 - 1) * SPARK_ORIGIN_JITTER;
+      const s: Spark = {
         x: sparkW / 2 + rx * halfW,
-        y: fresh ? sparkH + Math.random() * 12 : Math.random() * sparkH,
-        vy: 0.6 + Math.random() * 1.4,
+        // Canvas y grows downward, so a fraction measured up from the base
+        // inverts. Embers appear at the flame tips and climb from there.
+        y: sparkH * (1 - originVy),
+        vy: 0.5 + Math.random() * 1.2,
         sway: Math.random() * Math.PI * 2,
-        size: (L.sparkSize as number) * (0.6 + Math.random() * 0.9),
+        // Squared random: mostly near-invisible motes with the occasional bright
+        // one, which is what makes a spark field read as embers, not as stars.
+        size: (L.sparkSize as number) * (0.35 + Math.random() * Math.random() * 1.9),
         life: fresh ? 0 : Math.random(),
-        maxLife: 90 + Math.random() * 90,
+        maxLife: 70 + Math.random() * 110,
         seed: Math.random() * Math.PI * 2,
       };
+      // Initial fill only: scatter along the flight path so the field doesn't
+      // start as one synchronised pulse sitting on the origin line.
+      if (!fresh) s.y -= Math.random() * sparkH * 0.35;
+      return s;
     };
 
     const syncSparkCount = () => {
@@ -341,10 +401,16 @@ const Shadowflame = ({
       if (sparks.length === 0) return;
       const L = live.current;
       const rise = (L.sparkSpeed as number) * m;
-      const cc = hexToRgb(L.coreColor as string);
-      const cr = (cc[0] * 255) | 0;
-      const cg = (cc[1] * 255) | 0;
-      const cb = (cc[2] * 255) | 0;
+
+      // Sprite is rebuilt only when the core colour actually changes, so
+      // dragging any other control costs nothing.
+      const key = L.coreColor as string;
+      if (key !== spriteKey) {
+        sprite = buildSparkSprite(key);
+        spriteKey = key;
+      }
+      if (!sprite) return;
+
       const fscale = Math.min(3, dt * 60); // normalise toward per-frame at 60fps
       sctx.globalCompositeOperation = "lighter";
       for (let i = 0; i < sparks.length; i++) {
@@ -352,27 +418,21 @@ const Shadowflame = ({
         s.y -= s.vy * rise * 1.4 * fscale;
         s.x += Math.sin(s.sway + s.y * 0.03) * 0.6 * rise * fscale;
         s.life += (1 / s.maxLife) * (0.4 + m) * fscale;
-        if (s.y < -4 || s.life >= 1) {
+        if (s.y < -6 || s.life >= 1) {
           sparks[i] = makeSpark(true);
           continue;
         }
-        const heightFrac = 1 - s.y / (sparkH || 1);
-        const fade =
-          Math.min(1, s.life * 6) * Math.min(1, (1 - heightFrac) * 2 + 0.05);
-        const flick = 0.6 + 0.4 * Math.sin(s.seed + s.y * 0.15);
-        const a = fade * flick * (0.5 + 0.5 * m);
+        // Burn curve: snap alight, hold, then die out over the back half. The
+        // old fade keyed off distance from the canvas floor, which is meaningless
+        // now that embers are born at the tips rather than off the bottom edge.
+        const fadeIn = Math.min(1, s.life * 9);
+        const fadeOut = Math.max(0, 1 - Math.max(0, s.life - 0.4) / 0.6);
+        const flick = 0.55 + 0.45 * Math.sin(s.seed + s.y * 0.2);
+        const a = fadeIn * fadeOut * flick * (0.45 + 0.55 * m);
         if (a <= 0.01) continue;
-        const rad = s.size * (1 - heightFrac * 0.5);
+        const rad = (s.size * (1 - s.life * 0.35) + 0.5) * 1.9; // embers cool and shrink
         sctx.globalAlpha = Math.min(1, a);
-        sctx.fillStyle = `rgb(${cr},${cg},${cb})`;
-        sctx.beginPath();
-        sctx.arc(s.x, s.y, rad + 0.8, 0, Math.PI * 2);
-        sctx.fill();
-        sctx.globalAlpha = Math.min(1, a * 0.9);
-        sctx.fillStyle = "rgb(255,255,255)";
-        sctx.beginPath();
-        sctx.arc(s.x, s.y, Math.max(0.4, rad * 0.5), 0, Math.PI * 2);
-        sctx.fill();
+        sctx.drawImage(sprite, s.x - rad, s.y - rad, rad * 2, rad * 2);
       }
       sctx.globalAlpha = 1;
     };
@@ -470,6 +530,7 @@ const Shadowflame = ({
       io.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       renderStillRef.current = null;
+      sprite = null;
       try {
         container.removeChild(canvas);
       } catch {

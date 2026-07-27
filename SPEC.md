@@ -13,7 +13,7 @@ G3: ∀ concept (Pro state, favourites merge, creds presence, prop kind) → ∃
 - C1: animation BODY (shader | physics | particle math | draw call) stays inline per-component. ⊥ shared abstraction over it.
 - C1a: animation RUNTIME HOST (rAF arm/halt, ResizeObserver, DPR, timers, dispose) → ∃! `hooks/use-animation-loop.ts`. host ⊥ know animation math; halt predicate caller-supplied ∴ host ⊥ prescriptive.
 - C1b: host ships to customer ∴ 2nd `Variant` on entry (`lib/registry/types.ts:62-67` — array "kept extensible"). CodePanel tab ∀ variant. install: copy ∀ file. ⊥ npm package, ⊥ private import.
-- C2: ! respect `prefers-reduced-motion` — loops self-halt at speed 0 | paused.
+- C2: motion = deliverable (registry ships animated components) ∴ reduced-motion gate ? per-component call, ⊥ blanket mandate. loops self-halt at speed 0 | paused regardless.
 - C3: build ! stay PPR-clean.
 - C4: registry default = truth. source ≠ registry → patch source (⊥ patch registry). customer copy === bench shown.
 - C5: checks run headless under plain `bun` — relative imports, ⊥ `@/`, ⊥ React|Next|DOM, ⊥ new runtime dep. precedent: `scripts/gen-readme.ts:10`.
@@ -131,7 +131,7 @@ V21: prompt text ∉ `ComponentEntry` — entry client-serialized ∀ visitor (S
 V22: ∀ `prompts/*.md` → basename ∈ slugs | check exit ≠ 0 (⊥ silently-dropped overlay)
 V23: ∀ clipboard write → text in hand pre-click (prop, ⊥ fetch on click) — await before write → ⊥ user-gesture @ Safari.
      ∀ success FX (sparkle, sound, trackEvent) ∈ try post-await. ⊥ fire on click ∴ failed copy ⊥ celebrates
-V24: JS-driven motion → ! own reduced-motion gate. globals.css `@media (prefers-reduced-motion)` backstop reaches CSS ⊥ motion/react ⊥ gsap ⊥ rAF ⊥ canvas
+V24: reduced-motion gate ? optional per §C2. ∃ gate → ! own it in JS: globals.css `@media (prefers-reduced-motion)` backstop reaches CSS ⊥ motion/react ⊥ gsap ⊥ rAF ⊥ canvas
 
 ## §T
 

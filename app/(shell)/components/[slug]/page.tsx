@@ -1,7 +1,9 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getEntry } from "@/lib/registry";
+import { termAnchor } from "@/lib/philosophy";
 import { cn, displayName } from "@/lib/utils";
 import LiveWorkspace from "@/components/shell/LiveWorkspace";
 import CodePanel from "@/components/shell/CodePanel";
@@ -78,6 +80,25 @@ export default async function ComponentPage({
 				<p className="mt-3 max-w-2xl font-sans text-sm text-ink-dim">
 					{entry.description}
 				</p>
+
+				{/* The motion terms this component demonstrates, each linking to its
+				    definition. Declared on the entry; /philosophy inverts the mapping. */}
+				{entry.philosophy && entry.philosophy.length > 0 && (
+					<div className="mt-4 flex flex-wrap items-center gap-1.5">
+						<span className="font-display text-[9px] uppercase tracking-[0.2em] text-ink-mute">
+							Philosophy
+						</span>
+						{entry.philosophy.map((term) => (
+							<Link
+								key={term}
+								href={`/philosophy#${termAnchor(term)}`}
+								className="rounded-full border border-hairline px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
+							>
+								{term}
+							</Link>
+						))}
+					</div>
+				)}
 			</header>
 
 			{/* The workspace reads tuned values from the URL (nuqs) — dynamic under

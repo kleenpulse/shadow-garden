@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import GradualBlur from "@/components/registry/gradual-blur/GradualBlur";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
 
 // Fixed frosted strip along the bottom of the viewport that blurs content
 // scrolling under it. Its vertical offset is driven by scroll position:
@@ -11,7 +12,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 // We move it with the `bottom` offset rather than `transform` on purpose — a
 // transformed ancestor becomes a backdrop root and the backdrop-filter would blur nothing.
 
-export default function PageBottomBlur() {
+export default function PageBottomBlur({ className }: { className?: string }) {
 	const ref = useRef<HTMLDivElement>(null);
 	// Trim the stacked backdrop-filter layers on phones — 6 full-width blur passes
 	// are costly on mobile GPUs; 3 is visually identical on a thin strip.
@@ -19,6 +20,7 @@ export default function PageBottomBlur() {
 
 	useEffect(() => {
 		const el = ref.current;
+		if (className) return; // if a className is provided, we don't want to apply the scroll effect
 		if (!el) return;
 		// Full strip height → offset needed to clear it entirely below the fold.
 		const sinkMax = el.offsetHeight || 112;
@@ -52,7 +54,7 @@ export default function PageBottomBlur() {
 			window.removeEventListener("scroll", onScroll);
 			window.removeEventListener("resize", onScroll);
 		};
-	}, []);
+	}, [className]);
 
 	return (
 		<div
@@ -62,14 +64,15 @@ export default function PageBottomBlur() {
 				position: "fixed",
 				left: 0,
 				right: 0,
-				bottom: "-8rem", // start tucked away; the scroll handler takes over on mount
+				bottom: className ? "0rem" : "-8rem", // start tucked away; the scroll handler takes over on mount
 				height: compact ? "3rem" : "5rem",
 				zIndex: 110,
 				pointerEvents: "none",
 			}}
+			className={cn(className)}
 		>
 			<GradualBlur
-				target="parent"
+				target={className ? "page" : "parent"}
 				position="bottom"
 				exponential
 				strength={3}

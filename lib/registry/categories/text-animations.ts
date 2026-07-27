@@ -10,6 +10,13 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A gooey blur-morph that cross-dissolves between a list of words.",
 		dependencies: [],
+		philosophy: [
+			"Text morph",
+			"Morph",
+			"Crossfade",
+			"Blur",
+			"Loop",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -34,6 +41,14 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Animated numeric transitions with flip, slide, fade, and bounce styles.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Number ticker",
+			"Tabular numbers",
+			"Bounce",
+			"Slide in",
+			"Fade in / Fade out",
+			"3D tilt / Flip",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -88,6 +103,11 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A marquee that scrolls only when its text overflows the container.",
 		dependencies: [],
+		philosophy: [
+			"Marquee",
+			"Loop",
+			"Linear",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -136,6 +156,10 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Text whose letters interpolate font weight by cursor proximity.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Hover effect",
+			"Interpolation / Tween",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -171,6 +195,13 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A wrapping marquee whose drift speed and direction follow scroll velocity — fast scrolls whip the row along, upward scrolls reverse it.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Marquee",
+			"Scroll-driven animation",
+			"Velocity",
+			"Spring",
+			"Momentum",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -227,6 +258,13 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A per-letter pull-up reveal — letters rise, sharpen from a blur, and fade in with a stagger.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Stagger",
+			"Slide in",
+			"Blur",
+			"Fade in / Fade out",
+			"Enter / Exit",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -287,6 +325,12 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A scroll-scrubbed word reveal — each word brightens and rises as it enters the viewport, tied directly to scroll position.",
 		dependencies: ["gsap"],
+		philosophy: [
+			"Scroll reveal",
+			"Scroll-driven animation",
+			"Stagger",
+			"Reveal",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -353,6 +397,12 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Ciphered glyphs boiling out of noise and resolving into words — a decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
 		dependencies: [],
+		philosophy: [
+			"Text morph",
+			"Stepped animation",
+			"Hover effect",
+			"Stagger",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -436,6 +486,11 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Text that casts a long shadow sweeping like a sundial through the hours.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Loop",
+			"Idle animation",
+			"Linear",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -526,6 +581,12 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Spectral RGB-split echoes drift off the letters and dissolve into the dark.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Follow-through",
+			"Blur",
+			"Loop",
+			"Idle animation",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -604,6 +665,86 @@ export const textAnimations: ComponentEntry[] = [
 				kind: "color",
 				default: "#22d3ee",
 				description: "Cyan chromatic ghost.",
+			},
+		],
+	},
+	{
+		slug: "lumen",
+		name: "Lumen",
+		category: "Text Animations",
+		tier: "free",
+		addedAt: "2026-07-26",
+		description:
+			"Copy that lights up as you read it — words ahead sit dim and unfocused, and stay lit once you pass them.",
+		dependencies: ["motion"],
+		philosophy: [
+			"Scroll-driven animation",
+			"Scroll reveal",
+			"Stagger",
+			"Interpolation / Tween",
+			"Blur",
+			"Purposeful animation",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/lumen/Lumen.tsx",
+			},
+		],
+		props: [
+			{
+				name: "dimOpacity",
+				kind: "number",
+				default: 0.15,
+				min: 0,
+				max: 0.6,
+				step: 0.05,
+				description: "Opacity of words that haven't been reached yet.",
+			},
+			{
+				name: "fadeSpan",
+				kind: "number",
+				default: 6,
+				min: 1,
+				max: 20,
+				step: 1,
+				unit: "words",
+				description: "Width of the reading band — words mid-transition at once.",
+			},
+			{
+				name: "blurAmount",
+				kind: "number",
+				default: 4,
+				min: 0,
+				max: 12,
+				step: 0.5,
+				unit: "px",
+				description: "Blur on a word that hasn't been reached.",
+			},
+			{
+				name: "startOffset",
+				kind: "number",
+				default: 0.15,
+				min: 0,
+				max: 0.5,
+				step: 0.05,
+				description: "Point in the scroll pass where the first word brightens.",
+			},
+			{
+				name: "endOffset",
+				kind: "number",
+				default: 0.6,
+				min: 0.3,
+				max: 1,
+				step: 0.05,
+				description: "Point by which the last word is fully lit.",
+			},
+			{
+				name: "highlightColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "Amethyst bloom on the leading edge.",
 			},
 		],
 	},

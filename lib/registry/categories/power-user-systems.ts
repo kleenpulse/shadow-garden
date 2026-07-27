@@ -11,6 +11,11 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A painterly toon-shaded 3D cherry-blossom scene with wind-driven falling petals.",
 		dependencies: ["three", "@react-three/fiber"],
+		philosophy: [
+			"Loop",
+			"Float",
+			"Idle animation",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -91,6 +96,11 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
 		dependencies: ["cmdk", "motion", "lucide-react"],
+		philosophy: [
+			"Enter / Exit",
+			"Scale in",
+			"Blur",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -129,6 +139,14 @@ export const powerUserSystems: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"A from-scratch 2D rigid-body physics lab — fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
+		philosophy: [
+			"Drag",
+			"Momentum",
+			"Velocity",
+			"Mass",
+			"Bounce",
+			"Frame rate (FPS)",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -246,6 +264,12 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
 		dependencies: ["ogl"],
+		philosophy: [
+			"Orbit",
+			"Loop",
+			"Drag",
+			"Frame rate (FPS)",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -463,6 +487,12 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
 		dependencies: ["ogl"],
+		philosophy: [
+			"Orbit",
+			"Loop",
+			"Drag",
+			"Blur",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -674,6 +704,12 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A murmuration of hundreds of boids wheeling as one — separation, alignment, and cohesion resolved every frame through a spatial hash for the crowd, banking toward or scattering from your cursor, smeared into long trails of amethyst and cyan as the flock folds across the dark.",
 		dependencies: [],
+		philosophy: [
+			"Loop",
+			"Idle animation",
+			"Hover effect",
+			"Follow-through",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -821,6 +857,11 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A real-time GPU fluid you can stir — semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
 		dependencies: ["ogl"],
+		philosophy: [
+			"Drag",
+			"Loop",
+			"Idle animation",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -970,6 +1011,11 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A pool of dark, moonlit water you disturb by hand — a leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
 		dependencies: ["ogl"],
+		philosophy: [
+			"Ripple",
+			"Drag",
+			"Loop",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -1116,6 +1162,10 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A persistent three-pane file manager that stores real image, video, and blob uploads 100% client-side — OPFS when available, IndexedDB everywhere else — with nested folders, search, sort, drag-and-drop upload, move, and a live preview panel.",
 		dependencies: ["lucide-react", "motion", "react-resizable-panels"],
+		philosophy: [
+			"Drag",
+			"Layout animation",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -1232,6 +1282,11 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"An orrery of moons casting real eclipse shadows across a shadowed world; drag to orbit.",
 		dependencies: ["three", "@react-three/fiber"],
+		philosophy: [
+			"Orbit",
+			"Loop",
+			"Drag",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -1329,6 +1384,11 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"GPU reaction-diffusion growing living tendrils of darkness the cursor seeds.",
 		dependencies: ["ogl"],
+		philosophy: [
+			"Loop",
+			"Idle animation",
+			"Hover effect",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -1416,6 +1476,186 @@ export const powerUserSystems: ComponentEntry[] = [
 				kind: "color",
 				default: "#05010a",
 				description: "Dark field the darkness grows over.",
+			},
+		],
+	},
+	{
+		slug: "parallax-rail",
+		name: "ParallaxRail",
+		category: "Power-User Systems",
+		tier: "pro",
+		addedAt: "2026-07-26",
+		description:
+			"A pinned section where scrolling down drives content sideways across depth planes moving at different rates.",
+		dependencies: ["motion"],
+		philosophy: [
+			"Parallax",
+			"Scroll-driven animation",
+			"Translate",
+			"Orchestration",
+			"Mask",
+			"Compositing",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/parallax-rail/ParallaxRail.tsx",
+			},
+		],
+		props: [
+			{
+				name: "planes",
+				kind: "number",
+				default: 3,
+				min: 1,
+				max: 3,
+				step: 1,
+				description: "How many depth planes to render.",
+			},
+			{
+				name: "travel",
+				kind: "number",
+				default: 1,
+				min: 0.3,
+				max: 2.5,
+				step: 0.1,
+				unit: "×",
+				description: "Multiplier on the front rail's travel across the pin.",
+			},
+			{
+				name: "depthSpread",
+				kind: "number",
+				default: 0.45,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "How much slower the backmost plane moves than the front.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 30,
+				min: 10,
+				max: 90,
+				step: 5,
+				description: "Spring damping on the scrub — higher tracks scroll exactly.",
+			},
+			{
+				name: "fadeEdges",
+				kind: "number",
+				default: 0.12,
+				min: 0,
+				max: 0.4,
+				step: 0.02,
+				description: "Width of the soft mask at each rail edge.",
+			},
+			{
+				name: "railGap",
+				kind: "number",
+				default: 24,
+				min: 8,
+				max: 64,
+				step: 4,
+				unit: "px",
+				description: "Vertical gap between planes.",
+			},
+		],
+	},
+	{
+		slug: "elastic",
+		name: "Elastic",
+		category: "Power-User Systems",
+		tier: "pro",
+		addedAt: "2026-07-26",
+		description:
+			"Throw the top card and the speed you released it at carries into the spring — catch it mid-flight and it redirects.",
+		dependencies: ["motion"],
+		philosophy: [
+			"Spring",
+			"Stiffness / Tension",
+			"Damping",
+			"Mass",
+			"Momentum",
+			"Velocity",
+			"Interruptible animation",
+			"Rubber-banding",
+			"Drag",
+			"Bounce",
+			"Follow-through",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/elastic/Elastic.tsx",
+			},
+		],
+		props: [
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 320,
+				min: 60,
+				max: 800,
+				step: 20,
+				description: "How strongly the spring pulls home. Higher is snappier.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 22,
+				min: 5,
+				max: 60,
+				step: 1,
+				description: "How fast it settles. Lower overshoots and oscillates.",
+			},
+			{
+				name: "mass",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 4,
+				step: 0.1,
+				description: "How heavy the card feels. More mass is more sluggish.",
+			},
+			{
+				name: "bounds",
+				kind: "number",
+				default: 140,
+				min: 40,
+				max: 400,
+				step: 10,
+				unit: "px",
+				description: "How far the card may travel from home.",
+			},
+			{
+				name: "rubberBand",
+				kind: "number",
+				default: 0.45,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Give past the bounds, hard wall → loose.",
+			},
+			{
+				name: "flickPower",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 3,
+				step: 0.1,
+				unit: "×",
+				description: "Multiplier on the release velocity handed to the spring.",
+			},
+			{
+				name: "cards",
+				kind: "number",
+				default: 3,
+				min: 1,
+				max: 5,
+				step: 1,
+				description: "How many cards in the stack.",
 			},
 		],
 	},

@@ -8,6 +8,7 @@ import {
 	SunMoon,
 	Link2,
 	LayoutGrid,
+	BookMarked,
 } from "lucide-react";
 import { getEntry } from "@/lib/registry";
 import type { Category, ComponentEntry } from "@/lib/registry/types";
@@ -102,6 +103,14 @@ export function buildCommandGroups(
 			keywords: ["favorites", "saved", "collection"],
 			active: pathname === "/favorites",
 			onRun: () => actions.navigate("/favorites"),
+		},
+		{
+			id: "action:philosophy",
+			label: "Motion Philosophy",
+			icon: BookMarked,
+			keywords: ["philosophy", "glossary", "terms", "reference", "naming"],
+			active: pathname === "/philosophy",
+			onRun: () => actions.navigate("/philosophy"),
 		},
 		{
 			id: "action:theme",

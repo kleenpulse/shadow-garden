@@ -1,6 +1,8 @@
 "use client";
 
-import { Search } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { BookMarked, HandHelping, Search } from "lucide-react";
 import { useUIStore } from "@/lib/store";
 import { useIsMac } from "@/hooks/use-is-mac";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
@@ -14,6 +16,9 @@ import GoProButton from "./GoProButton";
 // the right. Hidden on mobile — MobileBar carries the same affordances there.
 export default function TopBar() {
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
+	const pathname = usePathname();
+
+	const isPhilosophy = pathname === "/philosophy";
 
 	// Show the right modifier hint per platform (SSR-safe, hydration-consistent).
 	const isMac = useIsMac();
@@ -36,6 +41,23 @@ export default function TopBar() {
 
 			<div className="ml-auto flex items-center gap-2">
 				<GoProButton />
+				<Link
+					href="/philosophy"
+					aria-label="Motion philosophy"
+					title="Motion philosophy"
+					aria-current={isPhilosophy ? "page" : undefined}
+					{...hoverProps()}
+					onClick={() => play("select")}
+					className={`grid size-7 place-items-center rounded-md border border-hairline transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8 ${
+						isPhilosophy ? "text-accent" : "text-ink-dim"
+					}`}
+				>
+					{isPhilosophy ? (
+						<HandHelping strokeWidth={1} className="size-5" aria-hidden />
+					) : (
+						<BookMarked className="size-4" aria-hidden />
+					)}
+				</Link>
 				<FavoritesLink
 					{...hoverProps()}
 					onClick={() => play("select")}

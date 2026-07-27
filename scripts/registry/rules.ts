@@ -1,6 +1,7 @@
 import type { CheckContext, Finding, Rule } from "./check";
 import { defaultsAgree } from "./source-defaults";
 import { validateDefault } from "../../lib/registry/kinds";
+import { PHILOSOPHY_TERMS } from "../../lib/philosophy";
 
 // The cheap rules — pure data plus one readdir and one package.json read. Each
 // one closes an invariant that used to fail silently at runtime: a wrong entry
@@ -175,6 +176,26 @@ const addedAtFormat: Rule = {
   },
 };
 
+const philosophyTermExists: Rule = {
+  id: "philosophy-term-exists",
+  severity: "error",
+  what: "every cited philosophy term is defined in lib/philosophy.ts",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      for (const term of entry.philosophy ?? []) {
+        if (!PHILOSOPHY_TERMS.has(term)) {
+          out.push({
+            slug: entry.slug,
+            detail: `philosophy term "${term}" is not in lib/philosophy.ts — /philosophy silently drops the link, so the component looks uncovered`,
+          });
+        }
+      }
+    }
+    return out;
+  },
+};
+
 const promptOverlaySlug: Rule = {
   id: "prompt-overlay-slug",
   severity: "error",
@@ -334,6 +355,10 @@ const NOT_A_LOOP = new Map<string, string>([
   ["dissolve", "RO measures for a one-shot particle burst"],
   ["marquee-text", "RO measures text width; the marquee itself is CSS"],
   ["scroll-velocity", "RO measures for a scroll-driven transform"],
+  [
+    "parallax-rail",
+    "RO measures rail overflow and pin height; the scrub itself is scroll-driven",
+  ],
   ["border-glow", "bounded easing tweens that terminate themselves"],
   [
     "morphing-text",
@@ -527,6 +552,7 @@ export const RULES: Rule[] = [
   defaultInDomain,
   disabledWhenTarget,
   addedAtFormat,
+  philosophyTermExists,
   promptOverlaySlug,
   dependenciesDeclared,
   previewRegistered,

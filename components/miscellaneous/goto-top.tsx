@@ -5,15 +5,24 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useLenis } from "lenis/react";
 import useWindowHeight from "@/hooks/use-window-height";
+import { useUIStore } from "@/lib/store";
 
 const GotoTop = () => {
 	const { scrollY } = useWindowHeight();
 
 	const [hideToTop, setHideToTop] = useState(false);
+	// A corner-anchored overlay (the philosophy section nav) outranks this button
+	// for the same screen real estate. Unmount rather than fade — the class-driven
+	// hide below carries `duration-1000`, which would linger over a panel that
+	// opens in 420ms.
+	const navOverlayOpen = useUIStore((state) => state.navOverlayOpen);
 	const lenis = useLenis();
 
 	const handleTop = () => {
-		if (!lenis) return;
+		if (!lenis) {
+			window.scrollTo({ top: 0, behavior: "smooth" });
+			return;
+		}
 
 		lenis.scrollTo("#hero", {
 			duration: 2,
@@ -37,7 +46,7 @@ const GotoTop = () => {
 		});
 	}, []);
 
-	return hideToTop ? null : (
+	return hideToTop || navOverlayOpen ? null : (
 		<div
 			role="button"
 			onClick={handleTop}

@@ -10,6 +10,12 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Reveal a second layer through a random pixelated dissolve on hover.",
 		dependencies: ["gsap"],
+		philosophy: [
+			"Reveal",
+			"Stepped animation",
+			"Hover effect",
+			"Crossfade",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -58,6 +64,10 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description: "A cursor-proximity gradient border with an outer glow.",
 		dependencies: [],
+		philosophy: [
+			"Hover effect",
+			"Interpolation / Tween",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -144,6 +154,12 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A card shell with 3D magnetic tilt, radial glow, and a shimmer sweep.",
 		dependencies: ["motion"],
+		philosophy: [
+			"3D tilt / Flip",
+			"Perspective",
+			"Hover effect",
+			"Skeleton / Shimmer",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -168,6 +184,11 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A three-bar hamburger that morphs to an X, driven by a toggle prop.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Morph",
+			"Rotate",
+			"Translate",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -192,6 +213,13 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A dialog that morphs open from its trigger via shared-layout animation, with elements that travel between card and panel.",
 		dependencies: ["motion", "lucide-react"],
+		philosophy: [
+			"Shared element transition",
+			"Layout animation",
+			"Morph",
+			"Origin-aware animation",
+			"Continuity transition",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -250,6 +278,13 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A dialog that grows out of the clicked element and shrinks back into it, entirely inside a portal — never behind page content.",
 		dependencies: ["motion", "lucide-react"],
+		philosophy: [
+			"Origin-aware animation",
+			"Scale in",
+			"Transform origin",
+			"Enter / Exit",
+			"Continuity transition",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -308,6 +343,13 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A grid card that flips out of its cell — GSAP Flip carries it to viewport center while it rotates to reveal its back face, then returns on close.",
 		dependencies: ["gsap"],
+		philosophy: [
+			"3D tilt / Flip",
+			"Shared element transition",
+			"Layout animation",
+			"Perspective",
+			"Rotate",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -381,6 +423,11 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
 		dependencies: [],
+		philosophy: [
+			"Line drawing",
+			"Enter / Exit",
+			"Stagger",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -450,6 +497,12 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Four glyphs pinned to the container corners that blur-and-scale in on mount and dissolve out on exit.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Enter / Exit",
+			"Blur",
+			"Scale in",
+			"Stagger",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -529,6 +582,12 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A display-type list where a shared accent block springs between rows on hover while the text indents and inverts.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Hover effect",
+			"Layout animation",
+			"Spring",
+			"Continuity transition",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -614,6 +673,13 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A percentage-counting load overlay — spinning ring, eased counter, and a fade-out that reveals the page beneath.",
 		dependencies: ["gsap"],
+		philosophy: [
+			"Loop",
+			"Number ticker",
+			"Fade in / Fade out",
+			"Easing",
+			"Perceived performance",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -707,6 +773,15 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A menu overlay that blooms open as a clip-path circle spring while items stagger in with blur and rotation, then collapses back to its pill.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Clip-path",
+			"Reveal",
+			"Spring",
+			"Stagger",
+			"Blur",
+			"Rotate",
+			"Enter / Exit",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -773,6 +848,13 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A button that leans into your cursor — caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Hover effect",
+			"Spring",
+			"Ripple",
+			"Press / Tap feedback",
+			"Momentum",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -861,6 +943,12 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A custom cursor with a shadow at its heel — a precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage; the page cursor is never touched.",
 		dependencies: ["motion"],
+		philosophy: [
+			"Spring",
+			"Follow-through",
+			"Hover effect",
+			"Momentum",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -948,6 +1036,12 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Content hidden in darkness; the cursor is a torch that reveals only what it touches.",
 		dependencies: [],
+		philosophy: [
+			"Mask",
+			"Reveal",
+			"Hover effect",
+			"Idle animation",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -1028,6 +1122,11 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"An element disintegrates into drifting shadow-motes on dismiss, and reforms on command.",
 		dependencies: ["gsap"],
+		philosophy: [
+			"Enter / Exit",
+			"Stagger",
+			"Reveal",
+		],
 		variants: [
 			{
 				lang: "ts",
@@ -1111,6 +1210,439 @@ export const microInteractions: ComponentEntry[] = [
 				kind: "color",
 				default: "#a855f7",
 				description: "Amethyst tint blended into the shadow-motes.",
+			},
+		],
+	},
+	{
+		slug: "tilt",
+		name: "Tilt",
+		category: "Micro-interactions",
+		tier: "free",
+		addedAt: "2026-07-26",
+		description:
+			"A machined card that leans toward the pointer in 3D while a specular sheet slides across its face.",
+		dependencies: [],
+		philosophy: [
+			"3D tilt / Flip",
+			"Perspective",
+			"Transform origin",
+			"Hover effect",
+			"Asymmetric easing",
+			"Hardware acceleration",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/tilt/Tilt.tsx",
+			},
+		],
+		props: [
+			{
+				name: "maxTilt",
+				kind: "number",
+				default: 10,
+				min: 0,
+				max: 25,
+				step: 1,
+				unit: "°",
+				description: "Maximum lean at the card's edge.",
+			},
+			{
+				name: "perspective",
+				kind: "number",
+				default: 900,
+				min: 300,
+				max: 2000,
+				step: 50,
+				unit: "px",
+				description: "Depth of the 3D projection — lower exaggerates it.",
+			},
+			{
+				name: "glare",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Opacity of the specular sheet, matte → mirror.",
+			},
+			{
+				name: "glareSize",
+				kind: "number",
+				default: 0.9,
+				min: 0.3,
+				max: 2,
+				step: 0.05,
+				description: "Glare radius as a fraction of card width.",
+			},
+			{
+				name: "hoverScale",
+				kind: "number",
+				default: 1.03,
+				min: 1,
+				max: 1.15,
+				step: 0.01,
+				description: "Scale applied while the pointer is over the card.",
+			},
+			{
+				name: "smoothing",
+				kind: "number",
+				default: 0.28,
+				min: 0.05,
+				max: 1,
+				step: 0.01,
+				unit: "s",
+				description: "How long the card takes to catch up to the pointer.",
+			},
+			{
+				name: "glareColor",
+				kind: "color",
+				default: "#c4b5fd",
+				description: "Tint of the specular sheet.",
+			},
+		],
+	},
+	{
+		slug: "sigil",
+		name: "Sigil",
+		category: "Micro-interactions",
+		tier: "free",
+		addedAt: "2026-07-26",
+		description:
+			"An SVG crest that traces itself in when it scrolls into view, stroke by stroke.",
+		dependencies: [],
+		philosophy: [
+			"Line drawing",
+			"Reveal",
+			"Scroll reveal",
+			"Enter / Exit",
+			"Delay",
+			"Duration",
+			"Fill mode",
+			"Stagger",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/sigil/Sigil.tsx",
+			},
+		],
+		props: [
+			{
+				name: "duration",
+				kind: "number",
+				default: 1800,
+				min: 400,
+				max: 5000,
+				step: 100,
+				unit: "ms",
+				description: "Time for a single stroke to draw.",
+			},
+			{
+				name: "delay",
+				kind: "number",
+				default: 0,
+				min: 0,
+				max: 2000,
+				step: 50,
+				unit: "ms",
+				description: "Wait after entering view before the first stroke.",
+			},
+			{
+				name: "strokeWidth",
+				kind: "number",
+				default: 1.5,
+				min: 0.5,
+				max: 6,
+				step: 0.5,
+				description: "Stroke width in viewBox units.",
+			},
+			{
+				name: "glow",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Bloom trailing the stroke.",
+			},
+			{
+				name: "replayOnLeave",
+				kind: "boolean",
+				default: true,
+				description: "Re-arm on exit so the crest redraws on the way back.",
+			},
+			{
+				name: "easing",
+				kind: "enum",
+				default: "ease-out",
+				options: ["ease-out", "linear", "ease-in-out", "dramatic"],
+				description: "Curve the stroke advances on.",
+			},
+			{
+				name: "strokeColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "Amethyst stroke.",
+			},
+		],
+	},
+	{
+		slug: "rift",
+		name: "Rift",
+		category: "Micro-interactions",
+		tier: "pro",
+		addedAt: "2026-07-26",
+		description:
+			"A draggable tear between two overlaid scenes — push past an edge and it resists, then snaps back.",
+		dependencies: [],
+		philosophy: [
+			"Clip-path",
+			"Before / after slider",
+			"Drag",
+			"Rubber-banding",
+			"Continuity transition",
+			"Reveal",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/rift/Rift.tsx",
+			},
+		],
+		props: [
+			{
+				name: "position",
+				kind: "number",
+				default: 50,
+				min: 0,
+				max: 100,
+				step: 1,
+				unit: "%",
+				description: "Resting position of the tear.",
+			},
+			{
+				name: "handleWidth",
+				kind: "number",
+				default: 2,
+				min: 1,
+				max: 8,
+				step: 1,
+				unit: "px",
+				description: "Thickness of the divider line.",
+			},
+			{
+				name: "rubberBand",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Give when dragged past an edge, hard stop → loose.",
+			},
+			{
+				name: "angle",
+				kind: "number",
+				default: 0,
+				min: -20,
+				max: 20,
+				step: 1,
+				unit: "°",
+				description: "Lean of the tear off vertical.",
+			},
+			{
+				name: "snapBack",
+				kind: "boolean",
+				default: false,
+				description: "Return to the resting position on release.",
+			},
+			{
+				name: "glow",
+				kind: "number",
+				default: 0.4,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Bloom along the divider.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "Amethyst divider.",
+			},
+		],
+	},
+	{
+		slug: "unfold",
+		name: "Unfold",
+		category: "Micro-interactions",
+		tier: "pro",
+		addedAt: "2026-07-26",
+		description:
+			"A row of slats that open on approach while their neighbours give up the room on a spring.",
+		dependencies: ["motion"],
+		philosophy: [
+			"Accordion / Collapse",
+			"Layout animation",
+			"Spring",
+			"Stiffness / Tension",
+			"Damping",
+			"Hover effect",
+			"Layout thrashing",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/unfold/Unfold.tsx",
+			},
+		],
+		props: [
+			{
+				name: "panels",
+				kind: "number",
+				default: 5,
+				min: 2,
+				max: 7,
+				step: 1,
+				description: "How many slats to render.",
+			},
+			{
+				name: "expandRatio",
+				kind: "number",
+				default: 3.5,
+				min: 1.5,
+				max: 8,
+				step: 0.5,
+				unit: "×",
+				description: "How much wider the open slat is than a closed one.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 260,
+				min: 60,
+				max: 500,
+				step: 20,
+				description: "Spring stiffness — higher snaps open faster.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 30,
+				min: 8,
+				max: 60,
+				step: 2,
+				description: "Spring damping — lower overshoots and settles.",
+			},
+			{
+				name: "labelReveal",
+				kind: "boolean",
+				default: true,
+				description: "Turn the vertical rail label horizontal on open.",
+			},
+			{
+				name: "useImage",
+				kind: "boolean",
+				default: false,
+				description: "Fade each panel's cut-out artwork in behind its slat.",
+			},
+			{
+				name: "gap",
+				kind: "number",
+				default: 8,
+				min: 0,
+				max: 32,
+				step: 2,
+				unit: "px",
+				description: "Space between slats.",
+			},
+		],
+	},
+	{
+		slug: "approach",
+		name: "Approach",
+		category: "Micro-interactions",
+		tier: "pro",
+		addedAt: "2026-07-26",
+		description:
+			"A tile whose overlay enters from the exact edge your cursor crossed, and leaves the way you go.",
+		dependencies: [],
+		philosophy: [
+			"Direction-aware transition",
+			"Enter / Exit",
+			"Translate",
+			"Skew",
+			"Hover effect",
+			"Spatial consistency",
+			"Cubic-bezier",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/approach/Approach.tsx",
+			},
+		],
+		props: [
+			{
+				name: "overlayOpacity",
+				kind: "number",
+				default: 0.92,
+				min: 0.2,
+				max: 1,
+				step: 0.02,
+				description: "Opacity of the overlay panel.",
+			},
+			{
+				name: "duration",
+				kind: "number",
+				default: 420,
+				min: 120,
+				max: 1200,
+				step: 20,
+				unit: "ms",
+				description: "Travel time of the overlay.",
+			},
+			{
+				name: "skew",
+				kind: "number",
+				default: 4,
+				min: 0,
+				max: 16,
+				step: 1,
+				unit: "°",
+				description: "Shear while the overlay is off-position.",
+			},
+			{
+				name: "blur",
+				kind: "number",
+				default: 0,
+				min: 0,
+				max: 12,
+				step: 1,
+				unit: "px",
+				description: "Blur on the overlay while it is moving.",
+			},
+			{
+				name: "offsetDistance",
+				kind: "number",
+				default: 100,
+				min: 40,
+				max: 160,
+				step: 5,
+				unit: "%",
+				description: "How far off-tile the overlay starts.",
+			},
+			{
+				name: "overlayColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "Amethyst overlay panel.",
 			},
 		],
 	},
