@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogIn, Search } from "lucide-react";
+import { BookMarked, HandHelping, Search } from "lucide-react";
 import { useUIStore } from "@/lib/store";
 import { useAuthUser } from "@/hooks/use-auth-user";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
 import AuthMenu from "./AuthMenu";
@@ -16,9 +17,12 @@ export default function MobileBar() {
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
 	const { user, ready, signIn } = useAuthUser();
 	const pathname = usePathname();
+	const { play, hoverProps } = useInteractionSound();
+
+	const isPhilosophy = pathname === "/philosophy";
 
 	return (
-		<div className="sticky top-0 z-20 flex items-center gap-3 border-b border-hairline bg-surface/90 px-3 py-3 backdrop-blur lg:hidden h-10">
+		<div className="sticky top-0 z-20 flex items-center gap-3 border-b border-hairline bg-surface/90 px-2 py-3 backdrop-blur lg:hidden h-10">
 			<button
 				type="button"
 				onClick={toggleSidebar}
@@ -45,6 +49,23 @@ export default function MobileBar() {
 				>
 					<Search className="h-4 w-4" aria-hidden />
 				</button>
+				<Link
+					href="/philosophy"
+					aria-label="Motion philosophy"
+					title="Motion philosophy"
+					aria-current={isPhilosophy ? "page" : undefined}
+					{...hoverProps()}
+					onClick={() => play("select")}
+					className={`grid size-7 place-items-center rounded-md border border-hairline transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none ${
+						isPhilosophy ? "text-accent" : "text-ink-dim"
+					}`}
+				>
+					{isPhilosophy ? (
+						<HandHelping strokeWidth={1} className="size-5" aria-hidden />
+					) : (
+						<BookMarked className="size-4" aria-hidden />
+					)}
+				</Link>
 				{ready && user ? (
 					<AuthMenu />
 				) : (

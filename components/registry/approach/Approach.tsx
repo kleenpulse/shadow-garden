@@ -147,23 +147,37 @@ export default function Approach({
 		const panel = panelRef.current;
 		if (!panel) return;
 		clearHide();
-		panel.style.visibility = "";
-		apply(true, false);
+
+		// `display` rather than `visibility`. A hidden-but-displayed panel keeps its
+		// box, and on a composited, rounded-clipped child that meant the region it
+		// occupied was never guaranteed to be re-rastered — the parent had no reason
+		// to repaint pixels nothing claimed to have changed. `display: none` takes
+		// the element out of the layer tree entirely, so the parent *must* repaint
+		// that region, and the layer is destroyed rather than left holding a frame.
+		const wasParked = panel.style.display === "none";
+		panel.style.display = "";
+
+		// Only park from a genuine standstill. Parking mid-flight means writing
+		// `transition: "none"`, which CANCELS the running compositor animation —
+		// and a cancelled compositor animation is the one thing left in this
+		// component that can strand a rasterised frame. Interrupting an exit now
+		// reverses it from wherever it is, which is also what the eye expects.
+		if (wasParked) apply(true, false);
 		apply(false, true);
 	}, [apply, clearHide]);
 
 	const dismiss = useCallback(() => {
 		apply(true, true);
-		// Guaranteed backstop for the visibility latch. `transitionend` is an
-		// optimisation here, never the only way home: it does not fire for a
-		// cancelled transition, nor when a write changes nothing, and both are
-		// ordinary events on a tile the pointer is crossing quickly.
+		// Guaranteed backstop for the latch. `transitionend` is an optimisation
+		// here, never the only way home: it does not fire for a cancelled
+		// transition, nor when a write changes nothing, and both are ordinary
+		// events on a tile the pointer is crossing quickly.
 		clearHide();
 		hideTimer.current = setTimeout(() => {
 			hideTimer.current = null;
 			if (shown.current) return;
 			const panel = panelRef.current;
-			if (panel) panel.style.visibility = "hidden";
+			if (panel) panel.style.display = "none";
 		}, duration + 80);
 	}, [apply, clearHide, duration]);
 
@@ -238,22 +252,22 @@ export default function Approach({
 	);
 
 	/**
-	 * Hide early once the exit finishes, so no sub-pixel colour from `background`
-	 * bleeds through at near-zero opacity. Purely an optimisation over the timer
-	 * in `dismiss` — if it never fires, the timer still lands.
+	 * There is deliberately no `transitionend` fast-path here.
+	 *
+	 * There used to be one: when `opacity` finished it hid the panel immediately,
+	 * a frame or two ahead of the timer. It read as a free optimisation and it was
+	 * the bug. `opacity` and `transform` do not finish together — a retarget
+	 * restarts `transform` while leaving `opacity` alone when its value did not
+	 * change — so `opacity` routinely lands first, and hiding on it set
+	 * `display: none` on an element whose `transform` was still animating. Killing
+	 * a composited animation by destroying its layer mid-flight is exactly what
+	 * strands a rasterised frame inside the rounded clip. Instrumented traces show
+	 * `transitionend opacity` → `display:none` → `transitioncancel transform`
+	 * roughly 16ms later, on every hover.
+	 *
+	 * The timer in `dismiss` (`duration + 80`, measured from the last write) always
+	 * lands after both properties are done, so nothing is lost by waiting for it.
 	 */
-	const onTransitionEnd = useCallback(
-		(e: React.TransitionEvent<HTMLDivElement>) => {
-			// The panel wraps arbitrary `overlay` content, whose own transitions bubble.
-			if (e.target !== panelRef.current) return;
-			if (e.propertyName !== "opacity") return;
-			if (shown.current) return;
-			clearHide();
-			const panel = panelRef.current;
-			if (panel) panel.style.visibility = "hidden";
-		},
-		[clearHide],
-	);
 
 	// A pointer that leaves the window never delivers `pointerleave` to the tile
 	// it was over, which would strand the overlay open. Same backstop the canvas
@@ -278,7 +292,7 @@ export default function Approach({
 
 	useEffect(() => {
 		const panel = panelRef.current;
-		if (panel && !shown.current) panel.style.visibility = "hidden";
+		if (panel && !shown.current) panel.style.display = "none";
 	}, []);
 
 	useEffect(() => clearHide, [clearHide]);
@@ -298,7 +312,6 @@ export default function Approach({
 			<div
 				ref={panelRef}
 				aria-hidden
-				onTransitionEnd={onTransitionEnd}
 				// No `will-change`. It promoted this layer for the element's whole
 				// lifetime, so a stale raster inside the rounded clip was never
 				// discarded — `visibility: hidden` does not force a re-raster of the
