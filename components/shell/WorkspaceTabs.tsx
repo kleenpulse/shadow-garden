@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { Fragment, useEffect, type ReactNode } from "react";
 import { useUIStore, type WorkspaceTab } from "@/lib/store";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import PillTabs, { type PillTabItem } from "./PillTabs";
@@ -46,7 +46,12 @@ export default function WorkspaceTabs({
 					items={TABS}
 					layoutId="workspace-tabs"
 				/>
-				{promptSlot}
+				{/* Wrapped, not rendered bare: this row is a two-child array, and a
+				    streamed server node arrives here as a lazy — not yet an element, so
+				    jsx() can't mark it key-validated, and React warns "unique key" the
+				    moment it resolves. The fragment is a real element in the array and
+				    reconciles promptSlot as its only child. No DOM, no key needed. */}
+				<Fragment>{promptSlot}</Fragment>
 			</div>
 			<div role="tabpanel" hidden={activeTab !== "preview"}>
 				{preview}
