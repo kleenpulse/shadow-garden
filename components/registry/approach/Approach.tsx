@@ -305,7 +305,19 @@ export default function Approach({
 			onPointerCancel={onPointerCancel}
 			onFocus={onFocus}
 			onBlur={onBlur}
-			className={cn("relative isolate overflow-hidden select-none", className)}
+			// `contain: paint` is load-bearing, not a perf hint. `overflow-hidden` plus
+			// a border radius asks the compositor to reconcile a clipped composited
+			// child against a rounded surface, and it gets the damage bounds wrong:
+			// rapid interrupted travel leaves purple bands that survive the panel
+			// being removed from the layer tree entirely, some of them painted past
+			// the rounded corner — outside the clip that is supposed to be absolute.
+			// `contain: paint` states the guarantee explicitly instead of leaving it
+			// to be inferred, so descendants cannot paint outside this box and the
+			// damage rect is computed against a known bound.
+			className={cn(
+				"relative isolate overflow-hidden select-none [contain:paint]",
+				className,
+			)}
 		>
 			{children}
 
