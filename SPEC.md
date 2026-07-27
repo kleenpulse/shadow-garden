@@ -237,6 +237,7 @@ T54|~|approach round 2: drop `will-change-transform`; `filter` declaration + tra
 T55|x|masonry (pro, Power-User Systems): ∃! parent + absolute + `translate3d`, container-derived column count, CSS-`columns` pre-hydration fallback, sync pack ∈ layout effect, RO ∀ async height, IO reveal w/ `transition-delay` stagger. `NOT_A_LOOP` entry|V31,V32,V33,V6
 T56|x|/philosophy §terms: `grid gap-3 sm:grid-cols-2` → `<Masonry minColumnWidth=240 maxColumns=3 gap=12 revealDistance=20 reducedMotion>` ∀ section. ANCHOR_STOP ∧ `id` ∀ article unchanged ∴ V27/V28 hold|V31,V33,V27,V28
 T57|x|`scrollToAnchor`: settle target reveal ≺ measure; stage instantly when > SMOOTH_MAX(1.4) vh, animate APPROACH(0.55) vh only. proven: drift 0 ∀ fresh-load term pick (target `revealed:-` ∧ opacity 0 pre-click), max step 1900→68px|V33,V34,V35
+T58|x|shadowflame `flameWidth` source `1` → `1.6` (registry = truth, ≡ T49). straggler of T13. bench ∀ rendered 1.6 ∴ ⊥ site visual change; ∃! copied source drifted. `check:registry` → 0 errors|V8,C4,B8
 
 ## §B
 
