@@ -70,4 +70,5 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   unfold: dynamic(() => import("./unfold/UnfoldPreview"), { ssr: false }),
   approach: dynamic(() => import("./approach/ApproachPreview"), { ssr: false }),
   elastic: dynamic(() => import("./elastic/ElasticPreview"), { ssr: false }),
+  masonry: dynamic(() => import("./masonry/MasonryPreview"), { ssr: false }),
 };

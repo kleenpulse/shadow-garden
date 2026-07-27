@@ -359,6 +359,10 @@ const NOT_A_LOOP = new Map<string, string>([
     "parallax-rail",
     "RO measures rail overflow and pin height; the scrub itself is scroll-driven",
   ],
+  [
+    "masonry",
+    "RO watches item heights and one rAF coalesces repacks; layout only, no render loop",
+  ],
   ["border-glow", "bounded easing tweens that terminate themselves"],
   [
     "morphing-text",
