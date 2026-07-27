@@ -48,6 +48,25 @@ export function groupByCategory(
 	})).filter((group) => group.entries.length > 0);
 }
 
+/**
+ * Invert the per-entry `philosophy` declarations into term → components.
+ * Entries stay in registry order under each term, so the glossary lists them the
+ * same way the catalog does. Terms nothing demonstrates are simply absent.
+ */
+export function componentsByTerm(
+	entries: ComponentEntry[] = registry,
+): Map<string, ComponentEntry[]> {
+	const out = new Map<string, ComponentEntry[]>();
+	for (const entry of entries) {
+		for (const term of entry.philosophy ?? []) {
+			const bucket = out.get(term);
+			if (bucket) bucket.push(entry);
+			else out.set(term, [entry]);
+		}
+	}
+	return out;
+}
+
 /** Build the default tuned-values object from a prop schema. */
 export function defaultsFromSchema(props: PropSchema[]): TunedValues {
 	const out: TunedValues = {};

@@ -42,6 +42,11 @@ interface UIState {
   setPaletteOpen: (open: boolean) => void;
   togglePalette: () => void;
 
+  /** A floating page overlay has claimed the screen corners (e.g. the philosophy
+   * section nav), so corner-anchored chrome like GotoTop should stand down. */
+  navOverlayOpen: boolean;
+  setNavOverlayOpen: (open: boolean) => void;
+
   /** Manual pause of the previewed animation (ephemeral; reset per component). */
   paused: boolean;
   setPaused: (paused: boolean) => void;
@@ -70,6 +75,9 @@ export const useUIStore = create<UIState>()(
       paletteOpen: false,
       setPaletteOpen: (paletteOpen) => set({ paletteOpen }),
       togglePalette: () => set((state) => ({ paletteOpen: !state.paletteOpen })),
+
+      navOverlayOpen: false,
+      setNavOverlayOpen: (navOverlayOpen) => set({ navOverlayOpen }),
 
       paused: false,
       setPaused: (paused) => set({ paused }),

@@ -5,6 +5,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
+import { HandHelping } from "lucide-react";
 
 const Threads = dynamic(() => import("@/components/registry/threads/Threads"), {
 	ssr: false,
@@ -105,15 +106,18 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 				>
 					<Link
 						href="/components"
-						className="rounded-md bg-accent px-5 py-2.5 text-on-accent transition-colors hover:bg-accent-hover"
+						prefetch
+						className="rounded-md bg-accent px-5 flex items-center h-8 text-on-accent transition-colors hover:bg-accent-hover"
 					>
 						Enter the catalog
 					</Link>
 					<Link
-						href="/components/threads"
-						className="rounded-md border border-hairline px-5 py-2.5 text-ink-dim transition-colors hover:border-accent-muted hover:text-ink"
+						href="/philosophy"
+						prefetch
+						className="rounded-md border border-hairline px-5  h-8 text-ink-dim transition-colors hover:border-accent-muted hover:text-ink inline-flex items-center gap-1.5"
 					>
-						Inspect Threads
+						Our Philosophy
+						<HandHelping strokeWidth={1} />
 					</Link>
 				</motion.div>
 			</motion.div>

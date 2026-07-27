@@ -55,9 +55,10 @@ export default function Wordmark({
 	// The typewriter cursor rides the write head: it sits at cell `at`, on its
 	// trailing edge for forward typing and leading edge for reverse. null = hidden
 	// (rest, decode, glitch, reduced motion).
-	const [cursor, setCursor] = useState<{ at: number; side: "left" | "right" } | null>(
-		null,
-	);
+	const [cursor, setCursor] = useState<{
+		at: number;
+		side: "left" | "right";
+	} | null>(null);
 	const triggerRef = useRef<() => void>(() => {});
 
 	useEffect(() => {
@@ -231,8 +232,8 @@ export default function Wordmark({
 	return (
 		<span
 			className={cn(
-				"relative inline-block font-display uppercase tracking-[0.2em]",
-				size === "xs" ? "text-xs" : "text-sm",
+				"relative inline-block font-display uppercase tracking-[0.2em] text-sm",
+
 				className,
 			)}
 			onPointerEnter={() => triggerRef.current()}

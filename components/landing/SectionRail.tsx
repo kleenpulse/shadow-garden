@@ -87,7 +87,7 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 		<TooltipProvider delay={0}>
 			<nav
 				aria-label="Section navigation"
-				className="fixed right-3 top-1/2 z-120 hidden -translate-y-1/2 lg:block"
+				className="fixed right-0.5 top-1/2 z-120 hidden -translate-y-1/2 lg:block"
 			>
 				<ol className="flex flex-col items-end gap-3">
 					{sections.map((section) => (

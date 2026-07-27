@@ -62,4 +62,12 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   dissolve: dynamic(() => import("./dissolve/DissolvePreview"), { ssr: false }),
   "umbral-orrery": dynamic(() => import("./umbral-orrery/UmbralOrreryPreview"), { ssr: false }),
   "shadow-bloom": dynamic(() => import("./shadow-bloom/ShadowBloomPreview"), { ssr: false }),
+  tilt: dynamic(() => import("./tilt/TiltPreview"), { ssr: false }),
+  sigil: dynamic(() => import("./sigil/SigilPreview"), { ssr: false }),
+  lumen: dynamic(() => import("./lumen/LumenPreview"), { ssr: false }),
+  "parallax-rail": dynamic(() => import("./parallax-rail/ParallaxRailPreview"), { ssr: false }),
+  rift: dynamic(() => import("./rift/RiftPreview"), { ssr: false }),
+  unfold: dynamic(() => import("./unfold/UnfoldPreview"), { ssr: false }),
+  approach: dynamic(() => import("./approach/ApproachPreview"), { ssr: false }),
+  elastic: dynamic(() => import("./elastic/ElasticPreview"), { ssr: false }),
 };

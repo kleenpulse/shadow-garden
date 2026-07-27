@@ -78,7 +78,7 @@ export default function Home() {
 				<section
 					key={exhibit.category}
 					id={anchorFor(exhibit.category)}
-					className="mx-auto w-full max-w-7xl scroll-mt-10 px-3 py-14 sm:px-6 sm:py-24"
+					className="mx-auto w-full max-w-7xl scroll-mt-10 px-3 py-14 lg:px-6 sm:py-24"
 				>
 					<Reveal>
 						<SpecimenPlate
