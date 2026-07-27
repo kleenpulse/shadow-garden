@@ -232,7 +232,7 @@ export default function Wordmark({
 	return (
 		<span
 			className={cn(
-				"relative inline-block font-display uppercase tracking-[0.2em] text-sm",
+				"relative inline-block font-display uppercase tracking-[0.2em] text-xs min-[375.5px]:text-sm",
 
 				className,
 			)}
