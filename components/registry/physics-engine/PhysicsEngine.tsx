@@ -22,6 +22,11 @@
  */
 
 import { memo, useEffect, useRef, useState } from "react";
+import {
+	useAnimationLoop,
+	type FrameInfo,
+	type Metrics,
+} from "@/hooks/use-animation-loop";
 
 /* ================================================================
  * 1 · Constants
@@ -29,7 +34,8 @@ import { memo, useEffect, useRef, useState } from "react";
 
 const DT = 1 / 120; // fixed physics timestep (s)
 const MAX_STEPS_PER_FRAME = 10; // then drop backlog — no spiral of death
-const MAX_FRAME_DELTA = 0.25; // s, clamp tab-switch deltas
+// Tab-switch deltas are clamped by the animation runtime host before the frame
+// ever gets here, so there is no second clamp in this file.
 const SCALE = 48; // px per meter
 
 const VELOCITY_ITERATIONS = 10;
@@ -1094,6 +1100,34 @@ const PhysicsEngine = memo(function PhysicsEngine({
 		staticColor,
 	};
 
+	// The sim body stays here; the rAF arming, the ResizeObserver, the dpr cap
+	// and the teardown latch all belong to the shared runtime host. The world
+	// itself is built inside the effect below, so the host reaches it through
+	// these two refs rather than the other way round.
+	//
+	// `onFrame` is written long-hand on purpose: `frameRef.current?.(info) ??
+	// false` reads like a null-guard but hands the host a literal `false` on
+	// every *successful* frame, which is its halt signal — the sim would render
+	// once and freeze (§B7).
+	const frameRef = useRef<((info: FrameInfo) => void | false) | null>(null);
+	const resizeRef = useRef<((metrics: Metrics) => void) | null>(null);
+
+	const loop = useAnimationLoop({
+		target: rootRef,
+		// Reduced motion has no loop at all — the world is settled once and
+		// painted static. Everything else that can stop the sim (offscreen,
+		// backgrounded tab) is decided inside the frame, because those are
+		// observer state rather than render state.
+		halted: reduce,
+		dpr: 2,
+		// The world is rebuilt from scratch on every size change, so a drag of
+		// the resize handle must not rebuild it sixty times a second.
+		resizeDebounceMs: 150,
+		onResize: (metrics) => resizeRef.current?.(metrics),
+		onFrame: (info) => (frameRef.current ? frameRef.current(info) : false),
+		deps: [scene, bodyCount, sizeVariation, reduce],
+	});
+
 	// changing the physical laws mid-sim must disturb settled bodies
 	useEffect(() => {
 		wakeRef.current?.();
@@ -1110,15 +1144,15 @@ const PhysicsEngine = memo(function PhysicsEngine({
 		if (!root || !canvas) return;
 		const ctx = canvas.getContext("2d");
 		if (!ctx) return;
-		const dpr = Math.min(window.devicePixelRatio || 1, 2);
+		// Owned by the host now and re-read on every resize, so dragging the
+		// window to a second monitor re-sharpens instead of staying blurry.
+		let dpr = 1;
 
 		let world: World | null = null;
 		let cssW = 0;
 		let cssH = 0;
-		let raf = 0;
 		let ioVisible = true;
 		let pageVisible = !document.hidden;
-		let lastT = 0;
 		let acc = 0;
 		let grabbing: { pointerId: number } | null = null;
 		let disposed = false;
@@ -1374,12 +1408,18 @@ const PhysicsEngine = memo(function PhysicsEngine({
 
 		/* ---- fixed-timestep loop: physics at 120 Hz, render interpolated ---- */
 
-		function loop(t: number) {
-			raf = requestAnimationFrame(loop);
-			if (!world) return;
-			const delta = Math.min((t - lastT) / 1000, MAX_FRAME_DELTA);
-			lastT = t;
-			acc += Math.max(delta, 0) * propsRef.current.timeScale;
+		frameRef.current = ({ dt }) => {
+			// Offscreen or backgrounded: stop scheduling. These are observer
+			// state, not render state, so the halt is decided here rather than
+			// through the host's `halted` flag.
+			if (!ioVisible || !pageVisible || disposed) return false;
+			if (!world) return false;
+
+			// dt is 0 on the first frame of every arm, which is exactly when a
+			// backlog carried across a halt would burst. Drop it there.
+			if (dt === 0) acc = 0;
+
+			acc += Math.max(dt, 0) * propsRef.current.timeScale;
 			let steps = 0;
 			const p = stepParams();
 			while (acc >= DT && steps < MAX_STEPS_PER_FRAME) {
@@ -1389,68 +1429,47 @@ const PhysicsEngine = memo(function PhysicsEngine({
 			}
 			if (steps === MAX_STEPS_PER_FRAME) acc = acc % DT; // drop backlog, never spiral
 			draw(propsRef.current.timeScale > 0 ? Math.min(acc / DT, 1) : 1);
-		}
-
-		const tryStart = () => {
-			if (reduce || raf !== 0 || !ioVisible || !pageVisible || disposed) return;
-			lastT = performance.now();
-			acc = 0;
-			raf = requestAnimationFrame(loop);
-		};
-		const tryStop = () => {
-			if (raf !== 0) {
-				cancelAnimationFrame(raf);
-				raf = 0;
-			}
 		};
 
 		/* ---- sizing (debounced after first layout; rebuild keeps the seed) ---- */
 
-		let sized = false;
-		let resizeTimer: ReturnType<typeof setTimeout> | undefined;
-		function applySize() {
-			const rect = root!.getBoundingClientRect();
-			const w = Math.max(rect.width, 0);
-			const h = Math.max(rect.height, 0);
+		resizeRef.current = (metrics) => {
+			const w = Math.max(metrics.width, 0);
+			const h = Math.max(metrics.height, 0);
 			if (w < 40 || h < 40) return;
-			if (Math.abs(w - cssW) < 1 && Math.abs(h - cssH) < 1) return;
+			const sameBox = Math.abs(w - cssW) < 1 && Math.abs(h - cssH) < 1;
+			if (sameBox && metrics.dpr === dpr) return;
 			cssW = w;
 			cssH = h;
-			canvas!.width = w * dpr;
-			canvas!.height = h * dpr;
+			dpr = metrics.dpr;
+			canvas!.width = metrics.bufferWidth;
+			canvas!.height = metrics.bufferHeight;
 			canvas!.style.width = `${w}px`;
 			canvas!.style.height = `${h}px`;
 			ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
 			buildWorld();
 			if (reduce) settle();
+			// Repaint immediately rather than waiting for a frame: resizing a
+			// canvas clears its backing store, and while halted no frame is
+			// coming (§V2).
 			draw(1);
-		}
-		const ro = new ResizeObserver(() => {
-			if (!sized) {
-				sized = true;
-				applySize();
-				return;
-			}
-			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(applySize, 150);
-		});
-		ro.observe(root);
+		};
 
 		/* ---- visibility gates: hidden Code tab / background browser tab ---- */
 
+		// Only the re-arm needs a call. Going offscreen or backgrounded is
+		// already handled by the frame returning false the next time it runs.
 		const io = new IntersectionObserver(
 			([entry]) => {
 				ioVisible = entry.isIntersecting;
-				if (ioVisible) tryStart();
-				else tryStop();
+				if (ioVisible) loop.start();
 			},
 			{ threshold: 0 },
 		);
 		io.observe(root);
 		const onVisibility = () => {
 			pageVisible = !document.hidden;
-			if (pageVisible) tryStart();
-			else tryStop();
+			if (pageVisible) loop.start();
 		};
 		document.addEventListener("visibilitychange", onVisibility);
 
@@ -1547,13 +1566,16 @@ const PhysicsEngine = memo(function PhysicsEngine({
 			draw(1);
 		};
 
-		tryStart();
+		// The host's own setup effect runs before this one, so its first resize
+		// found both refs empty. Size and arm the sim now that they are filled.
+		loop.resize();
+		loop.start();
 
 		return () => {
 			disposed = true;
-			tryStop();
-			clearTimeout(resizeTimer);
-			ro.disconnect();
+			loop.stop();
+			frameRef.current = null;
+			resizeRef.current = null;
 			io.disconnect();
 			document.removeEventListener("visibilitychange", onVisibility);
 			canvas.removeEventListener("pointerdown", onPointerDown);

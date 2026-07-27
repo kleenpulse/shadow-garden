@@ -153,6 +153,12 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/physics-engine/PhysicsEngine.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+			},
 		],
 		props: [
 			{

@@ -376,8 +376,11 @@ const NOT_A_LOOP = new Map<string, string>([
  * stays visible instead of being quietly blessed by an allowlist.
  */
 const PENDING_MIGRATION = new Map<string, string>([
-  ["physics-engine", "pausable canvas sim with its own rAF loop and RO"],
-  ["variable-proximity", "pausable, free-running rAF pointer follow"],
+  // Empty, and worth keeping that way. The last two residents —
+  // physics-engine and variable-proximity — are on the runtime host as of
+  // 2026-07-27. Anything added here warns on every single run by design; it is
+  // a debt ledger, not a second allowlist. If a new entry genuinely cannot be
+  // hosted, it belongs in NOT_A_LOOP with a reason, not here.
 ]);
 
 const noHandRolledLoop: Rule = {

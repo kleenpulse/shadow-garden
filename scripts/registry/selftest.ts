@@ -284,13 +284,17 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     }),
   },
   {
-    // The allowlist rule fires against the real repo, not a synthetic entry:
-    // its whole job is to describe entries named in the two maps.
+    // The allowlist rule can only fire on a slug one of the two maps actually
+    // names, so this borrows a real one. It used to borrow physics-engine out
+    // of PENDING_MIGRATION; that map is empty now that the migration landed,
+    // which left the rule uncovered — so this exercises the other branch
+    // instead: a NOT_A_LOOP resident that has stopped using either primitive
+    // and should therefore be taken off the list.
     rule: "loop-allowlist-current",
-    ctx: context([entry({ slug: "physics-engine" })], {
-      dirs: new Set(["physics-engine"]),
-      previewKeys: new Set(["physics-engine"]),
-      loopUsage: () => ({ rafCalls: 2, resizeObservers: 1, usesHost: false, nullishHalts: 0 }),
+    ctx: context([entry({ slug: "masonry" })], {
+      dirs: new Set(["masonry"]),
+      previewKeys: new Set(["masonry"]),
+      loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false, nullishHalts: 0 }),
     }),
   },
 ];

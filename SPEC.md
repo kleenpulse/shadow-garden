@@ -113,7 +113,9 @@ V6: ∀ entry → slug unique ∧ slug === dir name ∧ slug ∈ previews keys �
 V7: ∀ prop → default ∈ domain (number ∈ [min,max], enum ∈ options) ∧ `disabledWhen.prop` ∈ same entry props
 V8: ∀ prop → `prop.name` ∈ preview read-keys ∧ registry default === source default. conflict → registry wins ∴ patch source
 V9: ∀ entry → `addedAt` ∈ YYYY-MM-DD ∧ `dependencies` ⊆ package.json deps ∧ `pausable` ⇔ preview forwards `paused`
-V10: ∃! animation runtime host. ∀ rAF|RO|DPR registry component → host it. ⊥ hand-rolled rAF ⊥ hand-rolled RO
+V10: ∃! animation runtime host. ∀ rAF|RO|DPR registry component → host it. ⊥ hand-rolled rAF ⊥ hand-rolled RO.
+     `PENDING_MIGRATION` = debt ledger, ⊥ 2nd allowlist ∴ ! drain to ∅ & stay ∅ (∅ @ 2026-07-27).
+     entry ⊥ hostable → `NOT_A_LOOP` + reason. observer state (IO, visibilitychange) ∉ `halted` (⊥ render state) → halt ∈ frame via `return false`, re-arm via `loop.start()`
 V11: host → ≤1 live rAF ∧ cancel+latch on unmount (⊥ re-arm post-unmount) ∧ ∀ timer cleared ∧ GL → `loseContext()` ∧ dispose idempotent ∧ ⊥ dep on props object identity
 V12: ∀ hosted entry → variants ∋ host file ∧ CodePanel tab ∀ variant ∧ install says copy ∀ file
 V13: ∃! Pro read seam (server) ∧ ∃! Pro cache (client). ⊥ 2nd resolution ladder ⊥ 2nd fetch cache
@@ -238,6 +240,8 @@ T55|x|masonry (pro, Power-User Systems): ∃! parent + absolute + `translate3d`,
 T56|x|/philosophy §terms: `grid gap-3 sm:grid-cols-2` → `<Masonry minColumnWidth=240 maxColumns=3 gap=12 revealDistance=20 reducedMotion>` ∀ section. ANCHOR_STOP ∧ `id` ∀ article unchanged ∴ V27/V28 hold|V31,V33,V27,V28
 T57|x|`scrollToAnchor`: settle target reveal ≺ measure; stage instantly when > SMOOTH_MAX(1.4) vh, animate APPROACH(0.55) vh only. proven: drift 0 ∀ fresh-load term pick (target `revealed:-` ∧ opacity 0 pre-click), max step 1900→68px|V33,V34,V35
 T58|x|shadowflame `flameWidth` source `1` → `1.6` (registry = truth, ≡ T49). straggler of T13. bench ∀ rendered 1.6 ∴ ⊥ site visual change; ∃! copied source drifted. `check:registry` → 0 errors|V8,C4,B8
+T59|x|physics-engine + variable-proximity → runtime host. `PENDING_MIGRATION` drained to ∅. both entries + `role:"hook"` variant. physics: IO/visibility → `return false` ∈ frame, `loop.start()` on re-arm; dpr ← metrics ∀ resize (was 1× @ mount); `MAX_FRAME_DELTA` dropped (host clamps tighter); `acc = 0` @ `dt === 0` = post-halt burst guard. vp: local `useAnimationFrame` deleted, `paintWhenHalted:false` (⊥ backing store ∴ paint-while-paused would re-apply weights pause exists to settle)|V10,V12,V1,V2
+T60|x|selftest `loop-allowlist-current` case repointed PENDING_MIGRATION → NOT_A_LOOP branch (`masonry`, 0 rAF ∧ 0 RO). draining the ledger left the rule uncovered ∴ selftest caught it — working as designed|V5
 
 ## §B
 

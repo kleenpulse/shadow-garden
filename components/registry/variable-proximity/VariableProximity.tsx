@@ -10,20 +10,7 @@ import {
   type HTMLAttributes,
 } from 'react'
 import { motion } from 'motion/react'
-
-function useAnimationFrame(callback: () => void, paused = false) {
-  useEffect(() => {
-    // Halt entirely while paused: a still cursor otherwise still costs a frame.
-    if (paused) return
-    let frameId: number
-    const loop = () => {
-      callback()
-      frameId = requestAnimationFrame(loop)
-    }
-    frameId = requestAnimationFrame(loop)
-    return () => cancelAnimationFrame(frameId)
-  }, [callback, paused])
-}
+import { useAnimationLoop } from '@/hooks/use-animation-loop'
 
 function useMousePositionRef(containerRef: RefObject<HTMLElement | null>) {
   const positionRef = useRef({ x: 0, y: 0 })
@@ -135,47 +122,63 @@ const VariableProximity = forwardRef<HTMLSpanElement, VariableProximityProps>(
       }
     }
 
-    useAnimationFrame(() => {
-      if (!containerRef?.current) return
-      const { x, y } = mousePositionRef.current
-      if (lastPositionRef.current.x === x && lastPositionRef.current.y === y) {
-        return
-      }
-      lastPositionRef.current = { x, y }
-      const containerRect = containerRef.current.getBoundingClientRect()
-
-      letterRefs.current.forEach((letterRef, index) => {
-        if (!letterRef) return
-
-        const rect = letterRef.getBoundingClientRect()
-        const letterCenterX = rect.left + rect.width / 2 - containerRect.left
-        const letterCenterY = rect.top + rect.height / 2 - containerRect.top
-
-        const distance = calculateDistance(
-          mousePositionRef.current.x,
-          mousePositionRef.current.y,
-          letterCenterX,
-          letterCenterY
-        )
-
-        if (distance >= radius) {
-          letterRef.style.fontVariationSettings = fromFontVariationSettings
+    // On the shared animation runtime host rather than a private rAF: one arm
+    // point, one cancel-and-latch teardown, and a ResizeObserver on the
+    // container instead of nothing at all — letter boxes move when the
+    // container reflows, and the old loop only noticed because it re-measured
+    // every single frame.
+    //
+    // `paintWhenHalted: false` is deliberate. The host's default is to repaint
+    // one frame after a resize so a cleared canvas is never left blank, but
+    // there is no backing store here — the letters are DOM and a resize cannot
+    // wipe them. Painting a frame while paused would re-apply proximity weights
+    // that the pause exists to settle.
+    useAnimationLoop({
+      target: containerRef,
+      halted: paused,
+      paintWhenHalted: false,
+      onFrame: () => {
+        if (!containerRef?.current) return
+        const { x, y } = mousePositionRef.current
+        if (lastPositionRef.current.x === x && lastPositionRef.current.y === y) {
           return
         }
+        lastPositionRef.current = { x, y }
+        const containerRect = containerRef.current.getBoundingClientRect()
 
-        const falloffValue = calculateFalloff(distance)
-        const newSettings = parsedSettings
-          .map(({ axis, fromValue, toValue }) => {
-            const interpolatedValue =
-              fromValue + (toValue - fromValue) * falloffValue
-            return `'${axis}' ${interpolatedValue}`
-          })
-          .join(', ')
+        letterRefs.current.forEach((letterRef, index) => {
+          if (!letterRef) return
 
-        interpolatedSettingsRef.current[index] = newSettings
-        letterRef.style.fontVariationSettings = newSettings
-      })
-    }, paused)
+          const rect = letterRef.getBoundingClientRect()
+          const letterCenterX = rect.left + rect.width / 2 - containerRect.left
+          const letterCenterY = rect.top + rect.height / 2 - containerRect.top
+
+          const distance = calculateDistance(
+            mousePositionRef.current.x,
+            mousePositionRef.current.y,
+            letterCenterX,
+            letterCenterY
+          )
+
+          if (distance >= radius) {
+            letterRef.style.fontVariationSettings = fromFontVariationSettings
+            return
+          }
+
+          const falloffValue = calculateFalloff(distance)
+          const newSettings = parsedSettings
+            .map(({ axis, fromValue, toValue }) => {
+              const interpolatedValue =
+                fromValue + (toValue - fromValue) * falloffValue
+              return `'${axis}' ${interpolatedValue}`
+            })
+            .join(', ')
+
+          interpolatedSettingsRef.current[index] = newSettings
+          letterRef.style.fontVariationSettings = newSettings
+        })
+      },
+    })
 
     // While paused (or reduced motion), settle every letter back to its rest
     // weight — the loop is halted, so nothing else will reset them.
