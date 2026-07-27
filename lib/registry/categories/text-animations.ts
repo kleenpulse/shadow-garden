@@ -166,6 +166,12 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/variable-proximity/VariableProximity.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+			},
 		],
 		props: [
 			{
