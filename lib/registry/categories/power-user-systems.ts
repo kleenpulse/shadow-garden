@@ -1575,10 +1575,11 @@ export const powerUserSystems: ComponentEntry[] = [
 		tier: "pro",
 		addedAt: "2026-07-26",
 		description:
-			"Throw the top card and the speed you released it at carries into the spring — catch it mid-flight and it redirects.",
+			"Throw the top card and the speed you released it at carries into the spring — throw it far enough and it cycles to the back of the deck instead of coming home.",
 		dependencies: ["motion"],
 		philosophy: [
 			"Spring",
+			"Swipe to dismiss",
 			"Stiffness / Tension",
 			"Damping",
 			"Mass",
@@ -1662,6 +1663,17 @@ export const powerUserSystems: ComponentEntry[] = [
 				max: 5,
 				step: 1,
 				description: "How many cards in the stack.",
+			},
+			{
+				name: "throwThreshold",
+				kind: "number",
+				default: 90,
+				min: 20,
+				max: 260,
+				step: 10,
+				unit: "px",
+				description:
+					"Throw distance past which the card cycles to the back instead of springing home. Capped at 90% of bounds so it stays reachable.",
 			},
 		],
 	},
