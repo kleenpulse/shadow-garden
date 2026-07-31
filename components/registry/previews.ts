@@ -71,4 +71,10 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   approach: dynamic(() => import("./approach/ApproachPreview"), { ssr: false }),
   elastic: dynamic(() => import("./elastic/ElasticPreview"), { ssr: false }),
   masonry: dynamic(() => import("./masonry/MasonryPreview"), { ssr: false }),
+  hold: dynamic(() => import("./hold/HoldPreview"), { ssr: false }),
+  redact: dynamic(() => import("./redact/RedactPreview"), { ssr: false }),
+  moire: dynamic(() => import("./moire/MoirePreview"), { ssr: false }),
+  dismiss: dynamic(() => import("./dismiss/DismissPreview"), { ssr: false }),
+  aperture: dynamic(() => import("./aperture/AperturePreview"), { ssr: false }),
+  "split-flap": dynamic(() => import("./split-flap/SplitFlapPreview"), { ssr: false }),
 };
