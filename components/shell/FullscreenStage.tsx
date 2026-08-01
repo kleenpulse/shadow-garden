@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+// Patched router: imperative navigations drive the route progress bar too.
+import { useRouter } from "@bprogress/next/app";
 import { motion } from "motion/react";
 import { Minimize2, SlidersHorizontal } from "lucide-react";
 import type { ComponentEntry } from "@/lib/registry/types";

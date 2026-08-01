@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Space_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "@/components/theme-provider";
+import { RouteProgress } from "@/components/providers/route-progress";
 import { IntroOverlay } from "@/components/intro/IntroOverlay";
 import { DevFab } from "@/components/dev/DevFab";
 import "./globals.css";
@@ -73,9 +74,11 @@ export default function RootLayout({
 					enableSystem={false}
 					disableTransitionOnChange
 				>
-					<IntroOverlay />
-					<NuqsAdapter>{children}</NuqsAdapter>
-					{process.env.NODE_ENV === "development" && <DevFab />}
+					<RouteProgress>
+						<IntroOverlay />
+						<NuqsAdapter>{children}</NuqsAdapter>
+						{process.env.NODE_ENV === "development" && <DevFab />}
+					</RouteProgress>
 				</ThemeProvider>
 			</body>
 		</html>
