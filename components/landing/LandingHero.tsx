@@ -5,7 +5,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
-import { HandHelping } from "lucide-react";
+import CookBookIcon from "@/components/icons/cook-book";
 
 const Threads = dynamic(() => import("@/components/registry/threads/Threads"), {
 	ssr: false,
@@ -112,12 +112,12 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 						Enter the catalog
 					</Link>
 					<Link
-						href="/philosophy"
+						href="/cookbook"
 						prefetch
 						className="rounded-md border border-hairline px-5  h-8 text-ink-dim transition-colors hover:border-accent-muted hover:text-ink inline-flex items-center gap-1.5"
 					>
-						Our Philosophy
-						<HandHelping strokeWidth={1} />
+						the Cook Book
+						<CookBookIcon className="size-3.5" aria-hidden />
 					</Link>
 				</motion.div>
 			</motion.div>

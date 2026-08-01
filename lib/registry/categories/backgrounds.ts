@@ -11,7 +11,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"A woven field of flowing threads rendered on a WebGL line shader.",
 		dependencies: ["ogl"],
-		philosophy: ["Loop", "Idle animation", "Hardware acceleration"],
+		cookbook: ["Loop", "Idle animation", "Hardware acceleration"],
 		variants: [
 			{
 				lang: "ts",
@@ -86,7 +86,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"An animated grainy mesh-gradient rendered on a WebGL2 shader.",
 		dependencies: ["ogl"],
-		philosophy: ["Loop", "Idle animation", "Compositing"],
+		cookbook: ["Loop", "Idle animation", "Compositing"],
 		variants: [
 			{
 				lang: "ts",
@@ -212,7 +212,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"Volumetric god-rays from a configurable origin, optionally mouse-following.",
 		dependencies: ["ogl"],
-		philosophy: ["Loop", "Idle animation", "Hover effect"],
+		cookbook: ["Loop", "Idle animation", "Hover effect"],
 		variants: [
 			{
 				lang: "ts",
@@ -328,7 +328,7 @@ export const backgrounds: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"Progressive edge blur — stacked backdrop-filter layers dissolve content toward a chosen edge.",
-		philosophy: ["Blur", "Mask", "Compositing"],
+		cookbook: ["Blur", "Mask", "Compositing"],
 		variants: [
 			{
 				lang: "ts",
@@ -402,7 +402,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"Corner-anchored two-color light rays with adjustable tilt and blend.",
 		dependencies: ["ogl"],
-		philosophy: ["Loop", "Idle animation"],
+		cookbook: ["Loop", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -513,7 +513,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"An interactive dot grid that bulges and glows around the cursor.",
 		dependencies: [],
-		philosophy: ["Hover effect", "Idle animation", "Compositing"],
+		cookbook: ["Hover effect", "Idle animation", "Compositing"],
 		variants: [
 			{
 				lang: "ts",
@@ -637,7 +637,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"Glowing wavy light-strands with an optional glass refraction lens.",
 		dependencies: ["ogl"],
-		philosophy: ["Loop", "Idle animation", "Blur"],
+		cookbook: ["Loop", "Idle animation", "Blur"],
 		variants: [
 			{
 				lang: "ts",
@@ -799,7 +799,7 @@ export const backgrounds: ComponentEntry[] = [
 		pausable: true,
 		description: "Flowing translucent ribbons drifting across a canvas.",
 		dependencies: [],
-		philosophy: ["Loop", "Float", "Idle animation"],
+		cookbook: ["Loop", "Float", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -891,7 +891,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"A dot-matrix world map whose particles scatter from the cursor.",
 		dependencies: [],
-		philosophy: ["Hover effect", "Idle animation", "Loop"],
+		cookbook: ["Hover effect", "Idle animation", "Loop"],
 		variants: [
 			{
 				lang: "ts",
@@ -962,7 +962,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"A constellation network — drifting particles link by proximity, chase and flee the cursor, and glow.",
 		dependencies: [],
-		philosophy: ["Idle animation", "Hover effect", "Float", "Loop"],
+		cookbook: ["Idle animation", "Hover effect", "Float", "Loop"],
 		variants: [
 			{
 				lang: "ts",
@@ -1074,7 +1074,7 @@ export const backgrounds: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"A canvas field of '+' glyphs — scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
-		philosophy: ["Ripple", "Scroll-driven animation", "Hover effect", "Loop"],
+		cookbook: ["Ripple", "Scroll-driven animation", "Hover effect", "Loop"],
 		variants: [
 			{
 				lang: "ts",
@@ -1182,7 +1182,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"A procedural barcode whose bars light up like piano notes — looping on autoplay or scrubbed by scroll.",
 		dependencies: ["gsap"],
-		philosophy: [
+		cookbook: [
 			"Loop",
 			"Scroll-driven animation",
 			"Stagger",
@@ -1262,7 +1262,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"Flowing curtains of amethyst light drifting across a starless night sky — an fbm-warped WebGL2 field where luminous bands ripple, fold, and dissolve into fine grain, like a polar aurora seen from the dark side of the world.",
 		dependencies: ["ogl"],
-		philosophy: ["Loop", "Idle animation", "Float"],
+		cookbook: ["Loop", "Idle animation", "Float"],
 		variants: [
 			{
 				lang: "ts",
@@ -1366,7 +1366,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"Depth-layered stars drifting through a slow warp, each layer parallaxing at its own pace, with the occasional shooting star streaking a bright amethyst tail across the dark before the field settles back to its patient glimmer.",
 		dependencies: [],
-		philosophy: ["Parallax", "Loop", "Idle animation"],
+		cookbook: ["Parallax", "Loop", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -1467,7 +1467,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"A dark field of embers and ash rising on the draft, aglow with amethyst.",
 		dependencies: [],
-		philosophy: ["Loop", "Float", "Idle animation"],
+		cookbook: ["Loop", "Float", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -1564,7 +1564,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"A black flame with an amethyst core, its body folded from domain-warped noise.",
 		dependencies: ["ogl"],
-		philosophy: ["Loop", "Idle animation"],
+		cookbook: ["Loop", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -1704,7 +1704,7 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"Two lattices stacked at a fraction of a degree apart, beating against each other into live interference fringes. Every layer is band-limited in the shader, so what you see is the interference and not the sampling.",
 		dependencies: ["ogl"],
-		philosophy: [
+		cookbook: [
 			"Loop",
 			"Idle animation",
 			"Rotate",

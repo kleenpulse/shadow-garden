@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getEntry } from "@/lib/registry";
-import { termAnchor } from "@/lib/philosophy";
+import { termAnchor } from "@/lib/cookbook";
 import { cn, displayName } from "@/lib/utils";
 import LiveWorkspace from "@/components/shell/LiveWorkspace";
 import CodePanel from "@/components/shell/CodePanel";
@@ -82,16 +82,16 @@ export default async function ComponentPage({
 				</p>
 
 				{/* The motion terms this component demonstrates, each linking to its
-				    definition. Declared on the entry; /philosophy inverts the mapping. */}
-				{entry.philosophy && entry.philosophy.length > 0 && (
+				    definition. Declared on the entry; /cookbook inverts the mapping. */}
+				{entry.cookbook && entry.cookbook.length > 0 && (
 					<div className="mt-4 flex flex-wrap items-center gap-1.5">
 						<span className="font-display text-[9px] uppercase tracking-[0.2em] text-ink-mute">
-							Philosophy
+							Cook Book
 						</span>
-						{entry.philosophy.map((term) => (
+						{entry.cookbook.map((term) => (
 							<Link
 								key={term}
-								href={`/philosophy#${termAnchor(term)}`}
+								href={`/cookbook#${termAnchor(term)}`}
 								className="rounded-full border border-hairline px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
 							>
 								{term}

@@ -87,11 +87,11 @@ export interface ComponentEntry {
   props: PropSchema[];
   /**
    * Motion-glossary terms this component demonstrates, matched exactly against
-   * `PHILOSOPHY_TERMS` in lib/philosophy.ts. Declared here rather than on the glossary
-   * so a component owns its own philosophy; /philosophy inverts the mapping.
+   * `COOKBOOK_TERMS` in lib/cookbook.ts. Declared here rather than on the glossary
+   * so a component owns its own cookbook; /cookbook inverts the mapping.
    * `check:registry` fails on a term the glossary does not define.
    */
-  philosophy?: string[];
+  cookbook?: string[];
   /** v1 populates one canonical (TS + Tailwind) entry; array kept extensible. */
   variants: Variant[];
   dependencies?: string[];

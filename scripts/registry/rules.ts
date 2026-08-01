@@ -1,7 +1,7 @@
 import type { CheckContext, Finding, Rule } from "./check";
 import { defaultsAgree } from "./source-defaults";
 import { validateDefault } from "../../lib/registry/kinds";
-import { PHILOSOPHY_TERMS } from "../../lib/philosophy";
+import { COOKBOOK_TERMS } from "../../lib/cookbook";
 
 // The cheap rules — pure data plus one readdir and one package.json read. Each
 // one closes an invariant that used to fail silently at runtime: a wrong entry
@@ -176,18 +176,18 @@ const addedAtFormat: Rule = {
   },
 };
 
-const philosophyTermExists: Rule = {
-  id: "philosophy-term-exists",
+const cookbookTermExists: Rule = {
+  id: "cookbook-term-exists",
   severity: "error",
-  what: "every cited philosophy term is defined in lib/philosophy.ts",
+  what: "every cited cookbook term is defined in lib/cookbook.ts",
   run(ctx) {
     const out: Finding[] = [];
     for (const entry of ctx.registry) {
-      for (const term of entry.philosophy ?? []) {
-        if (!PHILOSOPHY_TERMS.has(term)) {
+      for (const term of entry.cookbook ?? []) {
+        if (!COOKBOOK_TERMS.has(term)) {
           out.push({
             slug: entry.slug,
-            detail: `philosophy term "${term}" is not in lib/philosophy.ts — /philosophy silently drops the link, so the component looks uncovered`,
+            detail: `cookbook term "${term}" is not in lib/cookbook.ts — /cookbook silently drops the link, so the component looks uncovered`,
           });
         }
       }
@@ -559,7 +559,7 @@ export const RULES: Rule[] = [
   defaultInDomain,
   disabledWhenTarget,
   addedAtFormat,
-  philosophyTermExists,
+  cookbookTermExists,
   promptOverlaySlug,
   dependenciesDeclared,
   previewRegistered,

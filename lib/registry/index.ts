@@ -49,7 +49,7 @@ export function groupByCategory(
 }
 
 /**
- * Invert the per-entry `philosophy` declarations into term → components.
+ * Invert the per-entry `cookbook` declarations into term → components.
  * Entries stay in registry order under each term, so the glossary lists them the
  * same way the catalog does. Terms nothing demonstrates are simply absent.
  */
@@ -58,7 +58,7 @@ export function componentsByTerm(
 ): Map<string, ComponentEntry[]> {
 	const out = new Map<string, ComponentEntry[]>();
 	for (const entry of entries) {
-		for (const term of entry.philosophy ?? []) {
+		for (const term of entry.cookbook ?? []) {
 			const bucket = out.get(term);
 			if (bucket) bucket.push(entry);
 			else out.set(term, [entry]);

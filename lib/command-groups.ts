@@ -8,8 +8,8 @@ import {
 	SunMoon,
 	Link2,
 	LayoutGrid,
-	BookMarked,
 } from "lucide-react";
+import CookBookIcon from "@/components/icons/cook-book";
 import { getEntry } from "@/lib/registry";
 import type { Category, ComponentEntry } from "@/lib/registry/types";
 import type { CommandGroupDef } from "@/components/registry/command-palette/CommandPalette";
@@ -105,12 +105,19 @@ export function buildCommandGroups(
 			onRun: () => actions.navigate("/favorites"),
 		},
 		{
-			id: "action:philosophy",
-			label: "Motion Philosophy",
-			icon: BookMarked,
-			keywords: ["philosophy", "glossary", "terms", "reference", "naming"],
-			active: pathname === "/philosophy",
-			onRun: () => actions.navigate("/philosophy"),
+			id: "action:cookbook",
+			label: "Motion Cook Book",
+			icon: CookBookIcon,
+			keywords: [
+				"cookbook",
+				"cook book",
+				"glossary",
+				"terms",
+				"reference",
+				"naming",
+			],
+			active: pathname === "/cookbook",
+			onRun: () => actions.navigate("/cookbook"),
 		},
 		{
 			id: "action:theme",

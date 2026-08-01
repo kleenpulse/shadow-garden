@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
-import type { Range, Suggestion } from "@/lib/philosophy-search";
+import type { Range, Suggestion } from "@/lib/cookbook-search";
 import { cn } from "@/lib/utils";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import TierBadge from "./TierBadge";
@@ -47,7 +47,7 @@ function Marked({ text, ranges }: { text: string; ranges: readonly Range[] }) {
 	return <>{out}</>;
 }
 
-export default function PhilosophyFilter({
+export default function CookbookFilter({
 	query,
 	onQueryChange,
 	onCommitQuery,
@@ -75,8 +75,8 @@ export default function PhilosophyFilter({
 	const { play, typeKey, hoverProps } = useInteractionSound();
 
 	const uid = useId();
-	const listboxId = `sg-philosophy-listbox-${uid}`;
-	const optionId = (i: number) => `sg-philosophy-option-${uid}-${i}`;
+	const listboxId = `sg-cookbook-listbox-${uid}`;
+	const optionId = (i: number) => `sg-cookbook-option-${uid}-${i}`;
 
 	const visible = open && suggestions.length > 0;
 
@@ -211,7 +211,7 @@ export default function PhilosophyFilter({
 					if (query.trim().length > 0) setOpen(true);
 				}}
 				placeholder="Filter terms…"
-				aria-label="Filter philosophy terms"
+				aria-label="Filter cook book terms"
 				aria-expanded={visible}
 				aria-controls={visible ? listboxId : undefined}
 				aria-autocomplete="list"

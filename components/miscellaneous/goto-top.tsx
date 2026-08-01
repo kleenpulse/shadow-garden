@@ -11,7 +11,7 @@ const GotoTop = () => {
 	const { scrollY } = useWindowHeight();
 
 	const [hideToTop, setHideToTop] = useState(false);
-	// A corner-anchored overlay (the philosophy section nav) outranks this button
+	// A corner-anchored overlay (the cookbook section nav) outranks this button
 	// for the same screen real estate. Unmount rather than fade — the class-driven
 	// hide below carries `duration-1000`, which would linger over a panel that
 	// opens in 420ms.

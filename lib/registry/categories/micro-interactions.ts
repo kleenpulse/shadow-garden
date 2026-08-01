@@ -10,7 +10,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Reveal a second layer through a random pixelated dissolve on hover.",
 		dependencies: ["gsap"],
-		philosophy: ["Reveal", "Stepped animation", "Hover effect", "Crossfade"],
+		cookbook: ["Reveal", "Stepped animation", "Hover effect", "Crossfade"],
 		variants: [
 			{
 				lang: "ts",
@@ -59,7 +59,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description: "A cursor-proximity gradient border with an outer glow.",
 		dependencies: [],
-		philosophy: ["Hover effect", "Interpolation / Tween"],
+		cookbook: ["Hover effect", "Interpolation / Tween"],
 		variants: [
 			{
 				lang: "ts",
@@ -146,7 +146,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A card shell with 3D magnetic tilt, radial glow, and a shimmer sweep.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"3D tilt / Flip",
 			"Perspective",
 			"Hover effect",
@@ -176,7 +176,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A three-bar hamburger that morphs to an X, driven by a toggle prop.",
 		dependencies: ["motion"],
-		philosophy: ["Morph", "Rotate", "Translate"],
+		cookbook: ["Morph", "Rotate", "Translate"],
 		variants: [
 			{
 				lang: "ts",
@@ -201,7 +201,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A dialog that morphs open from its trigger via shared-layout animation, with elements that travel between card and panel.",
 		dependencies: ["motion", "lucide-react"],
-		philosophy: [
+		cookbook: [
 			"Shared element transition",
 			"Layout animation",
 			"Morph",
@@ -266,7 +266,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A dialog that grows out of the clicked element and shrinks back into it, entirely inside a portal — never behind page content.",
 		dependencies: ["motion", "lucide-react"],
-		philosophy: [
+		cookbook: [
 			"Origin-aware animation",
 			"Scale in",
 			"Transform origin",
@@ -331,7 +331,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A grid card that flips out of its cell — GSAP Flip carries it to viewport center while it rotates to reveal its back face, then returns on close.",
 		dependencies: ["gsap"],
-		philosophy: [
+		cookbook: [
 			"3D tilt / Flip",
 			"Shared element transition",
 			"Layout animation",
@@ -411,7 +411,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
 		dependencies: [],
-		philosophy: ["Line drawing", "Enter / Exit", "Stagger"],
+		cookbook: ["Line drawing", "Enter / Exit", "Stagger"],
 		variants: [
 			{
 				lang: "ts",
@@ -481,7 +481,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Four glyphs pinned to the container corners that blur-and-scale in on mount and dissolve out on exit.",
 		dependencies: ["motion"],
-		philosophy: ["Enter / Exit", "Blur", "Scale in", "Stagger"],
+		cookbook: ["Enter / Exit", "Blur", "Scale in", "Stagger"],
 		variants: [
 			{
 				lang: "ts",
@@ -561,7 +561,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A display-type list where a shared accent block springs between rows on hover while the text indents and inverts.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Hover effect",
 			"Layout animation",
 			"Spring",
@@ -652,7 +652,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A percentage-counting load overlay — spinning ring, eased counter, and a fade-out that reveals the page beneath.",
 		dependencies: ["gsap"],
-		philosophy: [
+		cookbook: [
 			"Loop",
 			"Number ticker",
 			"Fade in / Fade out",
@@ -752,7 +752,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A menu overlay that blooms open as a clip-path circle spring while items stagger in with blur and rotation, then collapses back to its pill.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Clip-path",
 			"Reveal",
 			"Spring",
@@ -827,7 +827,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A button that leans into your cursor — caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Hover effect",
 			"Spring",
 			"Ripple",
@@ -922,7 +922,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A custom cursor with a shadow at its heel — a precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage; the page cursor is never touched.",
 		dependencies: ["motion"],
-		philosophy: ["Spring", "Follow-through", "Hover effect", "Momentum"],
+		cookbook: ["Spring", "Follow-through", "Hover effect", "Momentum"],
 		variants: [
 			{
 				lang: "ts",
@@ -1010,7 +1010,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Content hidden in darkness; the cursor is a torch that reveals only what it touches.",
 		dependencies: [],
-		philosophy: ["Mask", "Reveal", "Hover effect", "Idle animation"],
+		cookbook: ["Mask", "Reveal", "Hover effect", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -1091,7 +1091,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"An element disintegrates into drifting shadow-motes on dismiss, and reforms on command.",
 		dependencies: ["gsap"],
-		philosophy: ["Enter / Exit", "Stagger", "Reveal"],
+		cookbook: ["Enter / Exit", "Stagger", "Reveal"],
 		variants: [
 			{
 				lang: "ts",
@@ -1187,7 +1187,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A machined card that leans toward the pointer in 3D while a specular sheet slides across its face.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"3D tilt / Flip",
 			"Perspective",
 			"Transform origin",
@@ -1277,7 +1277,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"An SVG crest that traces itself in when it scrolls into view, stroke by stroke.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Line drawing",
 			"Reveal",
 			"Scroll reveal",
@@ -1363,7 +1363,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A draggable tear between two overlaid scenes — push past an edge and it resists, then snaps back.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Clip-path",
 			"Before / after slider",
 			"Drag",
@@ -1450,7 +1450,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A row of slats that open on approach while their neighbours give up the room on a spring.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Accordion / Collapse",
 			"Layout animation",
 			"Spring",
@@ -1537,7 +1537,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A tile whose overlay enters from the exact edge your cursor crossed, and leaves the way you go.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Direction-aware transition",
 			"Enter / Exit",
 			"Translate",
@@ -1620,7 +1620,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A confirm that has to be earned — the ring fills while you hold, snaps shut when it commits, and empties on a different curve entirely if you let go early.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Hold to confirm",
 			"Asymmetric easing",
 			"Press / Tap feedback",
@@ -1755,7 +1755,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Throw the top card away and the stack closes up behind it. Distance commits, but so does speed — a fast flick from barely anywhere counts, and anything short of both rubber-bands home carrying the velocity you let go at.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Swipe to dismiss",
 			"Rubber-banding",
 			"Velocity",
@@ -1895,7 +1895,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism — wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Reveal",
 			"Rotate",
 			"Clip-path",
@@ -2010,7 +2010,7 @@ export const microInteractions: ComponentEntry[] = [
 				name: "edgeColor",
 				label: "Edge",
 				kind: "color",
-				default: "#000000",
+				default: "#a855f7",
 				description: "Amethyst on the blade seams and the bezel.",
 			},
 		],

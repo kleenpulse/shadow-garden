@@ -1,27 +1,27 @@
 import type { Metadata } from "next";
 import { componentsByTerm } from "@/lib/registry";
-import { PHILOSOPHY } from "@/lib/philosophy";
-import PhilosophyBrowser, {
-	type PhilosophySectionRow,
-} from "@/components/shell/PhilosophyBrowser";
+import { COOKBOOK } from "@/lib/cookbook";
+import CookbookBrowser, {
+	type CookbookSectionRow,
+} from "@/components/shell/CookbookBrowser";
 // Client component, imported directly: `ssr: false` is illegal in a Server
 // Component under Next 16, and the leaf already renders null until mounted.
-import PhilosophyFlame from "@/components/shell/PhilosophyFlame";
+import CookbookFlame from "@/components/shell/CookbookFlame";
 import GotoTop from "@/components/miscellaneous/goto-top";
 import PageBottomBlur from "@/components/landing/PageBottomBlur";
 
 export const metadata: Metadata = {
-	title: "Motion Philosophy",
+	title: "Motion Cook Book",
 	description:
 		"The precise name for every web animation — stagger, rubber-banding, origin-aware, spring damping — each linked to a live, tunable component that demonstrates it.",
 };
 
 // Static: no cookie read, no URL read, no request-time data. The filter is a
 // client leaf holding local state, so this whole page prerenders.
-export default function PhilosophyPage() {
+export default function CookbookPage() {
 	const byTerm = componentsByTerm();
 
-	const sections: PhilosophySectionRow[] = PHILOSOPHY.map((section) => ({
+	const sections: CookbookSectionRow[] = COOKBOOK.map((section) => ({
 		title: section.title,
 		blurb: section.blurb,
 		terms: section.terms.map((t) => ({
@@ -43,7 +43,7 @@ export default function PhilosophyPage() {
 
 	return (
 		<div className="mx-auto max-w-7xl ">
-			<PhilosophyFlame />
+			<CookbookFlame />
 			<PageBottomBlur className="lg:hidden" />
 			<GotoTop />
 
@@ -52,7 +52,7 @@ export default function PhilosophyPage() {
 					Reference
 				</p>
 				<h1 className="mt-2 font-display text-3xl uppercase tracking-[0.08em] text-ink">
-					Motion Philosophy
+					Motion Cook Book
 				</h1>
 				<p className="mt-3 max-w-xl font-sans text-xs md:text-sm text-ink-dim">
 					The exact word for the thing you can picture but can&apos;t name.
@@ -64,7 +64,7 @@ export default function PhilosophyPage() {
 				</p>
 			</header>
 
-			<PhilosophyBrowser sections={sections} />
+			<CookbookBrowser sections={sections} />
 		</div>
 	);
 }

@@ -4,13 +4,15 @@ export interface SVGProps extends React.SVGAttributes<SVGSVGElement> {
 	children?: React.ReactNode;
 }
 
+// 24px default mirrors lucide's contract, so an unstyled render matches the icon set.
+// A `size-*` class still wins — stylesheets beat presentation attributes.
 const GithubIcon = forwardRef<SVGSVGElement, SVGProps>(
 	({ className, ...props }, ref) => {
 		return (
 			<svg
 				viewBox="0 0 1024 1024"
-				width="1024"
-				height="1024"
+				width={24}
+				height={24}
 				fill="none"
 				className={cn(className)}
 				ref={ref}
