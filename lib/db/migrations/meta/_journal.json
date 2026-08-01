@@ -50,6 +50,13 @@
       "when": 1785086497003,
       "tag": "0006_wealthy_sandman",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1785534929909,
+      "tag": "0007_admin_ops",
+      "breakpoints": true
     }
   ]
 }
