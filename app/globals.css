@@ -27,6 +27,11 @@
 	--color-bench-100: #e2e6e9;
 	--color-bench-50: #f3f5f6;
 
+	/* Amethyst fixed to its dark-theme value, for the surfaces that stay graphite
+	   in both themes (the code block, exhibit plates). The semantic `accent` role
+	   darkens under the light theme, which is unreadable on near-black. */
+	--color-amethyst: #a855f7;
+
 	/* Type roles: mono display+readouts (Space Mono), sans body (Geist), mono code (Geist Mono) */
 	--font-display:
 		var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
@@ -212,6 +217,35 @@
 	}
 	.shiki-wrap code {
 		font-family: var(--font-mono);
+	}
+
+	/*
+    Collapsed code surface (§V37). `interpolate-size` is declared HERE, on the
+    block, never on :root — it is an inherited property, so at :root it
+    retroactively makes every auto-height transition in the app animatable
+    (Sidebar, CookbookSectionNav). Chromium-only (Chrome/Edge 129+); Safari and
+    Firefox get no tween and snap to the end state, which is correct, not broken.
+  */
+	.shiki-wrap {
+		interpolate-size: allow-keywords;
+		max-height: max-content;
+		transition: max-height 240ms ease-out;
+	}
+	.shiki-wrap[data-collapsed] {
+		/* 14 line boxes (12px × 1.6) + pre.shiki's 1rem top/bottom padding. */
+		max-height: calc(14 * 1.6 * 12px + 2rem);
+		/* Legal beside the element's overflow-x:auto — a long line still scrolls
+       sideways while the block is clamped. */
+		overflow-y: hidden;
+	}
+	.shiki-code-fade {
+		transition: opacity 240ms ease-out;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.shiki-wrap,
+		.shiki-code-fade {
+			transition: none;
+		}
 	}
 
 	/*

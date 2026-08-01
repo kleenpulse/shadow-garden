@@ -31,6 +31,13 @@ export interface SourceFile {
   html: string;
   raw: string;
   lang: string;
+  /**
+   * Source line count. Drives the Code tab's collapse threshold and the "show all
+   * N lines" label. Counted here rather than client-side so the label ships in the
+   * static HTML — and because the Code panel is `display:none` while the Preview
+   * tab is active, which makes any DOM measurement of it read zero.
+   */
+  lineCount: number;
 }
 
 export type SourceResult =
@@ -71,6 +78,8 @@ async function readVariant(variant: Variant): Promise<SourceFile | null> {
     html: await highlightToHtml(raw, lang),
     raw,
     lang,
+    // Trailing newline stripped first — otherwise every file reports one phantom line.
+    lineCount: raw.replace(/\n$/, "").split("\n").length,
   };
 }
 
