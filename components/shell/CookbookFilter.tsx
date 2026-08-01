@@ -263,7 +263,7 @@ export default function CookbookFilter({
 					// z-10, not higher: the shell's TopBar is sticky at z-20, and a
 					// popup that paints over it while the page is scrolled reads broken.
 					onMouseDown={(event) => event.preventDefault()}
-					className="absolute left-0 right-0 top-full z-10 mt-1 max-h-72 overflow-y-auto scrollbar-thin rounded-md border border-hairline bg-panel p-1 shadow-lg shadow-black/25"
+					className="absolute left-0 right-0 top-full z-10 mt-1 max-h-65 sm:max-h-72 overflow-y-auto scrollbar-thin rounded-md border border-hairline bg-panel p-1 shadow-lg dark:shadow-2xl shadow-black/25 dark:shadow-black/60"
 				>
 					{suggestions.map((suggestion, i) => {
 						const isActive = i === active;
@@ -273,7 +273,10 @@ export default function CookbookFilter({
 								: null;
 
 						return (
-							<li key={`${suggestion.kind}:${suggestion.label}`} role="presentation">
+							<li
+								key={`${suggestion.kind}:${suggestion.label}`}
+								role="presentation"
+							>
 								{heading && (
 									<p
 										role="presentation"
@@ -298,7 +301,10 @@ export default function CookbookFilter({
 									)}
 								>
 									<span className="min-w-0 flex-1 truncate">
-										<Marked text={suggestion.label} ranges={suggestion.ranges} />
+										<Marked
+											text={suggestion.label}
+											ranges={suggestion.ranges}
+										/>
 									</span>
 
 									{suggestion.kind === "term" && (

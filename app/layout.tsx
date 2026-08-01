@@ -75,7 +75,7 @@ export default function RootLayout({
 				>
 					<IntroOverlay />
 					<NuqsAdapter>{children}</NuqsAdapter>
-					{/* {process.env.NODE_ENV === "development" && <DevFab />} */}
+					{process.env.NODE_ENV === "development" && <DevFab />}
 				</ThemeProvider>
 			</body>
 		</html>

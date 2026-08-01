@@ -49,11 +49,11 @@ export default function TopBar() {
 					aria-current={isCookbook ? "page" : undefined}
 					{...hoverProps()}
 					onClick={() => play("select")}
-					className={`grid size-7 place-items-center rounded-md border border-hairline transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8 ${
+					className={`grid size-7 place-items-center rounded-md  transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8 ${
 						isCookbook ? "text-accent" : "text-ink-dim"
 					}`}
 				>
-					<CookBookIcon open={isCookbook} className="size-4" aria-hidden />
+					<CookBookIcon open={isCookbook} className="size-full" aria-hidden />
 				</Link>
 				<FavoritesLink
 					{...hoverProps()}
