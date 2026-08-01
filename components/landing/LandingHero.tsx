@@ -117,7 +117,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 						className="rounded-md border border-hairline px-5  h-8 text-ink-dim transition-colors hover:border-accent-muted hover:text-ink inline-flex items-center gap-1.5"
 					>
 						the Cook Book
-						<CookBookIcon className="size-3.5" aria-hidden />
+						<CookBookIcon className="size-5.5" aria-hidden />
 					</Link>
 				</motion.div>
 			</motion.div>

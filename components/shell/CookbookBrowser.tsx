@@ -328,7 +328,7 @@ export default function CookbookBrowser({
 
 				{/* Sits over the rail's floor rather than after the list, so it stays
 				    reachable however far the sections scroll. */}
-				<CookbookFlameControlsDesktop className="sticky bottom-10 left-0" />
+				<CookbookFlameControlsDesktop className="sticky bottom-1 left-0 -ml-7" />
 			</div>
 
 			<div className="min-w-0 flex-1 pb-[10svh]">
