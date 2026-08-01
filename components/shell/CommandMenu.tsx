@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+// Patched router: imperative navigations drive the route progress bar too.
+import { useRouter } from "@bprogress/next/app";
 import { toast } from "sonner";
 import CommandPalette, {
   isEditableTarget,

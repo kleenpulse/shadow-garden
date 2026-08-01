@@ -294,6 +294,18 @@
 	clip-path: var(--magicui-theme-vt-clip-from);
 }
 
+/* Route progress bar (components/providers/route-progress.tsx). BProgress feeds one
+   color string into both the bar background and the peg's glow; ours is a gradient,
+   which `background` accepts and `box-shadow` does not — so the glow resolves invalid
+   and vanishes. Re-declared here, tuned to the gradient's leading (right) edge.
+   Unlayered and carrying an extra `body`: the provider injects its own stylesheet into
+   the body at mount, so a layered or equal-specificity rule would lose to it. */
+body .bprogress .peg {
+	box-shadow:
+		0 0 10px #22d3ee,
+		0 0 5px #6d28d9;
+}
+
 /* Intro overlay (components/intro/IntroOverlay.tsx): hidden unless the
    pre-paint script in app/layout.tsx stamps html[data-sg-intro] — first load
    of a session only. The attribute also locks scroll until the reveal begins;

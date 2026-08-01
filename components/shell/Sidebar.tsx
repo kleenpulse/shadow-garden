@@ -9,7 +9,9 @@ import {
 } from "react";
 import { motion } from "motion/react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+// Patched router: imperative navigations drive the route progress bar too.
+import { useRouter } from "@bprogress/next/app";
 import { groupByCategory, registry } from "@/lib/registry";
 import type { Category, ComponentEntry } from "@/lib/registry/types";
 import { fuzzyScore } from "@/lib/fuzzy";
