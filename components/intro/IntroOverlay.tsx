@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
-import { createDustGL, sampleWord, type DustGL } from "./dust-gl";
+import { createDustGL, GRAIN_IN, sampleWord, type DustGL } from "./dust-gl";
 
 /**
  * Once-per-session brand intro. The pre-paint script in app/layout.tsx stamps
@@ -227,16 +227,27 @@ export function IntroOverlay() {
 			// One clock: the char swap reads the gsap-tweened front, the shader
 			// recomputes the same linear front from tl.time() — never a frame of
 			// desync between the vanishing glyph and its grain field. No mask, no
-			// wipe: the instant the front touches a char it swaps wholesale to its
-			// grain field (visually identical, baseline-aligned), and erosion
-			// proceeds per-grain — ragged and granular, never a traveling line.
+			// wipe: erosion is per-grain, ragged and granular, never a traveling
+			// line.
+			//
+			// The glyph does not hide the moment the front touches it. Its grains
+			// stipple in over GRAIN_IN seconds *underneath the still-solid text* —
+			// same colour, same pixels, so the ramp is invisible — and only once
+			// they are all up does the span go. Hiding on contact instead is the
+			// robotic crack: a whole letter switching to dust in one frame, and
+			// dimming as it does. Nothing has moved yet at this point, because
+			// PEEL_FLOOR in the shader exceeds GRAIN_IN.
+			const granPx = frontSpeed * GRAIN_IN;
 			const tick = () => {
 				const t = tl?.time() ?? 0;
 				for (let i = 0; i < rects.length; i++) {
 					const rect = rects[i];
 					const span = charRefs.current[i];
 					if (!rect || !span) continue;
-					if (front.x < rect.right && span.style.visibility !== "hidden") {
+					if (
+						front.x < rect.right - granPx &&
+						span.style.visibility !== "hidden"
+					) {
 						span.style.visibility = "hidden";
 					}
 				}

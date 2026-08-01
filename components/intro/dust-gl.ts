@@ -36,6 +36,24 @@ export interface DustGL {
   dispose(): void; // idempotent
 }
 
+/**
+ * Seconds a char's grains take to speckle in, measured from the front touching
+ * its right edge. The DOM glyph stays solid underneath for exactly this long —
+ * grains are the same colour on the same pixels, so the ramp is invisible and
+ * the handoff has no pop. IntroOverlay converts this to px of front travel to
+ * time its `visibility: hidden`; both sides must use this number or the glyph
+ * vanishes before its dust is up.
+ */
+export const GRAIN_IN = 0.1;
+
+/**
+ * Minimum hold between a grain's release and its first movement. Must exceed
+ * GRAIN_IN: the DOM glyph is still painted during the speckle-in, so a grain
+ * that flew away early would leave the solid glyph sitting over a hole it had
+ * already vacated — then blink out when the span hides.
+ */
+const PEEL_FLOOR = 0.12;
+
 const VERTEX = /* glsl */ `
 attribute vec2 aHome;
 attribute vec3 aColor;
@@ -49,8 +67,18 @@ uniform float uFrontSpeed;
 uniform vec2 uResolution;
 uniform float uDpr;
 
+const float GRAIN_IN = ${GRAIN_IN.toFixed(3)};
+const float PEEL_FLOOR = ${PEEL_FLOOR.toFixed(3)};
+
 varying vec3 vColor;
 varying float vAlpha;
+varying float vSoft;
+
+// Cheap per-grain hash off the home position — granulation order needs its own
+// randomness and every aRand channel is already spoken for.
+float hash12(vec2 p) {
+  return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+}
 
 // Stream function, domain-warped (sin inside sin) so the field never reads as
 // the periodic sine sum it actually is. The domain scrolls downstream with the
@@ -76,10 +104,13 @@ vec2 curl(vec2 p, float t) {
 }
 
 void main() {
-  // The whole char turns granular the instant the front touches its right
-  // edge (the DOM glyph swaps out) — every grain of it becomes visible at
-  // home, full alpha. No mask, no wipe line: erosion is purely granular.
-  float visibleT = (uFrontStart - aEdge.x) / uFrontSpeed;
+  // A char starts granulating when the front touches its right edge, but its
+  // grains do not all arrive at once — each waits out its own slice of the
+  // GRAIN_IN window, so the letter crackles into dust instead of switching
+  // over in one frame. The DOM glyph is still solid underneath for the whole
+  // window, hiding the ramp entirely. No mask, no wipe line.
+  float granT = (uFrontStart - aEdge.x) / uFrontSpeed;
+  float visibleT = granT + GRAIN_IN * hash12(aHome);
   // A grain leaves once the front passes its own x (plus positive jitter so
   // dust lifts off the still-held face) — right-to-left, ragged, per-grain.
   float key = aHome.x + aRand2.z * 40.0;
@@ -88,8 +119,10 @@ void main() {
   // stays anchored — but the window is tight (~2 chars of front travel), so
   // a char is mostly gone before the front reaches its second neighbor. The
   // crown of a glyph goes first (aEdge.y = 0 at the top): wind takes the
-  // exposed top of a letter before it gets under the base.
-  float peel = 0.34 * pow(aRand.x, 0.7) * mix(0.55, 1.0, clamp(aEdge.y, 0.0, 1.0));
+  // exposed top of a letter before it gets under the base. The floor is the
+  // handoff guarantee — see PEEL_FLOOR.
+  float peel = PEEL_FLOOR
+    + 0.30 * pow(aRand.x, 0.7) * mix(0.55, 1.0, clamp(aEdge.y, 0.0, 1.0));
   float life = mix(1.0, 1.9, aRand2.x);
   float tf = clamp(uTime - releaseT - peel, 0.0, life);
   float lifeFrac = tf / life;
@@ -113,20 +146,24 @@ void main() {
   // Amplitude grows super-linearly with flight time: the diffusion-like spread
   // that frays the plume into wisps, without integrating any state.
   float turbAmp = mix(0.7, 1.5, aRand2.w) * 78.0 * pow(tf, 1.3);
-  // The held face breathes before it lets go. Ramps from zero at the swap so
-  // the granular glyph is pixel-identical to the DOM one on the handoff frame.
-  float held = clamp(uTime - visibleT, 0.0, 1.0);
+  // The held face breathes before it lets go — a heat-haze shimmer that reads
+  // as the letter loosening rather than waiting. Squared ramp from zero at the
+  // grain's own arrival, so it is still sub-pixel while the DOM glyph is up.
+  float held = clamp((uTime - visibleT) / 0.35, 0.0, 1.0);
   // Sampled at the travelling position, never at aHome — a grain has to enter
   // new eddies as it flies or the whole cloud just shimmers in place.
-  vec2 pos = ballistic + curl(ballistic, uTime) * (turbAmp + 3.2 * held * held);
+  vec2 pos = ballistic + curl(ballistic, uTime) * (turbAmp + 2.5 * held * held);
 
-  // Hidden until the char swap / held 1 / flight: opaque through most of the
-  // travel, then a long tail. Fast grains slightly ghosted — motion blur.
+  // Arrival is a brief per-grain fade rather than a step — with the hash
+  // stagger above, the char stipples in. Then opaque through most of the
+  // travel and a long tail. Fast grains slightly ghosted — motion blur.
   float lifeK = 1.0 - lifeFrac;
-  float alpha = step(visibleT, uTime) * pow(lifeK, 1.7);
+  float alpha = clamp((uTime - visibleT) / 0.05, 0.0, 1.0) * pow(lifeK, 1.7);
   alpha *= mix(1.0, 0.62, (vterm / 460.0) * step(0.001, tf));
   vAlpha = alpha;
   vColor = aColor;
+  // Drives the sprite profile: solid ink at rest, haze in flight.
+  vSoft = pow(lifeFrac, 0.6);
 
   // Base size covers the sampling stride so the swap reads near-solid; the
   // 2.7x growth is dispersal — alpha falls faster than area grows, so total
@@ -148,13 +185,20 @@ precision mediump float;
 
 varying vec3 vColor;
 varying float vAlpha;
+varying float vSoft;
 
 void main() {
   vec2 d = gl_PointCoord - 0.5;
-  // Gaussian minus its own edge pedestal: soft volumetric falloff that still
-  // reaches exactly zero at the sprite bounds, so no square cutoff shows when
-  // the points grow late in life. A hard disc reads as sand.
-  float m = max(exp(-dot(d, d) * 11.0) - 0.064, 0.0) * 1.068;
+  float r = length(d);
+  // At rest the sprite is a plateau disc with a soft rim. This is what makes
+  // the granulated glyph match solid ink: a gaussian's coverage collapses to
+  // roughly half the sprite, so a field of them reads visibly lighter and
+  // greyer than the DOM text it replaces — the letter appears to dim as it
+  // cracks. In flight it morphs to a gaussian, where the soft falloff is
+  // exactly what turns overlapping grains into haze instead of sand.
+  float disc = 1.0 - smoothstep(0.34, 0.5, r);
+  float haze = max(exp(-r * r * 11.0) - 0.064, 0.0) * 1.068;
+  float m = mix(disc, haze, vSoft);
   float a = vAlpha * m;
   gl_FragColor = vec4(vColor * a, a); // premultiplied
 }
