@@ -5,6 +5,7 @@ import { Renderer, Program, Mesh, Triangle } from "ogl";
 import { useTheme } from "next-themes";
 import { useAnimationLoop } from "@/hooks/use-animation-loop";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
+import { useFlameHydrated, useFlameStore } from "@/lib/cookbook-flame-store";
 
 /**
  * The ambient flame under /cookbook. A deliberate private fork of the
@@ -23,6 +24,12 @@ import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
  * `fixed` layer is always intersecting, so the observer could only ever report
  * true. The `visibilitychange` halt stays; a backgrounded tab is the one halt
  * that actually fires here.
+ *
+ * The reader's two switches (lib/cookbook-flame-store, surfaced by
+ * CookbookFlameControls) arrive through the store, not props: this layer is a
+ * sibling of CookbookBrowser under a server component, so there is no tree to
+ * pass through. `enabled` gates the mount below; `paused` folds into the frame
+ * loop's existing motion scalar.
  */
 
 // Wrap accumulated sim time so iTime stays small — keeps the fbm/domain-warp
@@ -228,12 +235,27 @@ function buildSprite(core: string, hot: string): HTMLCanvasElement {
 	return c;
 }
 
+/**
+ * Mount gate. Kept separate from FlameCanvas because the GL effect below is
+ * mount-once (`[]` deps) — an early `return null` inside it would bail that
+ * effect forever and re-enabling would never rebuild the renderer. Unmounting
+ * the whole subtree instead runs the existing teardown (WEBGL_lose_context), so
+ * "off" actually releases the context rather than hiding a live canvas.
+ */
 export default function CookbookFlame() {
+	const enabled = useFlameStore((s) => s.enabled);
+	const hydrated = useFlameHydrated();
+	if (hydrated && !enabled) return null;
+	return <FlameCanvas />;
+}
+
+function FlameCanvas() {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const sparkCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
 	const { resolvedTheme } = useTheme();
 	const reducedMotion = usePrefersReducedMotion();
+	const paused = useFlameStore((s) => s.paused);
 
 	// resolvedTheme is undefined until next-themes has read the DOM. Falling back
 	// to dark costs nothing: the app's defaultTheme is dark, so the pre-resolve
@@ -244,10 +266,10 @@ export default function CookbookFlame() {
 	// The only values the frame loop reads live: the theme can flip mid-session.
 	// Mirrored in an effect rather than during render — this runs before the
 	// loop.start() effect below, so a re-armed frame always sees the new palette.
-	const live = useRef({ palette, reducedMotion });
+	const live = useRef({ palette, reducedMotion, paused });
 	useEffect(() => {
-		live.current = { palette, reducedMotion };
-	}, [palette, reducedMotion]);
+		live.current = { palette, reducedMotion, paused };
+	}, [palette, reducedMotion, paused]);
 
 	const drawRef = useRef<((dt: number) => void | false) | null>(null);
 	const measureRef = useRef<
@@ -444,7 +466,13 @@ export default function CookbookFlame() {
 		};
 
 		drawRef.current = (dt: number) => {
-			const wantMotion = !isPageVisible || live.current.reducedMotion ? 0 : 1;
+			// One choke point for every reason to stop: the reader's pause switch
+			// rides the same eased fade-to-still as a backgrounded tab, so pausing
+			// settles the flame instead of snapping it.
+			const wantMotion =
+				!isPageVisible || live.current.reducedMotion || live.current.paused
+					? 0
+					: 1;
 			motion += (wantMotion - motion) * Math.min(1, dt * 4);
 			if (wantMotion === 0 && motion < 0.001) motion = 0;
 
@@ -484,11 +512,13 @@ export default function CookbookFlame() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// Theme or reduced-motion flipped. start() is idempotent; re-armed under a
-	// still state it bakes exactly one frame with the new palette and self-halts.
+	// Theme, reduced-motion or the pause switch flipped. start() is idempotent;
+	// re-armed under a still state it bakes exactly one frame with the new palette
+	// and self-halts. This is also the only thing that revives a self-halted loop
+	// when the reader un-pauses.
 	useEffect(() => {
 		loop.start();
-	}, [resolvedTheme, reducedMotion, loop]);
+	}, [resolvedTheme, reducedMotion, paused, loop]);
 
 	return (
 		<div
