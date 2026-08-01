@@ -19,6 +19,7 @@ import Masonry, {
 	settleMasonryReveal,
 } from "@/components/registry/masonry/Masonry";
 import CookbookFilter from "./CookbookFilter";
+import { CookbookFlameControlsDesktop } from "./CookbookFlameControls";
 import CookbookSectionNav from "./CookbookSectionNav";
 import TierBadge from "./TierBadge";
 
@@ -265,57 +266,70 @@ export default function CookbookBrowser({
 			{/* Below `lg` the rail is display:none — this carries the same index as a
 			    corner pill. Kept out of the rail's own subtree so it isn't clipped by
 			    the rail's `overflow-y-auto`. */}
-			<CookbookSectionNav
-				sections={navItems}
-				active={active}
-				onJump={jumpTo}
-			/>
+			<CookbookSectionNav sections={navItems} active={active} onJump={jumpTo} />
 
-			{/* Section index — a rail, not a second sidebar. */}
-			<nav
-				ref={railRef}
-				aria-label="Sections"
-				className="mb-8 hidden shrink-0 scrollbar-thin lg:sticky lg:top-20 lg:mb-0 lg:block lg:max-h-[calc(100svh-7rem)] lg:w-48 lg:overflow-y-auto"
-			>
-				<p className="mb-2 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
-					Sections
-				</p>
-				<ul className="space-y-0.5">
-					{filtered.map((section) => {
-						const id = termAnchor(section.title);
-						const isActive = id === active;
-						return (
-							<li key={section.title}>
-								<a
-									href={`#${id}`}
-									data-rail-id={id}
-									onClick={() => jumpTo(id)}
-									aria-current={isActive ? "true" : undefined}
-									className={cn(
-										"relative block rounded-sm px-2 py-1 text-sm transition-colors",
-										isActive
-											? "text-accent"
-											: "text-ink-dim hover:bg-raised/40 hover:text-ink",
-									)}
-								>
-									{isActive && (
-										<motion.span
-											layoutId="sg-cookbook-rail__active"
-											className="pointer-events-none absolute inset-0 z-0 rounded-sm border-l-2 border-accent bg-accent/10"
-											transition={
-												reduced
-													? { duration: 0 }
-													: { type: "spring", stiffness: 380, damping: 34 }
-											}
-										/>
-									)}
-									<span className="relative z-10">{section.title}</span>
-								</a>
-							</li>
-						);
-					})}
-				</ul>
-			</nav>
+			{/* Section index — a rail, not a second sidebar. Sticky and the
+			    positioning context live on this wrapper, not on the scroller: an
+			    absolute child of an `overflow-y-auto` box is clipped by it and
+			    scrolls away with the list. */}
+			<div className="relative mb-8 hidden shrink-0 lg:sticky lg:top-20 lg:mb-0 lg:block lg:h-[calc(100svh-7rem)] lg:w-48 lg:self-start">
+				{/* The height is explicit, not `max-h`. As a flex item this box would
+				    otherwise stretch to the full page, and a sticky element as tall as
+				    its scroll container never appears to stick — that's what capped the
+				    old rail. Fixing it here also gives the controls below a stable
+				    floor at the viewport's edge instead of one that drifts with the
+				    section count. */}
+				<nav
+					ref={railRef}
+					aria-label="Sections"
+					className="h-full scrollbar-thin lg:overflow-y-auto"
+				>
+					<p className="mb-2 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
+						Sections
+					</p>
+					{/* Bottom padding so the last section can scroll clear of the
+					    gear pinned over the rail's floor. */}
+					<ul className="space-y-0.5 pb-10">
+						{filtered.map((section) => {
+							const id = termAnchor(section.title);
+							const isActive = id === active;
+							return (
+								<li key={section.title}>
+									<a
+										href={`#${id}`}
+										data-rail-id={id}
+										onClick={() => jumpTo(id)}
+										aria-current={isActive ? "true" : undefined}
+										className={cn(
+											"relative block rounded-sm px-2 py-1 text-sm transition-colors",
+											isActive
+												? "text-accent"
+												: "text-ink-dim hover:bg-raised/40 hover:text-ink",
+										)}
+									>
+										{isActive && (
+											<motion.span
+												layoutId="sg-cookbook-rail__active"
+												className="pointer-events-none absolute inset-0 z-0 rounded-sm border-l-2 border-accent bg-accent/10"
+												transition={
+													reduced
+														? { duration: 0 }
+														: { type: "spring", stiffness: 380, damping: 34 }
+												}
+											/>
+										)}
+										<span className="relative z-10">{section.title}</span>
+									</a>
+								</li>
+							);
+						})}
+					</ul>
+				</nav>
+
+				{/* Sits over the rail's floor rather than after the list, so it stays
+				    reachable however far the sections scroll. */}
+				<CookbookFlameControlsDesktop className="sticky bottom-10 left-0" />
+			</div>
 
 			<div className="min-w-0 flex-1 pb-[10svh]">
 				<div className="mb-4 md:mb-8 flex gap-2 items-center top-10 sticky sm:top-14 z-10 bg-panel/80 backdrop-blur py-2">

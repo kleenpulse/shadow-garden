@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/lib/store";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
+import { CookbookFlameControlsMobile } from "./CookbookFlameControls";
 
 // The desktop rail's mobile counterpart: a corner pill that reads out where you
 // are in the glossary and morphs open into the section index. Deliberately no
@@ -24,8 +25,11 @@ const PILL_H = 32;
 
 // Panel ceilings, clamped against the viewport in the resize effect below.
 const OPEN_W = 320;
-const OPEN_H = 384;
+const OPEN_H = 424;
 const ROW_H = 34;
+// The pinned flame-controls footer. Counted into the derived height so a
+// filtered-down list of two sections doesn't crush the controls out of the box.
+const FOOTER_H = 40;
 
 const IOS_EASE = [0.32, 0.72, 0, 1] as const;
 const FULL_CLIP = "inset(-8% -8% -8% -8% round 14px)";
@@ -80,7 +84,11 @@ export default function CookbookSectionNav({
 		const calc = () =>
 			setBox({
 				w: Math.min(OPEN_W, window.innerWidth - 32),
-				h: Math.min(OPEN_H, window.innerHeight * 0.6, total * ROW_H + 44),
+				h: Math.min(
+					OPEN_H,
+					window.innerHeight * 0.6,
+					total * ROW_H + 44 + FOOTER_H,
+				),
 			});
 		calc();
 		window.addEventListener("resize", calc);
@@ -203,34 +211,45 @@ export default function CookbookSectionNav({
 							maxHeight: box.h,
 							willChange: "clip-path, opacity",
 						}}
-						className="absolute bottom-9 left-0 z-30 origin-bottom-left overflow-y-auto overscroll-contain rounded-xl border border-hairline bg-panel/80 p-1.5  backdrop-blur-2xl scrollbar-none"
+						className="absolute bottom-9 left-0 z-30 flex origin-bottom-left flex-col overflow-hidden rounded-xl border border-hairline bg-panel/80 backdrop-blur-2xl"
 					>
-						<p className="px-2 pb-1 pt-0.5 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
-							Sections
-						</p>
-						<ul>
-							{sections.map((section) => {
-								const isActive = section.id === active;
-								return (
-									<li key={section.id}>
-										<a
-											href={`#${section.id}`}
-											{...hoverProps()}
-											onClick={() => select(section.id)}
-											aria-current={isActive ? "true" : undefined}
-											className={cn(
-												"block truncate rounded-sm border-l-2 px-2 py-1.5 font-sans text-sm transition-colors",
-												isActive
-													? "border-accent bg-accent/10 text-accent"
-													: "border-transparent text-ink-dim hover:bg-raised/40 hover:text-ink",
-											)}
-										>
-											{section.title}
-										</a>
-									</li>
-								);
-							})}
-						</ul>
+						{/* The scroll lives on this inner box, not the panel: the panel
+						    itself has to stay unscrolled so the footer below can hold
+						    the floor while the list moves behind it. */}
+						<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-1.5 scrollbar-none">
+							<p className="px-2 pb-1 pt-0.5 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
+								Sections
+							</p>
+							<ul>
+								{sections.map((section) => {
+									const isActive = section.id === active;
+									return (
+										<li key={section.id}>
+											<a
+												href={`#${section.id}`}
+												{...hoverProps()}
+												onClick={() => select(section.id)}
+												aria-current={isActive ? "true" : undefined}
+												className={cn(
+													"block truncate rounded-sm border-l-2 px-2 py-1.5 font-sans text-sm transition-colors",
+													isActive
+														? "border-accent bg-accent/10 text-accent"
+														: "border-transparent text-ink-dim hover:bg-raised/40 hover:text-ink",
+												)}
+											>
+												{section.title}
+											</a>
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+
+						{/* Flame controls. Deliberately does not close the panel — the
+						    point is to watch the background react while toggling. */}
+						<div className="shrink-0 border-t border-hairline bg-panel/60 px-3 py-2">
+							<CookbookFlameControlsMobile />
+						</div>
 					</motion.div>
 				)}
 			</AnimatePresence>
