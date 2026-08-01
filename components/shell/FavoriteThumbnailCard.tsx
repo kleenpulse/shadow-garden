@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useReducedMotion } from "motion/react";
 import type { ComponentEntry, PropSchema } from "@/lib/registry/types";
 import { defaultsFromSchema } from "@/lib/registry";
-import { displayName } from "@/lib/utils";
+import { displayName } from "@/lib/display-name";
 import { previews } from "@/components/registry/previews";
 import PreviewBoundary from "./PreviewBoundary";
 import TierBadge from "./TierBadge";

@@ -12,7 +12,8 @@ G3: ∀ concept (Pro state, favourites merge, creds presence, prop kind) → ∃
 
 - C1: animation BODY (shader | physics | particle math | draw call) stays inline per-component. ⊥ shared abstraction over it.
 - C1a: animation RUNTIME HOST (rAF arm/halt, ResizeObserver, DPR, timers, dispose) → ∃! `hooks/use-animation-loop.ts`. host ⊥ know animation math; halt predicate caller-supplied ∴ host ⊥ prescriptive.
-- C1b: host ships to customer ∴ 2nd `Variant` on entry (`lib/registry/types.ts:62-67` — array "kept extensible"). CodePanel tab ∀ variant. install: copy ∀ file. ⊥ npm package, ⊥ private import.
+- C1b: host ships to customer ∴ 2nd `Variant` on entry (`lib/registry/types.ts` — array "kept extensible"). CodePanel tab ∀ variant. install: copy ∀ file. ⊥ npm package, ⊥ private import.
+  generalized @ V41: peer file ∈ {`hook` runtime host, `util` `lib/utils.ts`, `peer` sibling}. role total ∴ `ROLE_TABLE` ∈ `lib/registry/roles.ts` (≡ V16 shape). `util` ≠ `peer`: `Toolbar.tsx` called a "util" lies in the tab strip.
 - C2: motion = deliverable (registry ships animated components) ∴ reduced-motion gate ? per-component call, ⊥ blanket mandate. loops self-halt at speed 0 | paused regardless.
 - C3: build ! stay PPR-clean.
 - C4: registry default = truth. source ≠ registry → patch source (⊥ patch registry). customer copy === bench shown.
@@ -30,10 +31,23 @@ Registry check (`scripts/registry/`, headless):
 
 - cmd: `bun scripts/check-registry.ts` → stdout violations; exit 0 ⇔ ⊥ error-severity
 - fn: `checkRegistry(ctx, rules)` → `Violation[]` — pure, io injected
-- type: `CheckContext` → `{ registry, previewKeys:Set, dirs:Set, fileExists(rel), previewReads(slug), sourceDefaults(slug), loopUsage(slug), packageDeps:Set, promptOverlays:Set }`
+- type: `CheckContext` → `{ registry, previewKeys:Set, dirs:Set, fileExists(rel), previewReads(slug), sourceDefaults(slug), loopUsage(slug), entryImports(slug), packageDeps:Set, promptOverlays:Set }`
+- fn: `parseImports(file,text)` → `Specifier[]` ∈ {package(name normalized)|alias(`@/`)|relative(`./`)}. TS AST ∴ quote-agnostic ∧ ⊥ count comment|string. pure, ⊥ fs
+- fn: `entryImports(slug)` → `{packages:Set, files:Set, via:Map, unresolved[]}` — BFS ∀ `variants[*]`, ext ladder `∅|.tsx|.ts|/index.tsx|/index.ts`, cycle-safe. 2 caches: per-slug ∧ per-file-parse
 - type: `Rule` → `{ id, severity:"error"|"warn", what, run(ctx): Finding[] }`
 - type: `Violation` → `Finding & { rule, severity }`; `Finding` → `{ slug?, prop?, detail }`
 - new rule → ! selftest case (uncovered rule → selftest exit ≠ 0) ∧ ! default ∈ selftest `context()` factory
+
+Source strip (`lib/registry/strip-comments.ts`, ∅ deps ∴ importable under plain `bun`):
+
+- fn: `stripComments(src)` → src ⊖ comments, blank runs collapsed. ∃! caller = `readVariant` ∈ `source.ts` ∴ Code tab | copy | `lineCount` | prompt ∀ agree
+- cmd: `bun run check:strip` → exit ≠ 0 on token drift | syntax error | ⊥-directive survivor. covers `components/registry/**` ∪ ∀ declared `variant.file` (derived ∴ new peer file ⊥ opens a hole)
+
+Variant roles (`lib/registry/roles.ts`, ⊥ React ⊥ server-only ∴ client + `scripts/` both import):
+
+- type: `VariantRole` = `component|hook|util|peer` ∈ `types.ts` (vendored file ! compile standalone ∴ union lives there, table here)
+- table: `ROLE_TABLE` `satisfies Record<VariantRole,RoleMeta>`, `RoleMeta` → `{badge, promptSuffix, contract}`. ∃! table ∧ ∀ consumer reads through it ∴ 5th role = tsc error @ 1 site
+- fn: `roleOf(role?)` → total; `rolesPresent(roles)` → table order (⊥ file order ∴ prompt byte-stable)
 
 Animation runtime host (`hooks/use-animation-loop.ts`, `"use client"`):
 
@@ -109,15 +123,17 @@ V2: ∀ resize → repaint ≥1 frame even if render loop self-halted (paused | 
 V3: prod → ⊥ cookie|env Pro unlock. ∀ dev override (`SHADOW_GARDEN_PRO`, `sg_pro`) → ! IS_LOCAL_DEV
 V4: ∀ db reach → ∃ capability guard upstream. creds ∉ env → typed refusal ∴ ⊥ throw at module-import
 V5: ∃! registry check module. headless ∧ violation → exit ≠ 0
-V6: ∀ entry → slug unique ∧ slug === dir name ∧ slug ∈ previews keys ∧ ∀ variant.file ∃ on disk ∧ ∈ {`components/registry/`, `hooks/`}
+V6: ∀ entry → slug unique ∧ slug === dir name ∧ slug ∈ previews keys ∧ ∀ variant.file ∃ on disk ∧ ∈ {`components/registry/`, `hooks/`} ∪ `PEER_FILES`
+    `PEER_FILES` = exact paths {`lib/utils.ts`, `components/ui/auto-mask-vertical.tsx`}, ⊥ a `lib/` root — root would expose `lib/db` ∧ `lib/registry/entitlement.ts` @ 1 typo ∧ widen the trace. mirrored `source.ts` ↔ `rules.ts` (rules ⊥ import source: `server-only` + `react.cache`)
 V7: ∀ prop → default ∈ domain (number ∈ [min,max], enum ∈ options) ∧ `disabledWhen.prop` ∈ same entry props
 V8: ∀ prop → `prop.name` ∈ preview read-keys ∧ registry default === source default. conflict → registry wins ∴ patch source
 V9: ∀ entry → `addedAt` ∈ YYYY-MM-DD ∧ `dependencies` ⊆ package.json deps ∧ `pausable` ⇔ preview forwards `paused`
+    ⊆ = the direction that cannot be wrong (declared pkg ∄ repo). ⊇ (imported pkg ∄ declared) → V41 — ∃! that one bills the customer
 V10: ∃! animation runtime host. ∀ rAF|RO|DPR registry component → host it. ⊥ hand-rolled rAF ⊥ hand-rolled RO.
      `PENDING_MIGRATION` = debt ledger, ⊥ 2nd allowlist ∴ ! drain to ∅ & stay ∅ (∅ @ 2026-07-27).
      entry ⊥ hostable → `NOT_A_LOOP` + reason. observer state (IO, visibilitychange) ∉ `halted` (⊥ render state) → halt ∈ frame via `return false`, re-arm via `loop.start()`
 V11: host → ≤1 live rAF ∧ cancel+latch on unmount (⊥ re-arm post-unmount) ∧ ∀ timer cleared ∧ GL → `loseContext()` ∧ dispose idempotent ∧ ⊥ dep on props object identity
-V12: ∀ hosted entry → variants ∋ host file ∧ CodePanel tab ∀ variant ∧ install says copy ∀ file
+V12: ∀ entry (⊥ hosted-only) → variants ∋ ∀ non-npm file ∈ transitive closure ∧ CodePanel tab ∀ variant ∧ install says copy ∀ file
 V13: ∃! Pro read seam (server) ∧ ∃! Pro cache (client). ⊥ 2nd resolution ladder ⊥ 2nd fetch cache
 V14: ∃! favourites reconcile module, pure (⊥ fetch ⊥ store ⊥ db ⊥ React). ∀ merge|diff|order rule → from it
 V15: ∃! capability predicate module, 1 shape. ⊥ inline `process.env` truthiness at call site
@@ -189,6 +205,19 @@ V38: ∀ collapse of tall region → park viewport @ region top ≺ shrink. scro
      region's own top ⊥ moves on collapse — only content below rises ∴ viewport parked @ that top sees ∅ jump.
      fold-first → doc shrinks under an in-flight programmatic smooth scroll ∴ browser clamps ∧ cancels it (measured: landed 306px past target, ⊥ 96).
      fold gated on `scrollend` + timeout floor (⊥ ∀ browser fires it). long gap staged instantly ≺ animated approach (§V35)
+V40: ∀ source served to customer (Code tab, copy, `raw`, prompt) → ∅ comments. strip @ `readVariant`, ⊥ @ disk — repo keeps its "why" notes.
+     ⊖ = comments ∧ nothing else: token stream pre/post ! identical ∀ shipped file (`check:strip`, TS parser). scanner hand-rolled (typescript = devDep ∧ this ∈ request path) ∴ ! JSX-aware — `Classified // Section VII` ∈ JSX text ⊥ comment; `{/* … */}` takes its braces ∴ ⊥ bare `{}` | orphaned `{`+`}` on 2 lines.
+     directive comments survive (`eslint-*`, `@ts-*`, `prettier-ignore`, `webpack*`, `<reference`) — instruction to a tool, ⊥ prose; buyer's paste ! lint ≡ ours.
+     ∀ allowlist entry ! anchored to token ∄ English prose. `global ` matched "…can stand down from the / global hotkey), but keep Escape…" ∧ pinned it ∴ ∃ comment ∈ shipped bytes.
+V41: ∀ entry → transitive import closure of `variants[*]` ⊆ (`dependencies` ∪ `variants` ∪ FRAMEWORK{react,react-dom,next}) ∧ ⊇ ∀ declared pkg.
+     closure ≡ ∀ byte `getSource()` hands the buyer, transitively. preview ∉ closure (⊥ a variant ∧ ⊥ read by getSource) ∴ command-palette `lucide-react` = OVER-declared, ⊥ justified.
+     bare → `dependencies`, subpath normalized (`motion/react`→motion, `gsap/Flip`→gsap, `three/examples/…`→three, `@scope/x/y`→`@scope/x`).
+     `@/` | `./` → ∃ variant ∋ resolved file. walk transitive ∴ marquee-text ! declare `./auto-mask-horizontal` ∧ `lib/utils.ts` (2 hops); command-palette reaches utils via `auto-mask-vertical` (2 hops) ∴ 1-file scan misses both.
+     peer file carries own pkgs UP to host ∴ 37 × `lib/utils.ts` ! declare clsx ∧ tailwind-merge — declaring the VARIANT ⊥ removes the PACKAGES.
+     unresolved specifier → own rule, ⊥ silent: truncated walk ⇒ incomplete closure reads as COMPLETE.
+     ⊇ direction @ error + `DEPENDS_WITHOUT_IMPORT` reason map (≡ `NOT_A_LOOP` shape, ⊥ `PENDING_MIGRATION` ledger). ∅ @ 2026-08-01.
+     shipped util ! stay customer-only: `displayName` (shell PascalCase splitter) evicted `lib/utils.ts` → `lib/display-name.ts` — internals ∈ a buyer's paste = dead code they ! reason about.
+     ⊥ tsc-reachable ∀ construction: repo compiles ∀ these imports (they resolve HERE); ∃! the customer's copy breaks.
 V39: ∀ CSS-transition assertion @ headless → run on ⊥-GPU page. swiftshader + mounted WebGL preview = ~6fps ∴ transition samples `playState:"running", currentTime:0` indefinitely ∧ reads as broken.
      ∧ ∀ source-panel assertion → free-tier entry. pro entry = `locked` ∴ ∅ `.shiki-wrap` ∈ DOM, ⊥ a failure of the thing under test.
      ∴ confirm mechanism on isolated static page ≺ concluding the feature is at fault
@@ -259,6 +288,18 @@ T60|x|selftest `loop-allowlist-current` case repointed PENDING_MIGRATION → NOT
 T61|x|`WorkspaceTabs` wraps `{promptSlot}` ∈ `<Fragment>` ∴ dev key warning gone. ⊥ layout change (fragment ⊥ DOM)|V36,B13
 T62|x|code tab collapse: `.shiki-wrap[data-collapsed]` max-height = 14 lines, applied @ `lineCount > 22`. graphite fade + pill `show all N lines ⌄` / `collapse ⌃`, sticky @ expanded. `lineCount` ∈ `SourceFile` (server-counted — Code panel = `display:none` under Preview tab ∴ ∀ DOM measure reads 0). `CodeTabs` keys `CodeBlock` on file ∴ state per-file. root `overflow-clip` ⊥ `hidden`. new static `--color-amethyst` (semantic accent darkens @ light theme, unreadable on permanent graphite). ⊥ new `StatEvent`. verified: 301px clamped → 9929px expanded, blockTop = REST_OFFSET exactly post-collapse|V37,V38
 T63|x|verify harness lesson: app page @ headless swiftshader ran 3 rAF/500ms (~6fps) w/ WebGL preview mounted behind code tab ∴ CSS transition sampled `playState:"running", currentTime:0` @ +3000ms → read as `interpolate-size` broken. isolated static page: same CSS ticks correctly (mid-tween h=1133, ends `max-content`). ∴ ∀ transition assertion → run on ⊥-GPU entry (`border-glow`, ⊥ `vortex-bloom`). ∧ pro entry (`physics-engine`) = locked ∴ ⊥ `.shiki-wrap` @ all — pick free entry ∀ source-panel test|V39,B14
+T64|x|`stripComments()` + wire @ `readVariant` ∴ customer bytes carry ∅ comments while repo files keep theirs. frame-stack scanner (code/template/JSX-tag/JSX-children) ∴ `/` as comment vs divide vs regex vs closing tag vs plain text resolved. `check-strip.ts` (TS parser, devDep) asserts token identity: 162/162, 130 files had comments. 2 real defects caught by it, ⊥ by eye — `global ` allowlist entry ate a prose comment, `{/* … */}` left `{}` behind|V40
+T65|x|`scripts/registry/imports.ts`: TS-AST `parseImports(file,text)` → `Specifier[]`, subpath+scope normalize. covers import|export-from|import-type|dynamic|side-effect. quote-agnostic ∀ construction (reads `.text` off StringLiteral) — ∃ registry files @ single quotes ∴ the grep audit under-reported ∧ ⊥ failed. pure, ⊥ fs|V41,C5
+T66|x|`entryImports(slug)` ∈ CheckContext: BFS ∀ `variants[*]` (⊥ `variants[0]` — peer ships ∴ its imports ship), ext ladder, `statSync().isFile()` (bare `./store` ⊥ resolve to the dir), cycle-safe, `via` parent map, `unresolved[]`. 2 caches: per-slug ≡ loopUsage ∧ per-FILE parse (utils × 37, host × 24 → ~40 unique parses)|V41,V5,I.check
+T67|x|`VariantRole` = component\|hook\|util\|peer ∈ types.ts (vendored ∴ self-contained, ⊥ import roles.ts) + `ROLE_TABLE` ∈ `lib/registry/roles.ts` `satisfies Record<VariantRole,RoleMeta>`. 4 hardcoded `role === "hook"` sites → table (CodeTabs badge, prompt suffix, prompt contract ∀ role ∈ table order, rules). `source.ts` PEER_FILES exact map ≺ prefix loop + `SourceFile.role: VariantRole`|V6,V12,V16,C1b
+T68|x|sweep 38/68 via AST codemod (splice @ offsets ∴ tabs+prop order survive): +`UTILS_VARIANT` × 37 & +clsx+tailwind-merge; gradual-blur +motion; flip-card +lucide-react; command-palette −lucide-react +`components/ui/auto-mask-vertical.tsx`; marquee-text +`./auto-mask-horizontal`; file-explorer +23 peers (⊥ UTILS — owns `cn` ∈ `./util`). ! ≻ T67: `variant-file-root` already error ∴ util variant pre-T67 fails 37|V41,V6
+T69|x|4 rules ∀ error + selftest case: `imported-package-declared`, `imported-file-ships`, `imported-file-resolves`, `declared-package-imported` (+`DEPENDS_WITHOUT_IMPORT`). FRAMEWORK seeded ∈ clean `context()` factory ∴ the existing clean-entry assert = the negative test. proven @ real repo, ⊥ ∃! synthetic: reverted gradual-blur → both directions fired (utils file + motion/clsx/tailwind-merge)|V41,V5,G2
+T70|x|`check:strip` file list derived (`walk(components/registry)` ∪ ∀ `variant.file`) ⊥ hardcoded ∴ 162→164 picked up the 2 new peer files w/ ⊥ edit. a new peer ⊥ opens a strip hole ∀ construction|V40,V41
+T71|x|`displayName` `lib/utils.ts` → `lib/display-name.ts`, 4 shell importers repointed. utils.ts = ∃! `cn` ∴ the shipped util ≡ canonical shadcn file. caught by eye @ the rendered `util` tab, ⊥ by any check — "is this ours or theirs" ∄ machine-decidable|V41
+T72|x|`installCommand` fallback "needs no extra dependencies" → "needs no npm packages": ⊥ contradict the file manifest rendered directly below it. absent ≡ `[]` KEPT (⊥ rule demanding an optional key)|V41,B15
+T73|x|admin vendor re-copy 6/7. `index.ts` was PRE-drifted (`philosophy` → `cookbook` rename never propagated) ∴ V19 check had been failing ∧ ⊥ run — ≡ B8/B9 2nd-order (the check exists, nobody ran it). drift ✓ + admin tsc exit 0|V19
+T74| |file-explorer Code panel = 24 tabs. T68 fixed the LIE (manifest now true), ⊥ the ergonomics. collapse `role:"peer"` behind ∃! "N supporting files" affordance|V41,T68
+T75|x|aperture defaults: source `bladeCount 6`→8, `edgeColor "#a855f7"`→"#000000" (registry = truth ≡ T49/T58). pre-existing drift, ∄ this change — surfaced ∃! because `check:registry` finally ran|V8,C4
 
 ## §B
 
@@ -277,3 +318,4 @@ B11|2026-07-27|/cookbook: heading lands under the filter bar ∀ jump. `scroll-m
 B12|2026-07-27|approach: round-1 fix (B9) landed ∧ artifact PERSISTED — 2nd, distinct cause @ compositor, ⊥ DOM. purple fragments ⊥ full-tile-width (∃ ~75% width bar; ∃ 40px strip carrying the card radius; ∃ multi-fragment tile) ∴ damage-rect granularity, ⊥ any specified transform. user: scroll|resize|devtools-toggle ∀ clear it ∴ DOM healthy, painted output stale. cause: ∃! entry stacking permanent `will-change` + animated `filter` + rounded `overflow-hidden` on ancestor. `blur` default 0 ∴ `filter: blur(0px)` bought a render surface ∀ 0 visual ∧ redefined damage rect; `will-change` kept layer promoted ∴ stale raster never discarded. controls ∈ repo: spotlight-shell = same clip + skew-translate, ⊥ will-change ⊥ filter, ⊥ artifacts; tilt = will-change + radius but clip on static child. fix: drop both. 2nd-order: round 1 declared "fixed ∧ proven" on a harness run under swiftshader ∴ green was ⊥ signal (V30); real-GPU + headful + presented-frame diff ALSO ⊥ reproduce ∴ ⊥ harness-verified — user eye = ∃! proof|V29,V30
 B13|2026-07-27|dev console: `Each child in a list should have a unique "key" prop. Check the render method of WorkspaceTabs. It was passed a child from ComponentPage.` ⊥ real missing key — `promptSlot` = ∃! prop passed server→client that lands as bare sibling ∈ 2-child array (`[<PillTabs>, promptSlot]`). streamed RSC node = lazy @ jsxs time ∴ `validateChildKeys` skips it (⊥ `isValidElement`) ∴ `_store.validated` stays 0; resolves to keyless element ∴ `warnForMissingKey` fires. `code` = same origin ⊥ warns — reconciled as ∃! child, ⊥ array. dev-only noise, ⊥ runtime effect|V36
 B14|2026-08-01|near-miss, ⊥ shipped: code-tab clamp read as permanently stuck (301px, `maxHeight: calc-size(max-content, 300.8px + (0 * size))` = interpolation frozen @ t=0) ∴ ⊥ conclude `interpolate-size` unusable. 2 false leads ≺ cause: (1) probed `physics-engine` = pro ∴ locked ∴ ∅ `.shiki-wrap` — read as "no code panel"; (2) probed `vortex-bloom` = WebGL ∴ page ran 3 rAF/500ms under swiftshader ∴ transition clock ⊥ advanced ∧ fade opacity stuck @ 1 too — 2 frozen transitions = the tell it was env, ⊥ CSS. isolated static page w/ identical CSS ticked correctly ∴ mechanism sound. re-run @ `border-glow` (free, ⊥ GPU): 301 → 9929px, fade → 0, ∀ check green|V39
+B15|2026-08-01|`gradual-blur` install block printed "# GradualBlur needs no extra dependencies" while the shipped file imports `motion/react` ∧ `@/lib/utils` ∴ customer paste ⊥ compiles ∧ ⊥ diagnosable (error names node_modules, ⊥ the registry). mechanism: `dependencies` key ABSENT ∧ `installCommand` maps absent ≡ `[]` ≡ "needs nothing" ∴ a MISSING key ASSERTS zero deps — silence read as a claim. amplified @ T42: `installCommand("bun",entry)` embedded ∈ prompt ∴ the buyer's LLM told the same lie ∧ will confidently ⊥ install it (≡ B8 amplification). scope measured ⊥ estimated (closure walk, ⊥ grep): 38/68 — 37 × undeclared `lib/utils.ts` (35 direct, marquee-text ∧ command-palette @ 2 hops) ∧ ∄ 1 entry declaring clsx\|tailwind-merge which `cn` needs; 1 × undeclared motion; 1 × undeclared lucide-react (flip-card); 1 × OVER-declared lucide-react (command-palette — ∃! the PREVIEW imports it ∴ buyer billed ∀ a pkg never loaded); 1 × 23-file closure @ 1 declared variant. root: ⊥ check ever read the source's imports — `dependencies-declared` owned ∃! `⊆ package.json`, the direction that cannot be wrong. 2nd-order ×2: (a) 2 recon passes disagreed — the grep pass missed single-quoted files ∧ reported "1 offender", the AST pass found 38 ∴ ∀ import audit ! AST; (b) `check:registry` was red on arrival (aperture, T75) ∴ the gate had ⊥ run before commit — 3rd repeat of B8/B9/T73|V41

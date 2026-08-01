@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useBorderGlow } from "@/components/registry/border-glow/BorderGlow";
 import type { Tier } from "@/lib/registry/types";
-import { cn, displayName } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { displayName } from "@/lib/display-name";
 import TierBadge from "./TierBadge";
 import NewBadge from "./NewBadge";
 import FavoriteButton from "./FavoriteButton";

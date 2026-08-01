@@ -1,4 +1,15 @@
-import type { ComponentEntry } from "../types";
+import type { ComponentEntry, Variant } from "../types";
+
+/** lib/utils.ts ships with every entry whose source imports `cn`. Its own
+ *  packages (clsx, tailwind-merge) are the host entry's to declare — the check
+ *  walks into this file and finds them there (§V41). */
+const UTILS_VARIANT: Variant = {
+	lang: "ts",
+	style: "tailwind",
+	file: "lib/utils.ts",
+	role: "util",
+	label: "utils.ts",
+};
 
 /** Micro-interactions — hover, focus, and dialog motion primitives. */
 export const microInteractions: ComponentEntry[] = [
@@ -9,7 +20,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"Reveal a second layer through a random pixelated dissolve on hover.",
-		dependencies: ["gsap"],
+		dependencies: ["gsap", "clsx", "tailwind-merge"],
 		cookbook: ["Reveal", "Stepped animation", "Hover effect", "Crossfade"],
 		variants: [
 			{
@@ -17,6 +28,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/pixel-transition/PixelTransition.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -145,7 +157,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A card shell with 3D magnetic tilt, radial glow, and a shimmer sweep.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"3D tilt / Flip",
 			"Perspective",
@@ -158,6 +170,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/spotlight-shell/SpotlightShell.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -200,7 +213,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "pro",
 		description:
 			"A dialog that morphs open from its trigger via shared-layout animation, with elements that travel between card and panel.",
-		dependencies: ["motion", "lucide-react"],
+		dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Shared element transition",
 			"Layout animation",
@@ -214,6 +227,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/morph-dialog/MorphDialog.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -265,7 +279,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A dialog that grows out of the clicked element and shrinks back into it, entirely inside a portal — never behind page content.",
-		dependencies: ["motion", "lucide-react"],
+		dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Origin-aware animation",
 			"Scale in",
@@ -279,6 +293,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/grow-dialog/GrowDialog.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -330,7 +345,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "pro",
 		description:
 			"A grid card that flips out of its cell — GSAP Flip carries it to viewport center while it rotates to reveal its back face, then returns on close.",
-		dependencies: ["gsap"],
+		dependencies: ["gsap", "lucide-react", "clsx", "tailwind-merge"],
 		cookbook: [
 			"3D tilt / Flip",
 			"Shared element transition",
@@ -344,6 +359,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/flip-card/FlipCard.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -410,7 +426,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: ["Line drawing", "Enter / Exit", "Stagger"],
 		variants: [
 			{
@@ -418,6 +434,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/blueprint-card/BlueprintCard.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -560,7 +577,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "pro",
 		description:
 			"A display-type list where a shared accent block springs between rows on hover while the text indents and inverts.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Hover effect",
 			"Layout animation",
@@ -573,6 +590,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/hover-list/HoverList.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -651,7 +669,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A percentage-counting load overlay — spinning ring, eased counter, and a fade-out that reveals the page beneath.",
-		dependencies: ["gsap"],
+		dependencies: ["gsap", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Loop",
 			"Number ticker",
@@ -665,6 +683,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/preloader/Preloader.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -751,7 +770,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A menu overlay that blooms open as a clip-path circle spring while items stagger in with blur and rotation, then collapses back to its pill.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Clip-path",
 			"Reveal",
@@ -767,6 +786,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/circle-menu/CircleMenu.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1009,7 +1029,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-24",
 		description:
 			"Content hidden in darkness; the cursor is a torch that reveals only what it touches.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: ["Mask", "Reveal", "Hover effect", "Idle animation"],
 		variants: [
 			{
@@ -1017,6 +1037,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/torchlight/Torchlight.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1090,7 +1111,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-24",
 		description:
 			"An element disintegrates into drifting shadow-motes on dismiss, and reforms on command.",
-		dependencies: ["gsap"],
+		dependencies: ["gsap", "clsx", "tailwind-merge"],
 		cookbook: ["Enter / Exit", "Stagger", "Reveal"],
 		variants: [
 			{
@@ -1098,6 +1119,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/dissolve/Dissolve.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1186,7 +1208,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-26",
 		description:
 			"A machined card that leans toward the pointer in 3D while a specular sheet slides across its face.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"3D tilt / Flip",
 			"Perspective",
@@ -1201,6 +1223,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/tilt/Tilt.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1276,7 +1299,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-26",
 		description:
 			"An SVG crest that traces itself in when it scrolls into view, stroke by stroke.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Line drawing",
 			"Reveal",
@@ -1293,6 +1316,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/sigil/Sigil.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1362,7 +1386,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-26",
 		description:
 			"A draggable tear between two overlaid scenes — push past an edge and it resists, then snaps back.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Clip-path",
 			"Before / after slider",
@@ -1377,6 +1401,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/rift/Rift.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1449,7 +1474,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-26",
 		description:
 			"A row of slats that open on approach while their neighbours give up the room on a spring.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Accordion / Collapse",
 			"Layout animation",
@@ -1465,6 +1490,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/unfold/Unfold.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1536,7 +1562,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-26",
 		description:
 			"A tile whose overlay enters from the exact edge your cursor crossed, and leaves the way you go.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Direction-aware transition",
 			"Enter / Exit",
@@ -1552,6 +1578,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/approach/Approach.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1619,7 +1646,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-31",
 		description:
 			"A confirm that has to be earned — the ring fills while you hold, snaps shut when it commits, and empties on a different curve entirely if you let go early.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Hold to confirm",
 			"Asymmetric easing",
@@ -1634,6 +1661,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/hold/Hold.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1754,7 +1782,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-31",
 		description:
 			"Throw the top card away and the stack closes up behind it. Distance commits, but so does speed — a fast flick from barely anywhere counts, and anything short of both rubber-bands home carrying the velocity you let go at.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Swipe to dismiss",
 			"Rubber-banding",
@@ -1770,6 +1798,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/dismiss/Dismiss.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1894,7 +1923,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-07-31",
 		description:
 			"A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism — wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Reveal",
 			"Rotate",
@@ -1909,6 +1938,7 @@ export const microInteractions: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/aperture/Aperture.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{

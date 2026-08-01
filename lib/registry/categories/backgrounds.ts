@@ -1,4 +1,15 @@
-import type { ComponentEntry } from "../types";
+import type { ComponentEntry, Variant } from "../types";
+
+/** lib/utils.ts ships with every entry whose source imports `cn`. Its own
+ *  packages (clsx, tailwind-merge) are the host entry's to declare — the check
+ *  walks into this file and finds them there (§V41). */
+const UTILS_VARIANT: Variant = {
+	lang: "ts",
+	style: "tailwind",
+	file: "lib/utils.ts",
+	role: "util",
+	label: "utils.ts",
+};
 
 /** Backgrounds — full-canvas / ambient visual systems. */
 export const backgrounds: ComponentEntry[] = [
@@ -329,12 +340,14 @@ export const backgrounds: ComponentEntry[] = [
 		description:
 			"Progressive edge blur — stacked backdrop-filter layers dissolve content toward a chosen edge.",
 		cookbook: ["Blur", "Mask", "Compositing"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		variants: [
 			{
 				lang: "ts",
 				style: "tailwind",
 				file: "components/registry/gradual-blur/GradualBlur.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
