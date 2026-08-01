@@ -11,9 +11,12 @@
  * Grain lifecycle (all in-shader): hidden until the front passes its release
  * key → held at its home pixel at full alpha (the letter granulates but stays
  * pixel-anchored) → after a per-grain back-loaded peel delay, a drag-limited
- * gust accelerates it rightward to 250-900 px/s, weaving through a
- * low-spatial-frequency gust field (neighbors move semi-coherently — wind,
- * not jitter) while it fades across the flight.
+ * gust lifts it downstream while buoyancy raises it and wind shear rakes the
+ * risen grains ahead, all of it advected through a divergence-free curl field
+ * sampled at the grain's *travelling* position — so a grain meets new eddies as
+ * it goes, which is the difference between smoke and shimmer. It disperses as
+ * it fades: the sprite grows while alpha falls, so the plume thins into haze
+ * instead of blinking out.
  */
 
 import { Geometry, Mesh, Program, Renderer } from "ogl";
@@ -22,9 +25,9 @@ export interface GrainData {
   count: number;
   home: Float32Array; // count*2 — rest position, viewport CSS px
   color: Float32Array; // count*3 — theme-resolved rgb 0..1
-  rand: Float32Array; // count*4 — peel shape / terminal speed / vy / wobble phase
-  rand2: Float32Array; // count*4 — flight life / size / release jitter / gust freq
-  edge: Float32Array; // count*1 — owning char's right edge x (swap moment)
+  rand: Float32Array; // count*4 — peel shape / terminal speed / fan / buoyancy
+  rand2: Float32Array; // count*4 — flight life / size / release jitter / turb amp
+  edge: Float32Array; // count*2 — char right edge x (swap moment) / normalized y in the glyph (0 = crown)
 }
 
 export interface DustGL {
@@ -38,7 +41,7 @@ attribute vec2 aHome;
 attribute vec3 aColor;
 attribute vec4 aRand;
 attribute vec4 aRand2;
-attribute float aEdge;
+attribute vec2 aEdge;
 
 uniform float uTime;
 uniform float uFrontStart;
@@ -49,55 +52,86 @@ uniform float uDpr;
 varying vec3 vColor;
 varying float vAlpha;
 
-// Low-spatial-frequency layered field: neighboring grains displace together,
-// so gusts read as waves sweeping the cloud — the VFX ingredient.
-vec2 gust(vec2 p, float t, float ph) {
-  float a = sin(p.y * 0.011 + t * 1.7 + ph) + 0.5 * sin(p.y * 0.031 - t * 2.3 + ph * 1.9);
-  float b = sin(p.x * 0.009 - t * 1.3 + ph * 2.7) + 0.5 * sin(p.x * 0.027 + t * 2.9 + ph * 0.7);
-  return vec2(a * 0.6 + 0.4 * b, b);
+// Stream function, domain-warped (sin inside sin) so the field never reads as
+// the periodic sine sum it actually is. The domain scrolls downstream with the
+// wind: eddies travel along with the plume rather than standing still in screen
+// space, which is the actual signature of smoke.
+float psiQ(vec2 q, float t) {
+  float s  =        sin(q.x       + 1.7 * sin(q.y * 0.9 + t * 0.35));
+  s       += 0.55 * sin(q.y * 2.1 - 1.3 * sin(q.x * 1.7 - t * 0.50));
+  s       += 0.26 * sin((q.x + q.y) * 3.9 + t * 0.95);
+  return s;
+}
+
+// Curl of psi — divergence-free, so the cloud swirls instead of pumping (a
+// plain gradient field has sources and sinks: grains pile up and thin out in
+// fixed spots, which reads as jitter). Differenced in normalized q space so the
+// result is O(1) and the caller's amplitude stays in readable pixels.
+vec2 curl(vec2 p, float t) {
+  const float e = 0.06;
+  vec2 q = p * 0.0055 - vec2(t * 0.62, 0.0);
+  float dy = psiQ(q + vec2(0.0, e), t) - psiQ(q - vec2(0.0, e), t);
+  float dx = psiQ(q + vec2(e, 0.0), t) - psiQ(q - vec2(e, 0.0), t);
+  return vec2(dy, -dx) / (2.0 * e);
 }
 
 void main() {
   // The whole char turns granular the instant the front touches its right
   // edge (the DOM glyph swaps out) — every grain of it becomes visible at
   // home, full alpha. No mask, no wipe line: erosion is purely granular.
-  float visibleT = (uFrontStart - aEdge) / uFrontSpeed;
+  float visibleT = (uFrontStart - aEdge.x) / uFrontSpeed;
   // A grain leaves once the front passes its own x (plus positive jitter so
   // dust lifts off the still-held face) — right-to-left, ragged, per-grain.
-  float key = aHome.x + aRand2.z * 24.0;
+  float key = aHome.x + aRand2.z * 40.0;
   float releaseT = max((uFrontStart - key) / uFrontSpeed, visibleT);
   // Back-loaded peel: grains hold at home after release so the silhouette
   // stays anchored — but the window is tight (~2 chars of front travel), so
-  // a char is mostly gone before the front reaches its second neighbor.
-  float peel = 0.28 * pow(aRand.x, 0.7);
-  float life = mix(0.45, 0.75, aRand2.x);
+  // a char is mostly gone before the front reaches its second neighbor. The
+  // crown of a glyph goes first (aEdge.y = 0 at the top): wind takes the
+  // exposed top of a letter before it gets under the base.
+  float peel = 0.34 * pow(aRand.x, 0.7) * mix(0.55, 1.0, clamp(aEdge.y, 0.0, 1.0));
+  float life = mix(1.0, 1.9, aRand2.x);
   float tf = clamp(uTime - releaseT - peel, 0.0, life);
   float lifeFrac = tf / life;
 
   // Drag-limited surge: v(t) = vterm * (1 - exp(-t/tau)) integrated — gentle
   // lift-off into a fast wash. sqrt bias favors screamers.
-  float vterm = mix(250.0, 900.0, sqrt(aRand.y));
-  float dx = vterm * (tf - 0.12 * (1.0 - exp(-tf / 0.12)));
-  // Fan spread: quadratic center-bias — most dust washes straight right, soft
-  // tails peel top-right and bottom-right (~±17° extremes), slight lift bias.
+  float tau = 0.22;
+  float vterm = mix(150.0, 460.0, sqrt(aRand.y));
+  float base = vterm * (tf - tau * (1.0 - exp(-tf / tau)));
+
+  // Buoyancy, accelerating — dust lifts as it loosens. Screen y is down.
+  float rise = (mix(26.0, 88.0, aRand.w) * tf + 16.0) * tf;
+  // Wind shear: the higher a grain climbs the faster the wind carries it, so
+  // the plume rakes up-and-right in a curve instead of shooting flat.
+  float dx = base * (1.0 + rise * 0.0016);
+  // Fan spread: quadratic center-bias — soft tails peel off above and below.
   float fan = aRand.z * 2.0 - 1.0;
-  float dy = (fan * abs(fan) * 130.0 - 12.0) * tf;
+  float dy = fan * abs(fan) * 90.0 * tf - rise;
 
-  float flightRamp = min(tf * 5.0, 1.0);
-  vec2 pos = aHome + vec2(dx, dy)
-    + gust(aHome, uTime, aRand.w * 6.2831853) * mix(6.0, 16.0, aRand2.w) * flightRamp;
+  vec2 ballistic = aHome + vec2(dx, dy);
+  // Amplitude grows super-linearly with flight time: the diffusion-like spread
+  // that frays the plume into wisps, without integrating any state.
+  float turbAmp = mix(0.7, 1.5, aRand2.w) * 78.0 * pow(tf, 1.3);
+  // The held face breathes before it lets go. Ramps from zero at the swap so
+  // the granular glyph is pixel-identical to the DOM one on the handoff frame.
+  float held = clamp(uTime - visibleT, 0.0, 1.0);
+  // Sampled at the travelling position, never at aHome — a grain has to enter
+  // new eddies as it flies or the whole cloud just shimmers in place.
+  vec2 pos = ballistic + curl(ballistic, uTime) * (turbAmp + 3.2 * held * held);
 
-  // Hidden until the char swap / held 1 / flight: quadratic fade, opaque
-  // through most of the travel. Fast grains slightly ghosted — motion blur.
+  // Hidden until the char swap / held 1 / flight: opaque through most of the
+  // travel, then a long tail. Fast grains slightly ghosted — motion blur.
   float lifeK = 1.0 - lifeFrac;
-  float alpha = step(visibleT, uTime) * lifeK * lifeK;
-  alpha *= mix(1.0, 0.65, (vterm / 900.0) * step(0.001, tf));
+  float alpha = step(visibleT, uTime) * pow(lifeK, 1.7);
+  alpha *= mix(1.0, 0.62, (vterm / 460.0) * step(0.001, tf));
   vAlpha = alpha;
   vColor = aColor;
 
-  // Sized to cover the sparser gap-3 sampling stride — the swap still reads
-  // near-solid.
-  gl_PointSize = mix(2.4, 3.4, aRand2.y) * mix(1.0, 0.55, lifeFrac) * uDpr;
+  // Base size covers the sampling stride so the swap reads near-solid; the
+  // 2.7x growth is dispersal — alpha falls faster than area grows, so total
+  // ink still drops while each grain thins into haze.
+  gl_PointSize = mix(2.6, 3.6, aRand2.y) * mix(1.0, 2.7, pow(lifeFrac, 0.75)) * uDpr;
   gl_Position = vec4(
     pos.x / uResolution.x * 2.0 - 1.0,
     1.0 - pos.y / uResolution.y * 2.0,
@@ -117,7 +151,10 @@ varying float vAlpha;
 
 void main() {
   vec2 d = gl_PointCoord - 0.5;
-  float m = 1.0 - smoothstep(0.38, 0.5, length(d));
+  // Gaussian minus its own edge pedestal: soft volumetric falloff that still
+  // reaches exactly zero at the sprite bounds, so no square cutoff shows when
+  // the points grow late in life. A hard disc reads as sand.
+  float m = max(exp(-dot(d, d) * 11.0) - 0.064, 0.0) * 1.068;
   float a = vAlpha * m;
   gl_FragColor = vec4(vColor * a, a); // premultiplied
 }
@@ -213,11 +250,16 @@ export function sampleWord(
     for (let py = 0; py < h; py += gap) {
       for (let px = 0; px < w; px += gap) {
         if (data[(py * w + px) * 4 + 3] > 128) {
-          home.push(originX + px, originY + py);
+          // Jitter inside the grain's own sampled cell (±gap/2, so ±1px at
+          // display sizes): the silhouette is unchanged but the held face
+          // stops reading as the halftone lattice the fixed stride produces.
+          const y = originY + py + (Math.random() - 0.5) * gap;
+          home.push(originX + px + (Math.random() - 0.5) * gap, y);
           color.push(r, g, b);
           rand.push(Math.random(), Math.random(), Math.random(), Math.random());
           rand2.push(Math.random(), Math.random(), Math.random(), Math.random());
-          edge.push(rect.right);
+          // Normalized height in the glyph, 0 at the crown — drives peel order.
+          edge.push(rect.right, (y - rect.top) / rect.height);
         }
       }
     }
@@ -272,7 +314,7 @@ export function createDustGL(
     aColor: { size: 3, data: grains.color },
     aRand: { size: 4, data: grains.rand },
     aRand2: { size: 4, data: grains.rand2 },
-    aEdge: { size: 1, data: grains.edge },
+    aEdge: { size: 2, data: grains.edge },
   });
 
   const uniforms = {
