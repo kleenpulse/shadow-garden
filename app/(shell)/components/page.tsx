@@ -29,7 +29,7 @@ export default function CatalogPage() {
 			<div className="space-y-10">
 				{groups.map((group) => (
 					<section key={group.category}>
-						<h2 className="mb-3 font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute sticky top-14 z-10 bg-surface/80 py-2 backdrop-blur sm:py-3">
+						<h2 className="mb-3 font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute sticky top-10 md:top-14 z-10 bg-surface/80 py-2 backdrop-blur sm:py-3">
 							{group.category}
 						</h2>
 						<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
