@@ -15,22 +15,24 @@ import { createDustGL, sampleWord, type DustGL } from "./dust-gl";
  * right-to-left. The instant the front touches a char, the DOM glyph swaps
  * wholesale to its baseline-aligned GPU grain field (dust-gl.ts) — visually
  * identical, pixel-anchored — and erosion proceeds per-grain: grains hold at
- * home, then peel off staggered and get washed away rightward. No mask, no
- * traveling wipe line. Both sides read the same gsap clock, so they can never
- * desync. As the final char erodes, the background halves split Aventine-style
- * to reveal the page while the last dust streams over it. No skip — the intro
- * plays once per session, in full.
+ * home, then peel off staggered (crown first) and drift away as smoke, rising
+ * and raking downstream through a curl field. No mask, no traveling wipe line.
+ * Both sides read the same gsap clock, so they can never desync. As the final
+ * char erodes, the background halves split Aventine-style to reveal the page
+ * while the plume dissipates over it. No skip — the intro plays once per
+ * session, in full.
  */
 
 const WORD = "SHADOWGARDEN";
 const SPLIT = 6; // "SHADOW" (ink) | "GARDEN" (accent)
 const SESSION_KEY = "sg-intro-v1"; // must match the pre-paint script in app/layout.tsx
 const BUDGET_PER_CHAR = 2500;
-// Once-per-session — let it breathe. Slower sweep, statelier split.
-const SWEEP = 2.3; // wind front travel time, right edge → left edge
-const REVEAL_AT = 2.15; // halves split as the front finishes the final chars
-const CANVAS_FADE_AT = 2.6; // dust gets ~1s of airtime over the revealed page
-const FINISH_AT = 3.25;
+// Once-per-session — let it breathe. A decisive wind front, then a plume that
+// lingers: the reclaimed sweep time is spent on the smoke, not the wipe.
+const SWEEP = 1.9; // wind front travel time, right edge → left edge
+const REVEAL_AT = 1.78; // halves split as the front finishes the final chars
+const CANVAS_FADE_AT = 2.95; // dust gets ~1.9s of airtime over the revealed page
+const FINISH_AT = 3.9;
 
 export function IntroOverlay() {
 	const [phase, setPhase] = useState<"boot" | "done">("boot");
@@ -217,7 +219,7 @@ export function IntroOverlay() {
 			);
 			tl.to(
 				canvas,
-				{ opacity: 0, duration: 0.5, ease: "power1.in" },
+				{ opacity: 0, duration: 0.85, ease: "power1.in" },
 				CANVAS_FADE_AT,
 			);
 			tl.call(finish, undefined, FINISH_AT);
