@@ -1698,7 +1698,7 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "moire",
 		name: "Moire",
 		category: "Backgrounds",
-		tier: "free",
+		tier: "pro",
 		addedAt: "2026-07-31",
 		pausable: true,
 		description:

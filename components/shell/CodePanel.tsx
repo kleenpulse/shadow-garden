@@ -47,6 +47,7 @@ export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
         raw={only.raw}
         filename={only.file}
         slug={entry.slug}
+        lineCount={only.lineCount}
       />
     );
   }

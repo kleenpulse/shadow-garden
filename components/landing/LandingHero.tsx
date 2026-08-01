@@ -96,7 +96,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 					variants={rise}
 					className="mt-7 max-w-xl font-sans text-sm text-ink-dim sm:text-base"
 				>
-					Animation-forward React components, exhibited live on the page they
+					Motion-forward React components, exhibited live on the page they
 					power. Every parameter is a dial. Every specimen is catalogued.
 				</motion.p>
 

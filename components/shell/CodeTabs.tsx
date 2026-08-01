@@ -41,11 +41,15 @@ export default function CodeTabs({
           );
         })}
       </div>
+      {/* Keyed on the file: without it React reuses the instance and an expanded
+          80-line hook hands its "expanded" state to a 1600-line component. */}
       <CodeBlock
+        key={current.file}
         html={current.html}
         raw={current.raw}
         filename={current.file}
         slug={slug}
+        lineCount={current.lineCount}
       />
     </div>
   );
