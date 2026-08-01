@@ -49,7 +49,7 @@ const panelVariants = {
 	}),
 };
 
-export default function PhilosophySectionNav({
+export default function CookbookSectionNav({
 	sections,
 	active,
 	onJump,

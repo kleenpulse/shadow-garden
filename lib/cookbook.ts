@@ -1,27 +1,27 @@
-// The motion glossary behind /philosophy. Framework-free on purpose — no React,
+// The motion glossary behind /cookbook. Framework-free on purpose — no React,
 // no nuqs — so scripts/registry/ can import it under plain `bun` to validate the
 // terms every registry entry cites (§C5, same constraint as lib/registry/kinds.ts).
 //
-// A ComponentEntry declares the terms it demonstrates via `philosophy: string[]`;
+// A ComponentEntry declares the terms it demonstrates via `cookbook: string[]`;
 // the page inverts that mapping. Term strings are the join key, so they are
 // matched exactly — check:registry fails the build on a citation that does not
 // resolve here.
 
-export interface PhilosophyTerm {
+export interface CookbookTerm {
   /** Display name and join key. Must be unique across every section. */
   term: string;
   /** One-line definition. */
   description: string;
 }
 
-export interface PhilosophySection {
+export interface CookbookSection {
   title: string;
   /** What this group of terms is about, shown under the section heading. */
   blurb: string;
-  terms: PhilosophyTerm[];
+  terms: CookbookTerm[];
 }
 
-export const PHILOSOPHY: PhilosophySection[] = [
+export const COOKBOOK: CookbookSection[] = [
   {
     title: "Entrances & Exits",
     blurb: "How elements appear and disappear.",
@@ -506,11 +506,11 @@ export const PHILOSOPHY: PhilosophySection[] = [
 ];
 
 /** Every term string, for exact-match validation. Built once at module load. */
-export const PHILOSOPHY_TERMS: ReadonlySet<string> = new Set(
-  PHILOSOPHY.flatMap((section) => section.terms.map((t) => t.term)),
+export const COOKBOOK_TERMS: ReadonlySet<string> = new Set(
+  COOKBOOK.flatMap((section) => section.terms.map((t) => t.term)),
 );
 
-/** URL-safe anchor for a term, so /philosophy#spring resolves from anywhere. */
+/** URL-safe anchor for a term, so /cookbook#spring resolves from anywhere. */
 export function termAnchor(term: string): string {
   return term
     .toLowerCase()

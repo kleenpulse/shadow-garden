@@ -166,8 +166,8 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     ctx: context([entry({ addedAt: "25-07-2026" })]),
   },
   {
-    rule: "philosophy-term-exists",
-    ctx: context([entry({ philosophy: ["Not A Real Term"] })]),
+    rule: "cookbook-term-exists",
+    ctx: context([entry({ cookbook: ["Not A Real Term"] })]),
   },
   {
     rule: "prompt-overlay-slug",

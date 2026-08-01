@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { termAnchor } from "@/lib/philosophy";
+import { termAnchor } from "@/lib/cookbook";
 import {
 	buildSearchIndex,
-	searchPhilosophy,
+	searchCookbook,
 	type Suggestion,
-} from "@/lib/philosophy-search";
+} from "@/lib/cookbook-search";
 import { cn } from "@/lib/utils";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { useScrollSpy } from "@/hooks/use-scroll-spy";
@@ -18,8 +18,8 @@ import { useScrollSpy } from "@/hooks/use-scroll-spy";
 import Masonry, {
 	settleMasonryReveal,
 } from "@/components/registry/masonry/Masonry";
-import PhilosophyFilter from "./PhilosophyFilter";
-import PhilosophySectionNav from "./PhilosophySectionNav";
+import CookbookFilter from "./CookbookFilter";
+import CookbookSectionNav from "./CookbookSectionNav";
 import TierBadge from "./TierBadge";
 
 // Where an anchored heading has to come to rest. Two sticky layers are stacked
@@ -88,31 +88,31 @@ const READING_LINE = 120;
 
 // Only what the page needs crosses the boundary — the full ComponentEntry carries
 // prop schemas and variant paths the glossary has no use for.
-export interface PhilosophyComponentRef {
+export interface CookbookComponentRef {
 	slug: string;
 	name: string;
 	tier: "free" | "pro";
 }
 
-export interface PhilosophyTermRow {
+export interface CookbookTermRow {
 	term: string;
 	description: string;
-	components: PhilosophyComponentRef[];
+	components: CookbookComponentRef[];
 }
 
-export interface PhilosophySectionRow {
+export interface CookbookSectionRow {
 	title: string;
 	blurb: string;
-	terms: PhilosophyTermRow[];
+	terms: CookbookTermRow[];
 }
 
 // Local state, deliberately not nuqs: keeping the filter out of the URL keeps this
 // page free of any URL read, which is what lets it prerender without a Suspense
 // boundary under Cache Components.
-export default function PhilosophyBrowser({
+export default function CookbookBrowser({
 	sections,
 }: {
-	sections: PhilosophySectionRow[];
+	sections: CookbookSectionRow[];
 }) {
 	// Two values, not one. `query` is what is in the box and it drives the
 	// suggestion popup; `committed` is what the card grid is actually filtered by
@@ -127,9 +127,9 @@ export default function PhilosophyBrowser({
 	// Normalized once, at mount. Every keystroke after that is a handful of
 	// indexOf calls over ~140 short strings, which is why nothing here is debounced.
 	const index = useMemo(() => buildSearchIndex(sections), [sections]);
-	const result = useMemo(() => searchPhilosophy(index, query), [index, query]);
+	const result = useMemo(() => searchCookbook(index, query), [index, query]);
 	const gridResult = useMemo(
-		() => searchPhilosophy(index, committed),
+		() => searchCookbook(index, committed),
 		[index, committed],
 	);
 
@@ -265,7 +265,7 @@ export default function PhilosophyBrowser({
 			{/* Below `lg` the rail is display:none — this carries the same index as a
 			    corner pill. Kept out of the rail's own subtree so it isn't clipped by
 			    the rail's `overflow-y-auto`. */}
-			<PhilosophySectionNav
+			<CookbookSectionNav
 				sections={navItems}
 				active={active}
 				onJump={jumpTo}
@@ -300,7 +300,7 @@ export default function PhilosophyBrowser({
 								>
 									{isActive && (
 										<motion.span
-											layoutId="sg-philosophy-rail__active"
+											layoutId="sg-cookbook-rail__active"
 											className="pointer-events-none absolute inset-0 z-0 rounded-sm border-l-2 border-accent bg-accent/10"
 											transition={
 												reduced
@@ -319,7 +319,7 @@ export default function PhilosophyBrowser({
 
 			<div className="min-w-0 flex-1 pb-[10svh]">
 				<div className="mb-4 md:mb-8 flex gap-2 items-center top-10 sticky sm:top-14 z-10 bg-panel/80 backdrop-blur py-2">
-					<PhilosophyFilter
+					<CookbookFilter
 						query={query}
 						onQueryChange={onQueryChange}
 						onCommitQuery={onCommitQuery}

@@ -11,7 +11,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A painterly toon-shaded 3D cherry-blossom scene with wind-driven falling petals.",
 		dependencies: ["three", "@react-three/fiber"],
-		philosophy: [
+		cookbook: [
 			"Loop",
 			"Float",
 			"Idle animation",
@@ -96,7 +96,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
 		dependencies: ["cmdk", "motion", "lucide-react"],
-		philosophy: [
+		cookbook: [
 			"Enter / Exit",
 			"Scale in",
 			"Blur",
@@ -139,7 +139,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"A from-scratch 2D rigid-body physics lab — fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
-		philosophy: [
+		cookbook: [
 			"Drag",
 			"Momentum",
 			"Velocity",
@@ -270,7 +270,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
 		dependencies: ["ogl"],
-		philosophy: [
+		cookbook: [
 			"Orbit",
 			"Loop",
 			"Drag",
@@ -493,7 +493,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
 		dependencies: ["ogl"],
-		philosophy: [
+		cookbook: [
 			"Orbit",
 			"Loop",
 			"Drag",
@@ -710,7 +710,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A murmuration of hundreds of boids wheeling as one — separation, alignment, and cohesion resolved every frame through a spatial hash for the crowd, banking toward or scattering from your cursor, smeared into long trails of amethyst and cyan as the flock folds across the dark.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Loop",
 			"Idle animation",
 			"Hover effect",
@@ -863,7 +863,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A real-time GPU fluid you can stir — semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
 		dependencies: ["ogl"],
-		philosophy: [
+		cookbook: [
 			"Drag",
 			"Loop",
 			"Idle animation",
@@ -1017,7 +1017,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A pool of dark, moonlit water you disturb by hand — a leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
 		dependencies: ["ogl"],
-		philosophy: [
+		cookbook: [
 			"Ripple",
 			"Drag",
 			"Loop",
@@ -1168,7 +1168,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A persistent three-pane file manager that stores real image, video, and blob uploads 100% client-side — OPFS when available, IndexedDB everywhere else — with nested folders, search, sort, drag-and-drop upload, move, and a live preview panel.",
 		dependencies: ["lucide-react", "motion", "react-resizable-panels"],
-		philosophy: [
+		cookbook: [
 			"Drag",
 			"Layout animation",
 		],
@@ -1288,7 +1288,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"An orrery of moons casting real eclipse shadows across a shadowed world; drag to orbit.",
 		dependencies: ["three", "@react-three/fiber"],
-		philosophy: [
+		cookbook: [
 			"Orbit",
 			"Loop",
 			"Drag",
@@ -1390,7 +1390,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"GPU reaction-diffusion growing living tendrils of darkness the cursor seeds.",
 		dependencies: ["ogl"],
-		philosophy: [
+		cookbook: [
 			"Loop",
 			"Idle animation",
 			"Hover effect",
@@ -1494,7 +1494,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A pinned section where scrolling down drives content sideways across depth planes moving at different rates.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Parallax",
 			"Scroll-driven animation",
 			"Translate",
@@ -1577,7 +1577,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"Throw the top card and the speed you released it at carries into the spring — throw it far enough and it cycles to the back of the deck instead of coming home.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Spring",
 			"Swipe to dismiss",
 			"Stiffness / Tension",
@@ -1686,7 +1686,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A Pinterest-style grid where every item drops into the shortest column, packed by measurement rather than by a shared row baseline.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Layout animation",
 			"Stagger",
 			"Scroll reveal",

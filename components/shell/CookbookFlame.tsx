@@ -7,7 +7,7 @@ import { useAnimationLoop } from "@/hooks/use-animation-loop";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 /**
- * The ambient flame under /philosophy. A deliberate private fork of the
+ * The ambient flame under /cookbook. A deliberate private fork of the
  * Shadowflame registry component — NOT an import of it.
  *
  * Why fork: the shipped component renders opaque (`alpha: false`, `fragColor.a = 1`)
@@ -228,7 +228,7 @@ function buildSprite(core: string, hot: string): HTMLCanvasElement {
 	return c;
 }
 
-export default function PhilosophyFlame() {
+export default function CookbookFlame() {
 	const containerRef = useRef<HTMLDivElement | null>(null);
 	const sparkCanvasRef = useRef<HTMLCanvasElement | null>(null);
 

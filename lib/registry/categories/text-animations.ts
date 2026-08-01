@@ -10,7 +10,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A gooey blur-morph that cross-dissolves between a list of words.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Text morph",
 			"Morph",
 			"Crossfade",
@@ -41,7 +41,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Animated numeric transitions with flip, slide, fade, and bounce styles.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Number ticker",
 			"Tabular numbers",
 			"Bounce",
@@ -103,7 +103,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A marquee that scrolls only when its text overflows the container.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Marquee",
 			"Loop",
 			"Linear",
@@ -156,7 +156,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Text whose letters interpolate font weight by cursor proximity.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Hover effect",
 			"Interpolation / Tween",
 		],
@@ -201,7 +201,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A wrapping marquee whose drift speed and direction follow scroll velocity — fast scrolls whip the row along, upward scrolls reverse it.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Marquee",
 			"Scroll-driven animation",
 			"Velocity",
@@ -264,7 +264,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A per-letter pull-up reveal — letters rise, sharpen from a blur, and fade in with a stagger.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Stagger",
 			"Slide in",
 			"Blur",
@@ -331,7 +331,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A scroll-scrubbed word reveal — each word brightens and rises as it enters the viewport, tied directly to scroll position.",
 		dependencies: ["gsap"],
-		philosophy: [
+		cookbook: [
 			"Scroll reveal",
 			"Scroll-driven animation",
 			"Stagger",
@@ -403,7 +403,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Ciphered glyphs boiling out of noise and resolving into words — a decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Text morph",
 			"Stepped animation",
 			"Hover effect",
@@ -492,7 +492,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Text that casts a long shadow sweeping like a sundial through the hours.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Loop",
 			"Idle animation",
 			"Linear",
@@ -587,7 +587,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Spectral RGB-split echoes drift off the letters and dissolve into the dark.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Follow-through",
 			"Blur",
 			"Loop",
@@ -683,7 +683,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Copy that lights up as you read it — words ahead sit dim and unfocused, and stay lit once you pass them.",
 		dependencies: ["motion"],
-		philosophy: [
+		cookbook: [
 			"Scroll-driven animation",
 			"Scroll reveal",
 			"Stagger",
@@ -763,7 +763,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Copy that arrives fully classified under solid bars, then declassifies word by word — each bar clearing its own word and leaving an amethyst edge behind as the only evidence it was ever there.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Reveal",
 			"Mask",
 			"Clip-path",
@@ -894,7 +894,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A Solari departure board. Every column walks the charset one flap at a time until it reaches its letter, so the word is never revealed — it is arrived at, with a real hinged half falling away as the next one seats behind it.",
 		dependencies: [],
-		philosophy: [
+		cookbook: [
 			"Stepped animation",
 			"Stagger",
 			"3D tilt / Flip",

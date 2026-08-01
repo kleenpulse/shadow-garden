@@ -42,7 +42,7 @@ interface UIState {
   setPaletteOpen: (open: boolean) => void;
   togglePalette: () => void;
 
-  /** A floating page overlay has claimed the screen corners (e.g. the philosophy
+  /** A floating page overlay has claimed the screen corners (e.g. the cookbook
    * section nav), so corner-anchored chrome like GotoTop should stand down. */
   navOverlayOpen: boolean;
   setNavOverlayOpen: (open: boolean) => void;

@@ -1,5 +1,5 @@
-// Matching layer behind the /philosophy filter. Framework-free on purpose — no
-// React, no nuqs — same discipline as lib/philosophy.ts, so this stays testable
+// Matching layer behind the /cookbook filter. Framework-free on purpose — no
+// React, no nuqs — same discipline as lib/cookbook.ts, so this stays testable
 // and cheap to reason about outside a render.
 //
 // The problem it solves: the glossary exists so someone who *can't* name a thing
@@ -9,12 +9,12 @@
 // approximation and the canonical spelling diverge.
 
 import { fuzzyMatch } from "./fuzzy";
-import { termAnchor } from "./philosophy";
+import { termAnchor } from "./cookbook";
 
 // ---------------------------------------------------------------------------
 // Input shapes
 //
-// Declared structurally rather than importing PhilosophyBrowser's props: a lib
+// Declared structurally rather than importing CookbookBrowser's props: a lib
 // module must not depend on a client component, and these rows are already the
 // serialized subset that crosses the server/client boundary.
 // ---------------------------------------------------------------------------
@@ -374,7 +374,7 @@ const MAX_TOTAL = 8;
  * They must agree — a suggestion the list then refuses to show would be a lie.
  * Computing both here is what guarantees it.
  */
-export function searchPhilosophy(
+export function searchCookbook(
 	index: SearchIndex,
 	query: string,
 ): SearchResult {
