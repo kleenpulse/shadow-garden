@@ -10,12 +10,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Reveal a second layer through a random pixelated dissolve on hover.",
 		dependencies: ["gsap"],
-		philosophy: [
-			"Reveal",
-			"Stepped animation",
-			"Hover effect",
-			"Crossfade",
-		],
+		philosophy: ["Reveal", "Stepped animation", "Hover effect", "Crossfade"],
 		variants: [
 			{
 				lang: "ts",
@@ -64,10 +59,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "free",
 		description: "A cursor-proximity gradient border with an outer glow.",
 		dependencies: [],
-		philosophy: [
-			"Hover effect",
-			"Interpolation / Tween",
-		],
+		philosophy: ["Hover effect", "Interpolation / Tween"],
 		variants: [
 			{
 				lang: "ts",
@@ -184,11 +176,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A three-bar hamburger that morphs to an X, driven by a toggle prop.",
 		dependencies: ["motion"],
-		philosophy: [
-			"Morph",
-			"Rotate",
-			"Translate",
-		],
+		philosophy: ["Morph", "Rotate", "Translate"],
 		variants: [
 			{
 				lang: "ts",
@@ -423,11 +411,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
 		dependencies: [],
-		philosophy: [
-			"Line drawing",
-			"Enter / Exit",
-			"Stagger",
-		],
+		philosophy: ["Line drawing", "Enter / Exit", "Stagger"],
 		variants: [
 			{
 				lang: "ts",
@@ -497,12 +481,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Four glyphs pinned to the container corners that blur-and-scale in on mount and dissolve out on exit.",
 		dependencies: ["motion"],
-		philosophy: [
-			"Enter / Exit",
-			"Blur",
-			"Scale in",
-			"Stagger",
-		],
+		philosophy: ["Enter / Exit", "Blur", "Scale in", "Stagger"],
 		variants: [
 			{
 				lang: "ts",
@@ -943,12 +922,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"A custom cursor with a shadow at its heel — a precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage; the page cursor is never touched.",
 		dependencies: ["motion"],
-		philosophy: [
-			"Spring",
-			"Follow-through",
-			"Hover effect",
-			"Momentum",
-		],
+		philosophy: ["Spring", "Follow-through", "Hover effect", "Momentum"],
 		variants: [
 			{
 				lang: "ts",
@@ -1036,12 +1010,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"Content hidden in darkness; the cursor is a torch that reveals only what it touches.",
 		dependencies: [],
-		philosophy: [
-			"Mask",
-			"Reveal",
-			"Hover effect",
-			"Idle animation",
-		],
+		philosophy: ["Mask", "Reveal", "Hover effect", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -1122,11 +1091,7 @@ export const microInteractions: ComponentEntry[] = [
 		description:
 			"An element disintegrates into drifting shadow-motes on dismiss, and reforms on command.",
 		dependencies: ["gsap"],
-		philosophy: [
-			"Enter / Exit",
-			"Stagger",
-			"Reveal",
-		],
+		philosophy: ["Enter / Exit", "Stagger", "Reveal"],
 		variants: [
 			{
 				lang: "ts",
@@ -1769,8 +1734,7 @@ export const microInteractions: ComponentEntry[] = [
 				label: "Accent",
 				kind: "color",
 				default: "#a855f7",
-				description:
-					"Amethyst of the filling track and the confirmed state.",
+				description: "Amethyst of the filling track and the confirmed state.",
 			},
 			{
 				name: "trackColor",
@@ -1929,7 +1893,7 @@ export const microInteractions: ComponentEntry[] = [
 		tier: "pro",
 		addedAt: "2026-07-31",
 		description:
-			"A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism — wide open at 68% of the housing, past the centre and light-tight at zero, with the scalloped polygon a real iris makes on the way through.",
+			"A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism — wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
 		dependencies: ["motion"],
 		philosophy: [
 			"Reveal",
@@ -2002,7 +1966,7 @@ export const microInteractions: ComponentEntry[] = [
 				step: 0.02,
 				unit: "×",
 				description:
-					"Curvature of each blade's inner edge. Flatter blades make a more polygonal opening and a smaller one, because the same swing carries less of the leaf across the middle.",
+					"Curvature of each blade's inner edge. The mechanism is derived from the opening range, so this bends the leaf without touching the travel: flatter blades cut a rounder, more regular polygon, tighter ones pull the scallop corners out into a star.",
 			},
 			{
 				name: "edgeHighlight",
@@ -2013,7 +1977,7 @@ export const microInteractions: ComponentEntry[] = [
 				max: 1,
 				step: 0.05,
 				description:
-					"Strength of the lit rim along each blade. The blades share one fill, so this is the only thing separating them — at 0 the iris is a single dark mass with a hole in it.",
+					"Strength of the seam along each leaf's inner edge, and of the bezel. Each seam is cut by the leaf that lies over it — named rather than left to the drawing order, because a leaf stack is a ring and painter's order is a line. That is what puts exactly one line at every corner of the opening, wide open and shut alike.",
 			},
 			{
 				name: "housingInset",
@@ -2038,16 +2002,16 @@ export const microInteractions: ComponentEntry[] = [
 				name: "bladeColor",
 				label: "Blade",
 				kind: "color",
-				default: "#141018",
+				default: "#26232c",
 				description:
-					"Body of the blades, and the housing behind them. Its own material rather than a themed surface — a light theme must not put a white ring around a lens.",
+					"Body of the blades, the housing, and the barrel floor behind them. Its own material rather than a themed surface — a light theme must not put a white ring around a lens.",
 			},
 			{
 				name: "edgeColor",
 				label: "Edge",
 				kind: "color",
-				default: "#a855f7",
-				description: "Amethyst on the lit blade edges and the bezel.",
+				default: "#000000",
+				description: "Amethyst on the blade seams and the bezel.",
 			},
 		],
 	},

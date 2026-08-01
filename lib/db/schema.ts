@@ -44,6 +44,15 @@ export const profiles = pgTable("profiles", {
   // with a conditional UPDATE (WHERE ... IS NULL) so the welcome fires exactly
   // once even though the callback runs on every login.
   welcomeEmailSentAt: timestamp("welcome_email_sent_at", { withTimezone: true }),
+  // Admin gate — read by the operations console on every gated request. Nothing
+  // in the customer app writes it; it is granted by hand in SQL. 'user' | 'admin'.
+  role: text("role").notNull().default("user"),
+  // Kill Switch — the durable ban record. auth.users.banned_until blocks token
+  // REFRESH at the auth server, so an already-issued access token survives until
+  // it expires; these columns are what an app-side gate re-checks in the meantime.
+  banned: boolean("banned").notNull().default(false),
+  bannedAt: timestamp("banned_at", { withTimezone: true }),
+  bannedReason: text("banned_reason"),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
@@ -51,6 +60,34 @@ export const profiles = pgTable("profiles", {
     .defaultNow()
     .notNull(),
 });
+
+// Append-only ledger of every guarded mutation an operator performs. Written by
+// the admin console (admin_shadow-garden); nothing in the customer app touches it.
+// It lives in this schema because this repo is the sole DDL owner — the console
+// carries a read-model copy and runs no migrations of its own.
+//
+// `target` has no FK: it holds a user id OR a component slug OR a literal like
+// 'voice-brief', and the ledger must outlive the account it describes.
+export const adminAudit = pgTable(
+  "admin_audit",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    actorEmail: text("actor_email").notNull(),
+    action: text("action").notNull(), // 'ban' | 'unban' | 'grant_pro' | 'revoke_pro' | ...
+    target: text("target").notNull(),
+    payload: jsonb("payload"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [
+    // recentAudit(): ORDER BY created_at DESC LIMIT n.
+    index("admin_audit_created_idx").on(t.createdAt),
+    // The expiring-notice cron's per-user dedup probe walks action + target
+    // within a date window before deciding whether to send.
+    index("admin_audit_action_target_idx").on(t.action, t.target, t.createdAt),
+  ],
+);
 
 // Single row per user — the resolved source of truth for the `pro` flag. `pro` is
 // DERIVED, never stored: status='active' AND (current_period_end IS NULL OR > now()).
