@@ -55,6 +55,16 @@ function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): 
     previewReads: readsAll(registry),
     sourceDefaults: () => new Map(),
     loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false, nullishHalts: 0 }),
+    // Seeded with the framework packages on purpose: the clean-entry assertion
+    // below then doubles as the proof that FRAMEWORK_PROVIDED still exempts
+    // them. If someone ever makes the rule demand `react` in dependencies, this
+    // fires as a false positive rather than passing quietly.
+    entryImports: () => ({
+      packages: new Set(["react", "react-dom"]),
+      files: new Set<string>(),
+      via: new Map<string, string>(),
+      unresolved: [],
+    }),
     promptOverlays: new Set<string>(),
     ...over,
   };
@@ -176,6 +186,50 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
   {
     rule: "dependencies-declared",
     ctx: context([entry({ dependencies: ["not-a-real-package"] })]),
+  },
+  {
+    // The direction dependencies-declared cannot see: the package exists, the
+    // source imports it, the entry never says so.
+    rule: "imported-package-declared",
+    ctx: context([entry()], {
+      entryImports: () => ({
+        packages: new Set(["ogl"]),
+        files: new Set<string>(),
+        via: new Map<string, string>(),
+        unresolved: [],
+      }),
+    }),
+  },
+  {
+    // Reached transitively, which is the case a one-file import scan misses.
+    rule: "imported-file-ships",
+    ctx: context([entry()], {
+      entryImports: () => ({
+        packages: new Set<string>(),
+        files: new Set(["lib/utils.ts"]),
+        via: new Map([["lib/utils.ts", "components/registry/ok-entry/Sibling.tsx"]]),
+        unresolved: [],
+      }),
+    }),
+  },
+  {
+    rule: "imported-file-resolves",
+    ctx: context([entry()], {
+      entryImports: () => ({
+        packages: new Set<string>(),
+        files: new Set<string>(),
+        via: new Map<string, string>(),
+        unresolved: [
+          { raw: "./Gone", from: "components/registry/ok-entry/OkEntry.tsx" },
+        ],
+      }),
+    }),
+  },
+  {
+    // Over-declaration: billed to the customer, never loaded. The default
+    // entryImports ships no packages, so declaring one is enough to trip it.
+    rule: "declared-package-imported",
+    ctx: context([entry({ dependencies: ["ogl"] })]),
   },
   {
     rule: "preview-registered",

@@ -1,11 +1,12 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { registry } from "../../lib/registry/index";
-import type { CheckContext, PreviewReads } from "./check";
+import type { CheckContext, EntryImports, PreviewReads } from "./check";
 import { parsePreviewRegistrations, parseValueReads } from "./read-keys";
 import { parseSourceDefaults, type SourceDefault } from "./source-defaults";
 import { parseLoopUsage, type LoopUsage } from "./loop-usage";
+import { parseImports, type Specifier } from "./imports";
 
 // The one place the check touches disk. Everything the rules need arrives here so
 // the rules themselves stay pure. lib/registry/index.ts and categories/*.ts are
@@ -116,6 +117,73 @@ export function buildContext(): CheckContext {
     return result;
   }
 
+  // Parsed once per FILE, not once per entry that reaches it: lib/utils.ts is in
+  // 37 closures and the animation host in 24, so without this the same two files
+  // are re-parsed sixty-odd times per run.
+  const fileImportsCache = new Map<string, Specifier[]>();
+
+  function fileImports(abs: string): Specifier[] {
+    const cached = fileImportsCache.get(abs);
+    if (cached) return cached;
+    const parsed = parseImports(abs, readFileSync(abs, "utf8"));
+    fileImportsCache.set(abs, parsed);
+    return parsed;
+  }
+
+  const importsCache = new Map<string, EntryImports | null>();
+
+  function entryImports(slug: string): EntryImports | null {
+    if (importsCache.has(slug)) return importsCache.get(slug) ?? null;
+
+    const entry = registry.find((e) => e.slug === slug);
+    const seeds = (entry?.variants ?? [])
+      .map((v) => toRelative(v.file))
+      .filter((rel) => existsSync(abs(rel)));
+
+    let result: EntryImports | null = null;
+
+    if (seeds.length > 0) {
+      const packages = new Set<string>();
+      const files = new Set<string>();
+      const via = new Map<string, string>();
+      const unresolved: EntryImports["unresolved"] = [];
+
+      // BFS from every variant, not just variants[0] — a peer file is shipped
+      // too, so whatever it imports is equally the customer's problem.
+      const seen = new Set(seeds);
+      const queue = [...seeds];
+
+      while (queue.length > 0) {
+        const current = queue.shift()!;
+        for (const spec of fileImports(abs(current))) {
+          if (spec.kind === "package") {
+            packages.add(spec.name);
+            continue;
+          }
+
+          const target = resolveImport(current, spec);
+          if (target === null) {
+            unresolved.push({ raw: spec.raw, from: current });
+            continue;
+          }
+          if (seen.has(target)) continue;
+
+          seen.add(target);
+          via.set(target, current);
+          // Seeds are the declared variants; everything else is a file the entry
+          // reaches but has not necessarily declared.
+          files.add(target);
+          queue.push(target);
+        }
+      }
+
+      result = { packages, files, via, unresolved };
+    }
+
+    importsCache.set(slug, result);
+    return result;
+  }
+
   // Optional directory — a repo with no overlays authored yet is perfectly valid.
   const promptsDir = path.join(ROOT, "prompts");
   const promptOverlays = new Set(
@@ -137,8 +205,47 @@ export function buildContext(): CheckContext {
     previewReads,
     sourceDefaults,
     loopUsage,
+    entryImports,
     promptOverlays,
   };
+}
+
+/** Registry paths are forward-slashed; disk paths are not, on Windows. */
+function abs(relative: string): string {
+  return path.join(ROOT, ...relative.split("/"));
+}
+
+/** Whatever a registry entry wrote → the canonical forward-slashed repo-relative form. */
+function toRelative(file: string): string {
+  return file.split(/[\\/]/).join("/");
+}
+
+/**
+ * The extension ladder Next and tsconfig's `"@/*": ["./*"]` resolve through.
+ * Order matters — a directory holding both `index.tsx` and a sibling `index.ts`
+ * would otherwise resolve differently here than in the real build.
+ */
+const EXTENSIONS = ["", ".tsx", ".ts", "/index.tsx", "/index.ts"];
+
+/**
+ * Resolve one specifier against the file that imported it, returning a
+ * repo-relative path or `null` if nothing on disk matches. `@/x` maps to `x`
+ * from the repo root, which is what the tsconfig alias does.
+ */
+function resolveImport(from: string, spec: Specifier): string | null {
+  const base =
+    spec.kind === "alias"
+      ? spec.raw.slice(2)
+      : path.posix.join(path.posix.dirname(from), spec.raw);
+
+  for (const ext of EXTENSIONS) {
+    const candidate = base + ext;
+    const target = abs(candidate);
+    // `existsSync` is true for directories too — a bare `./store` must not
+    // resolve to the directory itself, only to its index file.
+    if (existsSync(target) && statSync(target).isFile()) return candidate;
+  }
+  return null;
 }
 
 /** `./threads/ThreadsPreview` → the .tsx (or .ts) file it resolves to. */

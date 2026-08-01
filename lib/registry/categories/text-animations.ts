@@ -1,4 +1,15 @@
-import type { ComponentEntry } from "../types";
+import type { ComponentEntry, Variant } from "../types";
+
+/** lib/utils.ts ships with every entry whose source imports `cn`. Its own
+ *  packages (clsx, tailwind-merge) are the host entry's to declare — the check
+ *  walks into this file and finds them there (§V41). */
+const UTILS_VARIANT: Variant = {
+	lang: "ts",
+	style: "tailwind",
+	file: "lib/utils.ts",
+	role: "util",
+	label: "utils.ts",
+};
 
 /** Text Animations — kinetic type and number transitions. */
 export const textAnimations: ComponentEntry[] = [
@@ -9,7 +20,7 @@ export const textAnimations: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A gooey blur-morph that cross-dissolves between a list of words.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Text morph",
 			"Morph",
@@ -23,6 +34,7 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/morphing-text/MorphingText.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -102,7 +114,7 @@ export const textAnimations: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A marquee that scrolls only when its text overflows the container.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Marquee",
 			"Loop",
@@ -114,6 +126,14 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/marquee-text/MarqueeText.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/marquee-text/auto-mask-horizontal.tsx",
+				role: "peer",
+				label: "auto-mask-horizontal.tsx",
+			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -200,7 +220,7 @@ export const textAnimations: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A wrapping marquee whose drift speed and direction follow scroll velocity — fast scrolls whip the row along, upward scrolls reverse it.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Marquee",
 			"Scroll-driven animation",
@@ -214,6 +234,7 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/scroll-velocity/ScrollVelocity.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -263,7 +284,7 @@ export const textAnimations: ComponentEntry[] = [
 		tier: "free",
 		description:
 			"A per-letter pull-up reveal — letters rise, sharpen from a blur, and fade in with a stagger.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Stagger",
 			"Slide in",
@@ -277,6 +298,7 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/letters-pull/LettersPull.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -491,7 +513,7 @@ export const textAnimations: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"Text that casts a long shadow sweeping like a sundial through the hours.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Loop",
 			"Idle animation",
@@ -503,6 +525,7 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/long-shadow/LongShadow.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -586,7 +609,7 @@ export const textAnimations: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"Spectral RGB-split echoes drift off the letters and dissolve into the dark.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Follow-through",
 			"Blur",
@@ -599,6 +622,7 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/specter/Specter.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -682,7 +706,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-07-26",
 		description:
 			"Copy that lights up as you read it — words ahead sit dim and unfocused, and stay lit once you pass them.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Scroll-driven animation",
 			"Scroll reveal",
@@ -697,6 +721,7 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/lumen/Lumen.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -762,7 +787,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-07-31",
 		description:
 			"Copy that arrives fully classified under solid bars, then declassifies word by word — each bar clearing its own word and leaving an amethyst edge behind as the only evidence it was ever there.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Reveal",
 			"Mask",
@@ -778,6 +803,7 @@ export const textAnimations: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/redact/Redact.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -893,7 +919,7 @@ export const textAnimations: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"A Solari departure board. Every column walks the charset one flap at a time until it reaches its letter, so the word is never revealed — it is arrived at, with a real hinged half falling away as the next one seats behind it.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Stepped animation",
 			"Stagger",
@@ -916,6 +942,7 @@ export const textAnimations: ComponentEntry[] = [
 				role: "hook",
 				label: "use-animation-loop.ts",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{

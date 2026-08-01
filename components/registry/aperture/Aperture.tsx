@@ -93,7 +93,7 @@ const dist = (p: number, pivot: number, arm: number) =>
 
 export default function Aperture({
 	children,
-	bladeCount = 6,
+	bladeCount = 8,
 	openness = 0.62,
 	duration = 900,
 	detent = 0.35,
@@ -102,7 +102,7 @@ export default function Aperture({
 	housingInset = 6,
 	autoOpen = true,
 	bladeColor = "#26232c",
-	edgeColor = "#a855f7",
+	edgeColor = "#000000",
 	reducedMotion = false,
 	className,
 }: ApertureProps) {

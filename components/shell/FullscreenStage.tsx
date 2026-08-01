@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import { Minimize2, SlidersHorizontal } from "lucide-react";
 import type { ComponentEntry } from "@/lib/registry/types";
-import { displayName } from "@/lib/utils";
+import { displayName } from "@/lib/display-name";
 import { useTunedProps } from "@/lib/registry/useTunedProps";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { usePauseState } from "@/hooks/use-pause-state";

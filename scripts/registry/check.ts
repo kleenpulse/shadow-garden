@@ -34,6 +34,27 @@ export interface PreviewReads {
   usesPaused: boolean;
 }
 
+/**
+ * The transitive import closure of an entry's declared variants — precisely the
+ * bytes getSource() hands the customer, and everything those bytes reach.
+ * Previews are not variants, so they are outside the closure by construction:
+ * that is what makes a package only the preview imports show up as over-declared
+ * rather than silently justified (§V40).
+ */
+export interface EntryImports {
+  /** npm packages reachable from the entry's variants, normalised to install names. */
+  packages: Set<string>;
+  /** Repo-relative files reachable via `@/` or `./`, excluding the variants themselves. */
+  files: Set<string>;
+  /** For each reached file, the file it was imported from — makes a transitive finding actionable. */
+  via: Map<string, string>;
+  /**
+   * Specifiers that resolved to nothing on disk. Never silent: a broken edge
+   * truncates the walk, so an incomplete closure would otherwise look complete.
+   */
+  unresolved: Array<{ raw: string; from: string }>;
+}
+
 export interface CheckContext {
   registry: ComponentEntry[];
   /** Directory names present directly under components/registry/. */
@@ -54,6 +75,12 @@ export interface CheckContext {
   sourceDefaults(slug: string): Map<string, SourceDefault> | null;
   /** Hand-rolled runtime primitives in a slug's component source. */
   loopUsage(slug: string): LoopUsage | null;
+  /**
+   * Everything a slug's shipped source imports, walked transitively. `null` when
+   * the entry declares no variant that exists on disk — `variant-file-exists`
+   * owns that failure, so this stays quiet about it.
+   */
+  entryImports(slug: string): EntryImports | null;
   /** Basenames (no extension) of the AI-prompt overlays in prompts/. */
   promptOverlays: Set<string>;
 }

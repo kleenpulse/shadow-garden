@@ -4,6 +4,7 @@ import path from "node:path";
 import { getSource, type SourceFile } from "./source";
 import { installCommand } from "./install";
 import { formatDefault, typeLabel } from "./kinds";
+import { ROLE_TABLE, rolesPresent } from "./roles";
 import type { ComponentEntry, PropSchema } from "./types";
 
 // The AI-ready integration brief. Derived, never authored twice: the same
@@ -124,10 +125,12 @@ function rules(entry: ComponentEntry, files: SourceFile[]): string[] {
       "The `touch-action: none` on the hit target is load-bearing — without it a finger drag scrolls the page instead of driving the effect. Do not strip it as a stray utility class.",
     );
   }
-  if (files.some((file) => file.role === "hook")) {
-    out.push(
-      "The peer hook is required, not optional. Copy it to `hooks/use-animation-loop.ts` so the component's `@/hooks/use-animation-loop` import resolves.",
-    );
+  // One contract line per role actually shipped, in ROLE_TABLE order — reading
+  // the order off the table rather than off `files` keeps the prompt byte-stable
+  // between entries that happen to declare their variants in a different order.
+  for (const role of rolesPresent(files.map((file) => file.role))) {
+    const { contract } = ROLE_TABLE[role];
+    if (contract) out.push(contract);
   }
   if (all.includes("WEBGL_lose_context") || all.includes("getContext")) {
     out.push(
@@ -189,11 +192,11 @@ function buildPrompt(
     [
       "## Files to create",
       "",
-      `${files.length === 1 ? "One file." : `${files.length} files — all of them are required.`} Paths are as shipped; the component may live anywhere in my project, but keep any peer hook at the exact path shown so the import alias resolves.`,
+      `${files.length === 1 ? "One file." : `${files.length} files — all of them are required.`} Paths are as shipped; the component may live anywhere in my project, but keep every peer file at the exact path shown so the import aliases resolve.`,
       "",
       ...files.map((file, i) =>
         [
-          `### ${i + 1}. \`${file.file}\`${file.role === "hook" ? " — peer hook, required" : ""}`,
+          `### ${i + 1}. \`${file.file}\`${ROLE_TABLE[file.role].promptSuffix}`,
           "",
           block(file.raw, file.lang),
           "",

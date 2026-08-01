@@ -59,17 +59,32 @@ export type ColorProp = PropBase & {
 
 export type PropSchema = NumberProp | EnumProp | BooleanProp | ColorProp;
 
+/**
+ * What a shipped file is to the customer. Every file the component imports has
+ * to be copied, so every file gets a role — the union is what stops a supporting
+ * file from being silently omitted from the install manifest (§V40).
+ *
+ * - `component` — the entry itself, always variants[0].
+ * - `hook` — the animation runtime host, `hooks/use-animation-loop.ts` (§C1b).
+ * - `util` — a shared helper living outside `components/registry/`, i.e.
+ *   `lib/utils.ts` and its `cn` export.
+ * - `peer` — a sibling the component is assembled from (`./Toolbar`,
+ *   `./auto-mask-horizontal`). Distinct from `util`: calling `Toolbar.tsx` a
+ *   util would be a lie in the tab strip.
+ *
+ * Behaviour per role lives in one table — `ROLE_TABLE` in lib/registry/roles.ts.
+ * The role union is declared here rather than there because this file is
+ * vendored into the admin repo (§V19) and has to compile standalone.
+ */
+export type VariantRole = "component" | "hook" | "util" | "peer";
+
 export type Variant = {
   lang: "js" | "ts";
   style: "css" | "tailwind";
   /** Path to the canonical source file on disk, relative to the repo root. */
   file: string;
-  /**
-   * What this file is to the customer. `"component"` is the entry itself and is
-   * always variants[0]; `"hook"` is a peer file they must copy alongside it —
-   * the animation runtime host (SPEC §C1b). Defaults to `"component"`.
-   */
-  role?: "component" | "hook";
+  /** Defaults to `"component"`. */
+  role?: VariantRole;
   /** Tab label in the Code panel. Falls back to the file's basename. */
   label?: string;
 };
@@ -92,8 +107,21 @@ export interface ComponentEntry {
    * `check:registry` fails on a term the glossary does not define.
    */
   cookbook?: string[];
-  /** v1 populates one canonical (TS + Tailwind) entry; array kept extensible. */
+  /** Every file the customer copies. v1 populates one canonical (TS + Tailwind)
+      component; peer files (`hook` / `util` / `peer`) follow it, so variants[0]
+      is always the component itself. */
   variants: Variant[];
+  /**
+   * npm packages the customer must install — the **transitive** closure over
+   * every declared variant, not just the component file's own imports. A variant
+   * that itself imports a package puts that package here too: the 37 entries
+   * shipping `lib/utils.ts` declare `clsx` and `tailwind-merge` because `cn`
+   * needs them. Previews are excluded — they never ship (§V40).
+   *
+   * This array is customer-facing install instructions. Under-declare and the
+   * paste does not compile; over-declare and they install a package they never
+   * load. `check:registry` enforces both directions.
+   */
   dependencies?: string[];
   /** Has a free-running animation loop the global pause control can halt.
       Set on WebGL/Canvas/rAF loopers; drives the header pause button's visibility. */

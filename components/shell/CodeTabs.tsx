@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { ROLE_TABLE } from "@/lib/registry/roles";
 import type { SourceFile } from "@/lib/registry/source";
 import CodeBlock from "./CodeBlock";
 
-// Multi-file source view. An entry that uses the animation runtime host ships two
-// files — the component and the peer hook — and the customer needs both (§C1b).
+// Multi-file source view. An entry ships every file the customer has to copy —
+// the component plus any peer hook, shared util or sibling — and the tab badge
+// comes from ROLE_TABLE so a new role cannot render untagged (§C1b, §V40).
 // Highlighting already happened server-side; this only switches which pre-rendered
 // block is mounted, so no source is re-parsed on the client.
 export default function CodeTabs({
@@ -34,8 +36,10 @@ export default function CodeTabs({
               }`}
             >
               {file.label}
-              {file.role === "hook" ? (
-                <span className="ml-1.5 text-ink-mute">peer</span>
+              {ROLE_TABLE[file.role].badge ? (
+                <span className="ml-1.5 text-ink-mute">
+                  {ROLE_TABLE[file.role].badge}
+                </span>
               ) : null}
             </button>
           );

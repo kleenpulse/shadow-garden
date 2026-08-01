@@ -15,6 +15,9 @@ const ADD: Record<PkgManager, string> = {
  *  gating of whether Pro install blocks are shown happens at the render layer. */
 export function installCommand(pm: PkgManager, entry: ComponentEntry): string {
   const deps = entry.dependencies ?? [];
-  if (deps.length === 0) return `# ${entry.name} needs no extra dependencies`;
+  // "no npm packages", not "no extra dependencies": an entry with zero packages
+  // can still ship peer files, and InstallBlock renders that manifest directly
+  // below this line. The broader claim would contradict it (§B15).
+  if (deps.length === 0) return `# ${entry.name} needs no npm packages`;
   return `${ADD[pm]} ${deps.join(" ")}`;
 }

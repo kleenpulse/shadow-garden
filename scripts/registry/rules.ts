@@ -18,6 +18,22 @@ import { COOKBOOK_TERMS } from "../../lib/cookbook";
  */
 const VARIANT_ROOTS = ["components/registry/", "hooks/"];
 
+/**
+ * Individual files outside those roots that getSource() will still resolve — a
+ * shared util the component imports, which the customer therefore has to copy.
+ * Exact paths, not a `lib/` root: see the rationale on PEER_FILES in
+ * lib/registry/source.ts. Keep the two lists in sync (rules.ts cannot import
+ * source.ts — it is `server-only` and wraps react.cache).
+ */
+const PEER_FILES = ["lib/utils.ts", "components/ui/auto-mask-vertical.tsx"];
+
+/** A variant path getSource() can resolve: inside a root, or an exact peer file. */
+function resolvableVariantFile(file: string): boolean {
+  return (
+    PEER_FILES.includes(file) || VARIANT_ROOTS.some((root) => file.startsWith(root))
+  );
+}
+
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 const slugUnique: Rule = {
@@ -74,11 +90,11 @@ const variantFileRoot: Rule = {
   what: "every variant.file sits under a root getSource() can resolve",
   run(ctx) {
     return eachVariant(ctx, (entry, file) =>
-      VARIANT_ROOTS.some((root) => file.startsWith(root))
+      resolvableVariantFile(file)
         ? null
         : {
             slug: entry.slug,
-            detail: `variant file outside ${VARIANT_ROOTS.join(" | ")}: ${file}`,
+            detail: `variant file outside ${VARIANT_ROOTS.join(" | ")} and not a known peer file: ${file}`,
           },
     );
   },
@@ -224,6 +240,111 @@ const dependenciesDeclared: Rule = {
             detail: `dependency "${dep}" is not in package.json — the copied install command would fail for the customer`,
           });
         }
+      }
+    }
+    return out;
+  },
+};
+
+/**
+ * Packages the prompt tells the customer to already have — its "Stack this
+ * source assumes" section states React 19 and the Next App Router outright. The
+ * parser reports every specifier; deciding which ones are the buyer's problem is
+ * policy, so it lives here rather than in imports.ts.
+ */
+const FRAMEWORK_PROVIDED = new Set(["react", "react-dom", "next"]);
+
+/**
+ * Entries allowed to declare a package their shipped source never imports, with
+ * the reason. The NOT_A_LOOP shape — a named exception carrying its own
+ * justification — not a PENDING_MIGRATION debt ledger. Empty is the correct
+ * state; a legitimate case would be a Tailwind plugin or a side-effect-only
+ * package that no `import` statement names.
+ */
+const DEPENDS_WITHOUT_IMPORT = new Map<string, string>();
+
+const importedPackageDeclared: Rule = {
+  id: "imported-package-declared",
+  severity: "error",
+  what: "every npm package the shipped source imports is declared in dependencies",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const imports = ctx.entryImports(entry.slug);
+      if (!imports) continue;
+      const declared = new Set(entry.dependencies ?? []);
+      for (const pkg of imports.packages) {
+        if (FRAMEWORK_PROVIDED.has(pkg) || declared.has(pkg)) continue;
+        out.push({
+          slug: entry.slug,
+          detail: `imports "${pkg}" but dependencies does not list it — the install block would tell the customer to run a command that leaves their paste unbuildable`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const importedFileShips: Rule = {
+  id: "imported-file-ships",
+  severity: "error",
+  what: "every non-npm file the shipped source imports is declared as a variant",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const imports = ctx.entryImports(entry.slug);
+      if (!imports) continue;
+      const shipped = new Set(entry.variants.map((v) => v.file));
+      for (const file of imports.files) {
+        if (shipped.has(file)) continue;
+        const from = imports.via.get(file);
+        const path =
+          from && !shipped.has(from) ? ` (reached through ${from})` : "";
+        out.push({
+          slug: entry.slug,
+          detail: `imports ${file}${path} but no variant ships it — the Code tab, the install manifest and the AI prompt all omit a file the customer cannot compile without`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const importedFileResolves: Rule = {
+  id: "imported-file-resolves",
+  severity: "error",
+  what: "every relative or aliased import inside a shipped file resolves on disk",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const imports = ctx.entryImports(entry.slug);
+      if (!imports) continue;
+      for (const { raw, from } of imports.unresolved) {
+        out.push({
+          slug: entry.slug,
+          detail: `"${raw}" in ${from} resolves to nothing — the closure walk stops there, so imported-file-ships can only report on the half of this entry it managed to reach`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const declaredPackageImported: Rule = {
+  id: "declared-package-imported",
+  severity: "error",
+  what: "every declared dependency is actually imported by the shipped source",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const imports = ctx.entryImports(entry.slug);
+      if (!imports || DEPENDS_WITHOUT_IMPORT.has(entry.slug)) continue;
+      for (const dep of entry.dependencies ?? []) {
+        if (imports.packages.has(dep)) continue;
+        out.push({
+          slug: entry.slug,
+          detail: `declares "${dep}" but no shipped file imports it — only the preview does, and the preview never ships. The customer installs a package they will never load`,
+        });
       }
     }
     return out;
@@ -562,6 +683,10 @@ export const RULES: Rule[] = [
   cookbookTermExists,
   promptOverlaySlug,
   dependenciesDeclared,
+  importedPackageDeclared,
+  importedFileShips,
+  importedFileResolves,
+  declaredPackageImported,
   previewRegistered,
   previewReadsEveryProp,
   previewReadsOnlyDeclaredProps,

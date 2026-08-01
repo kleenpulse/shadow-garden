@@ -1,4 +1,51 @@
-import type { ComponentEntry } from "../types";
+import type { ComponentEntry, Variant } from "../types";
+
+/** lib/utils.ts ships with every entry whose source imports `cn`. Its own
+ *  packages (clsx, tailwind-merge) are the host entry's to declare — the check
+ *  walks into this file and finds them there (§V41). */
+const UTILS_VARIANT: Variant = {
+	lang: "ts",
+	style: "tailwind",
+	file: "lib/utils.ts",
+	role: "util",
+	label: "utils.ts",
+};
+
+/** FileExplorer is assembled from its whole directory, not one file. Listed as a
+ *  mapped array rather than 23 literals so the entry stays readable; the set is
+ *  the component's transitive closure, which `check:registry` verifies. It
+ *  carries its own `cn` in ./util, so it takes no UTILS_VARIANT. */
+const FILE_EXPLORER_PEERS: Variant[] = [
+	"AutoScroll.tsx",
+	"Breadcrumb.tsx",
+	"ContextMenu.tsx",
+	"DetailPanel.tsx",
+	"EmptyState.tsx",
+	"FileGrid.tsx",
+	"FileList.tsx",
+	"FolderTree.tsx",
+	"InlineRename.tsx",
+	"StorageMeter.tsx",
+	"Thumbnail.tsx",
+	"Toolbar.tsx",
+	"UndoSnackbar.tsx",
+	"types.ts",
+	"useFileExplorer.ts",
+	"useFileStore.ts",
+	"useObjectUrl.ts",
+	"util.ts",
+	"store/index.ts",
+	"store/types.ts",
+	"store/idb-store.ts",
+	"store/memory-store.ts",
+	"store/opfs-store.ts",
+].map((name) => ({
+	lang: "ts",
+	style: "tailwind",
+	file: `components/registry/file-explorer/${name}`,
+	role: "peer",
+	label: name,
+}));
 
 /** Power-User Systems — composite, stateful showcase pieces. */
 export const powerUserSystems: ComponentEntry[] = [
@@ -10,7 +57,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"A painterly toon-shaded 3D cherry-blossom scene with wind-driven falling petals.",
-		dependencies: ["three", "@react-three/fiber"],
+		dependencies: ["three", "@react-three/fiber", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Loop",
 			"Float",
@@ -22,6 +69,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/sakura-tree/SakuraTree.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -95,7 +143,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		tier: "pro",
 		description:
 			"A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
-		dependencies: ["cmdk", "motion", "lucide-react"],
+		dependencies: ["cmdk", "motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Enter / Exit",
 			"Scale in",
@@ -107,6 +155,14 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/command-palette/CommandPalette.tsx",
 			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/ui/auto-mask-vertical.tsx",
+				role: "peer",
+				label: "auto-mask-vertical.tsx",
+			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -269,7 +325,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
-		dependencies: ["ogl"],
+		dependencies: ["ogl", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Orbit",
 			"Loop",
@@ -289,6 +345,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				role: "hook",
 				label: "use-animation-loop.ts",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -492,7 +549,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
-		dependencies: ["ogl"],
+		dependencies: ["ogl", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Orbit",
 			"Loop",
@@ -512,6 +569,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				role: "hook",
 				label: "use-animation-loop.ts",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1178,6 +1236,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/file-explorer/FileExplorer.tsx",
 			},
+			...FILE_EXPLORER_PEERS,
 		],
 		props: [
 			{
@@ -1287,7 +1346,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		pausable: true,
 		description:
 			"An orrery of moons casting real eclipse shadows across a shadowed world; drag to orbit.",
-		dependencies: ["three", "@react-three/fiber"],
+		dependencies: ["three", "@react-three/fiber", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Orbit",
 			"Loop",
@@ -1299,6 +1358,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/umbral-orrery/UmbralOrrery.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1493,7 +1553,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-07-26",
 		description:
 			"A pinned section where scrolling down drives content sideways across depth planes moving at different rates.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Parallax",
 			"Scroll-driven animation",
@@ -1508,6 +1568,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/parallax-rail/ParallaxRail.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1576,7 +1637,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-07-26",
 		description:
 			"Throw the top card and the speed you released it at carries into the spring — throw it far enough and it cycles to the back of the deck instead of coming home.",
-		dependencies: ["motion"],
+		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Spring",
 			"Swipe to dismiss",
@@ -1597,6 +1658,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/elastic/Elastic.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
@@ -1685,7 +1747,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-07-27",
 		description:
 			"A Pinterest-style grid where every item drops into the shortest column, packed by measurement rather than by a shared row baseline.",
-		dependencies: [],
+		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Layout animation",
 			"Stagger",
@@ -1701,6 +1763,7 @@ export const powerUserSystems: ComponentEntry[] = [
 				style: "tailwind",
 				file: "components/registry/masonry/Masonry.tsx",
 			},
+			UTILS_VARIANT,
 		],
 		props: [
 			{
