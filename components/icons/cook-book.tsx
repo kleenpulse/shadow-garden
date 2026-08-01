@@ -37,9 +37,23 @@ const SPINE_SHUT = 12 - W / 2;
 /** Open, the cover is mirrored and half-size — that is what the flip lands on. */
 const OPEN_SX = -0.5;
 
-/** Front cover: body, spine slot, title label, page block. Knockouts via evenodd. */
+// Front cover: body, spine groove, three title lines, page block.
+//
+// Traced from `public/closed-book.svg` — a 64-grid glyph — onto this 17-wide
+// local space at a uniform 17/56, which lands the book at 17 x 19.4 and centres
+// it vertically on the 24 grid. Layout, corner radii and line lengths are the
+// reference's; only the thin features are ours. Its groove and lines are 2/64,
+// which resolve here to 0.61 — well under a pixel at 16-24px, where they smear
+// to grey rather than read as gaps. Widened to 0.9, the smallest that still
+// paints a clean edge at 16px.
+//
+// Knockouts via evenodd — which counts every subpath, so no two of them may
+// overlap and none may cross the body's outline: an overlap lands back at an
+// odd crossing count and fills in, and an overhang paints as a stray chip
+// outside the book. The groove's bottom edge and the page block's top edge are
+// the same y for exactly that reason — they meet, they never overlap.
 const COVER_FACE =
-	"M0 3.5h15.5a1.5 1.5 0 0 1 1.5 1.5v13a1.5 1.5 0 0 1-1.5 1.5H0V3.5Z M1.7 5.6h1.5v12.8H1.7z M5.2 6.8h8.6v3.4H5.2z M4.4 17.2h9.4v1.4H4.4z";
+	"M1.21 2.3h14.58a1.21 1.21 0 0 1 1.21 1.21V18.08a.61 .61 0 0 1-.61 .61V20.95h.22a.39 .39 0 0 1 0 .78H1.82A1.82 1.82 0 0 1 0 19.91V3.51a1.21 1.21 0 0 1 1.21-1.21Z M2.35 2.3h.9v16.39h-.9Z M6.22 6.4h2.74a.45 .45 0 0 1 0 .9H6.22a.45 .45 0 0 1 0-.9Z M6.22 8.23h6.99a.45 .45 0 0 1 0 .9H6.22a.45 .45 0 0 1 0-.9Z M6.22 10.05h4.87a.45 .45 0 0 1 0 .9H6.22a.45 .45 0 0 1 0-.9Z M1.82 18.69H15.79v2.26H1.82a1.13 1.13 0 0 1 0-2.26Z";
 /** One page, gutter edge at local x=0. Rendered at half scale in both halves. */
 const PAGE_FACE = "M0 6.6c4.03-1.2 10.29-2 17-2V17.2c-6.71 0-12.98.8-17 2V6.6Z";
 /** Both covers standing open, cradling the pages. Fixed — it only fades. */

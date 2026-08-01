@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings2 } from "lucide-react";
+import { Settings, Settings2 } from "lucide-react";
 import Switch from "@/components/shell/controls/Switch";
 import {
 	Popover,
@@ -25,15 +25,18 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 	const setPaused = useFlameStore((s) => s.setPaused);
 
 	return (
-		<div className={cn("flex", dense ? "items-center gap-4" : "flex-col gap-2.5")}>
+		<div
+			className={cn("flex", dense ? "items-center gap-4" : "flex-col gap-2.5")}
+		>
 			<Switch
 				id="sg-flame-enabled"
-				label="Flame"
+				label="Flame "
 				checked={enabled}
 				onChange={(v) => {
 					play("select");
 					setEnabled(v);
 				}}
+				className="justify-between"
 			/>
 			{/* Motion over a torn-down canvas is a dead control, so it follows. */}
 			<Switch
@@ -61,11 +64,11 @@ export function CookbookFlameControlsDesktop({
 			<PopoverTrigger
 				aria-label="Background settings"
 				className={cn(
-					"grid size-7 place-items-center rounded-md border border-hairline bg-panel/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none data-[popup-open]:text-accent",
+					"grid size-9 place-items-center rounded-md border border-hairline bg-panel/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none data-popup-open:text-accent",
 					className,
 				)}
 			>
-				<Settings2 className="size-3.5" aria-hidden />
+				<Settings className="size-5" aria-hidden />
 			</PopoverTrigger>
 			<PopoverContent side="top" align="start" className="p-3">
 				<p className="mb-2.5 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
