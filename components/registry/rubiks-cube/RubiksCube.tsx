@@ -870,6 +870,16 @@ export default function RubiksCube({
         frameloop={halted ? "demand" : "always"}
         camera={{ position: orbitPosition(cameraDistance), fov: 42 }}
         gl={{ antialias: true, alpha: true }}
+        // R3F sizes itself from getBoundingClientRect, which reports the
+        // *transformed* box, and re-measures on scroll by default. A CSS
+        // transform on any ancestor therefore feeds its own scale back in: the
+        // canvas is resized to the scaled rect, inside the element that already
+        // scaled it, and shrinks again 50ms after every scroll. That re-measure
+        // exists to keep the raycaster's offsets right while the page moves,
+        // and nothing here raycasts — the orbit drag binds pointer events on
+        // the canvas directly and reads client deltas. The ResizeObserver still
+        // handles real layout changes, which is the only resize that is true.
+        resize={{ scroll: false }}
       >
         <ReadySignal onReady={onReady} />
         <CubeScene
