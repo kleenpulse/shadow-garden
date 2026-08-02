@@ -24,11 +24,18 @@ import PageBottomBlur from "@/components/landing/PageBottomBlur";
 import GotoTop from "@/components/miscellaneous/goto-top";
 
 // Each index shows a curated few — the full catalog lives at /components.
+// γ counts in cards on a two-column grid, so its cap keeps the rows even.
 const LIST_LIMIT = 5;
+const CARD_LIMIT = 6;
 
 export default function Home() {
 	const data = buildLandingData();
 	const sealedEntries = data.proEntries.slice(0, LIST_LIMIT);
+
+	// How many specimens a section actually shows — γ renders cards, everyone
+	// else renders the list. Drives the "All N …" overflow link.
+	const shownFor = (exhibit: LandingExhibit) =>
+		exhibit.category === "Micro-interactions" ? CARD_LIMIT : LIST_LIMIT;
 
 	// Live exhibit per category — the page is built from the components it sells.
 	const exhibitFor = (exhibit: LandingExhibit) => {
@@ -40,7 +47,7 @@ export default function Home() {
 			case "Micro-interactions":
 				return (
 					<GammaExhibit
-						items={exhibit.entries}
+						items={exhibit.entries.slice(0, CARD_LIMIT)}
 						accentColor={data.spotlightAccent}
 					/>
 				);
@@ -104,28 +111,28 @@ export default function Home() {
 						{exhibitFor(exhibit)}
 					</Reveal>
 
-					{/* The category index — a curated five, the rest one click away.
-              γ skips it: the spotlight cards above already carry the index. */}
+					{/* The category index — a curated few, the rest one click away.
+              γ skips the list: its spotlight cards above ARE the index, so it
+              carries only the overflow link. */}
 					{exhibit.category === "Micro-interactions" ? null : (
-						<>
-							<SpotlightList
-								className="mt-10"
-								items={exhibit.entries.slice(0, LIST_LIMIT).map((entry) => ({
-									slug: entry.slug,
-									name: entry.name,
-									tag: entry.tier,
-									tagTone: entry.tier === "pro" ? "accent" : "default",
-								}))}
-							/>
-							{exhibit.entries.length > LIST_LIMIT && (
-								<Link
-									href="/components"
-									className="mt-6 inline-block font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute transition-colors hover:text-accent"
-								>
-									All {exhibit.entries.length} {exhibit.category} →
-								</Link>
-							)}
-						</>
+						<SpotlightList
+							className="mt-10"
+							items={exhibit.entries.slice(0, LIST_LIMIT).map((entry) => ({
+								slug: entry.slug,
+								name: entry.name,
+								tag: entry.tier,
+								tagTone: entry.tier === "pro" ? "accent" : "default",
+							}))}
+						/>
+					)}
+
+					{exhibit.entries.length > shownFor(exhibit) && (
+						<Link
+							href="/components"
+							className="mt-6 inline-block font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute transition-colors hover:text-accent"
+						>
+							All {exhibit.entries.length} {exhibit.category} →
+						</Link>
 					)}
 				</section>
 			))}
