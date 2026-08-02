@@ -368,7 +368,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "divCount",
-				label: "Div Count",
 				kind: "number",
 				default: 5,
 				min: 1,
@@ -677,7 +676,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "scale",
-				label: "size",
 				kind: "number",
 				default: 1.1,
 				min: 0.5,
@@ -724,7 +722,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "strandWidth",
-				label: "width %",
 				kind: "number",
 				default: 100,
 				min: 10,
@@ -1011,7 +1008,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "connectDistance",
-				label: "Link distance",
 				kind: "number",
 				default: 120,
 				min: 40,
@@ -1022,7 +1018,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "cursorDistance",
-				label: "Cursor radius",
 				kind: "number",
 				default: 150,
 				min: 0,
@@ -1105,7 +1100,6 @@ export const backgrounds: ComponentEntry[] = [
 		props: [
 			{
 				name: "gapX",
-				label: "Gap X",
 				kind: "number",
 				default: 42,
 				min: 24,
@@ -1116,7 +1110,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "gapY",
-				label: "Gap Y",
 				kind: "number",
 				default: 38,
 				min: 24,
@@ -1165,7 +1158,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "waveDecay",
-				label: "Decay",
 				kind: "number",
 				default: 0.96,
 				min: 0.9,
@@ -1219,7 +1211,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "restOpacity",
-				label: "Rest opacity",
 				kind: "number",
 				default: 0.6,
 				min: 0.1,
@@ -1229,7 +1220,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "peakOpacity",
-				label: "Peak opacity",
 				kind: "number",
 				default: 1,
 				min: 0.5,
@@ -1239,7 +1229,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "noteDuration",
-				label: "Note length",
 				kind: "number",
 				default: 1.6,
 				min: 0.4,
@@ -1293,21 +1282,18 @@ export const backgrounds: ComponentEntry[] = [
 		props: [
 			{
 				name: "baseColor",
-				label: "Night sky",
 				kind: "color",
 				default: "#05010a",
 				description: "Deep background the curtains glow against.",
 			},
 			{
 				name: "auroraColor",
-				label: "Curtain",
 				kind: "color",
 				default: "#a855f7",
 				description: "Primary amethyst light of the bands.",
 			},
 			{
 				name: "auroraColor2",
-				label: "Highlight",
 				kind: "color",
 				default: "#22d3ee",
 				description: "Secondary tint the curtain edges shift toward.",
@@ -1397,14 +1383,12 @@ export const backgrounds: ComponentEntry[] = [
 		props: [
 			{
 				name: "starColor",
-				label: "Stars",
 				kind: "color",
 				default: "#ffffff",
 				description: "Color of the star field.",
 			},
 			{
 				name: "accentColor",
-				label: "Accent",
 				kind: "color",
 				default: "#a855f7",
 				description: "Tints a minority of stars and every shooting-star tail.",
@@ -1430,7 +1414,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "driftSpeed",
-				label: "Warp drift",
 				kind: "number",
 				default: 0.5,
 				min: 0,
@@ -1450,7 +1433,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "shootingStars",
-				label: "Shooting stars",
 				kind: "number",
 				default: 0.4,
 				min: 0,
@@ -1742,7 +1724,6 @@ export const backgrounds: ComponentEntry[] = [
 		props: [
 			{
 				name: "lattice",
-				label: "Lattice",
 				kind: "enum",
 				default: "lines",
 				options: ["lines", "grid", "dots", "rings"],
@@ -1751,7 +1732,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "pitch",
-				label: "Cell pitch",
 				kind: "number",
 				default: 9,
 				min: 3,
@@ -1763,7 +1743,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "angle",
-				label: "Layer angle",
 				kind: "number",
 				default: 3.2,
 				min: 0,
@@ -1775,7 +1754,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "drift",
-				label: "Drift",
 				kind: "number",
 				default: 0.35,
 				min: 0,
@@ -1787,7 +1765,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "separation",
-				label: "Separation",
 				kind: "number",
 				default: 6,
 				min: 0,
@@ -1799,7 +1776,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "thickness",
-				label: "Ink duty",
 				kind: "number",
 				default: 0.16,
 				min: 0.05,
@@ -1810,7 +1786,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "contrast",
-				label: "Fringe contrast",
 				kind: "number",
 				default: 1,
 				min: 0.2,
@@ -1822,7 +1797,6 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "pointerInfluence",
-				label: "Pointer twist",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -1834,14 +1808,12 @@ export const backgrounds: ComponentEntry[] = [
 			},
 			{
 				name: "inkColor",
-				label: "Ink",
 				kind: "color",
 				default: "#a855f7",
 				description: "Amethyst of the lattice lines themselves.",
 			},
 			{
 				name: "backgroundColor",
-				label: "Field",
 				kind: "color",
 				default: "#08050e",
 				description: "The dark field the two lattices sit on.",

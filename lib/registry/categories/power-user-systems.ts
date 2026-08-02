@@ -70,7 +70,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		props: [
 			{
 				name: "windSpeed",
-				label: "Wind",
 				kind: "number",
 				default: 3,
 				min: 0,
@@ -80,7 +79,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "fallingPetals",
-				label: "Falling petals",
 				kind: "number",
 				default: 129,
 				min: 0,
@@ -92,7 +90,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "bloomAmount",
-				label: "Bloom",
 				kind: "number",
 				default: 0.85,
 				min: 0,
@@ -102,7 +99,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "weather",
-				label: "Weather",
 				kind: "enum",
 				default: "clear",
 				options: ["clear", "breezy", "overcast", "storm"],
@@ -111,7 +107,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "windDirection",
-				label: "Wind direction",
 				kind: "number",
 				default: 45,
 				min: 0,
@@ -122,7 +117,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "cameraDistance",
-				label: "Camera distance",
 				kind: "number",
 				default: 8,
 				min: 4,
@@ -337,7 +331,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		props: [
 			{
 				name: "steps",
-				label: "Quality",
 				kind: "number",
 				default: 300,
 				min: 60,
@@ -348,7 +341,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "diskInner",
-				label: "Disk inner",
 				kind: "number",
 				default: 3,
 				min: 2,
@@ -360,7 +352,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "diskOuter",
-				label: "Disk outer",
 				kind: "number",
 				default: 12,
 				min: 6,
@@ -372,7 +363,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "diskBrightness",
-				label: "Disk brightness",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -383,7 +373,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "ringColor",
-				label: "Ring color",
 				kind: "color",
 				default: "#ff9e38",
 				description:
@@ -391,7 +380,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "dopplerMax",
-				label: "Doppler",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -402,7 +390,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "starBrightness",
-				label: "Starfield",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -414,7 +401,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "skyFloor",
-				label: "Sky floor",
 				kind: "number",
 				default: 0.02,
 				min: 0,
@@ -425,7 +411,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "rotationSpeed",
-				label: "Orbit speed",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -437,7 +422,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "fov",
-				label: "Field of view",
 				kind: "number",
 				default: 85,
 				min: 30,
@@ -449,7 +433,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "bloomStrength",
-				label: "Bloom",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -461,7 +444,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "bloomRadius",
-				label: "Bloom radius",
 				kind: "number",
 				default: 1,
 				min: 0.2,
@@ -473,7 +455,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "vignette",
-				label: "Vignette",
 				kind: "number",
 				default: 0.4,
 				min: 0,
@@ -483,7 +464,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "grain",
-				label: "Film grain",
 				kind: "number",
 				default: 0.06,
 				min: 0,
@@ -493,7 +473,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "chromaticAberration",
-				label: "Chromatic aberration",
 				kind: "number",
 				default: 0.15,
 				min: 0,
@@ -503,7 +482,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "autoOrbit",
-				label: "Cinematic orbit",
 				kind: "boolean",
 				default: true,
 				description:
@@ -511,7 +489,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "debug",
-				label: "Debug view",
 				kind: "enum",
 				default: "off",
 				options: ["off", "steps", "disk", "min-r", "escape-dir", "redshift"],
@@ -520,7 +497,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "tint",
-				label: "Halo tint",
 				kind: "color",
 				default: "#a855f7",
 				description:
@@ -556,7 +532,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		props: [
 			{
 				name: "primary",
-				label: "Primary",
 				kind: "color",
 				default: "#f0a830",
 				description:
@@ -564,7 +539,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "secondary",
-				label: "Secondary",
 				kind: "color",
 				default: "#120e1a",
 				description:
@@ -572,7 +546,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "accent",
-				label: "Accent",
 				kind: "color",
 				default: "#ffe7a3",
 				description:
@@ -580,7 +553,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "coreObject",
-				label: "Core object",
 				kind: "enum",
 				default: "lotus",
 				options: ["lotus", "gem", "flame"],
@@ -589,7 +561,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "coreScale",
-				label: "Core size",
 				kind: "number",
 				default: 1.5,
 				min: 0.5,
@@ -601,7 +572,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "stemLength",
-				label: "Stem length",
 				kind: "number",
 				default: 1.4,
 				min: 0,
@@ -612,7 +582,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "vortexIntensity",
-				label: "Vortex intensity",
 				kind: "number",
 				default: 7,
 				min: 1,
@@ -623,7 +592,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "glowIntensity",
-				label: "Glow intensity",
 				kind: "number",
 				default: 8,
 				min: 1,
@@ -634,7 +602,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "particleDensity",
-				label: "Particle density",
 				kind: "number",
 				default: 200,
 				min: 0,
@@ -645,7 +612,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "particleSpeed",
-				label: "Particle speed",
 				kind: "number",
 				default: 0,
 				min: 0,
@@ -657,7 +623,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "smokeAmount",
-				label: "Background smoke",
 				kind: "number",
 				default: 0.6,
 				min: 0,
@@ -668,7 +633,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "cameraAutoRotate",
-				label: "Auto-orbit",
 				kind: "boolean",
 				default: true,
 				description:
@@ -676,7 +640,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "rotationSpeed",
-				label: "Orbit speed",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -688,7 +651,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "fov",
-				label: "Field of view",
 				kind: "number",
 				default: 60,
 				min: 30,
@@ -700,7 +662,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "verticalOffset",
-				label: "Vertical offset",
 				kind: "number",
 				default: 0,
 				min: -1,
@@ -711,7 +672,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "chromaticAberration",
-				label: "Chromatic aberration",
 				kind: "number",
 				default: 0.15,
 				min: 0,
@@ -721,7 +681,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "vignette",
-				label: "Vignette",
 				kind: "number",
 				default: 0.4,
 				min: 0,
@@ -731,7 +690,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "grain",
-				label: "Film grain",
 				kind: "number",
 				default: 0.02,
 				min: 0,
@@ -916,14 +874,12 @@ export const powerUserSystems: ComponentEntry[] = [
 		props: [
 			{
 				name: "dyeColor",
-				label: "Smoke",
 				kind: "color",
 				default: "#a855f7",
 				description: "Color of the dye injected into the fluid.",
 			},
 			{
 				name: "backgroundColor",
-				label: "Void",
 				kind: "color",
 				default: "#05010a",
 				description: "Background the plume rises against.",
@@ -938,7 +894,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "pressureIterations",
-				label: "Solver iterations",
 				kind: "number",
 				default: 25,
 				min: 10,
@@ -949,7 +904,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "velocityFade",
-				label: "Momentum",
 				kind: "number",
 				default: 0.98,
 				min: 0.9,
@@ -959,7 +913,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "densityFade",
-				label: "Dissipation",
 				kind: "number",
 				default: 0.97,
 				min: 0.9,
@@ -969,7 +922,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "curl",
-				label: "Vorticity",
 				kind: "number",
 				default: 20,
 				min: 0,
@@ -980,7 +932,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "splatRadius",
-				label: "Splat size",
 				kind: "number",
 				default: 0.2,
 				min: 0.05,
@@ -990,7 +941,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "splatForce",
-				label: "Splat force",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -1001,7 +951,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "autoPlume",
-				label: "Auto plume",
 				kind: "boolean",
 				default: true,
 				description:
@@ -1029,7 +978,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "grain",
-				label: "Film grain",
 				kind: "number",
 				default: 0.04,
 				min: 0,
@@ -1207,7 +1155,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		props: [
 			{
 				name: "defaultView",
-				label: "View",
 				kind: "enum",
 				default: "grid",
 				options: ["grid", "list"],
@@ -1216,7 +1163,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "thumbnailSize",
-				label: "Thumbnail size",
 				kind: "number",
 				default: 112,
 				min: 72,
@@ -1235,7 +1181,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "sortBy",
-				label: "Sort by",
 				kind: "enum",
 				default: "name",
 				options: ["name", "date", "size", "type"],
@@ -1244,7 +1189,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "sortDir",
-				label: "Sort direction",
 				kind: "enum",
 				default: "asc",
 				options: ["asc", "desc"],
@@ -1252,28 +1196,24 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "showFolderRail",
-				label: "Folder rail",
 				kind: "boolean",
 				default: true,
 				description: "Show the left folder-tree rail.",
 			},
 			{
 				name: "showDetails",
-				label: "Detail panel",
 				kind: "boolean",
 				default: true,
 				description: "Open the detail panel when a single file is selected.",
 			},
 			{
 				name: "showHidden",
-				label: "Show hidden",
 				kind: "boolean",
 				default: false,
 				description: "Reveal entries whose name starts with a dot.",
 			},
 			{
 				name: "allowUpload",
-				label: "Allow upload",
 				kind: "boolean",
 				default: true,
 				description:
@@ -1281,7 +1221,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "allowDelete",
-				label: "Allow delete",
 				kind: "boolean",
 				default: true,
 				description:
@@ -1289,7 +1228,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "undoWindowMs",
-				label: "Undo window",
 				kind: "number",
 				default: 5000,
 				min: 0,
@@ -1731,7 +1669,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		props: [
 			{
 				name: "minColumnWidth",
-				label: "Min column width",
 				kind: "number",
 				default: 240,
 				min: 120,
@@ -1743,7 +1680,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "maxColumns",
-				label: "Max columns",
 				kind: "number",
 				default: 4,
 				min: 1,
@@ -1793,14 +1729,12 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "revealOnScroll",
-				label: "Reveal on scroll",
 				kind: "boolean",
 				default: true,
 				description: "Fade and rise each item in as it enters the viewport.",
 			},
 			{
 				name: "revealDistance",
-				label: "Reveal distance",
 				kind: "number",
 				default: 16,
 				min: 0,
@@ -1834,7 +1768,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		props: [
 			{
 				name: "autoRotate",
-				label: "Ambient spin",
 				kind: "boolean",
 				default: true,
 				description:
@@ -1842,7 +1775,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "rotationSpeed",
-				label: "Spin speed",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -1855,7 +1787,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "moveDuration",
-				label: "Turn time",
 				kind: "number",
 				default: 380,
 				min: 120,
@@ -1867,7 +1798,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "scrambleMoveCount",
-				label: "Scramble length",
 				kind: "number",
 				default: 12,
 				min: 1,
@@ -1878,7 +1808,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "pauseBetweenCycles",
-				label: "Cycle pause",
 				kind: "number",
 				default: 700,
 				min: 0,
@@ -1890,7 +1819,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "cameraDistance",
-				label: "Camera distance",
 				kind: "number",
 				default: 11,
 				min: 6,
@@ -1901,7 +1829,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "gap",
-				label: "Seam",
 				kind: "number",
 				default: 0.06,
 				min: 0,
@@ -1912,7 +1839,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "palette",
-				label: "Palette",
 				kind: "enum",
 				default: "classic",
 				options: ["classic", "amethyst", "mono", "neon"],
@@ -1921,21 +1847,19 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "bodyColor",
-				label: "Body",
 				kind: "color",
 				default: "#16161c",
-				description: "Plastic behind the stickers, and the core seen through the seams.",
+				description:
+					"Plastic behind the stickers, and the core seen through the seams.",
 			},
 			{
 				name: "background",
-				label: "Backdrop",
 				kind: "color",
 				default: "#0b0d14",
 				description: "The dark field the cube turns in.",
 			},
 			{
 				name: "glossy",
-				label: "Glossy",
 				kind: "boolean",
 				default: true,
 				description:
@@ -1943,7 +1867,6 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 			{
 				name: "glow",
-				label: "Glow",
 				kind: "boolean",
 				default: false,
 				description:

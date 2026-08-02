@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { cookies } from "next/headers";
 import { eq } from "drizzle-orm";
 import { currentUserId } from "@/lib/supabase/current-user";
@@ -72,7 +73,7 @@ function deriveProStatus(row: {
 // so it follows the same rule rather than becoming the one live prod bypass.
 // The cookie is still read unconditionally: skipping it in production would
 // change when this function goes dynamic, and PPR depends on that shape.
-export async function getPro(): Promise<ProState> {
+async function resolvePro(): Promise<ProState> {
   if (IS_LOCAL_DEV && process.env.SHADOW_GARDEN_PRO === "1")
     return override("env");
 
@@ -124,3 +125,10 @@ export async function getPro(): Promise<ProState> {
       row.type === "subscription" && Boolean(row.polarSubscriptionId),
   };
 }
+
+// Request-scoped memo. A component page asks the ladder from four independent
+// Suspense boundaries (source, install, props, controls) and they all want the same
+// answer about the same visitor — without this, that is four session lookups and four
+// DB round trips per render. `cache()` is per-request, so it never leaks one visitor's
+// entitlement into another's render.
+export const getPro = cache(resolvePro);

@@ -364,7 +364,6 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "flipDuration",
-				label: "Flip duration",
 				kind: "number",
 				default: 0.5,
 				min: 0.2,
@@ -386,7 +385,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "expandedWidth",
-				label: "Expanded width",
 				kind: "number",
 				default: 400,
 				min: 280,
@@ -397,7 +395,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "expandedHeight",
-				label: "Expanded height",
 				kind: "number",
 				default: 480,
 				min: 320,
@@ -408,7 +405,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "backdropBlur",
-				label: "Backdrop blur",
 				kind: "number",
 				default: 2,
 				min: 0,
@@ -451,7 +447,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "dotSize",
-				label: "Node size",
 				kind: "number",
 				default: 4,
 				min: 2,
@@ -462,7 +457,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "glowIntensity",
-				label: "Glow intensity",
 				kind: "number",
 				default: 0.15,
 				min: 0,
@@ -478,7 +472,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "duration",
-				label: "Duration",
 				kind: "number",
 				default: 0.6,
 				min: 0.2,
@@ -534,7 +527,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "scaleFrom",
-				label: "Scale from",
 				kind: "number",
 				default: 1.5,
 				min: 1,
@@ -595,14 +587,12 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "highlightColor",
-				label: "Highlight",
 				kind: "color",
 				default: "#a855f7",
 				description: "Color of the sliding highlight block.",
 			},
 			{
 				name: "invertedColor",
-				label: "Hovered text",
 				kind: "color",
 				default: "#000000",
 				description: "Text and icon color while a row is highlighted.",
@@ -637,7 +627,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "textSize",
-				label: "Text size",
 				kind: "enum",
 				default: "md",
 				options: ["sm", "md", "lg"],
@@ -645,7 +634,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "showIcon",
-				label: "Crosshair",
 				kind: "boolean",
 				default: true,
 				description: "Rotate a crosshair icon in on hover.",
@@ -698,21 +686,18 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "ringColor",
-				label: "Ring color",
 				kind: "color",
 				default: "#a855f7",
 				description: "Color of the spinner, counter, and label.",
 			},
 			{
 				name: "overlayColor",
-				label: "Overlay",
 				kind: "color",
 				default: "#000000",
 				description: "Overlay background color.",
 			},
 			{
 				name: "ringSize",
-				label: "Ring size",
 				kind: "number",
 				default: 128,
 				min: 64,
@@ -723,7 +708,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "spinSpeed",
-				label: "Spin speed",
 				kind: "number",
 				default: 1.5,
 				min: 0.5,
@@ -734,7 +718,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "holdDelay",
-				label: "Hold at 100%",
 				kind: "number",
 				default: 0.4,
 				min: 0,
@@ -745,7 +728,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "fadeDuration",
-				label: "Fade duration",
 				kind: "number",
 				default: 0.6,
 				min: 0.2,
@@ -756,7 +738,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "showLabel",
-				label: "Label",
 				kind: "boolean",
 				default: true,
 				description: "Show the caption under the counter.",
@@ -791,7 +772,6 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "openStiffness",
-				label: "Open spring",
 				kind: "number",
 				default: 20,
 				min: 5,
@@ -811,7 +791,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "blur",
-				label: "Item blur",
 				kind: "number",
 				default: 8,
 				min: 0,
@@ -822,14 +801,12 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "overlayColor",
-				label: "Overlay",
 				kind: "color",
 				default: "#0a0a0c",
 				description: "Overlay background color.",
 			},
 			{
 				name: "overlayOpacity",
-				label: "Overlay opacity",
 				kind: "number",
 				default: 0.92,
 				min: 0.5,
@@ -864,7 +841,6 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "pullStrength",
-				label: "Pull",
 				kind: "number",
 				default: 0.4,
 				min: 0,
@@ -902,14 +878,12 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "auraColor",
-				label: "Aura",
 				kind: "color",
 				default: "#a855f7",
 				description: "Color of the proximity glow.",
 			},
 			{
 				name: "auraSize",
-				label: "Aura size",
 				kind: "number",
 				default: 80,
 				min: 0,
@@ -926,7 +900,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "rippleColor",
-				label: "Ripple",
 				kind: "color",
 				default: "#d2abfd",
 				description: "Color of the click ripple.",
@@ -953,7 +926,6 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "dotSize",
-				label: "Dot",
 				kind: "number",
 				default: 8,
 				min: 4,
@@ -964,7 +936,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "trailSize",
-				label: "Trail",
 				kind: "number",
 				default: 36,
 				min: 12,
@@ -994,14 +965,12 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "cursorColor",
-				label: "Color",
 				kind: "color",
 				default: "#a855f7",
 				description: "Color of the dot and trailing ring.",
 			},
 			{
 				name: "blendMode",
-				label: "Blend",
 				kind: "enum",
 				default: "difference",
 				options: ["difference", "screen", "exclusion", "normal"],
@@ -1009,7 +978,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "poolScale",
-				label: "Pool",
 				kind: "number",
 				default: 2,
 				min: 1,
@@ -1666,7 +1634,6 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "duration",
-				label: "Hold time",
 				kind: "number",
 				default: 1200,
 				min: 300,
@@ -1678,7 +1645,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "indicator",
-				label: "Indicator",
 				kind: "enum",
 				default: "ring",
 				options: ["ring", "bar", "fill"],
@@ -1687,7 +1653,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "threshold",
-				label: "Commit at",
 				kind: "number",
 				default: 0.92,
 				min: 0.6,
@@ -1698,7 +1663,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "rewindRate",
-				label: "Rewind rate",
 				kind: "number",
 				default: 2.4,
 				min: 0.5,
@@ -1710,7 +1674,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "strokeWidth",
-				label: "Track weight",
 				kind: "number",
 				default: 3,
 				min: 1,
@@ -1723,7 +1686,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "holdScale",
-				label: "Press sink",
 				kind: "number",
 				default: 0.96,
 				min: 0.85,
@@ -1735,7 +1697,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "commitScale",
-				label: "Commit pop",
 				kind: "number",
 				default: 1.06,
 				min: 1,
@@ -1747,7 +1708,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "successHold",
-				label: "Confirmed for",
 				kind: "number",
 				default: 1.4,
 				min: 0.4,
@@ -1759,14 +1719,12 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "accentColor",
-				label: "Accent",
 				kind: "color",
 				default: "#a855f7",
 				description: "Amethyst of the filling track and the confirmed state.",
 			},
 			{
 				name: "trackColor",
-				label: "Track",
 				kind: "color",
 				default: "#2a2136",
 				description:
@@ -1803,7 +1761,6 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "axis",
-				label: "Throw axis",
 				kind: "enum",
 				default: "x",
 				options: ["x", "y", "both"],
@@ -1812,7 +1769,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "threshold",
-				label: "Commit distance",
 				kind: "number",
 				default: 32,
 				min: 10,
@@ -1824,7 +1780,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "velocityThreshold",
-				label: "Commit speed",
 				kind: "number",
 				default: 520,
 				min: 100,
@@ -1836,7 +1791,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "rubberBand",
-				label: "Rubber band",
 				kind: "number",
 				default: 0.35,
 				min: 0,
@@ -1847,7 +1801,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "stackDepth",
-				label: "Cards shown",
 				kind: "number",
 				default: 3,
 				min: 1,
@@ -1858,7 +1811,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "stackOffset",
-				label: "Stack step",
 				kind: "number",
 				default: 14,
 				min: 0,
@@ -1870,7 +1822,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "stackScale",
-				label: "Stack taper",
 				kind: "number",
 				default: 0.05,
 				min: 0,
@@ -1881,7 +1832,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "rotateOnDrag",
-				label: "Lean",
 				kind: "number",
 				default: 8,
 				min: 0,
@@ -1893,7 +1843,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "stiffness",
-				label: "Stiffness",
 				kind: "number",
 				default: 420,
 				min: 80,
@@ -1904,7 +1853,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "damping",
-				label: "Damping",
 				kind: "number",
 				default: 32,
 				min: 8,
@@ -1943,7 +1891,6 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "bladeCount",
-				label: "Blades",
 				kind: "number",
 				default: 8,
 				min: 3,
@@ -1954,7 +1901,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "openness",
-				label: "Openness",
 				kind: "number",
 				default: 0.62,
 				min: 0,
@@ -1966,7 +1912,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "duration",
-				label: "Travel",
 				kind: "number",
 				default: 900,
 				min: 150,
@@ -1977,7 +1922,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "detent",
-				label: "Detent",
 				kind: "number",
 				default: 0.35,
 				min: 0,
@@ -1988,7 +1932,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "bladeCurvature",
-				label: "Blade curve",
 				kind: "number",
 				default: 1,
 				min: 0.6,
@@ -2000,7 +1943,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "edgeHighlight",
-				label: "Edge light",
 				kind: "number",
 				default: 0.6,
 				min: 0,
@@ -2011,7 +1953,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "housingInset",
-				label: "Bezel",
 				kind: "number",
 				default: 6,
 				min: 0,
@@ -2022,7 +1963,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "autoOpen",
-				label: "Cycle",
 				kind: "boolean",
 				default: true,
 				description:
@@ -2030,7 +1970,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "bladeColor",
-				label: "Blade",
 				kind: "color",
 				default: "#26232c",
 				description:
@@ -2038,7 +1977,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "edgeColor",
-				label: "Edge",
 				kind: "color",
 				default: "#000000",
 				description: "Amethyst on the blade seams and the bezel.",
@@ -2089,7 +2027,6 @@ export const microInteractions: ComponentEntry[] = [
 		props: [
 			{
 				name: "sweepDuration",
-				label: "Sweep",
 				kind: "number",
 				default: 1.9,
 				min: 0.6,
@@ -2101,7 +2038,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "grainDensity",
-				label: "Grain density",
 				kind: "number",
 				default: 2500,
 				min: 400,
@@ -2112,7 +2048,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "windSpeed",
-				label: "Wind",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -2124,7 +2059,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "buoyancy",
-				label: "Buoyancy",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -2136,7 +2070,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "turbulence",
-				label: "Turbulence",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -2148,7 +2081,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "grainSize",
-				label: "Grain size",
 				kind: "number",
 				default: 1,
 				min: 0.4,
@@ -2160,7 +2092,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "splitIndex",
-				label: "Accent from",
 				kind: "number",
 				default: 6,
 				min: 0,
@@ -2171,7 +2102,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "reveal",
-				label: "Reveal",
 				kind: "enum",
 				default: "split",
 				options: ["split", "fade", "none"],
@@ -2180,7 +2110,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "autoplay",
-				label: "Autoplay",
 				kind: "boolean",
 				default: true,
 				description:
@@ -2188,7 +2117,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "replayDelay",
-				label: "Replay after",
 				kind: "number",
 				default: 1.2,
 				min: 0,
@@ -2201,7 +2129,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "inkColor",
-				label: "Ink",
 				kind: "color",
 				default: "#e9e7ef",
 				description:
@@ -2209,7 +2136,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "accentColor",
-				label: "Accent",
 				kind: "color",
 				default: "#a855f7",
 				description:
@@ -2217,7 +2143,6 @@ export const microInteractions: ComponentEntry[] = [
 			},
 			{
 				name: "backgroundColor",
-				label: "Backdrop",
 				kind: "color",
 				default: "#08050e",
 				description:

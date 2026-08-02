@@ -16,10 +16,18 @@ import { previews } from "@/components/registry/previews";
 import PlaceholderPreview from "./PlaceholderPreview";
 import PreviewBoundary from "./PreviewBoundary";
 import ControlsPanel from "./ControlsPanel";
+import ControlsLocked from "./ControlsLocked";
 
 // Viewport-filling twin of the LiveWorkspace stage. Reads the same nuqs query
 // params, so a tuning deep-links here byte-for-byte with no extra state.
-export default function FullscreenStage({ entry }: { entry: ComponentEntry }) {
+export default function FullscreenStage({
+	entry,
+	controlsLocked = false,
+}: {
+	entry: ComponentEntry;
+	/** Resolved server-side by FullscreenSection — the client never asks. */
+	controlsLocked?: boolean;
+}) {
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
@@ -88,6 +96,25 @@ export default function FullscreenStage({ entry }: { entry: ComponentEntry }) {
 								onChange={setValue}
 								onReset={reset}
 								pausable={entry.pausable}
+								locked={
+									controlsLocked ? (
+										<ControlsLocked
+											dense
+											name={entry.name}
+											propCount={entry.props.length}
+											// This route has no PricingModal — it lives in the (shell)
+											// layout — so the CTA leaves rather than opening in place.
+											cta={
+												<Link
+													href={`${backHref}#subscribe`}
+													className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 font-sans text-sm font-medium text-on-accent transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+												>
+													Unlock the controls →
+												</Link>
+											}
+										/>
+									) : null
+								}
 							/>
 						</motion.div>
 					)}

@@ -13,6 +13,8 @@ import { previews } from "@/components/registry/previews";
 import PlaceholderPreview from "./PlaceholderPreview";
 import PreviewBoundary from "./PreviewBoundary";
 import ControlsPanel from "./ControlsPanel";
+import ControlsLocked from "./ControlsLocked";
+import SubscribeButton from "./SubscribeButton";
 import WorkspaceTabs from "./WorkspaceTabs";
 
 // Owns the tuned-state source (the URL, via nuqs) shared by the preview stage and
@@ -25,10 +27,13 @@ export default function LiveWorkspace({
 	entry,
 	code,
 	promptSlot,
+	controlsLocked = false,
 }: {
 	entry: ComponentEntry;
 	code: ReactNode;
 	promptSlot?: ReactNode;
+	/** Resolved server-side by WorkspaceSection — the client never asks. */
+	controlsLocked?: boolean;
 }) {
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
@@ -90,6 +95,15 @@ export default function LiveWorkspace({
 				onChange={setValue}
 				onReset={reset}
 				pausable={entry.pausable}
+				locked={
+					controlsLocked ? (
+						<ControlsLocked
+							name={entry.name}
+							propCount={entry.props.length}
+							cta={<SubscribeButton label="Unlock the controls →" />}
+						/>
+					) : null
+				}
 			/>
 		</div>
 	);

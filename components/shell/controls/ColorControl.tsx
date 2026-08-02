@@ -18,7 +18,7 @@ export default function ColorControl({
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const label = schema.label ?? schema.name;
+  const label = schema.name;
 
   useEffect(() => {
     if (!open) return;

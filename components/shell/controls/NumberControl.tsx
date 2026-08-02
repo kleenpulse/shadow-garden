@@ -21,12 +21,11 @@ export default function NumberControl({
   onChange: (value: number) => void;
   disabled?: boolean;
 }) {
-  const label = schema.label ?? schema.name;
   return (
     <div className={cn("space-y-1.5 transition-opacity", disabled && "opacity-40")}>
       <div className="flex items-baseline justify-between gap-3">
         <label htmlFor={`ctl-${schema.name}`} className="font-mono text-xs text-ink-dim">
-          {label}
+          {schema.name}
         </label>
         <output className="font-display text-xs tabular-nums text-accent">
           {formatValue(value, schema)}

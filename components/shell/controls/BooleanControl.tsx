@@ -19,7 +19,7 @@ export default function BooleanControl({
   return (
     <Switch
       id={schema.name}
-      label={schema.label ?? schema.name}
+      label={schema.name}
       checked={value}
       onChange={onChange}
       disabled={disabled}
