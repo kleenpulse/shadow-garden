@@ -41,6 +41,10 @@ export interface RubiksCubeProps {
   /** Freeze the spin and the solve loop, holding the current pose. */
   paused?: boolean;
   reducedMotion?: boolean;
+  /** Fires once, on the first frame actually drawn. The canvas element exists
+   *  well before it paints anything — a host that fades the cube in needs the
+   *  draw, not the mount, or the transition is spent on an empty canvas. */
+  onReady?: () => void;
   className?: string;
 }
 
@@ -55,6 +59,22 @@ interface Move {
 
 const QUARTER = Math.PI / 2;
 const DEG = Math.PI / 180;
+
+// Resting orbit angles. Shared by the rig and by the camera the Canvas is
+// created with — a hardcoded start position only matches one `cameraDistance`,
+// and every other value visibly eases from that wrong radius to the right one
+// on the first frames.
+const ORBIT_AZIMUTH = 0.7;
+const ORBIT_ELEVATION = 0.42;
+
+function orbitPosition(radius: number): [number, number, number] {
+  const ce = Math.cos(ORBIT_ELEVATION);
+  return [
+    radius * ce * Math.sin(ORBIT_AZIMUTH),
+    radius * Math.sin(ORBIT_ELEVATION),
+    radius * ce * Math.cos(ORBIT_AZIMUTH),
+  ];
+}
 // Degrees per second of ambient spin at rotationSpeed 1. Slow enough that the
 // layer turns stay legible while the cube drifts underneath them.
 const BASE_SPIN = 13;
@@ -391,8 +411,11 @@ function CameraRig({
   const gl = useThree((s) => s.gl);
   const camera = useThree((s) => s.camera);
   const invalidate = useThree((s) => s.invalidate);
-  const azimuth = useRef({ current: 0.7, target: 0.7 });
-  const elevation = useRef({ current: 0.42, target: 0.42 });
+  const azimuth = useRef({ current: ORBIT_AZIMUTH, target: ORBIT_AZIMUTH });
+  const elevation = useRef({
+    current: ORBIT_ELEVATION,
+    target: ORBIT_ELEVATION,
+  });
   const radius = useRef(distance);
   const dragRef = useRef(onDrag);
   dragRef.current = onDrag;
@@ -804,11 +827,26 @@ function CubeScene({
   );
 }
 
+// Signals the first drawn frame. useFrame runs inside the render loop, so this
+// fires after the environment bake and the first paint — unlike a mount effect,
+// which lands while the canvas is still blank.
+function ReadySignal({ onReady }: { onReady?: () => void }) {
+  const fired = useRef(false);
+  useFrame(() => {
+    if (fired.current) return;
+    fired.current = true;
+    onReady?.();
+  });
+  return null;
+}
+
 export default function RubiksCube({
   className,
   paused = false,
   reducedMotion = false,
   transparent = false,
+  cameraDistance = 11,
+  onReady,
   ...props
 }: RubiksCubeProps) {
   // Activity-hidden routers force-lose the WebGL context but keep the <canvas>
@@ -830,13 +868,15 @@ export default function RubiksCube({
         flat
         dpr={[1, 1.75]}
         frameloop={halted ? "demand" : "always"}
-        camera={{ position: [7, 4.9, 7], fov: 42 }}
+        camera={{ position: orbitPosition(cameraDistance), fov: 42 }}
         gl={{ antialias: true, alpha: true }}
       >
+        <ReadySignal onReady={onReady} />
         <CubeScene
           paused={paused}
           reducedMotion={reducedMotion}
           transparent={transparent}
+          cameraDistance={cameraDistance}
           {...props}
         />
       </Canvas>
