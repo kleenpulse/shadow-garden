@@ -60,42 +60,37 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 	const inView = useInView(ref);
 	const reduce = useReducedMotion() ?? false;
 	const { container, rise } = makeVariants(reduce);
+	// Two complementary queries, not one boolean. useMediaQuery starts false on
+	// the server and on the first client render, so a single query cannot tell
+	// "narrow" from "not measured yet" — and anything gating on a separate
+	// mounted flag races it: the flag can land first, and that render reads as
+	// mobile and mounts Threads on a desktop before the cube replaces it. Both
+	// false means unmeasured and nothing renders; exactly one is true once the
+	// viewport is actually known, so the wrong backdrop can never mount.
 	const isDesktop = useMediaQuery("(min-width: 768px)");
+	const isMobile = useMediaQuery("(max-width: 767.98px)");
+	const decided = isDesktop || isMobile;
 	const { resolvedTheme } = useTheme();
 
-	// One counter, two frames, because the steps genuinely cannot share a render.
-	//
-	// Frame 1 mounts the backdrop. useMediaQuery starts false on the server and
-	// on the first client render, so branching on that render would spin up
-	// Threads' WebGL context for a tick on a desktop and immediately tear it
-	// down. Neither backdrop exists until the viewport is actually known.
-	//
-	// Frame 2 lights it. The visible end state is owned here rather than by a CSS
-	// animation (SPEC §V34) — the globals.css reduced-motion backstop only
-	// crushes the transition's duration, so someone who asked for no motion still
-	// lands on a lit backdrop instead of one stranded at opacity 0. It has to be
-	// a separate frame: the element must paint at 0 with its child already
-	// present, or the browser coalesces both values into one style resolution and
-	// there is no transition left to run.
-	const [phase, setPhase] = useState(0);
+	// The visible end state is owned here rather than by a CSS animation (SPEC
+	// §V34) — the globals.css reduced-motion backstop only crushes the
+	// transition's duration, so someone who asked for no motion still lands on a
+	// lit backdrop instead of one stranded at opacity 0. Keyed to `decided`, not
+	// to mount: the element has to paint at 0 with its child already present, and
+	// that first paint only happens once a branch has been chosen.
+	const [lit, setLit] = useState(false);
 	useEffect(() => {
-		let inner = 0;
-		const outer = requestAnimationFrame(() => {
-			setPhase(1);
-			inner = requestAnimationFrame(() => setPhase(2));
-		});
-		return () => {
-			cancelAnimationFrame(outer);
-			cancelAnimationFrame(inner);
-		};
-	}, []);
-	const mounted = phase >= 1;
-	const lit = phase >= 2;
+		if (!decided) return;
+		const id = requestAnimationFrame(() => setLit(true));
+		return () => cancelAnimationFrame(id);
+	}, [decided]);
 
-	const fade = cn(
-		"transition-opacity duration-1000 ease-out",
-		lit ? "opacity-100" : "opacity-0",
-	);
+	// A function, not a constant: tailwind-merge treats every `opacity-*` as the
+	// same class group, so folding a steady-state `opacity-70` and the fade's
+	// `opacity-100` into one `cn` call silently drops the former and Threads
+	// renders at full strength. One opacity per element, chosen here.
+	const fade = (target: string) =>
+		cn("transition-opacity duration-1000 ease-out", lit ? target : "opacity-0");
 
 	return (
 		<section
@@ -105,7 +100,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 			{/* Exactly one backdrop is ever mounted. A `hidden md:block` swap would
           allocate both WebGL contexts and only hide one — the same reasoning
           SectionRail uses to gate on the query rather than on CSS. */}
-			{mounted && isDesktop ? (
+			{isDesktop ? (
 				/* The cube is a bounded drag surface, not a full-bleed one: it sits
            clear of the copy and the CTA row below, so grabbing it never
            competes with them. `touch-pan-y` is re-declared over the
@@ -117,7 +112,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 						"absolute left-1/2 top-0 -translate-x-1/2 sm:left-[65%]",
 						"h-[min(92svh,108vw)] w-[min(92svh,108vw)]",
 						"[&_canvas]:touch-pan-y! cursor-default!",
-						fade,
+						fade("opacity-100"),
 					)}
 				>
 					<PreviewBoundary
@@ -148,12 +143,12 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
           same `touch-pan-y` override is required here; full-bleed, it would
           otherwise stop a finger drag from scrolling anywhere in the hero.
           Threads has no `reducedMotion` prop — it folds into `paused`. */}
-			{mounted && !isDesktop ? (
+			{isMobile ? (
 				<div
 					className={cn(
-						"absolute inset-0 opacity-70",
+						"absolute inset-0",
 						"[&_canvas]:touch-pan-y!",
-						fade,
+						fade("opacity-70"),
 					)}
 				>
 					<PreviewBoundary slug="threads" label="Threads" variant="silent">
@@ -179,9 +174,12 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
           (which sets it on its own root): a transparent full-bleed div is still
           a hit target, so without it this layer swallows every drag meant for
           the cube underneath. */}
-			{mounted && isDesktop && resolvedTheme !== "light" ? (
+			{isDesktop && resolvedTheme !== "light" ? (
 				<div
-					className={cn("pointer-events-none absolute inset-0 z-0", fade)}
+					className={cn(
+						"pointer-events-none absolute inset-0 z-0",
+						fade("opacity-100"),
+					)}
 					aria-hidden
 				>
 					<PreviewBoundary slug="side-rays" label="SideRays" variant="silent">
@@ -282,13 +280,17 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 			{/* Instrument readout — the actual prop values driving the field above. */}
 			<div className="relative z-10 border-t border-hairline bg-surface/60 backdrop-blur-sm">
 				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
-					{/* Names whichever field is actually mounted. The span appears from
-              640px while the swap is at 768px, so 640–768 correctly reports
-              Threads. */}
+					{/* Names whichever field is actually mounted, and stays blank until
+              one is — naming a field before the viewport is known would print
+              the same wrong answer the backdrop itself used to render. The span
+              appears from 640px while the swap is at 768px, so 640–768
+              correctly reports Threads. */}
 					<span className="hidden sm:inline">
 						{isDesktop
 							? `Field: RubiksCube · Turn ${hero.cube.moveDuration}ms · Scramble ${hero.cube.scrambleMoveCount}`
-							: `Field: Threads · Amp ${hero.threads.amplitude.toFixed(2)} · Dist ${hero.threads.distance.toFixed(2)}`}
+							: isMobile
+								? `Field: Threads · Amp ${hero.threads.amplitude.toFixed(2)} · Dist ${hero.threads.distance.toFixed(2)}`
+								: null}
 					</span>
 					<span className="w-full sm:w-auto">
 						Registry {stats.total} units [{stats.free} free / {stats.pro} pro]

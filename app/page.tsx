@@ -23,12 +23,12 @@ import SpotlightList from "@/components/landing/SpotlightList";
 import PageBottomBlur from "@/components/landing/PageBottomBlur";
 import GotoTop from "@/components/miscellaneous/goto-top";
 
-// The sealed archive reveals only a curated few — the rest stay in shadow.
-const SEALED_LIMIT = 7;
+// Each index shows a curated few — the full catalog lives at /components.
+const LIST_LIMIT = 5;
 
 export default function Home() {
 	const data = buildLandingData();
-	const sealedEntries = data.proEntries.slice(0, SEALED_LIMIT);
+	const sealedEntries = data.proEntries.slice(0, LIST_LIMIT);
 
 	// Live exhibit per category — the page is built from the components it sells.
 	const exhibitFor = (exhibit: LandingExhibit) => {
@@ -104,18 +104,28 @@ export default function Home() {
 						{exhibitFor(exhibit)}
 					</Reveal>
 
-					{/* The category index — every specimen catalogued, live one included.
-              γ skips it: the spotlight cards above already carry the full index. */}
+					{/* The category index — a curated five, the rest one click away.
+              γ skips it: the spotlight cards above already carry the index. */}
 					{exhibit.category === "Micro-interactions" ? null : (
-						<SpotlightList
-							className="mt-10"
-							items={exhibit.entries.map((entry) => ({
-								slug: entry.slug,
-								name: entry.name,
-								tag: entry.tier,
-								tagTone: entry.tier === "pro" ? "accent" : "default",
-							}))}
-						/>
+						<>
+							<SpotlightList
+								className="mt-10"
+								items={exhibit.entries.slice(0, LIST_LIMIT).map((entry) => ({
+									slug: entry.slug,
+									name: entry.name,
+									tag: entry.tier,
+									tagTone: entry.tier === "pro" ? "accent" : "default",
+								}))}
+							/>
+							{exhibit.entries.length > LIST_LIMIT && (
+								<Link
+									href="/components"
+									className="mt-6 inline-block font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute transition-colors hover:text-accent"
+								>
+									All {exhibit.entries.length} {exhibit.category} →
+								</Link>
+							)}
+						</>
 					)}
 				</section>
 			))}
@@ -160,7 +170,7 @@ export default function Home() {
 							<span aria-hidden>·</span>
 							<span className="text-bench-400">Sealed archive</span>
 							<span aria-hidden>·</span>
-							<span>{sealedEntries.length} units</span>
+							<span>{data.stats.pro} units</span>
 						</div>
 						<h2 className="mt-10 max-w-2xl font-display text-3xl uppercase leading-tight tracking-[0.04em] text-bench-100 sm:text-5xl">
 							Some source stays in shadow.
