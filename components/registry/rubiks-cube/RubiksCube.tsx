@@ -29,8 +29,11 @@ export interface RubiksCubeProps {
   colors?: Partial<Record<CubeFace, string>>;
   /** Plastic body behind the stickers. */
   bodyColor?: string;
-  /** Scene backdrop. */
+  /** Scene backdrop. Ignored when `transparent` is set. */
   background?: string;
+  /** Drop the scene backdrop entirely and clear to alpha, so whatever sits
+   *  behind the canvas shows through. */
+  transparent?: boolean;
   /** Wet-lacquer clearcoat and a faint oil-slick sheen across the stickers. */
   glossy?: boolean;
   /** Emissive stickers plus an additive silhouette halo. */
@@ -484,6 +487,7 @@ function CubeScene({
   colors,
   bodyColor = "#16161c",
   background = "#0b0d14",
+  transparent = false,
   glossy = true,
   glow = false,
   paused = false,
@@ -755,7 +759,7 @@ function CubeScene({
   return (
     <>
       <CameraRig distance={cameraDistance} onDrag={handleDrag} />
-      <color attach="background" args={[background]} />
+      {transparent ? null : <color attach="background" args={[background]} />}
       <StudioEnvironment intensity={glossy ? 1.25 : 0.55} />
       {glow ? (
         <GlowHalo extent={haloExtent} tint={GLOW_TINT[palette] ?? GLOW_TINT.classic} />
@@ -804,6 +808,7 @@ export default function RubiksCube({
   className,
   paused = false,
   reducedMotion = false,
+  transparent = false,
   ...props
 }: RubiksCubeProps) {
   // Activity-hidden routers force-lose the WebGL context but keep the <canvas>
@@ -826,9 +831,14 @@ export default function RubiksCube({
         dpr={[1, 1.75]}
         frameloop={halted ? "demand" : "always"}
         camera={{ position: [7, 4.9, 7], fov: 42 }}
-        gl={{ antialias: true }}
+        gl={{ antialias: true, alpha: true }}
       >
-        <CubeScene paused={paused} reducedMotion={reducedMotion} {...props} />
+        <CubeScene
+          paused={paused}
+          reducedMotion={reducedMotion}
+          transparent={transparent}
+          {...props}
+        />
       </Canvas>
     </div>
   );

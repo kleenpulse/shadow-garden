@@ -151,7 +151,7 @@ export default function Home() {
 			{/* ζ — Sealed archive: pro tier. Static graphite ground in both themes,
           so text uses the static bench ramp (same rule as the code surface). */}
 			<div id={SECTION_IDS.sealed} className="scroll-mt-10">
-				<ProSection raysColor={data.hero.color}>
+				<ProSection raysColor={data.raysColor}>
 					<div className="mx-auto w-full max-w-7xl px-3 py-14 sm:px-6 sm:py-28">
 						<div className="flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-bench-700 py-2 font-display text-[9px] uppercase tracking-widest text-bench-500 sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
 							<span className="text-[#a855f7]">
