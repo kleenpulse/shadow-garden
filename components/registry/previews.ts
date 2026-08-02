@@ -81,4 +81,5 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
     () => import("./intro-animation/IntroAnimationPreview"),
     { ssr: false },
   ),
+  "rubiks-cube": dynamic(() => import("./rubiks-cube/RubiksCubePreview"), { ssr: false }),
 };
