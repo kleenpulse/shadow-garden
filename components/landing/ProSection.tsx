@@ -11,7 +11,7 @@ const LightRays = dynamic(() => import("@/components/registry/light-rays/LightRa
 
 // Sealed-archive band. LightRays burns behind server-rendered content, mounts
 // near the viewport, and stills (speed 0) when offscreen or reduced motion —
-// with the hero Threads paused by then, at most one WebGL context animates.
+// with the hero cube paused by then, at most one WebGL context animates.
 export default function ProSection({
   raysColor,
   children,
