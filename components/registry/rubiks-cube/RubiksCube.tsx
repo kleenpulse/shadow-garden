@@ -240,26 +240,56 @@ void main() {
 }
 `;
 
+// How far the sticker's centre stands proud of its edge. The mesh is scaled
+// uniformly by STICKER_SCALE, which scales z too, so the dome is shallower on
+// screen than this number reads.
+const DOME_HEIGHT = 0.08;
+
 // Stickers are domed, not flat. A flat plane has one normal across its whole
 // surface, so a specular highlight covers all of it or none of it — the sticker
 // flashes rather than glints, and no amount of clearcoat makes that read as
 // gloss. Curvature is what produces the moving highlight. Real cube stickers
 // are slightly convex for the same reason.
 function makeStickerGeometry(): THREE.BufferGeometry {
-  const g = new THREE.PlaneGeometry(1, 1, 16, 16);
+  const g = new THREE.PlaneGeometry(1, 1, 20, 20);
   const pos = g.attributes.position;
   for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    const y = pos.getY(i);
-    // Chebyshev radius so the dome follows the square edge instead of a circle
-    // inscribed in it, which would leave the corners visibly sunken.
-    const r = Math.min(1, Math.max(Math.abs(x), Math.abs(y)) * 2);
-    pos.setZ(i, Math.cos(r * Math.PI * 0.5) * 0.06);
+    const x = Math.abs(pos.getX(i)) * 2;
+    const y = Math.abs(pos.getY(i)) * 2;
+    // Superellipse, not a Chebyshev max(|x|,|y|). Both hug the square edge, so
+    // both keep the corners from sinking the way an inscribed circle would —
+    // but Chebyshev's level sets are squares, which leaves the surface with a
+    // derivative jump along each diagonal. computeVertexNormals bakes that in
+    // as a crease, and a crease under a tight highlight is a starburst. The
+    // squircle has the same silhouette with no jump anywhere.
+    const r = Math.min(1, Math.pow(x ** 4 + y ** 4, 0.25));
+    pos.setZ(i, Math.cos(r * Math.PI * 0.5) * DOME_HEIGHT);
   }
   pos.needsUpdate = true;
   g.computeVertexNormals();
   return g;
 }
+
+// The studio's sky. A flat background colour is why a sticker either catches one
+// of the cards below or goes black: every normal that misses them resolves to
+// the same constant, so the face reads as a cliff rather than a falloff. A
+// gradient gives every direction something to return.
+const SKY_VERT = /* glsl */ `
+varying vec3 vPos;
+void main() {
+  vPos = position;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`;
+const SKY_FRAG = /* glsl */ `
+uniform vec3 uTop;
+uniform vec3 uBottom;
+varying vec3 vPos;
+void main() {
+  float t = clamp(normalize(vPos).y * 0.5 + 0.5, 0.0, 1.0);
+  gl_FragColor = vec4(mix(uBottom, uTop, t), 1.0);
+}
+`;
 
 // A three-strip studio, built here rather than imported from three's examples
 // so the reflections can be coloured to the bench. Clearcoat only reads as wet
@@ -286,15 +316,47 @@ function buildEnvScene(): { scene: THREE.Scene; dispose: () => void } {
     scene.add(mesh);
   };
 
-  scene.background = new THREE.Color("#0a0a10");
-  strip("#ffffff", 7, [0, 8, 1], [11, 4], [0, 0, 0]);
+  // Enclosing shell rather than more cards: cards leave gaps between them, and
+  // the gaps were the problem. Radius clears the cards at ±8 comfortably.
+  // Colours go in as uniforms so three converts the hex into its linear working
+  // space — hand-packing a gradient texture invites a double sRGB conversion.
+  //
+  // Pick these by the light they carry, not by how they read as a swatch. sRGB
+  // is steeply non-linear near black: a tasteful "dark sky" like #262633 sits at
+  // 0.15 sRGB but ~0.018 linear, which is close enough to nothing that the bake
+  // is indistinguishable from the flat background it replaced. Measured over six
+  // orientations, #262633 moved the cube's near-black pixels 7.8% → 6.6%; the
+  // values below move them to 2.7%.
+  const skyGeo = new THREE.SphereGeometry(40, 32, 16);
+  const skyMat = new THREE.ShaderMaterial({
+    uniforms: {
+      uTop: { value: new THREE.Color("#6e6e88") },
+      uBottom: { value: new THREE.Color("#2c2c3a") },
+    },
+    vertexShader: SKY_VERT,
+    fragmentShader: SKY_FRAG,
+    side: THREE.BackSide,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  scene.add(new THREE.Mesh(skyGeo, skyMat));
+
+  // The key used to run at 7, which pinned the up face at pure white — nothing
+  // rolls it off, since the renderer is `flat` and the stickers opt out of tone
+  // mapping to keep their literal hex.
+  strip("#ffffff", 5, [0, 8, 1], [11, 4], [0, 0, 0]);
   strip("#c9b8ff", 3.4, [-8, 1, 4], [3, 11], [0, 0, 0]);
   strip("#8fd0ff", 2.6, [8, -1, -4], [3, 11], [0, 0, 0]);
+  // Floor bounce. No front card: the camera rests front-right-above, so a fill
+  // there would flatten the contrast this scene exists to produce.
+  strip("#7d8398", 1.1, [0, -7, -1], [10, 4], [0, 0, 0]);
 
   return {
     scene,
     dispose: () => {
       geo.dispose();
+      skyGeo.dispose();
+      skyMat.dispose();
       for (const m of mats) m.dispose();
     },
   };
@@ -630,7 +692,7 @@ function CubeScene({
       const mat = faceMats[f.face];
       mat.roughness = glossy ? 0.2 : 0.42;
       mat.clearcoat = glossy ? 1 : 0;
-      mat.clearcoatRoughness = glossy ? 0.06 : 0.5;
+      mat.clearcoatRoughness = glossy ? 0.03 : 0.5;
       mat.iridescence = glossy ? 0.45 : 0;
       mat.iridescenceIOR = 1.32;
       mat.iridescenceThicknessRange = [130, 420];
@@ -852,19 +914,40 @@ export default function RubiksCube({
   // Activity-hidden routers force-lose the WebGL context but keep the <canvas>
   // in the DOM; a lost canvas can never re-acquire a context, so we remount a
   // fresh canvas element by bumping the key on hide. Harmless on real unmount.
+  //
+  // Do not narrow this to a webglcontextlost listener. The cleanup that detaches
+  // the listener runs at the same moment the router hides the tree — which is
+  // the moment the context dies — so the loss is never observed and the cube
+  // comes back as a permanently blank canvas.
   const [canvasEpoch, setCanvasEpoch] = useState(0);
   useEffect(() => () => setCanvasEpoch((e) => e + 1), []);
+
+  // That remount has a cost the key alone does not pay: the replacement <canvas>
+  // sits at the HTML default 300x150 until react-three-fiber measures its
+  // container. Hiding survives the swap on an Activity-hidden route — the host
+  // had already faded the cube in — so the gap paints a tiny cube at full
+  // opacity, every time, for as long as the measure takes. onCreated fires only
+  // once the root is configured at a real size, so it is the signal for when
+  // this canvas is safe to show.
+  const [livedEpoch, setLivedEpoch] = useState(-1);
+  const configured = livedEpoch === canvasEpoch;
+  const handleCreated = useCallback(
+    () => setLivedEpoch(canvasEpoch),
+    [canvasEpoch],
+  );
   const halted = paused || reducedMotion;
 
   return (
     <div
       className={cn(
         "relative h-full w-full select-none [&_canvas]:cursor-grab [&_canvas]:touch-none [&_canvas:active]:cursor-grabbing",
+        !configured && "[&_canvas]:opacity-0",
         className,
       )}
     >
       <Canvas
         key={canvasEpoch}
+        onCreated={handleCreated}
         flat
         dpr={[1, 1.75]}
         frameloop={halted ? "demand" : "always"}
