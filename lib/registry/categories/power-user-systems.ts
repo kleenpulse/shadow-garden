@@ -58,11 +58,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A painterly toon-shaded 3D cherry-blossom scene with wind-driven falling petals.",
 		dependencies: ["three", "@react-three/fiber", "clsx", "tailwind-merge"],
-		cookbook: [
-			"Loop",
-			"Float",
-			"Idle animation",
-		],
+		cookbook: ["Loop", "Float", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -144,11 +140,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
 		dependencies: ["cmdk", "motion", "clsx", "tailwind-merge"],
-		cookbook: [
-			"Enter / Exit",
-			"Scale in",
-			"Blur",
-		],
+		cookbook: ["Enter / Exit", "Scale in", "Blur"],
 		variants: [
 			{
 				lang: "ts",
@@ -326,12 +318,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
 		dependencies: ["ogl", "clsx", "tailwind-merge"],
-		cookbook: [
-			"Orbit",
-			"Loop",
-			"Drag",
-			"Frame rate (FPS)",
-		],
+		cookbook: ["Orbit", "Loop", "Drag", "Frame rate (FPS)"],
 		variants: [
 			{
 				lang: "ts",
@@ -550,12 +537,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
 		dependencies: ["ogl", "clsx", "tailwind-merge"],
-		cookbook: [
-			"Orbit",
-			"Loop",
-			"Drag",
-			"Blur",
-		],
+		cookbook: ["Orbit", "Loop", "Drag", "Blur"],
 		variants: [
 			{
 				lang: "ts",
@@ -768,12 +750,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A murmuration of hundreds of boids wheeling as one — separation, alignment, and cohesion resolved every frame through a spatial hash for the crowd, banking toward or scattering from your cursor, smeared into long trails of amethyst and cyan as the flock folds across the dark.",
 		dependencies: [],
-		cookbook: [
-			"Loop",
-			"Idle animation",
-			"Hover effect",
-			"Follow-through",
-		],
+		cookbook: ["Loop", "Idle animation", "Hover effect", "Follow-through"],
 		variants: [
 			{
 				lang: "ts",
@@ -921,11 +898,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A real-time GPU fluid you can stir — semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
 		dependencies: ["ogl"],
-		cookbook: [
-			"Drag",
-			"Loop",
-			"Idle animation",
-		],
+		cookbook: ["Drag", "Loop", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -1075,11 +1048,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A pool of dark, moonlit water you disturb by hand — a leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
 		dependencies: ["ogl"],
-		cookbook: [
-			"Ripple",
-			"Drag",
-			"Loop",
-		],
+		cookbook: ["Ripple", "Drag", "Loop"],
 		variants: [
 			{
 				lang: "ts",
@@ -1226,10 +1195,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"A persistent three-pane file manager that stores real image, video, and blob uploads 100% client-side — OPFS when available, IndexedDB everywhere else — with nested folders, search, sort, drag-and-drop upload, move, and a live preview panel.",
 		dependencies: ["lucide-react", "motion", "react-resizable-panels"],
-		cookbook: [
-			"Drag",
-			"Layout animation",
-		],
+		cookbook: ["Drag", "Layout animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -1245,7 +1211,8 @@ export const powerUserSystems: ComponentEntry[] = [
 				kind: "enum",
 				default: "grid",
 				options: ["grid", "list"],
-				description: "Initial content layout. The toolbar toggle overrides it live.",
+				description:
+					"Initial content layout. The toolbar toggle overrides it live.",
 			},
 			{
 				name: "thumbnailSize",
@@ -1263,7 +1230,8 @@ export const powerUserSystems: ComponentEntry[] = [
 				kind: "enum",
 				default: "comfortable",
 				options: ["comfortable", "compact"],
-				description: "Row height and padding for the list view and folder rail.",
+				description:
+					"Row height and padding for the list view and folder rail.",
 			},
 			{
 				name: "sortBy",
@@ -1271,7 +1239,8 @@ export const powerUserSystems: ComponentEntry[] = [
 				kind: "enum",
 				default: "name",
 				options: ["name", "date", "size", "type"],
-				description: "Initial sort field. The toolbar sort menu overrides it live.",
+				description:
+					"Initial sort field. The toolbar sort menu overrides it live.",
 			},
 			{
 				name: "sortDir",
@@ -1315,7 +1284,8 @@ export const powerUserSystems: ComponentEntry[] = [
 				label: "Allow delete",
 				kind: "boolean",
 				default: true,
-				description: "Enable delete, rename, and move. Off locks the store's contents.",
+				description:
+					"Enable delete, rename, and move. Off locks the store's contents.",
 			},
 			{
 				name: "undoWindowMs",
@@ -1347,11 +1317,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"An orrery of moons casting real eclipse shadows across a shadowed world; drag to orbit.",
 		dependencies: ["three", "@react-three/fiber", "clsx", "tailwind-merge"],
-		cookbook: [
-			"Orbit",
-			"Loop",
-			"Drag",
-		],
+		cookbook: ["Orbit", "Loop", "Drag"],
 		variants: [
 			{
 				lang: "ts",
@@ -1450,11 +1416,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		description:
 			"GPU reaction-diffusion growing living tendrils of darkness the cursor seeds.",
 		dependencies: ["ogl"],
-		cookbook: [
-			"Loop",
-			"Idle animation",
-			"Hover effect",
-		],
+		cookbook: ["Loop", "Idle animation", "Hover effect"],
 		variants: [
 			{
 				lang: "ts",
@@ -1606,7 +1568,8 @@ export const powerUserSystems: ComponentEntry[] = [
 				min: 10,
 				max: 90,
 				step: 5,
-				description: "Spring damping on the scrub — higher tracks scroll exactly.",
+				description:
+					"Spring damping on the scrub — higher tracks scroll exactly.",
 			},
 			{
 				name: "fadeEdges",
@@ -1846,6 +1809,145 @@ export const powerUserSystems: ComponentEntry[] = [
 				unit: "px",
 				description: "How far an item rises on reveal.",
 				disabledWhen: { prop: "revealOnScroll", equals: false },
+			},
+		],
+	},
+	{
+		slug: "rubiks-cube",
+		name: "RubiksCube",
+		category: "Power-User Systems",
+		tier: "pro",
+		addedAt: "2026-08-02",
+		pausable: true,
+		description:
+			"A Rubik's cube that scrambles and solves itself on an endless loop while spinning like a planet. Two independent rotation layers, and every quarter-turn is quantised back to exact integers, so an hour of turns drifts by nothing at all.",
+		dependencies: ["three", "@react-three/fiber", "clsx", "tailwind-merge"],
+		cookbook: ["Rotate", "Orbit", "Loop", "Drag", "Easing", "Idle animation"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/rubiks-cube/RubiksCube.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "autoRotate",
+				label: "Ambient spin",
+				kind: "boolean",
+				default: true,
+				description:
+					"Spin the whole cube on its own axis, independently of the solve loop. Off leaves the cube still while it keeps scrambling and solving.",
+			},
+			{
+				name: "rotationSpeed",
+				label: "Spin speed",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Multiplier on the ambient spin rate. A drag re-aims the spin axis but never changes this — direction is yours, speed is the component's.",
+				disabledWhen: { prop: "autoRotate", equals: false },
+			},
+			{
+				name: "moveDuration",
+				label: "Turn time",
+				kind: "number",
+				default: 380,
+				min: 120,
+				max: 1200,
+				step: 10,
+				unit: "ms",
+				description:
+					"How long one quarter-turn takes. The ease overshoots slightly and settles back, which is the mechanical click a real cube makes.",
+			},
+			{
+				name: "scrambleMoveCount",
+				label: "Scramble length",
+				kind: "number",
+				default: 12,
+				min: 1,
+				max: 30,
+				step: 1,
+				description:
+					"Quarter-turns per scramble. The solve is this sequence replayed backwards and negated, so a longer scramble buys a longer solve for free.",
+			},
+			{
+				name: "pauseBetweenCycles",
+				label: "Cycle pause",
+				kind: "number",
+				default: 700,
+				min: 0,
+				max: 3000,
+				step: 50,
+				unit: "ms",
+				description:
+					"Beat of stillness between scramble and solve. Zero runs the two together into one continuous churn.",
+			},
+			{
+				name: "cameraDistance",
+				label: "Camera distance",
+				kind: "number",
+				default: 11,
+				min: 6,
+				max: 22,
+				step: 0.5,
+				description:
+					"Orbit radius, which is what sets the cube's apparent size. Drag anywhere to orbit; elevation stops short of the poles so the cube never tumbles sideways.",
+			},
+			{
+				name: "gap",
+				label: "Seam",
+				kind: "number",
+				default: 0.06,
+				min: 0,
+				max: 0.3,
+				step: 0.01,
+				description:
+					"Space between cubies, in cubie widths. Widen it and the black core shows through the seams, exactly as a real cube's does.",
+			},
+			{
+				name: "palette",
+				label: "Palette",
+				kind: "enum",
+				default: "classic",
+				options: ["classic", "amethyst", "mono", "neon"],
+				description:
+					"Named sticker scheme. The component also takes a `colors` record to override any individual face.",
+			},
+			{
+				name: "bodyColor",
+				label: "Body",
+				kind: "color",
+				default: "#16161c",
+				description: "Plastic behind the stickers, and the core seen through the seams.",
+			},
+			{
+				name: "background",
+				label: "Backdrop",
+				kind: "color",
+				default: "#0b0d14",
+				description: "The dark field the cube turns in.",
+			},
+			{
+				name: "glossy",
+				label: "Glossy",
+				kind: "boolean",
+				default: true,
+				description:
+					"Wet-lacquer clearcoat plus a faint oil-slick sheen, lit by a small studio environment. Off leaves flat matte plastic.",
+			},
+			{
+				name: "glow",
+				label: "Glow",
+				kind: "boolean",
+				default: false,
+				description:
+					"Emissive stickers plus an additive amethyst halo at the silhouette. Off by default: it is a flourish, not the point.",
 			},
 		],
 	},
