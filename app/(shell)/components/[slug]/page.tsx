@@ -6,11 +6,11 @@ import { getAllSlugs, getEntry } from "@/lib/registry";
 import { termAnchor } from "@/lib/cookbook";
 import { cn } from "@/lib/utils";
 import { displayName } from "@/lib/display-name";
-import LiveWorkspace from "@/components/shell/LiveWorkspace";
+import WorkspaceSection from "@/components/shell/WorkspaceSection";
 import CodePanel from "@/components/shell/CodePanel";
 import PromptButton from "@/components/shell/PromptButton";
 import InstallSection from "@/components/shell/InstallSection";
-import PropsTable from "@/components/shell/PropsTable";
+import PropsSection from "@/components/shell/PropsSection";
 import TierBadge from "@/components/shell/TierBadge";
 import NewBadge from "@/components/shell/NewBadge";
 import FavoriteButton from "@/components/shell/FavoriteButton";
@@ -107,7 +107,7 @@ export default async function ComponentPage({
           tab's gated source and the gated Copy Prompt control (both dynamic) are
           rendered server-side and passed in. */}
 			<Suspense fallback={<PanelSkeleton />}>
-				<LiveWorkspace
+				<WorkspaceSection
 					entry={entry}
 					code={
 						<Suspense fallback={<PanelSkeleton />}>
@@ -139,7 +139,13 @@ export default async function ComponentPage({
 				<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute">
 					Props
 				</h2>
-				<PropsTable entry={entry} />
+				<Suspense
+					fallback={
+						<div className="h-40 animate-pulse rounded-lg border border-hairline bg-panel" />
+					}
+				>
+					<PropsSection entry={entry} />
+				</Suspense>
 			</section>
 		</article>
 	);

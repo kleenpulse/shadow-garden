@@ -21,7 +21,7 @@ export default function EnumControl({
   onChange: (value: string) => void;
   disabled?: boolean;
 }) {
-  const label = schema.label ?? schema.name;
+  const label = schema.name;
   return (
     <div className={cn("space-y-1.5 transition-opacity", disabled && "opacity-40")}>
       <label htmlFor={`ctl-${schema.name}`} className="font-mono text-xs text-ink-dim">

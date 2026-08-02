@@ -267,7 +267,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "numCopies",
-				label: "Copies",
 				kind: "number",
 				default: 6,
 				min: 2,
@@ -313,7 +312,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "delay",
-				label: "Stagger",
 				kind: "number",
 				default: 0.05,
 				min: 0,
@@ -324,7 +322,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "yValue",
-				label: "Y offset",
 				kind: "number",
 				default: 10,
 				min: 0,
@@ -379,7 +376,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "yOffset",
-				label: "Y offset",
 				kind: "number",
 				default: 30,
 				min: 0,
@@ -390,7 +386,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "fromOpacity",
-				label: "Dim opacity",
 				kind: "number",
 				default: 0.1,
 				min: 0,
@@ -475,7 +470,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "speed",
-				label: "Reroll rate",
 				kind: "number",
 				default: 45,
 				min: 10,
@@ -486,7 +480,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "glitchInterval",
-				label: "Glitch interval",
 				kind: "number",
 				default: 3,
 				min: 0.5,
@@ -497,7 +490,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "flashColor",
-				label: "Flash",
 				kind: "color",
 				default: "#a855f7",
 				description: "Accent tint a character flashes as it resolves.",
@@ -808,7 +800,6 @@ export const textAnimations: ComponentEntry[] = [
 		props: [
 			{
 				name: "mode",
-				label: "Clear by",
 				kind: "enum",
 				default: "wipe",
 				options: ["wipe", "slide", "lift"],
@@ -817,7 +808,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "direction",
-				label: "Order",
 				kind: "enum",
 				default: "ltr",
 				options: ["ltr", "rtl", "center-out", "random"],
@@ -826,7 +816,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "duration",
-				label: "Clear time",
 				kind: "number",
 				default: 420,
 				min: 120,
@@ -837,7 +826,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "stagger",
-				label: "Stagger",
 				kind: "number",
 				default: 70,
 				min: 0,
@@ -849,7 +837,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "startDelay",
-				label: "Start delay",
 				kind: "number",
 				default: 300,
 				min: 0,
@@ -861,7 +848,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "barPadding",
-				label: "Bar overhang",
 				kind: "number",
 				default: 3,
 				min: 0,
@@ -873,7 +859,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "loop",
-				label: "Re-classify",
 				kind: "boolean",
 				default: false,
 				description:
@@ -881,7 +866,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "interval",
-				label: "Legible for",
 				kind: "number",
 				default: 3.5,
 				min: 1,
@@ -894,7 +878,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "barColor",
-				label: "Bar",
 				kind: "color",
 				default: "#15101f",
 				description:
@@ -902,7 +885,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "edgeColor",
-				label: "Edge",
 				kind: "color",
 				default: "#a855f7",
 				description:
@@ -947,7 +929,6 @@ export const textAnimations: ComponentEntry[] = [
 		props: [
 			{
 				name: "charset",
-				label: "Charset",
 				kind: "enum",
 				default: "alphanumeric",
 				options: ["alphanumeric", "letters", "digits", "departures"],
@@ -956,7 +937,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "flapDuration",
-				label: "Flap time",
 				kind: "number",
 				default: 90,
 				min: 30,
@@ -968,7 +948,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "stagger",
-				label: "Column stagger",
 				kind: "number",
 				default: 45,
 				min: 0,
@@ -980,7 +959,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "settleBounce",
-				label: "Settle",
 				kind: "number",
 				default: 0.5,
 				min: 0,
@@ -991,7 +969,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "cardGap",
-				label: "Card gap",
 				kind: "number",
 				default: 4,
 				min: 0,
@@ -1002,7 +979,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "seamWeight",
-				label: "Seam",
 				kind: "number",
 				default: 1,
 				min: 0,
@@ -1014,7 +990,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "specular",
-				label: "Specular",
 				kind: "number",
 				default: 0.55,
 				min: 0,
@@ -1025,7 +1000,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "perspective",
-				label: "Perspective",
 				kind: "number",
 				default: 420,
 				min: 120,
@@ -1037,7 +1011,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "cardColor",
-				label: "Card",
 				kind: "color",
 				default: "#17141d",
 				description:
@@ -1045,7 +1018,6 @@ export const textAnimations: ComponentEntry[] = [
 			},
 			{
 				name: "glyphColor",
-				label: "Glyph",
 				kind: "color",
 				default: "#e8e4ee",
 				description: "The printed characters.",

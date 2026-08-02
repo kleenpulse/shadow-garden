@@ -22,10 +22,10 @@ export type PropValue = number | string | boolean;
 export type TunedValues = Record<string, PropValue>;
 
 type PropBase = {
-  /** Prop name as it appears in the component API. */
+  /** Prop name as it appears in the component API. The Controls panel labels the
+      control with this verbatim — a prettified alias would make the bench and the
+      Props table disagree about what you are tuning. */
   name: string;
-  /** Optional friendlier control label; falls back to `name`. */
-  label?: string;
   /** One-line description, shown in the API table. */
   description: string;
   /** Disable this control while another tuned prop equals the given value. */
@@ -95,7 +95,7 @@ export interface ComponentEntry {
   category: Category;
   tier: Tier;
   /** ISO date (YYYY-MM-DD) the component was added. Drives the transient "New"
-      badge (< 7 days old); absent means never-new. */
+      badge (< NEW_WINDOW_DAYS old); absent means never-new. */
   addedAt?: string;
   description: string;
   /** Drives the Controls panel and the Props API table. */
