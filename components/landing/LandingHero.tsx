@@ -5,11 +5,18 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useTheme } from "next-themes";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLenis } from "lenis/react";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import CookBookIcon from "@/components/icons/cook-book";
 import type { LandingData } from "@/components/landing/data";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
+
+if (typeof window !== "undefined") {
+	gsap.registerPlugin(ScrollTrigger);
+}
 
 const RubiksCube = dynamic(
 	() => import("@/components/registry/rubiks-cube/RubiksCube"),
@@ -31,6 +38,12 @@ interface LandingHeroProps {
 // The hidden state is identical either way — SSR can't know the motion
 // preference, so the initial markup must not branch on it. Reduced motion
 // lands the same reveal instantly instead.
+// Size the cube has retreated to by the time the hero's bottom edge reaches
+// mid-viewport. The cube pulls back, not the camera — cameraDistance stays at
+// its tuned 7.6 throughout, since lowering that would move the camera *closer*
+// and grow the cube, which is the opposite of a recede.
+const CUBE_FAR_SCALE = 0.7;
+
 const makeVariants = (reduce: boolean) => ({
 	container: {
 		hidden: {},
@@ -72,6 +85,20 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 	const decided = isDesktop || isMobile;
 	const { resolvedTheme } = useTheme();
 
+	// Lenis and GSAP each drive their own rAF, so a scrubbed trigger under an
+	// unwired Lenis reads a scroll position one frame stale — on a scrubbed
+	// canvas that is visible stutter. useLenis resolves through a module-level
+	// store rather than context, which is why it works here even though
+	// SmoothScroll is a sibling of this component rather than an ancestor.
+	// Returns undefined under reduced motion (SmoothScroll renders null); the
+	// trigger isn't created in that case either, so there is nothing to sync.
+	useLenis(ScrollTrigger.update);
+
+	// The cube recedes as the hero leaves. Scale on the wrapper, not the camera:
+	// the canvas never re-renders, so this costs a GPU composite and no React
+	// work at all.
+	const cubeRef = useRef<HTMLDivElement>(null);
+
 	// The visible end state is owned here rather than by a CSS animation (SPEC
 	// §V34) — the globals.css reduced-motion backstop only crushes the
 	// transition's duration, so someone who asked for no motion still lands on a
@@ -104,6 +131,33 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 	const fade = (target: string) =>
 		cn("transition-opacity duration-1000 ease-out", lit ? target : "opacity-0");
 
+	// isDesktop is load-bearing in the deps, not incidental: the wrapper does not
+	// exist until the viewport query resolves, so the first run bails on a null
+	// ref and this has to re-run once the cube actually mounts. ctx.revert()
+	// strips the inline transform on teardown, so crossing the breakpoint can't
+	// strand the cube mid-scale (SPEC §V34) — GSAP owns the end state either way.
+	useEffect(() => {
+		const el = cubeRef.current;
+		const section = ref.current;
+		if (!el || !section || reduce) return;
+		const ctx = gsap.context(() => {
+			gsap.to(el, {
+				scale: CUBE_FAR_SCALE,
+				// Linear along the scrub. GSAP defaults to power1.out, which would
+				// bunch the whole recede into the first third of an already short
+				// ramp — the trigger spans about half a viewport.
+				ease: "none",
+				scrollTrigger: {
+					trigger: section,
+					start: "top top",
+					end: "bottom center",
+					scrub: true,
+				},
+			});
+		}, section);
+		return () => ctx.revert();
+	}, [isDesktop, reduce]);
+
 	return (
 		<section
 			ref={ref}
@@ -120,6 +174,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
            the drag IS the interaction, but a scroll trap on a hero. Here a
            horizontal drag orbits and a vertical drag still scrolls the page. */
 				<div
+					ref={cubeRef}
 					className={cn(
 						"absolute left-1/2 top-10 -translate-x-1/2 sm:left-[69%]",
 						"h-[min(92svh,108vw)] w-[min(92svh,108vw)]",
