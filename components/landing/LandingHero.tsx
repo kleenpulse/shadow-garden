@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { motion, useInView, useReducedMotion } from "motion/react";
@@ -75,15 +75,27 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 	// The visible end state is owned here rather than by a CSS animation (SPEC
 	// §V34) — the globals.css reduced-motion backstop only crushes the
 	// transition's duration, so someone who asked for no motion still lands on a
-	// lit backdrop instead of one stranded at opacity 0. Keyed to `decided`, not
-	// to mount: the element has to paint at 0 with its child already present, and
-	// that first paint only happens once a branch has been chosen.
+	// lit backdrop instead of one stranded at opacity 0.
+	//
+	// The cube decides its own moment via onReady. Its canvas element is in the
+	// DOM long before it draws anything — WebGL init plus a PMREM environment
+	// bake — so fading on mount spends the whole transition on a blank canvas and
+	// the cube arrives fully opaque, which reads as a snap rather than a fade.
+	// Threads needs no such signal: one fullscreen shader, no bake.
 	const [lit, setLit] = useState(false);
+	const light = useCallback(() => setLit(true), []);
 	useEffect(() => {
 		if (!decided) return;
-		const id = requestAnimationFrame(() => setLit(true));
-		return () => cancelAnimationFrame(id);
-	}, [decided]);
+		const frame = isMobile ? requestAnimationFrame(light) : 0;
+		// Backstop: if the backdrop never signals — chunk failed to load, WebGL
+		// refused, PreviewBoundary caught and rendered null — light anyway rather
+		// than leave the hero stranded at opacity 0.
+		const timer = setTimeout(light, 2500);
+		return () => {
+			cancelAnimationFrame(frame);
+			clearTimeout(timer);
+		};
+	}, [decided, isMobile, light]);
 
 	// A function, not a constant: tailwind-merge treats every `opacity-*` as the
 	// same class group, so folding a steady-state `opacity-70` and the fade's
@@ -109,7 +121,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
            horizontal drag orbits and a vertical drag still scrolls the page. */
 				<div
 					className={cn(
-						"absolute left-1/2 top-0 -translate-x-1/2 sm:left-[65%]",
+						"absolute left-1/2 top-10 -translate-x-1/2 sm:left-[69%]",
 						"h-[min(92svh,108vw)] w-[min(92svh,108vw)]",
 						"[&_canvas]:touch-pan-y! cursor-default!",
 						fade("opacity-100"),
@@ -131,6 +143,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 							cameraDistance={hero.cube.cameraDistance}
 							paused={!inView}
 							reducedMotion={reduce}
+							onReady={light}
 							className="cursor-default!"
 						/>
 					</PreviewBoundary>
