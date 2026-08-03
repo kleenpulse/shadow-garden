@@ -24,34 +24,83 @@ import { cn } from "@/lib/utils";
  * A wrapping marquee whose drift speed — and direction — follow scroll
  * velocity: scroll velocity springs into a multiplier on the base drift, so a
  * fast scroll whips the row along and scrolling upward reverses it.
+ *
+ * The row drifts at `velocity` while the page is still. Scrolling adds a
+ * multiplier on top, smoothed by a spring so the row eases in and out of speed
+ * instead of snapping to raw scroll deltas.
  */
 
 export interface VelocityMapping {
-  /** Scroll velocity range (px/s) mapped onto the multiplier range. */
+  /**
+   * Downward scroll speed in px/s, as `[slow, fast]`. Defaults to
+   * `[0, 1000]`.
+   */
   input: [number, number];
+  /**
+   * Drift multipliers the input range maps onto, as `[atSlow, atFast]`.
+   * Defaults to `[0, 5]` — a 1000px/s scroll runs the row at 6x `velocity`,
+   * since the resting drift is the 1 this adds to. Only the magnitude is used;
+   * scroll *direction* is read off the raw scroll, not off this.
+   *
+   * Unclamped on purpose, so a harder flick overshoots the top of the range
+   * rather than flattening out at it.
+   */
   output: [number, number];
 }
 
 export interface MarqueeVelocityProps {
-  /** Row content, repeated `numCopies` times to fill the loop. */
+  /**
+   * One cycle of row content, tiled edge to edge to fill the loop. Give it its
+   * own trailing spacing — the seam between copies is not gapped for you.
+   */
   children: ReactNode;
-  /** Base drift in px/s; negative drifts left-to-right. */
+  /**
+   * Resting drift in px/s, before scroll multiplies it. Positive starts the row
+   * moving right, negative moves it left, `0` leaves it still until a scroll
+   * pushes it. Sign sets the *starting* direction only — an upward scroll
+   * inverts it and the row keeps drifting that way until you scroll down
+   * again.
+   */
   velocity?: number;
-  /** Spring damping on the scroll velocity smoothing. */
+  /**
+   * Friction on the velocity spring. Low overshoots and rebounds after the
+   * scroll stops; high settles dead but reacts lazily. Critical damping is
+   * `2 * sqrt(stiffness)` — at or just above it, the row never wobbles. Only
+   * the drift speed rides this spring, so an underdamped value ripples the
+   * speed without ever throwing the direction.
+   */
   damping?: number;
-  /** Spring stiffness on the scroll velocity smoothing. */
+  /**
+   * How hard the velocity spring pulls toward the current scroll speed. High
+   * tracks the scroll almost instantly; low lags behind it and keeps coasting
+   * after the scroll stops, which reads as weight.
+   */
   stiffness?: number;
-  /** How many copies of the content tile the loop. */
+  /**
+   * Minimum copies tiled into the loop. Treated as a floor — narrow content
+   * gets more copies so the wrap never sweeps a gap through the container.
+   */
   numCopies?: number;
+  /** Scroll-to-drift mapping; see {@link VelocityMapping}. */
   velocityMapping?: VelocityMapping;
-  /** Scrollable ancestor to track; window when omitted. */
+  /**
+   * Scrollable ancestor whose scrolling drives the drift. Tracks the window
+   * when omitted.
+   */
   scrollContainerRef?: RefObject<HTMLElement | null>;
-  /** Force reduced motion (OS preference is honored automatically). */
+  /**
+   * Parks the row regardless of OS setting. The OS reduced-motion preference
+   * is already honored on its own; this only forces it on.
+   */
   reducedMotion?: boolean;
-  /** Classes on the moving row. */
+  /** Classes on the moving row — set type, color and copy spacing here. */
   className?: string;
-  /** Classes on the clipping wrapper. */
+  /**
+   * Classes on the clipping wrapper — sizing, masks and edge fades go here,
+   * not on the row.
+   */
   containerClassName?: string;
+  /** Inline styles on the clipping wrapper. */
   style?: CSSProperties;
 }
 
@@ -70,6 +119,10 @@ function useElementWidth(ref: RefObject<HTMLElement | null>): number {
   }, [ref]);
   return width;
 }
+
+// px/s of scroll below which the direction latch ignores the signal — floating
+// point noise around a stopped scroll, never a real gesture.
+const DIRECTION_DEADZONE = 1;
 
 function wrap(min: number, max: number, v: number): number {
   const range = max - min;
@@ -132,15 +185,23 @@ export default function MarqueeVelocity({
     copyWidth === 0 ? "0px" : `${wrap(-copyWidth, 0, v)}px`,
   );
 
+  // Direction latches off the raw scroll velocity; speed comes from the
+  // spring. Taking the sign from the spring instead is what caused the row to
+  // reverse on its own: a spring overshoots as it settles, so the tail of a
+  // *downward* scroll dips the smoothed value below zero for a fraction of a
+  // second and a `< 0` test reads that as a full reversal. Raw velocity is a
+  // finite difference of scroll position — it cannot ring, and it reads 0 the
+  // instant scrolling stops, which is what leaves the last direction latched
+  // while the row drifts at rest.
   const directionFactor = useRef(1);
   useAnimationFrame((_, delta) => {
     if (reduce) return;
-    let moveBy = directionFactor.current * velocity * (delta / 1000);
-    const factor = velocityFactor.get();
-    if (factor < 0) directionFactor.current = -1;
-    else if (factor > 0) directionFactor.current = 1;
-    moveBy += directionFactor.current * moveBy * factor;
-    baseX.set(baseX.get() + moveBy);
+    const raw = scrollVelocity.get();
+    if (raw > DIRECTION_DEADZONE) directionFactor.current = 1;
+    else if (raw < -DIRECTION_DEADZONE) directionFactor.current = -1;
+    const boost = 1 + Math.abs(velocityFactor.get());
+    const step = directionFactor.current * velocity * (delta / 1000) * boost;
+    baseX.set(baseX.get() + step);
   });
 
   const copies = [];

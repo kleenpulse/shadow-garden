@@ -245,7 +245,8 @@ export const textAnimations: ComponentEntry[] = [
 				max: 200,
 				step: 10,
 				unit: "px/s",
-				description: "Base drift speed; negative drifts the other way.",
+				description:
+					"Resting drift before scroll multiplies it. Positive moves the row right, negative moves it left, 0 leaves it still until you scroll.",
 			},
 			{
 				name: "damping",
@@ -254,7 +255,8 @@ export const textAnimations: ComponentEntry[] = [
 				min: 10,
 				max: 100,
 				step: 5,
-				description: "Spring damping on the scroll velocity smoothing.",
+				description:
+					"Friction on the velocity spring. Low overshoots and rebounds once the scroll stops; high settles dead.",
 			},
 			{
 				name: "stiffness",
@@ -263,7 +265,8 @@ export const textAnimations: ComponentEntry[] = [
 				min: 100,
 				max: 800,
 				step: 20,
-				description: "Spring stiffness on the scroll velocity smoothing.",
+				description:
+					"How hard the spring chases the current scroll speed. High tracks it instantly; low lags and keeps coasting, which reads as weight.",
 			},
 			{
 				name: "numCopies",
@@ -272,7 +275,8 @@ export const textAnimations: ComponentEntry[] = [
 				min: 2,
 				max: 12,
 				step: 1,
-				description: "How many copies of the content tile the loop.",
+				description:
+					"Minimum copies tiled into the loop. A floor, not a count — narrow content gets more so the wrap never sweeps a gap through.",
 			},
 		],
 	},
