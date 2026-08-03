@@ -52,7 +52,7 @@ export interface SliderSchema {
 
 export interface LandingData {
 	stats: { total: number; free: number; pro: number };
-	/** Landing-page tuning for the hero. The cube runs on desktop, Threads below
+	/** Landing-page tuning for the hero. The cube runs on desktop, Waves below
 	 *  the md breakpoint, and the rays burn top-right on desktop dark only.
 	 *  Cube values are stated outright, not registry-derived — see the note on
 	 *  the `hero` literal in buildLandingData. */
@@ -65,7 +65,7 @@ export interface LandingData {
 			rotationSpeed: number;
 			cameraDistance: number;
 		};
-		threads: {
+		waves: {
 			amplitude: number;
 			distance: number;
 			color: string;
@@ -185,7 +185,7 @@ export function buildLandingData(): LandingData {
 			// cube slower than its shipped defaults so the motion stays ambient
 			// behind the headline. The readout strip prints these same numbers, so
 			// its claim to be showing the values actually driving the field stays
-			// true. Threads and the rays below have no such divergence, so they
+			// true. Waves and the rays below have no such divergence, so they
 			// stay registry-derived and can never drift from the catalog.
 			cube: {
 				palette: "mono",
@@ -195,11 +195,11 @@ export function buildLandingData(): LandingData {
 				rotationSpeed: 0.6,
 				cameraDistance: 7.6,
 			},
-			threads: {
-				amplitude: numberProp("threads", "amplitude").default,
-				distance: numberProp("threads", "distance").default,
-				color: colorProp("threads", "color"),
-				opacity: numberProp("threads", "opacity").default,
+			waves: {
+				amplitude: numberProp("waves", "amplitude").default,
+				distance: numberProp("waves", "distance").default,
+				color: colorProp("waves", "color"),
+				opacity: numberProp("waves", "opacity").default,
 			},
 			rays: {
 				color1: colorProp("side-rays", "rayColor1"),

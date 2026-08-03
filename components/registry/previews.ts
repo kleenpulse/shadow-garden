@@ -9,10 +9,10 @@ import type { PreviewProps } from "@/lib/registry/types";
 // components/registry/<slug>/. Unregistered slugs fall back to the reference
 // stand-in (see LiveWorkspace), so the full spine works end-to-end regardless.
 export const previews: Record<string, ComponentType<PreviewProps>> = {
-  threads: dynamic(() => import("./threads/ThreadsPreview"), { ssr: false }),
+  waves: dynamic(() => import("./waves/WavesPreview"), { ssr: false }),
   grainient: dynamic(() => import("./grainient/GrainientPreview"), { ssr: false }),
   "light-rays": dynamic(() => import("./light-rays/LightRaysPreview"), { ssr: false }),
-  "gradual-blur": dynamic(() => import("./gradual-blur/GradualBlurPreview"), { ssr: false }),
+  "mask-blur": dynamic(() => import("./mask-blur/MaskBlurPreview"), { ssr: false }),
   "side-rays": dynamic(() => import("./side-rays/SideRaysPreview"), { ssr: false }),
   "dot-field": dynamic(() => import("./dot-field/DotFieldPreview"), { ssr: false }),
   strands: dynamic(() => import("./strands/StrandsPreview"), { ssr: false }),
@@ -33,7 +33,7 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "hover-list": dynamic(() => import("./hover-list/HoverListPreview"), { ssr: false }),
   preloader: dynamic(() => import("./preloader/PreloaderPreview"), { ssr: false }),
   "circle-menu": dynamic(() => import("./circle-menu/CircleMenuPreview"), { ssr: false }),
-  "scroll-velocity": dynamic(() => import("./scroll-velocity/ScrollVelocityPreview"), { ssr: false }),
+  "marquee-velocity": dynamic(() => import("./marquee-velocity/MarqueeVelocityPreview"), { ssr: false }),
   "letters-pull": dynamic(() => import("./letters-pull/LettersPullPreview"), { ssr: false }),
   constellation: dynamic(() => import("./constellation/ConstellationPreview"), { ssr: false }),
   "plus-grid": dynamic(() => import("./plus-grid/PlusGridPreview"), { ssr: false }),

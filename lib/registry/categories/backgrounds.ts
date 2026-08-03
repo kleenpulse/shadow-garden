@@ -14,20 +14,20 @@ const UTILS_VARIANT: Variant = {
 /** Backgrounds — full-canvas / ambient visual systems. */
 export const backgrounds: ComponentEntry[] = [
 	{
-		slug: "threads",
-		name: "Threads",
+		slug: "waves",
+		name: "Waves",
 		category: "Backgrounds",
 		tier: "free",
 		pausable: true,
 		description:
-			"A woven field of flowing threads rendered on a WebGL line shader.",
+			"A woven field of flowing waves rendered on a WebGL line shader.",
 		dependencies: ["ogl"],
 		cookbook: ["Loop", "Idle animation", "Hardware acceleration"],
 		variants: [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/threads/Threads.tsx",
+				file: "components/registry/waves/Waves.tsx",
 			},
 			{
 				lang: "ts",
@@ -42,7 +42,7 @@ export const backgrounds: ComponentEntry[] = [
 				name: "color",
 				kind: "color",
 				default: "#a855f7",
-				description: "Line color of the threads.",
+				description: "Line color of the waves.",
 			},
 			{
 				name: "amplitude",
@@ -78,7 +78,7 @@ export const backgrounds: ComponentEntry[] = [
 				min: 0,
 				max: 1,
 				step: 0.05,
-				description: "Overall opacity of the threads.",
+				description: "Overall opacity of the waves.",
 			},
 			{
 				name: "enableMouseInteraction",
@@ -333,8 +333,8 @@ export const backgrounds: ComponentEntry[] = [
 		],
 	},
 	{
-		slug: "gradual-blur",
-		name: "GradualBlur",
+		slug: "mask-blur",
+		name: "MaskBlur",
 		category: "Backgrounds",
 		tier: "free",
 		description:
@@ -345,7 +345,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/gradual-blur/GradualBlur.tsx",
+				file: "components/registry/mask-blur/MaskBlur.tsx",
 			},
 			UTILS_VARIANT,
 		],

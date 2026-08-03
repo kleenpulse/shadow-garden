@@ -9,8 +9,8 @@ Each component ships with a live preview, a Controls panel that tunes every prop
 <!-- catalog:start -->
 70 components across 4 categories:
 
-- **Backgrounds** (17) — WebGL/canvas ambience: Threads, Grainient, Light Rays, Gradual Blur, Side Rays, Dot Field, Strands, Ribbons, World Map ASCII, Constellation, Plus Grid, Barcode, Aurora, Starfield, Cinders, Shadowflame, Moire.
-- **Text Animations** (13) — type in motion: Morphing Text, Animated Number, Marquee Text, Variable Proximity, Scroll Velocity, Letters Pull, Word Reveal, Scramble Text, Long Shadow, Specter, Lumen, Redact, Split Flap.
+- **Backgrounds** (17) — WebGL/canvas ambience: Waves, Grainient, Light Rays, Mask Blur, Side Rays, Dot Field, Strands, Ribbons, World Map ASCII, Constellation, Plus Grid, Barcode, Aurora, Starfield, Cinders, Shadowflame, Moire.
+- **Text Animations** (13) — type in motion: Morphing Text, Animated Number, Marquee Text, Variable Proximity, Marquee Velocity, Letters Pull, Word Reveal, Scramble Text, Long Shadow, Specter, Lumen, Redact, Split Flap.
 - **Micro-interactions** (25) — small mechanisms, felt more than seen: Pixel Transition, Border Glow, Spotlight Shell, Animated Hamburger, Morph Dialog, Grow Dialog, Flip Card, Blueprint Card, Corner Letters, Hover List, Preloader, Circle Menu, Magnetic Button, Shadow Cursor, Torchlight, Dissolve, Tilt, Sigil, Rift, Unfold, Approach, Hold, Dismiss, Aperture, Intro Animation.
 - **Power-User Systems** (15) — command surfaces for operators: Sakura Tree, Command Palette, Physics Engine, Black Hole, Vortex Bloom, Flock Field, Smoke Field, Ripple Field, File Explorer, Umbral Orrery, Shadow Bloom, Parallax Rail, Elastic, Masonry, Rubiks Cube.
 

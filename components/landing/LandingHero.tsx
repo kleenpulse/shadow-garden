@@ -22,7 +22,7 @@ const RubiksCube = dynamic(
 	() => import("@/components/registry/rubiks-cube/RubiksCube"),
 	{ ssr: false },
 );
-const Threads = dynamic(() => import("@/components/registry/threads/Threads"), {
+const Waves = dynamic(() => import("@/components/registry/waves/Waves"), {
 	ssr: false,
 });
 const SideRays = dynamic(
@@ -66,7 +66,7 @@ const makeVariants = (reduce: boolean) => ({
 });
 
 // Full-viewport hero. The backdrop is the living instrument — the cube from md
-// up, Threads below it — running the same values the readout strip reports, and
+// up, Waves below it — running the same values the readout strip reports, and
 // paused once scrolled past.
 export default function LandingHero({ stats, hero }: LandingHeroProps) {
 	const ref = useRef<HTMLElement>(null);
@@ -77,7 +77,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 	// the server and on the first client render, so a single query cannot tell
 	// "narrow" from "not measured yet" — and anything gating on a separate
 	// mounted flag races it: the flag can land first, and that render reads as
-	// mobile and mounts Threads on a desktop before the cube replaces it. Both
+	// mobile and mounts Waves on a desktop before the cube replaces it. Both
 	// false means unmeasured and nothing renders; exactly one is true once the
 	// viewport is actually known, so the wrong backdrop can never mount.
 	const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -108,7 +108,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 	// DOM long before it draws anything — WebGL init plus a PMREM environment
 	// bake — so fading on mount spends the whole transition on a blank canvas and
 	// the cube arrives fully opaque, which reads as a snap rather than a fade.
-	// Threads needs no such signal: one fullscreen shader, no bake.
+	// Waves needs no such signal: one fullscreen shader, no bake.
 	const [lit, setLit] = useState(false);
 	const light = useCallback(() => setLit(true), []);
 	useEffect(() => {
@@ -126,7 +126,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 
 	// A function, not a constant: tailwind-merge treats every `opacity-*` as the
 	// same class group, so folding a steady-state `opacity-70` and the fade's
-	// `opacity-100` into one `cn` call silently drops the former and Threads
+	// `opacity-100` into one `cn` call silently drops the former and Waves
 	// renders at full strength. One opacity per element, chosen here.
 	const fade = (target: string) =>
 		cn("transition-opacity duration-1000 ease-out", lit ? target : "opacity-0");
@@ -206,11 +206,11 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 			) : null}
 
 			{/* Phones and small tablets get the field instead — the cube is 81 meshes
-          plus an environment bake, and it swallows a narrow viewport. Threads
+          plus an environment bake, and it swallows a narrow viewport. Waves
           bakes `[&_canvas]:touch-none` in ahead of its own className, so the
           same `touch-pan-y` override is required here; full-bleed, it would
           otherwise stop a finger drag from scrolling anywhere in the hero.
-          Threads has no `reducedMotion` prop — it folds into `paused`. */}
+          Waves has no `reducedMotion` prop — it folds into `paused`. */}
 			{isMobile ? (
 				<div
 					className={cn(
@@ -219,12 +219,12 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 						fade("opacity-70"),
 					)}
 				>
-					<PreviewBoundary slug="threads" label="Threads" variant="silent">
-						<Threads
-							color={hero.threads.color}
-							amplitude={hero.threads.amplitude}
-							distance={hero.threads.distance}
-							opacity={hero.threads.opacity}
+					<PreviewBoundary slug="waves" label="Waves" variant="silent">
+						<Waves
+							color={hero.waves.color}
+							amplitude={hero.waves.amplitude}
+							distance={hero.waves.distance}
+							opacity={hero.waves.opacity}
 							saturation={1}
 							maxDpr={1.5}
 							enableMouseInteraction={!reduce}
@@ -352,12 +352,12 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
               one is — naming a field before the viewport is known would print
               the same wrong answer the backdrop itself used to render. The span
               appears from 640px while the swap is at 768px, so 640–768
-              correctly reports Threads. */}
+              correctly reports Waves. */}
 					<span className="hidden sm:inline">
 						{isDesktop
 							? `Field: RubiksCube · Turn ${hero.cube.moveDuration}ms · Scramble ${hero.cube.scrambleMoveCount}`
 							: isMobile
-								? `Field: Threads · Amp ${hero.threads.amplitude.toFixed(2)} · Dist ${hero.threads.distance.toFixed(2)}`
+								? `Field: Waves · Amp ${hero.waves.amplitude.toFixed(2)} · Dist ${hero.waves.distance.toFixed(2)}`
 								: null}
 					</span>
 					<span className="w-full sm:w-auto">

@@ -9,7 +9,7 @@ export default function BarcodePreview({ values, reducedMotion }: PreviewProps) 
 	const mode = values.mode as "autoplay" | "scrub";
 	const scrollerRef = useRef<HTMLDivElement>(null);
 
-	// Auto-hiding scrollbar (same pattern as GradualBlurPreview).
+	// Auto-hiding scrollbar (same pattern as MaskBlurPreview).
 	const [scrolling, setScrolling] = useState(false);
 	const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 

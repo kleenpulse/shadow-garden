@@ -214,8 +214,8 @@ export const textAnimations: ComponentEntry[] = [
 		],
 	},
 	{
-		slug: "scroll-velocity",
-		name: "ScrollVelocity",
+		slug: "marquee-velocity",
+		name: "MarqueeVelocity",
 		category: "Text Animations",
 		tier: "free",
 		description:
@@ -232,7 +232,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/scroll-velocity/ScrollVelocity.tsx",
+				file: "components/registry/marquee-velocity/MarqueeVelocity.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -254,7 +254,7 @@ export const textAnimations: ComponentEntry[] = [
 				min: 10,
 				max: 100,
 				step: 5,
-				description: "Spring damping on the scroll-velocity smoothing.",
+				description: "Spring damping on the scroll velocity smoothing.",
 			},
 			{
 				name: "stiffness",
@@ -263,7 +263,7 @@ export const textAnimations: ComponentEntry[] = [
 				min: 100,
 				max: 800,
 				step: 20,
-				description: "Spring stiffness on the scroll-velocity smoothing.",
+				description: "Spring stiffness on the scroll velocity smoothing.",
 			},
 			{
 				name: "numCopies",

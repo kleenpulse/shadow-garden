@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import type { PreviewProps } from "@/lib/registry/types";
-import ScrollVelocity from "./ScrollVelocity";
+import MarqueeVelocity from "./MarqueeVelocity";
 
 function Row({ label }: { label: string }) {
 	return (
@@ -13,7 +13,7 @@ function Row({ label }: { label: string }) {
 	);
 }
 
-export default function ScrollVelocityPreview({
+export default function MarqueeVelocityPreview({
 	values,
 	reducedMotion,
 }: PreviewProps) {
@@ -39,12 +39,12 @@ export default function ScrollVelocityPreview({
 					<span className="text-center font-display text-[10px] tracking-widest text-ink-mute">
 						SCROLL — VELOCITY DRIVES THE DRIFT
 					</span>
-					<ScrollVelocity velocity={velocity} {...shared}>
+					<MarqueeVelocity velocity={velocity} {...shared}>
 						<Row label="SHADOW GARDEN" />
-					</ScrollVelocity>
-					<ScrollVelocity velocity={-velocity} {...shared}>
+					</MarqueeVelocity>
+					<MarqueeVelocity velocity={-velocity} {...shared}>
 						<Row label="ATOMIC" />
-					</ScrollVelocity>
+					</MarqueeVelocity>
 				</div>
 			</div>
 		</div>

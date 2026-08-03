@@ -1,15 +1,15 @@
 "use client";
 
 import type { PreviewProps } from "@/lib/registry/types";
-import Threads from "./Threads";
+import Waves from "./Waves";
 
-export default function ThreadsPreview({
+export default function WavesPreview({
   values,
   reducedMotion,
   paused,
 }: PreviewProps) {
   return (
-    <Threads
+    <Waves
       color={values.color as string}
       amplitude={values.amplitude as number}
       distance={values.distance as number}

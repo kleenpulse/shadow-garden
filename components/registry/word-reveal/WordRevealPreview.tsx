@@ -18,7 +18,7 @@ export default function WordRevealPreview({
 }: PreviewProps) {
 	const scrollerRef = useRef<HTMLDivElement>(null);
 
-	// Auto-hiding scrollbar (same pattern as GradualBlurPreview).
+	// Auto-hiding scrollbar (same pattern as MaskBlurPreview).
 	const [scrolling, setScrolling] = useState(false);
 	const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 

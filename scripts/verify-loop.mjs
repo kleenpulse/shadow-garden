@@ -2,7 +2,7 @@
  * Visual verification for entries on the animation runtime host (SPEC §V.V1/V2).
  *
  *   bun run build && bun run start          # in one shell
- *   bun run verify:loop side-rays threads   # in another
+ *   bun run verify:loop side-rays waves   # in another
  *
  * Zero dependencies: Node's native fetch and WebSocket drive headless Chrome
  * over CDP directly. Set CHROME_PATH to override browser discovery.
@@ -65,7 +65,7 @@ const NOT_BLANK_BYTES = 20000;
  *
  *  This is a liveness assertion, NOT a frame-rate one, and the floor is low on
  *  purpose. Headless runs on swiftshader with no GPU, where a heavy raymarched
- *  shader manages single-digit fps — threads and aurora legitimately draw 6–7
+ *  shader manages single-digit fps — waves and aurora legitimately draw 6–7
  *  times a second here. A frozen loop, by contrast, draws exactly zero more
  *  times no matter how long you watch. The signal is zero-versus-nonzero, so
  *  widen the window rather than raise the bar. */
