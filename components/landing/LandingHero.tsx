@@ -325,19 +325,19 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 
 				<motion.div
 					variants={rise}
-					className="pointer-events-auto mt-10 flex flex-wrap items-center gap-3 font-display text-[11px] uppercase tracking-[0.15em]"
+					className="pointer-events-auto mt-10 flex  items-center gap-3 font-display text-[10px] md:text-[11px] uppercase tracking-[0.15em]"
 				>
 					<Link
 						href="/components"
 						prefetch
-						className="rounded-md bg-accent px-5 flex items-center h-8 text-on-accent transition-colors hover:bg-accent-hover"
+						className="rounded-md bg-accent px-3 w-full sm:w-auto sm:px-5 flex items-center h-8 text-on-accent transition-colors hover:bg-accent-hover"
 					>
 						Enter the catalog
 					</Link>
 					<Link
 						href="/cookbook"
 						prefetch
-						className="rounded-md border border-hairline px-5  h-8 text-ink-dim transition-colors hover:border-accent-muted hover:text-ink inline-flex items-center gap-1.5"
+						className="rounded-md border border-hairline w-full sm:w-auto px-3 sm:px-5  h-8 text-ink-dim transition-colors hover:border-accent-muted hover:text-ink inline-flex items-center gap-1.5"
 					>
 						the Cook Book
 						<CookBookIcon className="size-5.5" aria-hidden />
