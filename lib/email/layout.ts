@@ -1,12 +1,14 @@
 import "server-only";
+import { SITE_URL } from "@/lib/site";
 
 // The branded HTML shell every template wears. Table-based, inline-styled —
 // email clients strip <style> and flexbox/grid, so everything is a table cell.
 // Palette from app/globals.css: graphite bench + one amethyst accent, Space
-// Mono wordmark (falls back to monospace where unloaded). This IS the customer
-// site, so links use NEXT_PUBLIC_SITE_URL directly.
+// Mono wordmark (falls back to monospace where unloaded).
 
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// Re-exported for the templates that already import it from here. The origin
+// itself lives in lib/site.ts — a second copy is how an email ships localhost links.
+export { SITE_URL };
 
 const BENCH_950 = "#0a0b0c";
 const PANEL = "#0e1012";

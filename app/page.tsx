@@ -22,6 +22,15 @@ import SectionRail from "@/components/landing/SectionRail";
 import SpotlightList from "@/components/landing/SpotlightList";
 import PageBottomBlur from "@/components/landing/PageBottomBlur";
 import GotoTop from "@/components/miscellaneous/goto-top";
+import JsonLd from "@/components/seo/JsonLd";
+import { productSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+
+// Title + description come from the root layout's defaults; only the canonical is
+// the page's own. Declared here rather than on the layout — see the note there.
+export const metadata: Metadata = {
+	alternates: { canonical: "/" },
+};
 
 // Each index shows a curated few — the full catalog lives at /components.
 // γ counts in cards on a two-column grid, so its cap keeps the rows even.
@@ -69,6 +78,7 @@ export default function Home() {
 
 	return (
 		<main className="relative w-full overflow-x-clip">
+			<JsonLd data={productSchema()} />
 			<div id="hero" />
 			<SmoothScroll />
 			<GotoTop />

@@ -16,7 +16,16 @@ export async function generateMetadata({
 	const { slug } = await params;
 	const entry = getEntry(slug);
 	if (!entry) return {};
-	return { title: `${entry.name} — Fullscreen`, description: entry.description };
+	return {
+		title: `${entry.name} — Fullscreen`,
+		description: entry.description,
+		// A stage, not a document: the whole body is one Suspense hole, so the
+		// prerendered HTML has no heading, no copy and no links. 70 of these would be
+		// half the site's URL inventory, all of it empty. `follow` stays on so the
+		// links that hydrate in still pass equity back to the catalog.
+		robots: { index: false, follow: true },
+		alternates: { canonical: `/components/${slug}/full` },
+	};
 }
 
 export default async function FullscreenPage({

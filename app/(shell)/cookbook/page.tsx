@@ -9,11 +9,34 @@ import CookbookBrowser, {
 import CookbookFlame from "@/components/shell/CookbookFlame";
 import GotoTop from "@/components/miscellaneous/goto-top";
 import PageBottomBlur from "@/components/landing/PageBottomBlur";
+import JsonLd from "@/components/seo/JsonLd";
+import { breadcrumbSchema, glossarySchema } from "@/lib/schema";
+import { SITE_OG_IMAGE } from "@/lib/seo";
+
+// The site's strongest long-tail asset: ~93 definition queries on one page. The
+// title leads with what people actually type ("animation glossary"), not the
+// in-house name for it.
+const TITLE = "Web Animation Glossary — The Motion Cook Book";
+const DESCRIPTION =
+	"The precise name for every web animation — stagger, rubber-banding, origin-aware, spring damping, easing, scrub. Every term defined, and wherever the bench can show you one running, a link straight to a live, tunable demo.";
 
 export const metadata: Metadata = {
-	title: "Motion Cook Book",
-	description:
-		"The precise name for every web animation — stagger, rubber-banding, origin-aware, spring damping — each linked to a live, tunable component that demonstrates it.",
+	title: TITLE,
+	description: DESCRIPTION,
+	alternates: { canonical: "/cookbook" },
+	openGraph: {
+		title: TITLE,
+		description: DESCRIPTION,
+		url: "/cookbook",
+		type: "article",
+		images: [SITE_OG_IMAGE],
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: TITLE,
+		description: DESCRIPTION,
+		images: [SITE_OG_IMAGE.url],
+	},
 };
 
 // Static: no cookie read, no URL read, no request-time data. The filter is a
@@ -43,6 +66,18 @@ export default function CookbookPage() {
 
 	return (
 		<div className="mx-auto max-w-7xl ">
+			{/* DefinedTermSet, not FAQPage: Google retired FAQ rich results for
+			    non-government/health sites in 2023, and a glossary is a term set. This
+			    is also the shape AI-search extractors read a definition out of. */}
+			<JsonLd
+				data={[
+					glossarySchema(),
+					breadcrumbSchema([
+						{ name: "Home", path: "/" },
+						{ name: "Motion Cook Book", path: "/cookbook" },
+					]),
+				]}
+			/>
 			<CookbookFlame />
 			<PageBottomBlur className="lg:hidden" />
 			<GotoTop />

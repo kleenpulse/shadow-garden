@@ -53,7 +53,9 @@ export default function CatalogCard({
 				className="absolute inset-0 z-0 rounded-lg"
 			/>
 			<div className="pointer-events-none relative z-10 flex items-center justify-between gap-2">
-				<span
+				{/* A heading, not a span: this is the card's title, and the catalog's
+				    outline should read as the list of components it actually is. */}
+				<h3
 					className={cn(
 						"font-display text-sm uppercase tracking-[0.08em] line-clamp-1 truncate",
 						slug === "grainient"
@@ -62,7 +64,7 @@ export default function CatalogCard({
 					)}
 				>
 					{displayName(name)}
-				</span>
+				</h3>
 				<div className="flex items-center gap-1.5">
 					<FavoriteButton
 						slug={slug}

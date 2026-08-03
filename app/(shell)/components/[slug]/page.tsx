@@ -6,6 +6,17 @@ import { getAllSlugs, getEntry } from "@/lib/registry";
 import { termAnchor } from "@/lib/cookbook";
 import { cn } from "@/lib/utils";
 import { displayName } from "@/lib/display-name";
+import { entryDescription, entryPath, entryTitle } from "@/lib/seo";
+import {
+	breadcrumbSchema,
+	componentSchema,
+	type Crumb,
+} from "@/lib/schema";
+import JsonLd from "@/components/seo/JsonLd";
+import Breadcrumbs from "@/components/shell/Breadcrumbs";
+import DemonstratedTerms from "@/components/shell/DemonstratedTerms";
+import RelatedComponents from "@/components/shell/RelatedComponents";
+import AppearsIn from "@/components/shell/AppearsIn";
 import WorkspaceSection from "@/components/shell/WorkspaceSection";
 import CodePanel from "@/components/shell/CodePanel";
 import PromptButton from "@/components/shell/PromptButton";
@@ -27,7 +38,21 @@ export async function generateMetadata({
 	const { slug } = await params;
 	const entry = getEntry(slug);
 	if (!entry) return {};
-	return { title: entry.name, description: entry.description };
+
+	const title = entryTitle(entry);
+	const description = entryDescription(entry);
+	const url = entryPath(entry);
+
+	return {
+		title,
+		description,
+		// The workspace writes tuned prop values into the URL via nuqs, so every
+		// shared "here's how I set it" link is a distinct crawlable URL. This is what
+		// collapses them back onto one page.
+		alternates: { canonical: url },
+		openGraph: { title, description, url, type: "article" },
+		twitter: { card: "summary_large_image", title, description },
+	};
 }
 
 function PanelSkeleton() {
@@ -54,8 +79,17 @@ export default async function ComponentPage({
 	const entry = getEntry(slug);
 	if (!entry) notFound();
 
+	const trail: Crumb[] = [
+		{ name: "Home", path: "/" },
+		{ name: "Components", path: "/components" },
+		{ name: entry.category, path: "/components" },
+		{ name: displayName(entry.name), path: entryPath(entry) },
+	];
+
 	return (
 		<article className="mx-auto max-w-7xl space-y-8">
+			<JsonLd data={[componentSchema(entry), breadcrumbSchema(trail)]} />
+			<Breadcrumbs trail={trail} />
 			<header className="border-b border-hairline pb-6">
 				<p className="font-display text-[11px] uppercase tracking-[0.22em] text-ink-mute">
 					{entry.category}
@@ -147,6 +181,14 @@ export default async function ComponentPage({
 					<PropsSection entry={entry} />
 				</Suspense>
 			</section>
+
+			{/* Both derived from the registry entry — no cookie read, no URL read, so
+			    they render into the static shell instead of behind a boundary. On a Pro
+			    page, where every panel above is a locked-state placeholder, this is the
+			    page's real content. */}
+			<DemonstratedTerms entry={entry} />
+			<RelatedComponents entry={entry} />
+			<AppearsIn entry={entry} />
 		</article>
 	);
 }

@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { registry } from "../../lib/registry/index";
+import { COLLECTIONS } from "../../lib/collections";
 import type { CheckContext, EntryImports, PreviewReads } from "./check";
 import { parsePreviewRegistrations, parseValueReads } from "./read-keys";
 import { parseSourceDefaults, type SourceDefault } from "./source-defaults";
@@ -196,6 +197,7 @@ export function buildContext(): CheckContext {
 
   return {
     registry,
+    collections: COLLECTIONS,
     dirs,
     // Registry paths are always forward-slashed; split so this works on Windows.
     fileExists: (relative) =>
