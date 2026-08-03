@@ -889,6 +889,27 @@ function CubeScene({
   );
 }
 
+// Reports when the canvas has been sized to actually fill its host, which is
+// the only safe moment to show it. react-three-fiber's own size is the signal
+// and it is reactive, so this needs no polling of its own — it re-runs whenever
+// that measurement changes and compares it against the host.
+function FitGate({
+  hostRef,
+  onFit,
+}: {
+  hostRef: { current: HTMLDivElement | null };
+  onFit: () => void;
+}) {
+  const width = useThree((s) => s.size.width);
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    const hostWidth = host.getBoundingClientRect().width;
+    if (hostWidth > 0 && Math.abs(width - hostWidth) <= 2) onFit();
+  }, [width, hostRef, onFit]);
+  return null;
+}
+
 // Signals the first drawn frame. useFrame runs inside the render loop, so this
 // fires after the environment bake and the first paint — unlike a mount effect,
 // which lands while the canvas is still blank.
@@ -915,39 +936,55 @@ export default function RubiksCube({
   // in the DOM; a lost canvas can never re-acquire a context, so we remount a
   // fresh canvas element by bumping the key on hide. Harmless on real unmount.
   //
-  // Do not narrow this to a webglcontextlost listener. The cleanup that detaches
-  // the listener runs at the same moment the router hides the tree — which is
-  // the moment the context dies — so the loss is never observed and the cube
-  // comes back as a permanently blank canvas.
+  // Deliberately unconditional, and every cleverer version has been worse. A
+  // webglcontextlost listener is detached by its own cleanup at the moment
+  // hiding kills the context, so the loss goes unseen and the cube returns
+  // permanently blank. Checking isContextLost() on the way back reads a flag the
+  // browser sets asynchronously — still false on that frame — so recovery lands
+  // a whole navigation late and the visit runs on a dead canvas. Holding the
+  // renderer in state so both signals could be combined then re-ran the effect
+  // with the dead renderer still in state, bumping on every pass: an unbounded
+  // remount loop that dies with "Maximum update depth exceeded". Swapping every
+  // time is cheap, total, and cannot loop. The cost it used to carry — a visibly
+  // tiny cube on the way back — is the reveal's problem below, not this one's.
   const [canvasEpoch, setCanvasEpoch] = useState(0);
   useEffect(() => () => setCanvasEpoch((e) => e + 1), []);
+  const hostRef = useRef<HTMLDivElement>(null);
 
-  // That remount has a cost the key alone does not pay: the replacement <canvas>
-  // sits at the HTML default 300x150 until react-three-fiber measures its
-  // container. Hiding survives the swap on an Activity-hidden route — the host
-  // had already faded the cube in — so the gap paints a tiny cube at full
-  // opacity, every time, for as long as the measure takes. onCreated fires only
-  // once the root is configured at a real size, so it is the signal for when
-  // this canvas is safe to show.
-  const [livedEpoch, setLivedEpoch] = useState(-1);
-  const configured = livedEpoch === canvasEpoch;
-  const handleCreated = useCallback(
-    () => setLivedEpoch(canvasEpoch),
-    [canvasEpoch],
-  );
+  // Reveal on a measured fit, never on a lifecycle callback. onCreated looks
+  // like the right signal and is not: react-three-fiber configures the root as
+  // soon as it has any non-zero measurement, so when the container has not
+  // settled it configures at the canvas's own default 300x150, fires onCreated,
+  // and the cube is revealed tiny before jumping to full size. Whether that
+  // happens is pure timing, which is why it reproduces on one machine and not
+  // another. Comparing the canvas's painted width against the host's is the one
+  // claim that cannot be made too early.
+  const [fitEpoch, setFitEpoch] = useState(-1);
+  const fitted = fitEpoch === canvasEpoch;
+  const markFitted = useCallback(() => setFitEpoch(canvasEpoch), [canvasEpoch]);
+
   const halted = paused || reducedMotion;
 
   return (
     <div
+      ref={hostRef}
       className={cn(
         "relative h-full w-full select-none [&_canvas]:cursor-grab [&_canvas]:touch-none [&_canvas:active]:cursor-grabbing",
-        !configured && "[&_canvas]:opacity-0",
+        // Fade rather than reveal. Every swap lands a brand new element, so the
+        // hidden state is its natural starting point and the transition runs
+        // itself — no reset to sequence, and it covers a swap the host cannot
+        // see. Keying this to the route would not: an Activity-restored page
+        // comes back on the same pathname, so nothing there ever changes.
+        // Both opacities are stated: they are one tailwind-merge class group,
+        // and a bare presence/absence pair lets an incoming className drop the
+        // one that happens to be last.
+        "[&_canvas]:transition-opacity [&_canvas]:duration-700 [&_canvas]:ease-out",
+        fitted ? "[&_canvas]:opacity-100" : "[&_canvas]:opacity-0",
         className,
       )}
     >
       <Canvas
         key={canvasEpoch}
-        onCreated={handleCreated}
         flat
         dpr={[1, 1.75]}
         frameloop={halted ? "demand" : "always"}
@@ -964,6 +1001,7 @@ export default function RubiksCube({
         // handles real layout changes, which is the only resize that is true.
         resize={{ scroll: false }}
       >
+        <FitGate hostRef={hostRef} onFit={markFitted} />
         <ReadySignal onReady={onReady} />
         <CubeScene
           paused={paused}
