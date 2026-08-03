@@ -42,7 +42,7 @@ function hexToRgb01(hex: string): [number, number, number] {
 	return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
 }
 
-interface ThreadsProps {
+interface WavesProps {
 	/** Hex color (ogl Color also accepts hex). */
 	color?: string;
 	amplitude?: number;
@@ -174,7 +174,7 @@ void main() {
 }
 `;
 
-const Threads: React.FC<ThreadsProps> = ({
+const Waves: React.FC<WavesProps> = ({
 	color = "#a855f7",
 	amplitude = 1.5,
 	distance = 0.2,
@@ -266,7 +266,7 @@ const Threads: React.FC<ThreadsProps> = ({
 			});
 
 			if (!gl.getProgramParameter(program.program, gl.LINK_STATUS)) {
-				throw new Error("Threads shader program failed to link");
+				throw new Error("Waves shader program failed to link");
 			}
 
 			const mesh = new Mesh(gl, { geometry, program });
@@ -358,7 +358,7 @@ const Threads: React.FC<ThreadsProps> = ({
 			};
 		} catch (err) {
 			console.warn(
-				"Threads: WebGL init failed, falling back to static image",
+				"Waves: WebGL init failed, falling back to static image",
 				err,
 			);
 			if (gl) {
@@ -395,7 +395,7 @@ const Threads: React.FC<ThreadsProps> = ({
 	}
 
 	// The canvas is appended imperatively by OGL, so the touch lock is scoped to it
-	// through the container: a finger drag distorts the threads, page stays put.
+	// through the container: a finger drag distorts the waves, page stays put.
 	return (
 		<div
 			ref={containerRef}
@@ -404,4 +404,4 @@ const Threads: React.FC<ThreadsProps> = ({
 	);
 };
 
-export default Threads;
+export default Waves;

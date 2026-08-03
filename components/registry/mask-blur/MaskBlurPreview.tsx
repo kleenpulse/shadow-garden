@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { PreviewProps } from "@/lib/registry/types";
 import { cn } from "@/lib/utils";
-import GradualBlur from "./GradualBlur";
+import MaskBlur from "./MaskBlur";
 
 const CARDS = [
 	{
@@ -40,7 +40,7 @@ const CARDS = [
 	},
 ];
 
-export default function GradualBlurPreview({ values }: PreviewProps) {
+export default function MaskBlurPreview({ values }: PreviewProps) {
 	const position = values.position as "top" | "bottom" | "left" | "right";
 	const vertical = position === "top" || position === "bottom";
 
@@ -115,7 +115,7 @@ export default function GradualBlurPreview({ values }: PreviewProps) {
 			</div>
 
 			{/* Pinned outside the scroller so the edge never drifts with the content. */}
-			<GradualBlur
+			<MaskBlur
 				position={position}
 				strength={values.strength as number}
 				divCount={values.divCount as number}

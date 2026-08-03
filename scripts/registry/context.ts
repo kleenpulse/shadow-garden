@@ -248,7 +248,7 @@ function resolveImport(from: string, spec: Specifier): string | null {
   return null;
 }
 
-/** `./threads/ThreadsPreview` → the .tsx (or .ts) file it resolves to. */
+/** `./waves/WavesPreview` → the .tsx (or .ts) file it resolves to. */
 function resolvePreview(registryDir: string, specifier: string): string | null {
   const base = path.join(registryDir, ...specifier.replace(/^\.\//, "").split("/"));
   for (const ext of [".tsx", ".ts"]) {

@@ -21,7 +21,7 @@ type Position = "top" | "bottom" | "left" | "right";
 type Curve = "linear" | "bezier" | "ease-in" | "ease-out" | "ease-in-out";
 type Target = "parent" | "page";
 
-export interface GradualBlurProps {
+export interface MaskBlurProps {
   position?: Position;
   strength?: number;
   height?: string;
@@ -113,7 +113,7 @@ function edgeStyle(
   }
 }
 
-export default function GradualBlur({
+export default function MaskBlur({
   position = "bottom",
   strength = 1,
   height = "6rem",
@@ -132,7 +132,7 @@ export default function GradualBlur({
   className,
   style,
   children,
-}: GradualBlurProps) {
+}: MaskBlurProps) {
   const reduce = useReducedMotion() ?? false;
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);

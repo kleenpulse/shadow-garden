@@ -475,7 +475,7 @@ const NOT_A_LOOP = new Map<string, string>([
   ["circle-menu", "RO measures layout geometry for the arc; no canvas"],
   ["dissolve", "RO measures for a one-shot particle burst"],
   ["marquee-text", "RO measures text width; the marquee itself is CSS"],
-  ["scroll-velocity", "RO measures for a scroll-driven transform"],
+  ["marquee-velocity", "RO measures for a scroll-driven transform"],
   [
     "parallax-rail",
     "RO measures rail overflow and pin height; the scrub itself is scroll-driven",

@@ -49,7 +49,7 @@ function block(text: string, lang = ""): string {
   return `${bars}${lang}\n${text.replace(/\s+$/, "")}\n${bars}`;
 }
 
-/** `<Threads color="#a855f7" amplitude={1.5} />` from the documented defaults. */
+/** `<Waves color="#a855f7" amplitude={1.5} />` from the documented defaults. */
 function usage(entry: ComponentEntry): string {
   const attr = (prop: PropSchema): string =>
     prop.kind === "number" || prop.kind === "boolean"

@@ -32,14 +32,14 @@ export interface VelocityMapping {
   output: [number, number];
 }
 
-export interface ScrollVelocityProps {
+export interface MarqueeVelocityProps {
   /** Row content, repeated `numCopies` times to fill the loop. */
   children: ReactNode;
   /** Base drift in px/s; negative drifts left-to-right. */
   velocity?: number;
-  /** Spring damping on the scroll-velocity smoothing. */
+  /** Spring damping on the scroll velocity smoothing. */
   damping?: number;
-  /** Spring stiffness on the scroll-velocity smoothing. */
+  /** Spring stiffness on the scroll velocity smoothing. */
   stiffness?: number;
   /** How many copies of the content tile the loop. */
   numCopies?: number;
@@ -76,7 +76,7 @@ function wrap(min: number, max: number, v: number): number {
   return ((((v - min) % range) + range) % range) + min;
 }
 
-export default function ScrollVelocity({
+export default function MarqueeVelocity({
   children,
   velocity = 50,
   damping = 50,
@@ -88,7 +88,7 @@ export default function ScrollVelocity({
   className,
   containerClassName,
   style,
-}: ScrollVelocityProps) {
+}: MarqueeVelocityProps) {
   const [osReduced, setOsReduced] = useState(false);
 
   // Computed in an effect so the pre-render never touches `window`.

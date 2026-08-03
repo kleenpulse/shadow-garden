@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import GradualBlur from "@/components/registry/gradual-blur/GradualBlur";
+import MaskBlur from "@/components/registry/mask-blur/MaskBlur";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 
@@ -71,7 +71,7 @@ export default function PageBottomBlur({ className }: { className?: string }) {
 			}}
 			className={cn(className)}
 		>
-			<GradualBlur
+			<MaskBlur
 				target={className ? "page" : "parent"}
 				position="bottom"
 				exponential

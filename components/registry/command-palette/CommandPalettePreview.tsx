@@ -12,7 +12,7 @@ const GROUPS: CommandGroupDef[] = [
     heading: "Navigate",
     commands: [
       { id: "catalog", label: "Go to Catalog", icon: Home, keywords: ["catalog", "components", "browse"], hint: "G C" },
-      { id: "threads", label: "Open Threads", icon: Sparkles, keywords: ["threads", "background", "webgl"] },
+      { id: "waves", label: "Open Waves", icon: Sparkles, keywords: ["waves", "background", "webgl"] },
     ],
   },
   {
