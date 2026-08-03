@@ -6,6 +6,7 @@ import { installCommand } from "./install";
 import { formatDefault, typeLabel } from "./kinds";
 import { ROLE_TABLE, rolesPresent } from "./roles";
 import type { ComponentEntry, PropSchema } from "./types";
+import { SITE_URL } from "@/lib/site";
 
 // The AI-ready integration brief. Derived, never authored twice: the same
 // PropSchema[] that drives the Controls panel and the props table also writes the
@@ -28,8 +29,6 @@ export type PromptResult =
 // asserted anyway — one cheap guard beats reasoning about every future caller.
 const PROMPTS_ROOT = path.join(process.cwd(), "prompts");
 const SLUG = /^[a-z0-9-]+$/;
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL;
 
 /**
  * A fence long enough to survive the content. Component source is TSX and rarely
@@ -170,7 +169,7 @@ function buildPrompt(
       `- **Component:** ${entry.name}`,
       `- **Category:** ${entry.category}`,
       `- **Summary:** ${entry.description}`,
-      ...(SITE ? [`- **Reference:** ${SITE}/components/${entry.slug}`] : []),
+      `- **Reference:** ${SITE_URL}/components/${entry.slug}`,
     ].join("\n"),
   );
 

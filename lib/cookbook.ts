@@ -510,6 +510,16 @@ export const COOKBOOK_TERMS: ReadonlySet<string> = new Set(
   COOKBOOK.flatMap((section) => section.terms.map((t) => t.term)),
 );
 
+/** Term → its definition. Lets a component page print what its declared terms
+ *  actually mean instead of listing bare words, without duplicating the glossary. */
+const TERM_INDEX: ReadonlyMap<string, string> = new Map(
+  COOKBOOK.flatMap((section) => section.terms.map((t) => [t.term, t.description])),
+);
+
+export function termDefinition(term: string): string | undefined {
+  return TERM_INDEX.get(term);
+}
+
 /** URL-safe anchor for a term, so /cookbook#spring resolves from anywhere. */
 export function termAnchor(term: string): string {
   return term

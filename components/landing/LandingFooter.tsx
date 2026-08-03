@@ -1,6 +1,22 @@
 import Link from "next/link";
-import { anchorFor, SECTION_IDS, type LandingData } from "@/components/landing/data";
+import {
+	anchorFor,
+	SECTION_IDS,
+	type LandingData,
+} from "@/components/landing/data";
 import SmoothAnchor from "@/components/landing/SmoothAnchor";
+import { COLLECTIONS, collectionPath } from "@/lib/collections";
+
+// The homepage is the strongest page on the site, so the collection spokes get a
+// link from it rather than living only in the shell footer. Four, not eighteen —
+// this is a colophon, and it sits beside a four-row exhibit list. The
+// /collections index carries the rest.
+const FEATURED = [
+	"react-stagger-animation",
+	"react-drag-animations",
+	"react-hover-effects",
+	"react-micro-interactions",
+];
 
 // Quiet colophon — the last of the page's seven plates (η).
 export default function LandingFooter({
@@ -10,9 +26,16 @@ export default function LandingFooter({
 	stats: LandingData["stats"];
 	exhibits: LandingData["exhibits"];
 }) {
+	const featured = FEATURED.map((slug) =>
+		COLLECTIONS.find((collection) => collection.slug === slug),
+	).filter((collection) => collection !== undefined);
+
 	return (
-		<footer id={SECTION_IDS.colophon} className="scroll-mt-10 border-t border-hairline">
-			<div className="mx-auto grid w-full max-w-7xl gap-10 px-3 py-14 sm:px-6 sm:grid-cols-[1fr_auto]">
+		<footer
+			id={SECTION_IDS.colophon}
+			className="scroll-mt-10 border-t border-hairline"
+		>
+			<div className="mx-auto grid w-full max-w-7xl gap-10 px-3 py-14 sm:px-6 sm:grid-cols-[1fr_auto_auto]">
 				<div>
 					<p className="font-display text-sm uppercase tracking-[0.28em] text-ink">
 						Shadow Garden
@@ -41,6 +64,26 @@ export default function LandingFooter({
 						className="mt-2 text-accent transition-colors hover:text-accent-hover"
 					>
 						Full catalog →
+					</Link>
+				</nav>
+				<nav
+					aria-label="Collections"
+					className="flex flex-col gap-2 font-display text-[10px] uppercase tracking-[0.22em]"
+				>
+					{featured.map((collection) => (
+						<Link
+							key={collection.slug}
+							href={collectionPath(collection)}
+							className="text-ink-dim transition-colors hover:text-accent"
+						>
+							{collection.title}
+						</Link>
+					))}
+					<Link
+						href="/collections"
+						className="mt-2 text-accent transition-colors hover:text-accent-hover"
+					>
+						All collections →
 					</Link>
 				</nav>
 			</div>

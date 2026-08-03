@@ -5,6 +5,14 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { RouteProgress } from "@/components/providers/route-progress";
 import { IntroOverlay } from "@/components/intro/IntroOverlay";
 import { DevFab } from "@/components/dev/DevFab";
+import JsonLd from "@/components/seo/JsonLd";
+import { siteSchema } from "@/lib/schema";
+import {
+	SITE_DESCRIPTION,
+	SITE_NAME,
+	SITE_TAGLINE,
+	SITE_URL,
+} from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,13 +32,53 @@ const spaceMono = Space_Mono({
 	weight: ["400", "700"],
 });
 
+// No `alternates.canonical` here on purpose. Metadata merges shallowly, so a
+// canonical on the root layout is inherited by every page that doesn't set its own
+// — pointing all 74 URLs at `/` and suppressing the lot. Each page declares its
+// own; a future page that forgets gets no canonical (neutral) rather than the
+// wrong one (fatal).
 export const metadata: Metadata = {
+	metadataBase: new URL(SITE_URL),
 	title: {
-		default: "Shadow Garden",
-		template: "%s — Shadow Garden",
+		default: `${SITE_TAGLINE} — ${SITE_NAME}`,
+		template: `%s — ${SITE_NAME}`,
 	},
-	description:
-		"A tunable gallery of animation-forward React components. Preview live, dial in the parameters, copy the source.",
+	description: SITE_DESCRIPTION,
+	applicationName: SITE_NAME,
+	authors: [{ name: SITE_NAME, url: SITE_URL }],
+	creator: SITE_NAME,
+	publisher: SITE_NAME,
+	keywords: [
+		"react animation components",
+		"react component library",
+		"animated react components",
+		"framer motion components",
+		"webgl background react",
+		"next.js components",
+		"tailwind components",
+		"react ui components",
+		"motion design system",
+		"typescript react components",
+	],
+	openGraph: {
+		type: "website",
+		siteName: SITE_NAME,
+		locale: "en_US",
+		url: SITE_URL,
+		title: `${SITE_TAGLINE} — ${SITE_NAME}`,
+		description: SITE_DESCRIPTION,
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: `${SITE_TAGLINE} — ${SITE_NAME}`,
+		description: SITE_DESCRIPTION,
+	},
+	robots: {
+		index: true,
+		follow: true,
+		googleBot: { index: true, follow: true, "max-image-preview": "large" },
+	},
+	formatDetection: { telephone: false, address: false, email: false },
 };
 
 export default function RootLayout({
@@ -48,6 +96,9 @@ export default function RootLayout({
 			className={`${geistSans.variable} ${geistMono.variable} ${spaceMono.variable} h-full antialiased`}
 		>
 			<body className="min-h-full flex flex-col font-sans">
+				{/* Who the site is, on every route. Static data, so it lands in the
+				    prerendered shell rather than streaming in behind a boundary. */}
+				<JsonLd data={siteSchema()} />
 				{/* Pre-paint: restore the persisted sidebar width into a CSS var before
             first paint so a resized sidebar renders at its saved width, no flash.
             Reads the same zustand-persist key/shape + clamps as lib/store.ts. */}

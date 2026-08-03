@@ -10,6 +10,7 @@
  * CheckContext buys — the rules never touch disk, so a fake registry is enough.
  */
 import type { ComponentEntry } from "../../lib/registry/types";
+import type { Collection } from "../../lib/collections";
 import { checkRegistry, type CheckContext } from "./check";
 import { RULES } from "./rules";
 
@@ -32,6 +33,28 @@ function entry(over: Partial<ComponentEntry> = {}): ComponentEntry {
   };
 }
 
+/**
+ * A collection that passes every collection rule against the entries below.
+ * The intro is padded to clear the 40-word floor — the rules count words, not
+ * meaning, so filler is the honest way to say "this axis is not what's broken".
+ */
+function collection(over: Partial<Collection> = {}): Collection {
+  return {
+    slug: "ok-collection",
+    title: "Ok Collection",
+    intro: Array.from({ length: 45 }, (_, i) => `word${i}`).join(" "),
+    filter: { kind: "category", category: "Backgrounds" },
+    ...over,
+  };
+}
+
+/** Enough distinct entries for a collection to clear COLLECTION_FLOOR. */
+function fiveEntries(over: Partial<ComponentEntry> = {}): ComponentEntry[] {
+  return Array.from({ length: 5 }, (_, i) =>
+    entry({ slug: `ok-entry-${i}`, ...over }),
+  );
+}
+
 /** A preview that reads exactly the props the entry declares. */
 function readsAll(registry: ComponentEntry[]) {
   return (slug: string) => ({
@@ -48,6 +71,11 @@ function readsAll(registry: ComponentEntry[]) {
 function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): CheckContext {
   return {
     registry,
+    // Empty by default: the real manifest resolved against a one-entry synthetic
+    // registry would fail every floor check, so each collection case supplies its
+    // own. An empty manifest is trivially clean, which is what the clean-entry
+    // assertion at the bottom needs.
+    collections: [],
     dirs: new Set(registry.map((e) => e.slug)),
     fileExists: () => true,
     packageDeps: new Set(["ogl"]),
@@ -349,6 +377,49 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
       dirs: new Set(["masonry"]),
       previewKeys: new Set(["masonry"]),
       loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false, nullishHalts: 0 }),
+    }),
+  },
+  {
+    rule: "collection-slug",
+    ctx: context(fiveEntries(), {
+      collections: [collection({ slug: "Not Kebab Case" })],
+    }),
+  },
+  {
+    // Filter is fine, registry is just too small to justify the page.
+    rule: "collection-floor",
+    ctx: context([entry()], { collections: [collection()] }),
+  },
+  {
+    rule: "collection-terms",
+    ctx: context(fiveEntries({ cookbook: ["Loop"] }), {
+      collections: [
+        collection({ filter: { kind: "terms", terms: ["Not A Real Term"] } }),
+      ],
+    }),
+  },
+  {
+    rule: "collection-deps",
+    ctx: context(fiveEntries({ dependencies: ["ogl"] }), {
+      collections: [
+        collection({ filter: { kind: "deps", packages: ["never-installed"] } }),
+      ],
+    }),
+  },
+  {
+    rule: "collection-intro",
+    ctx: context(fiveEntries(), {
+      collections: [collection({ intro: "Too short." })],
+    }),
+  },
+  {
+    // Two filters, one membership — the near-duplicate this rule exists to catch.
+    rule: "collection-overlap",
+    ctx: context(fiveEntries(), {
+      collections: [
+        collection({ slug: "by-category" }),
+        collection({ slug: "by-tier", filter: { kind: "tier", tier: "free" } }),
+      ],
     }),
   },
 ];

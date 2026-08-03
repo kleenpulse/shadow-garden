@@ -2,6 +2,7 @@ import type { CheckContext, Finding, Rule } from "./check";
 import { defaultsAgree } from "./source-defaults";
 import { validateDefault } from "../../lib/registry/kinds";
 import { COOKBOOK_TERMS } from "../../lib/cookbook";
+import { collectionTerms, resolveCollection } from "../../lib/collections";
 
 // The cheap rules — pure data plus one readdir and one package.json read. Each
 // one closes an invariant that used to fail silently at runtime: a wrong entry
@@ -671,6 +672,168 @@ function eachVariant(
   return out;
 }
 
+// ── /collections ────────────────────────────────────────────────────────────
+//
+// A collection page is a filtered view of the registry, which means it can rot
+// in ways an entry cannot: the filter stops matching, two collections drift into
+// the same membership, a page falls under the size where it is worth having. All
+// four are invisible in review — you would have to resolve every filter by hand
+// to see them — and all four are cheap to compute here.
+
+/** Under this, the page is thin content, which is worse than not shipping it. */
+const COLLECTION_FLOOR = 5;
+
+/** Under this, the intro is a heading and the page is a bare grid. */
+const COLLECTION_INTRO_WORDS = 40;
+
+/** Above this, two pages compete for one query instead of ranking for two. */
+const COLLECTION_MAX_JACCARD = 0.8;
+
+const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+const collectionSlug: Rule = {
+  id: "collection-slug",
+  severity: "error",
+  what: "every collection slug is unique and kebab-case",
+  run(ctx) {
+    const out: Finding[] = [];
+    const seen = new Map<string, number>();
+
+    for (const collection of ctx.collections) {
+      seen.set(collection.slug, (seen.get(collection.slug) ?? 0) + 1);
+      if (!KEBAB.test(collection.slug)) {
+        out.push({
+          slug: collection.slug,
+          detail: "not kebab-case — the slug is the URL at /collections/<slug>",
+        });
+      }
+    }
+
+    for (const [slug, n] of seen) {
+      if (n > 1) {
+        out.push({
+          slug,
+          detail: `declared ${n} times — getCollection() resolves the first, the rest are unreachable`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const collectionFloor: Rule = {
+  id: "collection-floor",
+  severity: "error",
+  what: `every collection resolves at least ${COLLECTION_FLOOR} components`,
+  run(ctx) {
+    return ctx.collections
+      .map((collection) => ({
+        collection,
+        n: resolveCollection(collection, ctx.registry).length,
+      }))
+      .filter((row) => row.n < COLLECTION_FLOOR)
+      .map(({ collection, n }) => ({
+        slug: collection.slug,
+        detail: `resolves ${n} component(s), under the floor of ${COLLECTION_FLOOR} — either the filter is wrong or the page should not exist yet`,
+      }));
+  },
+};
+
+const collectionTermDefined: Rule = {
+  id: "collection-terms",
+  severity: "error",
+  what: "every term a collection filters on is defined in the cookbook",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const collection of ctx.collections) {
+      for (const term of collectionTerms(collection)) {
+        if (!COOKBOOK_TERMS.has(term)) {
+          out.push({
+            slug: collection.slug,
+            detail: `filters on "${term}", which lib/cookbook.ts does not define — the filter matches nothing and the page prints no definition`,
+          });
+        }
+      }
+    }
+    return out;
+  },
+};
+
+const collectionDepDeclared: Rule = {
+  id: "collection-deps",
+  severity: "error",
+  what: "every package a collection filters on is declared by at least one entry",
+  run(ctx) {
+    const declared = new Set(
+      ctx.registry.flatMap((entry) => entry.dependencies ?? []),
+    );
+    const out: Finding[] = [];
+
+    for (const collection of ctx.collections) {
+      if (collection.filter.kind !== "deps") continue;
+      for (const pkg of collection.filter.packages) {
+        if (!declared.has(pkg)) {
+          out.push({
+            slug: collection.slug,
+            detail: `filters on "${pkg}", which no entry declares — a renamed or dropped dependency empties the page silently`,
+          });
+        }
+      }
+    }
+    return out;
+  },
+};
+
+const collectionIntro: Rule = {
+  id: "collection-intro",
+  severity: "error",
+  what: `every collection carries an intro of at least ${COLLECTION_INTRO_WORDS} words`,
+  run(ctx) {
+    return ctx.collections
+      .map((collection) => ({
+        collection,
+        words: collection.intro.trim().split(/\s+/).filter(Boolean).length,
+      }))
+      .filter((row) => row.words < COLLECTION_INTRO_WORDS)
+      .map(({ collection, words }) => ({
+        slug: collection.slug,
+        detail: `intro is ${words} word(s), under ${COLLECTION_INTRO_WORDS} — without it the page is a filtered grid under a heading, which is what a thin-content penalty looks like`,
+      }));
+  },
+};
+
+const collectionOverlap: Rule = {
+  id: "collection-overlap",
+  severity: "error",
+  what: `no two collections share ${COLLECTION_MAX_JACCARD} or more of their members`,
+  run(ctx) {
+    const sets = ctx.collections.map((collection) => ({
+      slug: collection.slug,
+      members: new Set(
+        resolveCollection(collection, ctx.registry).map((entry) => entry.slug),
+      ),
+    }));
+
+    const out: Finding[] = [];
+    for (const [index, a] of sets.entries()) {
+      for (const b of sets.slice(index + 1)) {
+        if (a.members.size === 0 || b.members.size === 0) continue;
+        const shared = [...a.members].filter((slug) =>
+          b.members.has(slug),
+        ).length;
+        const jaccard = shared / (a.members.size + b.members.size - shared);
+        if (jaccard >= COLLECTION_MAX_JACCARD) {
+          out.push({
+            slug: a.slug,
+            detail: `${Math.round(jaccard * 100)}% the same members as "${b.slug}" — near-duplicate pages cannibalise each other instead of ranking for two queries`,
+          });
+        }
+      }
+    }
+    return out;
+  },
+};
+
 export const RULES: Rule[] = [
   slugUnique,
   slugMatchesDir,
@@ -696,4 +859,10 @@ export const RULES: Rule[] = [
   noNullishHalt,
   loopHostShipsTheHook,
   loopAllowlistCurrent,
+  collectionSlug,
+  collectionFloor,
+  collectionTermDefined,
+  collectionDepDeclared,
+  collectionIntro,
+  collectionOverlap,
 ];

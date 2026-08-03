@@ -1,4 +1,5 @@
 import type { ComponentEntry } from "../../lib/registry/types";
+import type { Collection } from "../../lib/collections";
 import type { SourceDefault } from "./source-defaults";
 import type { LoopUsage } from "./loop-usage";
 
@@ -57,6 +58,12 @@ export interface EntryImports {
 
 export interface CheckContext {
   registry: ComponentEntry[];
+  /**
+   * The /collections manifest. Every collection's membership is computed from
+   * `registry`, so the two travel together — and injecting it here is what lets
+   * the selftest feed the collection rules a broken manifest with no disk.
+   */
+  collections: Collection[];
   /** Directory names present directly under components/registry/. */
   dirs: Set<string>;
   /** Existence probe for a repo-root-relative, forward-slashed path. */
