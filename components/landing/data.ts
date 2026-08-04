@@ -96,6 +96,26 @@ export interface LandingData {
 
 const GREEK = ["α", "β", "γ", "δ"] as const;
 
+/**
+ * Landing running order — deliberately not the registry's. Power-User Systems
+ * carries the File Explorer reel, the page's most substantial live exhibit, so
+ * it runs before the micro-interaction card grid.
+ *
+ * The greek letter and the plate index both follow POSITION, not category, so
+ * reordering here renumbers the page on its own. (The exhibit components are
+ * still named after the letters they originally sat on; `exhibitFor` in
+ * app/page.tsx maps by category, so the filenames are labels, not wiring.)
+ *
+ * Anything the registry adds and this list doesn't name still renders, appended
+ * in registry order — a new category can never silently vanish from the page.
+ */
+const EXHIBIT_ORDER: readonly Category[] = [
+	"Backgrounds",
+	"Text Animations",
+	"Power-User Systems",
+	"Micro-interactions",
+];
+
 /** "MorphingText" → "Morphing Text" — registry names are PascalCase; the page displays them spaced. */
 function spaceName(name: string): string {
 	return name.replace(/([a-z])([A-Z])/g, "$1 $2");
@@ -134,7 +154,15 @@ function colorProp(slug: string, name: string): string {
 export function buildLandingData(): LandingData {
 	const free = registry.filter((entry) => entry.tier === "free").length;
 
-	const exhibits: LandingExhibit[] = groupByCategory().map((group, i) => ({
+	const grouped = groupByCategory();
+	const ordered = [
+		...EXHIBIT_ORDER.map((category) =>
+			grouped.find((group) => group.category === category),
+		).filter((group) => group !== undefined),
+		...grouped.filter((group) => !EXHIBIT_ORDER.includes(group.category)),
+	];
+
+	const exhibits: LandingExhibit[] = ordered.map((group, i) => ({
 		greek: GREEK[i] ?? "·",
 		index: String(i + 1).padStart(2, "0"),
 		category: group.category,

@@ -12,7 +12,7 @@ import type {
 	ExplorerState,
 	FileExplorerProps,
 } from "./types";
-import { fileExtension } from "./util";
+import { fileExtension, kindForNode } from "./util";
 
 export function initExplorerState(
 	props: Pick<FileExplorerProps, "defaultView" | "sortBy" | "sortDir">,
@@ -205,9 +205,16 @@ export function filterNodes(
 }
 
 /**
- * Sort folders and files together by the chosen key + direction — a single
- * unified order so files participate in every sort, not just folders.
- * (Directories report size/mtime 0, so they group naturally under those keys.)
+ * Sort a listing the way a desktop file manager does.
+ *
+ * Folders are a separate band that always sits above the files, under every
+ * sort field AND both directions — the grouping is structural, not part of
+ * what the direction toggle reverses. Windows Explorer and Finder both behave
+ * this way, and it is why "sort by size descending" still opens with folders
+ * rather than burying them at the bottom on a 0-byte tiebreak.
+ *
+ * Within each band the chosen key applies, with `numeric` collation so
+ * `render-2` precedes `render-10` instead of following it.
  */
 export function sortNodes(
 	nodes: FileNode[],
@@ -216,6 +223,10 @@ export function sortNodes(
 ): FileNode[] {
 	const dir = sortDir === "asc" ? 1 : -1;
 	return [...nodes].sort((a, b) => {
+		// Not multiplied by `dir` — flipping the direction reorders each band, it
+		// does not send folders to the bottom.
+		if (a.kind !== b.kind) return a.kind === "directory" ? -1 : 1;
+
 		let cmp = 0;
 		switch (sortBy) {
 			case "name":
@@ -228,9 +239,12 @@ export function sortNodes(
 				cmp = a.size - b.size;
 				break;
 			case "type":
+				// Kind before extension: a Type sort is asked for to put like with
+				// like, and raw extension alphabetising scatters one media set
+				// across the listing (.mov far from .mp4, .avif next to .avi).
 				cmp =
-					fileExtension(a.name).localeCompare(fileExtension(b.name)) ||
-					collate(a.name, b.name);
+					kindForNode(a).localeCompare(kindForNode(b)) ||
+					fileExtension(a.name).localeCompare(fileExtension(b.name));
 				break;
 		}
 		// Stable tiebreak on name keeps ordering deterministic.

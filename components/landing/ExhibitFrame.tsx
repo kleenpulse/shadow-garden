@@ -7,6 +7,13 @@ import { cn } from "@/lib/utils";
 export interface ExhibitState {
   /** True while the frame is near the viewport and motion is allowed. */
   active: boolean;
+  /**
+   * Visibility alone, independent of the motion preference. `active` is already
+   * false for the whole session under reduced motion, so it can't answer
+   * "has this scrolled away?" — which δ needs to hand a taken-over exhibit back
+   * to its reel.
+   */
+  inView: boolean;
   reducedMotion: boolean;
 }
 
@@ -41,7 +48,9 @@ export default function ExhibitFrame({
         className,
       )}
     >
-      {mounted ? children({ active: inView && !reduce, reducedMotion: reduce }) : null}
+      {mounted
+        ? children({ active: inView && !reduce, inView, reducedMotion: reduce })
+        : null}
     </div>
   );
 }
