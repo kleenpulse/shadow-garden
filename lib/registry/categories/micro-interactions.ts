@@ -2150,4 +2150,461 @@ export const microInteractions: ComponentEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "segmented",
+		name: "Segmented",
+		category: "Micro-interactions",
+		tier: "free",
+		addedAt: "2026-08-06",
+		description:
+			"A segmented control whose indicator travels on a shared layout id and smears in the direction it is moving.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Direction-aware transition",
+			"Layout animation",
+			"Squash & stretch",
+			"Velocity",
+			"Spring",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/segmented/Segmented.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "indicator",
+				kind: "enum",
+				default: "solid",
+				options: ["solid", "outline", "underline"],
+				description:
+					"How the active segment is marked. All three are the same travelling element at different settings — the shared layout id does not change, so switching between them costs no extra animation code.",
+			},
+			{
+				name: "sizing",
+				kind: "enum",
+				default: "auto",
+				options: ["auto", "equal"],
+				description:
+					"Auto sizes each segment to its label, so the indicator resizes as well as travels — the half of the FLIP that equal-width tabs never show. Equal splits the row evenly and fills the container.",
+			},
+			{
+				name: "density",
+				kind: "enum",
+				default: "comfortable",
+				options: ["comfortable", "compact"],
+				description:
+					"Padding and type size. Compact is the toolbar setting; it shortens the travel too, which is why the smear reads more subtly there.",
+			},
+			{
+				name: "radius",
+				kind: "number",
+				default: 8,
+				min: 0,
+				max: 20,
+				step: 1,
+				unit: "px",
+				description:
+					"Corner radius of the indicator and the segments. motion corrects the radius through the layout animation, so a rounded indicator does not go oval while it is resizing.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 520,
+				min: 120,
+				max: 900,
+				step: 10,
+				description:
+					"Spring tension on the travel. It also drives the proxy spring the deformation is read from, so the smear stays in phase with the movement at every setting rather than at the one it was tuned on.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 34,
+				min: 8,
+				max: 60,
+				step: 1,
+				description:
+					"Spring friction. Low lets the indicator ring past the segment and come back, which the smear follows in both directions; high arrives dead and barely deforms at all.",
+			},
+			{
+				name: "smear",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How hard the travel deforms the indicator. The stretch is along the direction of movement and anchored at the leading edge, so it trails behind rather than running ahead. Zero is a rigid box that slides.",
+			},
+			{
+				name: "glow",
+				kind: "boolean",
+				default: true,
+				description:
+					"Accent bloom under the indicator. It travels with the box and takes the same deformation, so it reads as light coming off the thing rather than a separate shape following it.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"The indicator, its bloom, and the label of the active segment when the indicator is not filling it.",
+			},
+		],
+	},
+	{
+		slug: "tether",
+		name: "Tether",
+		category: "Micro-interactions",
+		tier: "free",
+		addedAt: "2026-08-06",
+		description:
+			"A popover that grows out of the corner nearest its trigger, and moves that origin when it flips.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Pop in",
+			"Origin-aware animation",
+			"Transform origin",
+			"Enter / Exit",
+			"Spring",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/tether/Tether.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "side",
+				kind: "enum",
+				default: "bottom",
+				options: ["top", "right", "bottom", "left"],
+				description:
+					"Preferred side. The transform origin is derived from the side the panel actually resolved to, never this one — a flip that keeps the requested origin grows the panel away from the trigger it just moved to.",
+			},
+			{
+				name: "align",
+				kind: "enum",
+				default: "center",
+				options: ["start", "center", "end"],
+				description:
+					"Where the panel sits along that side. It moves the origin and the caret together, so a start-aligned panel below the trigger grows down and to the right out of the button's left corner.",
+			},
+			{
+				name: "offset",
+				kind: "number",
+				default: 10,
+				min: 0,
+				max: 32,
+				step: 1,
+				unit: "px",
+				description:
+					"Gap between trigger and panel. Padding rather than margin: a pointer crossing the gap on its way into a hover-opened panel never leaves the component, so the panel does not close under the cursor.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 520,
+				min: 120,
+				max: 900,
+				step: 10,
+				description:
+					"Spring tension on the pop. High enough to feel like the panel is already there by the time the eye arrives.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 26,
+				min: 8,
+				max: 60,
+				step: 1,
+				description:
+					"Spring friction. A little overshoot is the pop; too little and the panel wobbles, which on a menu reads as unresponsive rather than lively.",
+			},
+			{
+				name: "popScale",
+				kind: "number",
+				default: 0.86,
+				min: 0.3,
+				max: 1,
+				step: 0.02,
+				description:
+					"Size the panel grows from. At 1 the origin work is invisible and the entrance is a plain fade — worth setting once to see what the rest of the component is buying.",
+			},
+			{
+				name: "arrow",
+				kind: "boolean",
+				default: true,
+				description:
+					"Caret on the tethered edge. It sits where the panel is anchored, so it stays pointing at the trigger through a side change without any repositioning code.",
+			},
+			{
+				name: "flip",
+				kind: "boolean",
+				default: true,
+				description:
+					"Move to the opposite side when the preferred one would overflow the viewport. The fit test reads the panel's layout box rather than its bounding rect, because the rect carries the entrance scale and would decide using a box smaller than the one about to be there.",
+			},
+			{
+				name: "openOn",
+				kind: "enum",
+				default: "click",
+				options: ["click", "hover"],
+				description:
+					"What opens the panel. Click also moves focus into it; hover deliberately does not, and answers focus on the trigger instead so the keyboard is not locked out of a pointer-only affordance.",
+			},
+			{
+				name: "closeDelay",
+				kind: "number",
+				default: 140,
+				min: 0,
+				max: 800,
+				step: 10,
+				unit: "ms",
+				disabledWhen: { prop: "openOn", equals: "click" },
+				description:
+					"Grace period before a hover-opened panel closes. The timer also refuses to fire while focus is still inside, so a pointer wandering off cannot destroy the element someone is tabbing through.",
+			},
+			{
+				name: "radius",
+				kind: "number",
+				default: 10,
+				min: 0,
+				max: 20,
+				step: 1,
+				unit: "px",
+				description: "Panel corner radius.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"The rule on the tethered edge and the caret. Both move with a flip, so the panel keeps pointing back at its origin on whichever side it ended up.",
+			},
+		],
+	},
+	{
+		slug: "inline-edit",
+		name: "InlineEdit",
+		category: "Micro-interactions",
+		tier: "free",
+		addedAt: "2026-08-06",
+		description:
+			"Text that becomes its own input with nothing moving — one padded box, two contents, sized in CSS.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: ["Morph", "Continuity transition", "Spatial consistency"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/inline-edit/InlineEdit.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "commitOn",
+				kind: "enum",
+				default: "blur",
+				options: ["blur", "explicit"],
+				description:
+					"Blur commits when focus leaves. Explicit grows a confirm and a cancel outside the box and treats losing focus as a cancel. Both are defensible, which is why it is a prop rather than a decision.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 460,
+				min: 120,
+				max: 900,
+				step: 10,
+				description:
+					"Spring tension on the border, wash and ring arriving. This is the only thing that animates — everything else is already exactly where it will be.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 32,
+				min: 8,
+				max: 60,
+				step: 1,
+				description:
+					"Spring friction on the same. Low overshoots the colour, which on a border reads as a flash rather than as bounce.",
+			},
+			{
+				name: "underline",
+				kind: "enum",
+				default: "dotted",
+				options: ["dotted", "solid", "none"],
+				description:
+					"How the display state says it is editable. A text decoration rather than a border, because a border would have to be reserved in the editing state too — and none is the honest option for a row that already announces itself some other way.",
+			},
+			{
+				name: "padX",
+				kind: "number",
+				default: 8,
+				min: 0,
+				max: 24,
+				step: 1,
+				unit: "px",
+				description:
+					"Horizontal padding. Shared by both states by construction: it lives on the shell, which never unmounts, so the two contents cannot disagree about it.",
+			},
+			{
+				name: "padY",
+				kind: "number",
+				default: 5,
+				min: 0,
+				max: 16,
+				step: 1,
+				unit: "px",
+				description:
+					"Vertical padding. The one that shifts every row below it when an inline editor gets this wrong.",
+			},
+			{
+				name: "radius",
+				kind: "number",
+				default: 6,
+				min: 0,
+				max: 16,
+				step: 1,
+				unit: "px",
+				description: "Corner radius of the shell.",
+			},
+			{
+				name: "selectOnEdit",
+				kind: "boolean",
+				default: true,
+				description:
+					"Select the whole value on entering edit, so typing replaces it. Off puts the caret where the click landed, which is the right behaviour for a long value being amended rather than renamed.",
+			},
+			{
+				name: "allowEmpty",
+				kind: "boolean",
+				default: false,
+				description:
+					"Accept an empty commit. Off puts the previous value back, on the grounds that a blank field is a mis-click far more often than an intention.",
+			},
+			{
+				name: "showPencil",
+				kind: "boolean",
+				default: true,
+				description:
+					"Pencil on hover and keyboard focus. Absolutely positioned outside the shell — anything rendered inside it changes the width of the box the component exists to hold still.",
+			},
+			{
+				name: "multiline",
+				kind: "boolean",
+				default: false,
+				description:
+					"A textarea that grows by line instead of a single-line field. The growth is the same CSS trick either way: an invisible copy of the draft sized in the same grid cell, so nothing is measured in JavaScript.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"The border, wash and ring of the editing state, and the underline of the display state. Expected as a 6-digit hex: the transparent variants are built by suffix so the fade runs on one interpolation rather than between two colours.",
+			},
+		],
+	},
+	{
+		slug: "crossing",
+		name: "Crossing",
+		category: "Micro-interactions",
+		tier: "pro",
+		addedAt: "2026-08-06",
+		description:
+			"A gallery-to-detail crossing on the View Transitions API, where one element is the same object in both views.",
+		dependencies: ["clsx", "tailwind-merge"],
+		cookbook: [
+			"View transition",
+			"Page transition",
+			"Shared element transition",
+			"Crossfade",
+			"Morph",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/crossing/Crossing.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "duration",
+				kind: "number",
+				default: 380,
+				min: 120,
+				max: 1200,
+				step: 10,
+				unit: "ms",
+				description:
+					"Length of the crossing. Applied to the shared elements and the view together through pseudo-element rules the component scopes to itself, so it never retimes a transition something else on the page is running.",
+			},
+			{
+				name: "easing",
+				kind: "enum",
+				default: "expressive",
+				options: ["expressive", "standard", "linear"],
+				description:
+					"Curve on the travel. Expressive arrives fast and settles; standard is the material curve; linear is there to show what the easing is worth, which on a morph is most of it.",
+			},
+			{
+				name: "shareTitle",
+				kind: "boolean",
+				default: true,
+				description:
+					"Carry the title across as a second shared element. Off, only the tile travels and the title cross-fades with the rest — the clearest way to see what a shared element buys over a crossfade.",
+			},
+			{
+				name: "exit",
+				kind: "enum",
+				default: "fade",
+				options: ["hold", "fade", "slide"],
+				description:
+					"What the outgoing copy of the tile does while the incoming one arrives. Hold keeps it opaque underneath and is the default: it is the only one with no instant where two gradients are both half there. Fade is the browser's own behaviour, kept so the difference is visible; slide sends the old one off as the new lands.",
+			},
+			{
+				name: "radius",
+				kind: "number",
+				default: 12,
+				min: 0,
+				max: 28,
+				step: 1,
+				unit: "px",
+				description: "Corner radius of the frame and, three px in, the tiles.",
+			},
+			{
+				name: "viewTransition",
+				kind: "boolean",
+				default: true,
+				description:
+					"Run the API at all. Off takes exactly the path an unsupported browser takes — the state update, bare — which is the only honest way to see the fallback. A view transition cannot be shortened, only skipped.",
+			},
+			{
+				name: "announce",
+				kind: "boolean",
+				default: true,
+				description:
+					"Announce the destination in a live region. A view transition is invisible to assistive tech, so a crossing that says nothing is a dead end for anyone not watching the pixels.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"Focus ring, and the mark on the card you came back from — drawn only once the crossing has finished. Anything painted on the shared element while it is in flight is captured into the snapshot and travels across the frame with it.",
+			},
+		],
+	},
 ];
