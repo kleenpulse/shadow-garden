@@ -2,6 +2,7 @@ import Link from "next/link";
 import { registry } from "@/lib/registry";
 import type { ComponentEntry } from "@/lib/registry/types";
 import { displayName } from "@/lib/display-name";
+import GlowCard from "./GlowCard";
 import TierBadge from "./TierBadge";
 
 // The sidebar links all 70 components from all 70 pages, so every page carries
@@ -31,7 +32,11 @@ export function relatedTo(current: ComponentEntry): ComponentEntry[] {
 		.map((row) => row.entry);
 }
 
-export default function RelatedComponents({ entry }: { entry: ComponentEntry }) {
+export default function RelatedComponents({
+	entry,
+}: {
+	entry: ComponentEntry;
+}) {
 	const related = relatedTo(entry);
 	if (related.length === 0) return null;
 
@@ -42,13 +47,20 @@ export default function RelatedComponents({ entry }: { entry: ComponentEntry }) 
 			</h2>
 			<ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
 				{related.map((item) => (
-					<li key={item.slug}>
+					// The glow rides the `li`, not the link — the link has to keep
+					// wrapping the name, which is the anchor text this whole section
+					// exists to hand a crawler. `z-10` floats it over the overlays.
+					<GlowCard
+						as="li"
+						key={item.slug}
+						className="rounded-lg border border-hairline bg-panel transition-colors  "
+					>
 						<Link
 							href={`/components/${item.slug}`}
-							className="flex h-full flex-col gap-2 rounded-lg border border-hairline bg-panel p-4 transition-colors hover:border-accent-muted"
+							className="relative z-10 flex h-full flex-col gap-2 rounded-lg p-4"
 						>
 							<div className="flex items-center justify-between gap-2">
-								<h3 className="font-display text-sm uppercase tracking-[0.08em] text-ink">
+								<h3 className="font-display text-sm uppercase tracking-[0.08em] text-ink group-hover:text-accent">
 									{displayName(item.name)}
 								</h3>
 								<TierBadge tier={item.tier} />
@@ -57,7 +69,7 @@ export default function RelatedComponents({ entry }: { entry: ComponentEntry }) 
 								{item.description}
 							</p>
 						</Link>
-					</li>
+					</GlowCard>
 				))}
 			</ul>
 		</section>
