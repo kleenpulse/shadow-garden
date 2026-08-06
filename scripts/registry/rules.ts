@@ -473,7 +473,7 @@ const pausableMatchesPreview: Rule = {
  */
 const NOT_A_LOOP = new Map<string, string>([
   ["blueprint-card", "one rAF to flip a drawn flag on mount; no loop"],
-  ["circle-menu", "RO measures layout geometry for the arc; no canvas"],
+  ["stagger-menu", "RO measures layout geometry for the arc; no canvas"],
   ["dissolve", "RO measures for a one-shot particle burst"],
   ["marquee-text", "RO measures text width; the marquee itself is CSS"],
   ["marquee-velocity", "RO measures for a scroll-driven transform"],

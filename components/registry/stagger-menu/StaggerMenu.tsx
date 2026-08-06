@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, type Variants } from "motion/react";
 import { cn } from "@/lib/utils";
 
-export interface CircleMenuProps {
+export interface StaggerMenuProps {
 	items: string[];
 	defaultOpen?: boolean;
 	/** Optional controlled mode. */
@@ -34,7 +34,7 @@ function hexToRgba(hex: string, alpha: number): string {
 	return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
 }
 
-export default function CircleMenu({
+export default function StaggerMenu({
 	items,
 	defaultOpen = false,
 	open,
@@ -47,7 +47,7 @@ export default function CircleMenu({
 	overlayOpacity = 0.92,
 	reducedMotion = false,
 	className,
-}: CircleMenuProps) {
+}: StaggerMenuProps) {
 	const rootRef = useRef<HTMLDivElement>(null);
 	const [internalOpen, setInternalOpen] = useState(defaultOpen);
 	const isOpen = open ?? internalOpen;
