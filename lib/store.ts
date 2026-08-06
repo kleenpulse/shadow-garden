@@ -4,7 +4,9 @@ import { persist } from "zustand/middleware";
 // Ephemeral shell chrome only. Tunable component state lives in the URL (nuqs),
 // not here — this store never holds anything worth sharing or deep-linking.
 export type WorkspaceTab = "preview" | "code";
-export type TierFilter = "all" | "free" | "pro";
+// "new" is a freshness slice, not a tier — it only ever appears in the sidebar
+// filter once at least one entry is inside the New window (lib/registry/freshness).
+export type CatalogFilter = "all" | "free" | "pro" | "new";
 
 // Desktop sidebar resize band. Default matches the historical `w-72` (288px).
 // The pre-paint script in app/layout.tsx reads the same clamps — keep in sync.
@@ -33,9 +35,9 @@ interface UIState {
   search: string;
   setSearch: (query: string) => void;
 
-  /** Sidebar tier filter (All/Free/Pro). */
-  tierFilter: TierFilter;
-  setTierFilter: (tier: TierFilter) => void;
+  /** Sidebar catalog filter (All/Free/Pro/New). */
+  catalogFilter: CatalogFilter;
+  setCatalogFilter: (filter: CatalogFilter) => void;
 
   /** Global command palette overlay (ephemeral — never persisted). */
   paletteOpen: boolean;
@@ -69,8 +71,8 @@ export const useUIStore = create<UIState>()(
       search: "",
       setSearch: (search) => set({ search }),
 
-      tierFilter: "all",
-      setTierFilter: (tierFilter) => set({ tierFilter }),
+      catalogFilter: "all",
+      setCatalogFilter: (catalogFilter) => set({ catalogFilter }),
 
       paletteOpen: false,
       setPaletteOpen: (paletteOpen) => set({ paletteOpen }),
