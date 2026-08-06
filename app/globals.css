@@ -410,4 +410,89 @@ html[data-sg-intro] {
 		visibility: visible;
 		animation: wordmark-blink 1s steps(1, end) infinite;
 	}
+
+	/* ---- Sidebar catalog filter, pre-hydration ----------------------------
+	   The persisted filter (localStorage, same key as the sidebar width) is
+	   stamped on <html> before first paint by lib/catalog-filter-script.ts.
+	   Until React's store rehydrates and takes over, these rules ARE the filter
+	   — without them the sidebar paints all 35 rows and then snaps.
+	   Sidebar removes the attribute once its own filtering has committed, so
+	   every rule below is dead weight for all but the first frames. */
+
+	/* The New tab is clock-dependent, so it ships hidden and the script reveals
+	   it. Rendering it conditionally in React instead made it pop in a frame
+	   late, which is the same jump one level up. */
+	.sg-catalog-tabs [role="tab"][data-value="new"] {
+		display: none;
+	}
+	html[data-catalog-has-new] .sg-catalog-tabs [role="tab"][data-value="new"] {
+		display: inline-flex;
+	}
+
+	/* React still thinks "all" is selected this early, so its indicator is in the
+	   wrong tab — hide it and draw a stand-in on the persisted one. Same fill as
+	   the motion indicator in PillTabs.tsx; keep the two in step. */
+	html[data-catalog-filter] .sg-catalog-tabs [role="tab"] {
+		color: var(--color-ink-dim);
+	}
+	html[data-catalog-filter]
+		.sg-catalog-tabs
+		[role="tab"][aria-selected="true"]
+		> span:first-child {
+		display: none;
+	}
+	html[data-catalog-filter="free"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="free"],
+	html[data-catalog-filter="pro"] .sg-catalog-tabs [role="tab"][data-value="pro"],
+	html[data-catalog-filter="new"] .sg-catalog-tabs [role="tab"][data-value="new"] {
+		color: var(--color-accent);
+	}
+	html[data-catalog-filter="free"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="free"]::before,
+	html[data-catalog-filter="pro"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="pro"]::before,
+	html[data-catalog-filter="new"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="new"]::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		border-radius: 0.375rem; /* rounded-md */
+		background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+	}
+	/* next-themes puts the class on <html>, so it's the same element the filter
+	   attribute lands on — one compound selector, not a descendant. */
+	html.dark[data-catalog-filter="free"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="free"]::before,
+	html.dark[data-catalog-filter="pro"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="pro"]::before,
+	html.dark[data-catalog-filter="new"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="new"]::before {
+		border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
+		background: color-mix(in oklab, var(--color-accent) 15%, transparent);
+	}
+
+	/* The list. Tier is a static attribute, so plain CSS covers Free/Pro; the
+	   "new" pair is injected by the script, which owns the date comparison. */
+	html[data-catalog-filter="free"] [data-entry]:not([data-tier="free"]),
+	html[data-catalog-filter="pro"] [data-entry]:not([data-tier="pro"]) {
+		display: none;
+	}
+	/* A category whose rows all just vanished must take its heading with it. */
+	html[data-catalog-filter="free"] [data-group]:not(:has([data-tier="free"])),
+	html[data-catalog-filter="pro"] [data-group]:not(:has([data-tier="pro"])) {
+		display: none;
+	}
+	/* The one thing CSS can't recompute. Held invisible (space reserved) rather
+	   than showing a total that's about to change under the reader. */
+	html[data-catalog-filter] [data-catalog-count] {
+		visibility: hidden;
+	}
 }

@@ -87,8 +87,13 @@ export const useUIStore = create<UIState>()(
     }),
     {
       name: "sg-ui",
-      // Only the width is worth persisting; open/search/tab stay ephemeral.
-      partialize: (state) => ({ sidebarWidth: state.sidebarWidth }),
+      // Width + catalog filter survive a reload; open/search/tab stay ephemeral.
+      // lib/catalog-filter-script.ts reads this same key/shape before first
+      // paint — change the shape here and that script goes quietly stale.
+      partialize: (state) => ({
+        sidebarWidth: state.sidebarWidth,
+        catalogFilter: state.catalogFilter,
+      }),
     },
   ),
 );

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	Suspense,
 	useEffect,
 	useMemo,
 	useRef,
@@ -29,9 +28,7 @@ import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import TierBadge from "./TierBadge";
 import NewBadge from "./NewBadge";
 import PillTabs, { type PillTabItem } from "./PillTabs";
-import CatalogFilterTabs, {
-	CATALOG_FILTER_PARAM,
-} from "./CatalogFilterTabs";
+import { CATALOG_FILTER_ATTR } from "@/lib/catalog-filter-script";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
 import FeedbackWidget from "./FeedbackWidget";
@@ -101,7 +98,7 @@ export default function Sidebar() {
 
 	// Freshness is wall-clock-dependent — same constraint as NewBadge: reading the
 	// clock during the prerendered shell would freeze it to build time. Stays null
-	// through SSR + first paint, so the New tab only mounts client-side.
+	// through SSR; the pre-paint script covers that window with the real clock.
 	const [now, setNow] = useState<number | null>(null);
 	useEffect(() => setNow(Date.now()), []);
 
@@ -111,19 +108,34 @@ export default function Sidebar() {
 		[now],
 	);
 
+	// Pre-mount the New tab always renders and CSS decides whether it's visible
+	// (the script knows the clock, React doesn't yet). Post-mount React takes the
+	// call. Rendering it only when `hasNew` made it pop in a frame after paint.
 	const tabs = useMemo(
-		() => (hasNew ? [...TIER_TABS, NEW_TAB] : TIER_TABS),
-		[hasNew],
+		() => (!mounted || hasNew ? [...TIER_TABS, NEW_TAB] : TIER_TABS),
+		[hasNew, mounted],
 	);
 
+	// The persisted filter rehydrates synchronously, so using it on the first
+	// client render would disagree with the SSR markup and blow up hydration for a
+	// 35-link nav. Render the SSR default until mounted; CSS covers the gap.
+	const effectiveFilter: CatalogFilter = mounted ? catalogFilter : "all";
+
+	// Only once the real filter has committed — otherwise the CSS crutch would be
+	// pulled a frame before React's own filtering landed, and the full list would
+	// flash through.
+	useEffect(() => {
+		if (mounted) document.documentElement.removeAttribute(CATALOG_FILTER_ATTR);
+	}, [mounted]);
+
 	const tierFiltered = useMemo(() => {
-		if (catalogFilter === "new") {
+		if (effectiveFilter === "new") {
 			if (now === null) return [];
 			return registry.filter((entry) => isWithinNewWindow(entry.addedAt, now));
 		}
-		if (catalogFilter === "all") return registry;
-		return registry.filter((entry) => entry.tier === catalogFilter);
-	}, [catalogFilter, now]);
+		if (effectiveFilter === "all") return registry;
+		return registry.filter((entry) => entry.tier === effectiveFilter);
+	}, [effectiveFilter, now]);
 
 	const searching = search.trim().length > 0;
 
@@ -165,14 +177,6 @@ export default function Sidebar() {
 		setActive(0);
 	}, [search, catalogFilter]);
 
-	// Carry the filter across navigation. Sidebar links are real navigations, so a
-	// bare href drops the query string — the sidebar would silently snap back to
-	// All the moment you clicked anything it had filtered down to.
-	const withFilter = (href: string) =>
-		catalogFilter === "all"
-			? href
-			: `${href}?${CATALOG_FILTER_PARAM}=${catalogFilter}`;
-
 	const toggleCategory = (category: Category) => {
 		setCollapsed((prev) => {
 			const next = new Set(prev);
@@ -192,7 +196,7 @@ export default function Sidebar() {
 		} else if (event.key === "Enter") {
 			const target = visibleFlat[active];
 			if (target) {
-				router.push(withFilter(`/components/${target.slug}`));
+				router.push(`/components/${target.slug}`);
 				setSidebarOpen(false);
 			}
 		} else if (event.key === "Escape") {
@@ -207,9 +211,16 @@ export default function Sidebar() {
 		// would falsely highlight the first item on every non-component route.
 		const isHighlighted = searching && indexOfSlug.get(entry.slug) === active;
 		return (
-			<li key={entry.slug}>
+			// data-* are the pre-paint filter's only handles on a row: the script runs
+			// before this markup is parsed, so it can't inspect anything computed.
+			<li
+				key={entry.slug}
+				data-entry
+				data-tier={entry.tier}
+				data-added={entry.addedAt}
+			>
 				<Link
-					href={withFilter(href)}
+					href={href}
 					{...hoverProps()}
 					onClick={() => {
 						if (!isActive) play("select"); // no cue re-selecting the current page
@@ -268,9 +279,7 @@ export default function Sidebar() {
 			>
 				<div className="flex items-center border-b border-hairline px-4 h-10 md:h-14">
 					<Link
-						href={
-							pathname === "/components" ? "/" : withFilter("/components")
-						}
+						href={pathname === "/components" ? "/" : "/components"}
 						className="flex items-baseline gap-0"
 						onClick={() => setSidebarOpen(false)}
 					>
@@ -280,8 +289,13 @@ export default function Sidebar() {
 
 				<div className="px-3 py-3">
 					{/* Catalog readout — doubles as a live match count while searching. */}
+					{/* The count is the one thing CSS can't recompute pre-mount, so it's
+					    held invisible (not removed — the row keeps its height) until React
+					    has the real number. No-JS never gets the attribute, so it reads
+					    the honest total. */}
 					<p
 						aria-live="polite"
+						data-catalog-count
 						className="mb-1.5 px-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute"
 					>
 						{searching
@@ -300,26 +314,20 @@ export default function Sidebar() {
 						aria-label="Search components"
 						className="w-full rounded-md border border-hairline bg-panel px-3 py-1.5 font-mono text-xs text-ink placeholder:text-ink-mute outline-none focus-visible:border-accent"
 					/>
-					{/* The tabs read ?filter from the URL, so they mount behind Suspense
-					    (Cache Components rule). The fallback is the same control bound to
-					    the store alone — the row never blinks, it just isn't deep-linkable
-					    for the frame before hydration. */}
-					<Suspense
-						fallback={
-							<PillTabs<CatalogFilter>
-								aria-label="Filter components"
-								value={catalogFilter}
-								onValueChange={setCatalogFilter}
-								items={tabs}
-								layoutId="sidebar-tier-filter-static"
-								fullWidth
-								size="md"
-								className="mt-2"
-							/>
-						}
-					>
-						<CatalogFilterTabs items={tabs} />
-					</Suspense>
+					{/* Pre-mount the active pill is drawn by CSS off html[data-catalog-filter]
+					    (see the pre-paint script), so `value` stays at the SSR default until
+					    React owns it — otherwise the indicator would slide across the track
+					    on every refresh as the persisted value landed. */}
+					<PillTabs<CatalogFilter>
+						aria-label="Filter components"
+						value={effectiveFilter}
+						onValueChange={setCatalogFilter}
+						items={tabs}
+						layoutId="sidebar-tier-filter"
+						fullWidth
+						size="md"
+						className="sg-catalog-tabs mt-2"
+					/>
 				</div>
 
 				{/* AutoMaskVertical fades the scroll edges and auto-hides the scrollbar
@@ -342,7 +350,7 @@ export default function Sidebar() {
 						groups.map((group) => {
 							const isCollapsed = collapsed.has(group.category);
 							return (
-								<div key={group.category} className="mb-3">
+								<div key={group.category} data-group className="mb-3">
 									<button
 										type="button"
 										onClick={() => toggleCategory(group.category)}

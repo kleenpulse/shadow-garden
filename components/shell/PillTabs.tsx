@@ -85,6 +85,9 @@ export default function PillTabs<V extends string = string>({
 					<button
 						key={item.value}
 						role="tab"
+						// Lets CSS address a specific tab — the sidebar's pre-paint filter
+						// draws the active pill before React knows which one it is.
+						data-value={item.value}
 						aria-selected={active}
 						tabIndex={active ? 0 : -1}
 						onClick={() => onValueChange(item.value)}
