@@ -210,6 +210,44 @@ const CANVAS_PROBE = `(() => {
   };
 })()`;
 
+// Not every loop host paints to a canvas. `ledger` and `teletype` run on the
+// same runtime and write to the DOM, where "keeps drawing" has no draw call to
+// count — so the equivalent liveness signal is mutation traffic inside the
+// preview stage, and the two backing-store invariants (V1/V2) simply do not
+// apply: a DOM component reflows natively and there is no buffer to leave
+// cleared. Reported as N/A rather than passed, so a run can never be read as
+// having checked something it structurally cannot.
+//
+// Scoped to `[data-preview-stage]`, never the document: the shell animates its
+// own chrome, and a page-wide observer would keep counting while the entry
+// under test sat frozen — the same false pass the per-canvas draw counter above
+// exists to prevent.
+const DOM_INSTRUMENT = `(() => {
+  const stage = document.querySelector('[data-preview-stage]');
+  if (!stage) return false;
+  if (window.__sgDomObserver) window.__sgDomObserver.disconnect();
+  window.__sgDom = 0;
+  window.__sgDomObserver = new MutationObserver((records) => {
+    window.__sgDom += records.length;
+  });
+  window.__sgDomObserver.observe(stage, {
+    childList: true, subtree: true, characterData: true, attributes: true,
+  });
+  return true;
+})()`;
+
+const DOM_PROBE = `(() => {
+  const stage = document.querySelector('[data-preview-stage]');
+  if (!stage) return null;
+  const r = stage.getBoundingClientRect();
+  return {
+    w: Math.round(r.width),
+    h: Math.round(r.height),
+    mutations: window.__sgDom || 0,
+    text: (stage.innerText || '').trim().length,
+  };
+})()`;
+
 const CLICK_PAUSE = `(() => {
   const b = [...document.querySelectorAll('button')].find(x => x.textContent.trim() === 'pause');
   if (!b) return false;
@@ -237,6 +275,68 @@ async function settle(sessionId, ok, budgetMs = 20000) {
   return last;
 }
 
+/** The DOM half of §V20 — same runtime host, no canvas to count draws on. */
+async function verifyDom(sessionId, slug) {
+  const armed = await evaluate(sessionId, DOM_INSTRUMENT);
+  check(armed === true, "preview stage found", armed ? "DOM loop host" : "no [data-preview-stage]");
+  if (!armed) return;
+
+  const start = await evaluate(sessionId, DOM_PROBE);
+  check(
+    start.w > 0 && start.h > 0 && start.text > 0,
+    "stage rendered content",
+    `${start.w}x${start.h}, ${start.text} chars`,
+  );
+  check(
+    (await shot(sessionId, slug, "1-initial")) > NOT_BLANK_BYTES,
+    "initial frame is not blank",
+  );
+
+  const before = await evaluate(sessionId, DOM_PROBE);
+  await sleep(CONTINUITY_MS);
+  const later = await evaluate(sessionId, DOM_PROBE);
+  const moved = later.mutations - before.mutations;
+  check(
+    moved >= MIN_DRAWS,
+    "V20 — loop keeps mutating the stage",
+    `${moved} mutations in ${CONTINUITY_MS}ms (need ${MIN_DRAWS})`,
+  );
+
+  const paused = await evaluate(sessionId, CLICK_PAUSE);
+  check(paused === true, "pause control found and clicked");
+  await sleep(900);
+
+  // Asserted here, unlike the canvas path. A DOM host has no buffer to ease to
+  // a stop in: once the runtime halts, nothing writes to the tree at all, so a
+  // non-zero count is a loop that ignored the pause.
+  const pausedFrom = await evaluate(sessionId, DOM_PROBE);
+  await sleep(700);
+  const pausedTo = await evaluate(sessionId, DOM_PROBE);
+  check(
+    pausedTo.mutations - pausedFrom.mutations === 0,
+    "pause actually halts the loop",
+    `${pausedTo.mutations - pausedFrom.mutations} mutations in 700ms while paused`,
+  );
+
+  await send(
+    "Emulation.setDeviceMetricsOverride",
+    { width: 900, height: 760, deviceScaleFactor: 1, mobile: false },
+    sessionId,
+  );
+  await sleep(900);
+  const resized = await evaluate(sessionId, DOM_PROBE);
+  check(
+    resized.w > 0 && resized.w !== start.w,
+    "stage followed the viewport resize",
+    `${start.w}px -> ${resized.w}px`,
+  );
+  check(
+    (await shot(sessionId, slug, "2-resized-while-paused")) > NOT_BLANK_BYTES,
+    "still rendered after resizing while paused",
+  );
+  console.log("  n/a   V1/V2 — no backing store on a DOM host; reflow is the browser's");
+}
+
 async function verify(sessionId, slug) {
   console.log(`\n${slug}`);
   await send("Emulation.setDeviceMetricsOverride", { width: 1400, height: 900, deviceScaleFactor: 1, mobile: false }, sessionId);
@@ -250,12 +350,22 @@ async function verify(sessionId, slug) {
     sessionId,
     (p) => p.parentW > 0 && p.w > 0 && Math.abs(p.cssW - p.parentW) <= 2,
   );
+
+  // No canvas at all means a DOM loop host, not a broken WebGL entry. A broken
+  // shader still renders its <canvas> element — it is in the JSX either way —
+  // and keeps failing the assertions below on a zero backing store or zero
+  // draws. Absence of the element is the discriminator, and it is the only one
+  // that cannot be faked by a component that is merely not working.
+  if (initial === null) {
+    await verifyDom(sessionId, slug);
+    return;
+  }
+
   check(
-    initial !== null && initial.w > 0 && initial.h > 0,
+    initial.w > 0 && initial.h > 0,
     "canvas has a backing store",
-    initial ? `${initial.w}x${initial.h}` : "no canvas found",
+    `${initial.w}x${initial.h}`,
   );
-  if (!initial) return;
 
   check(
     (await shot(sessionId, slug, "1-initial")) > NOT_BLANK_BYTES,

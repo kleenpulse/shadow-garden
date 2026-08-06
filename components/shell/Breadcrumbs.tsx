@@ -15,7 +15,15 @@ export default function Breadcrumbs({ trail }: { trail: Crumb[] }) {
 				{trail.map((crumb, index) => {
 					const isLast = index === trail.length - 1;
 					return (
-						<li key={crumb.path} className="flex items-center gap-1.5">
+						// Keyed by position, not by path. A trail is a fixed ordered list
+						// whose identity IS its position, and two crumbs may legitimately
+						// share a destination — a component page reads
+						// "Components / Power-User Systems", and there is no per-category
+						// route for the second one to point at. Keying by path made those
+						// collide and React logged a duplicate-key error on every one of
+						// the component detail pages.
+						// eslint-disable-next-line react/no-array-index-key
+						<li key={index} className="flex items-center gap-1.5">
 							{isLast ? (
 								<span aria-current="page" className="text-ink-dim">
 									{crumb.name}

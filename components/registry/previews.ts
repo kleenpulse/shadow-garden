@@ -78,6 +78,8 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   aperture: dynamic(() => import("./aperture/AperturePreview"), { ssr: false }),
   "split-flap": dynamic(() => import("./split-flap/SplitFlapPreview"), { ssr: false }),
   "approval-flow": dynamic(() => import("./approval-flow/ApprovalFlowPreview"), { ssr: false }),
+  "diff-review": dynamic(() => import("./diff-review/DiffReviewPreview"), { ssr: false }),
+  ledger: dynamic(() => import("./ledger/LedgerPreview"), { ssr: false }),
   "intro-animation": dynamic(
     () => import("./intro-animation/IntroAnimationPreview"),
     { ssr: false },
