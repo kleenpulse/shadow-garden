@@ -1820,4 +1820,272 @@ export const backgrounds: ComponentEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "contour",
+		name: "Contour",
+		category: "Backgrounds",
+		tier: "pro",
+		addedAt: "2026-08-06",
+		description:
+			"Iso-lines of a drifting height field — a topographic map of terrain that will not hold still, with every line band-limited so what you see is the ground and not the sampling.",
+		dependencies: ["ogl"],
+		cookbook: [
+			"Idle animation",
+			"Hover effect",
+			"Compositing",
+			"Hardware acceleration",
+		],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/contour/Contour.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "scale",
+				kind: "number",
+				default: 2.6,
+				min: 0.5,
+				max: 8,
+				step: 0.1,
+				description:
+					"Feature size of the terrain. Low is a wide landscape read from altitude; high zooms into a single ridge. It changes how many lines cross the frame without changing how many the height range is cut into, which is the difference between flying higher and re-surveying.",
+			},
+			{
+				name: "levels",
+				kind: "number",
+				default: 14,
+				min: 4,
+				max: 40,
+				step: 1,
+				description:
+					"Contour steps across the height range — the vertical resolution of the map. This is the control that would alias: push it up and the spacing walks toward one line per pixel, where the line frequency beats against the sampling grid. The shader measures its own derivative and fades the lines out on any slope too steep to hold them, falling back to the elevation tint — which is what a paper map does when the interval is wrong for the terrain. The top of the range is soft, never false.",
+			},
+			{
+				name: "warp",
+				kind: "number",
+				default: 0.55,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"How hard the field is domain-warped before the lines are cut from it. Zero gives smooth blobs that read as a heightmap of nothing in particular; high folds the terrain back over itself into ridges and cirques.",
+			},
+			{
+				name: "drift",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Speed of the drift. The field is sampled at an offset that orbits rather than one that accumulates, so this changes the pace without ever handing the shader an unbounded number to lose precision on.",
+			},
+			{
+				name: "lineWidth",
+				kind: "number",
+				default: 1.4,
+				min: 0.4,
+				max: 4,
+				step: 0.1,
+				unit: "px",
+				description:
+					"Line weight, held in pixels rather than field units — the map keeps the same hand at any scale, and the anti-aliasing band widens with it instead of being outrun by it.",
+			},
+			{
+				name: "majorEvery",
+				kind: "number",
+				default: 5,
+				min: 0,
+				max: 10,
+				step: 1,
+				description:
+					"Emphasise every Nth line, the way a real contour map indexes elevation. Zero draws them all alike, which is the setting that proves the point: without an index line the field reads as stripes rather than as ground.",
+			},
+			{
+				name: "bandOpacity",
+				kind: "number",
+				default: 0.18,
+				min: 0,
+				max: 1,
+				step: 0.02,
+				description:
+					"Tint of the band between two lines, by elevation. It is what turns a line drawing into a map — the eye reads height from the fill long before it counts the lines.",
+			},
+			{
+				name: "pointerLift",
+				kind: "number",
+				default: 0.4,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How much the cursor raises the ground under it. The lift is added to the height before the lines are cut, so the contours crowd around it exactly as they would around a real hill — nothing is drawn on top.",
+			},
+			{
+				name: "inkColor",
+				kind: "color",
+				default: "#e9e7ef",
+				description: "The contour lines and the elevation tint.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"The emphasised line. Only the index lines take it, so the accent counts elevation rather than colouring the whole drawing.",
+			},
+			{
+				name: "backgroundColor",
+				kind: "color",
+				default: "#0a0b0c",
+				description: "The paper the map is drawn on.",
+			},
+		],
+	},
+	{
+		slug: "cathode",
+		name: "Cathode",
+		category: "Backgrounds",
+		tier: "free",
+		addedAt: "2026-08-06",
+		description:
+			"A cathode-ray tube showing nothing worth watching: a beam that turns around at each edge, phosphor that holds after it has passed, and a hum bar rolling up the glass.",
+		dependencies: ["ogl"],
+		cookbook: ["Alternate (yoyo)", "Loop", "Idle animation", "Compositing"],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/cathode/Cathode.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "signal",
+				kind: "enum",
+				default: "grid",
+				options: ["sweep", "bars", "snow", "grid"],
+				description:
+					"What the tube is showing. Sweep is a single beam that reverses at each edge rather than jumping back — a beam that wrapped would read as a dropped frame, one that turns around reads as a mechanism. The rest are the test patterns a set falls back to when there is nothing on the line.",
+			},
+			{
+				name: "sweepSpeed",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				disabledWhen: { prop: "signal", equals: "bars" },
+				description:
+					"Speed of the beam across the face. At zero it parks and the phosphor settles, which is the clearest way to see what persistence is actually drawing.",
+			},
+			{
+				name: "scanlineDensity",
+				kind: "number",
+				default: 2.2,
+				min: 0.5,
+				max: 6,
+				step: 0.1,
+				unit: "px",
+				description:
+					"Pixels per scanline. Below about two the grille is past Nyquist, and rather than aliasing into a pattern that moves when the window does, the modulation fades out — a small canvas loses its scanlines instead of gaining moiré.",
+			},
+			{
+				name: "scanlineDepth",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How hard the scanlines and the aperture grille cut into the image. The grille rides at a third of this — a shadow mask you can actually resolve is a shadow mask that has stopped being a background.",
+			},
+			{
+				name: "curvature",
+				kind: "number",
+				default: 0.18,
+				min: 0,
+				max: 0.6,
+				step: 0.02,
+				description:
+					"Barrel distortion of the tube face. The glass edge is a soft falloff rather than a clip, because a hard rim aliases along its whole length and the rim is the one place the eye is guaranteed to go.",
+			},
+			{
+				name: "bloom",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"Halation around bright areas. Four analytic taps of the signal rather than a blur pass — the signal has a closed form in every mode, so a glow costs arithmetic instead of a second render target.",
+			},
+			{
+				name: "persistence",
+				kind: "number",
+				default: 0.4,
+				min: 0,
+				max: 0.95,
+				step: 0.05,
+				description:
+					"How long the phosphor holds after the beam has passed. Computed as an exponential in the distance already swept rather than by keeping the previous frame — which is what phosphor decay is, and it avoids the float render target that is the one thing the loop verifier cannot see through.",
+			},
+			{
+				name: "rollSpeed",
+				kind: "number",
+				default: 0.25,
+				min: 0,
+				max: 2,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Speed of the hum bar rolling up the frame. It carries its own decay tail, so persistence still means something on a signal that never moves.",
+			},
+			{
+				name: "chromaOffset",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 3,
+				step: 0.1,
+				unit: "px",
+				description:
+					"Convergence error between the colour guns. Held in pixels and converted through the face width, so the fringe reads the same on a strip as on a full page.",
+			},
+			{
+				name: "phosphorColor",
+				kind: "color",
+				default: "#7ef0c0",
+				description:
+					"The phosphor. Every signal borrows it except the colour bars, which carry their own hue — that is the whole point of a test card.",
+			},
+			{
+				name: "backgroundColor",
+				kind: "color",
+				default: "#050607",
+				description: "The dead glass outside the picture.",
+			},
+		],
+	},
 ];
