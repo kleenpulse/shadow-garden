@@ -19,6 +19,7 @@ import Masonry, {
 	settleMasonryReveal,
 } from "@/components/registry/masonry/Masonry";
 import CookbookFilter from "./CookbookFilter";
+import GlowCard from "./GlowCard";
 import { CookbookFlameControlsDesktop } from "./CookbookFlameControls";
 import CookbookSectionNav from "./CookbookSectionNav";
 import TierBadge from "./TierBadge";
@@ -390,24 +391,34 @@ export default function CookbookBrowser({
 								reducedMotion={reduced}
 							>
 								{section.terms.map((row) => (
-									<article
+									// This card is translucent over the flame backdrop, so the
+									// glow's interior punch-out has to be translucent too — the
+									// opaque default floods the card solid wherever the cone
+									// lands. Everything below it rides `z-10`: the outer glow
+									// ring sits at `z-1` and would otherwise paint over the text.
+									<GlowCard
+										as="article"
 										key={row.term}
 										id={termAnchor(row.term)}
+										glow={{
+											backgroundColor:
+												"color-mix(in oklab, var(--color-panel) 90%, transparent)",
+										}}
 										className={cn(
 											ANCHOR_STOP,
-											"rounded-xl border border-hairline bg-linear-to-b from-panel via-panel/70 to-panel/40 backdrop-blur-2xl p-4 transition-shadow",
+											"rounded-xl border border-hairline bg-linear-to-b from-panel via-panel/90 to-panel/70 backdrop-blur-2xl p-4 transition-shadow",
 											pulse === termAnchor(row.term) && "ring-1 ring-accent",
 										)}
 									>
-										<h3 className="font-display text-sm tracking-tight text-ink">
+										<h3 className="relative z-10 font-display text-sm tracking-tight text-ink">
 											{row.term}
 										</h3>
-										<p className="mt-1.5 font-sans text-[13px] leading-relaxed text-ink-dim">
+										<p className="relative z-10 mt-1.5 font-sans text-[13px] leading-relaxed text-ink-dim">
 											{row.description}
 										</p>
 
 										{row.components.length > 0 && (
-											<div className="mt-3 flex flex-wrap items-center gap-1.5 md:gap-2">
+											<div className="relative z-10 mt-3 flex flex-wrap items-center gap-1.5 md:gap-2">
 												<span className="font-display text-[9px] uppercase tracking-[0.2em] text-ink-mute">
 													See it
 												</span>
@@ -426,7 +437,7 @@ export default function CookbookBrowser({
 												))}
 											</div>
 										)}
-									</article>
+									</GlowCard>
 								))}
 							</Masonry>
 						</section>

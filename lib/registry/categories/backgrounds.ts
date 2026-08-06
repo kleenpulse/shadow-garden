@@ -677,7 +677,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				name: "scale",
 				kind: "number",
-				default: 1.1,
+				default: 0.9,
 				min: 0.5,
 				max: 3,
 				step: 0.05,
