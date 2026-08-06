@@ -75,7 +75,9 @@ export default function SiteFooter() {
 			</div>
 
 			<div className="border-t border-hairline">
-				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute lg:px-8">
+				{/* min-h-11 = the sidebar's pinned footer (py-3 + text-sm leading), so the
+				    two bottom bars line up where they meet at the sidebar edge. */}
+				<div className="mx-auto flex min-h-11 w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute lg:px-8">
 					<span>{registry.length} components · 1 accent</span>
 					<span>Shadow Garden</span>
 				</div>

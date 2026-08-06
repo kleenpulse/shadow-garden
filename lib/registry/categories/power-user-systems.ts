@@ -47,6 +47,25 @@ const FILE_EXPLORER_PEERS: Variant[] = [
 	label: name,
 }));
 
+/** ApprovalFlow is six files, not one. Same mapped-array shape as the explorer
+ *  above, and the same reason: the Code panel gets one tab per variant, so the
+ *  set is kept deliberately small and the reading order here is the order a
+ *  buyer should open them in. It imports `cn`, so it takes UTILS_VARIANT and
+ *  declares clsx + tailwind-merge itself (§V41). */
+const APPROVAL_FLOW_PEERS: Variant[] = [
+	"types.ts",
+	"useApprovalFlow.ts",
+	"StepPanel.tsx",
+	"OptionRow.tsx",
+	"DecidedRail.tsx",
+].map((name) => ({
+	lang: "ts",
+	style: "tailwind",
+	file: `components/registry/approval-flow/${name}`,
+	role: "peer",
+	label: name,
+}));
+
 /** Power-User Systems — composite, stateful showcase pieces. */
 export const powerUserSystems: ComponentEntry[] = [
 	{
@@ -1871,6 +1890,140 @@ export const powerUserSystems: ComponentEntry[] = [
 				default: false,
 				description:
 					"Emissive stickers plus an additive amethyst halo at the silhouette. Off by default: it is a flourish, not the point.",
+			},
+		],
+	},
+	{
+		slug: "approval-flow",
+		name: "ApprovalFlow",
+		category: "Power-User Systems",
+		tier: "pro",
+		addedAt: "2026-08-06",
+		description:
+			"A step-by-step approval checklist for agent permissions — radio and checkbox groups, an \"Other…\" escape hatch that grows a field in place, and per-step validation that blocks the commit. Answering a step sends the chosen option flying into a running record of what you have already decided, so the screen accumulates a decision trail instead of replacing itself.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Morph",
+			"Shared element transition",
+			"Layout animation",
+			"Stepped animation",
+			"Direction-aware transition",
+			"Shake / Wiggle",
+			"Spatial consistency",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/approval-flow/ApprovalFlow.tsx",
+			},
+			...APPROVAL_FLOW_PEERS,
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "layout",
+				kind: "enum",
+				default: "rail",
+				options: ["rail", "inline"],
+				description:
+					"Where the record of decided steps sits. A rail parks it beside the live step on wide screens; inline stacks it above.",
+			},
+			{
+				name: "morphDuration",
+				kind: "number",
+				default: 420,
+				min: 120,
+				max: 1200,
+				step: 10,
+				unit: "ms",
+				description:
+					"Step change, option reveal and the escape hatch growing open. The flight into the record is a spring and ignores this — stiffness and damping own that one.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 380,
+				min: 80,
+				max: 800,
+				step: 10,
+				description:
+					"How hard the chosen option is pulled toward its slot in the record.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 34,
+				min: 8,
+				max: 80,
+				step: 1,
+				description:
+					"How fast that flight settles. Low values let the label overshoot its slot before landing.",
+			},
+			{
+				name: "density",
+				kind: "enum",
+				default: "comfortable",
+				options: ["comfortable", "compact"],
+				description: "Row height, padding and glyph size throughout.",
+			},
+			{
+				name: "revealStagger",
+				kind: "number",
+				default: 45,
+				min: 0,
+				max: 200,
+				step: 5,
+				unit: "ms",
+				description:
+					"Delay added per option as a step's list arrives. 0 lands the whole group at once.",
+			},
+			{
+				name: "shakeIntensity",
+				kind: "number",
+				default: 6,
+				min: 0,
+				max: 16,
+				step: 1,
+				unit: "px",
+				description:
+					"Travel of the shake when a step is rejected. 0 disables it — the message and the red border still fire, because a rejection with no signal at all is a dead end.",
+			},
+			{
+				name: "shakeCycles",
+				kind: "number",
+				default: 3,
+				min: 1,
+				max: 6,
+				step: 1,
+				description:
+					"Round trips in that shake. Each one decays, and the last always ends on centre.",
+				disabledWhen: { prop: "shakeIntensity", equals: 0 },
+			},
+			{
+				name: "showProgress",
+				kind: "boolean",
+				default: true,
+				description: "Completion bar and step count above the live step.",
+			},
+			{
+				name: "autoAdvance",
+				kind: "boolean",
+				default: false,
+				description:
+					"Commit a single-choice step the moment it is answered. Never applies to the escape hatch, which needs a sentence first, and it is forced off under reduced motion.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "Selection, checked glyph, progress fill and the approve button.",
+			},
+			{
+				name: "dangerColor",
+				kind: "color",
+				default: "#f87171",
+				description: "Invalid row border and the rejection message.",
 			},
 		],
 	},
