@@ -83,6 +83,10 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   teletype: dynamic(() => import("./teletype/TeletypePreview"), { ssr: false }),
   kinetic: dynamic(() => import("./kinetic/KineticPreview"), { ssr: false }),
   reflow: dynamic(() => import("./reflow/ReflowPreview"), { ssr: false }),
+  segmented: dynamic(() => import("./segmented/SegmentedPreview"), { ssr: false }),
+  tether: dynamic(() => import("./tether/TetherPreview"), { ssr: false }),
+  "inline-edit": dynamic(() => import("./inline-edit/InlineEditPreview"), { ssr: false }),
+  crossing: dynamic(() => import("./crossing/CrossingPreview"), { ssr: false }),
   "intro-animation": dynamic(
     () => import("./intro-animation/IntroAnimationPreview"),
     { ssr: false },
