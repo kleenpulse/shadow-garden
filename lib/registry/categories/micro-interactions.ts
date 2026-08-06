@@ -745,8 +745,8 @@ export const microInteractions: ComponentEntry[] = [
 		],
 	},
 	{
-		slug: "circle-menu",
-		name: "CircleMenu",
+		slug: "stagger-menu",
+		name: "StaggerMenu",
 		category: "Micro-interactions",
 		tier: "free",
 		description:
@@ -765,7 +765,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/circle-menu/CircleMenu.tsx",
+				file: "components/registry/stagger-menu/StaggerMenu.tsx",
 			},
 			UTILS_VARIANT,
 		],

@@ -32,7 +32,7 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "corner-letters": dynamic(() => import("./corner-letters/CornerLettersPreview"), { ssr: false }),
   "hover-list": dynamic(() => import("./hover-list/HoverListPreview"), { ssr: false }),
   preloader: dynamic(() => import("./preloader/PreloaderPreview"), { ssr: false }),
-  "circle-menu": dynamic(() => import("./circle-menu/CircleMenuPreview"), { ssr: false }),
+  "stagger-menu": dynamic(() => import("./stagger-menu/StaggerMenuPreview"), { ssr: false }),
   "marquee-velocity": dynamic(() => import("./marquee-velocity/MarqueeVelocityPreview"), { ssr: false }),
   "letters-pull": dynamic(() => import("./letters-pull/LettersPullPreview"), { ssr: false }),
   constellation: dynamic(() => import("./constellation/ConstellationPreview"), { ssr: false }),
@@ -80,6 +80,9 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "approval-flow": dynamic(() => import("./approval-flow/ApprovalFlowPreview"), { ssr: false }),
   "diff-review": dynamic(() => import("./diff-review/DiffReviewPreview"), { ssr: false }),
   ledger: dynamic(() => import("./ledger/LedgerPreview"), { ssr: false }),
+  teletype: dynamic(() => import("./teletype/TeletypePreview"), { ssr: false }),
+  kinetic: dynamic(() => import("./kinetic/KineticPreview"), { ssr: false }),
+  reflow: dynamic(() => import("./reflow/ReflowPreview"), { ssr: false }),
   "intro-animation": dynamic(
     () => import("./intro-animation/IntroAnimationPreview"),
     { ssr: false },

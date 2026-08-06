@@ -140,6 +140,7 @@ export default function Ledger({
     jitter,
     maxEntries,
     loop,
+    reducedMotion,
   });
   live.current = {
     entries,
@@ -149,6 +150,7 @@ export default function Ledger({
     jitter,
     maxEntries,
     loop,
+    reducedMotion,
   };
 
   /** True while the reader is parked at the newest line. */
@@ -218,6 +220,12 @@ export default function Ledger({
   drawRef.current = (dt: number) => {
     const p = live.current;
     if (p.entries.length === 0) return false;
+    // The host halts *after* drawing, so the frame already in flight when
+    // reduced motion turns on still runs — and its writes land after the
+    // effect that just delivered the whole window, replacing a landed log with
+    // a half-typed one that nothing will ever finish. The frame body has to
+    // refuse to write, not merely stop being scheduled.
+    if (p.reducedMotion) return false;
 
     const s = stream.current;
     const step = dt * p.speed;

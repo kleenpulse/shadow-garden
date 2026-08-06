@@ -72,6 +72,12 @@ const NOT_BLANK_BYTES = 20000;
 const CONTINUITY_MS = 2000;
 const MIN_DRAWS = 3;
 
+/** How long a paused DOM host is given to finish arriving before stillness is
+ *  asserted. A runtime-host entry needs none of it; a spring-driven one is
+ *  mid-travel when the click lands and stopping it dead would be a worse
+ *  component, not a better one. */
+const SETTLE_MS = 1600;
+
 /** Entries whose continuity cannot be judged on swiftshader. Skipped loudly, not
  *  quietly passed — an expected failure trains people to ignore the whole run,
  *  which is how §B.B6 went unnoticed for weeks. Verified with VERIFY_GPU=1. */
@@ -304,18 +310,22 @@ async function verifyDom(sessionId, slug) {
 
   const paused = await evaluate(sessionId, CLICK_PAUSE);
   check(paused === true, "pause control found and clicked");
-  await sleep(900);
 
-  // Asserted here, unlike the canvas path. A DOM host has no buffer to ease to
-  // a stop in: once the runtime halts, nothing writes to the tree at all, so a
-  // non-zero count is a loop that ignored the pause.
+  // Rest, not teleportation. A runtime-host entry stops writing the instant it
+  // halts, but a spring-driven one is still travelling when the pause lands and
+  // has to be allowed to arrive — kinetic measured 348 mutations in the first
+  // 400ms after the click and exactly 0 in every 400ms bucket for the next 4.8
+  // seconds. The window is generous because it costs nothing: a loop that
+  // ignored the pause writes hundreds of records per 700ms, so no settle
+  // allowance short of seconds could launder one into a pass.
+  await sleep(SETTLE_MS);
   const pausedFrom = await evaluate(sessionId, DOM_PROBE);
   await sleep(700);
   const pausedTo = await evaluate(sessionId, DOM_PROBE);
   check(
     pausedTo.mutations - pausedFrom.mutations === 0,
-    "pause actually halts the loop",
-    `${pausedTo.mutations - pausedFrom.mutations} mutations in 700ms while paused`,
+    "pause brings the component to rest",
+    `${pausedTo.mutations - pausedFrom.mutations} mutations in 700ms, ${SETTLE_MS}ms after the click`,
   );
 
   await send(

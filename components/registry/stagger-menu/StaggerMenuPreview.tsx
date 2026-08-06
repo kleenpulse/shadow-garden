@@ -1,11 +1,11 @@
 "use client";
 
 import type { PreviewProps } from "@/lib/registry/types";
-import CircleMenu from "./CircleMenu";
+import StaggerMenu from "./StaggerMenu";
 
 const DEMO_ITEMS = ["HOME", "GARDEN", "REGISTRY", "ABOUT"];
 
-export default function CircleMenuPreview({
+export default function StaggerMenuPreview({
 	values,
 	reducedMotion,
 }: PreviewProps) {
@@ -23,7 +23,7 @@ export default function CircleMenuPreview({
 			</div>
 			<div className="absolute inset-x-8 top-1/3 h-px bg-white/5" />
 			<div className="absolute inset-x-8 bottom-1/3 h-px bg-white/5" />
-			<CircleMenu
+			<StaggerMenu
 				items={DEMO_ITEMS}
 				openStiffness={values.openStiffness as number}
 				stagger={values.stagger as number}
