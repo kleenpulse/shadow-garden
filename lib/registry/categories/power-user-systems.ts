@@ -2027,4 +2027,272 @@ export const powerUserSystems: ComponentEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "diff-review",
+		name: "DiffReview",
+		category: "Power-User Systems",
+		tier: "pro",
+		addedAt: "2026-08-06",
+		description:
+			"A review surface for a patch an agent has proposed — accept or reject each hunk, fold long runs of unchanged lines away, and flip between unified and split. Switching views does not redraw the diff: every line is a shared element that flies from the stream into its column and back, so you never lose the line you were reading.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Morph",
+			"Shared element transition",
+			"Layout animation",
+			"Crossfade",
+			"Stagger",
+			"Accordion / Collapse",
+			"Spatial consistency",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/diff-review/DiffReview.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+			name: "defaultView",
+			kind: "enum",
+			default: "unified",
+			options: ["unified", "split"],
+			description:
+				"Starting layout. One interleaved stream, or the old file beside the new one. The toolbar toggle overrides it live.",
+			},
+			{
+			name: "morphDuration",
+			kind: "number",
+			default: 380,
+			min: 120,
+			max: 1200,
+			step: 10,
+			unit: "ms",
+			description:
+				"Hunk fold, verdict change and the first reveal of a line. The flight between views is a spring and ignores this — stiffness and damping own that one.",
+			},
+			{
+			name: "stiffness",
+			kind: "number",
+			default: 420,
+			min: 80,
+			max: 800,
+			step: 10,
+			description:
+				"How hard a line is pulled toward its slot in the other view.",
+			},
+			{
+			name: "damping",
+			kind: "number",
+			default: 38,
+			min: 8,
+			max: 80,
+			step: 1,
+			description:
+				"How fast that flight settles. Low values let a line overshoot its column before landing.",
+			},
+			{
+			name: "stagger",
+			kind: "number",
+			default: 14,
+			min: 0,
+			max: 80,
+			step: 2,
+			unit: "ms",
+			description:
+				"Delay added per line as a hunk first appears. Capped at twelve lines in, so expanding a long fold never leaves the last row waiting in plain sight.",
+			},
+			{
+			name: "density",
+			kind: "enum",
+			default: "comfortable",
+			options: ["comfortable", "compact"],
+			description: "Row height and type size throughout.",
+			},
+			{
+			name: "showLineNumbers",
+			kind: "boolean",
+			default: true,
+			description:
+				"Old and new line numbers in the gutter. Split view shows one per side; unified shows the surviving number.",
+			},
+			{
+			name: "contextLines",
+			kind: "number",
+			default: 3,
+			min: 0,
+			max: 10,
+			step: 1,
+			description:
+				"Unchanged lines kept on the side of a run that faces a change. The rest fold behind an expander — except a fold that would hide a single line, which costs a row to save a row.",
+			},
+			{
+			name: "collapseDecided",
+			kind: "boolean",
+			default: true,
+			description:
+				"Fold a hunk's body away once it has a verdict, leaving the header and an Undo. Off keeps every hunk open so you can re-read what you just ruled on.",
+			},
+			{
+			name: "addColor",
+			kind: "color",
+			default: "#4ade80",
+			description: "Added lines, their gutter sign, and an accepted hunk's edge.",
+			},
+			{
+			name: "delColor",
+			kind: "color",
+			default: "#f87171",
+			description: "Removed lines, their gutter sign, and a rejected hunk's edge.",
+			},
+			{
+			name: "accentColor",
+			kind: "color",
+			default: "#a855f7",
+			description:
+				"Active view toggle, fold expanders, focus rings and the reviewed counter once every hunk has been ruled on.",
+			},
+		],
+	},
+	{
+		slug: "ledger",
+		name: "Ledger",
+		category: "Power-User Systems",
+		tier: "free",
+		addedAt: "2026-08-06",
+		pausable: true,
+		description:
+			"A live activity log for a working agent. Consecutive events from the same source fold into one block instead of stacking as identical rows, the window holds a fixed number and lets the rest fall off the top, and the scroll stays pinned to the newest line only until you scroll away from it — after that it keeps running and tells you how far behind you are.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Loop",
+			"Idle animation",
+			"Pulse",
+			"Fade in / Fade out",
+			"Slide in",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/ledger/Ledger.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+			name: "speed",
+			kind: "number",
+			default: 1,
+			min: 0.1,
+			max: 3,
+			step: 0.1,
+			unit: "×",
+			description:
+				"Multiplier on the whole cadence — typing and the gaps between events together.",
+			},
+			{
+			name: "charsPerSecond",
+			kind: "number",
+			default: 90,
+			min: 10,
+			max: 400,
+			step: 10,
+			description:
+				"Typing rate before jitter. The full text of an event is in the accessibility tree from the moment it arrives, so only the eye waits for this.",
+			},
+			{
+			name: "entryGap",
+			kind: "number",
+			default: 520,
+			min: 0,
+			max: 3000,
+			step: 20,
+			unit: "ms",
+			description: "Pause between one event landing and the next starting.",
+			},
+			{
+			name: "jitter",
+			kind: "number",
+			default: 0.35,
+			min: 0,
+			max: 1,
+			step: 0.05,
+			description:
+				"Spread on the per-event rate, metronome to wildly uneven. A fast burst draws a longer breath after it, so the unevenness reads as work rather than as noise. Seeded, not random — the same run is reproducible every mount.",
+			},
+			{
+			name: "maxEntries",
+			kind: "number",
+			default: 9,
+			min: 3,
+			max: 24,
+			step: 1,
+			description:
+				"Events retained before the oldest falls off the top, under a fade that keeps the window reading as a view onto a longer log.",
+			},
+			{
+			name: "group",
+			kind: "boolean",
+			default: true,
+			description:
+				"Fold consecutive same-source events into one block with a count. The block wears the worst severity in it, so a denial folded in among routine reads still shows red.",
+			},
+			{
+			name: "showTimestamps",
+			kind: "boolean",
+			default: true,
+			description:
+				"Elapsed stream time beside each block. Measured from the component's own clock, never from the wall clock, so it is identical on every replay.",
+			},
+			{
+			name: "caret",
+			kind: "boolean",
+			default: true,
+			description: "Blinking block caret on the line currently being written.",
+			},
+			{
+			name: "loop",
+			kind: "boolean",
+			default: true,
+			description:
+				"Wrap to the first event when the source list runs out. Off lets the stream halt itself once, and the header reads complete.",
+			},
+			{
+			name: "density",
+			kind: "enum",
+			default: "comfortable",
+			options: ["comfortable", "compact"],
+			description: "Row height and type size throughout.",
+			},
+			{
+			name: "accentColor",
+			kind: "color",
+			default: "#a855f7",
+			description:
+				"Live indicator, caret, catch-up pill and the ok severity.",
+			},
+			{
+			name: "warnColor",
+			kind: "color",
+			default: "#f0a830",
+			description: "The warn severity.",
+			},
+			{
+			name: "denyColor",
+			kind: "color",
+			default: "#f87171",
+			description: "The deny severity.",
+			},
+		],
+	},
 ];

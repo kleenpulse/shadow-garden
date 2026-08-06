@@ -63,7 +63,15 @@ export default function LiveWorkspace({
 					// grid, not block: previews size with `h-full`, which resolves to auto
 					// against a min-height-only block parent. A stretched grid area is
 					// definite, so `h-full` gets the real stage height.
-					<div className="group relative grid min-h-90 md:min-h-120 xl:min-h-150 overflow-hidden rounded-lg border border-hairline bg-panel">
+					// `data-preview-stage` is the handle scripts/verify-loop.mjs uses to
+					// scope its DOM-liveness observer to the entry under test. An attribute,
+					// not a class match: a harness keyed off a Tailwind string breaks
+					// silently the day these breakpoints change, and a silent harness is
+					// worse than none.
+					<div
+						data-preview-stage
+						className="group relative grid min-h-90 md:min-h-120 xl:min-h-150 overflow-hidden rounded-lg border border-hairline bg-panel"
+					>
 						<PreviewBoundary
 							slug={entry.slug}
 							variant="stage"
