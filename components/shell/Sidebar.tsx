@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	Suspense,
 	useEffect,
 	useMemo,
 	useRef,
@@ -15,35 +16,46 @@ import { useRouter } from "@bprogress/next/app";
 import { groupByCategory, registry } from "@/lib/registry";
 import type { Category, ComponentEntry } from "@/lib/registry/types";
 import { fuzzyScore } from "@/lib/fuzzy";
+import { isWithinNewWindow } from "@/lib/registry/freshness";
 import {
 	useUIStore,
 	SIDEBAR_MIN,
 	SIDEBAR_MAX,
 	SIDEBAR_DEFAULT,
-	type TierFilter,
+	type CatalogFilter,
 } from "@/lib/store";
 import { useResizable } from "./use-resizable";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import TierBadge from "./TierBadge";
 import NewBadge from "./NewBadge";
 import PillTabs, { type PillTabItem } from "./PillTabs";
+import CatalogFilterTabs, {
+	CATALOG_FILTER_PARAM,
+} from "./CatalogFilterTabs";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
 import FeedbackWidget from "./FeedbackWidget";
 
-const TIER_TABS: PillTabItem<TierFilter>[] = [
+const TIER_TABS: PillTabItem<CatalogFilter>[] = [
 	{ value: "all", label: "all" },
 	{ value: "free", label: "free" },
 	{ value: "pro", label: "pro" },
 ];
+// The label carries `.text-grainient` itself rather than the button: a directly
+// applied `color: transparent` beats the track's inherited text-* utility, which
+// would otherwise repaint the clipped glyphs solid.
+const NEW_TAB: PillTabItem<CatalogFilter> = {
+	value: "new",
+	label: <span className="text-grainient">new</span>,
+};
 
 export default function Sidebar() {
 	const pathname = usePathname();
 	const router = useRouter();
 	const search = useUIStore((state) => state.search);
 	const setSearch = useUIStore((state) => state.setSearch);
-	const tierFilter = useUIStore((state) => state.tierFilter);
-	const setTierFilter = useUIStore((state) => state.setTierFilter);
+	const catalogFilter = useUIStore((state) => state.catalogFilter);
+	const setCatalogFilter = useUIStore((state) => state.setCatalogFilter);
 	const sidebarOpen = useUIStore((state) => state.sidebarOpen);
 	const setSidebarOpen = useUIStore((state) => state.setSidebarOpen);
 	const sidebarWidth = useUIStore((state) => state.sidebarWidth);
@@ -87,10 +99,31 @@ export default function Sidebar() {
 			?.scrollIntoView({ block: "center" });
 	}, []);
 
+	// Freshness is wall-clock-dependent — same constraint as NewBadge: reading the
+	// clock during the prerendered shell would freeze it to build time. Stays null
+	// through SSR + first paint, so the New tab only mounts client-side.
+	const [now, setNow] = useState<number | null>(null);
+	useEffect(() => setNow(Date.now()), []);
+
+	const hasNew = useMemo(
+		() =>
+			now !== null && registry.some((e) => isWithinNewWindow(e.addedAt, now)),
+		[now],
+	);
+
+	const tabs = useMemo(
+		() => (hasNew ? [...TIER_TABS, NEW_TAB] : TIER_TABS),
+		[hasNew],
+	);
+
 	const tierFiltered = useMemo(() => {
-		if (tierFilter === "all") return registry;
-		return registry.filter((entry) => entry.tier === tierFilter);
-	}, [tierFilter]);
+		if (catalogFilter === "new") {
+			if (now === null) return [];
+			return registry.filter((entry) => isWithinNewWindow(entry.addedAt, now));
+		}
+		if (catalogFilter === "all") return registry;
+		return registry.filter((entry) => entry.tier === catalogFilter);
+	}, [catalogFilter, now]);
 
 	const searching = search.trim().length > 0;
 
@@ -130,7 +163,15 @@ export default function Sidebar() {
 
 	useEffect(() => {
 		setActive(0);
-	}, [search, tierFilter]);
+	}, [search, catalogFilter]);
+
+	// Carry the filter across navigation. Sidebar links are real navigations, so a
+	// bare href drops the query string — the sidebar would silently snap back to
+	// All the moment you clicked anything it had filtered down to.
+	const withFilter = (href: string) =>
+		catalogFilter === "all"
+			? href
+			: `${href}?${CATALOG_FILTER_PARAM}=${catalogFilter}`;
 
 	const toggleCategory = (category: Category) => {
 		setCollapsed((prev) => {
@@ -151,7 +192,7 @@ export default function Sidebar() {
 		} else if (event.key === "Enter") {
 			const target = visibleFlat[active];
 			if (target) {
-				router.push(`/components/${target.slug}`);
+				router.push(withFilter(`/components/${target.slug}`));
 				setSidebarOpen(false);
 			}
 		} else if (event.key === "Escape") {
@@ -168,7 +209,7 @@ export default function Sidebar() {
 		return (
 			<li key={entry.slug}>
 				<Link
-					href={href}
+					href={withFilter(href)}
 					{...hoverProps()}
 					onClick={() => {
 						if (!isActive) play("select"); // no cue re-selecting the current page
@@ -227,7 +268,9 @@ export default function Sidebar() {
 			>
 				<div className="flex items-center border-b border-hairline px-4 h-10 md:h-14">
 					<Link
-						href={pathname === "/components" ? "/" : "/components"}
+						href={
+							pathname === "/components" ? "/" : withFilter("/components")
+						}
 						className="flex items-baseline gap-0"
 						onClick={() => setSidebarOpen(false)}
 					>
@@ -257,16 +300,26 @@ export default function Sidebar() {
 						aria-label="Search components"
 						className="w-full rounded-md border border-hairline bg-panel px-3 py-1.5 font-mono text-xs text-ink placeholder:text-ink-mute outline-none focus-visible:border-accent"
 					/>
-					<PillTabs<TierFilter>
-						aria-label="Filter by tier"
-						value={tierFilter}
-						onValueChange={setTierFilter}
-						items={TIER_TABS}
-						layoutId="sidebar-tier-filter"
-						fullWidth
-						size="md"
-						className="mt-2"
-					/>
+					{/* The tabs read ?filter from the URL, so they mount behind Suspense
+					    (Cache Components rule). The fallback is the same control bound to
+					    the store alone — the row never blinks, it just isn't deep-linkable
+					    for the frame before hydration. */}
+					<Suspense
+						fallback={
+							<PillTabs<CatalogFilter>
+								aria-label="Filter components"
+								value={catalogFilter}
+								onValueChange={setCatalogFilter}
+								items={tabs}
+								layoutId="sidebar-tier-filter-static"
+								fullWidth
+								size="md"
+								className="mt-2"
+							/>
+						}
+					>
+						<CatalogFilterTabs items={tabs} />
+					</Suspense>
 				</div>
 
 				{/* AutoMaskVertical fades the scroll edges and auto-hides the scrollbar

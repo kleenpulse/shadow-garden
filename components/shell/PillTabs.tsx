@@ -89,9 +89,11 @@ export default function PillTabs<V extends string = string>({
 						tabIndex={active ? 0 : -1}
 						onClick={() => onValueChange(item.value)}
 						className={cn(
-							"relative inline-flex items-center justify-center rounded-md px-3 font-display uppercase tracking-[0.15em] outline-none transition-colors",
+							"relative inline-flex items-center justify-center rounded-md px-3 font-display whitespace-nowrap uppercase tracking-[0.15em] outline-none transition-colors",
 							sizeClasses.tab,
-							fullWidth && "flex-1",
+							// flex-1 already distributes the track, so the horizontal padding
+							// only costs label room — a fourth tab in a narrow sidebar clips without this.
+							fullWidth && "flex-1 px-1",
 							active ? "text-accent" : "text-ink-dim hover:text-ink",
 						)}
 					>

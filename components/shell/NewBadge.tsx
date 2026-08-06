@@ -9,8 +9,9 @@ import { isWithinNewWindow } from "@/lib/registry/freshness";
 // reveals after mount — no hydration mismatch, and it drops into server
 // components (the workspace header) as cleanly as client ones.
 //
-// - "pill": solid amethyst label — the loudest of Free (outline) / Pro (tint)
-//           / New. Used on catalog cards and the workspace header.
+// - "pill": black/white chip carrying the Grainient gradient in the glyphs — the
+//           loudest of Free (outline) / Pro (tint) / New, and the only badge that
+//           reads as a punch-out. Used on catalog cards and the workspace header.
 // - "tiny":  a tiny corner marker for tight rows (the sidebar). Anchored absolute
 //           to the top-left of a `relative` parent so it consumes no layout
 //           width — the row's name column stays put.
@@ -41,9 +42,13 @@ export default function NewBadge({
 		);
 	}
 
+	// Two spans, not one: `.text-grainient` sets the `background` shorthand to
+	// clip the gradient into the glyphs, so it would overwrite the chip's own
+	// fill if both lived on the same element. Outer paints, inner clips.
+	// Geometry mirrors TierBadge so the badge row stays on one rhythm.
 	return (
-		<span className="inline-flex min-w-11 items-center justify-center rounded bg-accent px-1.5 py-0.5 font-display text-[9px] uppercase tracking-[0.12em] text-on-accent">
-			New
+		<span className="inline-flex min-w-11 items-center justify-center rounded border border-hairline bg-white px-1 py-px font-display text-[10px]  uppercase sm:tracking-[0.15em] sm:text-xs dark:bg-black">
+			<span className="text-grainient">New</span>
 		</span>
 	);
 }
