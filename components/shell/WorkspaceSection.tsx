@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import { getEntitlement } from "@/lib/registry/entitlement";
+import { isControlsLocked } from "@/lib/registry/entitlement";
 import type { ComponentEntry } from "@/lib/registry/types";
 import LiveWorkspace from "./LiveWorkspace";
 
-// Server gate for the Controls panel, the same seam as source / install / props.
+// Server gate for the Controls panel — opt-in via GATE_CONTROLS, off by default.
 //
 // It has to sit HERE rather than in the page: the page is the static PPR shell, and an
 // entitlement read is a cookie read, which would drag the whole shell dynamic. Below
@@ -19,11 +19,7 @@ export default async function WorkspaceSection({
   code: ReactNode;
   promptSlot?: ReactNode;
 }) {
-  let controlsLocked = false;
-  if (entry.tier === "pro") {
-    const { pro } = await getEntitlement();
-    controlsLocked = !pro;
-  }
+  const controlsLocked = await isControlsLocked(entry.tier);
   return (
     <LiveWorkspace
       entry={entry}

@@ -130,7 +130,11 @@ const BLURBS: Record<Category, string> = {
 	Backgrounds: "Ambient fields. The room tone of an interface.",
 	"Text Animations": "Letters under tension. Morph, count, scroll.",
 	"Micro-interactions": "Small mechanisms. Felt more than seen.",
-	"Power-User Systems": "Command surfaces for operators.",
+	// Not "command surfaces": only the palette and the explorer are that. The
+	// other thirteen are a physics engine, an orrery, a flock, a Rubik's cube —
+	// what the category actually shares is weight. These are the ones with a
+	// simulation loop and state that outlives a frame.
+	"Power-User Systems": "Whole machines. State, memory, moving parts.",
 };
 
 function numberProp(slug: string, name: string): NumberProp {
