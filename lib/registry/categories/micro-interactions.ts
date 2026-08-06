@@ -2569,7 +2569,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				name: "exit",
 				kind: "enum",
-				default: "fade",
+				default: "hold",
 				options: ["hold", "fade", "slide"],
 				description:
 					"What the outgoing copy of the tile does while the incoming one arrives. Hold keeps it opaque underneath and is the default: it is the only one with no instant where two gradients are both half there. Fade is the browser's own behaviour, kept so the difference is visible; slide sends the old one off as the new lands.",

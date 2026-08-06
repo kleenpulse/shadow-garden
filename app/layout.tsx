@@ -7,6 +7,7 @@ import { IntroOverlay } from "@/components/intro/IntroOverlay";
 import { DevFab } from "@/components/dev/DevFab";
 import JsonLd from "@/components/seo/JsonLd";
 import { siteSchema } from "@/lib/schema";
+import { catalogFilterScript } from "@/lib/catalog-filter-script";
 import {
 	SITE_DESCRIPTION,
 	SITE_NAME,
@@ -107,6 +108,12 @@ export default function RootLayout({
 						__html:
 							"try{var s=JSON.parse(localStorage.getItem('sg-ui'));var w=Math.min(480,Math.max(220,(s&&s.state&&+s.state.sidebarWidth)||288));document.documentElement.style.setProperty('--sg-sidebar-w',w+'px')}catch(e){}",
 					}}
+				/>
+				{/* Pre-paint: restore the persisted sidebar catalog filter (All/Free/Pro/
+            New) onto <html> so the first paint already shows the filtered list.
+            Same persist key as the width above; globals.css owns the hiding. */}
+				<script
+					dangerouslySetInnerHTML={{ __html: catalogFilterScript() }}
 				/>
 				{/* Pre-paint: stamp html[data-sg-intro] when this session hasn't played
             the intro (or ?sg-intro forces a replay). globals.css keys the

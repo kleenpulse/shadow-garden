@@ -87,6 +87,8 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   tether: dynamic(() => import("./tether/TetherPreview"), { ssr: false }),
   "inline-edit": dynamic(() => import("./inline-edit/InlineEditPreview"), { ssr: false }),
   crossing: dynamic(() => import("./crossing/CrossingPreview"), { ssr: false }),
+  contour: dynamic(() => import("./contour/ContourPreview"), { ssr: false }),
+  cathode: dynamic(() => import("./cathode/CathodePreview"), { ssr: false }),
   "intro-animation": dynamic(
     () => import("./intro-animation/IntroAnimationPreview"),
     { ssr: false },
