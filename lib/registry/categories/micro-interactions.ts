@@ -2607,4 +2607,388 @@ export const microInteractions: ComponentEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "reorder",
+		name: "Reorder",
+		category: "Micro-interactions",
+		tier: "pro",
+		addedAt: "2026-08-06",
+		description:
+			"A sortable list that answers to a finger and to a keyboard equally — grab a row, and the rest step aside to make the space.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Drag to reorder",
+			"Drag",
+			"Layout animation",
+			"Spring",
+			"Press / Tap feedback",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/reorder/Reorder.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "axis",
+				kind: "enum",
+				default: "y",
+				options: ["y", "x"],
+				description: "Which way the list runs, and which arrow keys move a row.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 520,
+				min: 120,
+				max: 900,
+				step: 10,
+				description:
+					"Spring tension as the displaced rows close up. This is the only motion in the component that is not under your finger, so it is the one that decides whether the list feels attached to the drag.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 38,
+				min: 8,
+				max: 60,
+				step: 1,
+				description: "Spring friction on the same.",
+			},
+			{
+				name: "handle",
+				kind: "boolean",
+				default: true,
+				description:
+					"Restrict the drag to the grip. Off makes the whole row the surface, which is quicker to hit and costs you text selection and a scroll gesture that starts on a row.",
+			},
+			{
+				name: "lift",
+				kind: "number",
+				default: 1.03,
+				min: 1,
+				max: 1.15,
+				step: 0.01,
+				description:
+					"Scale of a row while it is off the ground. Past about 1.06 the row stops reading as lifted and starts reading as a different row.",
+			},
+			{
+				name: "liftShadow",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Shadow cast under a lifted row.",
+			},
+			{
+				name: "gap",
+				kind: "number",
+				default: 8,
+				min: 0,
+				max: 24,
+				step: 1,
+				unit: "px",
+				description: "Space between rows.",
+			},
+			{
+				name: "radius",
+				kind: "number",
+				default: 8,
+				min: 0,
+				max: 20,
+				step: 1,
+				unit: "px",
+				description: "Row corner radius.",
+			},
+			{
+				name: "density",
+				kind: "enum",
+				default: "comfortable",
+				options: ["comfortable", "compact"],
+				description: "Row padding.",
+			},
+			{
+				name: "showIndex",
+				kind: "boolean",
+				default: true,
+				description:
+					"Print the position of each row. Worth leaving on wherever the order is the data rather than a preference — it is the only on-screen confirmation that a keyboard move landed where the announcement said it did.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"Grip tint, and the outline on a row the keyboard is carrying. A pointer drag shows itself by moving; a keyboard grab has to be drawn.",
+			},
+		],
+	},
+	{
+		slug: "holofoil",
+		name: "Holofoil",
+		category: "Micro-interactions",
+		tier: "free",
+		addedAt: "2026-08-06",
+		description:
+			"Holographic trading-card foil over real content. The diffraction band travels against the tilt while the specular follows it, and the flake only lights where the rainbow currently falls — which is what stops the whole thing reading as one gradient sliding around.",
+		dependencies: [],
+		cookbook: [
+			"Hover effect",
+			"3D tilt / Flip",
+			"Perspective",
+			"Idle animation",
+			"Compositing",
+			"Hardware acceleration",
+		],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/holofoil/Holofoil.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "maxTilt",
+				kind: "number",
+				default: 14,
+				min: 0,
+				max: 30,
+				step: 1,
+				unit: "°",
+				description:
+					"Maximum lean at the card's edge. The tilt is only the carrier here — set it to zero and the foil still moves, because the bands are driven by pointer position rather than by the rotation.",
+			},
+			{
+				name: "perspective",
+				kind: "number",
+				default: 800,
+				min: 300,
+				max: 2400,
+				step: 50,
+				unit: "px",
+				description:
+					"Depth of the projection. Lower exaggerates the lean; the value that reads as expensive is nearly always further away than instinct suggests.",
+			},
+			{
+				name: "foil",
+				kind: "enum",
+				default: "rainbow",
+				options: ["rainbow", "reverse", "cosmic", "linear", "none"],
+				description:
+					"Which diffraction pattern the laminate carries. Rainbow is the repeating twelve-stop spectrum a real holographic sheet produces — it repeats rather than running one rainbow across the card. Reverse runs it the other way so the band travels against the tilt, which is what most people actually recognise as foil.",
+			},
+			{
+				name: "foilIntensity",
+				kind: "number",
+				default: 0.75,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				disabledWhen: { prop: "foil", equals: "none" },
+				description:
+					"Strength of the diffraction band. Past about one it stops being laminate and starts being a sticker.",
+			},
+			{
+				name: "sparkle",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"Density of the flake. It is masked by the diffraction band rather than laid over the card, and that coupling is the entire reason the specks read as suspended inside the laminate instead of as dust on your screen.",
+			},
+			{
+				name: "glare",
+				kind: "number",
+				default: 0.45,
+				min: 0,
+				max: 1.2,
+				step: 0.05,
+				description:
+					"The broad specular band, kept separate from the foil on purpose. Foil is diffraction and moves against the tilt; glare is reflection and follows it. Running both, opposed, is what gives the surface a material.",
+			},
+			{
+				name: "idleDrift",
+				kind: "number",
+				default: 0.2,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				unit: "×",
+				description:
+					"How much the foil keeps moving with no pointer on it, on two incommensurate rates so the idle never settles into an obvious period. A card in a case is never quite still, and a completely dead card in a grid reads as an image rather than an object.",
+			},
+			{
+				name: "settle",
+				kind: "number",
+				default: 0.12,
+				min: 0.02,
+				max: 0.5,
+				step: 0.01,
+				description:
+					"Seconds the card takes to catch up to the pointer. Near zero it is welded to the cursor and reads as a texture map; too high and it lags far enough that the foil stops feeling attached to your hand.",
+			},
+			{
+				name: "blendMode",
+				kind: "enum",
+				default: "color-dodge",
+				options: ["color-dodge", "screen", "overlay", "hard-light", "plus-lighter"],
+				description:
+					"How the foil composites onto whatever you wrapped. Colour-dodge behaves like real foil — it blows out where the card is already bright and does almost nothing in the shadows. Screen is the safe one on a light card.",
+			},
+			{
+				name: "sheenColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "The colour carried by the specular sheen.",
+			},
+		],
+	},
+	{
+		slug: "lens",
+		name: "Lens",
+		category: "Micro-interactions",
+		tier: "free",
+		addedAt: "2026-08-06",
+		description:
+			"A glass lens you drag across live content, bending it through an SVG displacement field with a real bevel and three-channel dispersion. It refracts a live duplicate of its own children rather than the page backdrop — which is the only version of this effect that works in Chrome, Safari and Firefox alike.",
+		dependencies: [],
+		cookbook: [
+			"Drag",
+			"Momentum",
+			"Rubber-banding",
+			"Damping",
+			"Blur",
+			"Mask",
+			"Hardware acceleration",
+		],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/lens/Lens.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "size",
+				kind: "number",
+				default: 180,
+				min: 80,
+				max: 420,
+				step: 10,
+				unit: "px",
+				description:
+					"Diameter of the disc. The displacement map is rasterised once at a fixed resolution and stretched to fit, so dragging this is cheap — regenerating a bitmap per frame would cost far more than the pixels are worth.",
+			},
+			{
+				name: "refraction",
+				kind: "number",
+				default: 0.55,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"How far the map pushes the content, and the one number this component is about. It runs through the filter property on a live duplicate rather than through backdrop-filter, because backdrop-filter with an SVG reference is Chromium-only — and CSS.supports reports true in WebKit and Gecko too, so the capability cannot even be detected honestly.",
+			},
+			{
+				name: "edgeThickness",
+				kind: "number",
+				default: 0.3,
+				min: 0.05,
+				max: 0.8,
+				step: 0.05,
+				description:
+					"How much of the radius is bevel. Real glass does nearly all of its bending in the last fifth, which is why displacing evenly across the whole disc gives a soap bubble rather than a lens.",
+			},
+			{
+				name: "blur",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 20,
+				step: 0.5,
+				unit: "px",
+				description:
+					"Softening behind the glass, and it wants to stay near zero. Blur is the fastest way to make a lens look like a smudge — real glass is sharpest dead centre, so anything past about three stops being an optic and becomes a frosted coaster you cannot read through.",
+			},
+			{
+				name: "chromatic",
+				kind: "number",
+				default: 0.22,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"Separation between the three channels' displacement — three real passes, isolated by colour matrices and recombined additively. Scaled by the disc rather than fixed in pixels, so the same setting is the same optic at any size. Glass disperses; a single pass with a tinted edge is a smear pretending to be physics.",
+			},
+			{
+				name: "magnify",
+				kind: "number",
+				default: 1.15,
+				min: 0.8,
+				max: 2,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Scale applied to the content inside the disc. It is a real transform rather than a displacement, because displacement can only resample pixels that are already there — faking magnification with it softens the entire window, which is exactly what makes most browser lenses read as a smear. Below one it is a fisheye pushed the wrong way: a real optic, and one that looks broken to everyone who is not an optician.",
+			},
+			{
+				name: "shimmer",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"Speed of the specular travelling the rim. It is the only thing here that moves on its own, and it is what stops a parked lens looking like a screenshot.",
+			},
+			{
+				name: "friction",
+				kind: "number",
+				default: 0.9,
+				min: 0.75,
+				max: 0.99,
+				step: 0.01,
+				description:
+					"How much of a throw survives, applied per second rather than per frame so the same flick coasts the same distance on a 60Hz and a 120Hz display.",
+			},
+			{
+				name: "bounded",
+				kind: "boolean",
+				default: true,
+				description:
+					"Keep the lens inside its container, resisting and reversing at the edge rather than stopping dead. A thrown object that halts against an invisible wall reads as a bug rather than as a boundary.",
+			},
+			{
+				name: "rimColor",
+				kind: "color",
+				default: "#e9e6ff",
+				description:
+					"The colour of the rim highlight, masked to the outermost two pixels so it reads as the lit edge of the glass instead of a ring drawn on top of it.",
+			},
+		],
+	},
 ];

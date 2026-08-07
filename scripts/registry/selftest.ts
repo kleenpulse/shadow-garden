@@ -38,11 +38,13 @@ function entry(over: Partial<ComponentEntry> = {}): ComponentEntry {
  * The intro is padded to clear the 40-word floor — the rules count words, not
  * meaning, so filler is the honest way to say "this axis is not what's broken".
  */
+const PADDING = Array.from({ length: 45 }, (_, i) => `word${i}`).join(" ");
+
 function collection(over: Partial<Collection> = {}): Collection {
   return {
     slug: "ok-collection",
     title: "Ok Collection",
-    intro: Array.from({ length: 45 }, (_, i) => `word${i}`).join(" "),
+    intro: PADDING,
     filter: { kind: "category", category: "Backgrounds" },
     ...over,
   };
@@ -413,6 +415,14 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     }),
   },
   {
+    // Prose claiming a membership the filter does not resolve. Padded past the
+    // 40-word floor so collection-intro is not what fires here.
+    rule: "collection-intro-count",
+    ctx: context(fiveEntries(), {
+      collections: [collection({ intro: `Ten components ${PADDING}` })],
+    }),
+  },
+  {
     // Two filters, one membership — the near-duplicate this rule exists to catch.
     rule: "collection-overlap",
     ctx: context(fiveEntries(), {
@@ -443,6 +453,30 @@ for (const { rule, ctx } of cases) {
   } else {
     console.log(`detects    ${rule}`);
   }
+}
+
+// The trap collection-intro-count is shaped around, and the one direction the
+// case list above cannot prove: a sub-count reads exactly like a membership
+// claim. `react-webgl-backgrounds` ships this sentence for real, so a rule that
+// fires on it would be worse than no rule at all.
+const subCount = checkRegistry(
+  context(fiveEntries(), {
+    collections: [
+      collection({
+        intro: `Five components that render on the GPU. Three components use Three.js. ${PADDING}`,
+      }),
+    ],
+  }),
+  RULES,
+).map((v) => v.rule);
+
+if (subCount.includes("collection-intro-count")) {
+  console.log(
+    "FALSE POSITIVE  collection-intro-count — fired on a correct claim beside a sub-count",
+  );
+  failed++;
+} else {
+  console.log("detects    nothing on a sub-count beside a correct claim");
 }
 
 const cleanViolations = checkRegistry(context([entry()]), RULES);

@@ -1983,7 +1983,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				name: "signal",
 				kind: "enum",
-				default: "grid",
+				default: "sweep",
 				options: ["sweep", "bars", "snow", "grid"],
 				description:
 					"What the tube is showing. Sweep is a single beam that reverses at each edge rather than jumping back — a beam that wrapped would read as a dropped frame, one that turns around reads as a mechanism. The rest are the test patterns a set falls back to when there is nothing on the line.",
@@ -2085,6 +2085,382 @@ export const backgrounds: ComponentEntry[] = [
 				kind: "color",
 				default: "#050607",
 				description: "The dead glass outside the picture.",
+			},
+		],
+	},
+	{
+		slug: "dither",
+		name: "Dither",
+		category: "Backgrounds",
+		tier: "free",
+		addedAt: "2026-08-06",
+		description:
+			"A live field crushed to one bit through an ordered threshold matrix. The only background here that looks better the cheaper it gets, and the only one that runs the same on a decade-old laptop as on a workstation.",
+		dependencies: ["ogl"],
+		cookbook: [
+			"Loop",
+			"Stepped animation",
+			"Idle animation",
+			"Compositing",
+			"Hardware acceleration",
+		],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/dither/Dither.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "pattern",
+				kind: "enum",
+				default: "bayer8",
+				options: ["bayer2", "bayer4", "bayer8", "halftone", "noise"],
+				description:
+					"Which threshold matrix decides each cell. Bayer is the ordered one — a fixed lattice, so the texture is stable and never crawls between frames. Halftone rotates the grid forty-five degrees and clusters instead of scattering, which is what a printing press does. Noise drops the lattice entirely and pays for it with a pattern that shimmers the moment anything moves.",
+			},
+			{
+				name: "levels",
+				kind: "number",
+				default: 2,
+				min: 2,
+				max: 8,
+				step: 1,
+				description:
+					"Tones per channel after quantisation. Two is the honest one-bit case. Above four this stops being dithering and starts being a slightly cheap gradient — worth dragging once to see exactly where the effect stops earning its name.",
+			},
+			{
+				name: "pixelSize",
+				kind: "number",
+				default: 3,
+				min: 1,
+				max: 12,
+				step: 1,
+				unit: "px",
+				description:
+					"Size of one dither cell, held in CSS pixels rather than device pixels. Held in device pixels the grid would halve on a retina screen and the effect would vanish on exactly the displays people judge it on.",
+			},
+			{
+				name: "field",
+				kind: "enum",
+				default: "plasma",
+				options: ["plasma", "ridges", "tunnel", "drift"],
+				description:
+					"What is being quantised underneath. The dither is indifferent to it — that is the point of a threshold matrix — but the four differ sharply in how much smooth gradient they hand it, and a pattern only shows its character on a gradient.",
+			},
+			{
+				name: "fieldSpeed",
+				kind: "number",
+				default: 0.3,
+				min: 0,
+				max: 2,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Rate the field evolves. At zero it parks, which is the clearest way to see the threshold matrix itself rather than the image passing through it.",
+			},
+			{
+				name: "fieldScale",
+				kind: "number",
+				default: 2.4,
+				min: 0.5,
+				max: 8,
+				step: 0.1,
+				description:
+					"Size of the field's features relative to the container. Small enough and the whole panel is one tone with nothing for the dither to resolve; large enough and every cell disagrees with its neighbour and the pattern turns to static.",
+			},
+			{
+				name: "frameHold",
+				kind: "number",
+				default: 0,
+				min: 0,
+				max: 8,
+				step: 1,
+				unit: "frames",
+				description:
+					"How many frames the field is held before it advances. Zero runs at display rate; three gives the deliberate stutter of a machine that could not keep up. The frame is still drawn either way and the held time is spent in one go when the hold expires — so this is a look, not a saving, and not a speed control in disguise.",
+			},
+			{
+				name: "contrast",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 3,
+				step: 0.05,
+				description:
+					"Contrast applied around mid-grey before quantisation. This is the real control over how much of the field survives: at two levels there is exactly one threshold, so pushing contrast up does not brighten the image, it decides where the edge between black and white falls.",
+			},
+			{
+				name: "inkColor",
+				kind: "color",
+				default: "#e8e4d8",
+				description:
+					"The colour a lit cell takes. Warm off-white rather than pure white on purpose — a true #ffffff against near-black is the one pairing that makes the grid buzz.",
+			},
+			{
+				name: "paperColor",
+				kind: "color",
+				default: "#0b0b0d",
+				description: "The colour an unlit cell takes.",
+			},
+		],
+	},
+	{
+		slug: "turing",
+		name: "Turing",
+		category: "Backgrounds",
+		tier: "pro",
+		addedAt: "2026-08-06",
+		description:
+			"Gray-Scott reaction-diffusion on the GPU. Two reagents, four terms, and coral, labyrinths and colonies that settle and stop all fall out of the arithmetic — a background that grows rather than loops, and never reaches the same frame twice.",
+		dependencies: ["ogl"],
+		cookbook: [
+			"Loop",
+			"Idle animation",
+			"Hover effect",
+			"Compositing",
+			"Frame rate (FPS)",
+		],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/turing/Turing.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "feed",
+				kind: "number",
+				default: 0.05,
+				min: 0.01,
+				max: 0.09,
+				step: 0.001,
+				description:
+					"Rate at which fresh reagent arrives everywhere. Feed and kill together pick the creature, and these coordinates were measured rather than inherited: 0.050/0.062 keeps colonising and is the default, 0.030/0.062 settles into stable spots and then genuinely stops, 0.039/0.058 floods to a dense labyrinth, and 0.022/0.051 oscillates without ever settling. Push feed past about 0.055 at this kill and the colonies die outright — the living band is a few thousandths wide, which is why the step is this fine.",
+			},
+			{
+				name: "kill",
+				kind: "number",
+				default: 0.062,
+				min: 0.045,
+				max: 0.07,
+				step: 0.001,
+				description:
+					"Rate at which the reacted product is removed. Pull it down and the pattern floods until it fills the plate; push it up and it starves back to nothing. The edge of the living band is a cliff rather than a slope, so this control does nothing and then does everything.",
+			},
+			{
+				name: "diffusion",
+				kind: "number",
+				default: 1,
+				min: 0.4,
+				max: 1.4,
+				step: 0.02,
+				description:
+					"How fast the substrate spreads relative to the activator, which is held at half. One is the canonical two-to-one. Turing's result is that a perfectly uniform system develops structure the moment one reagent outruns the other; this is that ratio, and below about 0.6 there is nothing to see because nothing outruns anything.",
+			},
+			{
+				name: "steps",
+				kind: "number",
+				default: 16,
+				min: 1,
+				max: 32,
+				step: 1,
+				description:
+					"Solver iterations per displayed frame, and the only reason this is watchable. The pattern needs a couple of thousand steps before it is worth looking at; at one step per frame that is most of a minute of staring at dots. Sixteen gets there in seconds and looks identical on arrival, because this is a time-scale control rather than a quality one. It is also the honest performance dial — every step is a full pass over the grid.",
+			},
+			{
+				name: "gridSize",
+				kind: "enum",
+				default: "512",
+				options: ["256", "384", "512", "768"],
+				description:
+					"Resolution of the simulation grid, deliberately held apart from the canvas — a window drag resizes only the display pass, so dragging the browser never wipes a pattern that took thirty seconds to grow. Bigger is finer filigree over the same area, not more area.",
+			},
+			{
+				name: "seed",
+				kind: "enum",
+				default: "spots",
+				options: ["spots", "ring", "stripe", "noise"],
+				description:
+					"How the plate is inoculated. Each one ends up somewhere different at identical feed and kill, which is the honest demonstration that this system has no single attractor — the initial condition is a real parameter, not a formality.",
+			},
+			{
+				name: "brush",
+				kind: "number",
+				default: 26,
+				min: 4,
+				max: 80,
+				step: 2,
+				unit: "px",
+				description:
+					"Radius the pointer inoculates. Measured against the grid rather than the canvas, so the blob covers the same share of the pattern on a narrow strip as on a full page. The dose is one impulse per frame regardless of how many solver steps run, so this control and the step count stay independent.",
+			},
+			{
+				name: "sharpness",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Where the palette ramp cuts the continuous field. The chemistry is smooth everywhere; coral does not look like coral until you cut it, and this is the cut. At zero you are looking at the raw concentration, which is the most informative view and the least striking one.",
+			},
+			{
+				name: "colorLow",
+				kind: "color",
+				default: "#0a0a12",
+				description: "The plate, where nothing has taken hold.",
+			},
+			{
+				name: "colorHigh",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"The colony. The membrane picks it up too, at a third strength, so the boundary reads as the same organism rather than as an outline drawn around it.",
+			},
+		],
+	},
+	{
+		slug: "quicksilver",
+		name: "Quicksilver",
+		category: "Backgrounds",
+		tier: "pro",
+		addedAt: "2026-08-06",
+		description:
+			"Molten chrome. Every other shader background emits light; this one reflects a studio that does not exist, synthesised from the surface normal — sharp softbox edges, a conductor's Fresnel wash, thin-film iridescence, and a wake that keeps moving where you dragged.",
+		dependencies: ["ogl"],
+		cookbook: [
+			"Loop",
+			"Idle animation",
+			"Hover effect",
+			"Compositing",
+			"Hardware acceleration",
+		],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/quicksilver/Quicksilver.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "flowSpeed",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 2,
+				step: 0.05,
+				unit: "×",
+				description:
+					"How fast the surface churns. At zero the metal sets, and a still frame is the only honest way to see how much of what you are looking at is the height field and how much is the light sitting on it.",
+			},
+			{
+				name: "warp",
+				kind: "number",
+				default: 0.55,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"How far the noise drags its own coordinates before it is sampled again. Low is rolled sheet metal; past about one the surface folds back through itself and stops reading as a liquid at all.",
+			},
+			{
+				name: "stir",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 3,
+				step: 0.1,
+				unit: "×",
+				description:
+					"How hard the pointer drags the metal. Eight recent impulses are kept alive at once, each with its own direction and age, which is why this leaves a wake rather than a dent — and why the whole component still costs one pass and no render target.",
+			},
+			{
+				name: "viscosity",
+				kind: "number",
+				default: 0.6,
+				min: 0.05,
+				max: 1,
+				step: 0.05,
+				description:
+					"How long a stir survives after the pointer has left. Low is mercury and settles almost before you have finished the gesture; high holds the wake long enough that you can write in it.",
+			},
+			{
+				name: "fresnel",
+				kind: "number",
+				default: 2.2,
+				min: 0.5,
+				max: 6,
+				step: 0.1,
+				description:
+					"Schlick exponent on the rim response. Low mirrors the whole surface evenly and reads as painted plastic; high keeps the bright reflection at the grazing angles, which is where metal actually puts it.",
+			},
+			{
+				name: "iridescence",
+				kind: "number",
+				default: 0.45,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Thin-film interference over the reflection, and the whole difference between chrome and oil on water. The hue comes from the film's optical thickness over the viewing cosine, so it tracks the surface angle instead of being a rainbow painted across the panel.",
+			},
+			{
+				name: "roughness",
+				kind: "number",
+				default: 0.18,
+				min: 0,
+				max: 1,
+				step: 0.02,
+				description:
+					"How soft the reflected studio edges are. This is not a blur: a rough conductor reflects the same room over a wider cone, so what widens is the light-to-dark transition. Zero is a mirror and shows every artefact in the height field, and a little roughness is what lets procedural metal survive being looked at closely.",
+			},
+			{
+				name: "tint",
+				kind: "color",
+				default: "#c8d2e0",
+				description:
+					"The base metal. Conductors tint what they reflect, and this washes out toward white at the grazing angles rather than staying constant — which is the part most fake chrome gets wrong.",
+			},
+			{
+				name: "sheenColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "The colour carried by the grazing-angle sheen.",
+			},
+			{
+				name: "backgroundColor",
+				kind: "color",
+				default: "#05060a",
+				description:
+					"The floor of the reflected environment, and what the vignette falls away to — so the panel edge reads as the room ending rather than as a mask laid over it.",
 			},
 		],
 	},

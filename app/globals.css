@@ -399,6 +399,29 @@ html[data-sg-intro] {
 		background-clip: text;
 		color: transparent;
 	}
+	/* Same ramp, lifted for dark ground. The ends already clear on black (#f754f1
+	   7.5:1, #22d3ee 11.7:1) — it's the #6d28d9 middle that dies at 2.9:1, so only
+	   that stop moves, to violet-400 (7.8:1). Keeps the Grainient identity while
+	   the glyphs stay legible; the original stays on light surfaces, where the
+	   bright ramp would fail the other way. */
+	.text-grainient-bright {
+		background: linear-gradient(120deg, #f754f1 0%, #a78bfa 50%, #22d3ee 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+	/* Composes on top of .text-grainient for surfaces that flip ground with the
+	   theme — the New chip is white in light, black in dark, so the ramp has to
+	   flip too. Only the image is restated; the clip and transparent color are
+	   already set by the base class. */
+	html.dark .text-grainient-on-dark {
+		background-image: linear-gradient(
+			120deg,
+			#f754f1 0%,
+			#a78bfa 50%,
+			#22d3ee 100%
+		);
+	}
 	/* visibility (not opacity) so the resting bg-clip-text gradient on the parent
 	   doesn't fill the cursor's glyph shape — hidden text is excluded from the
 	   text clip, opacity:0 text is not. Width is still reserved → no reflow. */
@@ -477,6 +500,15 @@ html[data-sg-intro] {
 		[role="tab"][data-value="new"]::before {
 		border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
 		background: color-mix(in oklab, var(--color-accent) 15%, transparent);
+	}
+	/* New's stand-in takes the punch-out fill its React indicator uses, or the
+	   pill would flash amethyst on refresh before handing over. Black in both
+	   themes, matching NEW_TAB's `activeFill` — keep the two in step. Must stay
+	   after the dark rule above: same specificity, source order decides. */
+	html[data-catalog-filter="new"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="new"]::before {
+		background: #000;
 	}
 
 	/* The list. Tier is a static attribute, so plain CSS covers Free/Pro; the
