@@ -2,6 +2,7 @@ import type { ComponentEntry } from "../../lib/registry/types";
 import type { Collection } from "../../lib/collections";
 import type { SourceDefault } from "./source-defaults";
 import type { LoopUsage } from "./loop-usage";
+import type { FilterRegions } from "./filter-region";
 
 // The registry check core. Pure: every piece of IO arrives on the context, so
 // the same rules run against the real repo (scripts/check-registry.ts) or against
@@ -82,6 +83,8 @@ export interface CheckContext {
   sourceDefaults(slug: string): Map<string, SourceDefault> | null;
   /** Hand-rolled runtime primitives in a slug's component source. */
   loopUsage(slug: string): LoopUsage | null;
+  /** SVG filter regions declared by a slug's component source. */
+  filterRegions(slug: string): FilterRegions | null;
   /**
    * Everything a slug's shipped source imports, walked transitively. `null` when
    * the entry declares no variant that exists on disk — `variant-file-exists`

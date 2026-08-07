@@ -62,14 +62,32 @@ export interface MirageProps {
   className?: string;
 }
 
-/** One period of the scrolling map, in CSS pixels. The map is rendered a tile
- *  larger than the element in both axes so a full period of scroll never
- *  uncovers an edge. */
-const TILE = 180;
+/** One period of the scrolling map, in CSS pixels, at `scale` 1. The map is
+ *  rendered a tile larger than the element in both axes so a full period of
+ *  scroll never uncovers an edge.
+ *
+ *  `scale` sizes the TILE rather than the cell count, and that is forced rather
+ *  than chosen. A tile of period P cannot hold a feature larger than P, and the
+ *  lattice only wraps on a whole number of cells — so cells-per-tile has to stay
+ *  integral and the cell size has to come from somewhere else. Sizing the tile
+ *  keeps the control continuous; quantising the cell count would make the slider
+ *  stick, and leaving both free is what stopped the field tiling at all. */
+const TILE_BASE = 180;
+const TILE_MIN = 60;
+/** Ceiling on the tile, and therefore on the map canvas (`box + tile`). Past
+ *  this the per-resize PNG encode is felt on a control drag. */
+const TILE_MAX = 720;
 
-/** Lattice cells per tile, x and y. Anisotropy is what separates the modes:
- *  equal frequencies give soup, and a strongly biased axis is what makes a tear
- *  read as a tear rather than as more haze. */
+const tileFor = (scale: number) =>
+  Math.max(
+    TILE_MIN,
+    Math.min(TILE_MAX, Math.round(TILE_BASE * Math.max(scale, 0.05))),
+  );
+
+/** Lattice cells per tile, x and y — integers, which is what makes the tile a
+ *  true period. Anisotropy is what separates the modes: equal frequencies give
+ *  soup, and a strongly biased axis is what makes a tear read as a tear rather
+ *  than as more haze. */
 const CELLS: Record<MirageMode, [number, number]> = {
   haze: [3, 6],
   liquify: [2, 2],
@@ -115,44 +133,40 @@ function makeNoise(cellsX: number, cellsY: number, seed: number) {
   };
 }
 
-function buildNoiseMap(
-  w: number,
-  h: number,
-  mode: MirageMode,
-  scale: number,
-): string {
+/** One period of the field, sampled in TILE space — `x / tile`, never
+ *  `x / canvasWidth`. That divisor is the whole invariant. makeNoise's lattice
+ *  wraps at its cell count, so sampling across the canvas yields a field whose
+ *  period is the CANVAS while the scroll below wraps at the tile. The two only
+ *  agree when the box happens to be a whole number of tiles, which it never is,
+ *  so every wrap swapped the field for an uncorrelated one — the entire element
+ *  jumping several pixels at once, twice a minute, with nothing touching it. */
+function buildNoiseTile(mode: MirageMode, tile: number): HTMLCanvasElement | null {
   const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1, Math.round(w));
-  canvas.height = Math.max(1, Math.round(h));
+  canvas.width = tile;
+  canvas.height = tile;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return "";
+  if (!ctx) return null;
 
   const [cx, cy] = CELLS[mode];
-  const s = Math.max(scale, 0.05);
-  // Cells are counted per TILE, so the tile stays the period no matter what the
-  // element measures — the scroll wrap is invisible at any size.
-  const tilesX = Math.max(1, Math.round((canvas.width / TILE) * (cx / s)));
-  const tilesY = Math.max(1, Math.round((canvas.height / TILE) * (cy / s)));
-
   const oct = OCTAVES[mode];
-  const n1x = makeNoise(tilesX, tilesY, 1);
-  const n1y = makeNoise(tilesX, tilesY, 2);
-  const n2x = makeNoise(tilesX * 2, tilesY * 2, 3);
-  const n2y = makeNoise(tilesX * 2, tilesY * 2, 4);
+  const n1x = makeNoise(cx, cy, 1);
+  const n1y = makeNoise(cx, cy, 2);
+  const n2x = makeNoise(cx * 2, cy * 2, 3);
+  const n2y = makeNoise(cx * 2, cy * 2, 4);
 
-  const img = ctx.createImageData(canvas.width, canvas.height);
+  const img = ctx.createImageData(tile, tile);
   const data = img.data;
-  for (let y = 0; y < canvas.height; y++) {
-    const v = y / canvas.height;
-    for (let x = 0; x < canvas.width; x++) {
-      const u = x / canvas.width;
+  for (let y = 0; y < tile; y++) {
+    const v = y / tile;
+    for (let x = 0; x < tile; x++) {
+      const u = x / tile;
       let dx = n1x(u, v) - 0.5;
       let dy = n1y(u, v) - 0.5;
       if (oct > 1) {
         dx += (n2x(u, v) - 0.5) * 0.5;
         dy += (n2y(u, v) - 0.5) * 0.5;
       }
-      const i = (y * canvas.width + x) * 4;
+      const i = (y * tile + x) * 4;
       data[i] = Math.max(0, Math.min(255, 128 + dx * 220));
       data[i + 1] = Math.max(0, Math.min(255, 128 + dy * 220));
       data[i + 2] = 128;
@@ -160,6 +174,29 @@ function buildNoiseMap(
     }
   }
   ctx.putImageData(img, 0, 0);
+  return canvas;
+}
+
+/** The map handed to feImage: the tile, repeated. Periodicity is structural
+ *  rather than asserted — a `repeat` pattern IS exactly periodic at the tile, at
+ *  every canvas size, so there is no box for which the scroll wrap can show. */
+function buildNoiseMap(
+  w: number,
+  h: number,
+  mode: MirageMode,
+  tile: number,
+): string {
+  const src = buildNoiseTile(mode, tile);
+  if (!src) return "";
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(w));
+  canvas.height = Math.max(1, Math.round(h));
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return "";
+  const pattern = ctx.createPattern(src, "repeat");
+  if (!pattern) return "";
+  ctx.fillStyle = pattern;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   return canvas.toDataURL();
 }
 
@@ -223,7 +260,17 @@ const Mirage = memo(
     const pointer = useRef({ x: 0.5, y: 0.5, over: false });
     const box = useRef({ w: 0, h: 0 });
 
-    const [maps, setMaps] = useState({ noise: "", taper: "", w: 0, h: 0 });
+    const [maps, setMaps] = useState({
+      noise: "",
+      taper: "",
+      w: 0,
+      h: 0,
+      tile: tileFor(scale),
+    });
+    // Mirrors maps.tile for the frame loop. The wrap distance and the feImage's
+    // own size have to be the SAME number — wrap at anything other than the
+    // rendered map's period and the fix is undone.
+    const tileRef = useRef(maps.tile);
 
     const live = useRef({ mode, intensity, speed, scale, chroma, trigger, edgeHold, reducedMotion });
     live.current = { mode, intensity, speed, scale, chroma, trigger, edgeHold, reducedMotion };
@@ -233,13 +280,16 @@ const Mirage = memo(
       const { w, h } = box.current;
       if (w < 2 || h < 2) return;
       const l = live.current;
+      const tile = tileFor(l.scale);
+      tileRef.current = tile;
       setMaps({
         // A tile larger in both axes, so a full period of scroll never uncovers
         // an edge of the element.
-        noise: buildNoiseMap(w + TILE, h + TILE, l.mode, l.scale),
+        noise: buildNoiseMap(w + tile, h + tile, l.mode, tile),
         taper: buildTaper(w, h, l.edgeHold),
         w,
         h,
+        tile,
       });
     };
 
@@ -265,11 +315,14 @@ const Mirage = memo(
 
         if (noise) {
           // Two incommensurate rates so the drift never settles into a visible
-          // period, wrapped at exactly one tile — which is seamless, so the wrap
-          // cannot be seen.
+          // period, wrapped at exactly one tile. The wrap is only invisible
+          // because the map is BUILT as a repeat of that tile — assert the
+          // period instead of constructing it and the whole element jumps to a
+          // different distortion once per wrap.
+          const tile = tileRef.current;
           const t = elapsed * l.speed;
-          const ox = -(((t * 26) % TILE) + TILE) % TILE;
-          const oy = -(((t * 17) % TILE) + TILE) % TILE;
+          const ox = -(((t * 26) % tile) + tile) % tile;
+          const oy = -(((t * 17) % tile) + tile) % tile;
           noise.setAttribute("x", ox.toFixed(2));
           noise.setAttribute("y", oy.toFixed(2));
         }
@@ -327,7 +380,25 @@ const Mirage = memo(
       >
         <svg aria-hidden className="absolute h-0 w-0" focusable="false">
           <defs>
-            <filter id={filterId} colorInterpolationFilters="sRGB">
+            {/* The region is pinned to the element's box. The default reaches
+                ten per cent beyond it, and out there the taper does not exist —
+                arithmetic on premultiplied transparent black resolves to 0.5 in
+                every channel, which un-premultiplies to MAXIMUM displacement
+                rather than none. The skirt then samples the source a half-scale
+                inside the box and paints a copy of the card's own edge around
+                it: a doubled border above and left, ending in mid-air a few
+                pixels short of the bottom corner, because past that point the
+                sample lands where nothing is drawn. Nothing legitimate needs to
+                live outside the box — the taper already forces the displacement
+                to zero at every edge. */}
+            <filter
+              id={filterId}
+              colorInterpolationFilters="sRGB"
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+            >
               {ready ? (
                 <>
                   <feImage
@@ -335,8 +406,8 @@ const Mirage = memo(
                     href={maps.noise}
                     x="0"
                     y="0"
-                    width={maps.w + TILE}
-                    height={maps.h + TILE}
+                    width={maps.w + maps.tile}
+                    height={maps.h + maps.tile}
                     preserveAspectRatio="none"
                     result="noise"
                   />

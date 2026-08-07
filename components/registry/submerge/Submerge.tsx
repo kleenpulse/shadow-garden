@@ -76,8 +76,13 @@ export interface SubmergeProps {
 /** Concurrent disturbances. Each costs one full-region composite, so this is the
  *  real budget knob; ten covers roughly a third of a screen of drag history. */
 const RIPPLES = 10;
-/** One period of the scrolling flow map, in CSS pixels. */
-const TILE = 200;
+/** One period of the scrolling flow map, in CSS pixels. The current scrolls and
+ *  wraps at exactly this distance, so the field it scrolls MUST repeat at
+ *  exactly this distance too — see buildFlowTile. */
+const TILE = 320;
+/** Lattice cells across one tile, coarse octave. The fine octave doubles it.
+ *  Cell size is TILE/FLOW_CELLS ≈ 107px, which is the scale of the swells. */
+const FLOW_CELLS = 3;
 /** Pointer travel between spawned sources, as a fraction of the SHORT side.
  *  Measured in pixels rather than in normalised box units — normalised, the same
  *  gesture spawns twice as densely vertically on a wide box.
@@ -121,6 +126,13 @@ const DISPLACE_BASE = 46;
  *  the current beneath it, and the sum of ripple and current would clip. */
 const MAX_WEIGHT = 0.68;
 
+/** Assumed seconds between spawns before a gesture has produced two. */
+const DEFAULT_GAP = 0.12;
+/** Bounds on the fraction of `settle` a wake may live. The ceiling is the old
+ *  fixed value; the floor keeps a frantic drag from leaving nothing behind. */
+const WAKE_LIFE_MAX = 0.85;
+const WAKE_LIFE_MIN = 0.18;
+
 /** Normalised exponential approach: 0 at p=0, 1 at p=1, finite slope at both.
  *  A square root also decelerates but has an INFINITE slope at zero, so every
  *  ring is born already travelling and the birth itself reads as a snap. */
@@ -157,30 +169,36 @@ function makeNoise(cellsX: number, cellsY: number, seed: number) {
   };
 }
 
-/** The slow current: R = x push, G = y push, B = height, A = 255. */
-function buildFlowMap(w: number, h: number): string {
+/** One period of the slow current: R = x push, G = y push, B = height, A = 255.
+ *
+ *  Sampled in TILE space — `x / TILE`, not `x / canvasWidth`. That single divisor
+ *  is the whole invariant. makeNoise's lattice wraps at its cell count, so
+ *  sampling across the canvas gives a field whose period is the CANVAS, and the
+ *  scroll below wraps at TILE. The two only agree when the box happens to be a
+ *  multiple of TILE, which it never is, so every wrap swapped the entire surface
+ *  for uncorrelated noise — a whole-element jump of up to ten pixels, every
+ *  thirty seconds, with nothing touching the element. */
+function buildFlowTile(): HTMLCanvasElement | null {
   const canvas = document.createElement("canvas");
-  canvas.width = Math.max(1, Math.round(w));
-  canvas.height = Math.max(1, Math.round(h));
+  canvas.width = TILE;
+  canvas.height = TILE;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return "";
+  if (!ctx) return null;
 
-  const tilesX = Math.max(1, Math.round((canvas.width / TILE) * 2));
-  const tilesY = Math.max(1, Math.round((canvas.height / TILE) * 2));
-  const nx1 = makeNoise(tilesX, tilesY, 1);
-  const ny1 = makeNoise(tilesX, tilesY, 2);
-  const nx2 = makeNoise(tilesX * 2, tilesY * 2, 3);
-  const ny2 = makeNoise(tilesX * 2, tilesY * 2, 4);
+  const nx1 = makeNoise(FLOW_CELLS, FLOW_CELLS, 1);
+  const ny1 = makeNoise(FLOW_CELLS, FLOW_CELLS, 2);
+  const nx2 = makeNoise(FLOW_CELLS * 2, FLOW_CELLS * 2, 3);
+  const ny2 = makeNoise(FLOW_CELLS * 2, FLOW_CELLS * 2, 4);
 
-  const img = ctx.createImageData(canvas.width, canvas.height);
+  const img = ctx.createImageData(TILE, TILE);
   const data = img.data;
-  for (let y = 0; y < canvas.height; y++) {
-    const v = y / canvas.height;
-    for (let x = 0; x < canvas.width; x++) {
-      const u = x / canvas.width;
+  for (let y = 0; y < TILE; y++) {
+    const v = y / TILE;
+    for (let x = 0; x < TILE; x++) {
+      const u = x / TILE;
       const dx = nx1(u, v) - 0.5 + (nx2(u, v) - 0.5) * 0.5;
       const dy = ny1(u, v) - 0.5 + (ny2(u, v) - 0.5) * 0.5;
-      const i = (y * canvas.width + x) * 4;
+      const i = (y * TILE + x) * 4;
       data[i] = Math.max(0, Math.min(255, 128 + dx * FLOW_AMP));
       data[i + 1] = Math.max(0, Math.min(255, 128 + dy * FLOW_AMP));
       data[i + 2] = Math.max(0, Math.min(255, 128 + (dx + dy) * FLOW_AMP * 0.43));
@@ -188,6 +206,32 @@ function buildFlowMap(w: number, h: number): string {
     }
   }
   ctx.putImageData(img, 0, 0);
+  return canvas;
+}
+
+/** Size-independent, so it is baked once for the life of the module — same
+ *  reasoning as the sprites below. */
+let FLOW_TILE: HTMLCanvasElement | null | undefined;
+function flowTile() {
+  if (FLOW_TILE === undefined) FLOW_TILE = buildFlowTile();
+  return FLOW_TILE;
+}
+
+/** The map handed to feImage: the tile, repeated. Periodicity is now structural
+ *  rather than asserted — a `repeat` pattern IS exactly periodic at the tile, at
+ *  every canvas size, so there is no box for which the scroll wrap can show. */
+function buildFlowMap(w: number, h: number): string {
+  const tile = flowTile();
+  if (!tile) return "";
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.max(1, Math.round(w));
+  canvas.height = Math.max(1, Math.round(h));
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return "";
+  const pattern = ctx.createPattern(tile, "repeat");
+  if (!pattern) return "";
+  ctx.fillStyle = pattern;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
   return canvas.toDataURL();
 }
 
@@ -336,9 +380,10 @@ interface Ripple {
    *  pointer outruns them. */
   r0: number;
   r1: number;
-  /** Fraction of `settle` this one lives. A wake dies before its slot is needed
-   *  again; an evicted ripple vanishes mid-life and that pop is what reads as
-   *  jumpy. */
+  /** Fraction of `settle` this one lives. For a wake it is derived from the
+   *  measured spawn rate so the ripple is always already dead when its slot
+   *  comes round — an evicted ripple vanishes mid-life, and that pop is what
+   *  reads as jumpy. */
   life: number;
   /** Peak blend weight. Wakes overlap heavily, so each carries less. */
   gain: number;
@@ -348,14 +393,14 @@ const Submerge = memo(
   ({
     children,
     depth = 0.45,
-    flow = 0.35,
+    flow = 1.25,
     turbulence = 0.5,
     rippleForce = 0.8,
     rippleSpread = 1,
     settle = 1.6,
     edgeHold = 0.35,
-    waterColor = "#4fc3d9",
-    deepColor = "#0b1e2e",
+    waterColor = "#bacffe",
+    deepColor = "#d9e7f3",
     paused = false,
     reducedMotion = false,
     className,
@@ -375,7 +420,15 @@ const Submerge = memo(
     const filterId = `sg-submerge-${rawId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
     const box = useRef({ w: 0, h: 0 });
-    const pointer = useRef({ lastX: NaN, lastY: NaN, travel: 0 });
+    // `gap` is the smoothed interval between spawns, in seconds. It is what
+    // tells a wake how long it may live — see spawn.
+    const pointer = useRef({
+      lastX: NaN,
+      lastY: NaN,
+      travel: 0,
+      lastSpawn: 0,
+      gap: DEFAULT_GAP,
+    });
     const ripples = useRef<Ripple[]>(
       Array.from({ length: RIPPLES }, () => ({
         x: 0.5, y: 0.5, age: 0, alive: false, href: "",
@@ -408,7 +461,9 @@ const Submerge = memo(
       // on the first gesture is the whole first impression. Memoised, so every
       // later resize skips it.
       shapes();
-      // Only these two depend on the box.
+      // Only these two depend on the box — and the flow map only in EXTENT now,
+      // never in pattern, so a resize no longer re-rolls the current underneath
+      // the content.
       setMaps({
         // A tile larger in both axes, so a full period of scroll never uncovers
         // an edge of the element.
@@ -435,8 +490,11 @@ const Submerge = memo(
         if (w < 2 || h < 2) return;
 
         // Ambient current. Two incommensurate rates so the drift never settles
-        // into a visible period, wrapped at exactly one tile — seamless, so the
-        // wrap cannot be seen.
+        // into a visible period, wrapped at exactly one tile. The wrap is only
+        // invisible because the map is BUILT as a repeat of that tile — assert
+        // the period rather than construct it and the whole surface jumps to a
+        // different shape once per wrap, which is the one bug in here you can
+        // see from across the room.
         const flowEl = flowRef.current;
         if (flowEl) {
           const t = elapsed * l.flow;
@@ -536,13 +594,24 @@ const Submerge = memo(
           WAKE_ANGLES;
         r.href = sh.wakes[bucket];
         // Slow. A wake that sprints outward is just a ring with extra steps: the
-        // envelope only forms while the pointer wins the race. The lifetime is
-        // matched to the slot count instead — ten sources spaced by SPAWN_FRACTION
-        // cover about half a screen of drag, and a wake that dies well before it
-        // is evicted just makes the trail shorter than it needs to be.
+        // envelope only forms while the pointer wins the race.
         r.r0 = 0.075;
         r.r1 = 0.18;
-        r.life = 0.85;
+        // A wake must die of old age, never of eviction. The slots are a strict
+        // ring, so the tenth spawn from now takes this one back whether or not it
+        // is still visible — and a disturbance deleted mid-life vanishes in a
+        // single frame, which is a pop. A fixed lifetime cannot avoid that,
+        // because whether it evicts depends on how fast the hand is moving: at
+        // the old 0.85 anything past ~300px/s evicted, and a casual sweep is
+        // three times that. So the life is one full trip round the ring instead,
+        // measured from the gesture actually in progress.
+        r.life = Math.max(
+          WAKE_LIFE_MIN,
+          Math.min(
+            WAKE_LIFE_MAX,
+            ((RIPPLES - 1) * pointer.current.gap) / Math.max(live.current.settle, 0.05),
+          ),
+        );
         r.gain = 0.62;
       } else {
         r.href = sh.ring;
@@ -586,6 +655,16 @@ const Submerge = memo(
       if (p.travel < step) return;
       p.travel = 0;
 
+      // Smoothed, because one stalled frame would otherwise stretch the next
+      // wake's life past its slot. Clamped above so a pause mid-gesture reads as
+      // a slow drag rather than as a wake that outlives the whole trail.
+      const now = e.timeStamp;
+      if (p.lastSpawn > 0) {
+        const dtSpawn = Math.min(0.5, Math.max(0.008, (now - p.lastSpawn) / 1000));
+        p.gap += (dtSpawn - p.gap) * 0.4;
+      }
+      p.lastSpawn = now;
+
       const len = Math.hypot(dx, dy);
       if (len > 1e-5) {
         const hd = heading.current;
@@ -625,6 +704,8 @@ const Submerge = memo(
     const release = () => {
       pointer.current.lastX = NaN;
       pointer.current.lastY = NaN;
+      // The interval across a gap between gestures is not a drag speed.
+      pointer.current.lastSpawn = 0;
     };
 
     const ready = maps.flow !== "" && maps.taper !== "";

@@ -7,6 +7,7 @@ import type { CheckContext, EntryImports, PreviewReads } from "./check";
 import { parsePreviewRegistrations, parseValueReads } from "./read-keys";
 import { parseSourceDefaults, type SourceDefault } from "./source-defaults";
 import { parseLoopUsage, type LoopUsage } from "./loop-usage";
+import { parseFilterRegions, type FilterRegions } from "./filter-region";
 import { parseImports, type Specifier } from "./imports";
 
 // The one place the check touches disk. Everything the rules need arrives here so
@@ -118,6 +119,28 @@ export function buildContext(): CheckContext {
     return result;
   }
 
+  const filterCache = new Map<string, FilterRegions | null>();
+
+  function filterRegions(slug: string): FilterRegions | null {
+    if (filterCache.has(slug)) return filterCache.get(slug) ?? null;
+
+    const entry = registry.find((e) => e.slug === slug);
+    // The component only. A peer or util file does not render a filter, and the
+    // shared runtime host certainly does not.
+    const variant = entry?.variants.find((v) => (v.role ?? "component") === "component");
+    let result: FilterRegions | null = null;
+
+    if (variant) {
+      const abs = path.join(ROOT, ...variant.file.split(/[\\/]/));
+      if (existsSync(abs)) {
+        result = parseFilterRegions(abs, readFileSync(abs, "utf8"));
+      }
+    }
+
+    filterCache.set(slug, result);
+    return result;
+  }
+
   // Parsed once per FILE, not once per entry that reaches it: lib/utils.ts is in
   // 37 closures and the animation host in 24, so without this the same two files
   // are re-parsed sixty-odd times per run.
@@ -207,6 +230,7 @@ export function buildContext(): CheckContext {
     previewReads,
     sourceDefaults,
     loopUsage,
+    filterRegions,
     entryImports,
     promptOverlays,
   };
