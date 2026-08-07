@@ -31,6 +31,13 @@ import { useAnimationLoop } from "@/hooks/use-animation-loop";
 // **Idle rotation stops the moment the pointer arrives.** A carousel that keeps
 // turning under the cursor is a carousel you cannot read, and one that keeps
 // turning under a *reader* is worse.
+//
+// **A press is not a drag until it travels.** The whole point of DOM panels is
+// that the text selects and the links click, so the ring cannot claim the
+// gesture on pointerdown. It waits for DRAG_THRESHOLD pixels: below that the
+// browser keeps the press and you get selection, focus and clicks; past it the
+// ring takes over, suppresses selection for the duration, and eats the trailing
+// click so a fling that ends on a link does not navigate.
 export interface RotundaProps {
   /** Panels arranged around the ring. */
   children?: ReactNode;
@@ -64,6 +71,9 @@ export interface RotundaProps {
 /** Below this angular speed a fling is over and the snap spring takes the ring. */
 const SETTLE_SPEED = 24;
 
+/** Pixels of travel before a press stops being a click and becomes a drag. */
+const DRAG_THRESHOLD = 5;
+
 const Rotunda = memo(
   ({
     children,
@@ -91,9 +101,12 @@ const Rotunda = memo(
     const motion = useRef({
       angle: 0,
       velocity: 0,
+      pending: false,
       dragging: false,
+      moved: false,
       hovering: false,
       pointerId: -1,
+      downX: 0,
       grabX: 0,
       grabAngle: 0,
       lastX: 0,
@@ -167,6 +180,10 @@ const Rotunda = memo(
             : `translate(-50%, -50%) rotateY(${theta}deg) translateZ(${l.radius}px)`;
           panel.style.zIndex = String(Math.round(front * 100));
           panel.style.opacity = String(1 - l.depthDim * (1 - front));
+          // A panel on the far side of the ring is facing away, so its links and
+          // buttons are not the ones under the cursor — hit-testing follows the
+          // transformed geometry and would happily fire them through the front.
+          panel.style.pointerEvents = front > 0.5 ? "auto" : "none";
 
           const inner = innersRef.current[i];
           if (inner) {
@@ -192,22 +209,52 @@ const Rotunda = memo(
     ]);
 
     const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+      // Secondary buttons belong to the context menu, not the ring.
+      if (e.button !== 0) return;
       const m = motion.current;
-      m.dragging = true;
+      m.pending = true;
+      m.dragging = false;
+      m.moved = false;
+      m.hovering = true;
       m.pointerId = e.pointerId;
+      m.downX = e.clientX;
       m.grabX = e.clientX;
       m.grabAngle = m.angle;
       m.lastX = e.clientX;
       m.lastT = e.timeStamp;
+      // A press stops a fling dead even if it never becomes a drag.
       m.velocity = 0;
-      e.currentTarget.setPointerCapture(e.pointerId);
+      // A press that begins on already-selected text starts a native
+      // drag-and-drop, which the browser ends with pointercancel — the ring
+      // would be stranded mid-throw. Collapsing the selection first removes the
+      // only thing that could be dragged.
+      window.getSelection()?.removeAllRanges();
       loop.start();
     };
 
     const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
       const m = motion.current;
       m.hovering = true;
-      if (!m.dragging || e.pointerId !== m.pointerId) return;
+      if (e.pointerId !== m.pointerId) return;
+
+      if (m.pending && !m.dragging) {
+        if (Math.abs(e.clientX - m.downX) < DRAG_THRESHOLD) return;
+        m.dragging = true;
+        m.moved = true;
+        // Re-anchor at the crossing point so the ring does not jump by the
+        // threshold the instant it takes over.
+        m.grabX = e.clientX;
+        m.grabAngle = m.angle;
+        m.lastX = e.clientX;
+        m.lastT = e.timeStamp;
+        e.currentTarget.setPointerCapture(e.pointerId);
+        // Suppressed only for the length of the gesture. A permanent
+        // `select-none` is what makes a DOM carousel no better than a canvas.
+        containerRef.current?.style.setProperty("user-select", "none");
+        window.getSelection()?.removeAllRanges();
+      }
+      if (!m.dragging) return;
+
       const l = live.current;
       m.angle = m.grabAngle + (e.clientX - m.grabX) * l.dragSensitivity;
 
@@ -227,9 +274,21 @@ const Rotunda = memo(
       if (m.pointerId !== -1 && e.currentTarget.hasPointerCapture(m.pointerId)) {
         e.currentTarget.releasePointerCapture(m.pointerId);
       }
+      m.pending = false;
       m.dragging = false;
       m.pointerId = -1;
+      containerRef.current?.style.removeProperty("user-select");
       loop.start();
+    };
+
+    // The click that trails a real drag would otherwise open whatever link the
+    // fling happened to end on. Captured at the top so it never reaches it.
+    const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
+      const m = motion.current;
+      if (!m.moved) return;
+      m.moved = false;
+      e.preventDefault();
+      e.stopPropagation();
     };
 
     const onPointerLeave = () => {
@@ -256,13 +315,12 @@ const Rotunda = memo(
     return (
       <div
         ref={containerRef}
-        // touch-none because the drag is the interaction, select-none because a
-        // drag across a panel's text otherwise selects it — and a press that
-        // begins on selected text starts a native drag, which the browser ends
-        // with pointercancel, stranding the ring mid-throw.
+        // touch-none because the drag is the interaction and a finger would
+        // otherwise scroll the page. No select-none: selection is suppressed for
+        // the length of a drag and left alone the rest of the time.
         className={
           className ??
-          "relative h-full w-full touch-none overflow-hidden select-none outline-none"
+          "relative h-full w-full touch-none overflow-hidden outline-none"
         }
         style={{ perspective: `${perspective}px` }}
         onPointerDown={onPointerDown}
@@ -270,6 +328,7 @@ const Rotunda = memo(
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
         onPointerLeave={onPointerLeave}
+        onClickCapture={onClickCapture}
         onKeyDown={onKeyDown}
         tabIndex={0}
         role="group"
