@@ -85,6 +85,7 @@ function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): 
     previewReads: readsAll(registry),
     sourceDefaults: () => new Map(),
     loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false, nullishHalts: 0 }),
+    filterRegions: () => ({ displacementFilters: 0, unpinned: [] }),
     // Seeded with the framework packages on purpose: the clean-entry assertion
     // below then doubles as the proof that FRAMEWORK_PROVIDED still exempts
     // them. If someone ever makes the rule demand `react` in dependencies, this
@@ -353,6 +354,17 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     // Uses the host but declares only the component variant.
     ctx: context([entry()], {
       loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: true, nullishHalts: 0 }),
+    }),
+  },
+  {
+    // The ghost frame of §B18/§B20: a displacing filter left on the default
+    // 120% region, so the skirt reads transparent black as maximum push.
+    rule: "displacement-filter-region-pinned",
+    ctx: context([entry()], {
+      filterRegions: () => ({
+        displacementFilters: 1,
+        unpinned: ["x, y, width, height"],
+      }),
     }),
   },
   {

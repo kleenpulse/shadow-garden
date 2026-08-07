@@ -2684,10 +2684,10 @@ export const powerUserSystems: ComponentEntry[] = [
 				kind: "number",
 				default: 2.2,
 				min: 0.3,
-				max: 8,
+				max: 4,
 				step: 0.1,
 				description:
-					"Size of the turbulence cells, counted against a fixed tile rather than against the element — so the same setting is the same air whether the panel is a card or a page. Small cells shred the glyphs and large ones move the whole block as a unit; the interesting band is where a cell is roughly the height of a line of text.",
+					"Size of the turbulence cells, measured against a scrolling tile rather than against the element — so the same setting is the same air whether the panel is a card or a page. This sizes the tile itself, because a tile can hold no feature larger than its own period and the noise lattice only wraps on a whole number of cells; free the cell count instead and the field stops tiling, which shows up as the whole panel jumping to a different distortion once a wrap. Small cells shred the glyphs and large ones move the whole block as a unit; the interesting band is where a cell is roughly the height of a line of text.",
 			},
 			{
 				name: "chroma",

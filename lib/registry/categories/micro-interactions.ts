@@ -2895,13 +2895,13 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				name: "size",
 				kind: "number",
-				default: 180,
-				min: 80,
-				max: 420,
-				step: 10,
-				unit: "px",
+				default: 45,
+				min: 10,
+				max: 90,
+				step: 1,
+				unit: "%",
 				description:
-					"Diameter of the disc. The displacement map is rasterised once at a fixed resolution and stretched to fit, so dragging this is cheap — regenerating a bitmap per frame would cost far more than the pixels are worth.",
+					"Diameter of the disc, measured against the shorter side of whatever it is dropped into rather than in pixels — so the glass keeps its proportion in a wide hero and in a narrow column alike, and can never outgrow the box on either axis. The displacement map is rasterised once at a fixed resolution and stretched to fit, so dragging this is cheap; regenerating a bitmap per frame would cost far more than the pixels are worth.",
 			},
 			{
 				name: "refraction",
@@ -2926,13 +2926,13 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				name: "blur",
 				kind: "number",
-				default: 1,
+				default: 0,
 				min: 0,
 				max: 20,
 				step: 0.5,
 				unit: "px",
 				description:
-					"Softening behind the glass, and it wants to stay near zero. Blur is the fastest way to make a lens look like a smudge — real glass is sharpest dead centre, so anything past about three stops being an optic and becomes a frosted coaster you cannot read through.",
+					"Softening behind the glass, and it ships at zero on purpose. Blur is the fastest way to make a lens look like a smudge — real glass is sharpest dead centre, so anything past about three stops being an optic and becomes a frosted coaster you cannot read through. At zero the blur is dropped from the filter list rather than written as blur(0px), which would still buy a render surface for no visible effect.",
 			},
 			{
 				name: "chromatic",
@@ -2947,7 +2947,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				name: "magnify",
 				kind: "number",
-				default: 1.15,
+				default: 1.6,
 				min: 0.8,
 				max: 2,
 				step: 0.05,
@@ -2980,7 +2980,7 @@ export const microInteractions: ComponentEntry[] = [
 				kind: "boolean",
 				default: true,
 				description:
-					"Keep the lens inside its container, resisting and reversing at the edge rather than stopping dead. A thrown object that halts against an invisible wall reads as a bug rather than as a boundary.",
+					"Which box holds the lens in, and what it is looking at. On, it stays inside its container and magnifies a live duplicate of the children you handed it. Off, it is portalled to the body and bound to the viewport instead — dropping the container's own clip is not enough, because any ancestor that clips wins and on a real page there is always one — and what it magnifies becomes the whole page. Either boundary resists and reverses rather than stopping dead; a thrown object that halts against an invisible wall reads as a bug rather than as a boundary. The page is duplicated for real, because no browser API lets an element read arbitrary rendered content: backdrop-filter cannot magnify and is Chromium-only. That copy is a snapshot rather than a live tree, re-taken on every grab, so it cannot carry a running animation, canvas pixels or component state.",
 			},
 			{
 				name: "rimColor",

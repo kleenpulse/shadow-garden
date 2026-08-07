@@ -552,6 +552,37 @@ const noNullishHalt: Rule = {
   },
 };
 
+// §B18/§B20. The SVG default filter region is 120% of the element's box, and in
+// that skirt the displacement map does not exist. A missing input is
+// premultiplied transparent black, which is not "no displacement" — read
+// directly it is R=G=0 and therefore maximum NEGATIVE push, and through an
+// arithmetic composite carrying a constant it lands on maximum positive push.
+// Either way the skirt samples the source half a scale inside the box and paints
+// a copy of the element's own edge around it: a doubled border that stops in
+// mid-air where the sample runs off the content. Shipped twice, and in both
+// files the comment above the tag asserted the region was the element's box.
+// Neither `verify:loop` nor any curl can see it — a ghost is not a missing
+// mutation and it is not a non-200 — so it lives here.
+const displacementFilterRegionPinned: Rule = {
+  id: "displacement-filter-region-pinned",
+  severity: "error",
+  what: "a filter that displaces pixels declares its own region rather than taking the 120% default",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const regions = ctx.filterRegions(entry.slug);
+      if (!regions) continue;
+      for (const missing of regions.unpinned) {
+        out.push({
+          slug: entry.slug,
+          detail: `<filter> wrapping an feDisplacementMap omits ${missing} — the default region reaches 10% past the element, where the map is transparent black and reads as MAXIMUM displacement. Pin it: x="0" y="0" width="100%" height="100%"`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
 const loopHostShipsTheHook: Rule = {
   id: "loop-host-ships-the-hook",
   severity: "error",
@@ -924,6 +955,7 @@ export const RULES: Rule[] = [
   pausableMatchesPreview,
   noHandRolledLoop,
   noNullishHalt,
+  displacementFilterRegionPinned,
   loopHostShipsTheHook,
   loopAllowlistCurrent,
   collectionSlug,
