@@ -9,6 +9,9 @@ const TAB_SPRING = { type: "spring" as const, stiffness: 350, damping: 30 };
 export type PillTabItem<V extends string = string> = {
 	value: V;
 	label: ReactNode;
+	/** Overrides the indicator's fill for this tab only — merged through `cn`, so
+	 *  a `bg-*` here beats the default amethyst tint. The border is left alone. */
+	activeFill?: string;
 };
 
 type PillTabsProps<V extends string = string> = {
@@ -104,7 +107,10 @@ export default function PillTabs<V extends string = string>({
 							<motion.span
 								layoutId={effectiveLayoutId}
 								// Inner radius stays rounded-md (ours). Amethyst-tinted fill.
-								className="absolute inset-0 z-0 rounded-md bg-accent/10 dark:border dark:border-accent/40 dark:bg-accent/15"
+								className={cn(
+									"absolute inset-0 z-0 rounded-md bg-accent/10 dark:border dark:border-accent/40 dark:bg-accent/15",
+									item.activeFill,
+								)}
 								transition={TAB_SPRING}
 							/>
 						)}

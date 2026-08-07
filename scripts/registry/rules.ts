@@ -802,6 +802,73 @@ const collectionIntro: Rule = {
   },
 };
 
+// Spelled-out cardinals, ones through ninety-nine. The registry is 84 entries
+// and the largest collection resolves 40, so two digits is coverage rather than
+// a guess — a hundreds table would be speculative and this is a lookup, not a
+// parser.
+const ONES = [
+  "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+  "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+  "sixteen", "seventeen", "eighteen", "nineteen",
+];
+const TENS = [
+  "", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty",
+  "ninety",
+];
+
+const CARDINALS = new Map<string, number>();
+for (const [n, word] of ONES.entries()) CARDINALS.set(word, n);
+for (const [t, tens] of TENS.entries()) {
+  if (!tens) continue;
+  CARDINALS.set(tens, t * 10);
+  for (let unit = 1; unit <= 9; unit++) {
+    CARDINALS.set(`${tens}-${ONES[unit]}`, t * 10 + unit);
+  }
+}
+
+/**
+ * Anchored on the NOUN, not the number. Every intro opens its claim the same
+ * way — "Nineteen backgrounds that run…", "Thirty components covering…" — and
+ * the capital is what separates that opening claim from a mid-sentence aside.
+ * Both halves matter: `react-webgl-backgrounds` says "Fourteen use ogl", which
+ * the noun excludes, and lowercase "three use Three.js", which the capital
+ * excludes on its own.
+ */
+const CLAIM = /\b([A-Z][a-z]+(?:-[a-z]+)?)\s+(?:components?|backgrounds?)\b/g;
+
+const collectionIntroCount: Rule = {
+  id: "collection-intro-count",
+  severity: "error",
+  what: "a collection intro's stated component count matches the membership it resolves",
+  run(ctx) {
+    const out: Finding[] = [];
+
+    for (const collection of ctx.collections) {
+      const actual = resolveCollection(collection, ctx.registry).length;
+
+      // Every match is checked, not just the first — an intro that states the
+      // count twice can rot in either half.
+      for (const match of collection.intro.matchAll(CLAIM)) {
+        const claimed = CARDINALS.get(match[1].toLowerCase());
+        if (claimed === undefined) continue;
+        // A sub-count reads exactly like a membership claim: "Three components
+        // use Three.js" is correct prose on a nineteen-member page. Nothing
+        // under the floor can BE a membership claim — collection-floor already
+        // guarantees every page resolves at least that many — so anything
+        // smaller is a sub-count and this rule stays out of it.
+        if (claimed < COLLECTION_FLOOR) continue;
+        if (claimed === actual) continue;
+
+        out.push({
+          slug: collection.slug,
+          detail: `intro says "${match[0]}", but the filter resolves ${actual} — membership is computed and the prose is not, so this is the one part of the page that rots in silence`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
 const collectionOverlap: Rule = {
   id: "collection-overlap",
   severity: "error",
@@ -864,5 +931,6 @@ export const RULES: Rule[] = [
   collectionTermDefined,
   collectionDepDeclared,
   collectionIntro,
+  collectionIntroCount,
   collectionOverlap,
 ];

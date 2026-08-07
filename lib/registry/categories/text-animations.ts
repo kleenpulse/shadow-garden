@@ -21,13 +21,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A gooey blur-morph that cross-dissolves between a list of words.",
 		dependencies: ["clsx", "tailwind-merge"],
-		cookbook: [
-			"Text morph",
-			"Morph",
-			"Crossfade",
-			"Blur",
-			"Loop",
-		],
+		cookbook: ["Text morph", "Morph", "Crossfade", "Blur", "Loop"],
 		variants: [
 			{
 				lang: "ts",
@@ -115,11 +109,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A marquee that scrolls only when its text overflows the container.",
 		dependencies: ["clsx", "tailwind-merge"],
-		cookbook: [
-			"Marquee",
-			"Loop",
-			"Linear",
-		],
+		cookbook: ["Marquee", "Loop", "Linear"],
 		variants: [
 			{
 				lang: "ts",
@@ -176,10 +166,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Text whose letters interpolate font weight by cursor proximity.",
 		dependencies: ["motion"],
-		cookbook: [
-			"Hover effect",
-			"Interpolation / Tween",
-		],
+		cookbook: ["Hover effect", "Interpolation / Tween"],
 		variants: [
 			{
 				lang: "ts",
@@ -354,12 +341,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A scroll-scrubbed word reveal — each word brightens and rises as it enters the viewport, tied directly to scroll position.",
 		dependencies: ["gsap"],
-		cookbook: [
-			"Scroll reveal",
-			"Scroll-driven animation",
-			"Stagger",
-			"Reveal",
-		],
+		cookbook: ["Scroll reveal", "Scroll-driven animation", "Stagger", "Reveal"],
 		variants: [
 			{
 				lang: "ts",
@@ -424,12 +406,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Ciphered glyphs boiling out of noise and resolving into words — a decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
 		dependencies: [],
-		cookbook: [
-			"Text morph",
-			"Stepped animation",
-			"Hover effect",
-			"Stagger",
-		],
+		cookbook: ["Text morph", "Stepped animation", "Hover effect", "Stagger"],
 		variants: [
 			{
 				lang: "ts",
@@ -443,7 +420,8 @@ export const textAnimations: ComponentEntry[] = [
 				kind: "enum",
 				default: "decode-on-mount",
 				options: ["decode-on-mount", "scramble-on-hover", "continuous-glitch"],
-				description: "Decode once on mount, re-scramble on hover, or glitch forever.",
+				description:
+					"Decode once on mount, re-scramble on hover, or glitch forever.",
 			},
 			{
 				name: "charset",
@@ -470,7 +448,8 @@ export const textAnimations: ComponentEntry[] = [
 				max: 100,
 				step: 5,
 				unit: "ms",
-				description: "Per-character offset of the settle deadline across the string.",
+				description:
+					"Per-character offset of the settle deadline across the string.",
 			},
 			{
 				name: "speed",
@@ -490,7 +469,8 @@ export const textAnimations: ComponentEntry[] = [
 				max: 8,
 				step: 0.5,
 				unit: "s",
-				description: "Seconds between glitch bursts (continuous-glitch mode only).",
+				description:
+					"Seconds between glitch bursts (continuous-glitch mode only).",
 			},
 			{
 				name: "flashColor",
@@ -510,11 +490,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Text that casts a long shadow sweeping like a sundial through the hours.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
-		cookbook: [
-			"Loop",
-			"Idle animation",
-			"Linear",
-		],
+		cookbook: ["Loop", "Idle animation", "Linear"],
 		variants: [
 			{
 				lang: "ts",
@@ -606,12 +582,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"Spectral RGB-split echoes drift off the letters and dissolve into the dark.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
-		cookbook: [
-			"Follow-through",
-			"Blur",
-			"Loop",
-			"Idle animation",
-		],
+		cookbook: ["Follow-through", "Blur", "Loop", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -737,7 +708,8 @@ export const textAnimations: ComponentEntry[] = [
 				max: 20,
 				step: 1,
 				unit: "words",
-				description: "Width of the reading band — words mid-transition at once.",
+				description:
+					"Width of the reading band — words mid-transition at once.",
 			},
 			{
 				name: "blurAmount",
@@ -1038,12 +1010,7 @@ export const textAnimations: ComponentEntry[] = [
 		description:
 			"A line of type arriving one character at a time, at a rate that varies and with a beat at every mark.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
-		cookbook: [
-			"Typewriter",
-			"Stepped animation",
-			"Loop",
-			"Idle animation",
-		],
+		cookbook: ["Typewriter", "Stepped animation", "Loop", "Idle animation"],
 		variants: [
 			{
 				lang: "ts",
@@ -1098,7 +1065,8 @@ export const textAnimations: ComponentEntry[] = [
 				max: 2000,
 				step: 20,
 				unit: "ms",
-				description: "Empty beat between one line clearing and the next starting.",
+				description:
+					"Empty beat between one line clearing and the next starting.",
 			},
 			{
 				name: "jitter",
@@ -1194,7 +1162,8 @@ export const textAnimations: ComponentEntry[] = [
 				min: 60,
 				max: 1400,
 				step: 20,
-				description: "Spring tension. Higher launches harder and settles sooner.",
+				description:
+					"Spring tension. Higher launches harder and settles sooner.",
 			},
 			{
 				name: "damping",
@@ -1443,6 +1412,258 @@ export const textAnimations: ComponentEntry[] = [
 				default: "#a855f7",
 				disabledWhen: { prop: "traceMoves", equals: false },
 				description: "The trace tint.",
+			},
+		],
+	},
+	{
+		slug: "metallic-text",
+		name: "MetallicText",
+		category: "Text Animations",
+		tier: "pro",
+		addedAt: "2026-08-06",
+		pausable: true,
+		description:
+			"Chrome poured into a headline — a metal ramp clipped to real glyphs, a specular travelling across them, and a tinted wake following a beat behind.",
+		dependencies: ["clsx", "tailwind-merge"],
+		cookbook: [
+			"Mask",
+			"Compositing",
+			"Follow-through",
+			"Idle animation",
+			"Loop",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/metallic-text/MetallicText.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "sweepSpeed",
+				kind: "number",
+				default: 3.2,
+				min: 0.5,
+				max: 12,
+				step: 0.1,
+				unit: "s",
+				description: "Time for the highlight to cross the line once.",
+			},
+			{
+				name: "sweepWidth",
+				kind: "number",
+				default: 0.28,
+				min: 0.05,
+				max: 1,
+				step: 0.01,
+				description:
+					"Width of the specular band as a share of the text box. Narrow reads as polished chrome, wide as brushed steel — the band is the light source, so its size is the softness of the reflection.",
+			},
+			{
+				name: "sweepAngle",
+				kind: "number",
+				default: 18,
+				min: -60,
+				max: 60,
+				step: 1,
+				unit: "°",
+				description:
+					"Rake of the band off vertical. Stops short of ±90 on purpose: at a right angle the band lies parallel to its own travel and the sweep stops reading as movement at all.",
+			},
+			{
+				name: "contrast",
+				kind: "number",
+				default: 0.7,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"Separation between the dark and light bands of the metal. This is what decides whether the text reads as chrome or as a grey gradient — the horizon between the two is the reflection of a ground plane.",
+			},
+			{
+				name: "specular",
+				kind: "number",
+				default: 0.85,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description: "Brightness of the travelling highlight.",
+			},
+			{
+				name: "lag",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.01,
+				description:
+					"How far the wake trails the highlight. At zero the two move as one gradient; raise it and the light gains weight, because the trailing edge is still arriving when the leading edge has gone.",
+			},
+			{
+				name: "sweep",
+				kind: "enum",
+				default: "alternate",
+				options: ["alternate", "loop"],
+				description:
+					"Whether the light returns the way it came or restarts from the same edge each pass.",
+			},
+			{
+				name: "grain",
+				kind: "number",
+				default: 0.12,
+				min: 0,
+				max: 0.5,
+				step: 0.01,
+				description:
+					"Brushed striations along the sweep axis. Directional rather than random — milled metal has a grain direction, and noise reads as dirt on the screen instead.",
+			},
+			{
+				name: "baseColor",
+				kind: "color",
+				default: "#8f94a3",
+				description:
+					"The metal. Also the fallback colour: where background-clip on text is unsupported the element renders as plain text in this colour rather than as an invisible headline.",
+			},
+			{
+				name: "highlightColor",
+				kind: "color",
+				default: "#ffffff",
+				description: "The specular.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "Tint of the wake.",
+			},
+		],
+	},
+	{
+		slug: "inlay",
+		name: "Inlay",
+		category: "Text Animations",
+		tier: "pro",
+		addedAt: "2026-08-07",
+		description:
+			"A live shader material poured into real letterforms — molten rock, aurora, chrome, embers, tide. The text stays a real text node at transparent, so it is still selectable, searchable and read aloud exactly once while something genuinely animated fills it.",
+		dependencies: ["ogl"],
+		cookbook: [
+			"Loop",
+			"Mask",
+			"Reveal",
+			"Idle animation",
+			"Compositing",
+		],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/inlay/Inlay.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "material",
+				kind: "enum",
+				default: "molten",
+				options: ["molten", "aurora", "chrome", "embers", "tide"],
+				description:
+					"What is poured into the letterforms. Each is a different branch over the same glyph mask, so switching is a uniform change and never a relayout — the type does not move when the material does.",
+			},
+			{
+				name: "flowSpeed",
+				kind: "number",
+				default: 0.4,
+				min: 0,
+				max: 2,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Rate the material flows. At zero it sets, which is the only way to judge the fill on its own rather than the motion carrying it.",
+			},
+			{
+				name: "scale",
+				kind: "number",
+				default: 1.6,
+				min: 0.3,
+				max: 6,
+				step: 0.1,
+				description:
+					"Size of the material's features relative to the type. Under about one the pattern is larger than the word and the letters read as flat colour; over three it turns to grain inside the strokes and the word stops being legible before it stops being pretty.",
+			},
+			{
+				name: "sweep",
+				kind: "number",
+				default: 0.8,
+				min: 0,
+				max: 3,
+				step: 0.05,
+				unit: "s",
+				description:
+					"How long the material takes to pour across the line on mount. The wipe runs in the shader against the glyph's own horizontal position, so it follows the letterforms rather than being a rectangle crossing them. Zero fills instantly.",
+			},
+			{
+				name: "glow",
+				kind: "number",
+				default: 0.4,
+				min: 0,
+				max: 1.5,
+				step: 0.05,
+				description:
+					"Bloom bleeding past the glyph edge. It is sampled from the mask around each fragment rather than by blurring the material, so the halo belongs to the letterform instead of to whatever colour happened to sit next to it. Past about one the letters fatten and the counters close up.",
+			},
+			{
+				name: "grain",
+				kind: "number",
+				default: 0.15,
+				min: 0,
+				max: 0.6,
+				step: 0.05,
+				description:
+					"Dither over the fill. A smooth gradient inside a letterform bands on an eight-bit display more visibly than almost anywhere else, because there is a hard edge right beside it for the eye to compare against.",
+			},
+			{
+				name: "warp",
+				kind: "number",
+				default: 0.25,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How far the material drags its own coordinates before it is sampled. This is what turns a moving gradient into something that looks like it is being stirred.",
+			},
+			{
+				name: "hoverBoost",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 2,
+				step: 0.05,
+				unit: "×",
+				description:
+					"How much the material accelerates and lifts under the pointer. The real text sits underneath at transparent — selection works, a screen reader reads it, a crawler indexes it — so this is decoration on a working headline rather than a replacement for one.",
+			},
+			{
+				name: "colorA",
+				kind: "color",
+				default: "#a855f7",
+				description: "The material's shadow.",
+			},
+			{
+				name: "colorB",
+				kind: "color",
+				default: "#38bdf8",
+				description: "The material's light.",
 			},
 		],
 	},

@@ -48,7 +48,9 @@ export default function NewBadge({
 	// Geometry mirrors TierBadge so the badge row stays on one rhythm.
 	return (
 		<span className="inline-flex min-w-11 items-center justify-center rounded border border-hairline bg-white px-1 py-px font-display text-[10px]  uppercase sm:tracking-[0.15em] sm:text-xs dark:bg-black">
-			<span className="text-grainient">New</span>
+			{/* The chip's ground flips with the theme, so the ramp does too — the
+			    stock mid stop is 2.9:1 on the dark chip. */}
+			<span className="text-grainient text-grainient-on-dark">New</span>
 		</span>
 	);
 }

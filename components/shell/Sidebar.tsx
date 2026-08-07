@@ -38,12 +38,16 @@ const TIER_TABS: PillTabItem<CatalogFilter>[] = [
 	{ value: "free", label: "free" },
 	{ value: "pro", label: "pro" },
 ];
-// The label carries `.text-grainient` itself rather than the button: a directly
+// The label carries the gradient itself rather than the button: a directly
 // applied `color: transparent` beats the track's inherited text-* utility, which
-// would otherwise repaint the clipped glyphs solid.
+// would otherwise repaint the clipped glyphs solid. The `-bright` ramp because
+// the fill below is black in both themes — the stock one's mid stop reads 2.9:1
+// there. Punch-out fill: the amethyst tint every other tab uses muddies gradient
+// glyphs.
 const NEW_TAB: PillTabItem<CatalogFilter> = {
 	value: "new",
-	label: <span className="text-grainient">new</span>,
+	label: <span className="text-grainient-bright">new</span>,
+	activeFill: "bg-black dark:bg-black",
 };
 
 export default function Sidebar() {
@@ -378,7 +382,7 @@ export default function Sidebar() {
 				{/* Feedback trigger — pinned to the bottom, offset by the list padding
 				    above so the last nav items never hide behind it. Opens the two-step
 				    feedback/bug-report modal (portals out via GrowDialog). */}
-				<div className="absolute inset-x-0 bottom-0 z-20 border-t border-hairline bg-surface">
+				<div className=" inset-x-0 bottom-0 z-20 border-t border-hairline bg-surface">
 					<FeedbackWidget />
 				</div>
 
