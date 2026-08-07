@@ -2771,7 +2771,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				name: "flow",
 				kind: "number",
-				default: 0.35,
+				default: 1.25,
 				min: 0,
 				max: 2,
 				step: 0.05,
@@ -2835,14 +2835,13 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				name: "waterColor",
 				kind: "color",
-				default: "#4fc3d9",
-				description:
-					"Shallow water — the colour every ring crest carries.",
+				default: "#bacffe",
+				description: "Shallow water — the colour every ring crest carries.",
 			},
 			{
 				name: "deepColor",
 				kind: "color",
-				default: "#0b1e2e",
+				default: "#d9e7f3",
 				description:
 					"Deep water. Applied as a multiply rather than an overlay, so the content keeps its own contrast instead of flattening behind a sheet of colour.",
 			},
