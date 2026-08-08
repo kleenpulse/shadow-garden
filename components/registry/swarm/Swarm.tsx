@@ -43,6 +43,8 @@ interface SwarmProps {
   shape?: SwarmShape;
   /** Strings the text shape cycles through. */
   targets?: string[];
+  /** Seconds a shape holds before auto swaps to the next. */
+  swapDuration?: number;
   /** How hard particles are pulled to their target. */
   morphSpeed?: number;
   /** How much of the morph is spread across the cloud. */
@@ -57,6 +59,8 @@ interface SwarmProps {
   pointSize?: number;
   /** How close the camera sits to the cloud. */
   zoom?: number;
+  /** Idle rotation while nothing is being dragged. */
+  autoSpin?: boolean;
   /** Colour of a settled particle. */
   particleColor?: string;
   /** Colour of a moving one. */
@@ -242,6 +246,19 @@ void main() {
   vec3 toTarget = tgt - pos;
   vec3 acc = toTarget * uMorph * 9.0 * gain;
 
+  // uDamping is a fixed velocity decay — it does not scale with the spring it is
+  // damping. At the default morphSpeed that decay sits almost exactly at
+  // critical damping, which is why the default morph settles clean. The ratio
+  // falls as morphSpeed rises though, and a stiff spring under a fixed decay
+  // overshoots: the cloud flies past its target and springs back, which reads as
+  // the whole thing zooming rather than morphing. Top the damping up to critical
+  // whenever the spring outruns it. Derived from the NOMINAL stiffness, ignoring
+  // the per-particle stagger gain, so the term is exactly zero at and below the
+  // default and the shipped look is untouched.
+  float cHave = -60.0 * log(clamp(uDamping, 0.01, 0.999));
+  float cNeed = 2.0 * sqrt(uMorph * 9.0);
+  acc -= vel * max(0.0, cNeed - cHave);
+
   // Turbulence fades out as a particle closes on its target. Applied at full
   // strength everywhere it competes with the restoring force near the target,
   // and the cloud hovers permanently in a band a few tenths wide — which reads
@@ -322,13 +339,32 @@ void main() {
   fragColor = vec4(col, a);
 }`;
 
+// Every FORM the enum offers, so a lap visits all of them before repeating.
+// `disperse` is deliberately absent: it is a state rather than a destination —
+// uniformly random targets, which is TV snow, not a shape. A morph into it has
+// every particle travelling somewhere unrelated to its neighbours, so it reads
+// as the animation coming apart rather than as a transition. The entry already
+// says as much by disabling `morphSpeed` while `shape` is disperse: there is no
+// morph there to pace.
 const AUTO_CYCLE = ["text", "sphere", "torus", "grid"] as const;
+
+/** How long the camera takes to swing back to front-on. */
+const FACE_SECONDS = 0.55;
+
+/** Shortest-path form of an angle, in (-π, π]. Folding the accumulated spin into
+ *  the orbit yaw without this makes a recentre from 3.1rad travel the long way
+ *  round instead of the few degrees actually separating it from front-on. */
+function wrapPi(a: number): number {
+  const t = ((((a + Math.PI) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2));
+  return t - Math.PI;
+}
 
 const Swarm = memo(
   ({
     density = "65k",
     shape = "auto",
-    targets = ["SHADOW", "GARDEN"],
+    targets = ["GARDEN", "ETA", "VII"],
+    swapDuration = 3.2,
     morphSpeed = 1.1,
     stagger = 0.45,
     curl = 0.3,
@@ -336,6 +372,7 @@ const Swarm = memo(
     repel = 1,
     pointSize = 1.6,
     zoom = 1,
+    autoSpin = true,
     particleColor = "#a855f7",
     accentColor = "#67e8f9",
     backgroundColor = "#04040a",
@@ -370,12 +407,12 @@ const Swarm = memo(
     });
 
     const live = useRef({
-      shape, targets, morphSpeed, stagger, curl, damping, repel,
-      pointSize, zoom, particleColor, accentColor, backgroundColor, reducedMotion,
+      shape, targets, swapDuration, morphSpeed, stagger, curl, damping, repel,
+      pointSize, zoom, autoSpin, particleColor, accentColor, backgroundColor, reducedMotion,
     });
     live.current = {
-      shape, targets, morphSpeed, stagger, curl, damping, repel,
-      pointSize, zoom, particleColor, accentColor, backgroundColor, reducedMotion,
+      shape, targets, swapDuration, morphSpeed, stagger, curl, damping, repel,
+      pointSize, zoom, autoSpin, particleColor, accentColor, backgroundColor, reducedMotion,
     };
 
     useEffect(() => {
@@ -424,7 +461,16 @@ const Swarm = memo(
       let velRead = makeRT(), velWrite = makeRT();
 
       const targetTexture = new Texture(glc, {
-        image: sampleText(targets[0] ?? "SHADOW", count),
+        // Seed from the CURRENT shape, not a fixed initial. This effect re-runs
+        // on a density change and the retarget effect below does not — its own
+        // deps are untouched by one — so whatever lands here is final until
+        // `shape` next moves. A hardcoded seed silently reverts the shape on
+        // every density step. "auto" seeds text because AUTO_CYCLE[0] is text
+        // and autoIndex starts at 0.
+        image:
+          shape === "auto" || shape === "text"
+            ? sampleText(targets[0] ?? "GARDEN", count)
+            : sampleShape(shape, count),
         width: side, height: side,
         type: gl2.FLOAT, format: gl2.RGBA, internalFormat: gl2.RGBA32F,
         minFilter: gl2.NEAREST, magFilter: gl2.NEAREST,
@@ -534,6 +580,18 @@ void main() { fragColor = texture(uSrc, vUv); }`,
       let spin = 0;
       let autoAt = 0;
       let autoIndex = 0;
+      // Separate from autoIndex: the cycle lands on "text" once per lap, so
+      // indexing the word list by autoIndex resolves to targets[0] every time
+      // and every entry past the first is dead.
+      let wordIndex = 0;
+      // Recentre state. Armed on the autoSpin true->false edge and disarmed by
+      // the first drag, so the swing to front-on happens once and never fights
+      // a hand already on the camera.
+      let wasAutoSpin = live.current.autoSpin;
+      let facing = false;
+      let faceT = 0;
+      let faceYaw = 0;
+      let facePitch = 0;
 
       drawRef.current = (dt) => {
         const l = live.current;
@@ -556,17 +614,63 @@ void main() { fragColor = texture(uSrc, vUv); }`,
           const decay = Math.pow(0.92, step * 60);
           o.vYaw *= decay;
           o.vPitch *= decay;
-          spin = (spin + step * 0.14) % (Math.PI * 2);
+          // Only the idle drift is gated. The momentum above is user-initiated,
+          // so it still coasts to rest with autoSpin off — cutting it there
+          // would stop a fling dead the instant the finger left.
+          if (l.autoSpin && !l.reducedMotion) {
+            spin = (spin + step * 0.14) % (Math.PI * 2);
+          }
         }
         o.yaw %= Math.PI * 2;
 
+        // Turning the drift off leaves a text shape wherever the rotation
+        // happened to be — half the time reading backwards, which is a picture
+        // of a word rather than a word. Swing back to front-on, once, on the
+        // edge. Only for the shapes that HAVE a front: recentring a torus would
+        // just be throwing away an angle the viewer chose.
+        const wantsFace = l.shape === "auto" || l.shape === "text";
+        if (wasAutoSpin && !l.autoSpin && wantsFace && !o.dragging) {
+          // Fold the accumulated spin into the orbit yaw first. Visually a
+          // no-op — the shader only ever sees the sum — but it leaves one angle
+          // to interpolate instead of two that would race each other to zero.
+          o.yaw = wrapPi(spin + o.yaw);
+          spin = 0;
+          faceYaw = o.yaw;
+          facePitch = o.pitch;
+          faceT = 0;
+          facing = true;
+        }
+        wasAutoSpin = l.autoSpin;
+
+        if (facing) {
+          if (o.dragging) {
+            // A hand on the camera outranks the recentre. Abandon it rather
+            // than finish the swing under the cursor.
+            facing = false;
+          } else {
+            faceT = Math.min(1, faceT + step / (l.reducedMotion ? 0.0001 : FACE_SECONDS));
+            const e = faceT * faceT * (3 - 2 * faceT);
+            o.yaw = faceYaw * (1 - e);
+            o.pitch = facePitch * (1 - e);
+            o.vYaw = 0;
+            o.vPitch = 0;
+            if (faceT >= 1) facing = false;
+          }
+        }
+
         if (l.shape === "auto") {
           autoAt += step;
-          if (autoAt > 3.2) {
+          // Floored rather than trusted: the registry clamps this, but a
+          // consumer passing 0 would retarget every frame and resample the
+          // whole cloud on the CPU with it.
+          if (autoAt > Math.max(l.swapDuration, 0.25)) {
             autoAt = 0;
             autoIndex = (autoIndex + 1) % AUTO_CYCLE.length;
             const next = AUTO_CYCLE[autoIndex];
-            const word = l.targets[autoIndex % Math.max(l.targets.length, 1)] ?? "SHADOW";
+            if (next === "text") {
+              wordIndex = (wordIndex + 1) % Math.max(l.targets.length, 1);
+            }
+            const word = l.targets[wordIndex] ?? "GARDEN";
             retargetRef.current?.(next as SwarmShape, word);
           }
         }
@@ -629,19 +733,22 @@ void main() { fragColor = texture(uSrc, vUv); }`,
         retargetRef.current = null;
         if (container.contains(canvas)) container.removeChild(canvas);
       };
+      // `shape` and `targets` are read above to seed the target, but are
+      // deliberately not deps: changing a shape must retarget, never tear down
+      // the renderer. The effect below owns that path.
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fallback, density]);
 
     useEffect(() => {
       if (shape === "auto") return;
-      retargetRef.current?.(shape, targets[0] ?? "SHADOW");
+      retargetRef.current?.(shape, targets[0] ?? "GARDEN");
       loop.paint();
     }, [shape, targets, loop]);
 
     useEffect(() => {
       loop.paint();
     }, [
-      morphSpeed, stagger, curl, damping, repel, pointSize, zoom,
+      swapDuration, morphSpeed, stagger, curl, damping, repel, pointSize, zoom, autoSpin,
       particleColor, accentColor, backgroundColor, loop,
     ]);
 

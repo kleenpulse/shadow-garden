@@ -103,9 +103,12 @@ export default function ControlsPanel({
 			>
 				{props.map((schema) => {
 					// Cross-prop gating from the schema (e.g. petals disabled at zero bloom).
-					const disabled = schema.disabledWhen
-						? values[schema.disabledWhen.prop] === schema.disabledWhen.equals
-						: false;
+					const gate = schema.disabledWhen;
+					const disabled = !gate
+						? false
+						: "equals" in gate
+							? values[gate.prop] === gate.equals
+							: values[gate.prop] !== gate.notEquals;
 						// `as never` — the lookup is keyed by the same discriminant the
 						// schema carries, but TS can't correlate an indexed access with a
 						// narrowed union member. Same escape the kind table documents.

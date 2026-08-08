@@ -28,8 +28,13 @@ type PropBase = {
   name: string;
   /** One-line description, shown in the API table. */
   description: string;
-  /** Disable this control while another tuned prop equals the given value. */
-  disabledWhen?: { prop: string; equals: PropValue };
+  /** Disable this control based on another tuned prop's value. `equals` gates a
+   *  control off for one value; `notEquals` gates it on for one value, which is
+   *  the only way to express "relevant to a single mode" without listing every
+   *  other mode and having to revisit the list when one is added. */
+  disabledWhen?:
+    | { prop: string; equals: PropValue }
+    | { prop: string; notEquals: PropValue };
 };
 
 export type NumberProp = PropBase & {

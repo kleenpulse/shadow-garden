@@ -2517,14 +2517,26 @@ export const powerUserSystems: ComponentEntry[] = [
 				default: "auto",
 				options: ["auto", "text", "sphere", "torus", "grid", "disperse"],
 				description:
-					"What the cloud is heading for. Auto walks the list on a timer; the rest hold. Targets are sampled out of an offscreen 2D canvas, so the text form is whatever string you pass — the GPU never sees a glyph, only a texture of positions.",
+					"What the cloud is heading for. Auto walks every form in turn — text, sphere, torus, grid — before repeating, and advances the word list one entry each time it comes back around to text; the rest hold. Disperse is the exception auto never lands on: its targets are uniformly random, so it is a state to send the cloud into rather than a form to morph between. Targets are sampled out of an offscreen 2D canvas, so the text form is whatever string you pass — the GPU never sees a glyph, only a texture of positions.",
+			},
+			{
+				name: "swapDuration",
+				kind: "number",
+				default: 3.2,
+				min: 0.5,
+				max: 12,
+				step: 0.1,
+				unit: "s",
+				disabledWhen: { prop: "shape", notEquals: "auto" },
+				description:
+					"How long a shape holds before auto moves to the next one. This is the hold, not the travel — the morph itself is paced by morphSpeed, so a short duration with a slow morph gives a cloud that never quite arrives anywhere, which is a look rather than a mistake.",
 			},
 			{
 				name: "morphSpeed",
 				kind: "number",
 				default: 1.1,
 				min: 0.05,
-				max: 3,
+				max: 10,
 				step: 0.05,
 				unit: "×",
 				disabledWhen: { prop: "shape", equals: "disperse" },
@@ -2594,6 +2606,13 @@ export const powerUserSystems: ComponentEntry[] = [
 				unit: "×",
 				description:
 					"How close the camera sits to the cloud. Sprite size scales with it: leaving the points fixed makes a zoomed-in cloud read as sparser rather than nearer, which is the tell that a zoom is really a viewport crop.",
+			},
+			{
+				name: "autoSpin",
+				kind: "boolean",
+				default: true,
+				description:
+					"Idle rotation while nothing is being dragged. Off holds the cloud still and hands the camera entirely to the pointer — a flung orbit still coasts to rest, since that motion was asked for. The drift exists to show the form is solid rather than a flat sprite, so turning it off is a choice about a still image, not a performance one.",
 			},
 			{
 				name: "particleColor",

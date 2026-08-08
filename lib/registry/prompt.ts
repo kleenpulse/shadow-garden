@@ -78,9 +78,12 @@ function propsTable(entry: ComponentEntry): string {
         prop.kind === "number"
           ? ` Range ${prop.min}–${prop.max}${prop.unit ? ` ${prop.unit}` : ""}.`
           : "";
-      const gated = prop.disabledWhen
-        ? ` Ignored while \`${prop.disabledWhen.prop}\` is \`${String(prop.disabledWhen.equals)}\`.`
-        : "";
+      const gate = prop.disabledWhen;
+      const gated = !gate
+        ? ""
+        : "equals" in gate
+          ? ` Ignored while \`${gate.prop}\` is \`${String(gate.equals)}\`.`
+          : ` Ignored unless \`${gate.prop}\` is \`${String(gate.notEquals)}\`.`;
       // Escape pipes so a description can't break the table.
       const description = `${prop.description}${range}${gated}`.replace(
         /\|/g,
