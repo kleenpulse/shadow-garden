@@ -17,20 +17,20 @@ import type {
 	FileStore,
 	FileStoreBackend,
 	StorageEstimate,
-} from "@/components/registry/file-explorer/store/types";
-import { parentPath } from "@/components/registry/file-explorer/store/types";
+} from "./explorer/store/types";
+import { parentPath } from "./explorer/store/types";
 import {
 	explorerReducer,
 	filterNodes,
 	initExplorerState,
 	sortNodes,
-} from "@/components/registry/file-explorer/use-file-explorer";
+} from "./explorer/use-file-explorer";
 import {
 	useDirectory,
 	useFileStore,
 	useStorageEstimate,
-} from "@/components/registry/file-explorer/use-file-store";
-import type { ExplorerState, Row } from "@/components/registry/file-explorer/types";
+} from "./explorer/use-file-store";
+import type { ExplorerState, Row } from "./explorer/types";
 import { BEATS, STILL, type Beat, type ReelApi, type Target, wipeAndSeed } from "./script";
 
 /** Isolated from the workspace's `sg-file-explorer` — a visitor's own uploads are never touched. */

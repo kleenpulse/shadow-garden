@@ -130,10 +130,10 @@ const BLURBS: Record<Category, string> = {
 	Backgrounds: "Ambient fields. The room tone of an interface.",
 	"Text Animations": "Letters under tension. Morph, count, scroll.",
 	"Micro-interactions": "Small mechanisms. Felt more than seen.",
-	// Not "command surfaces": only the palette and the explorer are that. The
-	// other thirteen are a physics engine, an orrery, a flock, a Rubik's cube —
-	// what the category actually shares is weight. These are the ones with a
-	// simulation loop and state that outlives a frame.
+	// Not "command surfaces": only the palette is that. The rest are a physics
+	// engine, an orrery, an ASCII render engine, a ledger — what the category
+	// actually shares is weight. These are the ones with a simulation loop and
+	// state that outlives a frame.
 	"Power-User Systems": "Whole machines. State, memory, moving parts.",
 };
 

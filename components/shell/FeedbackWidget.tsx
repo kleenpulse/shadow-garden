@@ -10,7 +10,7 @@ import {
   MessageSquare,
   MessageSquarePlus,
 } from "lucide-react";
-import GrowDialog from "@/components/registry/grow-dialog/grow-dialog";
+import GrowDialog from "./grow-dialog";
 import { collectClientContext } from "@/lib/feedback/context";
 import {
   LIMITS,

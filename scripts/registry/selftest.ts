@@ -397,9 +397,9 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     // instead: a NOT_A_LOOP resident that has stopped using either primitive
     // and should therefore be taken off the list.
     rule: "loop-allowlist-current",
-    ctx: context([entry({ slug: "masonry" })], {
-      dirs: new Set(["masonry"]),
-      previewKeys: new Set(["masonry"]),
+    ctx: context([entry({ slug: "marquee-text" })], {
+      dirs: new Set(["marquee-text"]),
+      previewKeys: new Set(["marquee-text"]),
       loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false, nullishHalts: 0 }),
     }),
   },

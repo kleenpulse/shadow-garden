@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTheme } from "next-themes";
 import ExhibitFrame from "@/components/landing/ExhibitFrame";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
-import FileExplorer from "@/components/registry/file-explorer/file-explorer";
+import FileExplorer from "./explorer/file-explorer";
 import ReelCursor from "./ReelCursor";
 import ReelShell from "./ReelShell";
 import { SEED } from "./script";

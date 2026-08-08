@@ -87,7 +87,7 @@ Time-driven shaders decay over their lifetime if unbounded:
 
 ## JS-measured layout (Masonry)
 
-`components/registry/masonry/` is the only component that measures the DOM and writes positions back. If you touch it — or write anything like it — every line below is load-bearing:
+`components/shell/masonry.tsx` (shell-internal) is the only component that measures the DOM and writes positions back. If you touch it — or write anything like it — every line below is load-bearing:
 
 - **Pack synchronously in `useLayoutEffect`**, never in the ResizeObserver or a rAF. React runs a child's layout effect before any parent's passive effect, which is the only reason a parent's `scrollIntoView` measures final geometry. RO and rAF handle async height change only (images, fonts, text rewrap).
 - **All reads, then all writes.** Measure every item in one pass, position in a second. Interleaving forces a full layout per item.

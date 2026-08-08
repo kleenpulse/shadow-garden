@@ -19,7 +19,7 @@ if (typeof window !== "undefined") {
 }
 
 const RubiksCube = dynamic(
-	() => import("@/components/registry/rubiks-cube/rubiks-cube"),
+	() => import("@/components/landing/rubiks-cube"),
 	{ ssr: false },
 );
 const Waves = dynamic(() => import("@/components/registry/waves/waves"), {

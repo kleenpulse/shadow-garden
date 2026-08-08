@@ -57,7 +57,7 @@ Open-source, animation-forward React component showcase (name from _The Eminence
 
 ## Masonry / JS-measured layout — the traps
 
-`components/registry/masonry/masonry.tsx` is the only component that measures the DOM and writes positions back. It also powers the `/cookbook` section grids, which sit on the one page in the repo with a programmatic scroll-to-anchor. Everything below is load-bearing; each line is a bug that already happened or would have (human version in CONVENTIONS.md).
+`components/shell/masonry.tsx` (a shell-internal copy; the catalog entry moved to the Pro repo) is the only component that measures the DOM and writes positions back. It also powers the `/cookbook` section grids, which sit on the one page in the repo with a programmatic scroll-to-anchor. Everything below is load-bearing; each line is a bug that already happened or would have (human version in CONVENTIONS.md).
 
 - **Pack synchronously in `useLayoutEffect`, never in the ResizeObserver or a rAF.** React runs a child's layout effect before any parent's passive effect, which is the only reason `CookbookBrowser`'s `scrollIntoView` measures final geometry. Move the pack into the RO callback and the old bug returns: right anchor, wrong offset. RO and rAF handle async height change only — images resolving, fonts swapping, text rewrapping after a column-count change.
 - **All reads, then all writes.** Measure every item in one pass and position every item in a second. Measure-move-measure per item forces a full layout per item — that's layout thrashing, and it's why the entry cites the term.

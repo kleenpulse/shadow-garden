@@ -5,7 +5,7 @@ import { displayName } from "@/lib/display-name";
 import GlowCard from "./GlowCard";
 import TierBadge from "./TierBadge";
 
-// The sidebar links all 70 components from all 70 pages, so every page carries
+// The sidebar links every component from every page, so every page carries
 // identical weight and nothing tells a crawler which pages are topically close to
 // which. This does: same category first, then anything sharing a cookbook term.
 // Server-rendered, so the links are in the static shell rather than behind

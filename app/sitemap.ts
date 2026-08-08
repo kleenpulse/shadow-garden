@@ -5,7 +5,7 @@ import { absoluteUrl } from "@/lib/site";
 
 // Only the pages meant to rank.
 //
-// Deliberately absent: the 70 `/components/[slug]/full` routes (a fullscreen
+// Deliberately absent: the `/components/[slug]/full` routes (a fullscreen
 // stage, not a document — their server HTML is one skeleton div) and `/favorites`
 // (rendered from localStorage, so its server HTML is empty). Both carry a noindex
 // tag instead. Listing a page here while telling Google not to index it is a

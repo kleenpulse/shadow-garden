@@ -1,6 +1,6 @@
 "use client";
 
-import MarqueeVelocity from "@/components/registry/marquee-velocity/marquee-velocity";
+import MarqueeVelocity from "./marquee-velocity";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
 const CREED = [

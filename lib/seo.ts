@@ -25,7 +25,7 @@ export const SITE_OG_IMAGE = {
 // Never import it from components/registry/.
 //
 // Everything here is DERIVED from the registry entry. Titles, descriptions and OG
-// copy for 70 components are generated from fields that already exist, so a new
+// copy for every component is generated from fields that already exist, so a new
 // component gets correct search metadata the moment its entry lands — there is no
 // second place to remember to update, and nothing to drift.
 

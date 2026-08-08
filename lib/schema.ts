@@ -76,7 +76,7 @@ export function productSchema() {
 	};
 }
 
-/** /components: the catalog as an ordered list of all 70. */
+/** /components: the catalog as an ordered list of every entry. */
 export function catalogSchema() {
 	return {
 		"@context": "https://schema.org",

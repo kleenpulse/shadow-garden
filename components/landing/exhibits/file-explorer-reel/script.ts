@@ -9,8 +9,8 @@
 // transition; the cursor only supplies a plausible cause for one.
 
 import type { Dispatch } from "react";
-import type { ExplorerAction, SeedEntry } from "@/components/registry/file-explorer/types";
-import type { FileStore } from "@/components/registry/file-explorer/store/types";
+import type { ExplorerAction, SeedEntry } from "./explorer/types";
+import type { FileStore } from "./explorer/store/types";
 
 // --- Seed ------------------------------------------------------------------
 

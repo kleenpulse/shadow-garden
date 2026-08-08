@@ -497,14 +497,9 @@ const NOT_A_LOOP = new Map<string, string>([
   ["stagger-menu", "RO measures layout geometry for the arc; no canvas"],
   ["dissolve", "RO measures for a one-shot particle burst"],
   ["marquee-text", "RO measures text width; the marquee itself is CSS"],
-  ["marquee-velocity", "RO measures for a scroll-driven transform"],
   [
     "parallax-rail",
     "RO measures rail overflow and pin height; the scrub itself is scroll-driven",
-  ],
-  [
-    "masonry",
-    "RO watches item heights and one rAF coalesces repacks; layout only, no render loop",
   ],
   ["border-glow", "bounded easing tweens that terminate themselves"],
   [
