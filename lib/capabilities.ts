@@ -15,12 +15,7 @@
 // silently resolve to undefined in the browser. That is why this is a table of
 // closures rather than a table of variable names.
 
-export type Capability =
-  | "db"
-  | "supabase"
-  | "polar"
-  | "polarWebhook"
-  | "email";
+export type Capability = "db" | "supabase";
 
 /** The Supabase URL, or undefined. Public — inlines into the browser bundle. */
 export function supabaseUrl(): string | undefined {
@@ -39,10 +34,6 @@ export function supabaseKey(): string | undefined {
 const PREDICATES: Record<Capability, () => boolean> = {
   db: () => Boolean(process.env.DATABASE_URL),
   supabase: () => Boolean(supabaseUrl() && supabaseKey()),
-  polar: () => Boolean(process.env.POLAR_ACCESS_TOKEN),
-  polarWebhook: () => Boolean(process.env.POLAR_WEBHOOK_SECRET),
-  email: () =>
-    Boolean(process.env.NODEMAILER_EMAIL && process.env.NODEMAILER_PW),
 };
 
 /**

@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import CommandPalette, {
   isEditableTarget,
   type Hotkey,
-} from "@/components/registry/command-palette/CommandPalette";
+} from "@/components/registry/command-palette/command-palette";
 import { registry, getEntry } from "@/lib/registry";
 import { buildCommandGroups, currentComponentSlug } from "@/lib/command-groups";
 import { useUIStore } from "@/lib/store";

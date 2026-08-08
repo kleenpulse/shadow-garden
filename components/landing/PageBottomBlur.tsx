@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import MaskBlur from "@/components/registry/mask-blur/MaskBlur";
+import MaskBlur from "@/components/registry/mask-blur/mask-blur";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 

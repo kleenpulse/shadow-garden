@@ -24,12 +24,12 @@ import {
 	filterNodes,
 	initExplorerState,
 	sortNodes,
-} from "@/components/registry/file-explorer/useFileExplorer";
+} from "@/components/registry/file-explorer/use-file-explorer";
 import {
 	useDirectory,
 	useFileStore,
 	useStorageEstimate,
-} from "@/components/registry/file-explorer/useFileStore";
+} from "@/components/registry/file-explorer/use-file-store";
 import type { ExplorerState, Row } from "@/components/registry/file-explorer/types";
 import { BEATS, STILL, type Beat, type ReelApi, type Target, wipeAndSeed } from "./script";
 

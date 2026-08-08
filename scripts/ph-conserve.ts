@@ -1,5 +1,5 @@
 /* T3 acceptance: e=1, μ=0 bouncing ball — ΣE must stay within ~1% for 30 s. */
-import { World, buildScene, makeCircle } from "../components/registry/physics-engine/PhysicsEngine";
+import { World, buildScene, makeCircle } from "../components/registry/physics-engine/physics-engine";
 
 const world = new World(16, 10, "playground");
 buildScene(world, 0, 0.5, () => 0.5); // bounds + zero rained bodies

@@ -2,7 +2,7 @@
 
 import type { DragEvent, MouseEvent } from "react";
 import type { FileNode, StorePath } from "./store/types";
-import type { StoreSource } from "./useFileStore";
+import type { StoreSource } from "./use-file-store";
 
 export type ViewMode = "grid" | "list";
 export type SortKey = "name" | "date" | "size" | "type";

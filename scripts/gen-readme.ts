@@ -21,27 +21,21 @@ const BLURB: Record<string, string> = {
 	"Power-User Systems": "command surfaces for operators",
 };
 
-// Registry names are PascalCase (LightRays); the catalog reads spaced (Light Rays).
-const spaced = (name: string) => name.replace(/([a-z0-9])([A-Z])/g, "$1 $2");
-
 const total = registry.length;
-const free = registry.filter((c) => c.tier === "free").length;
-const pro = registry.filter((c) => c.tier === "pro").length;
 
 const bullets = CATEGORY_ORDER.map((category) => {
 	const inCat = registry.filter((c) => c.category === category);
-	const names = inCat.map((c) => spaced(c.name)).join(", ");
 	const blurb = BLURB[category];
-	const lead = blurb ? `${blurb}: ` : "";
-	return `- **${category}** (${inCat.length}) — ${lead}${names}.`;
+	const lead = blurb ? ` — ${blurb}` : "";
+	return `- **${category}** (${inCat.length})${lead}`;
 }).join("\n");
 
 const block = `${START}
-${total} components across ${CATEGORY_ORDER.length} categories:
+**${total} components** across ${CATEGORY_ORDER.length} categories:
 
 ${bullets}
 
-Components are tiered **free** (${free}) or **pro** (${pro}). Pro source is gated server-side and never crosses to the client unless unlocked. The dev overrides (env \`SHADOW_GARDEN_PRO=1\`, cookie \`sg_pro=1\`) only apply in local development — in production the gate is entitlement-only.
+Browse the full catalog with live previews by running the dev server (see below).
 ${END}`;
 
 const readmePath = join(dirname(fileURLToPath(import.meta.url)), "..", "README.md");
@@ -61,5 +55,5 @@ if (next === readme) {
 	console.log("README catalog already up to date.");
 } else {
 	writeFileSync(readmePath, next);
-	console.log(`README catalog regenerated: ${total} components (${free} free / ${pro} pro).`);
+	console.log(`README catalog regenerated: ${total} components.`);
 }

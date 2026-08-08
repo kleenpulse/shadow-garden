@@ -1,7 +1,6 @@
 // Structured error logging for render failures caught by <PreviewBoundary>
 // and the route error boundary. Dev → console; prod → monitoring stub (no-op
-// until a service is wired in). Generalized from the deepellum-admin auth
-// logger — no auth coupling, safe to call from client or server.
+// until a service is wired in). Safe to call from client or server.
 
 export interface ErrorLog {
 	timestamp: number;

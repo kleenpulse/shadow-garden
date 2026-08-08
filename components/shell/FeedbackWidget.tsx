@@ -10,8 +10,7 @@ import {
   MessageSquare,
   MessageSquarePlus,
 } from "lucide-react";
-import GrowDialog from "@/components/registry/grow-dialog/GrowDialog";
-import { useAuthUser } from "@/hooks/use-auth-user";
+import GrowDialog from "@/components/registry/grow-dialog/grow-dialog";
 import { collectClientContext } from "@/lib/feedback/context";
 import {
   LIMITS,
@@ -66,10 +65,9 @@ const TYPES: {
 ];
 
 // Two-step feedback modal, mirroring Supabase's flow: pick a category, then write.
-// Rendered pinned to the bottom of the sidebar. Anonymous-friendly — the sidebar
-// shows for logged-out visitors, so we only ask for an email when there's no session.
+// Rendered pinned to the bottom of the sidebar. Fully anonymous — the optional
+// email field is the only reply channel.
 export default function FeedbackWidget({ className }: { className?: string }) {
-  const { user } = useAuthUser();
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const [open, setOpen] = useState(false);
@@ -119,7 +117,7 @@ export default function FeedbackWidget({ className }: { className?: string }) {
       type,
       subject: subject.trim() || undefined,
       message,
-      email: !user ? email.trim() || undefined : undefined,
+      email: email.trim() || undefined,
       page: typeof window !== "undefined" ? window.location.pathname : undefined,
       company: company || undefined,
       context: collectClientContext(),
@@ -247,23 +245,21 @@ export default function FeedbackWidget({ className }: { className?: string }) {
               />
             </label>
 
-            {!user ? (
-              <label className="block">
-                <span className="mb-1 block font-display text-[10px] uppercase tracking-widest text-ink-mute">
-                  Email{" "}
-                  <span className="normal-case tracking-normal text-ink-mute/70">
-                    (optional — so we can follow up)
-                  </span>
+            <label className="block">
+              <span className="mb-1 block font-display text-[10px] uppercase tracking-widest text-ink-mute">
+                Email{" "}
+                <span className="normal-case tracking-normal text-ink-mute/70">
+                  (optional — so we can follow up)
                 </span>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full rounded-md border border-hairline bg-panel px-3 py-2 font-sans text-sm text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
-                />
-              </label>
-            ) : null}
+              </span>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full rounded-md border border-hairline bg-panel px-3 py-2 font-sans text-sm text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
+              />
+            </label>
 
             {/* Honeypot: off-screen, not tabbable. Bots fill it; the server drops those. */}
             <input

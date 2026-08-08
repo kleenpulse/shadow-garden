@@ -2,19 +2,18 @@
 
 import { useOnlineCount } from "@/hooks/use-online-count";
 
-// Live presence readout — two cards, members vs guests, updating over the Supabase
-// Realtime websocket. Renders nothing until Supabase is configured (dormancy); the
-// server gate in app/page.tsx already omits the surrounding band in that case, but
-// self-gating keeps this island honest wherever it's mounted.
+// Live presence readout, updating over the Supabase Realtime websocket. Renders
+// nothing until Supabase is configured (dormancy); the server gate in app/page.tsx
+// already omits the surrounding band in that case, but self-gating keeps this
+// island honest wherever it's mounted.
 export default function PresenceDeck() {
-  const { configured, ready, auth, anon } = useOnlineCount();
+  const { configured, ready, total } = useOnlineCount();
 
   if (!configured) return null;
 
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <PresenceCard label="Members online" count={auth} ready={ready} accent />
-      <PresenceCard label="Guests online" count={anon} ready={ready} />
+    <div className="grid gap-3">
+      <PresenceCard label="Online now" count={total} ready={ready} accent />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import ExhibitFrame from "@/components/landing/ExhibitFrame";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
 const DotField = dynamic(
-	() => import("@/components/registry/dot-field/DotField"),
+	() => import("@/components/registry/dot-field/dot-field"),
 	{
 		ssr: false,
 	},

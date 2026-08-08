@@ -1,0 +1,39 @@
+name: Bug report
+description: Something in the showcase or a component behaves incorrectly.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to file a report. Please fill out the fields below.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: A clear description of the bug, including which component or page is affected.
+      placeholder: The `swarm` preview freezes after one frame when...
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open /components/swarm
+        2. Drag the canvas
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: OS, browser, Bun version, Node version.
+      placeholder: macOS 15, Chrome 131, Bun 1.2.x
+    validations:
+      required: false

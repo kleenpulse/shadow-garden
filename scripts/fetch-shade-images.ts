@@ -1,6 +1,6 @@
 /**
  * Populate public/shades/ with the Seven Shadows character art used by the
- * Unfold demo (components/registry/unfold/UnfoldPreview.tsx).
+ * Unfold demo (components/registry/unfold/unfold-preview.tsx).
  *
  *   bun scripts/fetch-shade-images.ts
  *

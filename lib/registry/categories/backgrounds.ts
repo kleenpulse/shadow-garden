@@ -1,5 +1,13 @@
 import type { ComponentEntry, Variant } from "../types";
 
+/** Upstream credit for entries adapted from React Bits (reactbits.dev, MIT).
+ *  Rendered on the component page; the served source is comment-stripped, so
+ *  the visible credit lives here, not in a code header. */
+const REACTBITS = {
+	name: "React Bits",
+	url: "https://reactbits.dev",
+};
+
 /** lib/utils.ts ships with every entry whose source imports `cn`. Its own
  *  packages (clsx, tailwind-merge) are the host entry's to declare — the check
  *  walks into this file and finds them there (§V41). */
@@ -27,7 +35,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/waves/Waves.tsx",
+				file: "components/registry/waves/waves.tsx",
 			},
 			{
 				lang: "ts",
@@ -90,6 +98,7 @@ export const backgrounds: ComponentEntry[] = [
 	},
 	{
 		slug: "grainient",
+		attribution: REACTBITS,
 		name: "Grainient",
 		category: "Backgrounds",
 		tier: "free",
@@ -102,7 +111,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/grainient/Grainient.tsx",
+				file: "components/registry/grainient/grainient.tsx",
 			},
 			{
 				lang: "ts",
@@ -216,6 +225,7 @@ export const backgrounds: ComponentEntry[] = [
 	},
 	{
 		slug: "light-rays",
+		attribution: REACTBITS,
 		name: "LightRays",
 		category: "Backgrounds",
 		tier: "free",
@@ -228,7 +238,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/light-rays/LightRays.tsx",
+				file: "components/registry/light-rays/light-rays.tsx",
 			},
 			{
 				lang: "ts",
@@ -345,7 +355,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/mask-blur/MaskBlur.tsx",
+				file: "components/registry/mask-blur/mask-blur.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -407,6 +417,7 @@ export const backgrounds: ComponentEntry[] = [
 	},
 	{
 		slug: "side-rays",
+		attribution: REACTBITS,
 		name: "SideRays",
 		category: "Backgrounds",
 		tier: "pro",
@@ -419,7 +430,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/side-rays/SideRays.tsx",
+				file: "components/registry/side-rays/side-rays.tsx",
 			},
 			{
 				lang: "ts",
@@ -518,6 +529,7 @@ export const backgrounds: ComponentEntry[] = [
 	},
 	{
 		slug: "dot-field",
+		attribution: REACTBITS,
 		name: "DotField",
 		category: "Backgrounds",
 		tier: "free",
@@ -530,7 +542,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/dot-field/DotField.tsx",
+				file: "components/registry/dot-field/dot-field.tsx",
 			},
 			{
 				lang: "ts",
@@ -642,6 +654,7 @@ export const backgrounds: ComponentEntry[] = [
 	},
 	{
 		slug: "strands",
+		attribution: REACTBITS,
 		name: "Strands",
 		category: "Backgrounds",
 		tier: "pro",
@@ -654,7 +667,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/strands/Strands.tsx",
+				file: "components/registry/strands/strands.tsx",
 			},
 			{
 				lang: "ts",
@@ -803,6 +816,7 @@ export const backgrounds: ComponentEntry[] = [
 	},
 	{
 		slug: "ribbons",
+		attribution: REACTBITS,
 		name: "Ribbons",
 		category: "Backgrounds",
 		tier: "pro",
@@ -814,7 +828,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/ribbons/Ribbons.tsx",
+				file: "components/registry/ribbons/ribbons.tsx",
 			},
 			{
 				lang: "ts",
@@ -906,7 +920,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/world-map-ascii/WorldMapAscii.tsx",
+				file: "components/registry/world-map-ascii/world-map-ascii.tsx",
 			},
 			{
 				lang: "ts",
@@ -977,7 +991,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/constellation/Constellation.tsx",
+				file: "components/registry/constellation/constellation.tsx",
 			},
 			{
 				lang: "ts",
@@ -1087,7 +1101,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/plus-grid/PlusGrid.tsx",
+				file: "components/registry/plus-grid/plus-grid.tsx",
 			},
 			{
 				lang: "ts",
@@ -1197,7 +1211,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/barcode/Barcode.tsx",
+				file: "components/registry/barcode/barcode.tsx",
 			},
 		],
 		props: [
@@ -1269,7 +1283,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/aurora/Aurora.tsx",
+				file: "components/registry/aurora/aurora.tsx",
 			},
 			{
 				lang: "ts",
@@ -1370,7 +1384,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/starfield/Starfield.tsx",
+				file: "components/registry/starfield/starfield.tsx",
 			},
 			{
 				lang: "ts",
@@ -1467,7 +1481,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/cinders/Cinders.tsx",
+				file: "components/registry/cinders/cinders.tsx",
 			},
 			{
 				lang: "ts",
@@ -1564,7 +1578,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/shadowflame/Shadowflame.tsx",
+				file: "components/registry/shadowflame/shadowflame.tsx",
 			},
 			{
 				lang: "ts",
@@ -1711,7 +1725,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/moire/Moire.tsx",
+				file: "components/registry/moire/moire.tsx",
 			},
 			{
 				lang: "ts",
@@ -1840,7 +1854,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/contour/Contour.tsx",
+				file: "components/registry/contour/contour.tsx",
 			},
 			{
 				lang: "ts",
@@ -1969,7 +1983,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/cathode/Cathode.tsx",
+				file: "components/registry/cathode/cathode.tsx",
 			},
 			{
 				lang: "ts",
@@ -2109,7 +2123,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/dither/Dither.tsx",
+				file: "components/registry/dither/dither.tsx",
 			},
 			{
 				lang: "ts",
@@ -2235,7 +2249,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/turing/Turing.tsx",
+				file: "components/registry/turing/turing.tsx",
 			},
 			{
 				lang: "ts",
@@ -2359,7 +2373,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/quicksilver/Quicksilver.tsx",
+				file: "components/registry/quicksilver/quicksilver.tsx",
 			},
 			{
 				lang: "ts",

@@ -6,13 +6,12 @@ import * as schema from "./schema";
 
 // App-runtime DB client over the Supabase transaction pooler (Supavisor, port 6543).
 // `prepare: false` is MANDATORY on the transaction pooler — prepared statements break
-// across pooled connections. Never import this from `proxy.ts` (edge runtime); all DB
-// access stays on the Node runtime.
+// across pooled connections. All DB access stays on the Node runtime.
 //
 // Importing this module is side-effect free. It used to throw at module scope when
 // DATABASE_URL was unset, which turned a missing credential into an opaque 500 inside
-// whichever caller reached it first — the Polar webhook retried that forever (§B.B4).
-// Callers now ask for the handle and branch on `null` (§V.V4).
+// whichever caller reached it first — and a webhook retried that forever. Callers
+// now ask for the handle and branch on `null`.
 
 function connect() {
   const connectionString = process.env.DATABASE_URL as string;

@@ -1,5 +1,13 @@
 import type { ComponentEntry, Variant } from "../types";
 
+/** Upstream credit for entries adapted from React Bits (reactbits.dev, MIT).
+ *  Rendered on the component page; the served source is comment-stripped, so
+ *  the visible credit lives here, not in a code header. */
+const REACTBITS = {
+	name: "React Bits",
+	url: "https://reactbits.dev",
+};
+
 /** lib/utils.ts ships with every entry whose source imports `cn`. Its own
  *  packages (clsx, tailwind-merge) are the host entry's to declare — the check
  *  walks into this file and finds them there (§V41). */
@@ -15,6 +23,7 @@ const UTILS_VARIANT: Variant = {
 export const microInteractions: ComponentEntry[] = [
 	{
 		slug: "pixel-transition",
+		attribution: REACTBITS,
 		name: "PixelTransition",
 		category: "Micro-interactions",
 		tier: "free",
@@ -26,7 +35,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/pixel-transition/PixelTransition.tsx",
+				file: "components/registry/pixel-transition/pixel-transition.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -66,6 +75,7 @@ export const microInteractions: ComponentEntry[] = [
 	},
 	{
 		slug: "border-glow",
+		attribution: REACTBITS,
 		name: "BorderGlow",
 		category: "Micro-interactions",
 		tier: "free",
@@ -76,7 +86,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/border-glow/BorderGlow.tsx",
+				file: "components/registry/border-glow/border-glow.tsx",
 			},
 		],
 		props: [
@@ -168,7 +178,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/spotlight-shell/SpotlightShell.tsx",
+				file: "components/registry/spotlight-shell/spotlight-shell.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -194,7 +204,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/animated-hamburger/AnimatedHamburger.tsx",
+				file: "components/registry/animated-hamburger/animated-hamburger.tsx",
 			},
 		],
 		props: [
@@ -225,7 +235,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/morph-dialog/MorphDialog.tsx",
+				file: "components/registry/morph-dialog/morph-dialog.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -291,7 +301,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/grow-dialog/GrowDialog.tsx",
+				file: "components/registry/grow-dialog/grow-dialog.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -357,7 +367,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/flip-card/FlipCard.tsx",
+				file: "components/registry/flip-card/flip-card.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -428,7 +438,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/blueprint-card/BlueprintCard.tsx",
+				file: "components/registry/blueprint-card/blueprint-card.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -496,7 +506,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/corner-letters/CornerLetters.tsx",
+				file: "components/registry/corner-letters/corner-letters.tsx",
 			},
 		],
 		props: [
@@ -580,7 +590,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/hover-list/HoverList.tsx",
+				file: "components/registry/hover-list/hover-list.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -669,7 +679,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/preloader/Preloader.tsx",
+				file: "components/registry/preloader/preloader.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -765,7 +775,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/stagger-menu/StaggerMenu.tsx",
+				file: "components/registry/stagger-menu/stagger-menu.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -835,7 +845,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/magnetic-button/MagneticButton.tsx",
+				file: "components/registry/magnetic-button/magnetic-button.tsx",
 			},
 		],
 		props: [
@@ -920,7 +930,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/shadow-cursor/ShadowCursor.tsx",
+				file: "components/registry/shadow-cursor/shadow-cursor.tsx",
 			},
 		],
 		props: [
@@ -1003,7 +1013,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/torchlight/Torchlight.tsx",
+				file: "components/registry/torchlight/torchlight.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1085,7 +1095,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/dissolve/Dissolve.tsx",
+				file: "components/registry/dissolve/dissolve.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1189,7 +1199,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/tilt/Tilt.tsx",
+				file: "components/registry/tilt/tilt.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1282,7 +1292,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/sigil/Sigil.tsx",
+				file: "components/registry/sigil/sigil.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1367,7 +1377,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/rift/Rift.tsx",
+				file: "components/registry/rift/rift.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1456,7 +1466,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/unfold/Unfold.tsx",
+				file: "components/registry/unfold/unfold.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1544,7 +1554,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/approach/Approach.tsx",
+				file: "components/registry/approach/approach.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1627,7 +1637,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/hold/Hold.tsx",
+				file: "components/registry/hold/hold.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1754,7 +1764,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/dismiss/Dismiss.tsx",
+				file: "components/registry/dismiss/dismiss.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1884,7 +1894,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/aperture/Aperture.tsx",
+				file: "components/registry/aperture/aperture.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -2007,7 +2017,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/intro-animation/IntroAnimation.tsx",
+				file: "components/registry/intro-animation/intro-animation.tsx",
 			},
 			{
 				lang: "ts",
@@ -2170,7 +2180,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/segmented/Segmented.tsx",
+				file: "components/registry/segmented/segmented.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -2276,7 +2286,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/tether/Tether.tsx",
+				file: "components/registry/tether/tether.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -2405,7 +2415,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/inline-edit/InlineEdit.tsx",
+				file: "components/registry/inline-edit/inline-edit.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -2535,7 +2545,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/crossing/Crossing.tsx",
+				file: "components/registry/crossing/crossing.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -2627,7 +2637,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/reorder/Reorder.tsx",
+				file: "components/registry/reorder/reorder.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -2749,7 +2759,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/holofoil/Holofoil.tsx",
+				file: "components/registry/holofoil/holofoil.tsx",
 			},
 			{
 				lang: "ts",
@@ -2881,7 +2891,7 @@ export const microInteractions: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/lens/Lens.tsx",
+				file: "components/registry/lens/lens.tsx",
 			},
 			{
 				lang: "ts",

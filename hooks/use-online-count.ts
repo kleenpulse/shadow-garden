@@ -5,24 +5,18 @@ import {
   createSupabaseBrowserClient,
   supabaseConfiguredClient,
 } from "@/lib/supabase/client";
-import { useAuthUser } from "@/hooks/use-auth-user";
-
-type Kind = "auth" | "anon";
 
 interface OnlineCount {
   configured: boolean;
-  /** True after the first presence "sync" — before that the numbers are unknown, not zero. */
+  /** True after the first presence "sync" — before that the number is unknown, not zero. */
   ready: boolean;
-  /** Distinct signed-in identities present. */
-  auth: number;
-  /** Distinct anonymous identities present. */
-  anon: number;
+  /** Distinct identities present. */
   total: number;
 }
 
 // Per-browser anonymous id. The httpOnly `sg_vid` cookie (server-side view dedup)
-// is unreadable from JS, so anonymous presence carries its own client-side id —
-// persisted so multiple tabs of one guest dedupe to a single count.
+// is unreadable from JS, so presence carries its own client-side id — persisted
+// so multiple tabs of one visitor dedupe to a single count.
 function anonId(): string {
   const KEY = "sg_anon_id";
   let id = localStorage.getItem(KEY);
@@ -42,53 +36,35 @@ function anonId(): string {
 // Fine for a showcase at tens of concurrent; revisit (throttle/sample) only if this
 // ever reaches thousands.
 export function useOnlineCount(): OnlineCount {
-  const { user, ready: authReady } = useAuthUser();
-  const [counts, setCounts] = useState({ auth: 0, anon: 0 });
+  const [total, setTotal] = useState(0);
   const [ready, setReady] = useState(false);
 
-  const userId = user?.id ?? null;
-
   useEffect(() => {
-    if (!supabaseConfiguredClient || !authReady) return;
+    if (!supabaseConfiguredClient) return;
 
     const supabase = createSupabaseBrowserClient();
-    const kind: Kind = userId ? "auth" : "anon";
-    const key = userId ?? anonId();
-
     const channel = supabase.channel("presence:lobby", {
-      config: { presence: { key } },
+      config: { presence: { key: anonId() } },
     });
 
     channel.on("presence", { event: "sync" }, () => {
-      const state = channel.presenceState<{ kind: Kind }>();
-      let auth = 0;
-      let anon = 0;
-      // presenceState() is keyed by identity; bucket each key by the kind its
-      // (first) meta reports. One identity is one client → one kind.
-      for (const metas of Object.values(state)) {
-        if (metas[0]?.kind === "auth") auth += 1;
-        else anon += 1;
-      }
-      setCounts({ auth, anon });
+      setTotal(Object.keys(channel.presenceState()).length);
       setReady(true);
     });
 
     channel.subscribe((status) => {
-      if (status === "SUBSCRIBED") channel.track({ kind });
+      if (status === "SUBSCRIBED") channel.track({});
     });
 
     return () => {
       supabase.removeChannel(channel);
     };
-    // Re-subscribe when identity flips (sign in/out) so you move buckets live.
-  }, [authReady, userId]);
+  }, []);
 
   return {
     configured: supabaseConfiguredClient,
     // Unconfigured → nothing to await; treat as ready so the deck can bow out cleanly.
     ready: supabaseConfiguredClient ? ready : true,
-    auth: counts.auth,
-    anon: counts.anon,
-    total: counts.auth + counts.anon,
+    total,
   };
 }

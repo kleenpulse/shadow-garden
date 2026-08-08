@@ -3,7 +3,6 @@ import { cache } from "react";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { highlightToHtml } from "@/lib/shiki";
-import { getEntitlement } from "./entitlement";
 import { stripComments } from "./strip-comments";
 import { roleOf } from "./roles";
 import type { ComponentEntry, Variant, VariantRole } from "./types";
@@ -62,7 +61,6 @@ export interface SourceFile {
 
 export type SourceResult =
   | { status: "ok"; files: SourceFile[] }
-  | { status: "locked" }
   | { status: "pending" };
 
 /** Resolve a repo-relative variant path inside one of the allowed roots. */
@@ -111,16 +109,7 @@ async function readVariant(variant: Variant): Promise<SourceFile | null> {
   };
 }
 
-// The Pro gate lives here: the canonical source bytes are read server-side and
-// returned only when the caller is entitled. For a locked Pro component nothing
-// but a `locked` marker crosses to the client. One gate per entry — a peer hook
-// is part of the same purchase, not separately gated.
 async function readSource(entry: ComponentEntry): Promise<SourceResult> {
-  if (entry.tier === "pro") {
-    const { pro } = await getEntitlement();
-    if (!pro) return { status: "locked" };
-  }
-
   const files: SourceFile[] = [];
   for (const variant of entry.variants) {
     const file = await readVariant(variant);

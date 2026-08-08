@@ -1,6 +1,6 @@
 {
-  "id": "d06ce613-c0f7-49c8-b05b-addb0eb2689b",
-  "prevId": "6f069ffa-5ef0-48fd-81fa-d5e2ee65063d",
+  "id": "410c31c6-3a9b-4745-ae13-f2eba46d4901",
+  "prevId": "49877445-cae5-477a-8176-024ef6483aa5",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -35,6 +35,13 @@
           "notNull": true,
           "default": 0
         },
+        "prompt_count": {
+          "name": "prompt_count",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
         "view_count": {
           "name": "view_count",
           "type": "integer",
@@ -56,10 +63,90 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
-    "public.entitlements": {
-      "name": "entitlements",
+    "public.component_views": {
+      "name": "component_views",
+      "schema": "",
+      "columns": {
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visitor_id": {
+          "name": "visitor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "component_views_slug_visitor_id_pk": {
+          "name": "component_views_slug_visitor_id_pk",
+          "columns": [
+            "slug",
+            "visitor_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.favorites": {
+      "name": "favorites",
+      "schema": "",
+      "columns": {
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "visitor_id": {
+          "name": "visitor_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "favorites_slug_visitor_id_pk": {
+          "name": "favorites_slug_visitor_id_pk",
+          "columns": [
+            "slug",
+            "visitor_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.feedback": {
+      "name": "feedback",
       "schema": "",
       "columns": {
         "id": {
@@ -69,62 +156,56 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
+        "visitor_id": {
+          "name": "visitor_id",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "type": {
           "name": "type",
-          "type": "entitlement_type",
+          "type": "feedback_type",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'bug'"
         },
         "status": {
           "name": "status",
-          "type": "entitlement_status",
-          "typeSchema": "public",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'new'"
+        },
+        "subject": {
+          "name": "subject",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "polar_customer_id": {
-          "name": "polar_customer_id",
+        "page": {
+          "name": "page",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "polar_subscription_id": {
-          "name": "polar_subscription_id",
-          "type": "text",
+        "context": {
+          "name": "context",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": false
-        },
-        "polar_order_id": {
-          "name": "polar_order_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "polar_product_id": {
-          "name": "polar_product_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "current_period_end": {
-          "name": "current_period_end",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "cancel_at_period_end": {
-          "name": "cancel_at_period_end",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
         },
         "created_at": {
           "name": "created_at",
@@ -141,94 +222,27 @@
           "default": "now()"
         }
       },
-      "indexes": {},
-      "foreignKeys": {
-        "entitlements_user_id_profiles_id_fk": {
-          "name": "entitlements_user_id_profiles_id_fk",
-          "tableFrom": "entitlements",
-          "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "entitlements_user_id_unique": {
-          "name": "entitlements_user_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.favorites": {
-      "name": "favorites",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "uuid",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "slug": {
-          "name": "slug",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
       "indexes": {
-        "favorites_user_slug_unq": {
-          "name": "favorites_user_slug_unq",
+        "feedback_created_idx": {
+          "name": "feedback_created_idx",
           "columns": [
             {
-              "expression": "user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "slug",
+              "expression": "created_at",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             }
           ],
-          "isUnique": true,
+          "isUnique": false,
           "concurrently": false,
           "method": "btree",
           "with": {}
         },
-        "favorites_user_idx": {
-          "name": "favorites_user_idx",
+        "feedback_status_idx": {
+          "name": "feedback_status_idx",
           "columns": [
             {
-              "expression": "user_id",
+              "expression": "status",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -240,92 +254,22 @@
           "with": {}
         }
       },
-      "foreignKeys": {
-        "favorites_user_id_profiles_id_fk": {
-          "name": "favorites_user_id_profiles_id_fk",
-          "tableFrom": "favorites",
-          "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.profiles": {
-      "name": "profiles",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "display_name": {
-          "name": "display_name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     }
   },
   "enums": {
-    "public.entitlement_status": {
-      "name": "entitlement_status",
+    "public.feedback_type": {
+      "name": "feedback_type",
       "schema": "public",
       "values": [
-        "active",
-        "canceled",
-        "revoked",
-        "past_due",
-        "expired",
-        "incomplete"
-      ]
-    },
-    "public.entitlement_type": {
-      "name": "entitlement_type",
-      "schema": "public",
-      "values": [
-        "subscription",
-        "lifetime"
+        "bug",
+        "idea",
+        "other"
       ]
     }
   },

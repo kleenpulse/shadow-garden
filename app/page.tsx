@@ -175,7 +175,7 @@ export default function Home() {
 				</Reveal>
 			</section>
 
-			{/* ζ — Sealed archive: pro tier. Static graphite ground in both themes,
+			{/* ζ — The archive, open. Static graphite ground in both themes,
           so text uses the static bench ramp (same rule as the code surface). */}
 			<div id={SECTION_IDS.sealed} className="scroll-mt-10">
 				<ProSection raysColor={data.raysColor}>
@@ -185,17 +185,17 @@ export default function Home() {
 								Plate <span className="normal-case">ζ</span>-06
 							</span>
 							<span aria-hidden>·</span>
-							<span className="text-bench-400">Sealed archive</span>
+							<span className="text-bench-400">Open archive</span>
 							<span aria-hidden>·</span>
 							<span>{data.stats.pro} units</span>
 						</div>
 						<h2 className="mt-10 max-w-2xl font-display text-3xl uppercase leading-tight tracking-[0.04em] text-bench-100 sm:text-5xl">
-							Some source stays in shadow.
+							Nothing stays in shadow.
 						</h2>
 						<p className="mt-6 max-w-xl font-sans text-sm leading-relaxed text-bench-300">
-							Free specimens ship with full source. Pro specimens render live on
-							this page — the implementation stays sealed until you hold the
-							key.
+							Every specimen ships with full source — MIT-licensed, copy-ready,
+							no key required. The pieces below render live on this page; the
+							implementation is one click away.
 						</p>
 						<SpotlightList
 							variant="sealed"
@@ -210,7 +210,7 @@ export default function Home() {
 							href="/components"
 							className="mt-10 inline-block rounded-md bg-[#a855f7] px-5 py-2.5 font-display text-[11px] uppercase tracking-[0.15em] text-bench-950 transition-opacity hover:opacity-90"
 						>
-							Unlock pro source
+							Browse the source
 						</Link>
 					</div>
 				</ProSection>

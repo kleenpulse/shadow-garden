@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
 import { has } from "@/lib/capabilities";
 import { cookies } from "next/headers";
-import { getCurrentUserClaims } from "@/lib/supabase/current-user";
 import { LIMITS, type FeedbackType } from "@/lib/feedback/submit";
 
-// User feedback / bug reports from the sidebar widget. Anonymous by design — the
-// sidebar renders for logged-out visitors too — so auth is optional: we attribute
-// to the signed-in user when present, else to the per-browser `sg_vid` cookie.
-// Access is server-side via Drizzle (bypasses RLS); the `feedback` table denies
-// direct PostgREST access. Node runtime by default (no runtime export).
+// User feedback / bug reports from the sidebar widget. Anonymous by design —
+// submissions are attributed to the per-browser `sg_vid` cookie. Access is
+// server-side via Drizzle; the `feedback` table denies direct PostgREST access.
+// Node runtime by default (no runtime export).
 //   POST /api/feedback { type, subject?, message, email?, page?, context?, company? } → { ok }
 
 const NO_STORE = { "Cache-Control": "no-store" } as const;
@@ -103,10 +101,7 @@ export async function POST(req: Request) {
     }
   }
 
-  // Identity: signed-in user (nullable) + a stable per-browser visitor id.
-  const claims = await getCurrentUserClaims();
-  const userId = claims?.sub ?? null;
-
+  // Identity: a stable per-browser visitor id.
   const jar = await cookies();
   let visitorId = jar.get("sg_vid")?.value ?? null;
   let setCookie = false;
@@ -123,7 +118,7 @@ export async function POST(req: Request) {
 
   const { getDb } = await import("@/lib/db");
   const { feedback } = await import("@/lib/db/schema");
-  const { and, or, eq, gte, sql } = await import("drizzle-orm");
+  const { and, eq, gte, sql } = await import("drizzle-orm");
 
   // Unreachable in practice — the DATABASE_URL short-circuit above already
   // returned. Kept so the handle stays non-null for the checker, not asserted.
@@ -135,16 +130,12 @@ export async function POST(req: Request) {
     );
   }
 
-  // Per-identity throttle. visitorId always exists (we mint one above); userId is
-  // an extra key when signed in so a user can't dodge the cap by clearing cookies.
+  // Per-identity throttle. visitorId always exists — we mint one above.
   const since = new Date(Date.now() - THROTTLE_WINDOW_MS);
-  const idMatch = userId
-    ? or(eq(feedback.visitorId, visitorId), eq(feedback.userId, userId))
-    : eq(feedback.visitorId, visitorId);
   const [{ n }] = await db
     .select({ n: sql<number>`count(*)::int` })
     .from(feedback)
-    .where(and(gte(feedback.createdAt, since), idMatch));
+    .where(and(gte(feedback.createdAt, since), eq(feedback.visitorId, visitorId)));
   if (n >= THROTTLE_MAX) {
     return NextResponse.json(
       { error: "rate_limited" },
@@ -153,7 +144,6 @@ export async function POST(req: Request) {
   }
 
   await db.insert(feedback).values({
-    userId,
     visitorId,
     email,
     type,

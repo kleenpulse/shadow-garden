@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import ExhibitFrame from "@/components/landing/ExhibitFrame";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import type { CommandGroupDef } from "@/components/registry/command-palette/CommandPalette";
+import type { CommandGroupDef } from "@/components/registry/command-palette/command-palette";
 
 const CommandPalette = dynamic(
-  () => import("@/components/registry/command-palette/CommandPalette"),
+  () => import("@/components/registry/command-palette/command-palette"),
   { ssr: false },
 );
 

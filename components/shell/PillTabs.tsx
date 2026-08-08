@@ -39,9 +39,8 @@ const SIZE_CLASSES = {
 
 /**
  * Pill-style tab toggle with an animated sliding indicator (motion `layoutId`).
- * Adapted from ellum's shared PillTabs, restyled into Shadow Garden's shell voice
- * (hairline panel, amethyst accent, uppercase display type) while keeping our
- * border radii. Arrow keys move between tabs (roving tabIndex).
+ * Styled to the Shadow Garden shell voice (hairline panel, amethyst accent,
+ * uppercase display type). Arrow keys move between tabs (roving tabIndex).
  */
 export default function PillTabs<V extends string = string>({
 	value,

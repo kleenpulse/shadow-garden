@@ -12,16 +12,11 @@ import { SITE_URL } from "@/lib/site";
 // PropSchema[] that drives the Controls panel and the props table also writes the
 // prompt's props section, so a tuned default can't drift out of the brief.
 //
-// The Pro gate is INHERITED, not re-implemented — getSource() already owns the
-// single server-side read seam (§V13), so `locked` and `pending` pass straight
-// through. This is also why the prompt text can't live on ComponentEntry: that
-// object is imported into client bundles (Sidebar, command groups) and handed
-// whole to LiveWorkspace, so every field on it ships to every visitor, free or
-// Pro. Nothing here crosses to a client that isn't entitled to the same bytes.
+// The read seam is INHERITED, not re-implemented — getSource() already owns the
+// single server-side read, so `pending` passes straight through.
 
 export type PromptResult =
   | { status: "ok"; text: string }
-  | { status: "locked" }
   | { status: "pending" };
 
 // Literal root, same reason as source.ts: a computed base defeats Turbopack's

@@ -10,8 +10,7 @@ import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
 import SoundControl from "./SoundControl";
-import AuthMenu from "./AuthMenu";
-import GoProButton from "./GoProButton";
+import GithubIcon from "../icons/github";
 
 // Slim desktop chrome strip: palette trigger on the left, favorites + theme on
 // the right. Hidden on mobile — MobileBar carries the same affordances there.
@@ -41,7 +40,6 @@ export default function TopBar() {
 			</button>
 
 			<div className="ml-auto flex items-center gap-2">
-				<GoProButton />
 				<Link
 					href="/cookbook"
 					aria-label="Motion cook book"
@@ -62,7 +60,18 @@ export default function TopBar() {
 				/>
 				<SoundControl />
 				<ThemeToggle />
-				<AuthMenu />
+				<a
+					href="https://github.com/kleenpulse/shadow-garden"
+					target="_blank"
+					rel="noreferrer"
+					aria-label="Shadow Garden on GitHub"
+					title="Shadow Garden on GitHub"
+					{...hoverProps()}
+					onClick={() => play("select")}
+					className="grid size-7 place-items-center rounded-md text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8"
+				>
+					<GithubIcon className="size-4" aria-hidden />
+				</a>
 			</div>
 		</div>
 	);

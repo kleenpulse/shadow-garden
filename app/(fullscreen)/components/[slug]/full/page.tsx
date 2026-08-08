@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getEntry } from "@/lib/registry";
-import FullscreenSection from "@/components/shell/FullscreenSection";
+import FullscreenStage from "@/components/shell/FullscreenStage";
 
 export function generateStaticParams() {
 	return getAllSlugs().map((slug) => ({ slug }));
@@ -42,7 +42,7 @@ export default async function FullscreenPage({
 		// The stage reads tuned values from the URL (nuqs) — dynamic under Cache
 		// Components, so it streams as the one hole in the static shell.
 		<Suspense fallback={<div className="h-dvh animate-pulse bg-panel" />}>
-			<FullscreenSection entry={entry} />
+			<FullscreenStage entry={entry} />
 		</Suspense>
 	);
 }

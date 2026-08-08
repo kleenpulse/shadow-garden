@@ -19,14 +19,14 @@ if (typeof window !== "undefined") {
 }
 
 const RubiksCube = dynamic(
-	() => import("@/components/registry/rubiks-cube/RubiksCube"),
+	() => import("@/components/registry/rubiks-cube/rubiks-cube"),
 	{ ssr: false },
 );
-const Waves = dynamic(() => import("@/components/registry/waves/Waves"), {
+const Waves = dynamic(() => import("@/components/registry/waves/waves"), {
 	ssr: false,
 });
 const SideRays = dynamic(
-	() => import("@/components/registry/side-rays/SideRays"),
+	() => import("@/components/registry/side-rays/side-rays"),
 	{ ssr: false },
 );
 

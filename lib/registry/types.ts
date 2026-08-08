@@ -131,6 +131,12 @@ export interface ComponentEntry {
   /** Has a free-running animation loop the global pause control can halt.
       Set on WebGL/Canvas/rAF loopers; drives the header pause button's visibility. */
   pausable?: boolean;
+  /**
+   * Upstream credit for a component adapted from third-party work. Rendered on
+   * the component page (the served source is comment-stripped, so a code header
+   * alone would never reach the visitor). Absent means original work.
+   */
+  attribution?: { name: string; url: string };
 }
 
 /** Props handed to every live preview component. */

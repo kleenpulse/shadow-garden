@@ -5,18 +5,15 @@ import { usePathname } from "next/navigation";
 import { Search } from "lucide-react";
 import CookBookIcon from "@/components/icons/cook-book";
 import { useUIStore } from "@/lib/store";
-import { useAuthUser } from "@/hooks/use-auth-user";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
-import AuthMenu from "./AuthMenu";
 import Wordmark from "@/components/Wordmark";
 import GithubIcon from "../icons/github";
 
 export default function MobileBar() {
 	const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
-	const { user, ready, signIn } = useAuthUser();
 	const pathname = usePathname();
 	const { play, hoverProps } = useInteractionSound();
 
@@ -63,29 +60,18 @@ export default function MobileBar() {
 				>
 					<CookBookIcon open={isCookbook} className="size-4" aria-hidden />
 				</Link>
-				{ready && user ? (
-					<AuthMenu />
-				) : (
-					<>
-						<FavoritesLink />
-						<ThemeToggle />
-						{ready ? (
-							<button
-								type="button"
-								onClick={signIn}
-								aria-label="Sign in with GitHub"
-								className="grid size-7 place-items-center rounded-md border border-hairline text-ink-dim hover:text-accent"
-							>
-								<GithubIcon className="size-4" aria-hidden />
-							</button>
-						) : (
-							<div
-								className="size-7 animate-pulse rounded-md border border-hairline bg-panel"
-								aria-hidden
-							/>
-						)}
-					</>
-				)}
+				<FavoritesLink />
+				<ThemeToggle />
+				<a
+					href="https://github.com/kleenpulse/shadow-garden"
+					target="_blank"
+					rel="noreferrer"
+					aria-label="Shadow Garden on GitHub"
+					title="Shadow Garden on GitHub"
+					className="grid size-7 place-items-center rounded-md border border-hairline text-ink-dim hover:text-accent"
+				>
+					<GithubIcon className="size-4" aria-hidden />
+				</a>
 			</div>
 		</div>
 	);

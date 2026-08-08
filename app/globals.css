@@ -133,8 +133,8 @@
 		border-radius: 2px;
 	}
 
-	/* App scrollbar — thin, transparent track, theme-tinted thumb (ported from the
-	   ellum reference). Applies to the page and every default scroll area. */
+	/* App scrollbar — thin, transparent track, theme-tinted thumb. Applies to
+	   the page and every default scroll area. */
 	html {
 		scrollbar-width: thin;
 		scrollbar-color: var(--sg-scroll) transparent;

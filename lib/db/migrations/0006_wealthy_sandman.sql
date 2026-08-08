@@ -1,1 +1,0 @@
-ALTER TABLE "component_stats" ADD COLUMN "prompt_count" integer DEFAULT 0 NOT NULL;

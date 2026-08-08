@@ -37,14 +37,6 @@ const CATEGORY_NOUN: Record<Category, string> = {
 	"Power-User Systems": "Component",
 };
 
-/** Plural form, for collection-level copy. */
-export const CATEGORY_PLURAL: Record<Category, string> = {
-	Backgrounds: "React background components",
-	"Text Animations": "React text animation components",
-	"Micro-interactions": "React micro-interaction components",
-	"Power-User Systems": "React power-user components",
-};
-
 export function entryPath(entry: ComponentEntry): string {
 	return `/components/${entry.slug}`;
 }

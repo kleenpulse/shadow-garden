@@ -13,27 +13,21 @@ import { previews } from "@/components/registry/previews";
 import PlaceholderPreview from "./PlaceholderPreview";
 import PreviewBoundary from "./PreviewBoundary";
 import ControlsPanel from "./ControlsPanel";
-import ControlsLocked from "./ControlsLocked";
-import SubscribeButton from "./SubscribeButton";
 import WorkspaceTabs from "./WorkspaceTabs";
 
 // Owns the tuned-state source (the URL, via nuqs) shared by the preview stage and
 // the controls. The Preview/Code tabs sit on top; the controls run full-width
 // underneath so dragging a control updates the preview directly above it.
-// `code` and `promptSlot` are server-rendered nodes (the gated source panel and
-// the gated Copy Prompt control) passed straight through — both read cookies, so
-// resolving them on the server keeps the entitlement answer out of the client.
+// `code` and `promptSlot` are server-rendered nodes (the source panel and the
+// Copy Prompt control) passed straight through.
 export default function LiveWorkspace({
 	entry,
 	code,
 	promptSlot,
-	controlsLocked = false,
 }: {
 	entry: ComponentEntry;
 	code: ReactNode;
 	promptSlot?: ReactNode;
-	/** Resolved server-side by WorkspaceSection — the client never asks. */
-	controlsLocked?: boolean;
 }) {
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
@@ -103,15 +97,6 @@ export default function LiveWorkspace({
 				onChange={setValue}
 				onReset={reset}
 				pausable={entry.pausable}
-				locked={
-					controlsLocked ? (
-						<ControlsLocked
-							name={entry.name}
-							propCount={entry.props.length}
-							cta={<SubscribeButton label="Unlock the controls →" />}
-						/>
-					) : null
-				}
 			/>
 		</div>
 	);

@@ -5,25 +5,9 @@ import { installCommand, PKG_MANAGERS, type PkgManager } from "@/lib/registry/in
 import type { ComponentEntry } from "@/lib/registry/types";
 import { trackEvent } from "@/lib/stats/track";
 
-export default function InstallBlock({
-  entry,
-  locked = false,
-}: {
-  entry: ComponentEntry;
-  locked?: boolean;
-}) {
+export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
   const [pm, setPm] = useState<PkgManager>("bun");
   const [copied, setCopied] = useState(false);
-
-  if (locked) {
-    return (
-      <div className="rounded-lg border border-hairline bg-panel px-4 py-6 text-center">
-        <p className="font-mono text-xs text-ink-mute">
-          Install commands unlock with the Pro tier.
-        </p>
-      </div>
-    );
-  }
 
   const command = installCommand(pm, entry);
 

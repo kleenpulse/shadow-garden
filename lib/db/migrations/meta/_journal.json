@@ -5,57 +5,22 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1784730238998,
-      "tag": "0000_exotic_ultimates",
+      "when": 1786205837737,
+      "tag": "0000_baseline",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "7",
-      "when": 1784730256388,
-      "tag": "0001_auth_link_and_rls",
+      "when": 1786211891015,
+      "tag": "0001_favorites-ledger",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "7",
-      "when": 1784755560542,
-      "tag": "0002_bouncy_steel_serpent",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1784758248434,
-      "tag": "0003_unknown_clea",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1784847934370,
-      "tag": "0004_dry_bedlam",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1784896423297,
-      "tag": "0005_sudden_stingray",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1785086497003,
-      "tag": "0006_wealthy_sandman",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1785534929909,
-      "tag": "0007_admin_ops",
+      "when": 1786213754765,
+      "tag": "0002_enable-rls",
       "breakpoints": true
     }
   ]

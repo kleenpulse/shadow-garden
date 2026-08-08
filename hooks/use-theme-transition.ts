@@ -15,10 +15,7 @@ interface UseThemeTransitionOptions {
  * (`runThemeTransition`). Exposes `pickTheme(themeOption, triggerEl?)` which
  * resolves `system` to the effective theme, skips the animation when nothing
  * visibly changes or the user prefers reduced motion, and otherwise runs the
- * clip-path reveal expanding from `triggerEl`.
- *
- * Adapted from the ellumAI hook: the cross-device backend sync (a PATCH to the
- * auth service) is dropped — this showcase persists via next-themes' own
+ * clip-path reveal expanding from `triggerEl`. Persists via next-themes' own
  * localStorage cache only.
  */
 export function useThemeTransition({

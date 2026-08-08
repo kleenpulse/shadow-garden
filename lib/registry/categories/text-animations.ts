@@ -1,5 +1,13 @@
 import type { ComponentEntry, Variant } from "../types";
 
+/** Upstream credit for entries adapted from React Bits (reactbits.dev, MIT).
+ *  Rendered on the component page; the served source is comment-stripped, so
+ *  the visible credit lives here, not in a code header. */
+const REACTBITS = {
+	name: "React Bits",
+	url: "https://reactbits.dev",
+};
+
 /** lib/utils.ts ships with every entry whose source imports `cn`. Its own
  *  packages (clsx, tailwind-merge) are the host entry's to declare — the check
  *  walks into this file and finds them there (§V41). */
@@ -15,6 +23,7 @@ const UTILS_VARIANT: Variant = {
 export const textAnimations: ComponentEntry[] = [
 	{
 		slug: "morphing-text",
+		attribution: REACTBITS,
 		name: "MorphingText",
 		category: "Text Animations",
 		tier: "free",
@@ -26,7 +35,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/morphing-text/MorphingText.tsx",
+				file: "components/registry/morphing-text/morphing-text.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -59,7 +68,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/animated-number/AnimatedNumber.tsx",
+				file: "components/registry/animated-number/animated-number.tsx",
 			},
 		],
 		props: [
@@ -114,7 +123,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/marquee-text/MarqueeText.tsx",
+				file: "components/registry/marquee-text/marquee-text.tsx",
 			},
 			{
 				lang: "ts",
@@ -159,6 +168,7 @@ export const textAnimations: ComponentEntry[] = [
 	},
 	{
 		slug: "variable-proximity",
+		attribution: REACTBITS,
 		name: "VariableProximity",
 		category: "Text Animations",
 		tier: "pro",
@@ -171,7 +181,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/variable-proximity/VariableProximity.tsx",
+				file: "components/registry/variable-proximity/variable-proximity.tsx",
 			},
 			{
 				lang: "ts",
@@ -219,7 +229,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/marquee-velocity/MarqueeVelocity.tsx",
+				file: "components/registry/marquee-velocity/marquee-velocity.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -286,7 +296,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/letters-pull/LettersPull.tsx",
+				file: "components/registry/letters-pull/letters-pull.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -346,7 +356,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/word-reveal/WordReveal.tsx",
+				file: "components/registry/word-reveal/word-reveal.tsx",
 			},
 		],
 		props: [
@@ -411,7 +421,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/scramble-text/ScrambleText.tsx",
+				file: "components/registry/scramble-text/scramble-text.tsx",
 			},
 		],
 		props: [
@@ -495,7 +505,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/long-shadow/LongShadow.tsx",
+				file: "components/registry/long-shadow/long-shadow.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -587,7 +597,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/specter/Specter.tsx",
+				file: "components/registry/specter/specter.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -686,7 +696,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/lumen/Lumen.tsx",
+				file: "components/registry/lumen/lumen.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -769,7 +779,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/redact/Redact.tsx",
+				file: "components/registry/redact/redact.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -891,7 +901,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/split-flap/SplitFlap.tsx",
+				file: "components/registry/split-flap/split-flap.tsx",
 			},
 			{
 				lang: "ts",
@@ -1015,7 +1025,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/teletype/Teletype.tsx",
+				file: "components/registry/teletype/teletype.tsx",
 			},
 			{
 				lang: "ts",
@@ -1150,7 +1160,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/kinetic/Kinetic.tsx",
+				file: "components/registry/kinetic/kinetic.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1301,7 +1311,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/reflow/Reflow.tsx",
+				file: "components/registry/reflow/reflow.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1436,7 +1446,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/metallic-text/MetallicText.tsx",
+				file: "components/registry/metallic-text/metallic-text.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1561,7 +1571,7 @@ export const textAnimations: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/inlay/Inlay.tsx",
+				file: "components/registry/inlay/inlay.tsx",
 			},
 			{
 				lang: "ts",

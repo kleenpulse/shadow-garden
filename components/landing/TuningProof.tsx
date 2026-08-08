@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useReducedMotion } from "motion/react";
-import BorderGlow from "@/components/registry/border-glow/BorderGlow";
-import { AnimatedNumber } from "@/components/registry/animated-number/AnimatedNumber";
+import BorderGlow from "@/components/registry/border-glow/border-glow";
+import { AnimatedNumber } from "@/components/registry/animated-number/animated-number";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import type { LandingData } from "@/components/landing/data";
 import { useMediaQuery } from "@/hooks/use-media-query";

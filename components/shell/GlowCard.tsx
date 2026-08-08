@@ -1,7 +1,7 @@
 "use client";
 
 import type { HTMLAttributes } from "react";
-import { useBorderGlow } from "@/components/registry/border-glow/BorderGlow";
+import { useBorderGlow } from "@/components/registry/border-glow/border-glow";
 import { cn } from "@/lib/utils";
 
 // Amethyst glow tuned down for chrome duty: a shell card is furniture, not a

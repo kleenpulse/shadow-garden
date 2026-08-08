@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Check, Lock, Stars } from "lucide-react";
+import { Check, Stars } from "lucide-react";
 import { toast } from "sonner";
-import { useBorderGlow } from "@/components/registry/border-glow/BorderGlow";
+import { useBorderGlow } from "@/components/registry/border-glow/border-glow";
 import { trackEvent } from "@/lib/stats/track";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
@@ -11,9 +11,7 @@ import { useUIStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import SparkleBurst, { useSparkleBurst } from "./SparkleBurst";
 
-// The two faces of the Copy Prompt control, both wrapped in one shell so the
-// locked and live states occupy identical space — swapping between them on an
-// entitlement change must not shift the tab row.
+// The Copy Prompt control.
 //
 // The border, background and radius live on the SHELL, not the button: the glow
 // overlays paint above the shell's own background layer but below its children,
@@ -177,26 +175,5 @@ export default function CopyPromptButton({
         {copied ? `Prompt for ${name} copied to clipboard` : ""}
       </span>
     </>
-  );
-}
-
-/** Free visitor on a Pro component. Same footprint, routes to the paywall. */
-export function PromptLocked({ name }: { name: string }) {
-  const label = `The AI prompt for ${name} is available on the Pro tier`;
-  return (
-    <PromptButtonShell>
-      <button
-        type="button"
-        aria-label={label}
-        title={label}
-        onClick={() => {
-          window.location.hash = "subscribe";
-        }}
-        className={cn(CHROME, "text-ink-mute hover:text-accent")}
-      >
-        <Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        <span className={LABEL}>Copy Prompt</span>
-      </button>
-    </PromptButtonShell>
   );
 }

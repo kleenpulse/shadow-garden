@@ -1,0 +1,36 @@
+name: Component request
+description: Propose a new component for the catalog.
+labels: ["component-request"]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Component name
+      placeholder: aurora-ribbon
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - backgrounds
+        - text-animations
+        - micro-interactions
+        - power-user-systems
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What it does
+      description: Describe the effect and, if possible, link a reference or demo.
+    validations:
+      required: true
+  - type: textarea
+    id: props
+    attributes:
+      label: Proposed props
+      description: The tunable props (number / enum / boolean / color) it would expose.
+    validations:
+      required: false

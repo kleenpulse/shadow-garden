@@ -17,11 +17,11 @@ import Breadcrumbs from "@/components/shell/Breadcrumbs";
 import DemonstratedTerms from "@/components/shell/DemonstratedTerms";
 import RelatedComponents from "@/components/shell/RelatedComponents";
 import AppearsIn from "@/components/shell/AppearsIn";
-import WorkspaceSection from "@/components/shell/WorkspaceSection";
+import LiveWorkspace from "@/components/shell/LiveWorkspace";
 import CodePanel from "@/components/shell/CodePanel";
 import PromptButton from "@/components/shell/PromptButton";
-import InstallSection from "@/components/shell/InstallSection";
-import PropsSection from "@/components/shell/PropsSection";
+import InstallBlock from "@/components/shell/InstallBlock";
+import PropsTable from "@/components/shell/PropsTable";
 import TierBadge from "@/components/shell/TierBadge";
 import NewBadge from "@/components/shell/NewBadge";
 import FavoriteButton from "@/components/shell/FavoriteButton";
@@ -116,6 +116,21 @@ export default async function ComponentPage({
 					{entry.description}
 				</p>
 
+				{entry.attribution && (
+					<p className="mt-2 font-mono text-[11px] text-ink-mute">
+						Adapted from{" "}
+						<a
+							href={entry.attribution.url}
+							target="_blank"
+							rel="noreferrer"
+							className="text-ink-dim underline decoration-hairline underline-offset-2 transition-colors hover:text-accent hover:decoration-current"
+						>
+							{entry.attribution.name}
+						</a>
+						<span aria-hidden> ↗</span>
+					</p>
+				)}
+
 				{/* The motion terms this component demonstrates, each linking to its
 				    definition. Declared on the entry; /cookbook inverts the mapping. */}
 				{entry.cookbook && entry.cookbook.length > 0 && (
@@ -138,10 +153,10 @@ export default async function ComponentPage({
 
 			{/* The workspace reads tuned values from the URL (nuqs) — dynamic under
           Cache Components, so it streams as a hole in the static shell. The Code
-          tab's gated source and the gated Copy Prompt control (both dynamic) are
-          rendered server-side and passed in. */}
+          tab's source and the Copy Prompt control are rendered server-side and
+          passed in. */}
 			<Suspense fallback={<PanelSkeleton />}>
-				<WorkspaceSection
+				<LiveWorkspace
 					entry={entry}
 					code={
 						<Suspense fallback={<PanelSkeleton />}>
@@ -160,32 +175,18 @@ export default async function ComponentPage({
 				<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute">
 					Install
 				</h2>
-				<Suspense
-					fallback={
-						<div className="h-20 animate-pulse rounded-lg border border-hairline bg-panel" />
-					}
-				>
-					<InstallSection entry={entry} />
-				</Suspense>
+				<InstallBlock entry={entry} />
 			</section>
 
 			<section className="space-y-3">
 				<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute">
 					Props
 				</h2>
-				<Suspense
-					fallback={
-						<div className="h-40 animate-pulse rounded-lg border border-hairline bg-panel" />
-					}
-				>
-					<PropsSection entry={entry} />
-				</Suspense>
+				<PropsTable entry={entry} />
 			</section>
 
 			{/* Both derived from the registry entry — no cookie read, no URL read, so
-			    they render into the static shell instead of behind a boundary. On a Pro
-			    page, where every panel above is a locked-state placeholder, this is the
-			    page's real content. */}
+			    they render into the static shell instead of behind a boundary. */}
 			<DemonstratedTerms entry={entry} />
 			<RelatedComponents entry={entry} />
 			<AppearsIn entry={entry} />

@@ -1,7 +1,7 @@
 "use client";
 
 import ExhibitFrame from "@/components/landing/ExhibitFrame";
-import { MorphingText } from "@/components/registry/morphing-text/MorphingText";
+import { MorphingText } from "@/components/registry/morphing-text/morphing-text";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
 // β — Text Animations. MorphingText cycles the category's own component names.

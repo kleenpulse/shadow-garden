@@ -1,12 +1,24 @@
 {
   "name": "shadow-garden",
   "version": "0.1.0",
-  "private": true,
+  "license": "MIT",
+  "description": "Animation-forward React component showcase — a two-pane docs bench with tunable controls, live previews, and copyable source.",
+  "homepage": "https://github.com/kleenpulse/shadow-garden#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kleenpulse/shadow-garden.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kleenpulse/shadow-garden/issues"
+  },
+  "author": "kleenpulse",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "check": "tsc --noEmit && bun scripts/check-registry.ts && bun scripts/registry/check-strip.ts",
     "readme": "bun scripts/gen-readme.ts",
     "check:registry": "bun scripts/check-registry.ts",
     "check:registry:selftest": "bun scripts/registry/selftest.ts",
@@ -23,8 +35,6 @@
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^16.2.10",
-    "@polar-sh/nextjs": "^0.9.6",
-    "@polar-sh/sdk": "^0.49.0",
     "@radix-ui/react-select": "2.3.3",
     "@react-three/fiber": "^9.6.1",
     "@supabase/ssr": "^0.12.3",
@@ -41,7 +51,6 @@
     "motion": "^12.42.2",
     "next": "^16.3.0",
     "next-themes": "0.4.6",
-    "nodemailer": "^9.0.3",
     "nuqs": "^2.9.0",
     "ogl": "^1.0.11",
     "postgres": "^3.4.9",
@@ -63,7 +72,6 @@
     "@tailwindcss/postcss": "^4",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
-    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.31.10",

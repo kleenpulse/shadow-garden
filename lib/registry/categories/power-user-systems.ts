@@ -16,23 +16,23 @@ const UTILS_VARIANT: Variant = {
  *  the component's transitive closure, which `check:registry` verifies. It
  *  carries its own `cn` in ./util, so it takes no UTILS_VARIANT. */
 const FILE_EXPLORER_PEERS: Variant[] = [
-	"AutoScroll.tsx",
-	"Breadcrumb.tsx",
-	"ContextMenu.tsx",
-	"DetailPanel.tsx",
-	"EmptyState.tsx",
-	"FileGrid.tsx",
-	"FileList.tsx",
-	"FolderTree.tsx",
-	"InlineRename.tsx",
-	"StorageMeter.tsx",
-	"Thumbnail.tsx",
-	"Toolbar.tsx",
-	"UndoSnackbar.tsx",
+	"auto-scroll.tsx",
+	"breadcrumb.tsx",
+	"context-menu.tsx",
+	"detail-panel.tsx",
+	"empty-state.tsx",
+	"file-grid.tsx",
+	"file-list.tsx",
+	"folder-tree.tsx",
+	"inline-rename.tsx",
+	"storage-meter.tsx",
+	"thumbnail.tsx",
+	"toolbar.tsx",
+	"undo-snackbar.tsx",
 	"types.ts",
-	"useFileExplorer.ts",
-	"useFileStore.ts",
-	"useObjectUrl.ts",
+	"use-file-explorer.ts",
+	"use-file-store.ts",
+	"use-object-url.ts",
 	"util.ts",
 	"store/index.ts",
 	"store/types.ts",
@@ -54,10 +54,10 @@ const FILE_EXPLORER_PEERS: Variant[] = [
  *  declares clsx + tailwind-merge itself (§V41). */
 const APPROVAL_FLOW_PEERS: Variant[] = [
 	"types.ts",
-	"useApprovalFlow.ts",
-	"StepPanel.tsx",
-	"OptionRow.tsx",
-	"DecidedRail.tsx",
+	"use-approval-flow.ts",
+	"step-panel.tsx",
+	"option-row.tsx",
+	"decided-rail.tsx",
 ].map((name) => ({
 	lang: "ts",
 	style: "tailwind",
@@ -82,7 +82,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/sakura-tree/SakuraTree.tsx",
+				file: "components/registry/sakura-tree/sakura-tree.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -158,7 +158,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/command-palette/CommandPalette.tsx",
+				file: "components/registry/command-palette/command-palette.tsx",
 			},
 			{
 				lang: "ts",
@@ -212,7 +212,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/physics-engine/PhysicsEngine.tsx",
+				file: "components/registry/physics-engine/physics-engine.tsx",
 			},
 			{
 				lang: "ts",
@@ -336,7 +336,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/black-hole/BlackHole.tsx",
+				file: "components/registry/black-hole/black-hole.tsx",
 			},
 			{
 				lang: "ts",
@@ -537,7 +537,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/vortex-bloom/VortexBloom.tsx",
+				file: "components/registry/vortex-bloom/vortex-bloom.tsx",
 			},
 			{
 				lang: "ts",
@@ -732,7 +732,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/flock-field/FlockField.tsx",
+				file: "components/registry/flock-field/flock-field.tsx",
 			},
 			{
 				lang: "ts",
@@ -880,7 +880,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/smoke-field/SmokeField.tsx",
+				file: "components/registry/smoke-field/smoke-field.tsx",
 			},
 			{
 				lang: "ts",
@@ -1020,7 +1020,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/ripple-field/RippleField.tsx",
+				file: "components/registry/ripple-field/ripple-field.tsx",
 			},
 			{
 				lang: "ts",
@@ -1167,7 +1167,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/file-explorer/FileExplorer.tsx",
+				file: "components/registry/file-explorer/file-explorer.tsx",
 			},
 			...FILE_EXPLORER_PEERS,
 		],
@@ -1279,7 +1279,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/umbral-orrery/UmbralOrrery.tsx",
+				file: "components/registry/umbral-orrery/umbral-orrery.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1384,7 +1384,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/parallax-rail/ParallaxRail.tsx",
+				file: "components/registry/parallax-rail/parallax-rail.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1475,7 +1475,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/elastic/Elastic.tsx",
+				file: "components/registry/elastic/elastic.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1580,7 +1580,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/masonry/Masonry.tsx",
+				file: "components/registry/masonry/masonry.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1679,7 +1679,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/rubiks-cube/RubiksCube.tsx",
+				file: "components/registry/rubiks-cube/rubiks-cube.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -1814,7 +1814,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/approval-flow/ApprovalFlow.tsx",
+				file: "components/registry/approval-flow/approval-flow.tsx",
 			},
 			...APPROVAL_FLOW_PEERS,
 			UTILS_VARIANT,
@@ -1949,7 +1949,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/diff-review/DiffReview.tsx",
+				file: "components/registry/diff-review/diff-review.tsx",
 			},
 			UTILS_VARIANT,
 		],
@@ -2079,7 +2079,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/ledger/Ledger.tsx",
+				file: "components/registry/ledger/ledger.tsx",
 			},
 			{
 				lang: "ts",
@@ -2220,7 +2220,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/rotunda/Rotunda.tsx",
+				file: "components/registry/rotunda/rotunda.tsx",
 			},
 			{
 				lang: "ts",
@@ -2356,7 +2356,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/ascii-engine/AsciiEngine.tsx",
+				file: "components/registry/ascii-engine/ascii-engine.tsx",
 			},
 			{
 				lang: "ts",
@@ -2492,7 +2492,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/swarm/Swarm.tsx",
+				file: "components/registry/swarm/swarm.tsx",
 			},
 			{
 				lang: "ts",
@@ -2658,7 +2658,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/mirage/Mirage.tsx",
+				file: "components/registry/mirage/mirage.tsx",
 			},
 			{
 				lang: "ts",
@@ -2766,7 +2766,7 @@ export const powerUserSystems: ComponentEntry[] = [
 			{
 				lang: "ts",
 				style: "tailwind",
-				file: "components/registry/submerge/Submerge.tsx",
+				file: "components/registry/submerge/submerge.tsx",
 			},
 			{
 				lang: "ts",

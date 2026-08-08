@@ -1,7 +1,6 @@
 import { registry } from "@/lib/registry";
 import type { ComponentEntry } from "@/lib/registry/types";
 import { COOKBOOK, termAnchor } from "@/lib/cookbook";
-import { PLANS } from "@/lib/pricing";
 import { displayName } from "@/lib/display-name";
 import { collectionPath, type Collection } from "@/lib/collections";
 import {
@@ -50,12 +49,7 @@ export function siteSchema() {
 	};
 }
 
-/** Price strings are display copy ("$99", "$4.99"); schema.org wants the number. */
-function numericPrice(price: string): string {
-	return price.replace(/[^0-9.]/g, "");
-}
-
-/** Homepage: the product itself, with both real plans. */
+/** Homepage: the product itself — free and open source. */
 export function productSchema() {
 	return {
 		"@context": "https://schema.org",
@@ -71,16 +65,14 @@ export function productSchema() {
 		programmingLanguage: "TypeScript",
 		publisher: { "@id": ORG_ID },
 		isPartOf: { "@id": SITE_ID },
-		offers: PLANS.map((plan) => ({
+		license: SITE_REPO ? `${SITE_REPO}/blob/main/LICENSE` : undefined,
+		offers: {
 			"@type": "Offer",
-			name: plan.name,
-			description: plan.tagline,
-			price: numericPrice(plan.price),
+			price: "0",
 			priceCurrency: "USD",
-			category: plan.cadence === "one-time" ? "one-time purchase" : "subscription",
-			url: absoluteUrl("/components#subscribe"),
+			url: absoluteUrl("/components"),
 			availability: "https://schema.org/InStock",
-		})),
+		},
 	};
 }
 

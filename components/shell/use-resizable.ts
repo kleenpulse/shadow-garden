@@ -20,7 +20,7 @@ const NUDGE_STEP = 16;
  * setter, so widths survive reload. The handle is keyboard-accessible (arrow
  * keys nudge) and double-click resets to `resetTo`. While dragging, the document
  * gets `select-none` + a col-resize cursor so text selection / hover transitions
- * don't fight the drag. Adapted from ellum's knowledge-center useResizable.
+ * don't fight the drag.
  */
 export function useResizable({
   width,

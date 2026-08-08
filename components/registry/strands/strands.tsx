@@ -1,0 +1,501 @@
+// Adapted from React Bits (https://reactbits.dev) - MIT licensed.
+// Restyled and re-tooled for the Shadow Garden bench.
+"use client";
+
+import { Renderer, Program, Mesh, Color, Triangle, RenderTarget } from "ogl";
+import { useEffect, useRef, CSSProperties } from "react";
+import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
+
+const MAX_STRANDS = 12;
+const MAX_COLORS = 8;
+
+const VERT = `#version 300 es
+in vec2 position;
+void main() {
+  gl_Position = vec4(position, 0.0, 1.0);
+}
+`;
+
+const FRAG = `#version 300 es
+precision highp float;
+
+uniform float uTime;
+uniform vec2 uResolution;
+uniform vec3 uColors[${MAX_COLORS}];
+uniform int uColorCount;
+uniform int uStrandCount;
+uniform float uSpeed;
+uniform float uAmplitude;
+uniform float uWaviness;
+uniform float uThickness;
+uniform float uGlow;
+uniform float uTaper;
+uniform float uSpread;
+uniform float uHueShift;
+uniform float uIntensity;
+uniform float uOpacity;
+uniform float uScale;
+uniform float uSaturation;
+uniform float uEnvWidth;
+uniform float uBrightTaper;
+
+out vec4 fragColor;
+
+const float PI = 3.14159265;
+
+vec3 spectrum(float t) {
+  return 0.5 + 0.5 * cos(2.0 * PI * (t + vec3(0.00, 0.33, 0.67)));
+}
+
+vec3 samplePalette(float t) {
+  t = fract(t);
+  float scaled = t * float(uColorCount);
+  int idx = int(floor(scaled));
+  float blend = fract(scaled);
+  int nextIdx = idx + 1;
+  if (nextIdx >= uColorCount) nextIdx = 0;
+  return mix(uColors[idx], uColors[nextIdx], blend);
+}
+
+vec3 strandColor(float t) {
+  if (uColorCount > 0) return samplePalette(t);
+  return spectrum(t);
+}
+
+void main() {
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uResolution) / uResolution.y;
+  uv /= max(uScale, 0.0001);
+
+  float e = 0.06 + uIntensity * 0.94;
+  // Envelope half-width in strand uv-space — when the glass is on it equals the
+  // lens rim, so strand tips land exactly on the glass edge. Amplitude keeps the
+  // full taper (waves converge to the center line, which meets the circle at
+  // x = ±r). Brightness falloff is mode-aware via uBrightTaper: a gentle power
+  // under glass so tips stay visible until they touch the rim, the full taper
+  // without glass so light dissolves in a soft gradient instead of hitting the
+  // envelope clamp at near-full strength.
+  float nx = clamp(abs(uv.x) / uEnvWidth, 0.0, 1.0);
+  float envCos = cos(nx * PI * 0.5);
+  float env = pow(envCos, uTaper);
+  float bright = pow(envCos, uBrightTaper);
+
+  vec3 col = vec3(0.0);
+
+  for (int i = 0; i < ${MAX_STRANDS}; i++) {
+    if (i >= uStrandCount) break;
+
+    float fi = float(i);
+    float ph = fi * 1.7 * uSpread;
+    float freq = (2.0 + fi * 0.35) * uWaviness;
+    float spd = 1.4 + fi * 1.2;
+
+    float tt = uTime * uSpeed;
+    float w = sin(uv.x * freq + tt * spd + ph) * 0.60
+            + sin(uv.x * freq * 1.1 - tt * spd * 0.7 + ph * 1.7) * 0.40;
+
+    float amp = (0.1 + 0.02 * e) * env * uAmplitude;
+    float y = w * amp;
+
+    float d = abs(uv.y - y);
+    float thick = (0.001 + 0.05 * e) * (0.35 + env) * uThickness;
+    float g = thick / (d + thick * 0.45);
+    g = g * g;
+
+    float h = fi / float(uStrandCount) + uv.x * 0.30 + uTime * 0.04 + uHueShift;
+    col += strandColor(h) * g * bright;
+  }
+
+  col *= 0.45 + 0.7 * e;
+  col = 1.0 - exp(-col * uGlow);
+
+  float gray = dot(col, vec3(0.2126, 0.7152, 0.0722));
+  col = max(mix(vec3(gray), col, uSaturation), 0.0);
+
+  float lum = max(max(col.r, col.g), col.b);
+  float alpha = clamp(lum, 0.0, 1.0) * uOpacity;
+
+  fragColor = vec4(col * uOpacity, alpha);
+}
+`;
+
+const GLASS_FRAG = `#version 300 es
+precision highp float;
+
+uniform sampler2D uScene;
+uniform vec2 uResolution;
+uniform float uRadius;
+uniform float uRefraction;
+uniform float uDispersion;
+
+out vec4 fragColor;
+
+vec2 toUv(vec2 p) {
+  return p * (uResolution.y / uResolution) + 0.5;
+}
+
+void main() {
+  vec2 p = (gl_FragCoord.xy - 0.5 * uResolution) / uResolution.y;
+  float d = length(p);
+  float r = uRadius;
+
+  float edge = fwidth(d) * 1.5;
+  float mask = 1.0 - smoothstep(r - edge, r + edge, d);
+  if (mask <= 0.0) {
+    fragColor = vec4(0.0);
+    return;
+  }
+
+  // sphere height: 0 at the rim, 1 at the center
+  float z = sqrt(max(r * r - d * d, 0.0)) / r;
+  float nd = d / r; // 0 at the center, 1 at the rim
+
+  // refraction is confined to a narrow band near the rim; the rest stays undistorted
+  vec2 dir = d > 0.0 ? p / d : vec2(0.0);
+  float lens = smoothstep(0.85, 1.0, nd) * pow(nd, 6.0);
+  vec2 offset = -dir * lens * uRefraction * 0.15;
+  vec2 disp = -dir * lens * uDispersion * 0.012;
+
+  vec3 light;
+  light.r = texture(uScene, toUv(p + offset - disp)).r;
+  light.g = texture(uScene, toUv(p + offset)).g;
+  light.b = texture(uScene, toUv(p + offset + disp)).b;
+
+  // neutral fresnel rim (no color tint so the glass stays clear)
+  float fres = pow(1.0 - z, 3.0);
+  vec3 rim = vec3(1.0) * fres * 0.18;
+
+  // specular highlight from the upper-left
+  vec2 lightDir = normalize(vec2(-0.55, 0.6));
+  float spec = pow(max(dot(p / max(r, 1e-4), lightDir), 0.0), 6.0);
+  spec *= smoothstep(r, r * 0.55, d);
+
+  vec3 emissive = light + rim + vec3(spec) * 0.4;
+  float emissiveA = clamp(max(max(emissive.r, emissive.g), emissive.b), 0.0, 1.0);
+
+  // almost clear glass body: only a faint neutral darkening, mostly near the rim
+  float bodyA = 0.05 + fres * 0.05;
+
+  // composite emissive light over the clear body (premultiplied)
+  float outA = emissiveA + bodyA * (1.0 - emissiveA);
+  vec3 outRGB = emissive;
+
+  outRGB *= mask;
+  outA *= mask;
+
+  fragColor = vec4(outRGB, outA);
+}
+`;
+
+export interface StrandsProps {
+	colors?: string[];
+	count?: number;
+	speed?: number;
+	amplitude?: number;
+	waviness?: number;
+	thickness?: number;
+	/** Horizontal reach of the strand field as a percentage — 100 spans to the
+	 * glass rim (or the legacy field width without glass), lower pulls the tips
+	 * inward proportionally. */
+	strandWidth?: number;
+	glow?: number;
+	taper?: number;
+	spread?: number;
+	hueShift?: number;
+	intensity?: number;
+	saturation?: number;
+	opacity?: number;
+	scale?: number;
+	glass?: boolean;
+	refraction?: number;
+	dispersion?: number;
+	glassSize?: number;
+	paused?: boolean;
+	className?: string;
+	style?: CSSProperties;
+}
+
+const buildPalette = (colors: string[]): number[][] => {
+	const filled = colors && colors.length ? colors : ["#ffffff"];
+	const padded: number[][] = [];
+	for (let i = 0; i < MAX_COLORS; i++) {
+		const hex = filled[i] ?? filled[filled.length - 1];
+		const c = new Color(hex);
+		padded.push([c.r, c.g, c.b]);
+	}
+	return padded;
+};
+
+export default function Strands({
+	colors = ["#FF4242", "#7C3AED", "#06B6D4", "#EAB308"],
+	count = 13,
+	speed = 0.8,
+	amplitude = 1.25,
+	waviness = 1,
+	thickness = 1.55,
+	strandWidth = 100,
+	glow = 0.25,
+	taper = 3,
+	spread = 1.65,
+	hueShift = 0,
+	intensity = 1,
+	saturation = 1,
+	opacity = 0.9,
+	scale = 0.9,
+	glass = true,
+	refraction = 1.3,
+	dispersion = 0.5,
+	glassSize = 1,
+	paused = false,
+	className = "",
+	style,
+}: StrandsProps) {
+	const propsRef = useRef<
+		Required<Omit<StrandsProps, "className" | "style" | "paused">>
+	>({
+		colors,
+		count,
+		speed,
+		amplitude,
+		waviness,
+		thickness,
+		strandWidth,
+		glow,
+		taper,
+		spread,
+		hueShift,
+		intensity,
+		saturation,
+		opacity,
+		scale,
+		glass,
+		refraction,
+		dispersion,
+		glassSize,
+	});
+	propsRef.current = {
+		colors,
+		count,
+		speed,
+		amplitude,
+		waviness,
+		thickness,
+		strandWidth,
+		glow,
+		taper,
+		spread,
+		hueShift,
+		intensity,
+		saturation,
+		opacity,
+		scale,
+		glass,
+		refraction,
+		dispersion,
+		glassSize,
+	};
+
+	const ctnDom = useRef<HTMLDivElement>(null);
+	// Mirror `paused` so the render loop self-halts without a context rebuild.
+	const pausedRef = useRef(paused);
+	pausedRef.current = paused;
+	const drawRef = useRef<((t: number) => void | false) | null>(null);
+	const measureRef = useRef<((m: Metrics) => void) | null>(null);
+	const glRef = useRef<WebGLRenderingContext | WebGL2RenderingContext | null>(
+		null,
+	);
+
+	const loop = useAnimationLoop({
+		target: ctnDom,
+		halted: paused,
+		dpr: 2,
+		onResize: (metrics) => measureRef.current?.(metrics),
+		onFrame: ({ now }) => (drawRef.current ? drawRef.current(now) : false),
+		gl: () => glRef.current,
+	});
+
+	useEffect(() => {
+		const ctn = ctnDom.current;
+		if (!ctn) return;
+
+		const renderer = new Renderer({
+			alpha: true,
+			premultipliedAlpha: true,
+			antialias: true,
+		});
+		const gl = renderer.gl;
+		gl.clearColor(0, 0, 0, 0);
+		gl.enable(gl.BLEND);
+		gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+		gl.canvas.style.backgroundColor = "transparent";
+
+		const geometry = new Triangle(gl);
+		if (geometry.attributes.uv) {
+			delete geometry.attributes.uv;
+		}
+
+		const bw = gl.drawingBufferWidth || ctn.offsetWidth;
+		const bh = gl.drawingBufferHeight || ctn.offsetHeight;
+
+		const program = new Program(gl, {
+			vertex: VERT,
+			fragment: FRAG,
+			uniforms: {
+				uTime: { value: 0 },
+				uResolution: { value: [bw, bh] },
+				uColors: { value: buildPalette(propsRef.current.colors) },
+				uColorCount: {
+					value: Math.min(propsRef.current.colors.length, MAX_COLORS),
+				},
+				uStrandCount: { value: Math.min(propsRef.current.count, MAX_STRANDS) },
+				uSpeed: { value: speed },
+				uAmplitude: { value: amplitude },
+				uWaviness: { value: waviness },
+				uThickness: { value: thickness },
+				uGlow: { value: glow },
+				uTaper: { value: taper },
+				uSpread: { value: spread },
+				uHueShift: { value: hueShift },
+				uIntensity: { value: intensity },
+				uOpacity: { value: opacity },
+				uScale: { value: scale },
+				uSaturation: { value: saturation },
+				uEnvWidth: {
+					value:
+						(glass ? 0.46 * glassSize : 0.3846) *
+						Math.min(Math.max(strandWidth, 1), 100) *
+						0.01,
+				},
+				uBrightTaper: { value: taper * (glass ? 0.3 : 1) },
+			},
+		});
+
+		const mesh = new Mesh(gl, { geometry, program });
+
+		const renderTarget = new RenderTarget(gl, {
+			width: bw,
+			height: bh,
+		});
+
+		const glassProgram = new Program(gl, {
+			vertex: VERT,
+			fragment: GLASS_FRAG,
+			uniforms: {
+				uScene: { value: renderTarget.texture },
+				uResolution: { value: [bw, bh] },
+				// Lens radius tracks the field scale so the glass hugs the strand
+				// field at any zoom instead of cropping it at a fixed screen radius.
+				uRadius: { value: 0.46 * glassSize * scale },
+				uRefraction: { value: refraction },
+				uDispersion: { value: dispersion },
+			},
+		});
+		const glassMesh = new Mesh(gl, { geometry, program: glassProgram });
+
+		// Out of flow: ogl's setSize writes an explicit pixel width onto the canvas,
+		// and in flow that raises the container's min-content width — the container
+		// then stops shrinking, the ResizeObserver never fires, and the canvas is
+		// pinned at its first size.
+		gl.canvas.style.position = "absolute";
+		gl.canvas.style.top = "0";
+		gl.canvas.style.left = "0";
+		ctn.appendChild(gl.canvas);
+
+		glRef.current = gl;
+		measureRef.current = ({
+			width,
+			height,
+			dpr,
+			bufferWidth,
+			bufferHeight,
+		}) => {
+			renderer.dpr = dpr;
+			renderer.setSize(width, height);
+			const targetBw = gl.drawingBufferWidth || bufferWidth;
+			const targetBh = gl.drawingBufferHeight || bufferHeight;
+			program.uniforms.uResolution.value = [targetBw, targetBh];
+			renderTarget.setSize(targetBw, targetBh);
+			glassProgram.uniforms.uResolution.value = [targetBw, targetBh];
+		};
+
+		let lastT = -1;
+		let accum = 0;
+		const update = (t: number) => {
+			const dt = lastT >= 0 ? t - lastT : 0;
+			lastT = t;
+			const current = propsRef.current;
+			// Accumulate the clock only while playing, so pausing freezes the phase
+			// and resuming continues without a jump.
+			if (!pausedRef.current) accum += dt;
+			program.uniforms.uTime.value = accum * 0.001;
+			program.uniforms.uColors.value = buildPalette(current.colors);
+			program.uniforms.uColorCount.value = Math.min(
+				current.colors.length,
+				MAX_COLORS,
+			);
+			program.uniforms.uStrandCount.value = Math.min(
+				Math.max(Math.round(current.count), 1),
+				MAX_STRANDS,
+			);
+			program.uniforms.uSpeed.value = current.speed;
+			program.uniforms.uAmplitude.value = current.amplitude;
+			program.uniforms.uWaviness.value = current.waviness;
+			program.uniforms.uThickness.value = current.thickness;
+			program.uniforms.uGlow.value = current.glow;
+			program.uniforms.uTaper.value = current.taper;
+			program.uniforms.uSpread.value = current.spread;
+			program.uniforms.uHueShift.value = current.hueShift;
+			program.uniforms.uIntensity.value = current.intensity;
+			program.uniforms.uOpacity.value = current.opacity;
+			program.uniforms.uScale.value = current.scale;
+			program.uniforms.uSaturation.value = current.saturation;
+			// Glass rim is 0.46 * glassSize * scale in screen space; strand uv is
+			// divided by scale, so scale cancels and the rim sits at 0.46 * glassSize.
+			// strandWidth scales that reach as a percentage (100 = tips on the rim).
+			program.uniforms.uEnvWidth.value =
+				(current.glass ? 0.46 * current.glassSize : 0.3846) *
+				Math.min(Math.max(current.strandWidth, 1), 100) *
+				0.01;
+			// Glass hides the strand endings behind its rim, so brightness may hold
+			// until contact; bare strands need the full taper to fade out gradually.
+			program.uniforms.uBrightTaper.value =
+				current.taper * (current.glass ? 0.3 : 1);
+
+			if (current.glass) {
+				renderer.render({ scene: mesh, target: renderTarget });
+				glassProgram.uniforms.uScene.value = renderTarget.texture;
+				glassProgram.uniforms.uRefraction.value = current.refraction;
+				glassProgram.uniforms.uDispersion.value = current.dispersion;
+				glassProgram.uniforms.uRadius.value =
+					0.46 * current.glassSize * current.scale;
+				renderer.render({ scene: glassMesh });
+			} else {
+				renderer.render({ scene: mesh });
+			}
+
+			// Halt once paused — one final frozen frame renders, then the loop stops
+			// issuing draw calls.
+			if (pausedRef.current) return false;
+		};
+		drawRef.current = update;
+
+		loop.resize();
+		loop.start();
+
+		return () => {
+			drawRef.current = null;
+			measureRef.current = null;
+			if (ctn && gl.canvas.parentNode === ctn) {
+				ctn.removeChild(gl.canvas);
+			}
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	return (
+		<div
+			ref={ctnDom}
+			className={`relative h-full w-full bg-transparent ${className}`}
+			style={style}
+		/>
+	);
+}

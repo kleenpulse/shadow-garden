@@ -26,7 +26,7 @@ function entry(over: Partial<ComponentEntry> = {}): ComponentEntry {
       {
         lang: "ts",
         style: "tailwind",
-        file: "components/registry/ok-entry/OkEntry.tsx",
+        file: "components/registry/ok-entry/ok-entry.tsx",
       },
     ],
     ...over,
@@ -120,6 +120,16 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
       entry({
         variants: [
           { lang: "ts", style: "tailwind", file: "lib/elsewhere/Thing.tsx" },
+        ],
+      }),
+    ]),
+  },
+  {
+    rule: "variant-file-kebab",
+    ctx: context([
+      entry({
+        variants: [
+          { lang: "ts", style: "tailwind", file: "components/registry/thing/Thing.tsx" },
         ],
       }),
     ]),
@@ -238,7 +248,7 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
       entryImports: () => ({
         packages: new Set<string>(),
         files: new Set(["lib/utils.ts"]),
-        via: new Map([["lib/utils.ts", "components/registry/ok-entry/Sibling.tsx"]]),
+        via: new Map([["lib/utils.ts", "components/registry/ok-entry/sibling.tsx"]]),
         unresolved: [],
       }),
     }),
@@ -251,7 +261,7 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
         files: new Set<string>(),
         via: new Map<string, string>(),
         unresolved: [
-          { raw: "./Gone", from: "components/registry/ok-entry/OkEntry.tsx" },
+          { raw: "./Gone", from: "components/registry/ok-entry/ok-entry.tsx" },
         ],
       }),
     }),

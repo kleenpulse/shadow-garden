@@ -58,7 +58,7 @@ Implement the `FileStore` interface and pass it as `store`. It accepts a ready
 instance **or** a factory:
 
 ```tsx
-import FileExplorer from "./FileExplorer";
+import FileExplorer from "./file-explorer";
 import type { FileStore } from "./store/types";
 
 const myStore: FileStore = {

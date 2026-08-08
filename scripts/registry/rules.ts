@@ -101,6 +101,27 @@ const variantFileRoot: Rule = {
   },
 };
 
+// Windows (core.ignorecase + NTFS) resolves `Masonry.tsx` and `masonry.tsx` to
+// the same file, so a wrongly-cased variant path passes every disk check locally
+// and only breaks on a case-sensitive filesystem (Linux CI, a contributor's
+// machine). Nothing else enforces the kebab-case file convention, so this does.
+const variantFileKebab: Rule = {
+  id: "variant-file-kebab",
+  severity: "error",
+  what: "every variant.file basename is lowercase kebab-case",
+  run(ctx) {
+    return eachVariant(ctx, (entry, file) => {
+      const base = file.split("/").pop() ?? file;
+      return /^[a-z0-9]+(?:[.-][a-z0-9]+)*\.[a-z]+$/.test(base)
+        ? null
+        : {
+            slug: entry.slug,
+            detail: `variant basename not kebab-case: ${base} — Windows resolves it case-insensitively, so this only fails on Linux`,
+          };
+    });
+  },
+};
+
 const propNamesUnique: Rule = {
   id: "prop-names-unique",
   severity: "error",
@@ -937,6 +958,7 @@ export const RULES: Rule[] = [
   slugMatchesDir,
   variantFileExists,
   variantFileRoot,
+  variantFileKebab,
   propNamesUnique,
   defaultInDomain,
   disabledWhenTarget,

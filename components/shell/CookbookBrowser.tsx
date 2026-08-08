@@ -17,7 +17,7 @@ import { useScrollSpy } from "@/hooks/use-scroll-spy";
 // measures final geometry (§V27, §V31).
 import Masonry, {
 	settleMasonryReveal,
-} from "@/components/registry/masonry/Masonry";
+} from "@/components/registry/masonry/masonry";
 import CookbookFilter from "./CookbookFilter";
 import GlowCard from "./GlowCard";
 import { CookbookFlameControlsDesktop } from "./CookbookFlameControls";

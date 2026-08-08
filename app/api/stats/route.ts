@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { has } from "@/lib/capabilities";
 import { cookies } from "next/headers";
 import { getAllSlugs } from "@/lib/registry";
-import { getCurrentUserClaims } from "@/lib/supabase/current-user";
 
 // Per-component engagement counter. Fire-and-forget from the client (favorite,
 // install, copy-source, view). Anonymous by design — no auth — so every visitor's
-// events count. Counts are soft, inflatable intent signals (no CLI verification to
-// back an "install"); acceptable social proof for an indie showcase. Best-effort:
-// a DB hiccup never surfaces to the user. Node runtime by default (no runtime
-// export under Cache Components).
+// events count. install/copy/prompt are soft, inflatable intent signals (no CLI
+// verification to back an "install"); acceptable social proof for an indie
+// showcase. Views and favorites are exact: both ride a per-visitor dedup ledger
+// keyed by the `sg_vid` cookie. Best-effort: a DB hiccup never surfaces to the
+// user. Node runtime by default (no runtime export under Cache Components).
 //   POST /api/stats  { slug, event } → 204
 
 const EVENTS = new Set([
@@ -112,32 +112,32 @@ async function increment(slug: string, event: StatEvent) {
   }
 }
 
-// Unique-view path: resolve a stable viewer identity, record it in the dedup ledger,
-// and only bump the public view_count when this (visitor, slug) pair is brand new.
-// Identity = signed-in user id (dedups across their devices) else a per-browser
-// `sg_vid` cookie. Any failure degrades to "no count" — never surfaces to the user.
+// Stable per-browser identity for the dedup ledgers (views, favorites). Reads
+// the `sg_vid` cookie, minting one onto the response when absent.
+async function resolveVisitor(res: NextResponse): Promise<string> {
+  const jar = await cookies();
+  let visitorId = jar.get("sg_vid")?.value ?? null;
+  if (!visitorId) {
+    visitorId =
+      typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+    res.cookies.set("sg_vid", visitorId, {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365, // one year
+    });
+  }
+  return visitorId;
+}
+
+// Unique-view path: record the (visitor, slug) pair in the dedup ledger and only
+// bump the public view_count when it is brand new. Any failure degrades to
+// "no count" — never surfaces to the user.
 async function handleView(slug: string): Promise<NextResponse> {
   const res = new NextResponse(null, { status: 204 });
-
-  const claims = await getCurrentUserClaims();
-  let visitorId: string | null = claims?.sub ?? null;
-
-  if (!visitorId) {
-    const jar = await cookies();
-    visitorId = jar.get("sg_vid")?.value ?? null;
-    if (!visitorId) {
-      visitorId =
-        typeof crypto !== "undefined" && "randomUUID" in crypto
-          ? crypto.randomUUID()
-          : `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-      res.cookies.set("sg_vid", visitorId, {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 365, // one year
-      });
-    }
-  }
+  const visitorId = await resolveVisitor(res);
 
   try {
     const { getDb } = await import("@/lib/db");
@@ -154,6 +154,42 @@ async function handleView(slug: string): Promise<NextResponse> {
     if (inserted.length > 0) await increment(slug, "view");
   } catch (err) {
     console.error("[stats] view dedup failed:", err);
+  }
+
+  return res;
+}
+
+// Favorite path: the per-visitor ledger is the source of truth for the public
+// count. `favorited` inserts the (slug, visitor) pair and bumps the count only
+// when the pair is new; `unfavorited` deletes it and decrements only when it
+// existed — so replays and toggle-spam leave the count exact.
+async function handleFavorite(slug: string, on: boolean): Promise<NextResponse> {
+  const res = new NextResponse(null, { status: 204 });
+  const visitorId = await resolveVisitor(res);
+
+  try {
+    const { getDb } = await import("@/lib/db");
+    const { favorites } = await import("@/lib/db/schema");
+    const { and, eq } = await import("drizzle-orm");
+    const db = getDb();
+    if (!db) return res;
+
+    if (on) {
+      const inserted = await db
+        .insert(favorites)
+        .values({ slug, visitorId })
+        .onConflictDoNothing()
+        .returning({ slug: favorites.slug });
+      if (inserted.length > 0) await increment(slug, "favorited");
+    } else {
+      const deleted = await db
+        .delete(favorites)
+        .where(and(eq(favorites.slug, slug), eq(favorites.visitorId, visitorId)))
+        .returning({ slug: favorites.slug });
+      if (deleted.length > 0) await increment(slug, "unfavorited");
+    }
+  } catch (err) {
+    console.error("[stats] favorite ledger failed:", err);
   }
 
   return res;
@@ -183,8 +219,11 @@ export async function POST(request: Request) {
     return new NextResponse(null, { status: 204 });
   }
 
-  // Views are deduped per viewer; every other event is a raw, intentional gesture.
+  // Views and favorites ride the per-visitor ledgers; every other event is a
+  // raw, intentional gesture.
   if (event === "view") return handleView(slug);
+  if (event === "favorited") return handleFavorite(slug, true);
+  if (event === "unfavorited") return handleFavorite(slug, false);
 
   try {
     await increment(slug, event as StatEvent);

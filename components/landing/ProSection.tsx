@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { useInView, useReducedMotion } from "motion/react";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
-const LightRays = dynamic(() => import("@/components/registry/light-rays/LightRays"), {
+const LightRays = dynamic(() => import("@/components/registry/light-rays/light-rays"), {
   ssr: false,
 });
 

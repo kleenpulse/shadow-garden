@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { SpotlightShell } from "@/components/registry/spotlight-shell/SpotlightShell";
+import { SpotlightShell } from "@/components/registry/spotlight-shell/spotlight-shell";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import type { LandingEntry } from "@/components/landing/data";
 

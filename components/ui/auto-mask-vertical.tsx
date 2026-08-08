@@ -12,7 +12,6 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 
-// Ported from the ellum reference (components/miscellaneous/auto-mask-vertical).
 // A vertical scroll container that (1) fades its top/bottom edges with a
 // mask-image gradient based on scroll position and (2) hides its scrollbar,
 // revealing it only on hover or while actively scrolling (md+).

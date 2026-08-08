@@ -12,7 +12,7 @@ import {
 import CookBookIcon from "@/components/icons/cook-book";
 import { getEntry } from "@/lib/registry";
 import type { Category, ComponentEntry } from "@/lib/registry/types";
-import type { CommandGroupDef } from "@/components/registry/command-palette/CommandPalette";
+import type { CommandGroupDef } from "@/components/registry/command-palette/command-palette";
 
 const CATEGORY_ICON: Record<Category, ComponentType<{ className?: string }>> = {
 	Backgrounds: Layers,
@@ -38,9 +38,7 @@ export function currentComponentSlug(pathname: string): string | undefined {
 
 /**
  * Derive the palette's groups from the registry — Favorites (jump), Components
- * (jump), and Actions (theme / copy / favorite-current / page nav). Mirrors the
- * ellum palette's "groups built from config" model, minus the app-specific
- * auth/billing gating.
+ * (jump), and Actions (theme / copy / favorite-current / page nav).
  */
 export function buildCommandGroups(
 	entries: ComponentEntry[],
