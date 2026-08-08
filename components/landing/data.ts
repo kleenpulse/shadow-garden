@@ -3,12 +3,11 @@
 // plain serializable objects cross into the client islands.
 
 import { registry, getEntry, groupByCategory } from "@/lib/registry";
-import type { Category, NumberProp, Tier } from "@/lib/registry/types";
+import type { Category, NumberProp } from "@/lib/registry/types";
 
 export interface LandingEntry {
 	slug: string;
 	name: string;
-	tier: Tier;
 	description: string;
 }
 
@@ -51,7 +50,7 @@ export interface SliderSchema {
 }
 
 export interface LandingData {
-	stats: { total: number; free: number; pro: number };
+	stats: { total: number };
 	/** Landing-page tuning for the hero. The cube runs on desktop, Waves below
 	 *  the md breakpoint, and the rays burn top-right on desktop dark only.
 	 *  Cube values are stated outright, not registry-derived — see the note on
@@ -78,11 +77,12 @@ export interface LandingData {
 	navSections: NavSection[];
 	/** Accent used by the SpotlightShell cards — its own registry default. */
 	spotlightAccent: string;
-	/** Rays burning behind the sealed-archive band. Read off LightRays, the
+	/** Rays burning behind the open-archive band. Read off LightRays, the
 	 *  component that actually renders them — it used to ride on the hero's
 	 *  colour, which only ever worked because both happened to be amethyst. */
 	raysColor: string;
-	proEntries: Array<{ slug: string; name: string; category: Category }>;
+	/** Newest additions, freshest first — the open-archive band's index. */
+	archiveEntries: Array<{ slug: string; name: string; category: Category }>;
 	tuning: {
 		glowColor: string;
 		sliders: SliderSchema[];
@@ -156,8 +156,6 @@ function colorProp(slug: string, name: string): string {
 }
 
 export function buildLandingData(): LandingData {
-	const free = registry.filter((entry) => entry.tier === "free").length;
-
 	const grouped = groupByCategory();
 	const ordered = [
 		...EXHIBIT_ORDER.map((category) =>
@@ -171,10 +169,9 @@ export function buildLandingData(): LandingData {
 		index: String(i + 1).padStart(2, "0"),
 		category: group.category,
 		blurb: BLURBS[group.category],
-		entries: group.entries.map(({ slug, name, tier, description }) => ({
+		entries: group.entries.map(({ slug, name, description }) => ({
 			slug,
 			name: spaceName(name),
-			tier,
 			description,
 		})),
 	}));
@@ -211,7 +208,7 @@ export function buildLandingData(): LandingData {
 	};
 
 	return {
-		stats: { total: registry.length, free, pro: registry.length - free },
+		stats: { total: registry.length },
 		hero: {
 			// Stated outright rather than read off the registry: the hero runs the
 			// cube slower than its shipped defaults so the motion stays ambient
@@ -242,8 +239,10 @@ export function buildLandingData(): LandingData {
 		navSections,
 		spotlightAccent: colorProp("spotlight-shell", "accentColor"),
 		raysColor: colorProp("light-rays", "raysColor"),
-		proEntries: registry
-			.filter((entry) => entry.tier === "pro")
+		// Newest first; never-dated entries sort last. Stable slice for the band's
+		// short index — the full catalog is one click away.
+		archiveEntries: [...registry]
+			.sort((a, b) => (b.addedAt ?? "").localeCompare(a.addedAt ?? ""))
 			.map(({ slug, name, category }) => ({
 				slug,
 				name: spaceName(name),

@@ -1,7 +1,7 @@
 import "server-only";
 import { createHighlighter, type Highlighter } from "shiki";
 
-// Server-side syntax highlighting. Under Cache Components, free-tier pages
+// Server-side syntax highlighting. Under Cache Components, component pages
 // prerender statically, so this runs at build time and ships zero client
 // highlighter JS. A module-level singleton keeps the WASM highlighter warm.
 let highlighterPromise: Promise<Highlighter> | null = null;

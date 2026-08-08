@@ -29,14 +29,9 @@ export default function GammaExhibit({
               href={`/components/${item.slug}`}
               className="flex h-full flex-col gap-3 p-6 focus-visible:outline-none"
             >
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="font-display text-sm uppercase tracking-[0.18em] text-ink">
-                  {item.name}
-                </span>
-                <span className="font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute">
-                  {item.tier}
-                </span>
-              </div>
+              <span className="font-display text-sm uppercase tracking-[0.18em] text-ink">
+                {item.name}
+              </span>
               <p className="font-sans text-xs leading-relaxed text-ink-dim">{item.description}</p>
               <span
                 aria-hidden

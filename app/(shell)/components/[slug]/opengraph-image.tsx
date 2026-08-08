@@ -48,7 +48,6 @@ export default async function Image({
 	const name = entry ? displayName(entry.name) : "Shadow Garden";
 	const category = entry?.category ?? "Component Registry";
 	const description = entry?.description ?? "";
-	const isPro = entry?.tier === "pro";
 	const propCount = entry?.props.length ?? 0;
 
 	return new ImageResponse(
@@ -86,22 +85,6 @@ export default async function Image({
 							>
 								{category}
 							</div>
-							{isPro && (
-								<div
-									style={{
-										display: "flex",
-										padding: "8px 18px",
-										borderRadius: 999,
-										border: `1px solid ${ACCENT}`,
-										color: ACCENT,
-										fontSize: 20,
-										letterSpacing: 4,
-										textTransform: "uppercase",
-									}}
-								>
-									Pro
-								</div>
-							)}
 						</div>
 
 						<div

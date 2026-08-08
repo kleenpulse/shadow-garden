@@ -53,7 +53,6 @@ export default function CookbookPage() {
 			components: (byTerm.get(t.term) ?? []).map((entry) => ({
 				slug: entry.slug,
 				name: entry.name,
-				tier: entry.tier,
 			})),
 		})),
 	}));

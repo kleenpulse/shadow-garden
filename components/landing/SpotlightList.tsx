@@ -10,7 +10,7 @@ import CrossHair from "../icons/cross-hair";
 export interface SpotlightItem {
 	slug: string;
 	name: string;
-	tag: string;
+	tag?: string;
 	tagTone?: "default" | "accent";
 }
 
@@ -108,18 +108,20 @@ export default function SpotlightList({
 								>
 									{item.name}
 								</span>
-								<span
-									className={cn(
-										"font-display text-[10px] uppercase tracking-[0.22em] transition-colors duration-200",
-										isHovered
-											? v.textOn
-											: item.tagTone === "accent"
-												? v.tagAccent
-												: v.tagIdle,
-									)}
-								>
-									{item.tag}
-								</span>
+								{item.tag && (
+									<span
+										className={cn(
+											"font-display text-[10px] uppercase tracking-[0.22em] transition-colors duration-200",
+											isHovered
+												? v.textOn
+												: item.tagTone === "accent"
+													? v.tagAccent
+													: v.tagIdle,
+										)}
+									>
+										{item.tag}
+									</span>
+								)}
 							</span>
 							<CrossHair
 								aria-hidden

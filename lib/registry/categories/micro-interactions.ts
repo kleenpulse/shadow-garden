@@ -26,7 +26,6 @@ export const microInteractions: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "PixelTransition",
 		category: "Micro-interactions",
-		tier: "free",
 		description:
 			"Reveal a second layer through a random pixelated dissolve on hover.",
 		dependencies: ["gsap", "clsx", "tailwind-merge"],
@@ -78,7 +77,6 @@ export const microInteractions: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "BorderGlow",
 		category: "Micro-interactions",
-		tier: "free",
 		description: "A cursor-proximity gradient border with an outer glow.",
 		dependencies: [],
 		cookbook: ["Hover effect", "Interpolation / Tween"],
@@ -164,7 +162,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "spotlight-shell",
 		name: "SpotlightShell",
 		category: "Micro-interactions",
-		tier: "free",
 		description:
 			"A card shell with 3D magnetic tilt, radial glow, and a shimmer sweep.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -195,7 +192,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "animated-hamburger",
 		name: "AnimatedHamburger",
 		category: "Micro-interactions",
-		tier: "free",
 		description:
 			"A three-bar hamburger that morphs to an X, driven by a toggle prop.",
 		dependencies: ["motion"],
@@ -220,7 +216,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "morph-dialog",
 		name: "MorphDialog",
 		category: "Micro-interactions",
-		tier: "pro",
 		description:
 			"A dialog that morphs open from its trigger via shared-layout animation, with elements that travel between card and panel.",
 		dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
@@ -286,7 +281,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "blueprint-card",
 		name: "BlueprintCard",
 		category: "Micro-interactions",
-		tier: "free",
 		description:
 			"A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
 		dependencies: ["clsx", "tailwind-merge"],
@@ -354,7 +348,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "corner-letters",
 		name: "CornerLetters",
 		category: "Micro-interactions",
-		tier: "free",
 		description:
 			"Four glyphs pinned to the container corners that blur-and-scale in on mount and dissolve out on exit.",
 		dependencies: ["motion"],
@@ -433,7 +426,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "hover-list",
 		name: "HoverList",
 		category: "Micro-interactions",
-		tier: "pro",
 		description:
 			"A display-type list where a shared accent block springs between rows on hover while the text indents and inverts.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -521,7 +513,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "preloader",
 		name: "Preloader",
 		category: "Micro-interactions",
-		tier: "free",
 		description:
 			"A percentage-counting load overlay — spinning ring, eased counter, and a fade-out that reveals the page beneath.",
 		dependencies: ["gsap", "clsx", "tailwind-merge"],
@@ -615,7 +606,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "stagger-menu",
 		name: "StaggerMenu",
 		category: "Micro-interactions",
-		tier: "free",
 		description:
 			"A menu overlay that blooms open as a clip-path circle spring while items stagger in with blur and rotation, then collapses back to its pill.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -687,7 +677,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "magnetic-button",
 		name: "MagneticButton",
 		category: "Micro-interactions",
-		tier: "pro",
 		description:
 			"A button that leans into your cursor — caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
 		dependencies: ["motion"],
@@ -778,7 +767,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "shadow-cursor",
 		name: "ShadowCursor",
 		category: "Micro-interactions",
-		tier: "pro",
 		description:
 			"A custom cursor with a shadow at its heel — a precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage; the page cursor is never touched.",
 		dependencies: ["motion"],
@@ -860,7 +848,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "torchlight",
 		name: "Torchlight",
 		category: "Micro-interactions",
-		tier: "pro",
 		addedAt: "2026-07-24",
 		description:
 			"Content hidden in darkness; the cursor is a torch that reveals only what it touches.",
@@ -942,7 +929,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "dissolve",
 		name: "Dissolve",
 		category: "Micro-interactions",
-		tier: "pro",
 		addedAt: "2026-07-24",
 		description:
 			"An element disintegrates into drifting shadow-motes on dismiss, and reforms on command.",
@@ -1039,7 +1025,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "tilt",
 		name: "Tilt",
 		category: "Micro-interactions",
-		tier: "free",
 		addedAt: "2026-07-26",
 		description:
 			"A machined card that leans toward the pointer in 3D while a specular sheet slides across its face.",
@@ -1130,7 +1115,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "sigil",
 		name: "Sigil",
 		category: "Micro-interactions",
-		tier: "free",
 		addedAt: "2026-07-26",
 		description:
 			"An SVG crest that traces itself in when it scrolls into view, stroke by stroke.",
@@ -1217,7 +1201,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "rift",
 		name: "Rift",
 		category: "Micro-interactions",
-		tier: "pro",
 		addedAt: "2026-07-26",
 		description:
 			"A draggable tear between two overlaid scenes — push past an edge and it resists, then snaps back.",
@@ -1305,7 +1288,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "approach",
 		name: "Approach",
 		category: "Micro-interactions",
-		tier: "pro",
 		addedAt: "2026-07-26",
 		description:
 			"A tile whose overlay enters from the exact edge your cursor crossed, and leaves the way you go.",
@@ -1389,7 +1371,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "hold",
 		name: "Hold",
 		category: "Micro-interactions",
-		tier: "free",
 		addedAt: "2026-07-31",
 		description:
 			"A confirm that has to be earned — the ring fills while you hold, snaps shut when it commits, and empties on a different curve entirely if you let go early.",
@@ -1515,7 +1496,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "aperture",
 		name: "Aperture",
 		category: "Micro-interactions",
-		tier: "pro",
 		addedAt: "2026-07-31",
 		description:
 			"A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism — wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
@@ -1635,7 +1615,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "segmented",
 		name: "Segmented",
 		category: "Micro-interactions",
-		tier: "free",
 		addedAt: "2026-08-06",
 		description:
 			"A segmented control whose indicator travels on a shared layout id and smears in the direction it is moving.",
@@ -1741,7 +1720,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "tether",
 		name: "Tether",
 		category: "Micro-interactions",
-		tier: "free",
 		addedAt: "2026-08-06",
 		description:
 			"A popover that grows out of the corner nearest its trigger, and moves that origin when it flips.",
@@ -1876,7 +1854,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "inline-edit",
 		name: "InlineEdit",
 		category: "Micro-interactions",
-		tier: "free",
 		addedAt: "2026-08-06",
 		description:
 			"Text that becomes its own input with nothing moving — one padded box, two contents, sized in CSS.",
@@ -2000,7 +1977,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "crossing",
 		name: "Crossing",
 		category: "Micro-interactions",
-		tier: "pro",
 		addedAt: "2026-08-06",
 		description:
 			"A gallery-to-detail crossing on the View Transitions API, where one element is the same object in both views.",
@@ -2092,7 +2068,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "reorder",
 		name: "Reorder",
 		category: "Micro-interactions",
-		tier: "pro",
 		addedAt: "2026-08-06",
 		description:
 			"A sortable list that answers to a finger and to a keyboard equally — grab a row, and the rest step aside to make the space.",
@@ -2212,7 +2187,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "holofoil",
 		name: "Holofoil",
 		category: "Micro-interactions",
-		tier: "free",
 		addedAt: "2026-08-06",
 		description:
 			"Holographic trading-card foil over real content. The diffraction band travels against the tilt while the specular follows it, and the flake only lights where the rainbow currently falls — which is what stops the whole thing reading as one gradient sliding around.",
@@ -2343,7 +2317,6 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "lens",
 		name: "Lens",
 		category: "Micro-interactions",
-		tier: "free",
 		addedAt: "2026-08-06",
 		description:
 			"A glass lens you drag across live content, bending it through an SVG displacement field with a real bevel and three-channel dispersion. It refracts a live duplicate of its own children rather than the page backdrop — which is the only version of this effect that works in Chrome, Safari and Firefox alike.",

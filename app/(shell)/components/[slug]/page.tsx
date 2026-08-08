@@ -22,7 +22,6 @@ import CodePanel from "@/components/shell/CodePanel";
 import PromptButton from "@/components/shell/PromptButton";
 import InstallBlock from "@/components/shell/InstallBlock";
 import PropsTable from "@/components/shell/PropsTable";
-import TierBadge from "@/components/shell/TierBadge";
 import NewBadge from "@/components/shell/NewBadge";
 import FavoriteButton from "@/components/shell/FavoriteButton";
 
@@ -104,7 +103,6 @@ export default async function ComponentPage({
 						{displayName(entry.name)}
 					</h1>
 					<NewBadge addedAt={entry.addedAt} />
-					<TierBadge tier={entry.tier} />
 					<FavoriteButton
 						slug={entry.slug}
 						name={entry.name}

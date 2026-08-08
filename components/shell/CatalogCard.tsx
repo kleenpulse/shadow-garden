@@ -1,11 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import type { Tier } from "@/lib/registry/types";
 import { cn } from "@/lib/utils";
 import { displayName } from "@/lib/display-name";
 import GlowCard from "./GlowCard";
-import TierBadge from "./TierBadge";
 import NewBadge from "./NewBadge";
 import FavoriteButton from "./FavoriteButton";
 
@@ -13,13 +11,11 @@ export default function CatalogCard({
 	slug,
 	name,
 	description,
-	tier,
 	addedAt,
 }: {
 	slug: string;
 	name: string;
 	description: string;
-	tier: Tier;
 	addedAt?: string;
 }) {
 	return (
@@ -57,7 +53,6 @@ export default function CatalogCard({
 						className="pointer-events-auto opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
 					/>
 					<NewBadge addedAt={addedAt} />
-					<TierBadge tier={tier} />
 				</div>
 			</div>
 			<p className="pointer-events-none relative z-10 font-sans text-xs leading-relaxed text-ink-dim line-clamp-3">

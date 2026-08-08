@@ -22,7 +22,6 @@ import CookbookFilter from "./CookbookFilter";
 import GlowCard from "./GlowCard";
 import { CookbookFlameControlsDesktop } from "./CookbookFlameControls";
 import CookbookSectionNav from "./CookbookSectionNav";
-import TierBadge from "./TierBadge";
 
 // Where an anchored heading has to come to rest. Two sticky layers are stacked
 // above it, not one: the shell's TopBar, and this page's own filter bar parked
@@ -93,7 +92,6 @@ const READING_LINE = 120;
 export interface CookbookComponentRef {
 	slug: string;
 	name: string;
-	tier: "free" | "pro";
 }
 
 export interface CookbookTermRow {
@@ -429,10 +427,6 @@ export default function CookbookBrowser({
 														className="flex items-center gap-1.5 rounded-lg border border-hairline px-1 py-0.5 font-sans text-[10px] text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
 													>
 														{c.name}
-														<TierBadge
-															tier={c.tier}
-															className="rounded-md px-1 min-w-7"
-														/>
 													</Link>
 												))}
 											</div>

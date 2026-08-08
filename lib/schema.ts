@@ -141,8 +141,9 @@ export function componentSchema(entry: ComponentEntry) {
 		programmingLanguage: "TypeScript",
 		runtimePlatform: "React",
 		codeSampleType: "full solution",
-		// Honest, and the one fact a buyer most wants before clicking.
-		isAccessibleForFree: entry.tier === "free",
+		// The whole catalog is MIT — every entry is free, and saying so is the one
+		// fact a visitor most wants before clicking.
+		isAccessibleForFree: true,
 		keywords: [entry.category, ...(entry.cookbook ?? [])].join(", "),
 		...(entry.dependencies?.length
 			? { softwareRequirements: entry.dependencies.join(", ") }

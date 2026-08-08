@@ -1,12 +1,12 @@
 import { registry } from "./registry/index";
-import type { Category, ComponentEntry, Tier } from "./registry/types";
+import type { Category, ComponentEntry } from "./registry/types";
 
 // Landing surfaces for the queries a component page can't answer. `/components`
 // targets the head term; a single entry targets one effect name. Nothing on the
 // site targeted "react hover effects" or "gsap react components" until this.
 //
 // Every member set is COMPUTED from fields the registry already declares —
-// category, cookbook terms, dependencies, tier. There is no second taxonomy to
+// category, cookbook terms, dependencies. There is no second taxonomy to
 // maintain and no way for a collection to drift from the catalog: add a
 // component that cites "Stagger" and it appears here on the next build.
 //
@@ -19,8 +19,7 @@ import type { Category, ComponentEntry, Tier } from "./registry/types";
 export type CollectionFilter =
   | { kind: "category"; category: Category }
   | { kind: "terms"; terms: string[] }
-  | { kind: "deps"; packages: string[] }
-  | { kind: "tier"; tier: Tier };
+  | { kind: "deps"; packages: string[] };
 
 export interface Collection {
   /** URL segment under /collections/. Shaped like the query, not like the filter. */
@@ -41,7 +40,6 @@ export const COLLECTION_GROUPS = [
   "By Category",
   "By Technique",
   "By Library",
-  "Free",
 ] as const;
 
 export type CollectionGroup = (typeof COLLECTION_GROUPS)[number];
@@ -50,7 +48,6 @@ const GROUP_OF: Record<CollectionFilter["kind"], CollectionGroup> = {
   category: "By Category",
   terms: "By Technique",
   deps: "By Library",
-  tier: "Free",
 };
 
 export const COLLECTIONS: Collection[] = [
@@ -174,14 +171,6 @@ export const COLLECTIONS: Collection[] = [
       "Seventeen components that render on the GPU through a WebGL context — fragment-shader gradients, particle fields, fluid simulations, a raymarched black hole. Sixteen use ogl, a wrapper small enough that the whole bundle costs less than one hero image; one uses Three.js, where the scene genuinely needs a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
     filter: { kind: "deps", packages: ["ogl", "three"] },
   },
-  // ── Free ───────────────────────────────────────────────────────────────────
-  {
-    slug: "free-react-animation-components",
-    title: "Free React Animation Components",
-    intro:
-      "Thirty-nine components with the full source visible, copyable, and free to use in commercial work — no attribution, no account, no install step beyond the packages they name. That is roughly half the registry, spanning all four categories, and it is the honest place to start: read the code, paste one into a real project, and decide whether the approach is worth the rest.",
-    filter: { kind: "tier", tier: "free" },
-  },
 ];
 
 export function collectionPath(collection: Collection): string {
@@ -215,8 +204,6 @@ function matches(filter: CollectionFilter, entry: ComponentEntry): boolean {
       return filter.packages.some((pkg) =>
         (entry.dependencies ?? []).includes(pkg),
       );
-    case "tier":
-      return entry.tier === filter.tier;
   }
 }
 
@@ -238,8 +225,7 @@ export function resolveCollection(
  * Why this entry is on this page. Rendered under each member, and the reason the
  * member list is page-specific rather than the same card repeated across 18
  * URLs — `word-reveal` reads "Stagger, Reveal" here and "Built with motion"
- * there. Category and tier collections have nothing to add: the heading already
- * said it.
+ * there. Category collections have nothing to add: the heading already said it.
  */
 export function matchReasons(
   collection: Collection,
@@ -278,13 +264,3 @@ export function siblingCollections(collection: Collection): Collection[] {
   );
 }
 
-export interface CollectionStats {
-  total: number;
-  free: number;
-  pro: number;
-}
-
-export function collectionStats(entries: ComponentEntry[]): CollectionStats {
-  const free = entries.filter((entry) => entry.tier === "free").length;
-  return { total: entries.length, free, pro: entries.length - free };
-}

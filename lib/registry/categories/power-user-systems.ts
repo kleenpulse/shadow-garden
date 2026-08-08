@@ -36,7 +36,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "command-palette",
 		name: "CommandPalette",
 		category: "Power-User Systems",
-		tier: "pro",
 		description:
 			"A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
 		dependencies: ["cmdk", "motion", "clsx", "tailwind-merge"],
@@ -83,7 +82,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "physics-engine",
 		name: "PhysicsEngine",
 		category: "Power-User Systems",
-		tier: "pro",
 		pausable: true,
 		description:
 			"A from-scratch 2D rigid-body physics lab — fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
@@ -213,7 +211,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "black-hole",
 		name: "BlackHole",
 		category: "Power-User Systems",
-		tier: "pro",
 		pausable: true,
 		description:
 			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
@@ -414,7 +411,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "vortex-bloom",
 		name: "VortexBloom",
 		category: "Power-User Systems",
-		tier: "free",
 		pausable: true,
 		description:
 			"A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
@@ -609,7 +605,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "smoke-field",
 		name: "SmokeField",
 		category: "Power-User Systems",
-		tier: "pro",
 		pausable: true,
 		description:
 			"A real-time GPU fluid you can stir — semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
@@ -749,7 +744,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "ripple-field",
 		name: "RippleField",
 		category: "Power-User Systems",
-		tier: "pro",
 		pausable: true,
 		description:
 			"A pool of dark, moonlit water you disturb by hand — a leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
@@ -897,7 +891,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "umbral-orrery",
 		name: "UmbralOrrery",
 		category: "Power-User Systems",
-		tier: "free",
 		addedAt: "2026-07-24",
 		pausable: true,
 		description:
@@ -996,7 +989,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "parallax-rail",
 		name: "ParallaxRail",
 		category: "Power-User Systems",
-		tier: "pro",
 		addedAt: "2026-07-26",
 		description:
 			"A pinned section where scrolling down drives content sideways across depth planes moving at different rates.",
@@ -1081,7 +1073,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "approval-flow",
 		name: "ApprovalFlow",
 		category: "Power-User Systems",
-		tier: "pro",
 		addedAt: "2026-08-06",
 		description:
 			'A step-by-step approval checklist for agent permissions — radio and checkbox groups, an "Other…" escape hatch that grows a field in place, and per-step validation that blocks the commit. Answering a step sends the chosen option flying into a running record of what you have already decided, so the screen accumulates a decision trail instead of replacing itself.',
@@ -1216,7 +1207,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "diff-review",
 		name: "DiffReview",
 		category: "Power-User Systems",
-		tier: "pro",
 		addedAt: "2026-08-06",
 		description:
 			"A review surface for a patch an agent has proposed — accept or reject each hunk, fold long runs of unchanged lines away, and flip between unified and split. Switching views does not redraw the diff: every line is a shared element that flies from the stream into its column and back, so you never lose the line you were reading.",
@@ -1347,7 +1337,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "ledger",
 		name: "Ledger",
 		category: "Power-User Systems",
-		tier: "free",
 		addedAt: "2026-08-06",
 		pausable: true,
 		description:
@@ -1487,7 +1476,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "rotunda",
 		name: "Rotunda",
 		category: "Power-User Systems",
-		tier: "pro",
 		addedAt: "2026-08-06",
 		description:
 			"Real HTML panels on a drag-spun 3D cylinder. A hand-rolled perspective projection written onto DOM elements rather than a canvas — so the text stays selectable, the links stay clickable, and a screen reader still reads every panel while the ring turns.",
@@ -1622,7 +1610,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "ascii-engine",
 		name: "AsciiEngine",
 		category: "Power-User Systems",
-		tier: "free",
 		addedAt: "2026-08-07",
 		description:
 			"A lit, raymarched 3D solid rendered at exactly one pixel per character cell, then quantised into a glyph ramp drawn once with fillText. Drag to orbit it through a full three-sixty. Real geometry underneath, terminal on top — and no scene graph, no mesh, and no second library to get there.",
@@ -1759,7 +1746,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "swarm",
 		name: "Swarm",
 		category: "Power-User Systems",
-		tier: "pro",
 		addedAt: "2026-08-07",
 		description:
 			"Up to a quarter of a million particles integrated entirely on the GPU, morphing between words and solids, with a drag-orbit camera. Position and velocity live in floating-point textures and never come back to the CPU; text targets are sampled once out of an offscreen canvas, so the shape can be any string with no font atlas.",
@@ -1925,7 +1911,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "mirage",
 		name: "Mirage",
 		category: "Power-User Systems",
-		tier: "pro",
 		addedAt: "2026-08-07",
 		description:
 			"Live, fully interactive HTML seen through moving air. An animated turbulence field displaces the real DOM subtree per pixel — no snapshot, no canvas replica — so the text stays selectable, the button still takes focus and the link is still a link while the whole panel shimmers.",
@@ -2033,7 +2018,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "submerge",
 		name: "Submerge",
 		category: "Power-User Systems",
-		tier: "pro",
 		addedAt: "2026-08-07",
 		description:
 			"Live content held under water. A slow current bends it continuously, a press drops a stone and a drag leaves a wake that trails behind the cursor — and the text underneath stays selectable, the button still answers and the link is still a link, because the water bends the real tree rather than a picture of it.",

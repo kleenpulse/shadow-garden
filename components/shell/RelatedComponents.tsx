@@ -3,7 +3,6 @@ import { registry } from "@/lib/registry";
 import type { ComponentEntry } from "@/lib/registry/types";
 import { displayName } from "@/lib/display-name";
 import GlowCard from "./GlowCard";
-import TierBadge from "./TierBadge";
 
 // The sidebar links every component from every page, so every page carries
 // identical weight and nothing tells a crawler which pages are topically close to
@@ -59,12 +58,9 @@ export default function RelatedComponents({
 							href={`/components/${item.slug}`}
 							className="relative z-10 flex h-full flex-col gap-2 rounded-lg p-4"
 						>
-							<div className="flex items-center justify-between gap-2">
-								<h3 className="font-display text-sm uppercase tracking-[0.08em] text-ink group-hover:text-accent">
-									{displayName(item.name)}
-								</h3>
-								<TierBadge tier={item.tier} />
-							</div>
+							<h3 className="font-display text-sm uppercase tracking-[0.08em] text-ink group-hover:text-accent">
+								{displayName(item.name)}
+							</h3>
 							<p className="font-sans text-xs leading-relaxed text-ink-dim">
 								{item.description}
 							</p>

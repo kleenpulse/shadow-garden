@@ -79,7 +79,7 @@ export function buildCommandGroups(
 			id: `nav:${entry.slug}`,
 			label: entry.name,
 			icon: CATEGORY_ICON[entry.category],
-			keywords: [entry.category, entry.tier],
+			keywords: [entry.category],
 			active: entry.slug === openSlug,
 			onRun: () => actions.navigate(`/components/${entry.slug}`),
 		})),

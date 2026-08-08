@@ -1,6 +1,6 @@
 /**
  * Regenerates the "What's inside" catalog block in README.md from the registry,
- * so component counts, names, and tier split never drift as components are added.
+ * so component counts and names never drift as components are added.
  *
  * Run: `bun run readme`. Edit the registry (lib/registry/index.ts), not the block.
  */

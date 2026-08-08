@@ -35,16 +35,12 @@ export interface CategoryGroup {
 }
 
 /** Registry grouped by category in fixed order; empty categories are omitted. */
-const TIER_ORDER = { free: 0, pro: 1 } as const;
-
 export function groupByCategory(
 	entries: ComponentEntry[] = registry,
 ): CategoryGroup[] {
 	return CATEGORY_ORDER.map((category) => ({
 		category,
-		entries: entries
-			.filter((entry) => entry.category === category)
-			.sort((a, b) => TIER_ORDER[a.tier] - TIER_ORDER[b.tier]),
+		entries: entries.filter((entry) => entry.category === category),
 	})).filter((group) => group.entries.length > 0);
 }
 

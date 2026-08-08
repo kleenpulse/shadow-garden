@@ -31,7 +31,7 @@ const SideRays = dynamic(
 );
 
 interface LandingHeroProps {
-	stats: { total: number; free: number; pro: number };
+	stats: { total: number };
 	hero: LandingData["hero"];
 }
 
@@ -361,7 +361,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 								: null}
 					</span>
 					<span className="w-full sm:w-auto">
-						Registry {stats.total} units [{stats.free} free / {stats.pro} pro]
+						Registry {stats.total} units [MIT · open source]
 					</span>
 				</div>
 			</div>

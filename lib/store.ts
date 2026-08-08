@@ -4,9 +4,9 @@ import { persist } from "zustand/middleware";
 // Ephemeral shell chrome only. Tunable component state lives in the URL (nuqs),
 // not here — this store never holds anything worth sharing or deep-linking.
 export type WorkspaceTab = "preview" | "code";
-// "new" is a freshness slice, not a tier — it only ever appears in the sidebar
-// filter once at least one entry is inside the New window (lib/registry/freshness).
-export type CatalogFilter = "all" | "free" | "pro" | "new";
+// "new" is a freshness slice — the whole filter strip only appears once at least
+// one entry is inside the New window (lib/registry/freshness).
+export type CatalogFilter = "all" | "new";
 
 // Desktop sidebar resize band. Default matches the historical `w-72` (288px).
 // The pre-paint script in app/layout.tsx reads the same clamps — keep in sync.
@@ -35,7 +35,7 @@ interface UIState {
   search: string;
   setSearch: (query: string) => void;
 
-  /** Sidebar catalog filter (All/Free/Pro/New). */
+  /** Sidebar catalog filter (All/New). */
   catalogFilter: CatalogFilter;
   setCatalogFilter: (filter: CatalogFilter) => void;
 
@@ -94,6 +94,19 @@ export const useUIStore = create<UIState>()(
         sidebarWidth: state.sidebarWidth,
         catalogFilter: state.catalogFilter,
       }),
+      // v1 dropped the free/pro tiers; a persisted "free"/"pro" coerces to "all".
+      version: 1,
+      migrate: (persisted) => {
+        const state = persisted as Partial<{
+          sidebarWidth: number;
+          catalogFilter: string;
+        }>;
+        return {
+          sidebarWidth: clampWidth(state.sidebarWidth ?? SIDEBAR_DEFAULT),
+          catalogFilter:
+            state.catalogFilter === "new" ? ("new" as const) : ("all" as const),
+        };
+      },
     },
   ),
 );

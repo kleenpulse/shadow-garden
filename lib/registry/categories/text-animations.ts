@@ -26,7 +26,6 @@ export const textAnimations: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "MorphingText",
 		category: "Text Animations",
-		tier: "free",
 		description:
 			"A gooey blur-morph that cross-dissolves between a list of words.",
 		dependencies: ["clsx", "tailwind-merge"],
@@ -52,7 +51,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "animated-number",
 		name: "AnimatedNumber",
 		category: "Text Animations",
-		tier: "free",
 		description:
 			"Animated numeric transitions with flip, slide, fade, and bounce styles.",
 		dependencies: ["motion"],
@@ -114,7 +112,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "marquee-text",
 		name: "MarqueeText",
 		category: "Text Animations",
-		tier: "free",
 		description:
 			"A marquee that scrolls only when its text overflows the container.",
 		dependencies: ["clsx", "tailwind-merge"],
@@ -171,7 +168,6 @@ export const textAnimations: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "VariableProximity",
 		category: "Text Animations",
-		tier: "pro",
 		pausable: true,
 		description:
 			"Text whose letters interpolate font weight by cursor proximity.",
@@ -214,7 +210,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "letters-pull",
 		name: "LettersPull",
 		category: "Text Animations",
-		tier: "free",
 		description:
 			"A per-letter pull-up reveal — letters rise, sharpen from a blur, and fade in with a stagger.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -280,7 +275,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "scramble-text",
 		name: "ScrambleText",
 		category: "Text Animations",
-		tier: "free",
 		description:
 			"Ciphered glyphs boiling out of noise and resolving into words — a decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
 		dependencies: [],
@@ -362,7 +356,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "long-shadow",
 		name: "LongShadow",
 		category: "Text Animations",
-		tier: "free",
 		addedAt: "2026-07-24",
 		pausable: true,
 		description:
@@ -454,7 +447,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "specter",
 		name: "Specter",
 		category: "Text Animations",
-		tier: "pro",
 		addedAt: "2026-07-24",
 		pausable: true,
 		description:
@@ -547,7 +539,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "lumen",
 		name: "Lumen",
 		category: "Text Animations",
-		tier: "free",
 		addedAt: "2026-07-26",
 		description:
 			"Copy that lights up as you read it — words ahead sit dim and unfocused, and stay lit once you pass them.",
@@ -629,7 +620,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "redact",
 		name: "Redact",
 		category: "Text Animations",
-		tier: "free",
 		addedAt: "2026-07-31",
 		description:
 			"Copy that arrives fully classified under solid bars, then declassifies word by word — each bar clearing its own word and leaving an amethyst edge behind as the only evidence it was ever there.",
@@ -750,7 +740,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "split-flap",
 		name: "SplitFlap",
 		category: "Text Animations",
-		tier: "pro",
 		addedAt: "2026-07-31",
 		pausable: true,
 		description:
@@ -882,7 +871,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "teletype",
 		name: "Teletype",
 		category: "Text Animations",
-		tier: "free",
 		addedAt: "2026-08-06",
 		pausable: true,
 		description:
@@ -1011,7 +999,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "reflow",
 		name: "Reflow",
 		category: "Text Animations",
-		tier: "free",
 		addedAt: "2026-08-06",
 		pausable: true,
 		description:
@@ -1146,7 +1133,6 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "metallic-text",
 		name: "MetallicText",
 		category: "Text Animations",
-		tier: "pro",
 		addedAt: "2026-08-06",
 		pausable: true,
 		description:

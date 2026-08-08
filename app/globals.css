@@ -442,14 +442,13 @@ html[data-sg-intro] {
 	   Sidebar removes the attribute once its own filtering has committed, so
 	   every rule below is dead weight for all but the first frames. */
 
-	/* The New tab is clock-dependent, so it ships hidden and the script reveals
-	   it. Rendering it conditionally in React instead made it pop in a frame
-	   late, which is the same jump one level up. */
-	.sg-catalog-tabs [role="tab"][data-value="new"] {
+	/* The whole strip is clock-dependent now that New is the only real filter
+	   (All alone is not a choice), so it ships hidden and the script reveals it.
+	   Rendering it conditionally in React instead made it pop in a frame late,
+	   which is the same jump one level up. Sidebar re-syncs the attribute
+	   post-mount, so the strip follows React's clock from then on. */
+	html:not([data-catalog-has-new]) .sg-catalog-tabs {
 		display: none;
-	}
-	html[data-catalog-has-new] .sg-catalog-tabs [role="tab"][data-value="new"] {
-		display: inline-flex;
 	}
 
 	/* React still thinks "all" is selected this early, so its indicator is in the
@@ -464,19 +463,9 @@ html[data-sg-intro] {
 		> span:first-child {
 		display: none;
 	}
-	html[data-catalog-filter="free"]
-		.sg-catalog-tabs
-		[role="tab"][data-value="free"],
-	html[data-catalog-filter="pro"] .sg-catalog-tabs [role="tab"][data-value="pro"],
 	html[data-catalog-filter="new"] .sg-catalog-tabs [role="tab"][data-value="new"] {
 		color: var(--color-accent);
 	}
-	html[data-catalog-filter="free"]
-		.sg-catalog-tabs
-		[role="tab"][data-value="free"]::before,
-	html[data-catalog-filter="pro"]
-		.sg-catalog-tabs
-		[role="tab"][data-value="pro"]::before,
 	html[data-catalog-filter="new"]
 		.sg-catalog-tabs
 		[role="tab"][data-value="new"]::before {
@@ -489,12 +478,6 @@ html[data-sg-intro] {
 	}
 	/* next-themes puts the class on <html>, so it's the same element the filter
 	   attribute lands on — one compound selector, not a descendant. */
-	html.dark[data-catalog-filter="free"]
-		.sg-catalog-tabs
-		[role="tab"][data-value="free"]::before,
-	html.dark[data-catalog-filter="pro"]
-		.sg-catalog-tabs
-		[role="tab"][data-value="pro"]::before,
 	html.dark[data-catalog-filter="new"]
 		.sg-catalog-tabs
 		[role="tab"][data-value="new"]::before {
@@ -511,17 +494,8 @@ html[data-sg-intro] {
 		background: #000;
 	}
 
-	/* The list. Tier is a static attribute, so plain CSS covers Free/Pro; the
-	   "new" pair is injected by the script, which owns the date comparison. */
-	html[data-catalog-filter="free"] [data-entry]:not([data-tier="free"]),
-	html[data-catalog-filter="pro"] [data-entry]:not([data-tier="pro"]) {
-		display: none;
-	}
-	/* A category whose rows all just vanished must take its heading with it. */
-	html[data-catalog-filter="free"] [data-group]:not(:has([data-tier="free"])),
-	html[data-catalog-filter="pro"] [data-group]:not(:has([data-tier="pro"])) {
-		display: none;
-	}
+	/* The list's "new" row-hiding pair is injected by the script, which owns the
+	   date comparison — no static filter rules remain now that tiers are gone. */
 	/* The one thing CSS can't recompute. Held invisible (space reserved) rather
 	   than showing a total that's about to change under the reader. */
 	html[data-catalog-filter] [data-catalog-count] {

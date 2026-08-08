@@ -4,7 +4,6 @@ import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import type { Range, Suggestion } from "@/lib/cookbook-search";
 import { cn } from "@/lib/utils";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
-import TierBadge from "./TierBadge";
 
 /**
  * The glossary's filter, as a real combobox.
@@ -313,10 +312,9 @@ export default function CookbookFilter({
 										</span>
 									)}
 									{suggestion.kind === "component" && (
-										<TierBadge
-											tier={suggestion.tier}
-											className="shrink-0 rounded-md px-1 min-w-7"
-										/>
+										<span className="shrink-0 font-display text-[9px] uppercase tracking-[0.16em] text-ink-mute">
+											{suggestion.demos} {suggestion.demos === 1 ? "term" : "terms"}
+										</span>
 									)}
 									{suggestion.kind === "section" && (
 										<span className="shrink-0 font-display text-[9px] uppercase tracking-[0.16em] text-ink-mute">

@@ -1,6 +1,6 @@
 import type { Category, ComponentEntry } from "@/lib/registry/types";
 import { displayName } from "@/lib/display-name";
-import { collectionStats, type Collection } from "@/lib/collections";
+import type { Collection } from "@/lib/collections";
 import { SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 
 /**
@@ -73,8 +73,5 @@ export function collectionDescription(
 	entries: ComponentEntry[],
 ): string {
 	const [opening] = collection.intro.split(/(?<=\.)\s/, 1);
-	const { total, free } = collectionStats(entries);
-	const tier =
-		free === total ? ", all free" : free > 0 ? `, ${free} free` : "";
-	return `${opening} ${total} live, tunable components${tier}.`;
+	return `${opening} ${entries.length} live, tunable components, all free.`;
 }

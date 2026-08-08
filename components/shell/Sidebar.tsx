@@ -25,30 +25,30 @@ import {
 } from "@/lib/store";
 import { useResizable } from "./use-resizable";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
-import TierBadge from "./TierBadge";
 import NewBadge from "./NewBadge";
 import PillTabs, { type PillTabItem } from "./PillTabs";
-import { CATALOG_FILTER_ATTR } from "@/lib/catalog-filter-script";
+import {
+	CATALOG_FILTER_ATTR,
+	CATALOG_HAS_NEW_ATTR,
+} from "@/lib/catalog-filter-script";
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
 import FeedbackWidget from "./FeedbackWidget";
 
-const TIER_TABS: PillTabItem<CatalogFilter>[] = [
-	{ value: "all", label: "all" },
-	{ value: "free", label: "free" },
-	{ value: "pro", label: "pro" },
-];
 // The label carries the gradient itself rather than the button: a directly
 // applied `color: transparent` beats the track's inherited text-* utility, which
 // would otherwise repaint the clipped glyphs solid. The `-bright` ramp because
 // the fill below is black in both themes — the stock one's mid stop reads 2.9:1
 // there. Punch-out fill: the amethyst tint every other tab uses muddies gradient
 // glyphs.
-const NEW_TAB: PillTabItem<CatalogFilter> = {
-	value: "new",
-	label: <span className="text-grainient-bright">new</span>,
-	activeFill: "bg-black dark:bg-black",
-};
+const FILTER_TABS: PillTabItem<CatalogFilter>[] = [
+	{ value: "all", label: "all" },
+	{
+		value: "new",
+		label: <span className="text-grainient-bright">new</span>,
+		activeFill: "bg-black dark:bg-black",
+	},
+];
 
 export default function Sidebar() {
 	const pathname = usePathname();
@@ -112,13 +112,23 @@ export default function Sidebar() {
 		[now],
 	);
 
-	// Pre-mount the New tab always renders and CSS decides whether it's visible
-	// (the script knows the clock, React doesn't yet). Post-mount React takes the
-	// call. Rendering it only when `hasNew` made it pop in a frame after paint.
-	const tabs = useMemo(
-		() => (!mounted || hasNew ? [...TIER_TABS, NEW_TAB] : TIER_TABS),
-		[hasNew, mounted],
-	);
+	// The filter strip only means anything while something is New — All alone is
+	// not a choice. It always renders and CSS keys its visibility off the has-new
+	// attribute: the pre-paint script stamps it with the browser clock, and React
+	// re-syncs it here once it has read the same clock (never before `now` lands,
+	// or the sync pass would strip the script's attribute for a frame).
+	useEffect(() => {
+		if (now === null) return;
+		document.documentElement.toggleAttribute(CATALOG_HAS_NEW_ATTR, hasNew);
+	}, [hasNew, now]);
+
+	// A persisted "new" outlives the window it filtered — once nothing is fresh
+	// the strip is hidden, so an empty list would have no visible way back.
+	useEffect(() => {
+		if (mounted && now !== null && !hasNew && catalogFilter === "new") {
+			setCatalogFilter("all");
+		}
+	}, [mounted, now, hasNew, catalogFilter, setCatalogFilter]);
 
 	// The persisted filter rehydrates synchronously, so using it on the first
 	// client render would disagree with the SSR markup and blow up hydration for a
@@ -132,20 +142,19 @@ export default function Sidebar() {
 		if (mounted) document.documentElement.removeAttribute(CATALOG_FILTER_ATTR);
 	}, [mounted]);
 
-	const tierFiltered = useMemo(() => {
+	const filtered = useMemo(() => {
 		if (effectiveFilter === "new") {
 			if (now === null) return [];
 			return registry.filter((entry) => isWithinNewWindow(entry.addedAt, now));
 		}
-		if (effectiveFilter === "all") return registry;
-		return registry.filter((entry) => entry.tier === effectiveFilter);
+		return registry;
 	}, [effectiveFilter, now]);
 
 	const searching = search.trim().length > 0;
 
 	const scored = useMemo(() => {
-		if (!searching) return tierFiltered;
-		return tierFiltered
+		if (!searching) return filtered;
+		return filtered
 			.map((entry) => ({
 				entry,
 				score: Math.max(
@@ -157,11 +166,11 @@ export default function Sidebar() {
 			.filter((row) => row.score > 0)
 			.sort((a, b) => b.score - a.score)
 			.map((row) => row.entry);
-	}, [search, searching, tierFiltered]);
+	}, [search, searching, filtered]);
 
 	const groups = useMemo(
-		() => groupByCategory(searching ? scored : tierFiltered),
-		[scored, searching, tierFiltered],
+		() => groupByCategory(searching ? scored : filtered),
+		[scored, searching, filtered],
 	);
 
 	const visibleFlat = useMemo<ComponentEntry[]>(() => {
@@ -217,12 +226,7 @@ export default function Sidebar() {
 		return (
 			// data-* are the pre-paint filter's only handles on a row: the script runs
 			// before this markup is parsed, so it can't inspect anything computed.
-			<li
-				key={entry.slug}
-				data-entry
-				data-tier={entry.tier}
-				data-added={entry.addedAt}
-			>
+			<li key={entry.slug} data-entry data-added={entry.addedAt}>
 				<Link
 					href={href}
 					{...hoverProps()}
@@ -257,9 +261,6 @@ export default function Sidebar() {
 						    narrow, and absolute positioning keeps the name column aligned. */}
 						<NewBadge addedAt={entry.addedAt} variant="tiny" />
 						<span className="block truncate font-sans">{entry.name}</span>
-					</span>
-					<span className="relative z-10">
-						<TierBadge tier={entry.tier} />
 					</span>
 				</Link>
 			</li>
@@ -303,8 +304,8 @@ export default function Sidebar() {
 						className="mb-1.5 px-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute"
 					>
 						{searching
-							? `${scored.length} / ${tierFiltered.length} components`
-							: `${tierFiltered.length} components`}
+							? `${scored.length} / ${filtered.length} components`
+							: `${filtered.length} components`}
 					</p>
 					<input
 						type="search"
@@ -326,8 +327,8 @@ export default function Sidebar() {
 						aria-label="Filter components"
 						value={effectiveFilter}
 						onValueChange={setCatalogFilter}
-						items={tabs}
-						layoutId="sidebar-tier-filter"
+						items={FILTER_TABS}
+						layoutId="sidebar-catalog-filter"
 						fullWidth
 						size="md"
 						className="sg-catalog-tabs mt-2"

@@ -22,7 +22,6 @@ import { termAnchor } from "./cookbook";
 export interface SearchComponentInput {
 	slug: string;
 	name: string;
-	tier: "free" | "pro";
 }
 
 export interface SearchTermInput {
@@ -234,7 +233,6 @@ interface TermRow {
 interface ComponentRow {
 	slug: string;
 	name: string;
-	tier: "free" | "pro";
 	/** Terms this component demonstrates, in document order. */
 	terms: string[];
 	anchor: string;
@@ -297,7 +295,6 @@ export function buildSearchIndex(
 				bySlug.set(c.slug, {
 					slug: c.slug,
 					name: c.name,
-					tier: c.tier,
 					terms: [t.term],
 					// A component demos several terms; the first in document order is
 					// the one a jump lands on.
@@ -330,7 +327,6 @@ export type Suggestion =
 			kind: "component";
 			label: string;
 			slug: string;
-			tier: "free" | "pro";
 			anchor: string;
 			sectionAnchor: string;
 			demos: number;
@@ -435,7 +431,6 @@ export function searchCookbook(
 				kind: "component",
 				label: row.name,
 				slug: row.slug,
-				tier: row.tier,
 				anchor: row.anchor,
 				sectionAnchor: row.sectionAnchor,
 				demos: row.terms.length,

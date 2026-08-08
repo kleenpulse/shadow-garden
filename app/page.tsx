@@ -39,7 +39,7 @@ const CARD_LIMIT = 6;
 
 export default function Home() {
 	const data = buildLandingData();
-	const sealedEntries = data.proEntries.slice(0, LIST_LIMIT);
+	const archiveEntries = data.archiveEntries.slice(0, LIST_LIMIT);
 
 	// How many specimens a section actually shows — γ renders cards, everyone
 	// else renders the list. Drives the "All N …" overflow link.
@@ -130,8 +130,6 @@ export default function Home() {
 							items={exhibit.entries.slice(0, LIST_LIMIT).map((entry) => ({
 								slug: entry.slug,
 								name: entry.name,
-								tag: entry.tier,
-								tagTone: entry.tier === "pro" ? "accent" : "default",
 							}))}
 						/>
 					)}
@@ -187,7 +185,7 @@ export default function Home() {
 							<span aria-hidden>·</span>
 							<span className="text-bench-400">Open archive</span>
 							<span aria-hidden>·</span>
-							<span>{data.stats.pro} units</span>
+							<span>{data.stats.total} units</span>
 						</div>
 						<h2 className="mt-10 max-w-2xl font-display text-3xl uppercase leading-tight tracking-[0.04em] text-bench-100 sm:text-5xl">
 							Nothing stays in shadow.
@@ -200,7 +198,7 @@ export default function Home() {
 						<SpotlightList
 							variant="sealed"
 							className="mt-10"
-							items={sealedEntries.map((entry) => ({
+							items={archiveEntries.map((entry) => ({
 								slug: entry.slug,
 								name: entry.name,
 								tag: entry.category,

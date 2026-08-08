@@ -25,7 +25,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "waves",
 		name: "Waves",
 		category: "Backgrounds",
-		tier: "free",
 		pausable: true,
 		description:
 			"A woven field of flowing waves rendered on a WebGL line shader.",
@@ -101,7 +100,6 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "Grainient",
 		category: "Backgrounds",
-		tier: "free",
 		pausable: true,
 		description:
 			"An animated grainy mesh-gradient rendered on a WebGL2 shader.",
@@ -228,7 +226,6 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "LightRays",
 		category: "Backgrounds",
-		tier: "free",
 		pausable: true,
 		description:
 			"Volumetric god-rays from a configurable origin, optionally mouse-following.",
@@ -344,9 +341,9 @@ export const backgrounds: ComponentEntry[] = [
 	},
 	{
 		slug: "mask-blur",
+		attribution: REACTBITS,
 		name: "MaskBlur",
 		category: "Backgrounds",
-		tier: "free",
 		description:
 			"Progressive edge blur — stacked backdrop-filter layers dissolve content toward a chosen edge.",
 		cookbook: ["Blur", "Mask", "Compositing"],
@@ -420,7 +417,6 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "SideRays",
 		category: "Backgrounds",
-		tier: "pro",
 		pausable: true,
 		description:
 			"Corner-anchored two-color light rays with adjustable tilt and blend.",
@@ -532,7 +528,6 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "DotField",
 		category: "Backgrounds",
-		tier: "free",
 		pausable: true,
 		description:
 			"An interactive dot grid that bulges and glows around the cursor.",
@@ -657,7 +652,6 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "Strands",
 		category: "Backgrounds",
-		tier: "pro",
 		pausable: true,
 		description:
 			"Glowing wavy light-strands with an optional glass refraction lens.",
@@ -819,7 +813,6 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "Ribbons",
 		category: "Backgrounds",
-		tier: "pro",
 		pausable: true,
 		description: "Flowing translucent ribbons drifting across a canvas.",
 		dependencies: [],
@@ -910,7 +903,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "world-map-ascii",
 		name: "WorldMap ASCII",
 		category: "Backgrounds",
-		tier: "pro",
 		pausable: true,
 		description:
 			"A dot-matrix world map whose particles scatter from the cursor.",
@@ -981,7 +973,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "constellation",
 		name: "Constellation",
 		category: "Backgrounds",
-		tier: "pro",
 		pausable: true,
 		description:
 			"A constellation network — drifting particles link by proximity, chase and flee the cursor, and glow.",
@@ -1092,7 +1083,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "plus-grid",
 		name: "PlusGrid",
 		category: "Backgrounds",
-		tier: "pro",
 		pausable: true,
 		description:
 			"A canvas field of '+' glyphs — scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
@@ -1197,7 +1187,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "barcode",
 		name: "Barcode",
 		category: "Backgrounds",
-		tier: "free",
 		description:
 			"A procedural barcode whose bars light up like piano notes — looping on autoplay or scrubbed by scroll.",
 		dependencies: ["gsap"],
@@ -1273,7 +1262,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "aurora",
 		name: "Aurora",
 		category: "Backgrounds",
-		tier: "free",
 		pausable: true,
 		description:
 			"Flowing curtains of amethyst light drifting across a starless night sky — an fbm-warped WebGL2 field where luminous bands ripple, fold, and dissolve into fine grain, like a polar aurora seen from the dark side of the world.",
@@ -1374,7 +1362,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "starfield",
 		name: "Starfield",
 		category: "Backgrounds",
-		tier: "pro",
 		pausable: true,
 		description:
 			"Depth-layered stars drifting through a slow warp, each layer parallaxing at its own pace, with the occasional shooting star streaking a bright amethyst tail across the dark before the field settles back to its patient glimmer.",
@@ -1470,7 +1457,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "cinders",
 		name: "Cinders",
 		category: "Backgrounds",
-		tier: "free",
 		addedAt: "2026-07-24",
 		pausable: true,
 		description:
@@ -1567,7 +1553,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "shadowflame",
 		name: "Shadowflame",
 		category: "Backgrounds",
-		tier: "pro",
 		addedAt: "2026-07-24",
 		pausable: true,
 		description:
@@ -1707,7 +1692,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "cathode",
 		name: "Cathode",
 		category: "Backgrounds",
-		tier: "free",
 		addedAt: "2026-08-06",
 		description:
 			"A cathode-ray tube showing nothing worth watching: a beam that turns around at each edge, phosphor that holds after it has passed, and a hum bar rolling up the glass.",
@@ -1841,7 +1825,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "turing",
 		name: "Turing",
 		category: "Backgrounds",
-		tier: "pro",
 		addedAt: "2026-08-06",
 		description:
 			"Gray-Scott reaction-diffusion on the GPU. Two reagents, four terms, and coral, labyrinths and colonies that settle and stop all fall out of the arithmetic — a background that grows rather than loops, and never reaches the same frame twice.",
@@ -1965,7 +1948,6 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "quicksilver",
 		name: "Quicksilver",
 		category: "Backgrounds",
-		tier: "pro",
 		addedAt: "2026-08-06",
 		description:
 			"Molten chrome. Every other shader background emits light; this one reflects a studio that does not exist, synthesised from the surface normal — sharp softbox edges, a conductor's Fresnel wash, thin-film iridescence, and a wake that keeps moving where you dragged.",

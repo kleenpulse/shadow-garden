@@ -8,7 +8,6 @@ import { defaultsFromSchema } from "@/lib/registry";
 import { displayName } from "@/lib/display-name";
 import { previews } from "@/components/registry/previews";
 import PreviewBoundary from "./PreviewBoundary";
-import TierBadge from "./TierBadge";
 import FavoriteButton from "./FavoriteButton";
 import { useThumbnailSlot } from "./thumbnail-slots";
 
@@ -97,7 +96,6 @@ export default function FavoriteThumbnailCard({
             {entry.description}
           </p>
         </div>
-        <TierBadge tier={entry.tier} />
       </div>
     </article>
   );

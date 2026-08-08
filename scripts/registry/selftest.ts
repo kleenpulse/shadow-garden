@@ -19,7 +19,6 @@ function entry(over: Partial<ComponentEntry> = {}): ComponentEntry {
     slug: "ok-entry",
     name: "OkEntry",
     category: "Backgrounds",
-    tier: "free",
     description: "fine",
     props: [],
     variants: [
@@ -447,10 +446,13 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
   {
     // Two filters, one membership — the near-duplicate this rule exists to catch.
     rule: "collection-overlap",
-    ctx: context(fiveEntries(), {
+    ctx: context(fiveEntries({ dependencies: ["ogl"] }), {
       collections: [
         collection({ slug: "by-category" }),
-        collection({ slug: "by-tier", filter: { kind: "tier", tier: "free" } }),
+        collection({
+          slug: "by-deps",
+          filter: { kind: "deps", packages: ["ogl"] },
+        }),
       ],
     }),
   },

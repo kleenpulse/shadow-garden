@@ -15,7 +15,7 @@ import type { Crumb } from "@/lib/schema";
 
 const TITLE = "Component Collections";
 const DESCRIPTION =
-	"Curated slices of the Shadow Garden catalog — by category, by technique, by animation library, and everything free. Each collection is computed from the registry, so it never drifts from the components it lists.";
+	"Curated slices of the Shadow Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists.";
 
 export const metadata: Metadata = {
 	title: TITLE,

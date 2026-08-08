@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import {
 	COLLECTIONS,
 	collectionPath,
-	collectionStats,
 	collectionTerms,
 	getCollection,
 	resolveCollection,
@@ -74,7 +73,6 @@ export default async function CollectionPage({
 	if (!collection) notFound();
 
 	const entries = resolveCollection(collection);
-	const stats = collectionStats(entries);
 	const siblings = siblingCollections(collection);
 
 	// Technique collections print the definitions of the terms they filter on;
@@ -106,7 +104,7 @@ export default async function CollectionPage({
 					{collection.intro}
 				</p>
 				<p className="mt-4 font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute">
-					{stats.total} components · {stats.free} free · {stats.pro} pro
+					{entries.length} components · all free
 				</p>
 			</header>
 

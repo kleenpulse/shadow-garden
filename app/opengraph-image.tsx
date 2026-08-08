@@ -27,7 +27,6 @@ const ACCENT = "#a855f7";
 
 export default function Image() {
 	const total = registry.length;
-	const free = registry.filter((entry) => entry.tier === "free").length;
 
 	return new ImageResponse(
 		(
@@ -107,7 +106,7 @@ export default function Image() {
 							>
 								{total} components
 							</div>
-							<div style={{ display: "flex" }}>{free} free</div>
+							<div style={{ display: "flex" }}>MIT · open source</div>
 							<div style={{ display: "flex", color: HAIRLINE }}>·</div>
 							<div style={{ display: "flex" }}>React · Next.js · TypeScript</div>
 						</div>

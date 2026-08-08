@@ -18,7 +18,7 @@ import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 // we had to have kept. That makes the trail a closed form: an exponential in the
 // distance already swept, which is what phosphor decay is. One `exp` against a
 // second pass, an extension probe, a fallback path and resize bookkeeping — on
-// the free-tier entry that most people will actually paste.
+// the entry that most people will actually paste.
 //
 // **The sweep reverses rather than wrapping.** A beam that jumps back to the
 // left edge reads as a dropped frame; one that turns around reads as a machine

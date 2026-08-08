@@ -19,7 +19,7 @@ Open-source, animation-forward React component showcase (name from _The Eminence
 - Each prop = one `PropSchema` in the component's entry under `lib/registry/categories/<category>.ts`. Drives **both** the Controls panel and the Props API table. Never hand-write props docs twice.
 - Add a component = registry entry in the matching `lib/registry/categories/<category>.ts` + `components/registry/<slug>/<slug>.tsx` + `<slug>-preview.tsx` + register in `components/registry/previews.ts` (`dynamic`, `ssr:false`). File names are kebab-case (enforced by `check:registry`); exported symbols and `entry.name` stay PascalCase. No new page or template.
 - Control kinds: number | enum | boolean | color. Array / ReactNode props → hardcode tasteful demo values in the Preview wrapper.
-- Code-tab source read from disk server-side (`lib/registry/source.ts`), comments stripped on the way out. Everything is free — there is no entitlement gate. `tier` on an entry is catalog metadata (badges/collections), not a lock.
+- Code-tab source read from disk server-side (`lib/registry/source.ts`), comments stripped on the way out. Everything is free — there is no entitlement gate and no `tier` field; the free/pro concept was purged when the catalog went MIT (premium components live in the separate PRO repo).
 - Anything reading cookies/URL (CodePanel, LiveWorkspace via nuqs) **must** render inside `<Suspense>`, else the Cache Components build breaks ("uncached data outside Suspense").
 
 ## Design — bench identity, keep it

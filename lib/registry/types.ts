@@ -16,8 +16,6 @@ export const CATEGORY_ORDER: Category[] = [
   "Power-User Systems",
 ];
 
-export type Tier = "free" | "pro";
-
 export type PropValue = number | string | boolean;
 export type TunedValues = Record<string, PropValue>;
 
@@ -98,7 +96,6 @@ export interface ComponentEntry {
   slug: string;
   name: string;
   category: Category;
-  tier: Tier;
   /** ISO date (YYYY-MM-DD) the component was added. Drives the transient "New"
       badge (< NEW_WINDOW_DAYS old); absent means never-new. */
   addedAt?: string;

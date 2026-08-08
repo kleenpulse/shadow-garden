@@ -31,12 +31,12 @@ function distinctAddedDates(): string[] {
  *
  * Width only needed a CSS var. This filter changes *which rows exist*, and a
  * script at the top of <body> can't touch a sidebar the parser hasn't reached
- * yet — so it stamps an attribute and globals.css hides the non-matching rows
- * and their now-empty category headings.
+ * yet — so it stamps an attribute and injects the row-hiding rules.
  *
- * "new" is the one filter CSS can't express statically (a date comparison), so
- * the script resolves the fresh dates against the live clock and injects those
- * two rules itself. Everything else is static CSS.
+ * "new" is the only filter left (the free/pro tiers are gone — everything is
+ * free), and it's exactly the one CSS can't express statically: a date
+ * comparison against the live clock. The script resolves the fresh dates and
+ * injects the two rules itself.
  */
 export function catalogFilterScript(): string {
 	const dates = JSON.stringify(distinctAddedDates());
@@ -49,14 +49,12 @@ var sel=fresh.length?':is('+fresh.map(function(x){return '[data-added="'+x+'"]'}
 if(fresh.length)d.setAttribute('${CATALOG_HAS_NEW_ATTR}','');
 var s=JSON.parse(localStorage.getItem('sg-ui'));
 var f=s&&s.state&&s.state.catalogFilter;
-if(f&&f!=='all'&&(f!=='new'||fresh.length)){
+if(f==='new'&&fresh.length){
 d.setAttribute('${CATALOG_FILTER_ATTR}',f);
-if(f==='new'){
 var st=document.createElement('style');
 st.textContent='html[${CATALOG_FILTER_ATTR}="new"] [data-entry]:not('+sel+'){display:none}'+
 'html[${CATALOG_FILTER_ATTR}="new"] [data-group]:not(:has('+sel+')){display:none}';
 document.head.appendChild(st);
-}
 }
 }catch(e){}`.replace(/\n/g, "");
 }

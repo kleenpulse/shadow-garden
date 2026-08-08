@@ -83,7 +83,6 @@ export default function CatalogPage() {
 									slug={entry.slug}
 									name={entry.name}
 									description={entry.description}
-									tier={entry.tier}
 									addedAt={entry.addedAt}
 								/>
 							))}
