@@ -44,7 +44,11 @@ export default function WorkspaceTabs({
 						setActiveTab(tab);
 					}}
 					items={TABS}
-					layoutId="workspace-tabs"
+					// Scoped per page: motion's layoutId registry is global and outlives a
+					// route change, so a constant id makes the fresh strip inherit the OLD
+					// page's pill bounds — it flew in from the previous page's Y before
+					// settling. A per-slug id has no prior bounds; the pill mounts in place.
+					layoutId={`workspace-tabs-${slug}`}
 				/>
 				{/* Wrapped, not rendered bare: this row is a two-child array, and a
 				    streamed server node arrives here as a lazy — not yet an element, so
