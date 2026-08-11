@@ -85,6 +85,18 @@ bun run build
 - Keep PRs focused. One component or one concern per PR where possible.
 - Fill out the PR checklist in the template.
 
+## Releases
+
+Versioning runs on [changesets](https://github.com/changesets/changesets). If your PR changes something user-facing — a component, the shell, the registry model — add a changeset with it:
+
+```bash
+bunx changeset
+```
+
+Pick the bump (`patch` for fixes, `minor` for features, `major` for breaking changes) and write a sentence aimed at the changelog reader. Pure chores (CI, internal tooling, typos) don't need one.
+
+On merge to `main`, the Release workflow gathers pending changesets into a "Version Packages" PR. Merging that PR bumps the version, updates `CHANGELOG.md`, tags `shadow-garden@x.y.z`, and cuts a GitHub Release. Maintainers merge the version PR; contributors only ever add changesets.
+
 ## Asking for help
 
 Open an issue using the bug or component-request template, or start a discussion. Please include your OS, browser, and Bun/Node versions when reporting a bug.

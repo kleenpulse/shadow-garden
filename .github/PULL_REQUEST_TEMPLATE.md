@@ -10,6 +10,7 @@
 - [ ] For a new/changed component: registry entry, component file, preview, and `previews.ts` registration are all in place
 - [ ] For an animation component: it drives its loop through `hooks/use-animation-loop.ts` and passes `bun run verify:loop <slug>`
 - [ ] Commits follow Conventional Commits (`feat(scope): …`)
+- [ ] For a user-facing change: a changeset is included (`bunx changeset`)
 - [ ] No hardcoded `bench-950`/white/black on themed surfaces; used semantic tokens
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) and [CONVENTIONS.md](../CONVENTIONS.md) for details.

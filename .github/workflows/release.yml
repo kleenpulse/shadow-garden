@@ -1,0 +1,34 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # changeset tag needs the full tag history to know what's already cut
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Version PR or tag release
+        uses: changesets/action@v1
+        with:
+          version: bun run changeset:version
+          publish: bun run changeset:tag
+          commit: "chore(release): version package"
+          title: "chore(release): version package"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

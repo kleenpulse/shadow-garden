@@ -1,6 +1,7 @@
 {
   "name": "shadow-garden",
   "version": "0.1.0",
+  "private": true,
   "license": "MIT",
   "description": "Animation-forward React component showcase — a two-pane docs bench with tunable controls, live previews, and copyable source.",
   "homepage": "https://github.com/kleenpulse/shadow-garden#readme",
@@ -24,6 +25,9 @@
     "check:registry:selftest": "bun scripts/registry/selftest.ts",
     "check:strip": "bun scripts/registry/check-strip.ts",
     "verify:loop": "node scripts/verify-loop.mjs",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:tag": "changeset tag",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -69,6 +73,8 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.5",
     "@tailwindcss/postcss": "^4",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^20",
