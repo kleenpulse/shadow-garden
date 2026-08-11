@@ -1,6 +1,6 @@
 {
   "name": "shadow-garden",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "license": "MIT",
   "description": "Animation-forward React component showcase — a two-pane docs bench with tunable controls, live previews, and copyable source.",
