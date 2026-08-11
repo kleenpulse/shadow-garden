@@ -14,7 +14,6 @@ import { buildCommandGroups, currentComponentSlug } from "@/lib/command-groups";
 import { useUIStore } from "@/lib/store";
 import { useFavoritesStore } from "@/lib/favorites-store";
 import { useThemeTransition } from "@/hooks/use-theme-transition";
-import { useInteractionSound } from "@/hooks/use-interaction-sound";
 
 // ⌘K (mac), Ctrl+K (win/linux), and "/" all open the palette. Module constant so
 // the array identity stays stable across renders.
@@ -33,7 +32,6 @@ export default function CommandMenu() {
   const favoriteSlugs = useFavoritesStore((state) => state.slugs);
   const toggleFav = useFavoritesStore((state) => state.toggle);
   const { resolvedTheme, pickTheme } = useThemeTransition();
-  const { play, typeKey } = useInteractionSound();
 
   // On the palette's own demo page, yield the global hotkey to the live preview
   // instance so ⌘K / "/" opens one palette (the demo), not two stacked overlays.
@@ -123,8 +121,6 @@ export default function CommandMenu() {
       groups={groups}
       hotkey={onPalettePage ? [] : HOTKEYS}
       initialValue={initialValue}
-      onValueChange={typeKey}
-      onItemHover={() => play("hover")}
       fixed
       placeholder="Search components or run a command…"
     />

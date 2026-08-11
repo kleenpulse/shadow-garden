@@ -6,10 +6,8 @@ import { Search } from "lucide-react";
 import CookBookIcon from "@/components/icons/cook-book";
 import { useUIStore } from "@/lib/store";
 import { useIsMac } from "@/hooks/use-is-mac";
-import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
-import SoundControl from "./SoundControl";
 import GithubIcon from "../icons/github";
 
 // Slim desktop chrome strip: palette trigger on the left, favorites + theme on
@@ -22,14 +20,12 @@ export default function TopBar() {
 
 	// Show the right modifier hint per platform (SSR-safe, hydration-consistent).
 	const isMac = useIsMac();
-	const { play, hoverProps } = useInteractionSound();
 
 	return (
 		<div className="sticky top-0 z-20 hidden h-10 md:h-14 items-center gap-3 border-b border-hairline bg-surface/80 px-3 backdrop-blur lg:flex lg:px-4">
 			<button
 				type="button"
 				onClick={() => setPaletteOpen(true)}
-				{...hoverProps()}
 				className="group flex h-9 w-full max-w-sm items-center gap-2 rounded-md border border-hairline bg-panel px-3 text-left text-ink-mute transition-colors hover:border-accent-muted hover:text-ink-dim"
 			>
 				<Search className="h-4 w-4" aria-hidden />
@@ -45,20 +41,13 @@ export default function TopBar() {
 					aria-label="Motion cook book"
 					title="Motion cook book"
 					aria-current={isCookbook ? "page" : undefined}
-					{...hoverProps()}
-					onClick={() => play("select")}
 					className={`grid size-7 place-items-center rounded-md  transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8 ${
 						isCookbook ? "text-accent" : "text-ink-dim"
 					}`}
 				>
 					<CookBookIcon open={isCookbook} className="size-full" aria-hidden />
 				</Link>
-				<FavoritesLink
-					{...hoverProps()}
-					onClick={() => play("select")}
-					className="h-8 w-8"
-				/>
-				<SoundControl />
+				<FavoritesLink className="h-8 w-8" />
 				<ThemeToggle />
 				<a
 					href="https://github.com/kleenpulse/shadow-garden"
@@ -66,8 +55,6 @@ export default function TopBar() {
 					rel="noreferrer"
 					aria-label="Shadow Garden on GitHub"
 					title="Shadow Garden on GitHub"
-					{...hoverProps()}
-					onClick={() => play("select")}
 					className="grid size-7 place-items-center rounded-md text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8"
 				>
 					<GithubIcon className="size-4" aria-hidden />

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/lib/store";
-import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { CookbookFlameControlsMobile } from "./CookbookFlameControls";
 
 // The desktop rail's mobile counterpart: a corner pill that reads out where you
@@ -62,7 +61,6 @@ export default function CookbookSectionNav({
 	active: string | null;
 	onJump: (id: string) => void;
 }) {
-	const { play, hoverProps } = useInteractionSound();
 	const setNavOverlayOpen = useUIStore((s) => s.setNavOverlayOpen);
 
 	const [open, setOpen] = useState(false);
@@ -135,11 +133,10 @@ export default function CookbookSectionNav({
 
 	const select = useCallback(
 		(id: string) => {
-			play("select");
 			onJump(id);
 			setOpen(false);
 		},
-		[onJump, play],
+		[onJump],
 	);
 
 	// Filtered down to nothing — a nav with no destinations is a dead control.
@@ -155,10 +152,7 @@ export default function CookbookSectionNav({
 				aria-label={`Sections: ${activeItem.title}, ${position} of ${total}. ${
 					open ? "Collapse" : "Expand"
 				}.`}
-				onClick={() => {
-					play("select");
-					setOpen((o) => !o);
-				}}
+				onClick={() => setOpen((o) => !o)}
 				initial={false}
 				animate={{ width: open ? box.w : CLOSED_W }}
 				transition={
@@ -227,7 +221,6 @@ export default function CookbookSectionNav({
 										<li key={section.id}>
 											<a
 												href={`#${section.id}`}
-												{...hoverProps()}
 												onClick={() => select(section.id)}
 												aria-current={isActive ? "true" : undefined}
 												className={cn(

@@ -4,10 +4,10 @@ import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-// Reader control over the /cookbook ambient flame. Mirrors lib/audio-store.ts
-// rather than lib/store.ts: that store is scoped to ephemeral shell chrome and
-// persists only the sidebar width, while both of these are durable opinions —
-// someone who kills a background because it costs them frames means it.
+// Reader control over the /cookbook ambient flame. Its own store rather than
+// lib/store.ts: that one is scoped to ephemeral shell chrome and persists only
+// the sidebar width, while this is a durable opinion — someone who kills a
+// background because it costs them frames means it.
 //
 // `enabled: false` unmounts the canvas entirely (GL context released), so it is
 // a real opt-out, not a visibility toggle. `paused` leaves the last painted

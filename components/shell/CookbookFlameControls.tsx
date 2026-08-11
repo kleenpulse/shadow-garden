@@ -7,7 +7,6 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
-import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { useFlameStore } from "@/lib/cookbook-flame-store";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +17,6 @@ import { cn } from "@/lib/utils";
 // there is no shared React tree to pass props through.
 
 function FlameControlRows({ dense = false }: { dense?: boolean }) {
-	const { play } = useInteractionSound();
 	const enabled = useFlameStore((s) => s.enabled);
 	const paused = useFlameStore((s) => s.paused);
 	const setEnabled = useFlameStore((s) => s.setEnabled);
@@ -32,10 +30,7 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 				id="sg-flame-enabled"
 				label="Flame "
 				checked={enabled}
-				onChange={(v) => {
-					play("select");
-					setEnabled(v);
-				}}
+				onChange={setEnabled}
 				className="justify-between"
 			/>
 			{/* Motion over a torn-down canvas is a dead control, so it follows. */}
@@ -44,10 +39,7 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 				label="Motion"
 				checked={enabled && !paused}
 				disabled={!enabled}
-				onChange={(v) => {
-					play("select");
-					setPaused(!v);
-				}}
+				onChange={(v) => setPaused(!v)}
 			/>
 		</div>
 	);

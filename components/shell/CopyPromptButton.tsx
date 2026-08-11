@@ -5,7 +5,6 @@ import { Check, Stars } from "lucide-react";
 import { toast } from "sonner";
 import { useBorderGlow } from "@/components/registry/border-glow/border-glow";
 import { trackEvent } from "@/lib/stats/track";
-import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { useUIStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -107,7 +106,6 @@ export default function CopyPromptButton({
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { sparks, burst, settle } = useSparkleBurst();
-  const { play } = useInteractionSound();
 
   // A pending reset must not fire into an unmounted tree, and a second click
   // must not inherit the first click's deadline.
@@ -138,7 +136,6 @@ export default function CopyPromptButton({
 
     // Everything below is the success path — a failed copy never celebrates.
     burst();
-    play("select");
     setCopied(true);
     trackEvent(slug, "prompt");
 

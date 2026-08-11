@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { Search } from "lucide-react";
 import CookBookIcon from "@/components/icons/cook-book";
 import { useUIStore } from "@/lib/store";
-import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
 import Wordmark from "@/components/Wordmark";
@@ -15,7 +14,6 @@ export default function MobileBar() {
 	const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
 	const pathname = usePathname();
-	const { play, hoverProps } = useInteractionSound();
 
 	const isCookbook = pathname === "/cookbook";
 
@@ -52,8 +50,6 @@ export default function MobileBar() {
 					aria-label="Motion cook book"
 					title="Motion cook book"
 					aria-current={isCookbook ? "page" : undefined}
-					{...hoverProps()}
-					onClick={() => play("select")}
 					className={`grid size-7 place-items-center rounded-md border border-hairline transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none ${
 						isCookbook ? "text-accent" : "text-ink-dim"
 					}`}

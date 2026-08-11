@@ -3,7 +3,6 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import type { Range, Suggestion } from "@/lib/cookbook-search";
 import { cn } from "@/lib/utils";
-import { useInteractionSound } from "@/hooks/use-interaction-sound";
 
 /**
  * The glossary's filter, as a real combobox.
@@ -71,7 +70,6 @@ export default function CookbookFilter({
 	const inputRef = useRef<HTMLInputElement>(null);
 	const listRef = useRef<HTMLUListElement>(null);
 
-	const { play, typeKey, hoverProps } = useInteractionSound();
 
 	const uid = useId();
 	const listboxId = `sg-cookbook-listbox-${uid}`;
@@ -85,7 +83,6 @@ export default function CookbookFilter({
 	};
 
 	const commit = (suggestion: Suggestion) => {
-		play("select");
 		close();
 		onSelect(suggestion);
 	};
@@ -201,7 +198,6 @@ export default function CookbookFilter({
 				value={query}
 				onChange={(event) => {
 					const next = event.target.value;
-					typeKey();
 					onQueryChange(next);
 					setOpen(next.trim().length > 0);
 				}}
@@ -289,7 +285,6 @@ export default function CookbookFilter({
 									role="option"
 									aria-selected={isActive}
 									data-index={i}
-									{...hoverProps()}
 									// pointermove, not pointerenter: scrolling the list under a
 									// stationary cursor would otherwise steal the keyboard cursor.
 									onPointerMove={() => setActive(i)}
