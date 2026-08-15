@@ -18,8 +18,10 @@ export default function ShellLayout({ children }: { children: ReactNode }) {
 				<main className="min-w-0 flex-1 px-3 py-6 lg:px-8 lg:py-10">
 					{children}
 				</main>
-				{/* Server rendered, so all 18 collection links ship in the static HTML
-            of every shell page — the spokes of the hub-and-spoke graph. */}
+				{/* Client component (i18n needs useTranslations), but the SSR pass is
+            always 'en' (see lib/i18n/provider.tsx), so all 18 collection links
+            still ship in the static HTML of every shell page — the spokes of
+            the hub-and-spoke graph. */}
 				<SiteFooter />
 			</div>
 			<CommandMenu />

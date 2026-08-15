@@ -2,6 +2,7 @@
 
 import { type FormEvent, type MouseEvent, useRef, useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import {
   AlertTriangle,
   ChevronLeft,
@@ -12,56 +13,30 @@ import {
 } from "lucide-react";
 import GrowDialog from "./grow-dialog";
 import { collectClientContext } from "@/lib/feedback/context";
-import {
-  LIMITS,
-  REASON_COPY,
-  submitFeedback,
-  type FeedbackType,
-} from "@/lib/feedback/submit";
+import { LIMITS, submitFeedback, type FeedbackType } from "@/lib/feedback/submit";
 import { cn } from "@/lib/utils";
 
 type Step = "choose" | "form";
 
-// Lengths and failure copy both come from the submit seam — this widget knows
-// how to lay out a form, not what "too long" means or how to say it.
+// Lengths come from the submit seam — this widget knows how to lay out a
+// form, not what "too long" means. Failure copy lives in the `feedback.*`
+// message catalog (submit.ts stays framework-free — /api/feedback imports it
+// too), looked up by reason key below.
 const {
   messageMin: MESSAGE_MIN,
   messageMax: MESSAGE_MAX,
   subjectMax: SUBJECT_MAX,
 } = LIMITS;
 
+// Text lives in chrome.feedback.types.<value>.* (see typeCopy below) — only the
+// icon and the closed `value` union stay here.
 const TYPES: {
   value: FeedbackType;
   icon: typeof AlertTriangle;
-  title: string;
-  blurb: string;
-  prompt: string;
-  placeholder: string;
 }[] = [
-  {
-    value: "bug",
-    icon: AlertTriangle,
-    title: "Report an issue",
-    blurb: "Something is broken or not working",
-    prompt: "What happened?",
-    placeholder: "Describe the bug and the steps to reproduce it…",
-  },
-  {
-    value: "idea",
-    icon: Lightbulb,
-    title: "Share an idea",
-    blurb: "Suggest a feature or improvement",
-    prompt: "Your idea",
-    placeholder: "What would make Shadow Garden better?",
-  },
-  {
-    value: "other",
-    icon: MessageSquare,
-    title: "General feedback",
-    blurb: "Anything else on your mind",
-    prompt: "Details",
-    placeholder: "Tell us more…",
-  },
+  { value: "bug", icon: AlertTriangle },
+  { value: "idea", icon: Lightbulb },
+  { value: "other", icon: MessageSquare },
 ];
 
 // Two-step feedback modal, mirroring Supabase's flow: pick a category, then write.
@@ -69,6 +44,8 @@ const TYPES: {
 // email field is the only reply channel.
 export default function FeedbackWidget({ className }: { className?: string }) {
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const t = useTranslations("chrome.feedback");
+  const tReasons = useTranslations("feedback.reasons");
 
   const [open, setOpen] = useState(false);
   const [originRect, setOriginRect] = useState<DOMRect | null>(null);
@@ -80,7 +57,17 @@ export default function FeedbackWidget({ className }: { className?: string }) {
   const [company, setCompany] = useState(""); // honeypot — humans leave it blank
   const [pending, setPending] = useState(false);
 
-  const activeType = TYPES.find((t) => t.value === type) ?? TYPES[0];
+  // Text for a type comes from chrome.feedback.types.<value>.* — the closed
+  // "bug" | "idea" | "other" union keeps the dynamic key safe.
+  const typeCopy = (value: FeedbackType) => ({
+    title: t(`types.${value}.title`),
+    blurb: t(`types.${value}.blurb`),
+    prompt: t(`types.${value}.prompt`),
+    placeholder: t(`types.${value}.placeholder`),
+  });
+
+  const activeType = TYPES.find((entry) => entry.value === type) ?? TYPES[0];
+  const activeCopy = typeCopy(activeType.value);
   const trimmedLen = message.trim().length;
   const canSubmit = trimmedLen >= MESSAGE_MIN && !pending;
 
@@ -125,12 +112,17 @@ export default function FeedbackWidget({ className }: { className?: string }) {
     setPending(false);
 
     if (!result.ok) {
-      const copy = REASON_COPY[result.reason];
-      toast.error(copy.title, { description: copy.description });
+      const reason = result.reason;
+      toast.error(tReasons(`${reason}.title`), {
+        description: tReasons(`${reason}.description`, {
+          min: MESSAGE_MIN,
+          max: MESSAGE_MAX,
+        }),
+      });
       return;
     }
 
-    toast.success("Thank you — your feedback reached the shadows.");
+    toast.success(t("submitSuccess"));
     setOpen(false);
     resetSoon();
   }
@@ -149,7 +141,7 @@ export default function FeedbackWidget({ className }: { className?: string }) {
         )}
       >
         <MessageSquarePlus className="size-4 text-ink-mute" />
-        <span className="font-sans">Feedback</span>
+        <span className="font-sans">{t("trigger")}</span>
       </button>
 
       <GrowDialog
@@ -158,25 +150,20 @@ export default function FeedbackWidget({ className }: { className?: string }) {
         originRect={originRect}
         originMaxWidth={448}
         className="max-w-md"
-        title={
-          step === "choose" ? "What would you like to share?" : activeType.title
-        }
-        description={
-          step === "choose"
-            ? "Your report reaches the operators running the garden."
-            : activeType.blurb
-        }
+        title={step === "choose" ? t("chooseTitle") : activeCopy.title}
+        description={step === "choose" ? t("chooseDescription") : activeCopy.blurb}
       >
         {step === "choose" ? (
           <div className="grid gap-2.5 px-5 pb-5">
-            {TYPES.map((t) => {
-              const Icon = t.icon;
+            {TYPES.map((entry) => {
+              const Icon = entry.icon;
+              const copy = typeCopy(entry.value);
               return (
                 <button
-                  key={t.value}
+                  key={entry.value}
                   type="button"
                   onClick={() => {
-                    setType(t.value);
+                    setType(entry.value);
                     setStep("form");
                   }}
                   className="group flex items-center gap-3 rounded-lg border border-hairline bg-panel p-3.5 text-left transition-colors hover:border-accent hover:bg-raised/40"
@@ -186,10 +173,10 @@ export default function FeedbackWidget({ className }: { className?: string }) {
                   </span>
                   <span className="min-w-0">
                     <span className="block font-display text-sm text-ink">
-                      {t.title}
+                      {copy.title}
                     </span>
                     <span className="block font-sans text-xs text-ink-mute">
-                      {t.blurb}
+                      {copy.blurb}
                     </span>
                   </span>
                 </button>
@@ -204,28 +191,28 @@ export default function FeedbackWidget({ className }: { className?: string }) {
               className="-ml-1 inline-flex w-fit items-center gap-1 rounded px-1 py-0.5 font-mono text-[11px] uppercase tracking-wider text-ink-mute transition-colors hover:text-ink"
             >
               <ChevronLeft className="size-3.5" />
-              back
+              {t("back")}
             </button>
 
             <label className="block">
               <span className="mb-1 block font-display text-[10px] uppercase tracking-widest text-ink-mute">
-                Subject{" "}
+                {t("subjectLabel")}{" "}
                 <span className="normal-case tracking-normal text-ink-mute/70">
-                  (optional)
+                  {t("optional")}
                 </span>
               </span>
               <input
                 value={subject}
                 onChange={(e) => setSubject(e.target.value.slice(0, SUBJECT_MAX))}
                 maxLength={SUBJECT_MAX}
-                placeholder="A quick summary"
+                placeholder={t("subjectPlaceholder")}
                 className="w-full rounded-md border border-hairline bg-panel px-3 py-2 font-sans text-sm text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
               />
             </label>
 
             <label className="block">
               <span className="mb-1 flex items-center justify-between font-display text-[10px] uppercase tracking-widest text-ink-mute">
-                <span>{activeType.prompt}</span>
+                <span>{activeCopy.prompt}</span>
                 <span
                   className={cn(
                     "font-mono tabular-nums",
@@ -240,22 +227,24 @@ export default function FeedbackWidget({ className }: { className?: string }) {
                 onChange={(e) => setMessage(e.target.value.slice(0, MESSAGE_MAX))}
                 rows={5}
                 autoFocus
-                placeholder={activeType.placeholder}
+                placeholder={activeCopy.placeholder}
                 className="w-full resize-none rounded-md border border-hairline bg-panel px-3 py-2 font-sans text-sm leading-relaxed text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
               />
             </label>
 
             <label className="block">
               <span className="mb-1 block font-display text-[10px] uppercase tracking-widest text-ink-mute">
-                Email{" "}
+                {t("emailLabel")}{" "}
                 <span className="normal-case tracking-normal text-ink-mute/70">
-                  (optional — so we can follow up)
+                  {t("emailOptional")}
                 </span>
               </span>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                // A format example, not prose — stays as the universal
+                // "you@example.com" pattern rather than being translated.
                 placeholder="you@example.com"
                 className="w-full rounded-md border border-hairline bg-panel px-3 py-2 font-sans text-sm text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
               />
@@ -280,7 +269,7 @@ export default function FeedbackWidget({ className }: { className?: string }) {
                 className="inline-flex items-center gap-2 rounded-md bg-accent px-3.5 py-2 font-display text-sm font-medium text-on-accent transition-colors hover:bg-accent-hover disabled:pointer-events-none disabled:opacity-50"
               >
                 {pending ? <Loader2 className="size-4 animate-spin" /> : null}
-                {pending ? "Sending…" : "Send feedback"}
+                {pending ? t("sending") : t("submit")}
               </button>
             </div>
           </form>

@@ -2,9 +2,21 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslations } from "next-intl";
+import { useDataCopy } from "@/lib/i18n/data-copy";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/lib/store";
 import { CookbookFlameControlsMobile } from "./CookbookFlameControls";
+
+// Mirrors scripts/i18n/gen-catalog.ts — the slug the generated
+// cookbookSections keys are written under. Item ids stay termAnchor-derived
+// (English) so the in-page anchors never change; only the display text moves.
+const sectionKey = (s: string) =>
+	s
+		.toLowerCase()
+		.replace(/&/g, "and")
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/^-+|-+$/g, "");
 
 // The desktop rail's mobile counterpart: a corner pill that reads out where you
 // are in the glossary and morphs open into the section index. Deliberately no
@@ -62,6 +74,11 @@ export default function CookbookSectionNav({
 	onJump: (id: string) => void;
 }) {
 	const setNavOverlayOpen = useUIStore((s) => s.setNavOverlayOpen);
+
+	const t = useTranslations("chrome.cookbookNav");
+	const copy = useDataCopy();
+	const sectionTitle = (title: string) =>
+		copy(`cookbookSections.${sectionKey(title)}.title`, title);
 
 	const [open, setOpen] = useState(false);
 	const pillRef = useRef<HTMLButtonElement>(null);
@@ -149,9 +166,19 @@ export default function CookbookSectionNav({
 				type="button"
 				aria-haspopup="dialog"
 				aria-expanded={open}
-				aria-label={`Sections: ${activeItem.title}, ${position} of ${total}. ${
-					open ? "Collapse" : "Expand"
-				}.`}
+				aria-label={
+					open
+						? t("collapseLabel", {
+								title: sectionTitle(activeItem.title),
+								position,
+								total,
+							})
+						: t("expandLabel", {
+								title: sectionTitle(activeItem.title),
+								position,
+								total,
+							})
+				}
 				onClick={() => setOpen((o) => !o)}
 				initial={false}
 				animate={{ width: open ? box.w : CLOSED_W }}
@@ -176,7 +203,7 @@ export default function CookbookSectionNav({
 						transition={{ duration: 0.12 }}
 						className="min-w-0 max-w-34 truncate font-sans font-medium text-xs text-ink-dim"
 					>
-						{activeItem.title}
+						{sectionTitle(activeItem.title)}
 					</motion.span>
 				</AnimatePresence>
 
@@ -194,7 +221,7 @@ export default function CookbookSectionNav({
 						ref={panelRef}
 						role="dialog"
 						aria-modal="false"
-						aria-label="Sections"
+						aria-label={t("sections")}
 						variants={panelVariants}
 						custom={{ pillClip }}
 						initial="initial"
@@ -212,7 +239,7 @@ export default function CookbookSectionNav({
 						    the floor while the list moves behind it. */}
 						<div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-1.5 scrollbar-none">
 							<p className="px-2 pb-1 pt-0.5 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
-								Sections
+								{t("sections")}
 							</p>
 							<ul>
 								{sections.map((section) => {
@@ -230,7 +257,7 @@ export default function CookbookSectionNav({
 														: "border-transparent text-ink-dim hover:bg-raised/40 hover:text-ink",
 												)}
 											>
-												{section.title}
+												{sectionTitle(section.title)}
 											</a>
 										</li>
 									);

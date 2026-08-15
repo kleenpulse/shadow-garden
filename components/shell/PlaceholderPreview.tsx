@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import type { PreviewProps } from "@/lib/registry/types";
 
 const num = (v: unknown, fallback: number) => (typeof v === "number" ? v : fallback);
@@ -18,6 +19,7 @@ export default function PlaceholderPreview({
   const rafRef = useRef(0);
   const valuesRef = useRef(values);
   valuesRef.current = values;
+  const t = useTranslations("chrome.placeholderPreview");
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -90,7 +92,7 @@ export default function PlaceholderPreview({
       <canvas ref={canvasRef} className="h-full w-full" aria-hidden />
       {showLabel && (
         <span className="pointer-events-none absolute bottom-3 left-3 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
-          reference preview — drop source to replace
+          {t("label")}
         </span>
       )}
     </div>

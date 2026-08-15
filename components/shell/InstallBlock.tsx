@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { installCommand, PKG_MANAGERS, type PkgManager } from "@/lib/registry/install";
 import type { ComponentEntry } from "@/lib/registry/types";
 import { trackEvent } from "@/lib/stats/track";
@@ -8,6 +9,7 @@ import { trackEvent } from "@/lib/stats/track";
 export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
   const [pm, setPm] = useState<PkgManager>("bun");
   const [copied, setCopied] = useState(false);
+  const t = useTranslations("chrome.install");
 
   const command = installCommand(pm, entry);
 
@@ -25,7 +27,7 @@ export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
   return (
     <div className="overflow-hidden rounded-lg border border-hairline bg-panel">
       <div className="flex items-center justify-between border-b border-hairline px-2 py-1.5">
-        <div role="tablist" aria-label="Package manager" className="flex gap-0.5">
+        <div role="tablist" aria-label={t("pkgManagerAria")} className="flex gap-0.5">
           {PKG_MANAGERS.map((manager) => {
             const active = manager === pm;
             return (
@@ -48,7 +50,7 @@ export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
           onClick={copy}
           className="px-2 font-mono text-[11px] text-ink-dim transition-colors hover:text-accent"
         >
-          {copied ? "copied" : "copy"}
+          {copied ? t("copied") : t("copy")}
         </button>
       </div>
       <pre className="overflow-x-auto px-4 py-3">
@@ -57,7 +59,7 @@ export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
       {entry.variants.length > 1 ? (
         <div className="border-t border-hairline px-4 py-3">
           <p className="font-mono text-[11px] text-ink-mute">
-            Then copy {entry.variants.length} files into your project:
+            {t("thenCopy", { count: entry.variants.length })}
           </p>
           <ul className="mt-1.5 space-y-0.5">
             {entry.variants.map((variant) => (

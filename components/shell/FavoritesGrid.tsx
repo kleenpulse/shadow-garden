@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Heart } from "lucide-react";
 import { getEntry } from "@/lib/registry";
 import type { ComponentEntry } from "@/lib/registry/types";
@@ -11,6 +12,7 @@ import FavoriteThumbnailCard from "./FavoriteThumbnailCard";
 export default function FavoritesGrid() {
   const hydrated = useFavoritesHydrated();
   const slugs = useFavoritesStore((state) => state.slugs);
+  const t = useTranslations("chrome.favorites");
 
   // Favorites live in localStorage — hold a skeleton until rehydrated so the
   // server-rendered shell doesn't flash a wrong (empty) state.
@@ -39,16 +41,16 @@ export default function FavoritesGrid() {
           <Heart className="h-5 w-5" aria-hidden />
         </span>
         <h2 className="mt-4 font-display text-sm uppercase tracking-[0.12em] text-ink">
-          No favorites yet
+          {t("emptyTitle")}
         </h2>
         <p className="mt-2 max-w-sm font-sans text-sm text-ink-dim">
-          Tap the heart on any component to pin it here for quick access.
+          {t("emptySubtitle")}
         </p>
         <Link
           href="/components"
           className="mt-5 rounded-md border border-hairline bg-panel px-4 py-2 font-mono text-xs text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
         >
-          Browse components
+          {t("browseComponents")}
         </Link>
       </div>
     );
@@ -57,7 +59,7 @@ export default function FavoritesGrid() {
   return (
     <div className="space-y-4">
       <p className="font-mono text-xs text-ink-mute">
-        {entries.length} {entries.length === 1 ? "component" : "components"} saved
+        {t("savedCount", { count: entries.length })}
       </p>
       <ThumbnailSlotsProvider max={6}>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
 	COLLECTIONS,
@@ -15,6 +14,12 @@ import { breadcrumbSchema, collectionSchema, type Crumb } from "@/lib/schema";
 import JsonLd from "@/components/seo/JsonLd";
 import Breadcrumbs from "@/components/shell/Breadcrumbs";
 import CollectionMembers from "@/components/shell/CollectionMembers";
+import {
+	CollectionGlossary,
+	CollectionHeader,
+	MembersHeading,
+	RelatedCollections,
+} from "./_components/collection-detail-client";
 
 // One template, 18 pages, every member set computed from the registry.
 //
@@ -76,12 +81,14 @@ export default async function CollectionPage({
 	const siblings = siblingCollections(collection);
 
 	// Technique collections print the definitions of the terms they filter on;
-	// the join is the same one DemonstratedTerms uses on a component page.
+	// the join is the same one DemonstratedTerms uses on a component page. The
+	// anchor is precomputed here so the client island gets plain rows.
 	const glossary = collectionTerms(collection)
 		.map((term) => ({ term, definition: termDefinition(term) }))
 		.filter((row): row is { term: string; definition: string } =>
 			Boolean(row.definition),
-		);
+		)
+		.map((row) => ({ ...row, anchor: termAnchor(row.term) }));
 
 	const trail: Crumb[] = [
 		{ name: "Home", path: "/" },
@@ -96,71 +103,28 @@ export default async function CollectionPage({
 			/>
 			<Breadcrumbs trail={trail} />
 
-			<header className="border-b border-hairline pb-6">
-				<h1 className="font-display text-2xl uppercase tracking-[0.08em] text-ink">
-					{collection.title}
-				</h1>
-				<p className="mt-4 max-w-2xl font-sans text-sm leading-relaxed text-ink-dim">
-					{collection.intro}
-				</p>
-				<p className="mt-4 font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute">
-					{entries.length} components · all free
-				</p>
-			</header>
+			<CollectionHeader
+				slug={collection.slug}
+				title={collection.title}
+				intro={collection.intro}
+				count={entries.length}
+			/>
 
 			<section className="space-y-3">
-				<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute">
-					In This Collection
-				</h2>
+				<MembersHeading />
 				<CollectionMembers collection={collection} entries={entries} />
 			</section>
 
-			{glossary.length > 0 && (
-				<section className="space-y-3">
-					<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute">
-						The Terms
-					</h2>
-					<dl className="divide-y divide-hairline rounded-lg border border-hairline bg-panel">
-						{glossary.map(({ term, definition }) => (
-							<div
-								key={term}
-								className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:gap-6"
-							>
-								<dt className="shrink-0 sm:w-52">
-									<Link
-										href={`/cookbook#${termAnchor(term)}`}
-										className="font-display text-xs uppercase tracking-[0.12em] text-ink transition-colors hover:text-accent"
-									>
-										{term}
-									</Link>
-								</dt>
-								<dd className="font-sans text-sm leading-relaxed text-ink-dim">
-									{definition}
-								</dd>
-							</div>
-						))}
-					</dl>
-				</section>
-			)}
+			{glossary.length > 0 && <CollectionGlossary rows={glossary} />}
 
 			{siblings.length > 0 && (
-				<section className="space-y-3">
-					<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute">
-						Related Collections
-					</h2>
-					<ul className="flex flex-wrap gap-1.5">
-						{siblings.map((sibling) => (
-							<li key={sibling.slug}>
-								<Link
-									href={collectionPath(sibling)}
-									className="inline-block rounded-full border border-hairline px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
-								>
-									{sibling.title}
-								</Link>
-							</li>
-						))}
-					</ul>
-				</section>
+				<RelatedCollections
+					siblings={siblings.map((sibling) => ({
+						slug: sibling.slug,
+						title: sibling.title,
+						href: collectionPath(sibling),
+					}))}
+				/>
 			)}
 		</div>
 	);

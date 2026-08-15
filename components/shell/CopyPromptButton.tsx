@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Check, Stars } from "lucide-react";
 import { toast } from "sonner";
 import { useBorderGlow } from "@/components/registry/border-glow/border-glow";
@@ -106,6 +107,8 @@ export default function CopyPromptButton({
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { sparks, burst, settle } = useSparkleBurst();
+  const t = useTranslations("chrome.copyPrompt");
+  const tCommon = useTranslations("common");
 
   // A pending reset must not fire into an unmounted tree, and a second click
   // must not inherit the first click's deadline.
@@ -120,7 +123,7 @@ export default function CopyPromptButton({
     // Absent on insecure origins. Fail loudly here — silence would read as a
     // successful copy that simply produced nothing.
     if (!navigator.clipboard) {
-      toast("Clipboard unavailable on this connection");
+      toast(t("clipboardUnavailable"));
       return;
     }
 
@@ -130,7 +133,7 @@ export default function CopyPromptButton({
       // and the copy silently fails.
       await navigator.clipboard.writeText(text);
     } catch {
-      toast("Couldn't copy the prompt");
+      toast(t("copyFailed"));
       return;
     }
 
@@ -149,7 +152,7 @@ export default function CopyPromptButton({
         <button
           type="button"
           onClick={copy}
-          aria-label={`Copy the AI integration prompt for ${name}`}
+          aria-label={t("ariaLabel", { name })}
           className={cn(
             CHROME,
             copied ? "text-accent" : "text-ink-dim hover:text-ink",
@@ -160,7 +163,9 @@ export default function CopyPromptButton({
           ) : (
             <Stars className="h-3.5 w-3.5 shrink-0" aria-hidden />
           )}
-          <span className={LABEL}>{copied ? "Copied" : "Copy Prompt"}</span>
+          <span className={LABEL}>
+            {copied ? tCommon("copied") : t("label")}
+          </span>
           <SparkleBurst sparks={sparks} onSettle={settle} />
         </button>
       </PromptButtonShell>
@@ -169,7 +174,7 @@ export default function CopyPromptButton({
           region nested inside one announces inconsistently across screen readers.
           `sr-only` is out of flow, so it costs the flex row nothing. */}
       <span role="status" className="sr-only">
-        {copied ? `Prompt for ${name} copied to clipboard` : ""}
+        {copied ? t("copiedAnnouncement", { name }) : ""}
       </span>
     </>
   );

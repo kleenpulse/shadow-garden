@@ -1,0 +1,1845 @@
+{
+  "common": {
+    "close": "Close",
+    "copy": "Copy",
+    "copied": "Copied",
+    "search": "Search",
+    "loading": "Loading…"
+  },
+  "chrome": {
+    "language": {
+      "label": "Language",
+      "changeLanguage": "Change language"
+    },
+    "propsTable": {
+      "prop": "Prop",
+      "type": "Type",
+      "default": "Default",
+      "description": "Description"
+    },
+    "catalogCard": {
+      "open": "Open {name}"
+    },
+    "cookbook": {
+      "sections": "Sections",
+      "enterToFilter": "↵ to filter",
+      "termCount": "{count, plural, one {# term} other {# terms}}",
+      "noMatches": "No matching terms.",
+      "seeIt": "See it"
+    },
+    "cookbookNav": {
+      "sections": "Sections",
+      "expandLabel": "Sections: {title}, {position} of {total}. Expand.",
+      "collapseLabel": "Sections: {title}, {position} of {total}. Collapse."
+    },
+    "demonstratedTerms": {
+      "heading": "What It Demonstrates"
+    },
+    "relatedComponents": {
+      "heading": "Related Components"
+    },
+    "appearsIn": {
+      "heading": "Appears In"
+    },
+    "collectionMembers": {
+      "builtWith": "Built with {libraries}"
+    },
+    "feedback": {
+      "trigger": "Feedback",
+      "chooseTitle": "What would you like to share?",
+      "chooseDescription": "Your report reaches the operators running the garden.",
+      "back": "back",
+      "subjectLabel": "Subject",
+      "optional": "(optional)",
+      "subjectPlaceholder": "A quick summary",
+      "emailLabel": "Email",
+      "emailOptional": "(optional — so we can follow up)",
+      "sending": "Sending…",
+      "submit": "Send feedback",
+      "submitSuccess": "Thank you — your feedback reached the shadows.",
+      "types": {
+        "bug": {
+          "title": "Report an issue",
+          "blurb": "Something is broken or not working",
+          "prompt": "What happened?",
+          "placeholder": "Describe the bug and the steps to reproduce it…"
+        },
+        "idea": {
+          "title": "Share an idea",
+          "blurb": "Suggest a feature or improvement",
+          "prompt": "Your idea",
+          "placeholder": "What would make Shadow Garden better?"
+        },
+        "other": {
+          "title": "General feedback",
+          "blurb": "Anything else on your mind",
+          "prompt": "Details",
+          "placeholder": "Tell us more…"
+        }
+      }
+    },
+    "sidebar": {
+      "closeNavigation": "Close navigation",
+      "searchPlaceholder": "Search components…",
+      "searchLabel": "Search components",
+      "filterLabel": "Filter components",
+      "filterTabs": {
+        "all": "all",
+        "new": "new"
+      },
+      "componentsLabel": "Components",
+      "noMatches": "No matches.",
+      "catalogCount": "{count, plural, one {# component} other {# components}}",
+      "catalogCountFiltered": "{matched} / {total, plural, one {# component} other {# components}}",
+      "resizeHandle": "Resize sidebar",
+      "resizeHint": "Drag to resize · double-click to reset"
+    },
+    "cookbookFilter": {
+      "placeholder": "Filter terms…",
+      "filterLabel": "Filter cook book terms",
+      "clearLabel": "Clear filter",
+      "suggestionsLabel": "Term suggestions",
+      "headings": {
+        "term": "Terms",
+        "component": "Components",
+        "section": "Sections"
+      },
+      "demoCount": "{count, plural, one {# term} other {# terms}}",
+      "sectionTermCount": "{count, plural, one {# term} other {# terms}}"
+    },
+    "topBar": {
+      "searchPlaceholder": "Search components…",
+      "cookbookLabel": "Motion cook book",
+      "githubLabel": "Shadow Garden on GitHub"
+    },
+    "mobileBar": {
+      "openNavigation": "Open navigation",
+      "cookbookLabel": "Motion cook book",
+      "githubLabel": "Shadow Garden on GitHub"
+    },
+    "footer": {
+      "tagline": "An instrument bench for React motion. Preview live, tune every parameter, take the source.",
+      "siteNavLabel": "Site",
+      "nav": {
+        "allComponents": "All components",
+        "collections": "Collections",
+        "cookbook": "Motion Cook Book"
+      },
+      "componentsAccent": "{count, plural, one {# component} other {# components}} · 1 accent"
+    },
+    "copyPrompt": {
+      "label": "Copy Prompt",
+      "ariaLabel": "Copy the AI integration prompt for {name}",
+      "copiedAnnouncement": "Prompt for {name} copied to clipboard",
+      "clipboardUnavailable": "Clipboard unavailable on this connection",
+      "copyFailed": "Couldn't copy the prompt"
+    },
+    "successOverlay": {
+      "ariaLabel": "Purchase complete",
+      "kicker": "Welcome to the shadows",
+      "title": "The eminence is yours.",
+      "body": "Your purchase is complete. The full arsenal of the Shadow Garden now answers to you.",
+      "cta": "Enter the shadows"
+    },
+    "favorites": {
+      "emptyTitle": "No favorites yet",
+      "emptySubtitle": "Tap the heart on any component to pin it here for quick access.",
+      "browseComponents": "Browse components",
+      "savedCount": "{count, plural, one {# component saved} other {# components saved}}",
+      "removeAria": "Remove {name} from favorites",
+      "addAria": "Add {name} to favorites",
+      "removeTitle": "Remove from favorites",
+      "addTitle": "Add to favorites",
+      "removedToast": "Removed {name} from favorites",
+      "addedToast": "Added {name} to favorites",
+      "genericComponent": "component",
+      "link": "Favorites",
+      "linkWithCount": "Favorites ({count})",
+      "subtitle": "The components you've pinned, saved in this browser."
+    },
+    "preview": {
+      "failedWithLabel": "{label} failed",
+      "failed": "Preview failed",
+      "retry": "Retry",
+      "crashedFallback": "This component crashed while rendering."
+    },
+    "cookbookFlame": {
+      "flame": "Flame ",
+      "motion": "Motion",
+      "backgroundSettings": "Background settings",
+      "background": "Background"
+    },
+    "fullscreenStage": {
+      "exitAria": "Exit fullscreen, back to {name}",
+      "hideControls": "Hide controls",
+      "showControls": "Show controls"
+    },
+    "install": {
+      "pkgManagerAria": "Package manager",
+      "copy": "copy",
+      "copied": "copied",
+      "thenCopy": "Then copy {count} files into your project:"
+    },
+    "workspaceTabs": {
+      "ariaLabel": "Preview or source",
+      "preview": "preview",
+      "code": "code"
+    },
+    "themeToggle": {
+      "switchToLight": "Switch to light theme",
+      "switchToDark": "Switch to dark theme"
+    },
+    "newBadge": {
+      "label": "New"
+    },
+    "controls": {
+      "heading": "Controls",
+      "play": "play",
+      "pause": "pause",
+      "reset": "reset",
+      "editAria": "Edit {name}",
+      "hexValueAria": "{name} hex value"
+    },
+    "growDialog": {
+      "closeAria": "Close dialog"
+    },
+    "codeTabs": {
+      "sourceFilesAria": "Source files"
+    },
+    "breadcrumbs": {
+      "ariaLabel": "Breadcrumb"
+    },
+    "placeholderPreview": {
+      "label": "reference preview — drop source to replace"
+    },
+    "liveWorkspace": {
+      "fullscreenAria": "Open preview fullscreen"
+    },
+    "gotoTop": {
+      "scrollToTop": "Scroll to top"
+    }
+  },
+  "catalog": {
+    "waves": {
+      "description": "A woven field of flowing waves rendered on a WebGL line shader.",
+      "props": {
+        "color": "Line color of the waves.",
+        "amplitude": "Wave displacement strength.",
+        "distance": "Z-spread between the layered lines.",
+        "saturation": "Color saturation of the field.",
+        "opacity": "Overall opacity of the waves.",
+        "enableMouseInteraction": "Let the cursor bend the field."
+      }
+    },
+    "grainient": {
+      "description": "An animated grainy mesh-gradient rendered on a WebGL2 shader.",
+      "props": {
+        "timeSpeed": "Overall animation speed.",
+        "warpStrength": "Domain-warp intensity.",
+        "warpFrequency": "Warp detail frequency.",
+        "blendSoftness": "Softness of the gradient blend.",
+        "noiseScale": "Scale of the underlying noise.",
+        "grainAmount": "Film-grain intensity.",
+        "contrast": "Output contrast.",
+        "saturation": "Output saturation.",
+        "zoom": "Camera zoom.",
+        "color1": "First gradient color.",
+        "color2": "Second gradient color.",
+        "color3": "Third gradient color."
+      }
+    },
+    "light-rays": {
+      "description": "Volumetric god-rays from a configurable origin, optionally mouse-following.",
+      "props": {
+        "raysColor": "Ray color.",
+        "raysSpeed": "Animation speed.",
+        "lightSpread": "Angular spread of the rays.",
+        "rayLength": "Length of the rays.",
+        "pulsating": "Pulse the ray intensity.",
+        "fadeDistance": "Distance over which rays fade.",
+        "saturation": "Color saturation.",
+        "followMouse": "Aim the rays toward the pointer. While on, the overlay claims touch input (a finger drag steers the rays instead of scrolling) and so intercepts clicks beneath it; off restores click-through.",
+        "mouseInfluence": "How much the cursor steers the rays.",
+        "noiseAmount": "Noise texture over the rays.",
+        "distortion": "Wavy distortion of the rays."
+      }
+    },
+    "mask-blur": {
+      "description": "Progressive edge blur — stacked backdrop-filter layers dissolve content toward a chosen edge.",
+      "props": {
+        "position": "Edge the blur attaches to.",
+        "strength": "Base blur multiplier applied to every layer.",
+        "divCount": "Number of stacked blur layers (higher = smoother ramp).",
+        "exponential": "Exponential progression for a stronger blur at the edge.",
+        "opacity": "Opacity applied to each blur layer.",
+        "target": "Attach to the parent container or the viewport (fixed).",
+        "tinted": "Wash the blurred edge with a faint amethyst accent."
+      }
+    },
+    "side-rays": {
+      "description": "Corner-anchored two-color light rays with adjustable tilt and blend.",
+      "props": {
+        "speed": "Animation speed.",
+        "rayColor1": "First ray color.",
+        "rayColor2": "Second ray color.",
+        "intensity": "Ray brightness.",
+        "spread": "Angular spread.",
+        "tilt": "Tilt of the ray bundle.",
+        "saturation": "Color saturation.",
+        "blend": "Blend between the two colors.",
+        "falloff": "Edge falloff.",
+        "opacity": "Overall opacity."
+      }
+    },
+    "dot-field": {
+      "description": "An interactive dot grid that bulges and glows around the cursor.",
+      "props": {
+        "dotRadius": "Radius of each dot.",
+        "dotSpacing": "Spacing between dots.",
+        "cursorRadius": "Cursor influence radius.",
+        "cursorForce": "Strength of the cursor push.",
+        "bulgeOnly": "Bulge toward the cursor only (no repel).",
+        "bulgeStrength": "Bulge displacement strength.",
+        "glowRadius": "Radius of the cursor glow.",
+        "sparkle": "Add a sparkle shimmer.",
+        "waveAmplitude": "Ambient wave motion.",
+        "gradientFrom": "Dot gradient start.",
+        "gradientTo": "Dot gradient end.",
+        "glowColor": "Cursor glow color."
+      }
+    },
+    "strands": {
+      "description": "Glowing wavy light-strands with an optional glass refraction lens.",
+      "props": {
+        "count": "Number of strands.",
+        "scale": "Field size — lower zooms out, higher magnifies the strands.",
+        "speed": "Animation speed.",
+        "amplitude": "Wave amplitude.",
+        "waviness": "Waviness of the strands.",
+        "thickness": "Strand thickness.",
+        "strandWidth": "Horizontal reach as a percentage — 100 spans to the glass rim.",
+        "glow": "Glow strength.",
+        "spread": "Vertical spread.",
+        "intensity": "Color intensity.",
+        "saturation": "Color saturation.",
+        "opacity": "Overall opacity.",
+        "glass": "Overlay a glass refraction lens.",
+        "refraction": "Glass refraction strength.",
+        "dispersion": "Chromatic dispersion."
+      }
+    },
+    "ribbons": {
+      "description": "Flowing translucent ribbons drifting across a canvas.",
+      "props": {
+        "color": "Ribbon color.",
+        "colorAlpha": "Ribbon opacity.",
+        "ribbonCount": "Number of ribbons on screen.",
+        "strokeSize": "Outline thickness.",
+        "horizontalSpeed": "Drift speed across the canvas.",
+        "parallaxAmount": "Scroll parallax factor.",
+        "verticalPosition": "Where ribbons spawn vertically.",
+        "animateSections": "Wiggle ribbon segments over time."
+      }
+    },
+    "world-map-ascii": {
+      "description": "A dot-matrix world map whose particles scatter from the cursor.",
+      "props": {
+        "color": "Particle color.",
+        "particleSize": "Dot radius.",
+        "density": "Particle density — higher packs more particles.",
+        "mouseRadius": "Cursor interaction radius; 0 disables the scatter.",
+        "drift": "Idle wobble amplitude."
+      }
+    },
+    "constellation": {
+      "description": "A constellation network — drifting particles link by proximity, chase and flee the cursor, and glow.",
+      "props": {
+        "density": "Particle density relative to area.",
+        "speed": "Top drift speed of particles.",
+        "connectDistance": "Max distance for particle-to-particle lines.",
+        "cursorDistance": "Cursor link + repel radius; 0 disables.",
+        "repelForce": "Push strength inside the cursor radius.",
+        "lineOpacity": "Opacity multiplier on connection lines.",
+        "glow": "Particle glow blur.",
+        "color1": "First particle color.",
+        "color2": "Second particle color.",
+        "color3": "Third particle color — lines between mixed pairs blend as gradients."
+      }
+    },
+    "plus-grid": {
+      "description": "A canvas field of '+' glyphs — scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
+      "props": {
+        "gapX": "Horizontal gap between glyphs.",
+        "gapY": "Vertical gap between glyphs.",
+        "fontSize": "Glyph size.",
+        "baseOpacity": "Resting opacity of the field.",
+        "waveAmplitude": "Peak displacement at full wave energy.",
+        "waveFrequency": "Ripple tightness across columns.",
+        "waveDecay": "Energy decay per tick — low snaps back, high lingers.",
+        "autoPulse": "Fire a wave pulse every few seconds.",
+        "color": "Glyph color."
+      }
+    },
+    "barcode": {
+      "description": "A procedural barcode whose bars light up like piano notes — looping on autoplay or scrubbed by scroll.",
+      "props": {
+        "mode": "Autoplay loops the note timeline; scrub ties it to scroll position.",
+        "restOpacity": "Opacity a bar settles at after its note.",
+        "peakOpacity": "Opacity at the peak of a note strike.",
+        "noteDuration": "Length of one note's swell and fade.",
+        "speed": "Playback rate of the autoplay loop.",
+        "color": "Bar color."
+      }
+    },
+    "aurora": {
+      "description": "Flowing curtains of amethyst light drifting across a starless night sky — an fbm-warped WebGL2 field where luminous bands ripple, fold, and dissolve into fine grain, like a polar aurora seen from the dark side of the world.",
+      "props": {
+        "baseColor": "Deep background the curtains glow against.",
+        "auroraColor": "Primary amethyst light of the bands.",
+        "auroraColor2": "Secondary tint the curtain edges shift toward.",
+        "speed": "Drift speed of the flowing bands.",
+        "intensity": "Overall brightness of the aurora.",
+        "bands": "Number of layered light curtains.",
+        "warp": "Turbulence of the fbm domain-warp folding the curtains.",
+        "coverage": "Vertical reach of the curtains up the sky.",
+        "grain": "Subtle film grain over the field."
+      }
+    },
+    "starfield": {
+      "description": "Depth-layered stars drifting through a slow warp, each layer parallaxing at its own pace, with the occasional shooting star streaking a bright amethyst tail across the dark before the field settles back to its patient glimmer.",
+      "props": {
+        "starColor": "Color of the star field.",
+        "accentColor": "Tints a minority of stars and every shooting-star tail.",
+        "density": "Star count relative to the pane area.",
+        "layers": "Parallax depth layers — nearer layers drift faster and brighter.",
+        "driftSpeed": "Speed of the slow directional warp across the field.",
+        "twinkle": "Strength of per-star brightness twinkle.",
+        "shootingStars": "How often streaks appear; 0 disables them.",
+        "glow": "Glow blur around each star."
+      }
+    },
+    "cinders": {
+      "description": "A dark field of embers and ash rising on the draft, aglow with amethyst.",
+      "props": {
+        "emberCount": "Number of embers and ash motes in the field.",
+        "riseSpeed": "Upward drift speed of the embers.",
+        "turbulence": "Sideways sway as the motes rise.",
+        "emberSize": "Base radius of each mote.",
+        "glow": "Halo size around each spark.",
+        "draftStrength": "How strongly the cursor stirs a draft.",
+        "emberColor": "Amethyst ember glow color.",
+        "backgroundColor": "Dark field the motes rise against."
+      }
+    },
+    "shadowflame": {
+      "description": "A black flame with an amethyst core, its body folded from domain-warped noise.",
+      "props": {
+        "coreColor": "Amethyst core of the flame.",
+        "flameColor": "Dark body of the black flame.",
+        "backgroundColor": "The void the flame rises against.",
+        "speed": "Rise speed of the flame.",
+        "warp": "Domain-warp turbulence folding the flame.",
+        "detail": "Number of noise octaves.",
+        "shimmer": "Rising heat-shimmer distortion.",
+        "height": "How far up the frame the flame reaches. Above 1 the taper never completes inside the frame, so the flame runs off the top edge instead of dying out.",
+        "grain": "Film grain over the field.",
+        "flameWidth": "Horizontal spread of the flame.",
+        "sparkCount": "Number of rising fire sparks (0 turns them off).",
+        "sparkSize": "Size of each rising spark.",
+        "sparkSpeed": "Rise speed of the sparks."
+      }
+    },
+    "cathode": {
+      "description": "A cathode-ray tube showing nothing worth watching: a beam that turns around at each edge, phosphor that holds after it has passed, and a hum bar rolling up the glass.",
+      "props": {
+        "signal": "What the tube is showing. Sweep is a single beam that reverses at each edge rather than jumping back — a beam that wrapped would read as a dropped frame, one that turns around reads as a mechanism. The rest are the test patterns a set falls back to when there is nothing on the line.",
+        "sweepSpeed": "Speed of the beam across the face. At zero it parks and the phosphor settles, which is the clearest way to see what persistence is actually drawing.",
+        "scanlineDensity": "Pixels per scanline. Below about two the grille is past Nyquist, and rather than aliasing into a pattern that moves when the window does, the modulation fades out — a small canvas loses its scanlines instead of gaining moiré.",
+        "scanlineDepth": "How hard the scanlines and the aperture grille cut into the image. The grille rides at a third of this — a shadow mask you can actually resolve is a shadow mask that has stopped being a background.",
+        "curvature": "Barrel distortion of the tube face. The glass edge is a soft falloff rather than a clip, because a hard rim aliases along its whole length and the rim is the one place the eye is guaranteed to go.",
+        "bloom": "Halation around bright areas. Four analytic taps of the signal rather than a blur pass — the signal has a closed form in every mode, so a glow costs arithmetic instead of a second render target.",
+        "persistence": "How long the phosphor holds after the beam has passed. Computed as an exponential in the distance already swept rather than by keeping the previous frame — which is what phosphor decay is, and it avoids the float render target that is the one thing the loop verifier cannot see through.",
+        "rollSpeed": "Speed of the hum bar rolling up the frame. It carries its own decay tail, so persistence still means something on a signal that never moves.",
+        "chromaOffset": "Convergence error between the colour guns. Held in pixels and converted through the face width, so the fringe reads the same on a strip as on a full page.",
+        "phosphorColor": "The phosphor. Every signal borrows it except the colour bars, which carry their own hue — that is the whole point of a test card.",
+        "backgroundColor": "The dead glass outside the picture."
+      }
+    },
+    "turing": {
+      "description": "Gray-Scott reaction-diffusion on the GPU. Two reagents, four terms, and coral, labyrinths and colonies that settle and stop all fall out of the arithmetic — a background that grows rather than loops, and never reaches the same frame twice.",
+      "props": {
+        "feed": "Rate at which fresh reagent arrives everywhere. Feed and kill together pick the creature, and these coordinates were measured rather than inherited: 0.050/0.062 keeps colonising and is the default, 0.030/0.062 settles into stable spots and then genuinely stops, 0.039/0.058 floods to a dense labyrinth, and 0.022/0.051 oscillates without ever settling. Push feed past about 0.055 at this kill and the colonies die outright — the living band is a few thousandths wide, which is why the step is this fine.",
+        "kill": "Rate at which the reacted product is removed. Pull it down and the pattern floods until it fills the plate; push it up and it starves back to nothing. The edge of the living band is a cliff rather than a slope, so this control does nothing and then does everything.",
+        "diffusion": "How fast the substrate spreads relative to the activator, which is held at half. One is the canonical two-to-one. Turing's result is that a perfectly uniform system develops structure the moment one reagent outruns the other; this is that ratio, and below about 0.6 there is nothing to see because nothing outruns anything.",
+        "steps": "Solver iterations per displayed frame, and the only reason this is watchable. The pattern needs a couple of thousand steps before it is worth looking at; at one step per frame that is most of a minute of staring at dots. Sixteen gets there in seconds and looks identical on arrival, because this is a time-scale control rather than a quality one. It is also the honest performance dial — every step is a full pass over the grid.",
+        "gridSize": "Resolution of the simulation grid, deliberately held apart from the canvas — a window drag resizes only the display pass, so dragging the browser never wipes a pattern that took thirty seconds to grow. Bigger is finer filigree over the same area, not more area.",
+        "seed": "How the plate is inoculated. Each one ends up somewhere different at identical feed and kill, which is the honest demonstration that this system has no single attractor — the initial condition is a real parameter, not a formality.",
+        "brush": "Radius the pointer inoculates. Measured against the grid rather than the canvas, so the blob covers the same share of the pattern on a narrow strip as on a full page. The dose is one impulse per frame regardless of how many solver steps run, so this control and the step count stay independent.",
+        "sharpness": "Where the palette ramp cuts the continuous field. The chemistry is smooth everywhere; coral does not look like coral until you cut it, and this is the cut. At zero you are looking at the raw concentration, which is the most informative view and the least striking one.",
+        "colorLow": "The plate, where nothing has taken hold.",
+        "colorHigh": "The colony. The membrane picks it up too, at a third strength, so the boundary reads as the same organism rather than as an outline drawn around it."
+      }
+    },
+    "quicksilver": {
+      "description": "Molten chrome. Every other shader background emits light; this one reflects a studio that does not exist, synthesised from the surface normal — sharp softbox edges, a conductor's Fresnel wash, thin-film iridescence, and a wake that keeps moving where you dragged.",
+      "props": {
+        "flowSpeed": "How fast the surface churns. At zero the metal sets, and a still frame is the only honest way to see how much of what you are looking at is the height field and how much is the light sitting on it.",
+        "warp": "How far the noise drags its own coordinates before it is sampled again. Low is rolled sheet metal; past about one the surface folds back through itself and stops reading as a liquid at all.",
+        "stir": "How hard the pointer drags the metal. Eight recent impulses are kept alive at once, each with its own direction and age, which is why this leaves a wake rather than a dent — and why the whole component still costs one pass and no render target.",
+        "viscosity": "How long a stir survives after the pointer has left. Low is mercury and settles almost before you have finished the gesture; high holds the wake long enough that you can write in it.",
+        "fresnel": "Schlick exponent on the rim response. Low mirrors the whole surface evenly and reads as painted plastic; high keeps the bright reflection at the grazing angles, which is where metal actually puts it.",
+        "iridescence": "Thin-film interference over the reflection, and the whole difference between chrome and oil on water. The hue comes from the film's optical thickness over the viewing cosine, so it tracks the surface angle instead of being a rainbow painted across the panel.",
+        "roughness": "How soft the reflected studio edges are. This is not a blur: a rough conductor reflects the same room over a wider cone, so what widens is the light-to-dark transition. Zero is a mirror and shows every artefact in the height field, and a little roughness is what lets procedural metal survive being looked at closely.",
+        "tint": "The base metal. Conductors tint what they reflect, and this washes out toward white at the grazing angles rather than staying constant — which is the part most fake chrome gets wrong.",
+        "sheenColor": "The colour carried by the grazing-angle sheen.",
+        "backgroundColor": "The floor of the reflected environment, and what the vignette falls away to — so the panel edge reads as the room ending rather than as a mask laid over it."
+      }
+    },
+    "mycelium": {
+      "description": "A slime mould foraging in the dark. Every other field here is a differential equation on a grid; this one is a population — up to a million agents, each carrying a position and a heading, sampling the trail ahead of itself, turning toward whatever smells strongest and laying down more of it as it goes. The veins, the junctions and the slow reorganisation are nowhere in the code.",
+      "props": {
+        "agentCount": "How many agents forage the field, in discrete steps rather than on a slider — each value reallocates the state textures and rebuilds the point geometry, which a slider would do on every pixel of a drag. Against a fixed 1024px field this is a density: a million closes the web into fine reticulation, and a quarter of that is the same behaviour drawn as a few sparse trunks. Step down if the frame rate needs it.",
+        "speed": "Forward travel per second, against the 1024px field. Push it far past the sensor distance and an agent steps clean over a vein without ever sensing it — the colony looks fast and builds nothing.",
+        "sensorDistance": "How far ahead the three sensors sit, measured against the trail map rather than the canvas so the structure holds its scale on a narrow strip. Short is myopic and knots; long lets an agent commit to a vein it can already see.",
+        "sensorAngle": "How far off its heading an agent looks when it samples left and right. This one control decides the topology: narrow makes long parallel veins that rarely meet, wide makes a dense web that merges everywhere. Past about 45° both flanks read the same trail and the colony loses its ability to choose.",
+        "turnSpeed": "How sharply an agent can steer, in radians per second. The interesting band is where this is just under what the sensor angle asks for, so agents are always slightly behind the decision they have made. Too low and they cannot follow their own trail at all.",
+        "wander": "Random walk added to every heading, in radians per second — exploration against exploitation. Trail-following is pure positive feedback, so at zero the colony converges onto two or three trunk roads within a minute and the rest of the field goes black. This is the noise that keeps leaking agents into empty space, where they seed the next generation of branches.",
+        "decay": "Fraction of the trail surviving each 60th of a second — the colony's memory. Below about 0.95 nothing persists long enough for a second agent to find it and no structure forms; above 0.995 every path ever taken stays lit and the map fogs over.",
+        "diffuse": "Blend toward the blurred neighbourhood. Diffusion is what lets a vein be found from beside it rather than only from on it — at zero the trails are one texel wide, invisible to a sensor not already on them, and nothing ever aggregates.",
+        "deposit": "Trail laid down by one agent in one step. Against decay this is the whole economy — a cell settles at deposit over one-minus-decay, so the pair decides whether open ground stays dark while the veins pin bright, or the entire field saturates into one flat sheet.",
+        "attract": "Strength of the food source under the pointer. It is laid into the trail map rather than applied as a force, so the colony has to find it and route to it over several seconds — the veins thicken toward your cursor the way they would toward an oat flake, instead of the swarm snapping to it. 0 turns it off.",
+        "spawn": "Where the population starts and which way it faces. Scatter is uniform and low-density, so the web self-organises within a couple of seconds. Ring faces inward and has to resolve its own collision first — slower to settle, and the only one where you can watch the first branches being forced.",
+        "trailColor": "The trail itself.",
+        "background": "The dark the network grows against.",
+        "glow": "Extra light on the densest strands, where several trails have piled onto the same cell."
+      }
+    },
+    "contour": {
+      "description": "A topographic map of terrain that will not hold still. The lines are not drawn, they are found — a height field is sampled onto a grid every frame and marching squares walks it once per altitude, emitting segments wherever the land crosses that height. Nothing here knows what a ridge is; ridges are where the crossings bunch up. The pointer raises a hill the contours have to route around, and because the interval is fixed rather than the line count, that extra altitude produces extra rings instead of restretching the ones already on screen.",
+      "props": {
+        "levels": "Contours per unit of altitude — the map's contour interval, inverted into the number a reader actually wants. This is a density rather than a count: how many lines land on screen is whatever that interval yields across the range the terrain currently occupies, so raising a peak under the cursor adds rings instead of crowding the ones already drawn.",
+        "cellSize": "Spacing of the height samples, and therefore the resolution of the whole map. Contours can only turn at a cell boundary, so a coarse grid gives visibly faceted rings while a fine one costs another full field sweep every frame. Below about 10px on a wide canvas a cost cap takes over and the cell grows back on its own.",
+        "speed": "How fast the land drifts beneath the frame. It is scrolled, never regenerated — the same hills pass through and leave, which is why a feature holds its shape long enough to be recognised on the way out.",
+        "warp": "Domain warp: the sample coordinates are displaced by the field itself before it is read. At zero the map is concentric ovals and reads as a lava lamp. Raising it folds the contours into ridges, valleys and saddles, which is the point at which it starts to look surveyed rather than generated.",
+        "cursorRadius": "Width of the landform the pointer raises, as the sigma of a Gaussian. Small and sharp reads as a volcanic plug with rings stacked tight around it; wide and low reads as a swell the contours merely lean around.",
+        "cursorStrength": "Height of that landform, in the same units as the terrain. Negative digs a depression instead and the map reads as a crater rather than a hill. Zero takes the pointer off the map entirely.",
+        "indexEvery": "Every Nth contour is an index contour, drawn brighter and heavier the way a real map weights its counted lines. The emphasis is keyed to absolute altitude rather than to draw order, so a given ring keeps its weight as the land moves under it instead of the highlight crawling through the set.",
+        "lineWidth": "Weight of an ordinary contour. Index contours are always drawn at one and a half times this, so the hierarchy survives at any setting.",
+        "lineColor": "The ordinary contours. Deliberately close to the paper — they are the texture, not the subject.",
+        "indexColor": "The index contours, and the only real light on the map.",
+        "background": "The paper."
+      }
+    },
+    "rainglass": {
+      "description": "Rain on a window with a city somewhere behind it. There is no scene being blurred — the backdrop is built out of focus to begin with, so the drops have something to bend without a render target or a blur pass anywhere in the frame. Each drop is a pure function of time inside its own grid cell, which is why a thousand of them cost the same as one and a resize cannot lose the rain. They descend the way water actually does: holding by surface tension, breaking loose, running fast, stopping again — and the trail exists only above the drop that made it.",
+      "props": {
+        "intensity": "How much water is on the glass. Cells are gated by this rather than dimmed by it — a cell either has a drop in it or it does not, because a half-present drop reads as a smudge on the screen rather than as weather.",
+        "dropScale": "Drop size, by way of the grid the drops live in. Large drops means fewer, heavier runs and a window you are standing close to; small means a fine spatter that reads as distance.",
+        "speed": "How often a drop breaks loose, and how fast it runs once it has. Because the descent is a held stair rather than a fall, raising this shortens the holds as much as it quickens the slips.",
+        "wander": "How far a running drop drifts sideways as it goes. At zero they run dead straight down, which is the one thing real water on glass never does.",
+        "refraction": "How hard each droplet bends the city behind it. The offset points out of the droplet's own centre, so this magnifies rather than smears — turn it off and the drops flatten into stickers on the glass.",
+        "fog": "Condensation film over the whole pane. It is removed by what the water has touched rather than drawn between the drops, so a trail is a clean stripe cut through the fog instead of a shape sitting on top of it.",
+        "layers": "Depth planes of rain, each smaller and refracting less than the one in front. Two is enough to read as depth; the third is texture and costs a full extra evaluation of the drop field per pixel.",
+        "blur": "How far out of focus the city is. This grows the bokeh discs rather than running a kernel over a rendered scene — there is nothing sharp behind the glass to soften, which is the whole reason this stays a single pass.",
+        "tintTop": "Sky, at the top of the frame.",
+        "tintBottom": "Ground, at the bottom.",
+        "glow": "The out-of-focus lights, and the highlight that catches on a wet edge."
+      }
+    },
+    "morphing-text": {
+      "description": "A gooey blur-morph that cross-dissolves between a list of words.",
+      "props": {
+        "auto": "Loop through the words forever (off = morph once)."
+      }
+    },
+    "animated-number": {
+      "description": "Animated numeric transitions with flip, slide, fade, and bounce styles.",
+      "props": {
+        "value": "The value to display and animate to.",
+        "animationType": "Transition style between values.",
+        "duration": "Transition duration.",
+        "staggerDelay": "Delay between each digit's animation."
+      }
+    },
+    "marquee-text": {
+      "description": "A marquee that scrolls only when its text overflows the container.",
+      "props": {
+        "speed": "Scroll speed (px/s).",
+        "gap": "Gap between repetitions.",
+        "pause": "Pause at the start before scrolling."
+      }
+    },
+    "variable-proximity": {
+      "description": "Text whose letters interpolate font weight by cursor proximity.",
+      "props": {
+        "radius": "Cursor influence radius.",
+        "falloff": "How influence falls off with distance."
+      }
+    },
+    "letters-pull": {
+      "description": "A per-letter pull-up reveal — letters rise, sharpen from a blur, and fade in with a stagger.",
+      "props": {
+        "duration": "Per-letter animation duration.",
+        "delay": "Delay between successive letters.",
+        "yValue": "Rise distance of each letter.",
+        "blur": "Starting blur each letter sharpens from."
+      }
+    },
+    "scramble-text": {
+      "description": "Ciphered glyphs boiling out of noise and resolving into words — a decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
+      "props": {
+        "mode": "Decode once on mount, re-scramble on hover, or glitch forever.",
+        "charset": "Pool of cipher glyphs shown before a character settles.",
+        "duration": "Total time for the full decode cascade to resolve.",
+        "stagger": "Per-character offset of the settle deadline across the string.",
+        "speed": "How often unsettled glyphs re-roll to new noise.",
+        "glitchInterval": "Seconds between glitch bursts (continuous-glitch mode only).",
+        "flashColor": "Accent tint a character flashes as it resolves."
+      }
+    },
+    "long-shadow": {
+      "description": "Text that casts a long shadow sweeping like a sundial through the hours.",
+      "props": {
+        "shadowLength": "Reach of the cast shadow (layer count).",
+        "sweepSpeed": "How fast the sun arcs; 0 holds a fixed shadow.",
+        "angleStart": "Sundial start angle.",
+        "angleSweep": "Total arc the sun sweeps.",
+        "pingPong": "Arc back and forth (off = full rotation).",
+        "fade": "How much the shadow dissolves along its length.",
+        "skew": "Italic lean of the cast shadow.",
+        "shadowColor": "Color of the long shadow."
+      }
+    },
+    "specter": {
+      "description": "Spectral RGB-split echoes drift off the letters and dissolve into the dark.",
+      "props": {
+        "ghostCount": "Number of spectral echoes.",
+        "drift": "How far each ghost drifts before dissolving.",
+        "speed": "Drift and dissolve cycle speed.",
+        "angle": "Direction the ghosts drift toward.",
+        "stagger": "Delay between successive emissions.",
+        "blur": "Ghost softness as it dissolves.",
+        "splitColor1": "Amethyst chromatic ghost.",
+        "splitColor2": "Cyan chromatic ghost."
+      }
+    },
+    "lumen": {
+      "description": "Copy that lights up as you read it — words ahead sit dim and unfocused, and stay lit once you pass them.",
+      "props": {
+        "dimOpacity": "Opacity of words that haven't been reached yet.",
+        "fadeSpan": "Width of the reading band — words mid-transition at once.",
+        "blurAmount": "Blur on a word that hasn't been reached.",
+        "startOffset": "Point in the scroll pass where the first word brightens.",
+        "endOffset": "Point by which the last word is fully lit.",
+        "highlightColor": "Amethyst bloom on the leading edge."
+      }
+    },
+    "redact": {
+      "description": "Copy that arrives fully classified under solid bars, then declassifies word by word — each bar clearing its own word and leaving an amethyst edge behind as the only evidence it was ever there.",
+      "props": {
+        "mode": "How a bar leaves. Wipe retracts it into its own edge, slide throws it clear of the word, lift peels it off the page — wipe reads as redaction being undone, slide reads as tape being pulled.",
+        "direction": "The order words declassify in. Random is the only one that reads as a machine working through a document rather than a person reading it.",
+        "duration": "How long one bar takes to clear its own word.",
+        "stagger": "Gap between one word starting to clear and the next. At 0 the whole block lifts at once and the espionage goes out of it.",
+        "startDelay": "Dead air after the classified block lands before the first bar moves. The pause is what makes the reveal feel authorised.",
+        "barPadding": "How far each bar overhangs its word. Drawn tight to the glyphs it reads as a highlighter; give it a couple of pixels and it reads as tape laid over the page.",
+        "loop": "Bring the bars back down and run the whole sweep again, forever, instead of settling on plain text.",
+        "interval": "Seconds the plain text stays legible before the bars come back down.",
+        "barColor": "Solid ink of the bars. Near-black on purpose — a censor bar that lets any of the word through is not a censor bar.",
+        "edgeColor": "Amethyst hairline riding the retreating edge of each bar. It is the only part of the effect the eye actually tracks."
+      }
+    },
+    "split-flap": {
+      "description": "A Solari departure board. Every column walks the charset one flap at a time until it reaches its letter, so the word is never revealed — it is arrived at, with a real hinged half falling away as the next one seats behind it.",
+      "props": {
+        "charset": "Which glyphs a column walks through on its way to its letter. This is what sets the length of the journey — a digits-only board lands almost immediately, a full alphanumeric one takes its time.",
+        "flapDuration": "Time for one flap. Under about 50ms the column reads as a blur rather than as discrete cards, which throws away the whole point of the mechanism.",
+        "stagger": "Delay between one column starting and the next. At 0 the board moves as one slab; a small offset is what makes it sound like a board even in silence.",
+        "settleBounce": "Overshoot as a flap hits its stop. This is follow-through: the card has mass, so it arrives slightly past and comes back.",
+        "cardGap": "Space between one card stack and the next.",
+        "seamWeight": "The hairline across the middle of a card, where the two halves meet. Kept in the DOM rather than drawn, so the browser snaps it to the pixel grid instead of letting it shimmer on fractional scaling.",
+        "specular": "Light sweeping across a moving flap, brightest edge-on. Without it a flip reads as a rectangle changing shape rather than as a surface turning.",
+        "perspective": "Depth of the foreshortening. Lower exaggerates the hinge and puts the viewer close to the board; higher flattens it toward a straight fold.",
+        "cardColor": "Body of the cards. Its own material, not a themed surface — a departure board is a dark object in any room.",
+        "glyphColor": "The printed characters."
+      }
+    },
+    "teletype": {
+      "description": "A line of type arriving one character at a time, at a rate that varies and with a beat at every mark.",
+      "props": {
+        "charsPerSecond": "Typing rate before jitter. Above roughly 40 the reader stops perceiving individual keystrokes and starts seeing a wipe.",
+        "deleteRate": "Erase rate as a multiple of the typing rate — deleting is never as deliberate as writing. At 0 the line is not erased at all: it is cut, and the next one starts clean.",
+        "hold": "Dwell on a finished line before it is taken away. This is the only window the reader has to actually read it.",
+        "gap": "Empty beat between one line clearing and the next starting.",
+        "jitter": "Spread on the per-line rate. At 0 the machine is a metronome, which reads as a progress bar rendered in letters rather than as typing.",
+        "punctuationPause": "Extra beat after a comma, period, dash or colon. The pause a reader hears at a mark is the silence that follows it, so it lands after the glyph, never before.",
+        "caret": "Shape of the cursor trailing the text.",
+        "caretBlink": "Seconds per blink cycle. The caret holds steady while characters are arriving and only blinks once the line is at rest — a terminal does the same, and the contrast is what makes the typing read as live.",
+        "loop": "Wrap to the first line when the list runs out.",
+        "reserveSpace": "Hold the box at the size of the longest line. Turn it off to watch everything below the type walk up and down the page — which is the reason it is on.",
+        "accentColor": "The caret."
+      }
+    },
+    "reflow": {
+      "description": "Text whose words keep their identity when the line breaks move — narrow the measure and the sentence travels instead of re-wrapping.",
+      "props": {
+        "columnWidth": "Width of the text column as a percentage of its container — the measure. Dragging this is the reflow, with not one word changing.",
+        "stiffness": "Spring tension on the travel.",
+        "damping": "Spring friction on the travel.",
+        "stagger": "Delay between one word starting its travel and the next. The index is capped at twenty, so a long paragraph cannot leave its tail sitting still in plain sight.",
+        "enterScale": "Size a word enters at and leaves at.",
+        "wordGap": "Space between words. A margin rather than a space character, so a word leaving the sentence does not strand the gap that followed it.",
+        "lineHeight": "Leading.",
+        "align": "Text alignment.",
+        "auto": "Advance through the phrases on a timer.",
+        "interval": "Time on each phrase.",
+        "traceMoves": "Tint a word for as long as it is travelling. A debugging affordance that earned its place — it is the only way to prove a word moved rather than being destroyed and re-created somewhere else.",
+        "accentColor": "The trace tint."
+      }
+    },
+    "metallic-text": {
+      "description": "Chrome poured into a headline — a metal ramp clipped to real glyphs, a specular travelling across them, and a tinted wake following a beat behind.",
+      "props": {
+        "sweepSpeed": "Time for the highlight to cross the line once.",
+        "sweepWidth": "Width of the specular band as a share of the text box. Narrow reads as polished chrome, wide as brushed steel — the band is the light source, so its size is the softness of the reflection.",
+        "sweepAngle": "Rake of the band off vertical. Stops short of ±90 on purpose: at a right angle the band lies parallel to its own travel and the sweep stops reading as movement at all.",
+        "contrast": "Separation between the dark and light bands of the metal. This is what decides whether the text reads as chrome or as a grey gradient — the horizon between the two is the reflection of a ground plane.",
+        "specular": "Brightness of the travelling highlight.",
+        "lag": "How far the wake trails the highlight. At zero the two move as one gradient; raise it and the light gains weight, because the trailing edge is still arriving when the leading edge has gone.",
+        "sweep": "Whether the light returns the way it came or restarts from the same edge each pass.",
+        "grain": "Brushed striations along the sweep axis. Directional rather than random — milled metal has a grain direction, and noise reads as dirt on the screen instead.",
+        "baseColor": "The metal. Also the fallback colour: where background-clip on text is unsupported the element renders as plain text in this colour rather than as an invisible headline.",
+        "highlightColor": "The specular.",
+        "accentColor": "Tint of the wake."
+      }
+    },
+    "molten": {
+      "description": "Type that melts. Letters sag under their own weight, string out, and fuse into one surface where they touch — because the glyphs are a coverage field cut by a threshold rather than shapes being moved, so two stems raise the coverage between them past the cut and one outline closes over both. The word underneath is a real text node the whole time: selectable, searchable, and read correctly aloud while it runs.",
+      "props": {
+        "mode": "What drives the melt. Loop runs unattended; hover melts while the pointer is over the word and reforms when it leaves; hold melts only while the pointer is down, which turns the effect into a control rather than an ambient.",
+        "melt": "How far the glyphs sag at the bottom of the cycle. Past about 0.8 the letterforms stop being readable at the extreme, which is either the point or a bug depending on how long the cycle holds there.",
+        "viscosity": "How slowly the material yields — a shaping term on the sag, not a speed. High viscosity means the cap line has barely moved while the baseline is already stringing, which is what separates melting wax from a linear squash.",
+        "cycle": "Time for one full sag and reform. The recovery is deliberately the faster half — a symmetric cycle reads as a loop, an asymmetric one reads as a material.",
+        "threshold": "Where the coverage field is cut into ink. Below 0.5 the glyphs fatten and neighbouring stems merge early; above it they thin and the melt breaks into droplets sooner. The only control that changes the weight of the type without changing the font.",
+        "softness": "Width of the cut either side of the threshold. Narrow gives a hard vector edge; wide is what makes two approaching stems fuse into one blob instead of overlapping — this is the gooey merge, and the reason the glyphs are a field and not a mask.",
+        "drip": "Vertical elongation under the sag, so a falling stroke stretches into a string before it separates. At zero the letters slide down intact, which looks like a transform rather than a phase change.",
+        "wobble": "Noise on the displacement. Zero is a clean symmetric melt; above about 0.6 the word stops surviving the bottom of the cycle.",
+        "phase": "How far each column lags the one to its left. At zero the whole line sags as a slab; raise it and the melt travels across the word, which reads as heat arriving rather than as gravity being switched on.",
+        "baseColor": "The type at rest.",
+        "meltColor": "Mixed in by local displacement, so whatever has moved furthest is hottest. Tying the colour to the field rather than to time means a hover melt and a loop melt colour identically with no second curve."
+      }
+    },
+    "neon": {
+      "description": "A neon sign, with everything that is wrong with a neon sign. Tubes strike one at a time rather than together, each settling at its own moment inside the ignition; the steady state carries a mains hum; and every so often one tube gives up for a third of a second and comes back. The glow is baked once per letter into a sprite, so a frame is a handful of draws no matter how wide the word — and the word itself never stops being a real, selectable text node underneath.",
+      "props": {
+        "mode": "What drives the ignition. Loop runs the sign as a shopfront does — lit, cut, struck again. Hover strikes it under the pointer and kills it a quarter of a second after the pointer leaves, because a sign does not fade out. Steady skips the start-up entirely and leaves only the hum and the failing tube.",
+        "tubeColor": "The gas.",
+        "glow": "Halo spread, and also the layout room reserved for it — the root pads itself by twice this, because a halo that leaves its box gets painted over by whatever the page put beside it. Changing this rebakes every sprite, so it is a setting rather than something to animate.",
+        "core": "How white-hot the centre of the tube runs against the saturated halo around it. It never reaches pure white on purpose: a white centre reads as a lightbulb behind a coloured filter rather than as excited gas.",
+        "ignition": "Seconds from cold to steady. Each letter picks its own settle point inside this window and its chance of holding climbs as it warms, so the stutter thins out by itself instead of stopping on a timer.",
+        "cycle": "Seconds lit before the power cuts and the sign strikes again. The dark between is fixed and short — long enough to register as off, short enough that nobody walks away during it.",
+        "hum": "Depth of the mains hum once a tube is lit. Two frequencies rather than one, because a single sine reads as a pulse effect; the beat between them is what reads as electricity.",
+        "flicker": "How often a tube gives up for a moment. One roll every one and a bit seconds decides whether a letter fails and which one, so failures are occasional and specific rather than a permanent shimmer across the whole word.",
+        "offGlass": "Show the dark glass where a tube is unlit. It carries no glow at all — a dark tube that still glows is the tell that the sign was never really off."
+      }
+    },
+    "rime": {
+      "description": "Hoarfrost taking a word — Molten's opposite number, the same idea of type as a coverage field run cold. Crystal tips seeded on the glyph edges creep across the letters, fork at a fixed lattice angle, and die where they run out of glyph or hit ice already there, so the cost tracks the growing edge rather than the area. The text underneath is never redrawn: it stays a real span at its real colour the whole time, which makes the thaw nothing more than fading the ice off type that was always there.",
+      "props": {
+        "mode": "What drives the freeze. Loop grows the crystal, holds it, thaws it and starts a new one. Hover rests frozen and clears under the pointer, regrowing once it has fully melted. Hold is the mirror of a melt: ice advances only while the pointer is down and retreats the moment it lifts.",
+        "growth": "How fast the crystal front advances. This is a budget of steps per second shared across every live tip, so a heavily branched frost spreads each tip more slowly — which is exactly how a real front behaves as it runs out of room.",
+        "branching": "How readily a tip splits in two, and the difference between needles and ferns. Forks are quantised to a sixty-degree lattice angle on purpose: free angles read as mould rather than as ice.",
+        "density": "Ceiling on how many tips may be alive at once, which decides how much ice the letters hold before the front runs out of room and the freeze completes. Low leaves the type legible under a tracery; high buries it.",
+        "seeds": "How many places the frost starts from. Every seed lands on a glyph edge rather than in the middle of a stem, because that is where condensation actually nucleates — and it is why the ice always looks like it arrived from outside the letter.",
+        "thaw": "How fast the ice clears. The crystal is not redrawn to melt it — the overlay simply fades — so this is free at any speed and the word beneath is legible throughout.",
+        "hold": "Seconds spent at full freeze before the thaw begins. The pause is what lets the finished crystal be looked at; without it the loop reads as a shimmer rather than as a process with an end.",
+        "sparkle": "Glints on the facets, sampled from points the front actually passed through rather than scattered over the box. They fade with the thaw, so the last thing to go is the light.",
+        "frostColor": "The ice. The crystal is stored white and tinted on the way out, so this repaints the whole thing without touching a single stored segment.",
+        "baseColor": "The type underneath, which never moves and is never redrawn."
+      }
+    },
+    "pixel-transition": {
+      "description": "Reveal a second layer through a random pixelated dissolve on hover.",
+      "props": {
+        "gridSize": "Pixel grid resolution.",
+        "pixelColor": "Color of the dissolve pixels.",
+        "animationStepDuration": "Duration of the dissolve.",
+        "once": "Play only once instead of on every hover."
+      }
+    },
+    "border-glow": {
+      "description": "A cursor-proximity gradient border with an outer glow.",
+      "props": {
+        "glowColor": "Glow color.",
+        "glowRadius": "Outer glow radius.",
+        "glowIntensity": "Glow brightness.",
+        "coneSpread": "Angular spread of the glow cone.",
+        "edgeSensitivity": "How close to the edge the glow activates.",
+        "borderRadius": "Corner radius.",
+        "fillOpacity": "Border fill opacity.",
+        "animated": "Play an intro sweep on mount."
+      }
+    },
+    "spotlight-shell": {
+      "description": "A card shell with 3D magnetic tilt, radial glow, and a shimmer sweep.",
+      "props": {
+        "accentColor": "Accent color for the glow and accent line."
+      }
+    },
+    "animated-hamburger": {
+      "description": "A three-bar hamburger that morphs to an X, driven by a toggle prop.",
+      "props": {
+        "toggle": "Toggle between the hamburger and the X."
+      }
+    },
+    "morph-dialog": {
+      "description": "A dialog that morphs open from its trigger via shared-layout animation, with elements that travel between card and panel.",
+      "props": {
+        "stiffness": "Spring stiffness of the morph.",
+        "damping": "Spring damping — lower rings longer.",
+        "radius": "Panel corner radius.",
+        "blurBackdrop": "Frosted blur on the backdrop scrim.",
+        "autoFocus": "Focus the first focusable element on open."
+      }
+    },
+    "blueprint-card": {
+      "description": "A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
+      "props": {
+        "accentColor": "Accent color for the frame, nodes, and glow.",
+        "dashed": "Dashed outer border; solid when off.",
+        "dotSize": "Diameter of the corner nodes.",
+        "glowIntensity": "Strength of the bottom gradient glow.",
+        "animated": "Draw the frame in on mount.",
+        "duration": "Draw-in animation duration."
+      }
+    },
+    "corner-letters": {
+      "description": "Four glyphs pinned to the container corners that blur-and-scale in on mount and dissolve out on exit.",
+      "props": {
+        "visible": "Mounts and unmounts the glyphs — toggle to replay.",
+        "stiffness": "Spring stiffness of the entrance.",
+        "blur": "Blur the glyphs travel from and to.",
+        "scaleFrom": "Starting scale of each glyph.",
+        "offset": "Inset from the corners.",
+        "size": "Glyph font size.",
+        "color": "Glyph color."
+      }
+    },
+    "hover-list": {
+      "description": "A display-type list where a shared accent block springs between rows on hover while the text indents and inverts.",
+      "props": {
+        "highlightColor": "Color of the sliding highlight block.",
+        "invertedColor": "Text and icon color while a row is highlighted.",
+        "stiffness": "Spring stiffness of the sliding highlight.",
+        "damping": "Spring damping — lower rings longer.",
+        "indent": "How far the row content slides right on hover.",
+        "textSize": "Display type scale of the rows.",
+        "showIcon": "Rotate a crosshair icon in on hover.",
+        "rounded": "Corner radius of the highlight block."
+      }
+    },
+    "preloader": {
+      "description": "A percentage-counting load overlay — spinning ring, eased counter, and a fade-out that reveals the page beneath.",
+      "props": {
+        "duration": "Simulated load time.",
+        "ringColor": "Color of the spinner, counter, and label.",
+        "overlayColor": "Overlay background color.",
+        "ringSize": "Ring diameter.",
+        "spinSpeed": "Seconds per spinner revolution.",
+        "holdDelay": "Pause at 100% before the fade.",
+        "fadeDuration": "Duration of the fade-out.",
+        "showLabel": "Show the caption under the counter."
+      }
+    },
+    "stagger-menu": {
+      "description": "A menu overlay that blooms open as a clip-path circle spring while items stagger in with blur and rotation, then collapses back to its pill.",
+      "props": {
+        "openStiffness": "Bloom spring stiffness — low values settle slowly.",
+        "stagger": "Delay between each item's entrance.",
+        "blur": "Blur the items travel from and to.",
+        "overlayColor": "Overlay background color.",
+        "overlayOpacity": "Overlay background opacity."
+      }
+    },
+    "magnetic-button": {
+      "description": "A button that leans into your cursor — caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
+      "props": {
+        "pullStrength": "Fraction of the cursor offset the button follows.",
+        "radius": "Field radius where the magnetic pull begins.",
+        "stiffness": "Spring stiffness of the pull and return.",
+        "damping": "Spring damping — lower overshoots and rings.",
+        "auraColor": "Color of the proximity glow.",
+        "auraSize": "Spread of the aura at full proximity.",
+        "ripple": "Emit a dark ripple burst on click.",
+        "rippleColor": "Color of the click ripple."
+      }
+    },
+    "shadow-cursor": {
+      "description": "A custom cursor with a shadow at its heel — a precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage; the page cursor is never touched.",
+      "props": {
+        "dotSize": "Size of the leading precise dot.",
+        "trailSize": "Size of the lagging trailing ring.",
+        "stiffness": "Spring stiffness of the trailing ring — higher lags less.",
+        "damping": "Spring damping of the trailing ring.",
+        "cursorColor": "Color of the dot and trailing ring.",
+        "blendMode": "Mix-blend-mode of the cursor over content beneath it.",
+        "poolScale": "How much the trail swells when over an interactive element."
+      }
+    },
+    "torchlight": {
+      "description": "Content hidden in darkness; the cursor is a torch that reveals only what it touches.",
+      "props": {
+        "radius": "Torch light radius.",
+        "softness": "Falloff softness of the light edge.",
+        "darkness": "How hidden the surrounding content is.",
+        "restReveal": "Ambient reveal away from the torch.",
+        "smoothing": "How much the light lags the cursor.",
+        "flicker": "Subtle torch flicker (off under reduced motion).",
+        "torchColor": "Amethyst torch tint."
+      }
+    },
+    "dissolve": {
+      "description": "An element disintegrates into drifting shadow-motes on dismiss, and reforms on command.",
+      "props": {
+        "dismissed": "Toggle to disintegrate; toggle back to reform.",
+        "particleGap": "Sampling stride; lower is finer motes.",
+        "drift": "How far the motes scatter.",
+        "duration": "Length of the dissolve.",
+        "stagger": "Spread of per-mote start times.",
+        "gravity": "Vertical bias; negative rises like ash.",
+        "swirl": "Turbulent curl on the mote paths.",
+        "reformOnTrigger": "Reassemble from motes when re-triggered.",
+        "moteColor": "Amethyst tint blended into the shadow-motes."
+      }
+    },
+    "tilt": {
+      "description": "A machined card that leans toward the pointer in 3D while a specular sheet slides across its face.",
+      "props": {
+        "maxTilt": "Maximum lean at the card's edge.",
+        "perspective": "Depth of the 3D projection — lower exaggerates it.",
+        "glare": "Opacity of the specular sheet, matte → mirror.",
+        "glareSize": "Glare radius as a fraction of card width.",
+        "hoverScale": "Scale applied while the pointer is over the card.",
+        "smoothing": "How long the card takes to catch up to the pointer.",
+        "glareColor": "Tint of the specular sheet."
+      }
+    },
+    "sigil": {
+      "description": "An SVG crest that traces itself in when it scrolls into view, stroke by stroke.",
+      "props": {
+        "duration": "Time for a single stroke to draw.",
+        "delay": "Wait after entering view before the first stroke.",
+        "strokeWidth": "Stroke width in viewBox units.",
+        "glow": "Bloom trailing the stroke.",
+        "replayOnLeave": "Re-arm on exit so the crest redraws on the way back.",
+        "easing": "Curve the stroke advances on.",
+        "strokeColor": "Amethyst stroke."
+      }
+    },
+    "rift": {
+      "description": "A draggable tear between two overlaid scenes — push past an edge and it resists, then snaps back.",
+      "props": {
+        "position": "Resting position of the tear.",
+        "handleWidth": "Thickness of the divider line.",
+        "rubberBand": "Give when dragged past an edge, hard stop → loose.",
+        "angle": "Lean of the tear off vertical.",
+        "snapBack": "Return to the resting position on release.",
+        "glow": "Bloom along the divider.",
+        "accentColor": "Amethyst divider."
+      }
+    },
+    "approach": {
+      "description": "A tile whose overlay enters from the exact edge your cursor crossed, and leaves the way you go.",
+      "props": {
+        "overlayOpacity": "Opacity of the overlay panel.",
+        "duration": "Travel time of the overlay.",
+        "skew": "Shear while the overlay is off-position.",
+        "blur": "Blur on the overlay while it is moving.",
+        "offsetDistance": "How far off-tile the overlay starts.",
+        "overlayColor": "Amethyst overlay panel."
+      }
+    },
+    "hold": {
+      "description": "A confirm that has to be earned — the ring fills while you hold, snaps shut when it commits, and empties on a different curve entirely if you let go early.",
+      "props": {
+        "duration": "How long a full press has to be held before it commits. Under about 600ms people let go by reflex; past 2s they assume it is broken.",
+        "indicator": "Where the progress lives — a ring traced around the glyph, a bar under the control, or the control's own face flooding left to right.",
+        "threshold": "Fraction of the track that counts as committed. Below 1 the last sliver closes itself, so the press lands a beat before the eye expects it — that early snap is what makes it feel decisive rather than punctual.",
+        "rewindRate": "How much faster a cancelled hold empties than it filled. At 1 it rewinds the same tape; above 2 the release reads as a spring letting go, which is the entire point of an asymmetric curve.",
+        "strokeWidth": "Weight of the progress track. Thin reads as instrumentation, thick reads as a toy.",
+        "holdScale": "How far the control sinks under the finger. The press feedback is doing more work here than the ring is — take it to 1 and the hold stops feeling physical.",
+        "commitScale": "Overshoot the control pops to at the instant of commit, before settling. This is the receipt.",
+        "successHold": "How long the confirmed state stays on screen before the control re-arms itself.",
+        "accentColor": "Amethyst of the filling track and the confirmed state.",
+        "trackColor": "The unfilled remainder. Keep it close to the surface underneath — a high-contrast track turns the ring into a bullseye."
+      }
+    },
+    "aperture": {
+      "description": "A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism — wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
+      "props": {
+        "bladeCount": "How many leaves in the mechanism. Low counts give the hard hexagonal bokeh of a cheap lens; past nine the opening is indistinguishable from a circle, which is exactly what expensive glass is sold on.",
+        "openness": "Where the blades rest, 0 shut to 1 wide. At 0 they cross past the centre rather than merely meeting it — an iris that only just touches leaks light.",
+        "duration": "Time for one full open or close.",
+        "detent": "Overshoot as the mechanism seats. 0 arrives dead, which reads as software; a little bounce reads as a part with mass hitting its stop.",
+        "bladeCurvature": "Curvature of each blade's inner edge. The mechanism is derived from the opening range, so this bends the leaf without touching the travel: flatter blades cut a rounder, more regular polygon, tighter ones pull the scallop corners out into a star.",
+        "edgeHighlight": "Strength of the seam along each leaf's inner edge, and of the bezel. Each seam is cut by the leaf that lies over it — named rather than left to the drawing order, because a leaf stack is a ring and painter's order is a line. That is what puts exactly one line at every corner of the opening, wide open and shut alike.",
+        "housingInset": "Width of the machined ring inside the rim. It is drawn over the blades, so the housing reads as the part they are seated in rather than one more leaf.",
+        "autoOpen": "Open and shut on a loop. Turning it off hands the mechanism to the openness slider.",
+        "bladeColor": "Body of the blades, the housing, and the barrel floor behind them. Its own material rather than a themed surface — a light theme must not put a white ring around a lens.",
+        "edgeColor": "Amethyst on the blade seams and the bezel."
+      }
+    },
+    "segmented": {
+      "description": "A segmented control whose indicator travels on a shared layout id and smears in the direction it is moving.",
+      "props": {
+        "indicator": "How the active segment is marked. All three are the same travelling element at different settings — the shared layout id does not change, so switching between them costs no extra animation code.",
+        "sizing": "Auto sizes each segment to its label, so the indicator resizes as well as travels — the half of the FLIP that equal-width tabs never show. Equal splits the row evenly and fills the container.",
+        "density": "Padding and type size. Compact is the toolbar setting; it shortens the travel too, which is why the smear reads more subtly there.",
+        "radius": "Corner radius of the indicator and the segments. motion corrects the radius through the layout animation, so a rounded indicator does not go oval while it is resizing.",
+        "stiffness": "Spring tension on the travel. It also drives the proxy spring the deformation is read from, so the smear stays in phase with the movement at every setting rather than at the one it was tuned on.",
+        "damping": "Spring friction. Low lets the indicator ring past the segment and come back, which the smear follows in both directions; high arrives dead and barely deforms at all.",
+        "smear": "How hard the travel deforms the indicator. The stretch is along the direction of movement and anchored at the leading edge, so it trails behind rather than running ahead. Zero is a rigid box that slides.",
+        "glow": "Accent bloom under the indicator. It travels with the box and takes the same deformation, so it reads as light coming off the thing rather than a separate shape following it.",
+        "accentColor": "The indicator, its bloom, and the label of the active segment when the indicator is not filling it."
+      }
+    },
+    "tether": {
+      "description": "A popover that grows out of the corner nearest its trigger, and moves that origin when it flips.",
+      "props": {
+        "side": "Preferred side. The transform origin is derived from the side the panel actually resolved to, never this one — a flip that keeps the requested origin grows the panel away from the trigger it just moved to.",
+        "align": "Where the panel sits along that side. It moves the origin and the caret together, so a start-aligned panel below the trigger grows down and to the right out of the button's left corner.",
+        "offset": "Gap between trigger and panel. Padding rather than margin: a pointer crossing the gap on its way into a hover-opened panel never leaves the component, so the panel does not close under the cursor.",
+        "stiffness": "Spring tension on the pop. High enough to feel like the panel is already there by the time the eye arrives.",
+        "damping": "Spring friction. A little overshoot is the pop; too little and the panel wobbles, which on a menu reads as unresponsive rather than lively.",
+        "popScale": "Size the panel grows from. At 1 the origin work is invisible and the entrance is a plain fade — worth setting once to see what the rest of the component is buying.",
+        "arrow": "Caret on the tethered edge. It sits where the panel is anchored, so it stays pointing at the trigger through a side change without any repositioning code.",
+        "flip": "Move to the opposite side when the preferred one would overflow the viewport. The fit test reads the panel's layout box rather than its bounding rect, because the rect carries the entrance scale and would decide using a box smaller than the one about to be there.",
+        "openOn": "What opens the panel. Click also moves focus into it; hover deliberately does not, and answers focus on the trigger instead so the keyboard is not locked out of a pointer-only affordance.",
+        "closeDelay": "Grace period before a hover-opened panel closes. The timer also refuses to fire while focus is still inside, so a pointer wandering off cannot destroy the element someone is tabbing through.",
+        "radius": "Panel corner radius.",
+        "accentColor": "The rule on the tethered edge and the caret. Both move with a flip, so the panel keeps pointing back at its origin on whichever side it ended up."
+      }
+    },
+    "inline-edit": {
+      "description": "Text that becomes its own input with nothing moving — one padded box, two contents, sized in CSS.",
+      "props": {
+        "commitOn": "Blur commits when focus leaves. Explicit grows a confirm and a cancel outside the box and treats losing focus as a cancel. Both are defensible, which is why it is a prop rather than a decision.",
+        "stiffness": "Spring tension on the border, wash and ring arriving. This is the only thing that animates — everything else is already exactly where it will be.",
+        "damping": "Spring friction on the same. Low overshoots the colour, which on a border reads as a flash rather than as bounce.",
+        "underline": "How the display state says it is editable. A text decoration rather than a border, because a border would have to be reserved in the editing state too — and none is the honest option for a row that already announces itself some other way.",
+        "padX": "Horizontal padding. Shared by both states by construction: it lives on the shell, which never unmounts, so the two contents cannot disagree about it.",
+        "padY": "Vertical padding. The one that shifts every row below it when an inline editor gets this wrong.",
+        "radius": "Corner radius of the shell.",
+        "selectOnEdit": "Select the whole value on entering edit, so typing replaces it. Off puts the caret where the click landed, which is the right behaviour for a long value being amended rather than renamed.",
+        "allowEmpty": "Accept an empty commit. Off puts the previous value back, on the grounds that a blank field is a mis-click far more often than an intention.",
+        "showPencil": "Pencil on hover and keyboard focus. Absolutely positioned outside the shell — anything rendered inside it changes the width of the box the component exists to hold still.",
+        "multiline": "A textarea that grows by line instead of a single-line field. The growth is the same CSS trick either way: an invisible copy of the draft sized in the same grid cell, so nothing is measured in JavaScript.",
+        "accentColor": "The border, wash and ring of the editing state, and the underline of the display state. Expected as a 6-digit hex: the transparent variants are built by suffix so the fade runs on one interpolation rather than between two colours."
+      }
+    },
+    "crossing": {
+      "description": "A gallery-to-detail crossing on the View Transitions API, where one element is the same object in both views.",
+      "props": {
+        "duration": "Length of the crossing. Applied to the shared elements and the view together through pseudo-element rules the component scopes to itself, so it never retimes a transition something else on the page is running.",
+        "easing": "Curve on the travel. Expressive arrives fast and settles; standard is the material curve; linear is there to show what the easing is worth, which on a morph is most of it.",
+        "shareTitle": "Carry the title across as a second shared element. Off, only the tile travels and the title cross-fades with the rest — the clearest way to see what a shared element buys over a crossfade.",
+        "exit": "What the outgoing copy of the tile does while the incoming one arrives. Hold keeps it opaque underneath and is the default: it is the only one with no instant where two gradients are both half there. Fade is the browser's own behaviour, kept so the difference is visible; slide sends the old one off as the new lands.",
+        "radius": "Corner radius of the frame and, three px in, the tiles.",
+        "viewTransition": "Run the API at all. Off takes exactly the path an unsupported browser takes — the state update, bare — which is the only honest way to see the fallback. A view transition cannot be shortened, only skipped.",
+        "announce": "Announce the destination in a live region. A view transition is invisible to assistive tech, so a crossing that says nothing is a dead end for anyone not watching the pixels.",
+        "accentColor": "Focus ring, and the mark on the card you came back from — drawn only once the crossing has finished. Anything painted on the shared element while it is in flight is captured into the snapshot and travels across the frame with it."
+      }
+    },
+    "reorder": {
+      "description": "A sortable list that answers to a finger and to a keyboard equally — grab a row, and the rest step aside to make the space.",
+      "props": {
+        "axis": "Which way the list runs, and which arrow keys move a row.",
+        "stiffness": "Spring tension as the displaced rows close up. This is the only motion in the component that is not under your finger, so it is the one that decides whether the list feels attached to the drag.",
+        "damping": "Spring friction on the same.",
+        "handle": "Restrict the drag to the grip. Off makes the whole row the surface, which is quicker to hit and costs you text selection and a scroll gesture that starts on a row.",
+        "lift": "Scale of a row while it is off the ground. Past about 1.06 the row stops reading as lifted and starts reading as a different row.",
+        "liftShadow": "Shadow cast under a lifted row.",
+        "gap": "Space between rows.",
+        "radius": "Row corner radius.",
+        "density": "Row padding.",
+        "showIndex": "Print the position of each row. Worth leaving on wherever the order is the data rather than a preference — it is the only on-screen confirmation that a keyboard move landed where the announcement said it did.",
+        "accentColor": "Grip tint, and the outline on a row the keyboard is carrying. A pointer drag shows itself by moving; a keyboard grab has to be drawn."
+      }
+    },
+    "holofoil": {
+      "description": "Holographic trading-card foil over real content. The diffraction band travels against the tilt while the specular follows it, and the flake only lights where the rainbow currently falls — which is what stops the whole thing reading as one gradient sliding around.",
+      "props": {
+        "maxTilt": "Maximum lean at the card's edge. The tilt is only the carrier here — set it to zero and the foil still moves, because the bands are driven by pointer position rather than by the rotation.",
+        "perspective": "Depth of the projection. Lower exaggerates the lean; the value that reads as expensive is nearly always further away than instinct suggests.",
+        "foil": "Which diffraction pattern the laminate carries. Rainbow is the repeating twelve-stop spectrum a real holographic sheet produces — it repeats rather than running one rainbow across the card. Reverse runs it the other way so the band travels against the tilt, which is what most people actually recognise as foil.",
+        "foilIntensity": "Strength of the diffraction band. Past about one it stops being laminate and starts being a sticker.",
+        "sparkle": "Density of the flake. It is masked by the diffraction band rather than laid over the card, and that coupling is the entire reason the specks read as suspended inside the laminate instead of as dust on your screen.",
+        "glare": "The broad specular band, kept separate from the foil on purpose. Foil is diffraction and moves against the tilt; glare is reflection and follows it. Running both, opposed, is what gives the surface a material.",
+        "idleDrift": "How much the foil keeps moving with no pointer on it, on two incommensurate rates so the idle never settles into an obvious period. A card in a case is never quite still, and a completely dead card in a grid reads as an image rather than an object.",
+        "settle": "Seconds the card takes to catch up to the pointer. Near zero it is welded to the cursor and reads as a texture map; too high and it lags far enough that the foil stops feeling attached to your hand.",
+        "blendMode": "How the foil composites onto whatever you wrapped. Colour-dodge behaves like real foil — it blows out where the card is already bright and does almost nothing in the shadows. Screen is the safe one on a light card.",
+        "sheenColor": "The colour carried by the specular sheen."
+      }
+    },
+    "lens": {
+      "description": "A glass lens you drag across live content, bending it through an SVG displacement field with a real bevel and three-channel dispersion. It refracts a live duplicate of its own children rather than the page backdrop — which is the only version of this effect that works in Chrome, Safari and Firefox alike.",
+      "props": {
+        "size": "Diameter of the disc, measured against the shorter side of whatever it is dropped into rather than in pixels — so the glass keeps its proportion in a wide hero and in a narrow column alike, and can never outgrow the box on either axis. The displacement map is rasterised once at a fixed resolution and stretched to fit, so dragging this is cheap; regenerating a bitmap per frame would cost far more than the pixels are worth.",
+        "refraction": "How far the map pushes the content, and the one number this component is about. It runs through the filter property on a live duplicate rather than through backdrop-filter, because backdrop-filter with an SVG reference is Chromium-only — and CSS.supports reports true in WebKit and Gecko too, so the capability cannot even be detected honestly.",
+        "edgeThickness": "How much of the radius is bevel. Real glass does nearly all of its bending in the last fifth, which is why displacing evenly across the whole disc gives a soap bubble rather than a lens.",
+        "blur": "Softening behind the glass, and it ships at zero on purpose. Blur is the fastest way to make a lens look like a smudge — real glass is sharpest dead centre, so anything past about three stops being an optic and becomes a frosted coaster you cannot read through. At zero the blur is dropped from the filter list rather than written as blur(0px), which would still buy a render surface for no visible effect.",
+        "chromatic": "Separation between the three channels' displacement — three real passes, isolated by colour matrices and recombined additively. Scaled by the disc rather than fixed in pixels, so the same setting is the same optic at any size. Glass disperses; a single pass with a tinted edge is a smear pretending to be physics.",
+        "magnify": "Scale applied to the content inside the disc. It is a real transform rather than a displacement, because displacement can only resample pixels that are already there — faking magnification with it softens the entire window, which is exactly what makes most browser lenses read as a smear. Below one it is a fisheye pushed the wrong way: a real optic, and one that looks broken to everyone who is not an optician.",
+        "shimmer": "Speed of the specular travelling the rim. It is the only thing here that moves on its own, and it is what stops a parked lens looking like a screenshot.",
+        "friction": "How much of a throw survives, applied per second rather than per frame so the same flick coasts the same distance on a 60Hz and a 120Hz display.",
+        "bounded": "Which box holds the lens in, and what it is looking at. On, it stays inside its container and magnifies a live duplicate of the children you handed it. Off, it is portalled to the body and bound to the viewport instead — dropping the container's own clip is not enough, because any ancestor that clips wins and on a real page there is always one — and what it magnifies becomes the whole page. Either boundary resists and reverses rather than stopping dead; a thrown object that halts against an invisible wall reads as a bug rather than as a boundary. The page is duplicated for real, because no browser API lets an element read arbitrary rendered content: backdrop-filter cannot magnify and is Chromium-only. That copy is a snapshot rather than a live tree, re-taken on every grab, so it cannot carry a running animation, canvas pixels or component state.",
+        "rimColor": "The colour of the rim highlight, masked to the outermost two pixels so it reads as the lit edge of the glass instead of a ring drawn on top of it."
+      }
+    },
+    "passcode": {
+      "description": "A one-time-code field whose cells answer every keystroke: each character lands compressed and springs back, a paste distributes across the row rather than filling it on one frame, a wrong code shakes and clears itself, and a right one folds the whole row into a tick. Underneath there is exactly one real input holding the whole code — which is what keeps SMS autofill, password managers, select-all and a screen reader working, none of which survive six inputs with maxLength one.",
+      "props": {
+        "length": "Cells in the code. Six is the industry default because it is about the longest string most people can hold in working memory between reading it and typing it — the control exists so you can feel where that stops being true.",
+        "mode": "What the field accepts. Numeric also asks for the number pad, which matters far more on a phone than the validation does — an alphanumeric code field that opens a full keyboard costs the user two taps every single time.",
+        "mask": "Render dots instead of characters. Off by default on purpose: a one-time code is worthless a minute after it arrives, and masking it only stops the person entitled to read it from checking their own typing.",
+        "stiffness": "Spring tension of the per-character pop. High enough to land inside the gap between two fast keystrokes, or the cells queue up behind a quick typist and the feedback arrives after the character it is confirming.",
+        "damping": "Spring friction. Low rings past and settles, which is the difference between a cell that acknowledges a keystroke and one that merely updates.",
+        "anticipation": "How far a cell compresses before it springs back. A brief gather in the opposite direction is what makes the pop read as the cell reacting rather than as the cell being resized — at zero it is a plain overshoot and noticeably flatter.",
+        "pasteStagger": "Delay between cells as a pasted or autofilled code distributes. Zero fills every cell on one frame, which is honest and reads as a glitch; the stagger turns an instantaneous state change into something the eye can follow.",
+        "shakeAmplitude": "Lateral travel of the rejection. It moves the whole row rather than the cells individually — a row that shakes has been judged, a set of cells that each shake looks broken.",
+        "autoSubmit": "Judge the code the moment the last cell fills instead of waiting for a button. Correct when a wrong answer costs nothing; wrong the instant it does.",
+        "submitDelay": "Pause between the last character landing and the verdict. It exists so the final cell finishes its own pop before the row is judged — validating on the same frame steals the confirmation of the keystroke that caused it, and the user never learns their last character registered.",
+        "accentColor": "The focused cell's ring, the filled border, the caret, and the success tick.",
+        "errorColor": "The rejection. It takes the cell borders rather than flooding the fills, so the code you typed stays readable while you are being told it is wrong."
+      }
+    },
+    "dial": {
+      "description": "A machined rotary knob: angular drag with detents you can feel on the way past, inertia on a flick, and a spring that settles into the nearest stop. The angle lives in a motion value rather than in React state — a drag writes it sixty times a second and a spring more often than that — so the only thing React holds is the detent index, and only when that integer actually changes. Arrow keys step through the same spring the hand does, so the keyboard is not a second, worse path to the same control.",
+      "props": {
+        "detents": "Stops across the sweep. This is the resolution of the control and it changes how the drag feels as much as how it reads: few stops far apart give a decisive click between settings, many close together give something closer to a continuous ramp with a texture.",
+        "sweep": "Angular range, centred on twelve o'clock. Two hundred and seventy is the instrument convention because it leaves a visible gap at the bottom — the eye reads the gap as the end of the scale, so both limits are legible without a label. At a full turn there are no ends to see.",
+        "stiffness": "How hard the spring pulls toward the chosen stop after release. High makes a knob that arrives the instant you let go; low makes one with weight, where a flick keeps travelling for a moment after the finger is gone.",
+        "damping": "How much of that spring's energy is absorbed. Below about fifteen the knob overshoots its stop and comes back, which reads as a loose detent rather than a machined one.",
+        "inertia": "How far a flick carries past the point the hand let go. The throw is projected first and the nearest stop chosen second, so a fast spin travels several detents and settles — at zero the knob stops at whichever stop it happened to be passing, which throws the whole gesture away.",
+        "detentPull": "Magnetism felt during the drag itself, before any release. The pull falls off toward the midpoint between two stops, so the exact centre is an unstable point the knob slides off rather than a flat spot it can rest in — which is what makes a detent feel like a notch instead of a suggestion.",
+        "ticks": "How the stops are marked on the panel around the knob. The scale never turns with the pointer — a mark that moves with the thing it is measuring tells you nothing about where you are.",
+        "readout": "The value under the knob, set in tabular figures so the number does not shuffle sideways as it counts.",
+        "accent": "The lit tick, the pointer line, and the live half of the readout.",
+        "size": "Knob diameter. Everything inside is drawn against a fixed grid and scaled, so the knurling, the bevel and the pointer keep their proportions at any size."
+      }
+    },
+    "peel": {
+      "description": "A sticker you take off by the corner. The fold is real geometry rather than a rotation: dragging a corner to a point bends the sheet along the perpendicular bisector of those two positions, because that is the only line where the paper can crease and still have the corner land under the hand. Everything follows from it — the face is the sheet clipped to one side of that line, and the flap is the other side reflected across it, mirrored by the same matrix that places it. Past the threshold it lets go; short of it, it springs back down.",
+      "props": {
+        "resistance": "How much the sheet fights the pull. The law is asymptotic rather than divided, so the corner approaches a full diagonal however hard it resists and the commit threshold stays reachable at every setting — the obvious form caps out below the threshold at high resistance and quietly makes the sticker impossible to remove.",
+        "curl": "Width of the specular band that sits along the fold. This is what stands in for a rounded crease: a mathematically sharp fold reads as a cut, and the band is the cheapest thing that reads as thickness.",
+        "threshold": "How far across its own diagonal the corner has to travel before letting go is committed. Low makes a sticker that comes away almost on contact; high makes one you have to mean, where the snap back is the usual outcome.",
+        "stiffness": "Spring behind both endings — the snap back down and the sweep off. It is deliberately the same spring for both, so the two outcomes feel like one mechanism resolving rather than two separate animations.",
+        "damping": "How much of that spring is absorbed. Low leaves a visible bounce as the sticker re-adheres, which is the part that sells it as something with a bit of spring left in the vinyl.",
+        "shadow": "Strength of the shadow the lifted flap casts, and of the darkening on the face just under the fold. Both scale with how far the peel has travelled, so the sticker is only ever as far off the surface as it looks.",
+        "backDim": "How much darker the backside is than the face. The mirroring alone is not enough to read as a reverse — the eye needs the light to have changed as well as the artwork.",
+        "content": "What is printed on the sticker. Holo is the useful stress test: a conic gradient reversed by the fold shows immediately whether the reflection is genuine or merely a scaled copy.",
+        "corner": "Which corner lifts. All four run the same solver against a different starting point rather than four hand-written cases, so the fold behaves identically wherever it starts.",
+        "size": "Sticker edge. The threshold is measured against the diagonal rather than in pixels, so the gesture asks for the same proportional drag at any size.",
+        "accent": "The badge glyph, the label type, and the base hue of the foil."
+      }
+    },
+    "command-palette": {
+      "description": "A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
+      "props": {
+        "hotkey": "Shortcut that opens the palette. cmd+k falls back to Ctrl+K on non-Apple platforms.",
+        "loop": "Wrap keyboard selection at the list ends.",
+        "glass": "Liquid-glass surface instead of a solid panel."
+      }
+    },
+    "physics-engine": {
+      "description": "A from-scratch 2D rigid-body physics lab — fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
+      "props": {
+        "scene": "Preset world. Switching rebuilds the scene deterministically from a fixed seed.",
+        "gravity": "Uniform downward gravity. 0 is zero-g — throw bodies and watch them coast.",
+        "restitution": "Bounciness of every collision, applied live to existing bodies. Impacts below 1 m/s are absorbed so stacks can settle.",
+        "friction": "Coulomb friction coefficient for all contacts, applied live. 0 is ice; boxes need around 0.3 to stack.",
+        "timeScale": "Simulation speed. Physics always steps at a fixed 120 Hz — this scales how much simulated time each frame consumes. 0 freezes time.",
+        "bodyCount": "How many bodies the playground rains and how tall the stack and wrecking-ball towers build. Projectile ignores it.",
+        "sizeVariation": "Spread of playground body sizes — 0 rains uniform bodies, 1 mixes pebbles with boulders. Density is fixed, so bigger really is heavier.",
+        "showVectors": "Velocity (green, solid) and net-force (red, dashed) arrows anchored at each body's center of mass, scaled to magnitude.",
+        "trails": "Fading motion trails behind moving bodies — read parabolas and pendulum arcs at a glance.",
+        "showEnergy": "Live HUD readout of kinetic, potential, and total energy in joules, computed from solver state every step — never faked.",
+        "tint": "Accent color for dynamic bodies, trails, and the grab spring. Grid and chrome follow the theme."
+      }
+    },
+    "black-hole": {
+      "description": "A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
+      "props": {
+        "steps": "Geodesic integration steps per ray. Higher sharpens the lensing and photon ring; lower runs faster. The single heaviest cost in the shader.",
+        "diskInner": "Inner disk radius in Schwarzschild radii. 3 Rs is the ISCO — the innermost stable circular orbit around a non-spinning hole.",
+        "diskOuter": "Outer edge of the accretion disk, in Schwarzschild radii.",
+        "diskBrightness": "Overall emission of the accretion disk.",
+        "ringColor": "Recolors the accretion disk. White keeps the physical blackbody gradient (gold → white → blue) and the Doppler asymmetry; pick a hue to tint the ring without dimming it.",
+        "dopplerMax": "Relativistic Doppler beaming and redshift strength. 0 flattens the disk to symmetric; 1 is the physical approaching-side-brighter, receding-side-dimmer asymmetry.",
+        "starBrightness": "Brightness of the gravitationally lensed background stars and Milky Way band.",
+        "skyFloor": "Ambient deep-space glow filling the void behind the stars. Tinted by the halo color.",
+        "rotationSpeed": "Speed of the cinematic camera orbit and the disk's differential swirl. 0 stops both.",
+        "fov": "Observer camera field of view. Wider pushes the hole smaller and exaggerates the lensing curvature; narrower zooms in and flattens the perspective.",
+        "bloomStrength": "Intensity of the HDR bloom that blooms the bright disk and photon ring. 0 disables the bloom passes entirely.",
+        "bloomRadius": "Spread of the bloom blur. Disabled when bloom is 0.",
+        "vignette": "Darkening toward the frame edges.",
+        "grain": "Animated fine film grain over the final image.",
+        "chromaticAberration": "Lens-edge color fringing, strongest toward the corners.",
+        "autoOrbit": "Spin the camera continuously left-to-right around the hole at a fixed distance. Drag to take manual 360° control; the orbit resumes a few seconds after you let go and keeps spinning around your current view — it never resets the angle. Off freezes the current view, which you can still drag.",
+        "debug": "Diagnostic shader outputs — step-count heatmap, disk-hit mask, closest-approach radius, escape direction, and the redshift factor.",
+        "tint": "Accent that tints only the outer halo, photon ring, sky floor, and hero-star glow. The accretion disk keeps its physical blackbody color."
+      }
+    },
+    "vortex-bloom": {
+      "description": "A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
+      "props": {
+        "primary": "Molten-gold high tone — the color of the swirling streaks and the throat glints.",
+        "secondary": "Obsidian deep tone — the funnel's shadowed lanes and the void behind it.",
+        "accent": "Luminous core-emission tint. Drives the color of the convergence bloom and the dust as it reaches the core.",
+        "coreObject": "The centerpiece sitting at the vortex's convergence — a layered petal lotus, a faceted crystal, or an animated flame plume. Swapping it never moves the point the dust flows toward.",
+        "coreScale": "Scales the centerpiece — lotus, gem, or flame — up or down without moving the convergence the dust flows toward.",
+        "stemLength": "Length of the lotus stalk hanging into the flow beneath the flower. Lotus only; 0 removes it.",
+        "vortexIntensity": "Swirl speed, streak turbulence, and dust inflow speed. Higher winds the funnel tighter and faster.",
+        "glowIntensity": "Core emission and HDR bloom strength. Drives how hard the convergence and the dust bloom.",
+        "particleDensity": "Dust grains spiraling down the flow. Capped at 1200 to hold 60fps on a mid-range GPU.",
+        "particleSpeed": "How fast the dust grains stream down the flow toward the core, independent of the swirl speed.",
+        "smokeAmount": "Soft, low-frequency atmospheric haze drifting behind the ribbons. 0 leaves crisp streaks on obsidian; higher fills the frame with smoke.",
+        "cameraAutoRotate": "Continuously orbit the funnel. Drag to take 360° control; the orbit resumes around your current view a moment after you let go.",
+        "rotationSpeed": "Speed of the cinematic camera orbit.",
+        "fov": "Observer field of view. Wider exaggerates the whirlpool's depth; narrower flattens it.",
+        "verticalOffset": "Slides the whole vortex up or down in the frame without moving the camera — recenter the eye where you want it.",
+        "chromaticAberration": "Lens-edge color fringing, strongest toward the corners.",
+        "vignette": "Darkening toward the frame edges.",
+        "grain": "Animated fine film grain over the final image."
+      }
+    },
+    "smoke-field": {
+      "description": "A real-time GPU fluid you can stir — semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
+      "props": {
+        "dyeColor": "Color of the dye injected into the fluid.",
+        "backgroundColor": "Background the plume rises against.",
+        "quality": "Bundles simulation and dye buffer resolution. Higher is finer and costlier.",
+        "pressureIterations": "Jacobi pressure passes per frame — higher makes the flow tighter and more incompressible.",
+        "velocityFade": "How long motion persists before it dissipates.",
+        "densityFade": "How long the dye lingers before fading out.",
+        "curl": "Vorticity-confinement strength — swirl detail. 0 skips the curl passes.",
+        "splatRadius": "Size of the dye and force splat under the pointer.",
+        "splatForce": "Velocity impulse imparted by a pointer drag.",
+        "autoPlume": "Continuously inject a rising plume at the base when idle.",
+        "buoyancy": "Upward force lifting the dye, so smoke rises. 0 lets it drift neutrally.",
+        "exposure": "Brightness of the rendered dye.",
+        "grain": "Animated grain over the final image."
+      }
+    },
+    "ripple-field": {
+      "description": "A pool of dark, moonlit water you disturb by hand — a leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
+      "props": {
+        "waterColor": "Amethyst tint of the water — specular glints, caustics, and crest light.",
+        "deepColor": "Deep pool base color the surface sits over.",
+        "quality": "Simulation grid resolution. Higher is crisper and costlier.",
+        "tension": "Wave propagation speed. Higher spreads ripples faster; the leapfrog solve caps below 0.5 to stay stable.",
+        "damping": "Per-step energy retention — toward 1 the ripples ring on longer.",
+        "splatForce": "Displacement a pointer drag or ambient drop carves into the surface.",
+        "splatRadius": "Size of the surface dimple under the pointer, in screen fractions.",
+        "refraction": "How strongly the surface slope bends the pool floor beneath the ripples.",
+        "specular": "Intensity of the specular and Fresnel glints on each wavefront.",
+        "glossiness": "Specular tightness — higher is a sharper, glassier highlight.",
+        "caustics": "Brightness of the caustic threads where converging wavefronts focus light.",
+        "autoRipple": "Randomly drop into the pool when idle so it never sits perfectly still.",
+        "grain": "Animated fine grain over the final image."
+      }
+    },
+    "umbral-orrery": {
+      "description": "An orrery of moons casting real eclipse shadows across a shadowed world; drag to orbit.",
+      "props": {
+        "moonCount": "Number of orbiting moons.",
+        "orbitSpeed": "Global orbit speed.",
+        "sunIntensity": "Sun brightness, which drives shadow contrast.",
+        "tilt": "Inclination of the orbital planes.",
+        "planetSize": "Radius of the shadowed planet.",
+        "moonSize": "Radius of the moons.",
+        "sunColor": "Warm color of the sun and its light.",
+        "glowColor": "Amethyst atmosphere rim on the planet.",
+        "cameraDistance": "Camera orbit radius."
+      }
+    },
+    "parallax-rail": {
+      "description": "A pinned section where scrolling down drives content sideways across depth planes moving at different rates.",
+      "props": {
+        "planes": "How many depth planes to render.",
+        "travel": "Multiplier on the front rail's travel across the pin.",
+        "depthSpread": "How much slower the backmost plane moves than the front.",
+        "damping": "Spring damping on the scrub — higher tracks scroll exactly.",
+        "fadeEdges": "Width of the soft mask at each rail edge.",
+        "railGap": "Vertical gap between planes."
+      }
+    },
+    "approval-flow": {
+      "description": "A step-by-step approval checklist for agent permissions — radio and checkbox groups, an \"Other…\" escape hatch that grows a field in place, and per-step validation that blocks the commit. Answering a step sends the chosen option flying into a running record of what you have already decided, so the screen accumulates a decision trail instead of replacing itself.",
+      "props": {
+        "layout": "Where the record of decided steps sits. A rail parks it beside the live step on wide screens; inline stacks it above.",
+        "morphDuration": "Step change, option reveal and the escape hatch growing open. The flight into the record is a spring and ignores this — stiffness and damping own that one.",
+        "stiffness": "How hard the chosen option is pulled toward its slot in the record.",
+        "damping": "How fast that flight settles. Low values let the label overshoot its slot before landing.",
+        "density": "Row height, padding and glyph size throughout.",
+        "revealStagger": "Delay added per option as a step's list arrives. 0 lands the whole group at once.",
+        "shakeIntensity": "Travel of the shake when a step is rejected. 0 disables it — the message and the red border still fire, because a rejection with no signal at all is a dead end.",
+        "shakeCycles": "Round trips in that shake. Each one decays, and the last always ends on centre.",
+        "showProgress": "Completion bar and step count above the live step.",
+        "autoAdvance": "Commit a single-choice step the moment it is answered. Never applies to the escape hatch, which needs a sentence first, and it is forced off under reduced motion.",
+        "accentColor": "Selection, checked glyph, progress fill and the approve button.",
+        "dangerColor": "Invalid row border and the rejection message."
+      }
+    },
+    "diff-review": {
+      "description": "A review surface for a patch an agent has proposed — accept or reject each hunk, fold long runs of unchanged lines away, and flip between unified and split. Switching views does not redraw the diff: every line is a shared element that flies from the stream into its column and back, so you never lose the line you were reading.",
+      "props": {
+        "defaultView": "Starting layout. One interleaved stream, or the old file beside the new one. The toolbar toggle overrides it live.",
+        "morphDuration": "Hunk fold, verdict change and the first reveal of a line. The flight between views is a spring and ignores this — stiffness and damping own that one.",
+        "stiffness": "How hard a line is pulled toward its slot in the other view.",
+        "damping": "How fast that flight settles. Low values let a line overshoot its column before landing.",
+        "stagger": "Delay added per line as a hunk first appears. Capped at twelve lines in, so expanding a long fold never leaves the last row waiting in plain sight.",
+        "density": "Row height and type size throughout.",
+        "showLineNumbers": "Old and new line numbers in the gutter. Split view shows one per side; unified shows the surviving number.",
+        "contextLines": "Unchanged lines kept on the side of a run that faces a change. The rest fold behind an expander — except a fold that would hide a single line, which costs a row to save a row.",
+        "collapseDecided": "Fold a hunk's body away once it has a verdict, leaving the header and an Undo. Off keeps every hunk open so you can re-read what you just ruled on.",
+        "addColor": "Added lines, their gutter sign, and an accepted hunk's edge.",
+        "delColor": "Removed lines, their gutter sign, and a rejected hunk's edge.",
+        "accentColor": "Active view toggle, fold expanders, focus rings and the reviewed counter once every hunk has been ruled on."
+      }
+    },
+    "ledger": {
+      "description": "A live activity log for a working agent. Consecutive events from the same source fold into one block instead of stacking as identical rows, the window holds a fixed number and lets the rest fall off the top, and the scroll stays pinned to the newest line only until you scroll away from it — after that it keeps running and tells you how far behind you are.",
+      "props": {
+        "speed": "Multiplier on the whole cadence — typing and the gaps between events together.",
+        "charsPerSecond": "Typing rate before jitter. The full text of an event is in the accessibility tree from the moment it arrives, so only the eye waits for this.",
+        "entryGap": "Pause between one event landing and the next starting.",
+        "jitter": "Spread on the per-event rate, metronome to wildly uneven. A fast burst draws a longer breath after it, so the unevenness reads as work rather than as noise. Seeded, not random — the same run is reproducible every mount.",
+        "maxEntries": "Events retained before the oldest falls off the top, under a fade that keeps the window reading as a view onto a longer log.",
+        "group": "Fold consecutive same-source events into one block with a count. The block wears the worst severity in it, so a denial folded in among routine reads still shows red.",
+        "showTimestamps": "Elapsed stream time beside each block. Measured from the component's own clock, never from the wall clock, so it is identical on every replay.",
+        "caret": "Blinking block caret on the line currently being written.",
+        "loop": "Wrap to the first event when the source list runs out. Off lets the stream halt itself once, and the header reads complete.",
+        "density": "Row height and type size throughout.",
+        "accentColor": "Live indicator, caret, catch-up pill and the ok severity.",
+        "warnColor": "The warn severity.",
+        "denyColor": "The deny severity."
+      }
+    },
+    "rotunda": {
+      "description": "Real HTML panels on a drag-spun 3D cylinder. A hand-rolled perspective projection written onto DOM elements rather than a canvas — so the text stays selectable, the links stay clickable, and a screen reader still reads every panel while the ring turns.",
+      "props": {
+        "radius": "Distance from the axis to each panel face. Together with the number of panels this decides whether the ring closes: too small for the count and the faces intersect, which is the one way this arrangement can look broken rather than tight.",
+        "perspective": "Depth of the projection, and the control that decides whether this reads as expensive or as a cheap paper fan. Near enough and the front panel distorts violently; far enough and the ring flattens into a row of cards.",
+        "autoSpin": "Idle rotation while nothing is being dragged. It stops the instant the pointer arrives and does not restart until it leaves, because a carousel that keeps moving under your cursor is a carousel you cannot read.",
+        "friction": "How much of a fling survives, and the whole feel of the throw. Applied per second rather than per frame, so the same gesture coasts the same distance on a 60Hz and a 120Hz display — the naive per-frame form silently halves the throw on better hardware.",
+        "snap": "Settle to the nearest panel once a fling drops below walking pace. Off, the ring stops wherever it stops — honest for a texture, wrong for a menu.",
+        "snapStiffness": "How hard the ring is pulled to the nearest face. Damping is derived from it at the critical ratio, so raising this arrives faster without ever adding the overshoot that would read as a wobble on a menu.",
+        "depthDim": "How far the back of the ring dims toward the background. Depth cueing sells the illusion harder than the rotation does, because a CSS transform gives you no occlusion to work with.",
+        "depthBlur": "Blur on panels past the halfway point. Applied to an inner wrapper rather than the panel itself: a filter on a child of a preserve-3d parent establishes a containing block and flattens the entire ring into a stack.",
+        "faceCamera": "Keep every panel square to the viewer rather than tangent to the ring. This turns the carousel into a card rack, and it is the right choice the moment the panels carry real copy you expect anyone to read off-centre.",
+        "dragSensitivity": "Degrees of rotation per pixel of drag. The honest test is whether the panel under your finger stays under your finger — too low and the ring feels geared down, too high and a small gesture spins it past the panel you were reaching for."
+      }
+    },
+    "ascii-engine": {
+      "description": "A lit, raymarched 3D solid rendered at exactly one pixel per character cell, then quantised into a glyph ramp drawn once with fillText. Drag to orbit it through a full three-sixty. Real geometry underneath, terminal on top — and no scene graph, no mesh, and no second library to get there.",
+      "props": {
+        "solid": "Which distance field is raymarched into the first pass. A field rather than a mesh: the silhouette stays exact at any cell size because it is evaluated instead of rasterised, which is why this needs no scene graph and no geometry upload.",
+        "charset": "The glyph ramp, darkest to lightest. The atlas is drawn once with fillText into an offscreen canvas and uploaded as a single texture, so the shader just indexes it and a longer ramp costs nothing per frame.",
+        "cellSize": "Width of one character cell, and the real resolution control. The first pass renders at exactly one texel per cell, so halving this quadruples the raymarch and changes nothing else — which makes it the honest performance dial rather than a cosmetic one.",
+        "spinSpeed": "Rotation speed of the solid. At zero it parks, which is the only way to judge whether the ramp is actually resolving the form or just flickering convincingly.",
+        "tilt": "Resting camera elevation. Dragging orbits from here rather than replacing it, so this control still means something after you have spun the solid around — and the pitch is clamped short of the poles, because a camera that rolls over the top reads as a bug rather than as a rotation you asked for.",
+        "zoom": "How much of the frame the solid fills. It narrows the field of view rather than moving the camera in — dollying would clip the near face of the solid long before its silhouette filled the frame, which looks like a broken near plane rather than a close-up.",
+        "contrast": "Gamma on the luminance before it picks a glyph, and what decides whether the solid reads as a form or as noise. The ramp has ten steps at most and the lighting has to spread across all of them — too little and the shape collapses into two characters.",
+        "edgeBoost": "How much of the silhouette is added back before quantising. Pure luminance loses the outline — a ten-step ramp cannot carry both the shading and the contour, so without this the form dissolves into its own gradient.",
+        "glow": "Bloom bleeding off the lit glyphs, driven by the cell's luminance rather than by the glyph's own coverage — so a bright cell glows whether it landed on a full block or a full stop.",
+        "inkColor": "The phosphor the glyphs are printed in.",
+        "backgroundColor": "The dead terminal behind them."
+      }
+    },
+    "swarm": {
+      "description": "Up to a quarter of a million particles integrated entirely on the GPU, morphing between words and solids, with a drag-orbit camera. Position and velocity live in floating-point textures and never come back to the CPU; text targets are sampled once out of an offscreen canvas, so the shape can be any string with no font atlas.",
+      "props": {
+        "density": "Particle count, as discrete steps rather than a slider. Each value reallocates four floating-point targets and rebuilds the geometry, and a slider would do that on every pixel of a drag. Sixty-five thousand is where letterforms close up. The simulation is nearly free above that — the cost is all fill rate — so the top step is for a machine you already know the answer about.",
+        "shape": "What the cloud is heading for. Auto walks every form in turn — text, sphere, torus, grid — before repeating, and advances the word list one entry each time it comes back around to text; the rest hold. Disperse is the exception auto never lands on: its targets are uniformly random, so it is a state to send the cloud into rather than a form to morph between. Targets are sampled out of an offscreen 2D canvas, so the text form is whatever string you pass — the GPU never sees a glyph, only a texture of positions.",
+        "swapDuration": "How long a shape holds before auto moves to the next one. This is the hold, not the travel — the morph itself is paced by morphSpeed, so a short duration with a slow morph gives a cloud that never quite arrives anywhere, which is a look rather than a mistake.",
+        "morphSpeed": "How hard each particle is pulled toward its target. This is an acceleration, not a duration — the cloud arrives when the pull and the damping agree, which is why it never snaps. It also has to win against the turbulence: too low against a high curl and the letterforms never resolve, they just hover.",
+        "stagger": "How much of the morph is spread across the cloud instead of happening at once. At zero every particle leaves and arrives together and it reads as a slide; near one the shape assembles over time and you can watch it build. The phase comes from each particle's own texel, so it does not reshuffle between shapes.",
+        "curl": "Curl-noise turbulence applied on the way. Curl of a vector field is divergence-free by construction, so it stirs the cloud without ever thinning it or piling it up — which is the entire reason to use curl noise rather than plain noise on a velocity field, where the cloud slowly develops holes.",
+        "damping": "How much velocity survives each step, applied per second rather than per frame. Below about 0.8 particles arrive dead and the shape has no life in it; above 0.97 they orbit their targets forever and never settle.",
+        "repel": "How hard the pointer pushes particles away on hover. Dragging orbits the camera instead — sharing one gesture between the two would mean every attempt to look around also blew a hole in what you were looking at. The falloff is exponential in squared distance, so the hole has a soft edge and the cloud closes behind your cursor rather than leaving a permanent scar.",
+        "pointSize": "Point sprite width, and the real performance control. Doubling it costs four times the shading at any density — at a quarter of a million particles the simulation is trivial and the fill rate is what falls over, which is the opposite of where most people expect the cost to be.",
+        "zoom": "How close the camera sits to the cloud. Sprite size scales with it: leaving the points fixed makes a zoomed-in cloud read as sparser rather than nearer, which is the tell that a zoom is really a viewport crop.",
+        "autoSpin": "Idle rotation while nothing is being dragged. Off holds the cloud still and hands the camera entirely to the pointer — a flung orbit still coasts to rest, since that motion was asked for. The drift exists to show the form is solid rather than a flat sprite, so turning it off is a choice about a still image, not a performance one.",
+        "particleColor": "The colour of a settled particle.",
+        "accentColor": "The colour of a moving one. Particles are blended between the two by their own speed, so the palette is a readout of the simulation rather than decoration laid over it.",
+        "backgroundColor": "The void behind the cloud. Points blend additively, so this wants to stay genuinely dark — anything lighter and the dense core clips to white before the count is visible."
+      }
+    },
+    "mirage": {
+      "description": "Live, fully interactive HTML seen through moving air. An animated turbulence field displaces the real DOM subtree per pixel — no snapshot, no canvas replica — so the text stays selectable, the button still takes focus and the link is still a link while the whole panel shimmers.",
+      "props": {
+        "mode": "How the air moves. The four differ by the anisotropy of the noise rather than by strength: equal frequencies on both axes give soup, and a strongly biased axis is what makes a tear read as a tear instead of as more haze.",
+        "intensity": "How far the content is pushed. This is genuine per-pixel displacement rather than a transform — a transform can only move the whole box, which is why skew-based heat haze never convinces. Past about one the text stops being readable, which is a legitimate look and a terrible default.",
+        "speed": "Rate the field drifts. The noise is rasterised once as a seamless tile and scrolled, never re-seeded — stepping a turbulence seed swaps in an entirely unrelated field each time, which reads as a component tearing itself apart rather than as air moving. The wrap at one tile is invisible because the tile is seamless.",
+        "scale": "Size of the turbulence cells, measured against a scrolling tile rather than against the element — so the same setting is the same air whether the panel is a card or a page. This sizes the tile itself, because a tile can hold no feature larger than its own period and the noise lattice only wraps on a whole number of cells; free the cell count instead and the field stops tiling, which shows up as the whole panel jumping to a different distortion once a wrap. Small cells shred the glyphs and large ones move the whole block as a unit; the interesting band is where a cell is roughly the height of a line of text.",
+        "chroma": "Strength of the colour cast the shimmer carries, gathered where the pointer is. Hot air refracts, so a little colour separation is the cue that sells it as air rather than as a wobbling image.",
+        "trigger": "What turns the effect on. Whichever you pick it eases rather than switches — a displacement that snaps on reads as the element being swapped out, one that rises reads as air beginning to move.",
+        "edgeHold": "How much of the element's own silhouette is protected. Displacing evenly moves the border too, so a rounded card dissolves into an amoeba and the one edge a reader uses to locate it is the first thing destroyed. This tapers the push toward neutral near the boundary — at zero the outline shreds, and past about half the shimmer is confined to the middle of the panel.",
+        "tintColor": "The colour the shimmer carries."
+      }
+    },
+    "submerge": {
+      "description": "Live content held under water. A slow current bends it continuously, a press drops a stone and a drag leaves a wake that trails behind the cursor — and the text underneath stays selectable, the button still answers and the link is still a link, because the water bends the real tree rather than a picture of it.",
+      "props": {
+        "depth": "How deep the content sits. It drives the colour wash and adds to the bend, because the further under a surface something lies the further the same slope carries the light across it. Past about 0.8 the water starts winning and the content stops being the subject.",
+        "flow": "Speed of the ambient current. The field is rasterised once as a seamless tile and scrolled rather than regenerated — regenerating costs a PNG encode per frame, which is why so many browser water effects settle for a static distortion instead.",
+        "turbulence": "How hard the current bends the content. This is genuine per-pixel displacement of the live tree, not a transform — a transform can only move the whole box, which is the reason skewed 'underwater' text never convinces.",
+        "rippleForce": "Strength of the disturbance the pointer leaves. A press radiates an isotropic ring; a drag leaves a wake — the same wave packet stretched along travel and weighted to the rear, so the water is disturbed where the pointer has been rather than around where it is. Sources are spaced by distance travelled rather than by pointer event, so the same gesture leaves the same wake at 60Hz or 120Hz.",
+        "rippleSpread": "How far a disturbance travels before it dies. Growth is an exponential approach rather than a square root: both decelerate, but a square root has infinite slope at zero, so every ring is born already moving and the birth itself snaps. A drag wake spreads slower than a press ring, because a trail lingers where it was left.",
+        "settle": "Seconds a disturbance takes to die away. Twelve run at once and a thirteenth reuses the oldest slot, so a fast drag always shows its newest wake rather than queueing behind stale ones — and twelve is enough that eviction rarely cuts one off mid-life, which is the pop that reads as jumpy.",
+        "edgeHold": "How much of the element's own silhouette is protected. Displacing evenly moves the border too, so a rounded card dissolves into an amoeba and the one edge a reader uses to locate it is the first thing destroyed. At zero the outline shreds; past about half the water is confined to the middle.",
+        "waterColor": "Shallow water — the colour every ring crest carries.",
+        "deepColor": "Deep water. Applied as a multiply rather than an overlay, so the content keeps its own contrast instead of flattening behind a sheet of colour."
+      }
+    },
+    "weave": {
+      "description": "A sheet of cloth on a position-based solver — particles and distance constraints relaxed to convergence every fixed step, with no forces, no rotations and no contacts. Drag it, load it, and pull until the constraints fail and the tear runs. Every quad is shaded by its own extension against the tear threshold, so the load path through the sheet is visible long before anything breaks.",
+      "props": {
+        "cols": "Particles across the sheet. Constraint count grows as roughly twice cols times rows and every one is visited on every relaxation pass, so this and rows together are the honest cost dial.",
+        "rows": "Particles down the sheet. Taller than it is wide is what makes the drape read as fabric; a square grid hangs like a banner and never folds.",
+        "iterations": "Relaxation passes over the constraint list per fixed step. Position-based dynamics has no exact solve — it converges, and this is how far it gets. One pass is rubber, six is linen, and past ten you are paying for a stiffness you cannot see.",
+        "gravity": "Uniform downward acceleration. Zero leaves the sheet floating so wind alone drives it, which is the clearest way to watch a strain wave cross the mesh.",
+        "wind": "Lateral forcing, applied with a travelling phase rather than uniformly — a uniform push only translates the sheet and never ripples it.",
+        "stiffness": "Fraction of each constraint's length error corrected per pass. One with enough passes is inextensible canvas; low values are jersey that stretches under its own weight. It trades against iterations almost multiplicatively — halving one and doubling the other lands in nearly the same place.",
+        "damping": "Velocity bled off per step. Verlet carries velocity implicitly in the gap between the current and previous position, so this scales that gap rather than a stored vector — which is why it reads as air resistance and not as friction.",
+        "tearThreshold": "Extension at which a constraint fails, as a multiple of its rest length. Evaluated after all relaxation passes, never during them: strain measured mid-solve is an artefact of the sweep order, and tearing on it produces failures that follow the constraint list rather than the load. Above about four nothing tears at any wind you can set.",
+        "pinMode": "Which particles are held. Corners is the one worth pulling on — the load concentrates into two diagonals you can see in the strain field long before anything tears. Free drops the whole sheet, and is the honest demonstration that none of this is keyframed.",
+        "shading": "How each quad is filled. Strain shades it by the extension of its own four edges, which is the point of the component: the load path through a hanging sheet is invisible in a wireframe and obvious the moment it is coloured.",
+        "tint": "The cloth at rest — zero strain. Also the anchors and the ring on a held particle.",
+        "strainColor": "The far end of the strain ramp, reached exactly at the tear threshold — so a quad going fully hot is a prediction rather than a decoration."
+      }
+    },
+    "telemetry": {
+      "description": "A metric board that behaves as one instrument instead of eight sparklines. Hovering any tile broadcasts a single timestamp and every other tile resolves its own value at that same instant, so a latency spike and a queue backing up are visibly the same event rather than two coincidences. Threshold breaches are recorded on the sample rather than on a pixel, so the scar travels with its data and is still there forty seconds after the value recovered.",
+      "props": {
+        "tiles": "Metrics on the board. Every tile shares one clock and one cursor, so this is also how many traces a single hover has to answer at once — the coordination is the component, and it only becomes legible above about six.",
+        "columns": "Grid width. Narrow columns make each trace taller relative to its width and exaggerate every wobble; wide ones flatten them into something you can actually compare across rows.",
+        "sampleRate": "How often each ring buffer takes a sample, held independent of the frame rate on purpose. The buffer advances on its own accumulator, so a machine dropping to 30fps shows the same history as one at 120 — a chart whose past depends on the viewer's GPU is lying about the data.",
+        "history": "How much past each trace shows. Ring capacity is this times the sample rate and is allocated once, so raising either reallocates rather than grows and the memory stays bounded.",
+        "smoothing": "Exponential moving average applied on the way into the buffer. It smooths the stored series rather than the drawing, so the cursor reads exactly the numbers you can see — a readout that disagrees with its own trace is worse than a noisy one.",
+        "threshold": "Normalised level a metric has to cross to count as a breach. Normalised because the tiles do not share units — a percentage and a megabyte have to be comparable for one cursor and one rule to mean anything across the board.",
+        "scars": "Keep a permanent mark on the trace where a breach happened. A flash you missed is a flash that did not happen; the scar is what makes an unattended board worth glancing at.",
+        "cursor": "The shared time cursor. Turning it off leaves eight ordinary sparklines, which is the clearest way to see what it was doing.",
+        "fill": "Area under the trace. Gradient reads as volume without competing with the line; solid is denser and better at small tile sizes; none is the honest choice when several traces would otherwise imply a stack that does not exist.",
+        "traceColor": "The line, the fill ramp, and the cursor rule.",
+        "breachColor": "The threshold rule, the scar, and the readout while the cursor sits on a breached sample. One colour across all three, so a scar is visibly the same event as the reading that produced it."
+      }
+    },
+    "rewind": {
+      "description": "An undo history you can scrub, and that refuses to throw the future away. Drag the head and the interface reverts live under your finger rather than on release; act from a past point and the abandoned future stays drawn on the rail as a branch you can walk back onto, instead of being silently destroyed the way every real undo stack destroys it. Controlled in the same shape as Ledger — it owns the rail, the gesture and the branch graph, and your reducer owns the states.",
+      "props": {
+        "orientation": "Which axis the rail runs on. Horizontal reads as a scrubber; vertical reads as a commit log and stacks better beside a form. The gesture is written against one axis abstraction rather than two handlers, so the modes cannot drift apart.",
+        "scrubSnap": "Lock the head to the nearest recorded state while dragging. Off, it moves continuously and the surface shows the state at or before it, which makes the density of the history visible — you can feel where you were working fast.",
+        "branching": "Draw the futures you abandoned instead of discarding them. Off is the familiar destructive undo; on is the honest model, and the difference between the two is the whole component.",
+        "branchDepth": "How many abandoned branches stay drawn beside the trunk before the oldest is folded away. Past about four the rail stops being a timeline and becomes a graph, which is a different component.",
+        "stiffness": "Spring tension on the head. The marker and the reported index come off the same drag, so the surface can never show a state the head has not reached — a readout running ahead of its own scrubber is the single thing that makes time travel feel fake.",
+        "damping": "Spring friction. Low lets the head ring past a state and come back, which is charming on a scrubber and disastrous on the fields it drives — this is the control that decides which of those you get.",
+        "tickDensity": "How many states the rail actually draws. All is truthful and unreadable past about sixty entries; even samples at a fixed pitch and leaves the true count in the label instead.",
+        "showLabels": "The action name and position under the rail. Without it a scrub is a position; with it, it is a history you can read while dragging.",
+        "railHeight": "Thickness of the rail, and of every branch beside it. Thin reads as a scrubber under a document; thick reads as the primary control on the screen.",
+        "accentColor": "The trunk, the head, and the travelled portion.",
+        "branchColor": "Abandoned futures. Deliberately a warm off-accent rather than a dimmed trunk — a discarded future is a different kind of thing from a quiet one, not a fainter version of the same thing."
+      }
+    }
+  },
+  "cookbookSections": {
+    "entrances-and-exits": {
+      "title": "Entrances & Exits",
+      "blurb": "How elements appear and disappear."
+    },
+    "sequencing-and-timing": {
+      "title": "Sequencing & Timing",
+      "blurb": "Coordinating multiple elements or moments."
+    },
+    "movement-and-transforms": {
+      "title": "Movement & Transforms",
+      "blurb": "Changing an element's position, size, or angle."
+    },
+    "transitions-between-states": {
+      "title": "Transitions Between States",
+      "blurb": "Connecting one state, view, or element to another."
+    },
+    "scroll": {
+      "title": "Scroll",
+      "blurb": "Motion tied to scrolling or navigating between views."
+    },
+    "feedback-and-interaction": {
+      "title": "Feedback & Interaction",
+      "blurb": "Responding to the user's actions."
+    },
+    "easing": {
+      "title": "Easing",
+      "blurb": "How speed changes over an animation."
+    },
+    "spring-animations": {
+      "title": "Spring Animations",
+      "blurb": "Physics-based motion as an alternative to fixed-duration easing."
+    },
+    "looping-and-ambient-motion": {
+      "title": "Looping & Ambient Motion",
+      "blurb": "Animations that run on their own."
+    },
+    "polish-and-effects": {
+      "title": "Polish & Effects",
+      "blurb": "The small touches that separate good from great."
+    },
+    "performance": {
+      "title": "Performance",
+      "blurb": "What keeps motion smooth instead of stuttering."
+    },
+    "principles-to-know": {
+      "title": "Principles to Know",
+      "blurb": "Concepts that guide when and how to animate."
+    }
+  },
+  "cookbookTerms": {
+    "fade-in-fade-out": "Element appears or disappears by changing opacity.",
+    "slide-in": "Element enters by sliding in from off-screen (left, right, top, or bottom).",
+    "scale-in": "Element grows from smaller to full size as it appears, often paired with a fade.",
+    "pop-in": "Element appears with a slight overshoot, like it bounces into place.",
+    "reveal": "Content is uncovered gradually, often by animating a clip-path or mask.",
+    "enter-exit": "The animation an element plays when it's added to or removed from the screen.",
+    "keyframes": "Defined points in an animation (0%, 50%, 100%) that the browser fills the gaps between.",
+    "interpolation-tween": "Generating all the in-between frames between a start and end value, so motion is continuous.",
+    "stagger": "Animate several items one after another with a small delay between each, creating a cascade.",
+    "orchestration": "Deliberately timing multiple animations so they feel like one coordinated motion.",
+    "delay": "Time before an animation starts.",
+    "duration": "How long an animation takes.",
+    "fill-mode": "Whether an element keeps its first or last frame's styles before the animation starts or after it ends (e.g. forwards).",
+    "stepped-animation": "An animation that is divided into discrete steps, like a countdown timer.",
+    "translate": "Move an element along the X or Y axis.",
+    "scale": "Make an element bigger or smaller.",
+    "rotate": "Spin an element around a point.",
+    "skew": "Slant an element along the X or Y axis, shearing it out of its rectangular shape.",
+    "3d-tilt-flip": "Rotate in 3D space (rotateX / rotateY) to add depth.",
+    "perspective": "How strong the 3D effect looks — a lower value exaggerates depth, like the viewer is closer.",
+    "transform-origin": "The anchor point a scale or rotation grows or spins from.",
+    "origin-aware-animation": "An element animates out of its trigger, like a popover growing from the button that opened it instead of from its own center which is the default in CSS.",
+    "crossfade": "One element fades out as another fades in, in the same spot.",
+    "continuity-transition": "A change that keeps the user oriented by visually connecting before and after. For example, making the same rectangle bigger and smaller.",
+    "morph": "One shape smoothly turns into another shape, e.g. Dynamic Island.",
+    "shared-element-transition": "An element travels and transforms from one position into another, like a thumbnail expanding into a card.",
+    "layout-animation": "When an element's size or position changes, it animates to the new spot instead of snapping.",
+    "accordion-collapse": "A section smoothly expands and collapses its height to show or hide content.",
+    "direction-aware-transition": "Content slides one way going forward and the opposite way going back, so navigation has a sense of direction.",
+    "scroll-reveal": "Elements fade or slide into place as they enter the viewport.",
+    "scroll-driven-animation": "An animation whose progress is tied directly to scroll position.",
+    "parallax": "Background and foreground move at different speeds while scrolling, creating depth.",
+    "page-transition": "An animation that plays when navigating from one page or route to another.",
+    "view-transition": "The browser morphs between two states or pages, connecting shared elements.",
+    "hover-effect": "Visual change when the cursor moves over an element.",
+    "press-tap-feedback": "A subtle scale-down when an element is clicked, so it feels physical.",
+    "hold-to-confirm": "A progress effect that fills up while the user holds a button.",
+    "drag": "Moving an element by grabbing it, often with momentum when released.",
+    "drag-to-reorder": "Dragging items in a list to rearrange them, while the others shift to make room.",
+    "swipe-to-dismiss": "Dragging an element off-screen to close it, like a drawer or toast.",
+    "rubber-banding": "Resistance and snap-back when you drag past a boundary (the iOS overscroll feel).",
+    "shake-wiggle": "A quick side-to-side jitter signaling an error or rejected input.",
+    "ripple": "A circle expanding from the point of a tap, confirming the press.",
+    "easing": "The rate at which an animation speeds up or slows down.",
+    "ease-out": "Starts fast, ends slow. The default for most UI and anything responding to the user.",
+    "ease-in": "Starts slow, ends fast. Usually avoided; can feel sluggish.",
+    "ease-in-out": "Slow, fast, slow. Good for elements already on screen moving from A to B.",
+    "linear": "Constant speed. Avoid for UI; reserve for spinners or marquees.",
+    "cubic-bezier": "A custom easing curve you define for precise control.",
+    "asymmetric-easing": "A curve that accelerates and decelerates at different rates. Feels more alive than a symmetric one.",
+    "spring": "Motion driven by physics (tension, mass, damping) rather than a set duration.",
+    "stiffness-tension": "How strongly the spring pulls toward its target. Higher feels snappier.",
+    "damping": "How quickly a spring settles. Lower damping means more bounce and oscillation.",
+    "mass": "How heavy the animated element feels. More mass makes it slower and more sluggish.",
+    "bounce": "A spring that overshoots and settles, adding playfulness.",
+    "perceptual-duration": "How long a spring feels finished, even though it keeps micro-settling underneath.",
+    "momentum": "Motion that carries velocity, especially after a drag or interruption.",
+    "velocity": "How fast and in which direction an element is moving. A spring carries it into the next animation when interrupted, so a flicked element keeps its speed.",
+    "interruptible-animation": "An animation that can be smoothly redirected mid-flight instead of finishing first.",
+    "marquee": "Text or content that scrolls continuously in a loop.",
+    "loop": "An animation that repeats, a set number of times or infinitely.",
+    "alternate-yoyo": "A loop that plays forward then reverses each iteration, instead of jumping back to the start.",
+    "orbit": "An element circling around another in a continuous path.",
+    "pulse": "A gentle repeating scale or opacity change to draw attention.",
+    "float": "A gentle, continuous up-and-down drift that makes a static element feel alive and weightless.",
+    "idle-animation": "Subtle motion that plays while an element is just sitting there, waiting to be interacted with.",
+    "blur": "A blur filter used to soften an element or mask tiny imperfections.",
+    "clip-path": "Clipping an element to a shape, used for reveals, masks, and before/after sliders.",
+    "mask": "Hiding or revealing parts of an element using a shape or gradient — like clip-path, but with soft, fadeable edges.",
+    "before-after-slider": "A draggable divider that wipes between two overlaid images to compare them.",
+    "line-drawing": "An SVG path that draws itself in, like an invisible pen tracing it.",
+    "text-morph": "Text that animates character by character when it changes, drawing attention to the new value.",
+    "skeleton-shimmer": "A placeholder with a moving sheen shown while content loads.",
+    "number-ticker": "Digits rolling or counting up to a value.",
+    "tabular-numbers": "Fixed-width digits so numbers don't shift around as they change. Essential for tickers, timers, and counters.",
+    "typewriter": "Text appearing one character at a time, as if being typed.",
+    "frame-rate-fps": "Frames drawn per second. 60fps is the baseline for smooth motion; 120fps on newer displays.",
+    "jank": "Visible stutter when the browser drops frames because it can't keep up with the animation.",
+    "dropped-frame": "A frame the browser missed its deadline to draw, causing a tiny hitch in motion.",
+    "compositing": "Letting the GPU move or fade an element on its own layer without redoing layout or paint.",
+    "will-change": "A CSS hint that an element is about to animate, so the browser can promote it to its own layer ahead of time.",
+    "layout-thrashing": "Animating properties like width, height, top, or left that force the browser to recalculate layout every frame, causing jank.",
+    "purposeful-animation": "Motion should serve a function — orient, give feedback, show relationships — not just decorate.",
+    "anticipation": "A small wind-up in the opposite direction before a move, hinting at what's about to happen.",
+    "follow-through": "Parts of an element keep moving and settle slightly after the main motion stops, adding weight.",
+    "squash-stretch": "Deforming an element as it moves to convey weight, speed, and flexibility.",
+    "perceived-performance": "The right animation makes an interface feel faster, even when it isn't.",
+    "frequency-of-use": "The more often a user sees an animation, the shorter and subtler it should be.",
+    "spatial-consistency": "Animating so an element keeps its identity and position across states, so users never lose track of where things went.",
+    "hardware-acceleration": "Animating transform and opacity lets the GPU keep motion smooth.",
+    "reduced-motion": "Respecting the user's prefers-reduced-motion setting by toning down or removing motion."
+  },
+  "collections": {
+    "react-micro-interactions": {
+      "title": "React Micro-Interaction Components",
+      "intro": "The small responses that make an interface feel answered rather than obedient. Thirty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device."
+    },
+    "react-background-components": {
+      "title": "React Background Components",
+      "intro": "Full-bleed motion for the layer behind everything else. Twenty-two backgrounds that run at the back of a hero, a section, or a whole page — WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one is sized by its container rather than the viewport, so it drops into a section as easily as a page, and each exposes its palette and speed as props you tune in the browser before copying anything."
+    },
+    "react-power-user-components": {
+      "title": "React Power-User Components",
+      "intro": "Components that carry state and physics rather than decoration. Command palettes, ledgers, orbital systems, ASCII render engines, particle and rigid-body simulations. These are the heaviest pieces in the registry and the ones with real APIs — most run a simulation loop, several own their own layout, and all of them expect to be wired to your data rather than dropped in as ornament."
+    },
+    "react-text-animations": {
+      "title": "React Text Animation Components",
+      "intro": "Type that moves on purpose. Seventeen components for the moment a headline lands, a number counts, or a word swaps — scramble, split-flap, variable-font proximity, marquee, redaction, neon ignition, frost and shadow effects. Each animates real text nodes rather than an image or a canvas replica, so the words stay selectable, searchable, and legible to a screen reader while they move."
+    },
+    "react-hover-effects": {
+      "title": "React Hover Effects",
+      "intro": "Twenty-eight components whose primary state change is the pointer arriving. Glows that track the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or displace underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo — each of these picks one property to move and commits to it rather than animating everything at once."
+    },
+    "react-stagger-animation": {
+      "title": "React Stagger Animation",
+      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Sixteen components here use it — letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting parameter is never the duration; it is the offset between items, and every one of these exposes it as a control you can drag."
+    },
+    "react-drag-animations": {
+      "title": "React Drag Animations",
+      "intro": "Seventeen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents, a sticker you can lift by the corner. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead."
+    },
+    "react-reveal-animations": {
+      "title": "React Reveal Animations",
+      "intro": "Content that is uncovered rather than faded in. Ten components animate a mask, a clip-path, or a wipe so the element is progressively exposed instead of simply changing opacity — pixel dissolves, curtain wipes, thawing frost, scroll-triggered entrances. A reveal reads as deliberate where a fade reads as a page still loading, which is why it is worth the extra property to animate."
+    },
+    "react-spring-animation": {
+      "title": "React Spring Animation",
+      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles naturally when it is interrupted and overshoots the way a real object does. Fourteen components here are spring-driven — magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
+    },
+    "react-blur-effects": {
+      "title": "React Blur Effects",
+      "intro": "Thirteen components that use blur as a material rather than a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen on approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius — an unbounded full-page backdrop-filter is the fastest way to drop frames."
+    },
+    "react-scroll-animations": {
+      "title": "React Scroll Animations",
+      "intro": "Six components whose timeline is the scrollbar. Parallax rails, scroll-triggered entrances, sections that scrub a transform against progress. Scroll-driven animation is the one case where the user controls playback, which means it has to look right at any speed and in both directions — every one of these is driven by position rather than by a trigger that fires once."
+    },
+    "react-clip-path-mask-effects": {
+      "title": "React Clip-Path & Mask Effects",
+      "intro": "Eleven components that animate the shape of what you can see rather than the element itself. Clip-path wipes, gradient masks, spotlight cutouts, a fold line that splits a sticker into a face and a flap, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere — and the only way to reveal one layer through another without duplicating the content."
+    },
+    "react-layout-animation": {
+      "title": "React Layout Animation",
+      "intro": "Seven components that animate between two layouts rather than between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference — done properly it keeps the element continuous, so the user tracks one object instead of watching one disappear and another appear."
+    },
+    "react-3d-tilt-effects": {
+      "title": "React 3D Tilt Effects",
+      "intro": "Six components that put an element in perspective and rotate it against the pointer. Tilting cards, holofoil surfaces, orbital layouts, depth that responds to where you are looking. The parameter that decides whether this reads as expensive or cheap is the perspective distance, not the rotation angle — too near and a small tilt distorts violently, too far and the whole effect flattens into a slide."
+    },
+    "framer-motion-components": {
+      "title": "Framer Motion Components for React",
+      "intro": "Thirty-two components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn."
+    },
+    "react-webgl-backgrounds": {
+      "title": "React WebGL Backgrounds",
+      "intro": "Twenty components that render on the GPU through a WebGL context — fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Nineteen use ogl, a wrapper small enough that the whole bundle costs less than one hero image; one uses Three.js, where the scene genuinely needs a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+    }
+  },
+  "collectionGroups": {
+    "by-category": "By Category",
+    "by-technique": "By Technique",
+    "by-library": "By Library"
+  },
+  "landing": {
+    "hero": {
+      "eyebrowTagline": "Component Registry",
+      "headlineCount": "{count, plural, one {# instrument} other {# instruments}}.",
+      "headlineBench": "One bench.",
+      "description": "Motion-forward React components, exhibited live on the page they power. Every parameter is a dial. Every specimen is catalogued.",
+      "ctaCatalog": "Enter the catalog",
+      "ctaCookbook": "the Cook Book",
+      "readoutCube": "Field: RubiksCube · Turn {duration}ms · Scramble {count}",
+      "readoutWaves": "Field: Waves · Amp {amplitude} · Dist {distance}",
+      "readoutRegistry": "{count, plural, one {Registry # unit [MIT · open source]} other {Registry # units [MIT · open source]}}"
+    },
+    "manifesto": {
+      "dark": "We operate in the dark",
+      "light": "We render in the light",
+      "parameters": "Every parameter accounted for",
+      "uncalibrated": "Nothing ships uncalibrated"
+    },
+    "footer": {
+      "tagline": "An instrument bench for React motion. Preview live, tune every parameter, take the source.",
+      "exhibitsAriaLabel": "Exhibits",
+      "collectionsAriaLabel": "Collections",
+      "fullCatalog": "Full catalog",
+      "allCollections": "All collections",
+      "plateLabel": "Plate",
+      "colophonLabel": "Colophon",
+      "statsLine": "{specimens, plural, one {# specimen} other {# specimens}} · {exhibitCount, plural, one {# exhibit} other {# exhibits}} · 1 accent"
+    },
+    "tuning": {
+      "edgesInstruction": "{mode, select, tap {Tap the edges} trace {Trace the edges} other {the edges}}",
+      "dialsDescription": "Every specimen in the catalog exposes its dials like this — tuned live, reflected in the props table, ready to copy.",
+      "sliders": {
+        "glowRadius": "Glow radius",
+        "coneSpread": "Cone spread"
+      }
+    },
+    "nav": {
+      "ariaLabel": "Section navigation",
+      "hero": "Top",
+      "calibration": "Calibration",
+      "sealed": "Sealed Archive",
+      "colophon": "Colophon"
+    }
+  },
+  "pages": {
+    "categories": {
+      "backgrounds": "Backgrounds",
+      "text-animations": "Text Animations",
+      "micro-interactions": "Micro-interactions",
+      "power-user-systems": "Power-User Systems"
+    },
+    "landing": {
+      "unitsMeta": "{count, plural, one {# unit} other {# units}}",
+      "allInCategory": "All {count} {category} →",
+      "openCommand": "Open {name}",
+      "blurbs": {
+        "backgrounds": "Ambient fields. The room tone of an interface.",
+        "text-animations": "Letters under tension. Morph, count, scroll.",
+        "micro-interactions": "Small mechanisms. Felt more than seen.",
+        "power-user-systems": "Whole machines. State, memory, moving parts."
+      },
+      "calibration": {
+        "label": "Calibration",
+        "meta": "2 dials",
+        "blurb": "Every dial is real. Turn one."
+      },
+      "archive": {
+        "plate": "Plate",
+        "openArchive": "Open archive",
+        "headline": "Nothing stays in shadow.",
+        "body": "Every specimen ships with full source — MIT-licensed, copy-ready, no key required. The pieces below render live on this page; the implementation is one click away.",
+        "cta": "Browse the source"
+      }
+    },
+    "cookbook": {
+      "eyebrow": "Reference",
+      "title": "Motion Cook Book",
+      "intro": "The exact word for the thing you can picture but can't name. Every term a designer, a brief, or a prompt might use — and wherever the bench can show you one running, a link straight to it.",
+      "coverage": "{covered} of {total} terms demonstrated live"
+    },
+    "components": {
+      "eyebrow": "Catalog",
+      "title": "Components",
+      "intro": "Every component is live and tunable. Dial in the parameters, share the URL, copy the source.",
+      "aboutCategory": "About {category} →"
+    },
+    "componentDetail": {
+      "adaptedFrom": "Adapted from",
+      "cookbookLabel": "Cook Book",
+      "install": "Install",
+      "props": "Props"
+    },
+    "collections": {
+      "eyebrow": "Catalog",
+      "title": "Collections",
+      "intro": "Curated slices of the Shadow Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists.",
+      "countMeta": "{count, plural, one {# component} other {# components}} · all free",
+      "inThisCollection": "In This Collection",
+      "theTerms": "The Terms",
+      "relatedCollections": "Related Collections"
+    },
+    "favorites": {
+      "eyebrow": "Collection",
+      "title": "Favorites"
+    },
+    "notFound": {
+      "title": "Nothing in this shadow",
+      "body": "That page isn't on the bench. The catalog holds {count} components — every one live, tunable, and ready to copy.",
+      "recovery": "Recovery",
+      "browseAll": "Browse all components",
+      "cookbook": "Motion Cook Book",
+      "home": "Home"
+    }
+  },
+  "commands": {
+    "placeholder": "Search components or run a command…",
+    "headings": {
+      "favorites": "Favorites",
+      "components": "Components",
+      "actions": "Actions"
+    },
+    "actions": {
+      "catalog": "Catalog",
+      "favoritesPage": "Favorites",
+      "cookbook": "Motion Cook Book",
+      "theme": "Theme",
+      "copyLink": "Copy page link",
+      "favoriteCurrent": "Favorite: {name}",
+      "unfavoriteCurrent": "Unfavorite: {name}"
+    },
+    "keywordAliases": {
+      "catalog": "catalog, components, browse, all",
+      "favoritesPage": "favorites, saved, collection",
+      "cookbook": "cookbook, cook book, glossary, terms, reference, naming",
+      "theme": "dark, light, mode, theme",
+      "copyLink": "share, url, link, copy",
+      "favoriteCurrent": "favorite, save, bookmark, toggle"
+    },
+    "toasts": {
+      "removedFavorite": "Removed {name} from favorites",
+      "addedFavorite": "Added {name} to favorites",
+      "clipboardUnavailable": "Clipboard unavailable",
+      "linkCopied": "Link copied",
+      "copyLinkFailed": "Couldn't copy link"
+    }
+  },
+  "feedback": {
+    "reasons": {
+      "too_short": {
+        "title": "Tell us a little more",
+        "description": "At least {min} characters, so we can act on it."
+      },
+      "too_long": {
+        "title": "That's a bit long",
+        "description": "Keep it under {max} characters."
+      },
+      "rate_limited": {
+        "title": "That's a lot of feedback fast",
+        "description": "Give it a minute, then retry."
+      },
+      "invalid_body": {
+        "title": "Couldn't send that",
+        "description": "The message didn't come through intact. Try again."
+      },
+      "network": {
+        "title": "Couldn't reach the shadows",
+        "description": "Check your connection and try again."
+      },
+      "server": {
+        "title": "Couldn't send that",
+        "description": "Something went wrong on our side. Try again shortly."
+      }
+    }
+  }
+}

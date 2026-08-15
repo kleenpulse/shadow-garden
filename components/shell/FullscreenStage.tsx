@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 // Patched router: imperative navigations drive the route progress bar too.
 import { useRouter } from "@bprogress/next/app";
+import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import { Minimize2, SlidersHorizontal } from "lucide-react";
 import type { ComponentEntry } from "@/lib/registry/types";
@@ -27,6 +28,7 @@ export default function FullscreenStage({
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
+	const t = useTranslations("chrome.fullscreenStage");
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [controlsOpen, setControlsOpen] = useState(false);
@@ -66,7 +68,7 @@ export default function FullscreenStage({
 			<div className="absolute left-3 top-3 z-10 flex items-center gap-2">
 				<Link
 					href={backHref}
-					aria-label={`Exit fullscreen, back to ${entry.name}`}
+					aria-label={t("exitAria", { name: entry.name })}
 					className="grid h-8 w-8 place-items-center rounded-md border border-hairline bg-surface/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
 				>
 					<Minimize2 className="h-4 w-4" aria-hidden />
@@ -100,7 +102,7 @@ export default function FullscreenStage({
 						onClick={() => setControlsOpen((open) => !open)}
 						aria-expanded={controlsOpen}
 						aria-controls="sg-fullscreen-controls"
-						aria-label={controlsOpen ? "Hide controls" : "Show controls"}
+						aria-label={controlsOpen ? t("hideControls") : t("showControls")}
 						className="absolute bottom-3 right-3 z-10 grid h-8 w-8 place-items-center rounded-md border border-hairline bg-surface/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
 					>
 						<SlidersHorizontal className="h-4 w-4" aria-hidden />

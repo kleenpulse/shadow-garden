@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { HexColorPicker } from "react-colorful";
 import type { ColorProp } from "@/lib/registry/types";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ export default function ColorControl({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const label = schema.name;
+  const t = useTranslations("chrome.controls");
 
   useEffect(() => {
     if (!open) return;
@@ -47,7 +49,7 @@ export default function ColorControl({
           <output className="font-display text-xs uppercase text-accent">{value}</output>
           <button
             type="button"
-            aria-label={`Edit ${label}`}
+            aria-label={t("editAria", { name: label })}
             aria-expanded={open}
             disabled={disabled}
             onClick={() => setOpen((prev) => !prev)}
@@ -63,7 +65,7 @@ export default function ColorControl({
             className="mt-2 w-full rounded-md border border-hairline bg-raised px-2 py-1 font-mono text-xs text-ink"
             value={value}
             onChange={(event) => onChange(event.target.value)}
-            aria-label={`${label} hex value`}
+            aria-label={t("hexValueAria", { name: label })}
           />
         </div>
       )}

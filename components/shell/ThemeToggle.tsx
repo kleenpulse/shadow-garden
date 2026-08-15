@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useThemeTransition } from "@/hooks/use-theme-transition";
 import { cn } from "@/lib/utils";
@@ -14,9 +15,10 @@ export default function ThemeToggle({ className }: { className?: string }) {
 	});
 	const [mounted, setMounted] = useState(false);
 	useEffect(() => setMounted(true), []);
+	const t = useTranslations("chrome.themeToggle");
 
 	const isDark = resolvedTheme !== "light"; // dark is the default identity
-	const label = isDark ? "Switch to light theme" : "Switch to dark theme";
+	const label = isDark ? t("switchToLight") : t("switchToDark");
 
 	return (
 		<button

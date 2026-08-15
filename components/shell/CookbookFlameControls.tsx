@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Settings, Settings2 } from "lucide-react";
 import Switch from "@/components/shell/controls/Switch";
 import {
@@ -21,6 +22,7 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 	const paused = useFlameStore((s) => s.paused);
 	const setEnabled = useFlameStore((s) => s.setEnabled);
 	const setPaused = useFlameStore((s) => s.setPaused);
+	const t = useTranslations("chrome.cookbookFlame");
 
 	return (
 		<div
@@ -28,7 +30,7 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 		>
 			<Switch
 				id="sg-flame-enabled"
-				label="Flame "
+				label={t("flame")}
 				checked={enabled}
 				onChange={setEnabled}
 				className="justify-between"
@@ -36,7 +38,7 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 			{/* Motion over a torn-down canvas is a dead control, so it follows. */}
 			<Switch
 				id="sg-flame-motion"
-				label="Motion"
+				label={t("motion")}
 				checked={enabled && !paused}
 				disabled={!enabled}
 				onChange={(v) => setPaused(!v)}
@@ -51,10 +53,11 @@ export function CookbookFlameControlsDesktop({
 }: {
 	className?: string;
 }) {
+	const t = useTranslations("chrome.cookbookFlame");
 	return (
 		<Popover>
 			<PopoverTrigger
-				aria-label="Background settings"
+				aria-label={t("backgroundSettings")}
 				className={cn(
 					"grid size-9 place-items-center rounded-md border border-hairline bg-panel/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none data-popup-open:text-accent",
 					className,
@@ -64,7 +67,7 @@ export function CookbookFlameControlsDesktop({
 			</PopoverTrigger>
 			<PopoverContent side="top" align="start" className="p-3">
 				<p className="mb-2.5 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
-					Background
+					{t("background")}
 				</p>
 				<FlameControlRows />
 			</PopoverContent>

@@ -1,8 +1,20 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { useTranslations } from "next-intl";
 import type { Range, Suggestion } from "@/lib/cookbook-search";
+import { useDataCopy } from "@/lib/i18n/data-copy";
 import { cn } from "@/lib/utils";
+
+// Mirrors scripts/i18n/gen-catalog.ts's slugify exactly — it's the key the
+// cookbookSections.<slug>.title catalog is generated under.
+function slugify(value: string): string {
+	return value
+		.toLowerCase()
+		.replace(/&/g, "and")
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/^-+|-+$/g, "");
+}
 
 /**
  * The glossary's filter, as a real combobox.
@@ -18,12 +30,6 @@ import { cn } from "@/lib/utils";
  * are the same piece of state (a combobox where they can disagree is a combobox
  * that lies to a screen reader).
  */
-
-const HEADINGS: Record<Suggestion["kind"], string> = {
-	term: "Terms",
-	component: "Components",
-	section: "Sections",
-};
 
 /** Paint the characters the query actually matched. */
 function Marked({ text, ranges }: { text: string; ranges: readonly Range[] }) {
@@ -61,6 +67,15 @@ export default function CookbookFilter({
 	onSelect: (suggestion: Suggestion) => void;
 	className?: string;
 }) {
+	const t = useTranslations("chrome.cookbookFilter");
+	const copy = useDataCopy();
+	// Kind headings, keyed by the closed Suggestion["kind"] union.
+	const headings: Record<Suggestion["kind"], string> = {
+		term: t("headings.term"),
+		component: t("headings.component"),
+		section: t("headings.section"),
+	};
+
 	const [open, setOpen] = useState(false);
 	// -1 = nothing selected. Distinct from 0 on purpose: a fresh popup must not
 	// pre-highlight a row, or Enter commits something the user never looked at.
@@ -205,8 +220,8 @@ export default function CookbookFilter({
 				onFocus={() => {
 					if (query.trim().length > 0) setOpen(true);
 				}}
-				placeholder="Filter terms…"
-				aria-label="Filter cook book terms"
+				placeholder={t("placeholder")}
+				aria-label={t("filterLabel")}
 				aria-expanded={visible}
 				aria-controls={visible ? listboxId : undefined}
 				aria-autocomplete="list"
@@ -232,7 +247,7 @@ export default function CookbookFilter({
 						close();
 						inputRef.current?.focus();
 					}}
-					aria-label="Clear filter"
+					aria-label={t("clearLabel")}
 					className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-sm p-1 text-ink-mute transition-colors hover:text-ink"
 				>
 					<svg
@@ -254,7 +269,7 @@ export default function CookbookFilter({
 					ref={listRef}
 					id={listboxId}
 					role="listbox"
-					aria-label="Term suggestions"
+					aria-label={t("suggestionsLabel")}
 					// z-10, not higher: the shell's TopBar is sticky at z-20, and a
 					// popup that paints over it while the page is scrolled reads broken.
 					onMouseDown={(event) => event.preventDefault()}
@@ -264,7 +279,7 @@ export default function CookbookFilter({
 						const isActive = i === active;
 						const heading =
 							i === 0 || suggestions[i - 1].kind !== suggestion.kind
-								? HEADINGS[suggestion.kind]
+								? headings[suggestion.kind]
 								: null;
 
 						return (
@@ -303,17 +318,20 @@ export default function CookbookFilter({
 
 									{suggestion.kind === "term" && (
 										<span className="shrink-0 font-display text-[9px] uppercase tracking-[0.16em] text-ink-mute">
-											{suggestion.sectionTitle}
+											{copy(
+												`cookbookSections.${slugify(suggestion.sectionTitle)}.title`,
+												suggestion.sectionTitle,
+											)}
 										</span>
 									)}
 									{suggestion.kind === "component" && (
 										<span className="shrink-0 font-display text-[9px] uppercase tracking-[0.16em] text-ink-mute">
-											{suggestion.demos} {suggestion.demos === 1 ? "term" : "terms"}
+											{t("demoCount", { count: suggestion.demos })}
 										</span>
 									)}
 									{suggestion.kind === "section" && (
 										<span className="shrink-0 font-display text-[9px] uppercase tracking-[0.16em] text-ink-mute">
-											{suggestion.count} terms
+											{t("sectionTermCount", { count: suggestion.count })}
 										</span>
 									)}
 								</div>

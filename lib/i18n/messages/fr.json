@@ -1,0 +1,1845 @@
+{
+  "common": {
+    "close": "Fermer",
+    "copy": "Copier",
+    "copied": "Copié",
+    "search": "Rechercher",
+    "loading": "Chargement…"
+  },
+  "chrome": {
+    "language": {
+      "label": "Langue",
+      "changeLanguage": "Changer de langue"
+    },
+    "propsTable": {
+      "prop": "Propriété",
+      "type": "Type",
+      "default": "Défaut",
+      "description": "Description"
+    },
+    "catalogCard": {
+      "open": "Ouvrir {name}"
+    },
+    "cookbook": {
+      "sections": "Sections",
+      "enterToFilter": "↵ pour filtrer",
+      "termCount": "{count, plural, one {# terme} other {# termes}}",
+      "noMatches": "Aucun terme correspondant.",
+      "seeIt": "Voir"
+    },
+    "cookbookNav": {
+      "sections": "Sections",
+      "expandLabel": "Sections : {title}, {position} sur {total}. Déplier.",
+      "collapseLabel": "Sections : {title}, {position} sur {total}. Replier."
+    },
+    "demonstratedTerms": {
+      "heading": "Ce que ça démontre"
+    },
+    "relatedComponents": {
+      "heading": "Composants associés"
+    },
+    "appearsIn": {
+      "heading": "Apparaît dans"
+    },
+    "collectionMembers": {
+      "builtWith": "Construit avec {libraries}"
+    },
+    "feedback": {
+      "trigger": "Retour",
+      "chooseTitle": "Que souhaitez-vous partager ?",
+      "chooseDescription": "Votre signalement parvient aux opérateurs qui font tourner le jardin.",
+      "back": "retour",
+      "subjectLabel": "Sujet",
+      "optional": "(facultatif)",
+      "subjectPlaceholder": "Un résumé rapide",
+      "emailLabel": "E-mail",
+      "emailOptional": "(facultatif — pour vous recontacter)",
+      "sending": "Envoi en cours…",
+      "submit": "Envoyer le retour",
+      "submitSuccess": "Merci — votre retour est parvenu aux ombres.",
+      "types": {
+        "bug": {
+          "title": "Signaler un problème",
+          "blurb": "Quelque chose est cassé ou ne fonctionne pas",
+          "prompt": "Que s’est-il passé ?",
+          "placeholder": "Décrivez le bug et les étapes pour le reproduire…"
+        },
+        "idea": {
+          "title": "Partager une idée",
+          "blurb": "Suggérer une fonctionnalité ou une amélioration",
+          "prompt": "Votre idée",
+          "placeholder": "Qu’est-ce qui améliorerait Shadow Garden ?"
+        },
+        "other": {
+          "title": "Retour général",
+          "blurb": "Tout autre chose qui vous passe par la tête",
+          "prompt": "Détails",
+          "placeholder": "Dites-nous en plus…"
+        }
+      }
+    },
+    "sidebar": {
+      "closeNavigation": "Fermer la navigation",
+      "searchPlaceholder": "Rechercher des composants…",
+      "searchLabel": "Rechercher des composants",
+      "filterLabel": "Filtrer les composants",
+      "filterTabs": {
+        "all": "tous",
+        "new": "nouveaux"
+      },
+      "componentsLabel": "Composants",
+      "noMatches": "Aucun résultat.",
+      "catalogCount": "{count, plural, one {# composant} other {# composants}}",
+      "catalogCountFiltered": "{matched} / {total, plural, one {# composant} other {# composants}}",
+      "resizeHandle": "Redimensionner la barre latérale",
+      "resizeHint": "Glisser pour redimensionner · double-clic pour réinitialiser"
+    },
+    "cookbookFilter": {
+      "placeholder": "Filtrer les termes…",
+      "filterLabel": "Filtrer les termes du livre de recettes",
+      "clearLabel": "Effacer le filtre",
+      "suggestionsLabel": "Suggestions de termes",
+      "headings": {
+        "term": "Termes",
+        "component": "Composants",
+        "section": "Sections"
+      },
+      "demoCount": "{count, plural, one {# terme} other {# termes}}",
+      "sectionTermCount": "{count, plural, one {# terme} other {# termes}}"
+    },
+    "topBar": {
+      "searchPlaceholder": "Rechercher des composants…",
+      "cookbookLabel": "Livre de recettes du mouvement",
+      "githubLabel": "Shadow Garden sur GitHub"
+    },
+    "mobileBar": {
+      "openNavigation": "Ouvrir la navigation",
+      "cookbookLabel": "Livre de recettes du mouvement",
+      "githubLabel": "Shadow Garden sur GitHub"
+    },
+    "footer": {
+      "tagline": "Un établi d’instruments pour le mouvement React. Prévisualisez en direct, réglez chaque paramètre, récupérez la source.",
+      "siteNavLabel": "Site",
+      "nav": {
+        "allComponents": "Tous les composants",
+        "collections": "Collections",
+        "cookbook": "Livre de recettes du mouvement"
+      },
+      "componentsAccent": "{count, plural, one {# composant} other {# composants}} · 1 accent"
+    },
+    "copyPrompt": {
+      "label": "Copier le prompt",
+      "ariaLabel": "Copier le prompt d’intégration IA de {name}",
+      "copiedAnnouncement": "Prompt de {name} copié dans le presse-papiers",
+      "clipboardUnavailable": "Presse-papiers indisponible sur cette connexion",
+      "copyFailed": "Impossible de copier le prompt"
+    },
+    "successOverlay": {
+      "ariaLabel": "Achat terminé",
+      "kicker": "Bienvenue dans les ombres",
+      "title": "L’éminence vous appartient.",
+      "body": "Votre achat est finalisé. Tout l’arsenal du Shadow Garden répond désormais à vos ordres.",
+      "cta": "Entrer dans les ombres"
+    },
+    "favorites": {
+      "emptyTitle": "Aucun favori pour l’instant",
+      "emptySubtitle": "Touchez le cœur sur n’importe quel composant pour l’épingler ici et y accéder rapidement.",
+      "browseComponents": "Parcourir les composants",
+      "savedCount": "{count, plural, one {# composant enregistré} other {# composants enregistrés}}",
+      "removeAria": "Retirer {name} des favoris",
+      "addAria": "Ajouter {name} aux favoris",
+      "removeTitle": "Retirer des favoris",
+      "addTitle": "Ajouter aux favoris",
+      "removedToast": "{name} retiré des favoris",
+      "addedToast": "{name} ajouté aux favoris",
+      "genericComponent": "composant",
+      "link": "Favoris",
+      "linkWithCount": "Favoris ({count})",
+      "subtitle": "Les composants que vous avez épinglés, enregistrés dans ce navigateur."
+    },
+    "preview": {
+      "failedWithLabel": "Échec de {label}",
+      "failed": "Échec de la prévisualisation",
+      "retry": "Réessayer",
+      "crashedFallback": "Ce composant a planté pendant le rendu."
+    },
+    "cookbookFlame": {
+      "flame": "Flamme ",
+      "motion": "Mouvement",
+      "backgroundSettings": "Réglages de l’arrière-plan",
+      "background": "Arrière-plan"
+    },
+    "fullscreenStage": {
+      "exitAria": "Quitter le plein écran, retour à {name}",
+      "hideControls": "Masquer les contrôles",
+      "showControls": "Afficher les contrôles"
+    },
+    "install": {
+      "pkgManagerAria": "Gestionnaire de paquets",
+      "copy": "copier",
+      "copied": "copié",
+      "thenCopy": "Copiez ensuite {count} fichiers dans votre projet :"
+    },
+    "workspaceTabs": {
+      "ariaLabel": "Aperçu ou source",
+      "preview": "aperçu",
+      "code": "code"
+    },
+    "themeToggle": {
+      "switchToLight": "Passer au thème clair",
+      "switchToDark": "Passer au thème sombre"
+    },
+    "newBadge": {
+      "label": "Nouveau"
+    },
+    "controls": {
+      "heading": "Contrôles",
+      "play": "lecture",
+      "pause": "pause",
+      "reset": "réinitialiser",
+      "editAria": "Modifier {name}",
+      "hexValueAria": "Valeur hexadécimale de {name}"
+    },
+    "growDialog": {
+      "closeAria": "Fermer la boîte de dialogue"
+    },
+    "codeTabs": {
+      "sourceFilesAria": "Fichiers source"
+    },
+    "breadcrumbs": {
+      "ariaLabel": "Fil d’Ariane"
+    },
+    "placeholderPreview": {
+      "label": "aperçu de référence — déposez la source pour le remplacer"
+    },
+    "liveWorkspace": {
+      "fullscreenAria": "Ouvrir l’aperçu en plein écran"
+    },
+    "gotoTop": {
+      "scrollToTop": "Retour en haut de page"
+    }
+  },
+  "catalog": {
+    "waves": {
+      "description": "Un champ tissé de vagues fluides rendu sur un shader de lignes WebGL.",
+      "props": {
+        "color": "Couleur des lignes des vagues.",
+        "amplitude": "Intensité du déplacement des vagues.",
+        "distance": "Écartement en Z entre les lignes superposées.",
+        "saturation": "Saturation des couleurs du champ.",
+        "opacity": "Opacité globale des vagues.",
+        "enableMouseInteraction": "Laisser le curseur courber le champ."
+      }
+    },
+    "grainient": {
+      "description": "Un dégradé maillé granuleux et animé, rendu sur un shader WebGL2.",
+      "props": {
+        "timeSpeed": "Vitesse globale de l’animation.",
+        "warpStrength": "Intensité de la distorsion de domaine.",
+        "warpFrequency": "Fréquence de détail de la distorsion.",
+        "blendSoftness": "Douceur du fondu du dégradé.",
+        "noiseScale": "Échelle du bruit sous-jacent.",
+        "grainAmount": "Intensité du grain pellicule.",
+        "contrast": "Contraste de sortie.",
+        "saturation": "Saturation de sortie.",
+        "zoom": "Zoom de la caméra.",
+        "color1": "Première couleur du dégradé.",
+        "color2": "Deuxième couleur du dégradé.",
+        "color3": "Troisième couleur du dégradé."
+      }
+    },
+    "light-rays": {
+      "description": "Des rayons volumétriques (god rays) depuis une origine configurable, avec suivi optionnel de la souris.",
+      "props": {
+        "raysColor": "Couleur des rayons.",
+        "raysSpeed": "Vitesse de l’animation.",
+        "lightSpread": "Étalement angulaire des rayons.",
+        "rayLength": "Longueur des rayons.",
+        "pulsating": "Faire pulser l’intensité des rayons.",
+        "fadeDistance": "Distance sur laquelle les rayons s’estompent.",
+        "saturation": "Saturation des couleurs.",
+        "followMouse": "Diriger les rayons vers le pointeur. Une fois activé, la surcouche capte les entrées tactiles (un glissement du doigt oriente les rayons au lieu de faire défiler la page) et intercepte donc les clics en dessous ; désactivé, le clic traverse à nouveau la surcouche.",
+        "mouseInfluence": "Intensité avec laquelle le curseur oriente les rayons.",
+        "noiseAmount": "Texture de bruit appliquée aux rayons.",
+        "distortion": "Distorsion ondulante des rayons."
+      }
+    },
+    "mask-blur": {
+      "description": "Un flou de bordure progressif — des couches de backdrop-filter empilées dissolvent le contenu vers un bord choisi.",
+      "props": {
+        "position": "Bord auquel le flou s’accroche.",
+        "strength": "Multiplicateur de flou de base appliqué à chaque couche.",
+        "divCount": "Nombre de couches de flou empilées (plus élevé = dégradé plus doux).",
+        "exponential": "Progression exponentielle pour un flou plus marqué près du bord.",
+        "opacity": "Opacité appliquée à chaque couche de flou.",
+        "target": "S’accrocher au conteneur parent ou à la fenêtre d’affichage (position fixe).",
+        "tinted": "Teinter le bord flouté d’une légère touche améthyste."
+      }
+    },
+    "side-rays": {
+      "description": "Des rayons lumineux bicolores ancrés dans un coin, avec inclinaison et fondu ajustables.",
+      "props": {
+        "speed": "Vitesse de l’animation.",
+        "rayColor1": "Première couleur des rayons.",
+        "rayColor2": "Deuxième couleur des rayons.",
+        "intensity": "Luminosité des rayons.",
+        "spread": "Étalement angulaire.",
+        "tilt": "Inclinaison du faisceau de rayons.",
+        "saturation": "Saturation des couleurs.",
+        "blend": "Fondu entre les deux couleurs.",
+        "falloff": "Atténuation en bordure.",
+        "opacity": "Opacité globale."
+      }
+    },
+    "dot-field": {
+      "description": "Une grille de points interactive qui se bombe et s’illumine autour du curseur.",
+      "props": {
+        "dotRadius": "Rayon de chaque point.",
+        "dotSpacing": "Espacement entre les points.",
+        "cursorRadius": "Rayon d’influence du curseur.",
+        "cursorForce": "Intensité de la poussée du curseur.",
+        "bulgeOnly": "Se bomber uniquement vers le curseur (sans répulsion).",
+        "bulgeStrength": "Intensité du déplacement du bombement.",
+        "glowRadius": "Rayon de la lueur du curseur.",
+        "sparkle": "Ajouter un scintillement.",
+        "waveAmplitude": "Mouvement ondulatoire ambiant.",
+        "gradientFrom": "Début du dégradé des points.",
+        "gradientTo": "Fin du dégradé des points.",
+        "glowColor": "Couleur de la lueur du curseur."
+      }
+    },
+    "strands": {
+      "description": "Des filaments de lumière ondulants et lumineux, avec une lentille de réfraction en verre optionnelle.",
+      "props": {
+        "count": "Nombre de filaments.",
+        "scale": "Taille du champ — plus bas dézoome, plus haut grossit les filaments.",
+        "speed": "Vitesse de l’animation.",
+        "amplitude": "Amplitude de l’onde.",
+        "waviness": "Ondulation des filaments.",
+        "thickness": "Épaisseur des filaments.",
+        "strandWidth": "Portée horizontale en pourcentage — 100 s’étend jusqu’au bord du verre.",
+        "glow": "Intensité de la lueur.",
+        "spread": "Étalement vertical.",
+        "intensity": "Intensité de la couleur.",
+        "saturation": "Saturation des couleurs.",
+        "opacity": "Opacité globale.",
+        "glass": "Superposer une lentille de réfraction en verre.",
+        "refraction": "Intensité de la réfraction du verre.",
+        "dispersion": "Dispersion chromatique."
+      }
+    },
+    "ribbons": {
+      "description": "Des rubans translucides et fluides dérivant sur un canvas.",
+      "props": {
+        "color": "Couleur du ruban.",
+        "colorAlpha": "Opacité du ruban.",
+        "ribbonCount": "Nombre de rubans à l’écran.",
+        "strokeSize": "Épaisseur du contour.",
+        "horizontalSpeed": "Vitesse de dérive sur le canvas.",
+        "parallaxAmount": "Facteur de parallaxe au défilement.",
+        "verticalPosition": "Position verticale d’apparition des rubans.",
+        "animateSections": "Faire onduler les segments de ruban dans le temps."
+      }
+    },
+    "world-map-ascii": {
+      "description": "Une carte du monde en matrice de points dont les particules se dispersent au passage du curseur.",
+      "props": {
+        "color": "Couleur des particules.",
+        "particleSize": "Rayon des points.",
+        "density": "Densité des particules — plus élevée en resserre davantage.",
+        "mouseRadius": "Rayon d’interaction du curseur ; 0 désactive la dispersion.",
+        "drift": "Amplitude du tremblement au repos."
+      }
+    },
+    "constellation": {
+      "description": "Un réseau en constellation — des particules à la dérive se relient par proximité, poursuivent et fuient le curseur, et s’illuminent.",
+      "props": {
+        "density": "Densité des particules par rapport à la surface.",
+        "speed": "Vitesse de dérive maximale des particules.",
+        "connectDistance": "Distance maximale des lignes reliant les particules.",
+        "cursorDistance": "Rayon de liaison et de répulsion du curseur ; 0 désactive.",
+        "repelForce": "Intensité de la poussée à l’intérieur du rayon du curseur.",
+        "lineOpacity": "Multiplicateur d’opacité des lignes de connexion.",
+        "glow": "Flou de la lueur des particules.",
+        "color1": "Première couleur des particules.",
+        "color2": "Deuxième couleur des particules.",
+        "color3": "Troisième couleur des particules — les lignes entre paires mixtes se fondent en dégradés."
+      }
+    },
+    "plus-grid": {
+      "description": "Un champ de glyphes « + » sur canvas — le défilement ou le mouvement du pointeur injecte une onde qui se propage et s’estompe à travers la grille.",
+      "props": {
+        "gapX": "Espacement horizontal entre les glyphes.",
+        "gapY": "Espacement vertical entre les glyphes.",
+        "fontSize": "Taille des glyphes.",
+        "baseOpacity": "Opacité au repos du champ.",
+        "waveAmplitude": "Déplacement maximal à pleine énergie de l’onde.",
+        "waveFrequency": "Resserrement de l’ondulation entre les colonnes.",
+        "waveDecay": "Décroissance de l’énergie par tick — faible revient vite, élevée persiste.",
+        "autoPulse": "Déclencher une impulsion d’onde toutes les quelques secondes.",
+        "color": "Couleur des glyphes."
+      }
+    },
+    "barcode": {
+      "description": "Un code-barres procédural dont les barres s’illuminent comme des notes de piano — en boucle en lecture automatique, ou piloté par le défilement.",
+      "props": {
+        "mode": "La lecture automatique boucle la ligne temporelle des notes ; le mode « scrub » la lie à la position de défilement.",
+        "restOpacity": "Opacité à laquelle une barre se stabilise après sa note.",
+        "peakOpacity": "Opacité au pic d’une frappe de note.",
+        "noteDuration": "Durée de la montée et de l’estompement d’une note.",
+        "speed": "Vitesse de lecture de la boucle automatique.",
+        "color": "Couleur des barres."
+      }
+    },
+    "aurora": {
+      "description": "Des rideaux de lumière améthyste dérivant dans un ciel nocturne sans étoiles — un champ WebGL2 déformé par fbm, où des bandes lumineuses ondulent, se replient et se dissolvent en un grain fin, comme une aurore polaire vue depuis la face sombre du monde.",
+      "props": {
+        "baseColor": "Fond profond sur lequel rayonnent les rideaux.",
+        "auroraColor": "Lumière améthyste primaire des bandes.",
+        "auroraColor2": "Teinte secondaire vers laquelle virent les bords des rideaux.",
+        "speed": "Vitesse de dérive des bandes fluides.",
+        "intensity": "Luminosité globale de l’aurore.",
+        "bands": "Nombre de rideaux de lumière superposés.",
+        "warp": "Turbulence de la distorsion de domaine fbm qui replie les rideaux.",
+        "coverage": "Portée verticale des rideaux dans le ciel.",
+        "grain": "Léger grain pellicule sur l’ensemble du champ."
+      }
+    },
+    "starfield": {
+      "description": "Des étoiles réparties en profondeur, dérivant au fil d’une lente distorsion, chaque couche évoluant en parallaxe à son propre rythme, avec de temps à autre une étoile filante traçant une traînée améthyste lumineuse dans l’obscurité, avant que le champ ne retrouve son scintillement patient.",
+      "props": {
+        "starColor": "Couleur du champ d’étoiles.",
+        "accentColor": "Teinte une minorité d’étoiles et chaque traînée d’étoile filante.",
+        "density": "Nombre d’étoiles par rapport à la surface du panneau.",
+        "layers": "Couches de profondeur en parallaxe — les couches proches dérivent plus vite et plus lumineuses.",
+        "driftSpeed": "Vitesse de la lente distorsion directionnelle qui traverse le champ.",
+        "twinkle": "Intensité du scintillement de luminosité de chaque étoile.",
+        "shootingStars": "Fréquence d’apparition des traînées ; 0 les désactive.",
+        "glow": "Flou lumineux autour de chaque étoile."
+      }
+    },
+    "cinders": {
+      "description": "Un champ sombre de braises et de cendres s’élevant dans le courant d’air, luisant d’améthyste.",
+      "props": {
+        "emberCount": "Nombre de braises et de particules de cendre dans le champ.",
+        "riseSpeed": "Vitesse d’ascension des braises.",
+        "turbulence": "Balancement latéral des particules pendant leur ascension.",
+        "emberSize": "Rayon de base de chaque particule.",
+        "glow": "Taille du halo autour de chaque étincelle.",
+        "draftStrength": "Intensité avec laquelle le curseur crée un courant d’air.",
+        "emberColor": "Couleur lumineuse améthyste des braises.",
+        "backgroundColor": "Fond sombre sur lequel s’élèvent les particules."
+      }
+    },
+    "shadowflame": {
+      "description": "Une flamme noire au cœur améthyste, dont le corps naît d’un bruit replié par distorsion de domaine.",
+      "props": {
+        "coreColor": "Cœur améthyste de la flamme.",
+        "flameColor": "Corps sombre de la flamme noire.",
+        "backgroundColor": "Le vide dans lequel s’élève la flamme.",
+        "speed": "Vitesse d’ascension de la flamme.",
+        "warp": "Turbulence de distorsion de domaine qui replie la flamme.",
+        "detail": "Nombre d’octaves de bruit.",
+        "shimmer": "Distorsion de miroitement thermique ascendant.",
+        "height": "Jusqu’où la flamme s’élève dans le cadre. Au-delà de 1, l’effilement ne s’achève jamais dans le cadre : la flamme sort donc par le bord supérieur au lieu de s’éteindre.",
+        "grain": "Grain pellicule sur l’ensemble du champ.",
+        "flameWidth": "Étalement horizontal de la flamme.",
+        "sparkCount": "Nombre d’étincelles ascendantes (0 les désactive).",
+        "sparkSize": "Taille de chaque étincelle ascendante.",
+        "sparkSpeed": "Vitesse d’ascension des étincelles."
+      }
+    },
+    "cathode": {
+      "description": "Un tube cathodique qui n’affiche rien qui vaille la peine d’être regardé : un faisceau qui fait demi-tour à chaque bord, un phosphore qui persiste après son passage, et une barre de ronflement qui remonte le long du verre.",
+      "props": {
+        "signal": "Ce que le tube affiche. Le mode balayage est un faisceau unique qui repart en sens inverse à chaque bord plutôt que de sauter en arrière — un faisceau qui boucle se lirait comme une image perdue, un faisceau qui fait demi-tour se lit comme un mécanisme. Les autres modes sont les mires de test sur lesquelles un poste retombe quand il n’y a rien sur la ligne.",
+        "sweepSpeed": "Vitesse du faisceau sur l’écran. À zéro, il se fige et le phosphore se stabilise — la façon la plus claire de voir ce que la persistance dessine réellement.",
+        "scanlineDensity": "Pixels par ligne de balayage. En dessous d’environ deux, la grille dépasse la limite de Nyquist ; plutôt que de créer un aliasing qui bouge avec la fenêtre, la modulation s’estompe — un petit canvas perd ses lignes de balayage au lieu de gagner du moiré.",
+        "scanlineDepth": "Avec quelle force les lignes de balayage et la grille d’ouverture entament l’image. La grille est calée au tiers de cette valeur — un masque perforé que l’on peut réellement distinguer est un masque perforé qui a cessé d’être un simple arrière-plan.",
+        "curvature": "Distorsion en barillet de la surface du tube. Le bord du verre s’atténue en douceur plutôt que d’être coupé net, car un bord dur crée de l’aliasing sur toute sa longueur — et le bord est précisément l’endroit où l’œil est sûr de se poser.",
+        "bloom": "Halo autour des zones lumineuses. Quatre échantillonnages analytiques du signal plutôt qu’une passe de flou — le signal ayant une forme close dans chaque mode, la lueur ne coûte que de l’arithmétique et non une seconde cible de rendu.",
+        "persistence": "Durée pendant laquelle le phosphore persiste après le passage du faisceau. Calculée comme une exponentielle de la distance déjà balayée plutôt qu’en conservant l’image précédente — ce qui correspond réellement à la décroissance du phosphore, et évite la cible de rendu en virgule flottante, seul point que le vérificateur de boucle ne peut pas traverser.",
+        "rollSpeed": "Vitesse à laquelle la barre de ronflement remonte l’image. Elle porte sa propre traîne de décroissance, si bien que la persistance garde un sens même sur un signal qui ne bouge jamais.",
+        "chromaOffset": "Erreur de convergence entre les canons électroniques. Exprimée en pixels et convertie selon la largeur de l’écran, si bien que la frange se lit de la même façon sur une bande étroite que sur une page entière.",
+        "phosphorColor": "Le phosphore. Chaque signal l’emprunte, sauf la mire de barres couleur, qui porte sa propre teinte — c’est tout l’intérêt d’une mire de test.",
+        "backgroundColor": "Le verre mort en dehors de l’image."
+      }
+    },
+    "turing": {
+      "description": "La réaction-diffusion de Gray-Scott sur le GPU. Deux réactifs, quatre termes — et des coraux, des labyrinthes et des colonies qui se stabilisent et s’arrêtent, tout cela découle de l’arithmétique : un arrière-plan qui croît plutôt qu’il ne boucle, et qui n’affiche jamais deux fois la même image.",
+      "props": {
+        "feed": "Vitesse à laquelle un réactif frais arrive partout. Feed et kill choisissent ensemble la créature obtenue, et ces coordonnées ont été mesurées plutôt qu’héritées : 0,050/0,062 continue de coloniser et constitue la valeur par défaut, 0,030/0,062 se stabilise en points fixes puis s’arrête vraiment, 0,039/0,058 inonde l’espace d’un labyrinthe dense, et 0,022/0,051 oscille sans jamais se stabiliser. Poussez feed au-delà d’environ 0,055 pour ce kill, et les colonies meurent net — la bande vivante ne fait que quelques millièmes de large, d’où ce pas aussi fin.",
+        "kill": "Vitesse à laquelle le produit réagi est retiré. Baissez-la, et le motif inonde la surface jusqu’à la remplir entièrement ; montez-la, et il s’étiole jusqu’à disparaître. La limite de la bande vivante est une falaise plutôt qu’une pente : ce réglage ne fait donc rien, puis fait tout d’un coup.",
+        "diffusion": "Vitesse à laquelle le substrat se propage par rapport à l’activateur, maintenu à moitié. La valeur un correspond au ratio canonique de deux pour un. Le résultat de Turing veut qu’un système parfaitement uniforme développe une structure dès qu’un réactif distance l’autre ; c’est exactement ce ratio, et en dessous d’environ 0,6, il n’y a rien à voir car rien ne distance rien.",
+        "steps": "Itérations du solveur par image affichée — la seule raison pour laquelle ce spectacle est regardable. Le motif a besoin de quelques milliers de pas avant de valoir le coup d’œil ; à un pas par image, cela représente près d’une minute à fixer des points. Seize pas y arrivent en quelques secondes et donnent un résultat identique à l’arrivée, car ce réglage joue sur l’échelle de temps, pas sur la qualité. C’est aussi le curseur de performance honnête — chaque pas est un balayage complet de la grille.",
+        "gridSize": "Résolution de la grille de simulation, délibérément découplée du canvas — redimensionner la fenêtre ne redimensionne que la passe d’affichage, si bien que déplacer le navigateur n’efface jamais un motif qui a mis trente secondes à croître. Une valeur plus élevée donne un filigrane plus fin sur la même surface, pas une surface plus grande.",
+        "seed": "Comment la plaque est ensemencée. Chaque valeur aboutit ailleurs à feed et kill identiques, ce qui démontre honnêtement que ce système n’a pas d’attracteur unique — la condition initiale est un paramètre réel, pas une formalité.",
+        "brush": "Rayon ensemencé par le pointeur. Mesuré par rapport à la grille plutôt qu’au canvas, si bien que la tache couvre la même proportion du motif sur une bande étroite que sur une page entière. La dose est d’une impulsion par image quel que soit le nombre de pas du solveur exécutés, donc ce réglage reste indépendant du nombre de pas.",
+        "sharpness": "Où la rampe de palette découpe le champ continu. La chimie est lisse partout ; le corail ne ressemble à du corail qu’une fois découpé, et c’est précisément ce découpage. À zéro, on observe la concentration brute — la vue la plus informative et la moins spectaculaire.",
+        "colorLow": "La plaque, là où rien ne s’est encore installé.",
+        "colorHigh": "La colonie. La membrane la reprend aussi, au tiers de son intensité, si bien que la frontière se lit comme le même organisme plutôt que comme un contour tracé autour de lui."
+      }
+    },
+    "quicksilver": {
+      "description": "Du chrome en fusion. Tous les autres arrière-plans shader émettent de la lumière ; celui-ci reflète un studio qui n’existe pas, synthétisé à partir de la normale de surface — des bords nets de softbox, un lissage de Fresnel propre aux conducteurs, une irisation en couche mince, et un sillage qui continue de bouger là où vous avez glissé.",
+      "props": {
+        "flowSpeed": "Vitesse à laquelle la surface se brasse. À zéro, le métal se fige, et une image figée est le seul moyen honnête de voir ce qui relève du champ de hauteur et ce qui relève de la lumière posée dessus.",
+        "warp": "Jusqu’où le bruit entraîne ses propres coordonnées avant d’être à nouveau échantillonné. Faible, c’est de la tôle laminée ; au-delà d’environ un, la surface se replie sur elle-même et cesse totalement de se lire comme un liquide.",
+        "stir": "Avec quelle force le pointeur entraîne le métal. Huit impulsions récentes sont maintenues actives simultanément, chacune avec sa propre direction et son propre âge — ce qui explique pourquoi cela laisse un sillage plutôt qu’une simple empreinte, et pourquoi l’ensemble du composant ne coûte toujours qu’une passe, sans cible de rendu.",
+        "viscosity": "Combien de temps un remous survit après le départ du pointeur. Faible, c’est du mercure qui se stabilise presque avant même la fin du geste ; élevé, le sillage tient assez longtemps pour qu’on puisse y écrire.",
+        "fresnel": "Exposant de Schlick sur la réponse en bordure. Faible, la surface entière réfléchit uniformément et se lit comme du plastique peint ; élevé, la réflexion vive se concentre aux angles rasants — là où le métal la place réellement.",
+        "iridescence": "Interférence en couche mince sur la réflexion — toute la différence entre le chrome et une flaque d’huile sur l’eau. La teinte provient de l’épaisseur optique du film rapportée au cosinus de vue, elle suit donc l’angle de la surface au lieu d’être un arc-en-ciel peint sur le panneau.",
+        "roughness": "Douceur des bords du studio reflété. Ce n’est pas un flou : un conducteur rugueux reflète la même pièce sur un cône plus large, donc c’est la transition entre lumière et ombre qui s’élargit. Zéro donne un miroir qui révèle chaque artefact du champ de hauteur ; un peu de rugosité est ce qui permet au métal procédural de résister à un examen rapproché.",
+        "tint": "Le métal de base. Les conducteurs teintent ce qu’ils reflètent, et cette teinte s’éclaircit vers le blanc aux angles rasants plutôt que de rester constante — c’est précisément ce que la plupart des faux chromes ratent.",
+        "sheenColor": "La couleur portée par le lustre aux angles rasants.",
+        "backgroundColor": "Le sol de l’environnement reflété, vers lequel le vignettage s’estompe — si bien que le bord du panneau se lit comme la fin de la pièce plutôt que comme un masque posé dessus."
+      }
+    },
+    "mycelium": {
+      "description": "Un myxomycète en quête de nourriture dans l’obscurité. Tous les autres champs ici sont une équation différentielle sur une grille ; celui-ci est une population — jusqu’à un million d’agents, chacun porteur d’une position et d’un cap, échantillonnant la piste devant lui, tournant vers ce qui sent le plus fort et en déposant davantage à mesure qu’il avance. Les veines, les jonctions et la lente réorganisation ne figurent nulle part dans le code.",
+      "props": {
+        "agentCount": "Nombre d’agents qui fourragent le champ, par paliers discrets plutôt que par curseur continu — chaque valeur réalloue les textures d’état et reconstruit la géométrie des points, ce qu’un curseur continu ferait à chaque pixel de glissement. Sur un champ fixe de 1024 px, c’est une densité : un million referme le réseau en un maillage fin, et un quart de cela donne le même comportement dessiné en quelques troncs épars. Réduisez si la fréquence d’images en a besoin.",
+        "speed": "Déplacement vers l’avant par seconde, rapporté au champ de 1024 px. Poussez-la bien au-delà de la distance des capteurs, et un agent enjambe une veine sans jamais la détecter — la colonie paraît rapide mais ne construit plus rien.",
+        "sensorDistance": "Distance à laquelle se trouvent les trois capteurs, mesurée par rapport à la carte des pistes plutôt qu’au canvas, afin que la structure garde son échelle sur une bande étroite. Courte, c’est myope et noué ; longue, cela laisse un agent s’engager vers une veine qu’il aperçoit déjà.",
+        "sensorAngle": "Écart par rapport à son cap auquel un agent regarde lorsqu’il échantillonne à gauche et à droite. Ce seul réglage décide de la topologie : étroit produit de longues veines parallèles qui se rejoignent rarement, large produit un réseau dense qui fusionne partout. Au-delà d’environ 45°, les deux flancs lisent la même piste et la colonie perd sa capacité à choisir.",
+        "turnSpeed": "Avec quelle vivacité un agent peut virer, en radians par seconde. La zone intéressante se situe juste en dessous de ce que réclame l’angle des capteurs, si bien que les agents restent toujours légèrement en retard sur la décision qu’ils ont prise. Trop bas, et ils ne peuvent plus suivre leur propre piste.",
+        "wander": "Marche aléatoire ajoutée à chaque cap, en radians par seconde — exploration contre exploitation. Suivre une piste relève d’une pure rétroaction positive : à zéro, la colonie converge en une minute vers deux ou trois grands axes et le reste du champ s’éteint. C’est ce bruit qui continue de faire fuir des agents vers l’espace vide, où ils amorcent la génération suivante de ramifications.",
+        "decay": "Fraction de la piste qui survit à chaque soixantième de seconde — la mémoire de la colonie. En dessous d’environ 0,95, rien ne persiste assez longtemps pour qu’un second agent le retrouve, et aucune structure ne se forme ; au-dessus de 0,995, chaque chemin jamais emprunté reste allumé et la carte s’embrume.",
+        "diffuse": "Fondu vers le voisinage flouté. La diffusion est ce qui permet de trouver une veine depuis ses abords plutôt que seulement en étant dessus — à zéro, les pistes ne font qu’un texel de large, invisibles pour un capteur qui n’est pas déjà dessus, et rien ne s’agrège jamais.",
+        "deposit": "Piste déposée par un agent en un pas. Face à decay, c’est toute l’économie du système — une cellule se stabilise à deposit divisé par un moins decay ; ensemble, ces deux réglages décident si le terrain ouvert reste sombre pendant que les veines s’épinglent en lumière vive, ou si le champ entier sature en une nappe plate.",
+        "attract": "Intensité de la source de nourriture sous le pointeur. Elle est déposée dans la carte des pistes plutôt qu’appliquée comme une force, si bien que la colonie doit la découvrir et s’y frayer un chemin sur plusieurs secondes — les veines s’épaississent vers votre curseur comme elles le feraient vers un flocon d’avoine, au lieu que l’essaim ne s’y aligne instantanément. 0 désactive l’effet.",
+        "spawn": "Où la population démarre et dans quelle direction elle est orientée. Dispersion est uniforme et de faible densité, si bien que le réseau s’auto-organise en quelques secondes. Anneau fait face vers l’intérieur et doit d’abord résoudre sa propre collision — plus lent à se stabiliser, et le seul mode où l’on peut observer les premières ramifications se former sous contrainte.",
+        "trailColor": "La piste elle-même.",
+        "background": "L’obscurité dans laquelle croît le réseau.",
+        "glow": "Lumière supplémentaire sur les filaments les plus denses, là où plusieurs pistes se sont empilées sur la même cellule."
+      }
+    },
+    "contour": {
+      "description": "Une carte topographique d’un terrain qui refuse de rester immobile. Les lignes ne sont pas dessinées, elles sont trouvées — un champ de hauteur est échantillonné sur une grille à chaque image, et l’algorithme marching squares le parcourt une fois par altitude, émettant des segments partout où le terrain croise cette hauteur. Rien ici ne sait ce qu’est une crête ; les crêtes sont simplement les endroits où les croisements se resserrent. Le pointeur soulève une colline que les courbes doivent contourner, et comme c’est l’intervalle qui est fixe plutôt que le nombre de lignes, cette altitude supplémentaire produit des anneaux en plus au lieu d’étirer ceux déjà à l’écran.",
+      "props": {
+        "levels": "Courbes par unité d’altitude — l’équidistance de la carte, inversée en le nombre que le lecteur souhaite réellement. C’est une densité plutôt qu’un compte : le nombre de lignes à l’écran dépend de ce que produit cet intervalle sur la plage actuellement occupée par le terrain, si bien qu’élever un pic sous le curseur ajoute des anneaux au lieu de tasser ceux déjà tracés.",
+        "cellSize": "Espacement des échantillons de hauteur, et donc résolution de toute la carte. Les courbes ne peuvent tourner qu’à la limite d’une cellule : une grille grossière donne des anneaux visiblement facettés, tandis qu’une grille fine coûte un balayage complet supplémentaire du champ à chaque image. En dessous d’environ 10 px sur un large canvas, un plafond de coût prend le relais et la cellule regrandit d’elle-même.",
+        "speed": "Vitesse à laquelle le terrain dérive sous le cadre. Il défile, il n’est jamais régénéré — les mêmes collines traversent puis s’en vont, ce qui explique pourquoi un relief garde sa forme assez longtemps pour être reconnu en sortant du cadre.",
+        "warp": "Distorsion de domaine : les coordonnées d’échantillonnage sont déplacées par le champ lui-même avant d’être lues. À zéro, la carte n’est faite que d’ovales concentriques et se lit comme une lampe à lave. En l’augmentant, les courbes se replient en crêtes, vallées et cols — c’est le moment où la carte commence à ressembler à un relevé plutôt qu’à une génération.",
+        "cursorRadius": "Largeur du relief soulevé par le pointeur, en tant qu’écart-type d’une gaussienne. Petite et nette, cela se lit comme un neck volcanique avec des anneaux serrés tout autour ; large et douce, cela se lit comme un renflement que les courbes contournent à peine.",
+        "cursorStrength": "Hauteur de ce relief, dans les mêmes unités que le terrain. Une valeur négative creuse une dépression, et la carte se lit alors comme un cratère plutôt que comme une colline. Zéro retire complètement le pointeur de la carte.",
+        "indexEvery": "Une courbe sur N est une courbe maîtresse, tracée plus vive et plus épaisse, comme le fait une vraie carte pour ses lignes comptées. L’accentuation est calée sur l’altitude absolue plutôt que sur l’ordre de tracé, si bien qu’un anneau donné garde son poids même quand le terrain bouge sous lui, au lieu que la mise en valeur ne se déplace dans l’ensemble.",
+        "lineWidth": "Épaisseur d’une courbe ordinaire. Les courbes maîtresses sont toujours tracées à une fois et demie cette valeur, si bien que la hiérarchie survit à tout réglage.",
+        "lineColor": "Les courbes ordinaires. Délibérément proches du papier — elles sont la texture, pas le sujet.",
+        "indexColor": "Les courbes maîtresses — la seule vraie lumière de la carte.",
+        "background": "Le papier."
+      }
+    },
+    "rainglass": {
+      "description": "De la pluie sur une vitre, avec une ville quelque part derrière. Aucune scène n’est floutée — l’arrière-plan est construit flou dès le départ, si bien que les gouttes ont quelque chose à courber sans qu’aucune cible de rendu ni passe de flou n’intervienne dans l’image. Chaque goutte est une fonction pure du temps à l’intérieur de sa propre cellule de grille, ce qui explique pourquoi mille gouttes coûtent autant qu’une seule, et pourquoi un redimensionnement ne peut jamais faire disparaître la pluie. Elles descendent comme l’eau le fait réellement : retenues par tension superficielle, puis lâchant prise, filant rapidement, s’arrêtant à nouveau — et la traînée n’existe qu’au-dessus de la goutte qui l’a créée.",
+      "props": {
+        "intensity": "Quantité d’eau sur la vitre. Les cellules sont activées par ce réglage plutôt qu’atténuées par lui — une cellule contient une goutte ou n’en contient pas, car une goutte à moitié présente se lit comme une tache à l’écran plutôt que comme de la météo.",
+        "dropScale": "Taille des gouttes, via la grille dans laquelle elles vivent. De grosses gouttes donnent des coulées moins nombreuses mais plus lourdes, et une vitre qui semble toute proche ; de petites gouttes donnent une fine pluie éparse qui se lit comme de la distance.",
+        "speed": "Fréquence à laquelle une goutte lâche prise, et vitesse à laquelle elle coule ensuite. Comme la descente est un escalier de paliers plutôt qu’une chute, augmenter ce réglage raccourcit les paliers autant qu’il accélère les glissements.",
+        "wander": "Distance sur laquelle une goutte qui coule dérive latéralement en chemin. À zéro, elle coule parfaitement droit vers le bas — ce qu’une vraie goutte d’eau sur une vitre ne fait jamais.",
+        "refraction": "Avec quelle force chaque gouttelette courbe la ville derrière elle. Le décalage part du centre propre de la gouttelette, ce qui grossit plutôt que ça ne barbouille — désactivez-le, et les gouttes s’aplatissent en simples autocollants sur la vitre.",
+        "fog": "Film de condensation sur toute la vitre. Il est retiré là où l’eau est passée plutôt que dessiné entre les gouttes, si bien qu’une traînée est une bande nette découpée dans la buée, plutôt qu’une forme posée par-dessus.",
+        "layers": "Plans de profondeur de pluie, chacun plus petit et réfractant moins que celui devant lui. Deux suffisent pour lire de la profondeur ; le troisième n’apporte que de la texture, au prix d’une évaluation complète supplémentaire du champ de gouttes par pixel.",
+        "blur": "À quel point la ville est floue. Ce réglage agrandit les disques de bokeh plutôt que d’appliquer un noyau de convolution sur une scène rendue — il n’y a rien de net derrière la vitre à adoucir, ce qui explique justement pourquoi tout tient en une seule passe.",
+        "tintTop": "Le ciel, en haut du cadre.",
+        "tintBottom": "Le sol, en bas.",
+        "glow": "Les lumières floues, et le reflet qui accroche le bord mouillé d’une goutte."
+      }
+    },
+    "morphing-text": {
+      "description": "Un morphing visqueux et flou qui fond en fondu-enchaîné d’un mot à l’autre dans une liste.",
+      "props": {
+        "auto": "Boucler indéfiniment sur les mots (désactivé = un seul morphing)."
+      }
+    },
+    "animated-number": {
+      "description": "Des transitions numériques animées avec des styles flip, glissement, fondu et rebond.",
+      "props": {
+        "value": "La valeur à afficher et vers laquelle animer.",
+        "animationType": "Style de transition entre les valeurs.",
+        "duration": "Durée de la transition.",
+        "staggerDelay": "Délai entre l’animation de chaque chiffre."
+      }
+    },
+    "marquee-text": {
+      "description": "Un défilement qui ne s’anime que lorsque son texte dépasse le conteneur.",
+      "props": {
+        "speed": "Vitesse de défilement (px/s).",
+        "gap": "Espace entre les répétitions.",
+        "pause": "Pause au démarrage avant le défilement."
+      }
+    },
+    "variable-proximity": {
+      "description": "Un texte dont les lettres interpolent leur graisse en fonction de la proximité du curseur.",
+      "props": {
+        "radius": "Rayon d’influence du curseur.",
+        "falloff": "Manière dont l’influence s’atténue avec la distance."
+      }
+    },
+    "letters-pull": {
+      "description": "Une révélation lettre par lettre en traction vers le haut — les lettres s’élèvent, se nettoient depuis un flou et apparaissent en fondu, avec un décalage successif.",
+      "props": {
+        "duration": "Durée d’animation par lettre.",
+        "delay": "Délai entre lettres successives.",
+        "yValue": "Distance d’élévation de chaque lettre.",
+        "blur": "Flou de départ depuis lequel chaque lettre se nettoie."
+      }
+    },
+    "scramble-text": {
+      "description": "Des glyphes chiffrés qui bouillonnent hors du bruit et se résolvent en mots — une cascade de décodage qui se stabilise caractère par caractère, un survol qui remélange à la demande, ou un léger glitch continu qui garde le texte agité, chaque lettre fraîchement résolue clignotant en teinte accent avant de se figer à l’encre.",
+      "props": {
+        "mode": "Décoder une fois au montage, remélanger au survol, ou glitcher indéfiniment.",
+        "charset": "Ensemble de glyphes chiffrés affichés avant qu’un caractère ne se stabilise.",
+        "duration": "Durée totale de résolution de toute la cascade de décodage.",
+        "stagger": "Décalage par caractère de l’échéance de stabilisation le long de la chaîne.",
+        "speed": "Fréquence à laquelle les glyphes non stabilisés retirent un nouveau bruit.",
+        "glitchInterval": "Secondes entre les rafales de glitch (mode glitch continu uniquement).",
+        "flashColor": "Teinte accent dont clignote un caractère lorsqu’il se résout."
+      }
+    },
+    "long-shadow": {
+      "description": "Un texte qui projette une ombre longue balayant les heures comme un cadran solaire.",
+      "props": {
+        "shadowLength": "Portée de l’ombre projetée (nombre de couches).",
+        "sweepSpeed": "Vitesse de la course du soleil ; 0 fige l’ombre.",
+        "angleStart": "Angle de départ du cadran solaire.",
+        "angleSweep": "Arc total balayé par le soleil.",
+        "pingPong": "Balayer d’avant en arrière (désactivé = rotation complète).",
+        "fade": "Intensité avec laquelle l’ombre se dissout sur sa longueur.",
+        "skew": "Inclinaison italique de l’ombre projetée.",
+        "shadowColor": "Couleur de l’ombre longue."
+      }
+    },
+    "specter": {
+      "description": "Des échos spectraux à décomposition RVB dérivent hors des lettres et se dissolvent dans l’obscurité.",
+      "props": {
+        "ghostCount": "Nombre d’échos spectraux.",
+        "drift": "Distance de dérive de chaque fantôme avant dissolution.",
+        "speed": "Vitesse du cycle de dérive et de dissolution.",
+        "angle": "Direction vers laquelle dérivent les fantômes.",
+        "stagger": "Délai entre émissions successives.",
+        "blur": "Douceur du fantôme lors de sa dissolution.",
+        "splitColor1": "Fantôme chromatique améthyste.",
+        "splitColor2": "Fantôme chromatique cyan."
+      }
+    },
+    "lumen": {
+      "description": "Un texte qui s’illumine au fil de la lecture — les mots à venir restent sombres et flous, puis demeurent éclairés une fois dépassés.",
+      "props": {
+        "dimOpacity": "Opacité des mots pas encore atteints.",
+        "fadeSpan": "Largeur de la bande de lecture — nombre de mots en transition simultanément.",
+        "blurAmount": "Flou sur un mot pas encore atteint.",
+        "startOffset": "Point du défilement où le premier mot s’éclaircit.",
+        "endOffset": "Point auquel le dernier mot est pleinement éclairé.",
+        "highlightColor": "Halo améthyste sur le front de lecture."
+      }
+    },
+    "redact": {
+      "description": "Un texte qui arrive entièrement classifié sous des barres opaques, puis se déclassifie mot par mot — chaque barre dégageant son propre mot et laissant derrière elle un liseré améthyste, seule trace de son passage.",
+      "props": {
+        "mode": "Comment une barre disparaît. Essuyage la rétracte vers son propre bord, glissement la projette hors du mot, décollement la détache de la page — l’essuyage se lit comme une censure annulée, le glissement comme un ruban qu’on arrache.",
+        "direction": "L’ordre dans lequel les mots se déclassifient. Aléatoire est le seul mode qui se lit comme une machine traitant un document, plutôt que comme une personne en train de le lire.",
+        "duration": "Temps que met une barre à dégager son propre mot.",
+        "stagger": "Écart entre le début du dégagement d’un mot et celui du suivant. À 0, tout le bloc se lève d’un coup et perd tout son côté espionnage.",
+        "startDelay": "Temps mort après l’arrivée du bloc classifié, avant que la première barre ne bouge. Cette pause est ce qui donne à la révélation un air d’autorisation officielle.",
+        "barPadding": "Débord de chaque barre par rapport à son mot. Serrée contre les glyphes, elle se lit comme un surligneur ; avec quelques pixels de plus, elle se lit comme un ruban posé sur la page.",
+        "loop": "Faire redescendre les barres et relancer tout le balayage indéfiniment, au lieu de se stabiliser sur le texte en clair.",
+        "interval": "Secondes pendant lesquelles le texte en clair reste lisible avant que les barres ne redescendent.",
+        "barColor": "Encre pleine des barres. Presque noire, volontairement — une barre de censure qui laisse filtrer le moindre bout de mot n’est pas une barre de censure.",
+        "edgeColor": "Liseré améthyste qui longe le bord reculant de chaque barre. C’est la seule partie de l’effet que l’œil suit réellement."
+      }
+    },
+    "split-flap": {
+      "description": "Un panneau de départs Solari. Chaque colonne parcourt le jeu de caractères une palette à la fois jusqu’à atteindre sa lettre — le mot n’est donc jamais révélé, il est atteint, avec une véritable demi-palette articulée qui bascule tandis que la suivante se met en place derrière elle.",
+      "props": {
+        "charset": "Quels glyphes une colonne traverse en chemin vers sa lettre. C’est ce qui détermine la longueur du trajet — un panneau uniquement numérique arrive presque immédiatement, un panneau alphanumérique complet prend son temps.",
+        "flapDuration": "Durée d’une palette. En dessous d’environ 50 ms, la colonne se lit comme un flou plutôt que comme des cartes distinctes, ce qui ruine tout l’intérêt du mécanisme.",
+        "stagger": "Délai entre le démarrage d’une colonne et celui de la suivante. À 0, le panneau bouge comme un seul bloc ; un léger décalage est ce qui lui donne, même en silence, l’allure d’un vrai panneau.",
+        "settleBounce": "Dépassement lorsqu’une palette atteint sa butée. C’est un effet de continuité : la carte a une masse, elle arrive donc légèrement au-delà puis revient.",
+        "cardGap": "Espace entre une pile de cartes et la suivante.",
+        "seamWeight": "Le trait fin au milieu d’une carte, là où les deux moitiés se rejoignent. Conservé dans le DOM plutôt que dessiné, afin que le navigateur l’aligne sur la grille de pixels au lieu de le laisser scintiller lors d’une mise à l’échelle fractionnaire.",
+        "specular": "Lumière balayant une palette en mouvement, la plus vive de profil. Sans elle, un basculement se lit comme un rectangle qui change de forme plutôt que comme une surface qui pivote.",
+        "perspective": "Profondeur du raccourci. Plus faible exagère la charnière et rapproche le spectateur du panneau ; plus élevée l’aplatit vers un simple pli droit.",
+        "cardColor": "Corps des cartes. Un matériau propre, pas une surface thématisée — un panneau de départs reste un objet sombre dans n’importe quelle pièce.",
+        "glyphColor": "Les caractères imprimés."
+      }
+    },
+    "teletype": {
+      "description": "Une ligne de texte qui arrive caractère par caractère, à un rythme variable, avec un temps d’arrêt à chaque signe de ponctuation.",
+      "props": {
+        "charsPerSecond": "Cadence de frappe avant tremblement. Au-delà d’environ 40, le lecteur cesse de percevoir les frappes individuelles et perçoit un simple balayage.",
+        "deleteRate": "Vitesse d’effacement, en multiple de la vitesse de frappe — effacer n’est jamais aussi délibéré qu’écrire. À 0, la ligne n’est pas effacée du tout : elle est coupée, et la suivante démarre propre.",
+        "hold": "Temps de maintien sur une ligne terminée avant qu’elle ne disparaisse. C’est la seule fenêtre dont dispose le lecteur pour réellement la lire.",
+        "gap": "Silence entre l’effacement d’une ligne et le début de la suivante.",
+        "jitter": "Étalement de la vitesse par ligne. À 0, la machine est un métronome, ce qui se lit comme une barre de progression rendue en lettres plutôt que comme de la frappe.",
+        "punctuationPause": "Temps d’arrêt supplémentaire après une virgule, un point, un tiret ou deux-points. La pause qu’un lecteur perçoit à un signe est le silence qui le suit, elle se place donc après le glyphe, jamais avant.",
+        "caret": "Forme du curseur qui suit le texte.",
+        "caretBlink": "Secondes par cycle de clignotement. Le curseur reste fixe pendant l’arrivée des caractères et ne clignote qu’une fois la ligne au repos — un terminal fait de même, et ce contraste est ce qui fait lire la frappe comme réelle.",
+        "loop": "Reboucler vers la première ligne une fois la liste épuisée.",
+        "reserveSpace": "Fixer la boîte à la taille de la ligne la plus longue. Désactivez-le pour voir tout ce qui se trouve sous le texte monter et descendre sur la page — c’est précisément la raison pour laquelle c’est activé par défaut.",
+        "accentColor": "Le curseur."
+      }
+    },
+    "reflow": {
+      "description": "Un texte dont les mots gardent leur identité quand les retours à la ligne se déplacent — réduisez la largeur de colonne, et la phrase voyage au lieu de se réajuster.",
+      "props": {
+        "columnWidth": "Largeur de la colonne de texte en pourcentage de son conteneur — la justification. Faire glisser ce réglage, c’est le réajustement en direct, sans qu’un seul mot ne change.",
+        "stiffness": "Tension du ressort sur le déplacement.",
+        "damping": "Frottement du ressort sur le déplacement.",
+        "stagger": "Délai entre le début du déplacement d’un mot et celui du suivant. L’indice est plafonné à vingt, afin qu’un long paragraphe ne laisse pas sa fin immobile et bien visible.",
+        "enterScale": "Taille à laquelle un mot apparaît et disparaît.",
+        "wordGap": "Espace entre les mots. Une marge plutôt qu’un caractère espace, afin qu’un mot quittant la phrase n’abandonne pas l’espace qui le suivait.",
+        "lineHeight": "Interlignage.",
+        "align": "Alignement du texte.",
+        "auto": "Avancer automatiquement dans les phrases selon une minuterie.",
+        "interval": "Temps passé sur chaque phrase.",
+        "traceMoves": "Teinter un mot tant qu’il est en déplacement. Un outil de débogage qui a mérité sa place — c’est le seul moyen de prouver qu’un mot s’est déplacé plutôt que d’avoir été détruit et recréé ailleurs.",
+        "accentColor": "La teinte de traçage."
+      }
+    },
+    "metallic-text": {
+      "description": "Du chrome coulé dans un titre — une rampe métallique découpée sur de vrais glyphes, un reflet spéculaire qui les traverse, et un sillage teinté qui suit un temps en retrait.",
+      "props": {
+        "sweepSpeed": "Temps que met le reflet à traverser la ligne une fois.",
+        "sweepWidth": "Largeur de la bande spéculaire, en proportion de la boîte de texte. Étroite, elle se lit comme du chrome poli ; large, comme de l’acier brossé — la bande fait office de source lumineuse, sa taille est donc la douceur de la réflexion.",
+        "sweepAngle": "Inclinaison de la bande par rapport à la verticale. S’arrête volontairement avant ±90 : à angle droit, la bande devient parallèle à son propre déplacement et le balayage cesse totalement de se lire comme un mouvement.",
+        "contrast": "Séparation entre les bandes sombres et claires du métal. C’est ce qui décide si le texte se lit comme du chrome ou comme un simple dégradé de gris — l’horizon entre les deux est le reflet d’un plan de sol.",
+        "specular": "Luminosité du reflet en mouvement.",
+        "lag": "À quelle distance le sillage traîne derrière le reflet. À zéro, les deux se déplacent comme un seul dégradé ; augmentez-le, et la lumière gagne en poids, car le bord arrière arrive encore alors que le bord avant est déjà passé.",
+        "sweep": "Si la lumière revient par où elle est venue, ou si elle redémarre du même bord à chaque passage.",
+        "grain": "Striures brossées le long de l’axe de balayage. Directionnelles plutôt qu’aléatoires — un métal usiné a un sens de fil, alors qu’un bruit aléatoire se lirait comme de la saleté à l’écran.",
+        "baseColor": "Le métal. Aussi la couleur de repli : là où background-clip sur du texte n’est pas pris en charge, l’élément s’affiche en texte simple dans cette couleur plutôt que comme un titre invisible.",
+        "highlightColor": "Le reflet spéculaire.",
+        "accentColor": "Teinte du sillage."
+      }
+    },
+    "molten": {
+      "description": "Un texte qui fond. Les lettres s’affaissent sous leur propre poids, s’étirent en filaments et fusionnent en une seule surface là où elles se touchent — parce que les glyphes sont un champ de couverture découpé par un seuil plutôt que des formes déplacées, si bien que deux jambages font franchir au recouvrement entre eux le seuil de découpe, et un seul contour finit par les englober tous les deux. Le mot en dessous reste tout du long un véritable nœud de texte : sélectionnable, indexable, et correctement lu à voix haute pendant que l’effet tourne.",
+      "props": {
+        "mode": "Ce qui déclenche la fonte. Boucle tourne en continu sans intervention ; survol fait fondre tant que le pointeur est sur le mot et le reforme lorsqu’il s’éloigne ; maintien ne fait fondre que tant que le pointeur reste enfoncé, ce qui transforme l’effet en un contrôle plutôt qu’en une ambiance.",
+        "melt": "Jusqu’où les glyphes s’affaissent au creux du cycle. Au-delà d’environ 0,8, les formes des lettres cessent d’être lisibles à l’extrême, ce qui est soit voulu, soit un défaut, selon la durée pendant laquelle le cycle s’y attarde.",
+        "viscosity": "Avec quelle lenteur le matériau cède — un terme qui façonne l’affaissement, pas une vitesse. Une viscosité élevée signifie que la ligne de casse a à peine bougé alors que la ligne de base s’étire déjà en filament — c’est ce qui distingue une cire qui fond d’un simple écrasement linéaire.",
+        "cycle": "Durée d’un cycle complet d’affaissement et de reformation. La reformation est délibérément la moitié la plus rapide — un cycle symétrique se lit comme une boucle, un cycle asymétrique se lit comme un matériau.",
+        "threshold": "Où le champ de couverture est découpé en encre. En dessous de 0,5, les glyphes s’épaississent et les jambages voisins fusionnent plus tôt ; au-dessus, ils s’amincissent et la fonte se rompt plus vite en gouttelettes. Le seul réglage qui change la graisse du texte sans changer de police.",
+        "softness": "Largeur de la coupe de part et d’autre du seuil. Étroite donne un bord vectoriel net ; large est ce qui fait fusionner deux jambages qui se rapprochent en une seule masse au lieu de simplement se chevaucher — c’est la fusion visqueuse, et la raison pour laquelle les glyphes sont un champ et non un masque.",
+        "drip": "Élongation verticale sous l’affaissement, si bien qu’un jambage qui tombe s’étire en filament avant de se détacher. À zéro, les lettres glissent vers le bas intactes, ce qui ressemble à une simple transformation plutôt qu’à un changement d’état.",
+        "wobble": "Bruit sur le déplacement. Zéro donne une fonte symétrique et nette ; au-delà d’environ 0,6, le mot ne survit plus au creux du cycle.",
+        "phase": "Retard de chaque colonne par rapport à celle qui la précède. À zéro, toute la ligne s’affaisse comme un bloc unique ; augmentez-le, et la fonte se propage à travers le mot, ce qui se lit comme l’arrivée de la chaleur plutôt que comme la gravité que l’on enclenche.",
+        "baseColor": "Le texte au repos.",
+        "meltColor": "Mélangée selon le déplacement local, de sorte que ce qui a le plus bougé est aussi le plus chaud. Lier la couleur au champ plutôt qu’au temps signifie qu’une fonte au survol et une fonte en boucle se colorent de façon identique, sans courbe supplémentaire."
+      }
+    },
+    "neon": {
+      "description": "Une enseigne au néon, avec tous les défauts d’une véritable enseigne au néon. Les tubes s’amorcent un par un plutôt qu’ensemble, chacun se stabilisant à son propre moment pendant l’allumage ; le régime stable porte un ronflement secteur ; et de temps en temps, un tube renonce pendant un tiers de seconde avant de revenir. La lueur est précalculée une fois par lettre dans un sprite, si bien qu’une image ne coûte qu’une poignée de tracés quelle que soit la largeur du mot — et le mot lui-même ne cesse jamais d’être, en dessous, un véritable nœud de texte sélectionnable.",
+      "props": {
+        "mode": "Ce qui déclenche l’allumage. Boucle fait fonctionner l’enseigne comme une devanture de magasin — allumée, coupée, réamorcée. Survol l’allume sous le pointeur et l’éteint un quart de seconde après son départ, car une enseigne ne s’éteint jamais en fondu. Stable saute entièrement la phase de démarrage et ne laisse que le ronflement et le tube défaillant.",
+        "tubeColor": "Le gaz.",
+        "glow": "Étalement du halo, et aussi l’espace de mise en page qui lui est réservé — la racine se dote d’une marge égale au double de cette valeur, car un halo qui déborde de sa boîte se fait recouvrir par ce que la page a placé à côté. Modifier ce réglage recalcule chaque sprite : c’est un paramètre de configuration, pas quelque chose à animer.",
+        "core": "À quel point le centre du tube chauffe au blanc face au halo saturé qui l’entoure. Il n’atteint jamais le blanc pur, volontairement : un centre blanc se lirait comme une ampoule derrière un filtre coloré plutôt que comme un gaz excité.",
+        "ignition": "Secondes entre l’état froid et l’état stable. Chaque lettre choisit son propre point de stabilisation dans cette fenêtre, et sa probabilité de tenir augmente à mesure qu’elle chauffe, si bien que les tremblotements s’estompent d’eux-mêmes plutôt que de s’arrêter sur une minuterie.",
+        "cycle": "Secondes d’allumage avant que l’alimentation ne coupe et que l’enseigne ne se réamorce. L’obscurité entre les deux est fixe et brève — assez longue pour être perçue comme éteinte, assez courte pour que personne ne s’en aille entre-temps.",
+        "hum": "Profondeur du ronflement secteur une fois un tube allumé. Deux fréquences plutôt qu’une, car une sinusoïde unique se lirait comme un simple effet de pulsation ; c’est le battement entre les deux qui se lit comme de l’électricité.",
+        "flicker": "Fréquence à laquelle un tube renonce un instant. Un tirage toutes les secondes et quelques décide si une lettre défaille, et laquelle, si bien que les défaillances restent occasionnelles et ciblées plutôt qu’un scintillement permanent sur tout le mot.",
+        "offGlass": "Afficher le verre sombre là où un tube est éteint. Il ne porte aucune lueur — un tube sombre qui continuerait de luire trahirait que l’enseigne n’a en réalité jamais été éteinte."
+      }
+    },
+    "rime": {
+      "description": "Le givre qui prend un mot — le pendant opposé de Molten, la même idée du texte comme champ de couverture, mais passée au froid. Des pointes de cristaux amorcées sur les bords des glyphes rampent à travers les lettres, se ramifient selon un angle de réseau fixe, et s’éteignent là où le glyphe manque ou là où de la glace est déjà présente — si bien que le coût suit le front en croissance plutôt que la surface. Le texte en dessous n’est jamais redessiné : il reste un véritable span, dans sa vraie couleur, tout du long, ce qui fait du dégel rien de plus qu’un estompage de la glace sur un texte qui a toujours été là.",
+      "props": {
+        "mode": "Ce qui déclenche le gel. Boucle fait croître le cristal, le maintient, le dégèle, puis en démarre un nouveau. Survol reste gelé et se dégage sous le pointeur, puis recroît une fois entièrement fondu. Maintien est le miroir d’une fonte : la glace n’avance que tant que le pointeur reste enfoncé, et recule dès qu’il se relève.",
+        "growth": "Vitesse à laquelle le front du cristal avance. C’est un budget de pas par seconde partagé entre toutes les pointes actives, si bien qu’un givre très ramifié fait progresser chaque pointe plus lentement — exactement comme un vrai front qui manque d’espace.",
+        "branching": "Avec quelle facilité une pointe se divise en deux — la différence entre aiguilles et fougères. Les ramifications sont volontairement quantifiées à un angle de réseau de soixante degrés : des angles libres se liraient comme de la moisissure plutôt que comme de la glace.",
+        "density": "Plafond du nombre de pointes actives simultanément, ce qui détermine la quantité de glace que portent les lettres avant que le front ne manque d’espace et que le gel ne s’achève. Faible laisse le texte lisible sous une dentelle de givre ; élevé l’ensevelit.",
+        "seeds": "Nombre d’endroits d’où part le givre. Chaque germe se pose sur un bord de glyphe plutôt qu’au milieu d’un jambage, car c’est là que la condensation nuclée réellement — et c’est pourquoi la glace a toujours l’air d’être arrivée depuis l’extérieur de la lettre.",
+        "thaw": "Vitesse à laquelle la glace se dégage. Le cristal n’est pas redessiné pour le faire fondre — la surcouche s’estompe simplement — ce réglage est donc gratuit à toute vitesse, et le mot en dessous reste lisible tout du long.",
+        "hold": "Secondes passées entièrement gelé avant que le dégel ne commence. Cette pause est ce qui permet de contempler le cristal achevé ; sans elle, la boucle se lirait comme un simple scintillement plutôt que comme un processus qui a une fin.",
+        "sparkle": "Éclats sur les facettes, échantillonnés à partir de points réellement traversés par le front plutôt que dispersés dans la boîte. Ils s’estompent avec le dégel, si bien que la lumière est la dernière chose à disparaître.",
+        "frostColor": "La glace. Le cristal est stocké en blanc et teinté à la sortie, si bien que ce réglage repeint l’ensemble sans toucher au moindre segment stocké.",
+        "baseColor": "Le texte en dessous, qui ne bouge jamais et n’est jamais redessiné."
+      }
+    },
+    "pixel-transition": {
+      "description": "Révéler une seconde couche via une dissolution pixelisée aléatoire au survol.",
+      "props": {
+        "gridSize": "Résolution de la grille de pixels.",
+        "pixelColor": "Couleur des pixels de dissolution.",
+        "animationStepDuration": "Durée de la dissolution.",
+        "once": "Jouer une seule fois au lieu de chaque survol."
+      }
+    },
+    "border-glow": {
+      "description": "Une bordure en dégradé réagissant à la proximité du curseur, avec une lueur extérieure.",
+      "props": {
+        "glowColor": "Couleur de la lueur.",
+        "glowRadius": "Rayon de la lueur extérieure.",
+        "glowIntensity": "Luminosité de la lueur.",
+        "coneSpread": "Étalement angulaire du cône lumineux.",
+        "edgeSensitivity": "Proximité au bord à laquelle la lueur s’active.",
+        "borderRadius": "Rayon des coins.",
+        "fillOpacity": "Opacité du remplissage de la bordure.",
+        "animated": "Jouer un balayage d’introduction au montage."
+      }
+    },
+    "spotlight-shell": {
+      "description": "Une coque de carte avec inclinaison magnétique 3D, lueur radiale et balayage scintillant.",
+      "props": {
+        "accentColor": "Couleur accent pour la lueur et la ligne d’accent."
+      }
+    },
+    "animated-hamburger": {
+      "description": "Une icône hamburger à trois barres qui se transforme en X, pilotée par une prop de bascule.",
+      "props": {
+        "toggle": "Basculer entre le hamburger et le X."
+      }
+    },
+    "morph-dialog": {
+      "description": "Une boîte de dialogue qui s’ouvre par morphing depuis son déclencheur via une animation de mise en page partagée, avec des éléments qui voyagent entre la carte et le panneau.",
+      "props": {
+        "stiffness": "Raideur du ressort du morphing.",
+        "damping": "Amortissement du ressort — plus faible, plus de rebonds.",
+        "radius": "Rayon des coins du panneau.",
+        "blurBackdrop": "Flou givré sur le voile d’arrière-plan.",
+        "autoFocus": "Donner le focus au premier élément focusable à l’ouverture."
+      }
+    },
+    "blueprint-card": {
+      "description": "Une carte façon dessin technique — enveloppe en pointillés, filets accent, nœuds d’angle et une douce lueur qui se dessinent à l’apparition.",
+      "props": {
+        "accentColor": "Couleur accent du cadre, des nœuds et de la lueur.",
+        "dashed": "Bordure extérieure en pointillés ; pleine si désactivé.",
+        "dotSize": "Diamètre des nœuds d’angle.",
+        "glowIntensity": "Intensité de la lueur en dégradé du bas.",
+        "animated": "Dessiner le cadre à l’apparition.",
+        "duration": "Durée de l’animation de tracé."
+      }
+    },
+    "corner-letters": {
+      "description": "Quatre glyphes épinglés aux coins du conteneur, qui apparaissent en flou-et-échelle au montage et se dissolvent à la sortie.",
+      "props": {
+        "visible": "Monte et démonte les glyphes — basculer pour rejouer.",
+        "stiffness": "Raideur du ressort à l’entrée.",
+        "blur": "Flou depuis et vers lequel voyagent les glyphes.",
+        "scaleFrom": "Échelle de départ de chaque glyphe.",
+        "offset": "Retrait par rapport aux coins.",
+        "size": "Taille de police des glyphes.",
+        "color": "Couleur des glyphes."
+      }
+    },
+    "hover-list": {
+      "description": "Une liste en gros caractères où un bloc accent partagé bondit entre les lignes au survol, pendant que le texte s’indente et s’inverse.",
+      "props": {
+        "highlightColor": "Couleur du bloc de surbrillance glissant.",
+        "invertedColor": "Couleur du texte et de l’icône lorsqu’une ligne est en surbrillance.",
+        "stiffness": "Raideur du ressort de la surbrillance glissante.",
+        "damping": "Amortissement du ressort — plus faible, plus de rebonds.",
+        "indent": "Distance à laquelle le contenu de la ligne glisse vers la droite au survol.",
+        "textSize": "Échelle typographique des lignes.",
+        "showIcon": "Faire pivoter une icône de réticule au survol.",
+        "rounded": "Rayon des coins du bloc de surbrillance."
+      }
+    },
+    "preloader": {
+      "description": "Une surcouche de chargement avec compteur en pourcentage — anneau tournant, compteur assoupli, et un fondu de sortie qui révèle la page en dessous.",
+      "props": {
+        "duration": "Durée de chargement simulée.",
+        "ringColor": "Couleur de l’anneau tournant, du compteur et du libellé.",
+        "overlayColor": "Couleur de fond de la surcouche.",
+        "ringSize": "Diamètre de l’anneau.",
+        "spinSpeed": "Secondes par révolution de l’anneau.",
+        "holdDelay": "Pause à 100 % avant le fondu.",
+        "fadeDuration": "Durée du fondu de sortie.",
+        "showLabel": "Afficher la légende sous le compteur."
+      }
+    },
+    "stagger-menu": {
+      "description": "Une surcouche de menu qui s’épanouit via un ressort circulaire en clip-path, pendant que les éléments apparaissent en cascade avec flou et rotation, puis se referme en pilule.",
+      "props": {
+        "openStiffness": "Raideur du ressort d’épanouissement — des valeurs faibles se stabilisent lentement.",
+        "stagger": "Délai entre l’entrée de chaque élément.",
+        "blur": "Flou depuis et vers lequel voyagent les éléments.",
+        "overlayColor": "Couleur de fond de la surcouche.",
+        "overlayOpacity": "Opacité de fond de la surcouche."
+      }
+    },
+    "magnetic-button": {
+      "description": "Un bouton qui se penche vers votre curseur — pris dans un champ magnétique, il glisse vers le pointeur tandis qu’une aura améthyste enfle avec la proximité, puis revient d’un coup de ressort à sa place et répond à chaque clic par une onde sombre qui jaillit depuis le point de contact.",
+      "props": {
+        "pullStrength": "Fraction du décalage du curseur que le bouton suit.",
+        "radius": "Rayon du champ où débute l’attraction magnétique.",
+        "stiffness": "Raideur du ressort de l’attraction et du retour.",
+        "damping": "Amortissement du ressort — plus faible dépasse et rebondit davantage.",
+        "auraColor": "Couleur de la lueur de proximité.",
+        "auraSize": "Étalement de l’aura à proximité maximale.",
+        "ripple": "Émettre une onde sombre au clic.",
+        "rippleColor": "Couleur de l’onde de clic."
+      }
+    },
+    "shadow-cursor": {
+      "description": "Un curseur personnalisé traînant une ombre à son talon — un point précis mène, tandis qu’une lame en retard le suit sur un ressort ; lorsqu’il croise un élément interactif, la traîne s’accumule et enfle autour de lui, inversant tout ce qui se trouve en dessous. Entièrement circonscrit à sa propre scène ; le curseur de la page n’est jamais touché.",
+      "props": {
+        "dotSize": "Taille du point précis de tête.",
+        "trailSize": "Taille de l’anneau de traîne en retard.",
+        "stiffness": "Raideur du ressort de l’anneau de traîne — plus élevée, moins de retard.",
+        "damping": "Amortissement du ressort de l’anneau de traîne.",
+        "cursorColor": "Couleur du point et de l’anneau de traîne.",
+        "blendMode": "Mode de fusion (mix-blend-mode) du curseur sur le contenu en dessous.",
+        "poolScale": "Amplitude du gonflement de la traîne au-dessus d’un élément interactif."
+      }
+    },
+    "torchlight": {
+      "description": "Un contenu caché dans l’obscurité ; le curseur est une torche qui ne révèle que ce qu’elle touche.",
+      "props": {
+        "radius": "Rayon de la lumière de la torche.",
+        "softness": "Douceur de l’atténuation du bord lumineux.",
+        "darkness": "À quel point le contenu environnant est caché.",
+        "restReveal": "Révélation ambiante loin de la torche.",
+        "smoothing": "Retard de la lumière par rapport au curseur.",
+        "flicker": "Léger vacillement de la torche (désactivé si mouvement réduit).",
+        "torchColor": "Teinte améthyste de la torche."
+      }
+    },
+    "dissolve": {
+      "description": "Un élément se désintègre en particules d’ombre à la dérive lors de sa fermeture, et se reforme sur commande.",
+      "props": {
+        "dismissed": "Basculer pour désintégrer ; rebasculer pour reformer.",
+        "particleGap": "Pas d’échantillonnage ; plus bas donne des particules plus fines.",
+        "drift": "Distance de dispersion des particules.",
+        "duration": "Durée de la dissolution.",
+        "stagger": "Étalement des temps de départ de chaque particule.",
+        "gravity": "Biais vertical ; négatif fait s’élever comme de la cendre.",
+        "swirl": "Tourbillon turbulent sur les trajectoires des particules.",
+        "reformOnTrigger": "Se reformer à partir des particules lorsque redéclenché.",
+        "moteColor": "Teinte améthyste mêlée aux particules d’ombre."
+      }
+    },
+    "tilt": {
+      "description": "Une carte façon pièce usinée qui s’incline en 3D vers le pointeur pendant qu’un voile spéculaire glisse sur sa face.",
+      "props": {
+        "maxTilt": "Inclinaison maximale au bord de la carte.",
+        "perspective": "Profondeur de la projection 3D — plus faible l’exagère.",
+        "glare": "Opacité du voile spéculaire, mat → miroir.",
+        "glareSize": "Rayon du reflet en fraction de la largeur de la carte.",
+        "hoverScale": "Échelle appliquée tant que le pointeur est sur la carte.",
+        "smoothing": "Temps que met la carte à rattraper le pointeur.",
+        "glareColor": "Teinte du voile spéculaire."
+      }
+    },
+    "sigil": {
+      "description": "Un blason SVG qui se trace lui-même à l’entrée dans le viewport, trait par trait.",
+      "props": {
+        "duration": "Temps de tracé d’un seul trait.",
+        "delay": "Attente après l’entrée dans le viewport avant le premier trait.",
+        "strokeWidth": "Épaisseur du trait en unités viewBox.",
+        "glow": "Lueur qui suit le trait.",
+        "replayOnLeave": "Se réarmer à la sortie pour que le blason se retrace au retour.",
+        "easing": "Courbe selon laquelle le trait avance.",
+        "strokeColor": "Trait améthyste."
+      }
+    },
+    "rift": {
+      "description": "Une déchirure déplaçable entre deux scènes superposées — poussez-la au-delà d’un bord et elle résiste, puis revient d’un coup.",
+      "props": {
+        "position": "Position de repos de la déchirure.",
+        "handleWidth": "Épaisseur de la ligne de séparation.",
+        "rubberBand": "Élasticité au-delà d’un bord, butée dure → souple.",
+        "angle": "Inclinaison de la déchirure par rapport à la verticale.",
+        "snapBack": "Retour à la position de repos au relâchement.",
+        "glow": "Lueur le long de la ligne de séparation.",
+        "accentColor": "Ligne de séparation améthyste."
+      }
+    },
+    "approach": {
+      "description": "Une tuile dont la surcouche entre exactement par le bord franchi par votre curseur, et repart par où vous partez.",
+      "props": {
+        "overlayOpacity": "Opacité du panneau de surcouche.",
+        "duration": "Temps de déplacement de la surcouche.",
+        "skew": "Cisaillement tant que la surcouche est hors position.",
+        "blur": "Flou sur la surcouche pendant son déplacement.",
+        "offsetDistance": "Distance à laquelle la surcouche démarre hors de la tuile.",
+        "overlayColor": "Panneau de surcouche améthyste."
+      }
+    },
+    "hold": {
+      "description": "Une confirmation qu’il faut mériter — l’anneau se remplit tant que vous maintenez, se referme d’un coup lorsqu’il s’engage, et se vide selon une courbe entièrement différente si vous relâchez trop tôt.",
+      "props": {
+        "duration": "Durée pendant laquelle une pression complète doit être maintenue avant de s’engager. En dessous d’environ 600 ms, les gens relâchent par réflexe ; au-delà de 2 s, ils pensent que c’est cassé.",
+        "indicator": "Où vit la progression — un anneau tracé autour du glyphe, une barre sous le contrôle, ou la face du contrôle elle-même qui se remplit de gauche à droite.",
+        "threshold": "Fraction de la piste qui compte comme engagée. En dessous de 1, le dernier fragment se referme de lui-même, si bien que la pression aboutit un instant avant que l’œil ne s’y attende — ce déclic anticipé est ce qui donne un sentiment de décision plutôt que de simple ponctualité.",
+        "rewindRate": "Combien plus vite un maintien annulé se vide par rapport à son remplissage. À 1, il rembobine la même bande ; au-delà de 2, le relâchement se lit comme un ressort qui se détend — c’est tout l’intérêt d’une courbe asymétrique.",
+        "strokeWidth": "Épaisseur de la piste de progression. Fine, elle se lit comme de l’instrumentation ; épaisse, elle se lit comme un jouet.",
+        "holdScale": "À quel point le contrôle s’enfonce sous le doigt. Le retour de pression fait ici plus de travail que l’anneau lui-même — réglez-le à 1 et le maintien cesse de paraître physique.",
+        "commitScale": "Dépassement auquel le contrôle bondit à l’instant de l’engagement, avant de se stabiliser. C’est l’accusé de réception.",
+        "successHold": "Durée pendant laquelle l’état confirmé reste à l’écran avant que le contrôle ne se réarme.",
+        "accentColor": "Améthyste de la piste qui se remplit et de l’état confirmé.",
+        "trackColor": "Le reste non rempli. Gardez-le proche de la surface sous-jacente — une piste à fort contraste transforme l’anneau en cible."
+      }
+    },
+    "aperture": {
+      "description": "Un diaphragme d’appareil photo. Les lames pivotent sur un anneau de pivots, et un seul angle partagé pilote tout le mécanisme — grand ouvert à 64 % du boîtier, passé le centre et totalement obturé à zéro, découpant le polygone festonné qu’un vrai diaphragme produit au passage.",
+      "props": {
+        "bladeCount": "Nombre de lames dans le mécanisme. Un faible nombre donne le bokeh hexagonal dur d’un objectif bon marché ; au-delà de neuf, l’ouverture devient indiscernable d’un cercle — exactement ce que vend un objectif haut de gamme.",
+        "openness": "Où les lames se posent, de 0 fermé à 1 grand ouvert. À 0, elles se croisent au-delà du centre plutôt que de simplement s’y toucher — un diaphragme qui se touche à peine laisse filtrer la lumière.",
+        "duration": "Temps d’une ouverture ou fermeture complète.",
+        "detent": "Dépassement lorsque le mécanisme se pose. 0 arrive net, ce qui se lit comme du logiciel ; un peu de rebond se lit comme une pièce dotée d’une masse qui atteint sa butée.",
+        "bladeCurvature": "Courbure du bord intérieur de chaque lame. Le mécanisme découle de la plage d’ouverture, ce réglage courbe donc la lame sans toucher à la course : des lames plus plates découpent un polygone plus rond et régulier, des lames plus serrées tirent les pointes festonnées en étoile.",
+        "edgeHighlight": "Intensité du liseré le long du bord intérieur de chaque lame, et de la lunette. Chaque liseré est découpé par la lame qui le recouvre — nommée plutôt que laissée à l’ordre de dessin, car une pile de lames forme un anneau alors que l’ordre du peintre est une ligne. C’est ce qui place exactement une ligne à chaque coin de l’ouverture, grand ouvert comme fermé.",
+        "housingInset": "Largeur de l’anneau usiné à l’intérieur de la monture. Il est dessiné par-dessus les lames, si bien que le boîtier se lit comme la pièce dans laquelle elles reposent plutôt que comme une lame de plus.",
+        "autoOpen": "Ouvrir et fermer en boucle. Le désactiver confie le mécanisme au curseur d’ouverture.",
+        "bladeColor": "Corps des lames, du boîtier et du fond du barillet derrière elles. Un matériau propre, pas une surface thématisée — un thème clair ne doit pas placer un anneau blanc autour d’un objectif.",
+        "edgeColor": "Améthyste sur les liserés des lames et la lunette."
+      }
+    },
+    "segmented": {
+      "description": "Un contrôle segmenté dont l’indicateur voyage via un identifiant de mise en page partagé et s’étire dans la direction de son déplacement.",
+      "props": {
+        "indicator": "Comment le segment actif est marqué. Les trois options sont le même élément voyageur avec des réglages différents — l’identifiant de mise en page partagé ne change pas, donc passer de l’un à l’autre ne coûte aucun code d’animation supplémentaire.",
+        "sizing": "Auto dimensionne chaque segment selon son libellé, si bien que l’indicateur se redimensionne autant qu’il voyage — la moitié du FLIP que des onglets de largeur égale ne montrent jamais. Égal répartit la ligne uniformément et remplit le conteneur.",
+        "density": "Marge intérieure et taille de police. Compact est le réglage barre d’outils ; il raccourcit aussi le trajet, ce qui explique pourquoi l’étirement s’y lit plus subtilement.",
+        "radius": "Rayon des coins de l’indicateur et des segments. motion corrige le rayon tout au long de l’animation de mise en page, si bien qu’un indicateur arrondi ne devient pas ovale pendant qu’il se redimensionne.",
+        "stiffness": "Tension du ressort sur le déplacement. Elle pilote aussi le ressort proxy à partir duquel la déformation est lue, si bien que l’étirement reste en phase avec le mouvement à tout réglage, et pas seulement à celui pour lequel il a été calibré.",
+        "damping": "Frottement du ressort. Faible laisse l’indicateur dépasser le segment puis revenir, ce que l’étirement suit dans les deux sens ; élevé arrive net et se déforme à peine.",
+        "smear": "Avec quelle force le déplacement déforme l’indicateur. L’étirement suit la direction du mouvement et s’ancre sur le bord avant, il traîne donc derrière plutôt que de courir devant. Zéro donne une boîte rigide qui glisse.",
+        "glow": "Lueur accent sous l’indicateur. Elle voyage avec la boîte et subit la même déformation, si bien qu’elle se lit comme une lumière émanant de l’objet plutôt que comme une forme distincte qui le suit.",
+        "accentColor": "L’indicateur, sa lueur, et le libellé du segment actif lorsque l’indicateur ne le remplit pas."
+      }
+    },
+    "tether": {
+      "description": "Une popover qui croît depuis le coin le plus proche de son déclencheur, et déplace cette origine lorsqu’elle bascule de côté.",
+      "props": {
+        "side": "Côté préféré. L’origine de la transformation découle du côté sur lequel le panneau s’est réellement stabilisé, jamais de celui-ci — un basculement qui conserverait l’origine demandée ferait croître le panneau à l’opposé du déclencheur vers lequel il vient de se déplacer.",
+        "align": "Où le panneau se place le long de ce côté. Il déplace l’origine et la flèche ensemble, si bien qu’un panneau aligné au début sous le déclencheur croît vers le bas et la droite depuis le coin gauche du bouton.",
+        "offset": "Espace entre le déclencheur et le panneau. Un remplissage plutôt qu’une marge : un pointeur qui traverse cet espace en chemin vers un panneau ouvert au survol ne quitte jamais le composant, si bien que le panneau ne se referme pas sous le curseur.",
+        "stiffness": "Tension du ressort sur l’apparition. Assez élevée pour donner l’impression que le panneau est déjà là au moment où l’œil arrive.",
+        "damping": "Frottement du ressort. Un léger dépassement fait l’apparition ; trop peu et le panneau vacille, ce qui sur un menu se lit comme un manque de réactivité plutôt que comme du dynamisme.",
+        "popScale": "Taille depuis laquelle le panneau croît. À 1, le travail sur l’origine devient invisible et l’entrée n’est qu’un simple fondu — à essayer une fois pour voir ce que le reste du composant apporte réellement.",
+        "arrow": "Flèche sur le bord ancré. Elle se place là où le panneau est fixé, si bien qu’elle continue de pointer vers le déclencheur même lors d’un changement de côté, sans aucun code de repositionnement.",
+        "flip": "Basculer vers le côté opposé lorsque le côté préféré déborderait de la fenêtre. Le test d’ajustement lit la boîte de mise en page du panneau plutôt que son rectangle englobant, car ce rectangle porte l’échelle d’entrée et déciderait avec une boîte plus petite que celle qui va réellement s’afficher.",
+        "openOn": "Ce qui ouvre le panneau. Clic déplace aussi le focus à l’intérieur ; survol s’en abstient délibérément, et répond au focus sur le déclencheur à la place, afin que le clavier ne soit pas exclu d’une fonctionnalité pensée pour le pointeur.",
+        "closeDelay": "Délai de grâce avant la fermeture d’un panneau ouvert au survol. Le minuteur refuse aussi de se déclencher tant que le focus est encore à l’intérieur, si bien qu’un pointeur qui s’égare ne peut pas détruire l’élément que quelqu’un est en train de parcourir au clavier.",
+        "radius": "Rayon des coins du panneau.",
+        "accentColor": "Le filet sur le bord ancré et la flèche. Les deux se déplacent avec un basculement, si bien que le panneau continue de pointer vers son origine, quel que soit le côté où il a atterri."
+      }
+    },
+    "inline-edit": {
+      "description": "Un texte qui devient sa propre saisie sans que rien ne bouge — une seule boîte au remplissage fixe, deux contenus, dimensionnée en CSS.",
+      "props": {
+        "commitOn": "Flou valide quand le focus s’en va. Explicite fait apparaître un bouton de confirmation et un d’annulation hors de la boîte, et traite la perte de focus comme une annulation. Les deux se défendent, c’est pourquoi c’est une prop plutôt qu’une décision arrêtée.",
+        "stiffness": "Tension du ressort sur l’arrivée de la bordure, du lavis et de l’anneau. C’est la seule chose qui s’anime — tout le reste est déjà exactement là où il restera.",
+        "damping": "Frottement du ressort sur les mêmes éléments. Faible fait dépasser la couleur, ce qui sur une bordure se lit comme un flash plutôt que comme un rebond.",
+        "underline": "Comment l’état d’affichage signale qu’il est modifiable. Une décoration de texte plutôt qu’une bordure, car une bordure devrait aussi être réservée dans l’état d’édition — et aucune décoration est l’option honnête pour une ligne qui s’annonce déjà autrement.",
+        "padX": "Remplissage horizontal. Partagé entre les deux états par construction : il réside dans la coque, qui n’est jamais démontée, si bien que les deux contenus ne peuvent jamais être en désaccord à ce sujet.",
+        "padY": "Remplissage vertical. Celui qui décale toutes les lignes en dessous quand un éditeur en ligne se trompe sur ce réglage.",
+        "radius": "Rayon des coins de la coque.",
+        "selectOnEdit": "Sélectionner toute la valeur à l’entrée en édition, si bien que la frappe la remplace. Désactivé place le curseur là où le clic a atterri, ce qui est le bon comportement pour une longue valeur que l’on corrige plutôt que l’on renomme.",
+        "allowEmpty": "Accepter une validation vide. Désactivé restaure la valeur précédente, partant du principe qu’un champ vide résulte bien plus souvent d’un mauvais clic que d’une intention.",
+        "showPencil": "Crayon au survol et au focus clavier. Positionné en absolu hors de la coque — tout ce qui serait rendu à l’intérieur changerait la largeur de la boîte que le composant existe justement pour garder stable.",
+        "multiline": "Une zone de texte qui croît ligne par ligne plutôt qu’un champ mono-ligne. La croissance repose sur la même astuce CSS dans les deux cas : une copie invisible du brouillon dimensionnée dans la même cellule de grille, si bien que rien n’est mesuré en JavaScript.",
+        "accentColor": "La bordure, le lavis et l’anneau de l’état d’édition, ainsi que le soulignement de l’état d’affichage. Attendue au format hexadécimal à 6 chiffres : les variantes transparentes sont construites par suffixe, si bien que le fondu ne repose que sur une seule interpolation plutôt qu’entre deux couleurs."
+      }
+    },
+    "crossing": {
+      "description": "Une transition galerie-vers-détail sur la View Transitions API, où un même élément reste le même objet dans les deux vues.",
+      "props": {
+        "duration": "Durée de la transition. Appliquée conjointement aux éléments partagés et à la vue, via des règles de pseudo-éléments que le composant confine à lui-même, si bien qu’elle ne retempore jamais une transition menée ailleurs sur la page.",
+        "easing": "Courbe du déplacement. Expressive arrive vite puis se stabilise ; standard est la courbe material ; linéaire sert à montrer ce que vaut l’accélération, ce qui sur un morphing représente presque tout.",
+        "shareTitle": "Faire voyager le titre comme second élément partagé. Désactivé, seule la tuile voyage et le titre s’estompe en fondu-enchaîné avec le reste — le moyen le plus clair de voir ce qu’apporte un élément partagé par rapport à un simple fondu-enchaîné.",
+        "exit": "Ce que fait la copie sortante de la tuile pendant que la nouvelle arrive. Maintenir la garde opaque en dessous, et c’est le comportement par défaut : c’est le seul sans instant où deux dégradés seraient tous deux à moitié présents. Fondu est le comportement natif du navigateur, conservé pour rendre la différence visible ; glissement fait sortir l’ancienne tuile pendant que la nouvelle atterrit.",
+        "radius": "Rayon des coins du cadre et, trois pixels plus loin, des tuiles.",
+        "viewTransition": "Faire tourner l’API ou non. Désactivé emprunte exactement le chemin d’un navigateur non compatible — la simple mise à jour d’état, à nu — seul moyen honnête de voir le repli. Une transition de vue ne peut pas être raccourcie, seulement contournée.",
+        "announce": "Annoncer la destination dans une région live. Une transition de vue est invisible pour les technologies d’assistance, si bien qu’une transition muette est une impasse pour quiconque ne regarde pas les pixels.",
+        "accentColor": "L’anneau de focus, et la marque sur la carte d’où l’on est revenu — dessinée seulement une fois la transition terminée. Tout ce qui serait peint sur l’élément partagé pendant son vol serait capturé dans l’instantané et voyagerait avec lui à travers le cadre."
+      }
+    },
+    "reorder": {
+      "description": "Une liste triable qui répond aussi bien au doigt qu’au clavier — attrapez une ligne, et les autres s’écartent pour lui faire de la place.",
+      "props": {
+        "axis": "Dans quel sens la liste se déroule, et quelles touches fléchées déplacent une ligne.",
+        "stiffness": "Tension du ressort lorsque les lignes déplacées se referment. C’est le seul mouvement du composant qui n’est pas sous votre doigt, c’est donc lui qui décide si la liste paraît attachée au glissement.",
+        "damping": "Frottement du ressort sur ce même mouvement.",
+        "handle": "Restreindre le glissement à la poignée. Désactivé fait de toute la ligne la surface de prise, plus rapide à atteindre, mais au prix de la sélection de texte et d’un geste de défilement démarrant sur une ligne.",
+        "lift": "Échelle d’une ligne pendant qu’elle est soulevée. Au-delà d’environ 1,06, la ligne cesse de se lire comme soulevée et commence à se lire comme une ligne différente.",
+        "liftShadow": "Ombre portée sous une ligne soulevée.",
+        "gap": "Espace entre les lignes.",
+        "radius": "Rayon des coins des lignes.",
+        "density": "Remplissage des lignes.",
+        "showIndex": "Afficher la position de chaque ligne. À laisser activé partout où l’ordre constitue la donnée plutôt qu’une simple préférence — c’est la seule confirmation à l’écran qu’un déplacement au clavier a bien atterri là où l’annonce l’indiquait.",
+        "accentColor": "Teinte de la poignée, et contour sur une ligne portée par le clavier. Un glissement au pointeur se manifeste en bougeant ; une prise au clavier doit, elle, être dessinée."
+      }
+    },
+    "holofoil": {
+      "description": "Un film holographique de carte à collectionner posé sur du vrai contenu. La bande de diffraction voyage à contre-sens de l’inclinaison pendant que le spéculaire la suit, et les paillettes ne s’allument que là où l’arc-en-ciel tombe actuellement — ce qui empêche l’ensemble de se lire comme un simple dégradé qui glisse.",
+      "props": {
+        "maxTilt": "Inclinaison maximale au bord de la carte. L’inclinaison n’est ici qu’un vecteur — réglez-la à zéro et le film continue de bouger, car les bandes sont pilotées par la position du pointeur plutôt que par la rotation.",
+        "perspective": "Profondeur de la projection. Plus faible exagère l’inclinaison ; la valeur qui paraît la plus qualitative est presque toujours plus éloignée que l’instinct ne le suggère.",
+        "foil": "Quel motif de diffraction porte le laminé. Arc-en-ciel est le spectre répétitif à douze paliers que produit une vraie feuille holographique — il se répète plutôt que de dérouler un seul arc-en-ciel sur toute la carte. Inversé le parcourt dans l’autre sens, si bien que la bande voyage à contre-sens de l’inclinaison, ce que la plupart des gens reconnaissent réellement comme du film holographique.",
+        "foilIntensity": "Intensité de la bande de diffraction. Au-delà d’environ un, elle cesse d’être un laminé et devient un simple autocollant.",
+        "sparkle": "Densité des paillettes. Elles sont masquées par la bande de diffraction plutôt que posées sur la carte, et ce couplage est l’unique raison pour laquelle les grains se lisent comme suspendus dans le laminé plutôt que comme de la poussière sur votre écran.",
+        "glare": "La large bande spéculaire, délibérément distincte du film holographique. Le film relève de la diffraction et se déplace à contre-sens de l’inclinaison ; le reflet relève de la réflexion et la suit. Faire tourner les deux, en opposition, est ce qui donne un matériau à la surface.",
+        "idleDrift": "À quel point le film continue de bouger sans pointeur dessus, selon deux vitesses incommensurables afin que le repos ne se stabilise jamais sur une période évidente. Une carte sous vitrine n’est jamais tout à fait immobile, et une carte totalement figée dans une grille se lit comme une image plutôt que comme un objet.",
+        "settle": "Secondes que met la carte à rattraper le pointeur. Près de zéro, elle est soudée au curseur et se lit comme une simple texture ; trop élevé, et elle prend assez de retard pour que le film cesse de sembler attaché à votre main.",
+        "blendMode": "Comment le film se compose sur ce que vous avez enveloppé. Superposition additive (colour-dodge) se comporte comme un vrai film holographique — il sature là où la carte est déjà claire et ne fait presque rien dans les ombres. Écran (screen) est le choix sûr sur une carte claire.",
+        "sheenColor": "La couleur portée par le lustre spéculaire."
+      }
+    },
+    "lens": {
+      "description": "Une lentille de verre que vous faites glisser sur du contenu vivant, le courbant via un champ de déplacement SVG avec un véritable biseau et une dispersion trois canaux. Elle réfracte un duplicata en direct de ses propres enfants plutôt que l’arrière-plan de la page — la seule version de cet effet qui fonctionne aussi bien sur Chrome, Safari et Firefox.",
+      "props": {
+        "size": "Diamètre du disque, mesuré par rapport au plus petit côté du conteneur plutôt qu’en pixels — si bien que le verre garde ses proportions aussi bien dans un large hero que dans une colonne étroite, et ne peut jamais dépasser la boîte sur aucun axe. La carte de déplacement est rastérisée une seule fois à une résolution fixe puis étirée pour s’ajuster, donc modifier ce réglage est peu coûteux ; régénérer un bitmap à chaque image coûterait bien plus cher que les pixels ne le valent.",
+        "refraction": "Jusqu’où la carte pousse le contenu — le seul chiffre qui compte vraiment dans ce composant. Il passe par la propriété filter sur un duplicata en direct plutôt que par backdrop-filter, car backdrop-filter avec une référence SVG n’est pris en charge que par Chromium — et CSS.supports renvoie pourtant vrai sur WebKit et Gecko aussi, si bien que cette capacité ne peut même pas être détectée honnêtement.",
+        "edgeThickness": "Quelle part du rayon constitue le biseau. Un vrai verre effectue presque toute sa courbure dans le dernier cinquième, ce qui explique pourquoi déplacer uniformément sur tout le disque donne une bulle de savon plutôt qu’une lentille.",
+        "blur": "Adoucissement derrière le verre, livré à zéro volontairement. Le flou est le moyen le plus rapide de faire ressembler une lentille à une simple tache — un vrai verre est le plus net en son centre, donc au-delà d’environ trois, l’objet cesse d’être un instrument optique et devient un dessous-de-verre dépoli à travers lequel on ne peut plus rien lire. À zéro, le flou est retiré de la liste des filtres plutôt qu’écrit comme blur(0px), ce qui coûterait quand même une surface de rendu pour aucun effet visible.",
+        "chromatic": "Séparation entre le déplacement des trois canaux — trois véritables passes, isolées par des matrices de couleur puis recombinées de façon additive. Mise à l’échelle du disque plutôt que fixée en pixels, si bien que le même réglage donne le même instrument optique à toute taille. Le verre disperse ; une passe unique avec un bord teinté n’est qu’une bavure qui se fait passer pour de la physique.",
+        "magnify": "Échelle appliquée au contenu à l’intérieur du disque. Une véritable transformation plutôt qu’un déplacement, car un déplacement ne peut que rééchantillonner des pixels déjà présents — simuler un grossissement avec cela adoucit toute la fenêtre, ce qui est précisément ce qui fait que la plupart des lentilles de navigateur se lisent comme une bavure. En dessous de un, c’est un effet fisheye poussé dans le mauvais sens : un véritable instrument optique, mais qui paraît cassé à quiconque n’est pas opticien.",
+        "shimmer": "Vitesse du reflet spéculaire qui parcourt le pourtour. C’est la seule chose ici qui bouge d’elle-même, et c’est ce qui empêche une lentille immobile de ressembler à une simple capture d’écran.",
+        "friction": "Quelle part d’un lancer survit, appliquée par seconde plutôt que par image, si bien que le même geste parcourt la même distance sur un écran à 60 Hz comme à 120 Hz.",
+        "bounded": "Quelle boîte retient la lentille, et ce qu’elle regarde. Activé, elle reste dans son conteneur et grossit un duplicata en direct des enfants qu’on lui a confiés. Désactivé, elle est téléportée dans le body et liée à la fenêtre d’affichage à la place — retirer le seul découpage du conteneur ne suffit pas, car tout ancêtre qui découpe l’emporte, et sur une vraie page il y en a toujours un — et ce qu’elle grossit devient alors la page entière. Dans les deux cas, la limite résiste et repousse plutôt que de stopper net ; un objet lancé qui s’arrête contre un mur invisible se lit comme un bug plutôt que comme une limite. La page est réellement dupliquée, car aucune API de navigateur ne permet à un élément de lire un contenu rendu arbitraire : backdrop-filter ne peut pas grossir et n’est pris en charge que par Chromium. Cette copie est un instantané plutôt qu’un arbre vivant, reprise à chaque prise en main, elle ne peut donc porter ni une animation en cours, ni des pixels de canvas, ni l’état d’un composant.",
+        "rimColor": "La couleur du reflet de bordure, masquée aux deux pixels les plus extérieurs, si bien qu’elle se lit comme le bord éclairé du verre plutôt que comme un anneau dessiné par-dessus."
+      }
+    },
+    "passcode": {
+      "description": "Un champ de code à usage unique dont les cellules répondent à chaque frappe : chaque caractère atterrit compressé puis rebondit, un collage se répartit sur toute la ligne au lieu de la remplir en une seule image, un code erroné secoue puis s’efface de lui-même, et un code correct replie toute la ligne en une coche. En dessous, il n’existe qu’une seule vraie saisie qui porte tout le code — ce qui préserve le fonctionnement de l’auto-remplissage SMS, des gestionnaires de mots de passe, du sélectionner-tout et d’un lecteur d’écran, aucun ne survivant à six champs de saisie limités à un caractère.",
+      "props": {
+        "length": "Cellules du code. Six est le standard du secteur, car c’est à peu près la plus longue chaîne que la plupart des gens peuvent garder en mémoire de travail entre la lecture et la saisie — ce réglage existe pour que vous puissiez sentir où cela cesse d’être vrai.",
+        "mode": "Ce que le champ accepte. Numérique fait aussi apparaître le pavé numérique, ce qui compte bien plus sur un téléphone que la validation elle-même — un champ de code alphanumérique qui ouvre un clavier complet coûte deux appuis à l’utilisateur, à chaque fois.",
+        "mask": "Afficher des points au lieu des caractères. Désactivé par défaut, volontairement : un code à usage unique ne vaut plus rien une minute après son arrivée, et le masquer n’empêche que la personne légitime de vérifier sa propre saisie.",
+        "stiffness": "Tension du ressort de l’apparition par caractère. Assez élevée pour atterrir dans l’intervalle entre deux frappes rapides, sinon les cellules s’accumulent derrière une saisie rapide et le retour arrive après le caractère qu’il est censé confirmer.",
+        "damping": "Frottement du ressort. Faible fait dépasser puis se stabiliser — c’est toute la différence entre une cellule qui accuse réception d’une frappe et une cellule qui se contente de se mettre à jour.",
+        "anticipation": "À quel point une cellule se comprime avant de rebondir. Un bref recul dans la direction opposée est ce qui fait lire l’apparition comme une réaction de la cellule plutôt que comme un simple redimensionnement — à zéro, ce n’est qu’un dépassement ordinaire, nettement plus plat.",
+        "pasteStagger": "Délai entre les cellules pendant qu’un code collé ou auto-rempli se répartit. Zéro remplit chaque cellule en une seule image, ce qui est honnête mais se lit comme un glitch ; le décalage transforme un changement d’état instantané en quelque chose que l’œil peut suivre.",
+        "shakeAmplitude": "Amplitude latérale du rejet. Elle déplace toute la ligne plutôt que chaque cellule individuellement — une ligne qui secoue a été jugée, un ensemble de cellules qui secouent chacune séparément paraît cassé.",
+        "autoSubmit": "Juger le code dès que la dernière cellule se remplit, sans attendre un bouton. Judicieux quand une réponse erronée ne coûte rien ; à éviter dès que ce n’est plus le cas.",
+        "submitDelay": "Pause entre l’atterrissage du dernier caractère et le verdict. Elle existe pour que la dernière cellule termine sa propre animation d’apparition avant que la ligne ne soit jugée — valider sur la même image volerait la confirmation de la frappe qui l’a déclenchée, et l’utilisateur n’apprendrait jamais que son dernier caractère a bien été pris en compte.",
+        "accentColor": "L’anneau de la cellule en focus, la bordure remplie, le curseur, et la coche de succès.",
+        "errorColor": "Le rejet. Il colore les bordures des cellules plutôt que d’inonder leur remplissage, si bien que le code que vous avez saisi reste lisible pendant qu’on vous signale qu’il est erroné."
+      }
+    },
+    "dial": {
+      "description": "Un bouton rotatif façon pièce usinée : glissement angulaire avec des crans que l’on sent au passage, inertie sur un lancer, et un ressort qui se stabilise sur la butée la plus proche. L’angle vit dans une valeur de mouvement plutôt que dans l’état React — un glissement l’écrit soixante fois par seconde, et un ressort plus souvent encore — si bien que React ne retient que l’indice du cran, et seulement quand cet entier change réellement. Les touches fléchées parcourent le même ressort que la main, le clavier n’est donc pas un second chemin, moins bon, vers le même contrôle.",
+      "props": {
+        "detents": "Butées réparties sur la course. C’est la résolution du contrôle, et elle change autant la sensation du glissement que sa lecture : peu de butées bien espacées donnent un déclic net entre les réglages, beaucoup de butées rapprochées se rapprochent d’une rampe continue et texturée.",
+        "sweep": "Plage angulaire, centrée sur midi. Deux cent soixante-dix est la convention des instruments de mesure, car elle laisse un écart visible en bas — l’œil lit cet écart comme la fin de l’échelle, si bien que les deux limites sont lisibles sans étiquette. Sur un tour complet, il n’y a plus d’extrémités à voir.",
+        "stiffness": "Avec quelle force le ressort tire vers la butée choisie après le relâchement. Élevée donne un bouton qui arrive à l’instant même où l’on relâche ; faible donne un bouton avec du poids, où un lancer continue de tourner un moment après le départ du doigt.",
+        "damping": "Quelle part de l’énergie de ce ressort est absorbée. En dessous d’environ quinze, le bouton dépasse sa butée puis revient, ce qui se lit comme un cran mal ajusté plutôt qu’usiné avec précision.",
+        "inertia": "Jusqu’où un lancer porte au-delà du point où la main a lâché prise. Le lancer est d’abord projeté, puis la butée la plus proche est choisie ensuite, si bien qu’une rotation rapide traverse plusieurs crans avant de se stabiliser — à zéro, le bouton s’arrête sur la butée qu’il était en train de croiser, ce qui gâche tout le geste.",
+        "detentPull": "Magnétisme ressenti pendant le glissement lui-même, avant tout relâchement. L’attraction diminue vers le point médian entre deux butées, si bien que le centre exact est un point instable dont le bouton glisse plutôt qu’un plateau où il pourrait se reposer — c’est ce qui fait ressentir un cran comme une véritable encoche plutôt que comme une simple suggestion.",
+        "ticks": "Comment les butées sont marquées sur le panneau autour du bouton. L’échelle ne tourne jamais avec le pointeur — une marque qui bouge avec ce qu’elle mesure ne vous apprend rien sur votre position.",
+        "readout": "La valeur sous le bouton, composée en chiffres tabulaires pour que le nombre ne se déplace pas latéralement en comptant.",
+        "accent": "Le repère allumé, la ligne du pointeur, et la moitié dynamique de l’affichage.",
+        "size": "Diamètre du bouton. Tout ce qui se trouve à l’intérieur est dessiné sur une grille fixe puis mis à l’échelle, si bien que le moletage, le biseau et le pointeur gardent leurs proportions à toute taille."
+      }
+    },
+    "peel": {
+      "description": "Un autocollant que l’on décolle par le coin. Le pli est une véritable géométrie plutôt qu’une rotation : faire glisser un coin vers un point courbe la feuille le long de la médiatrice de ces deux positions, car c’est la seule ligne où le papier peut se plier tout en laissant le coin atterrir sous la main. Tout en découle — la face est la feuille découpée d’un côté de cette ligne, et le rabat est l’autre côté réfléchi à travers elle, mis en miroir par la même matrice qui le positionne. Au-delà du seuil, il se détache ; en deçà, il retombe d’un coup de ressort.",
+      "props": {
+        "resistance": "Avec quelle force la feuille résiste à la traction. La loi est asymptotique plutôt que divisée, si bien que le coin s’approche toujours d’une diagonale complète, quelle que soit sa résistance, et que le seuil d’engagement reste atteignable à tout réglage — la formule évidente plafonnerait en dessous du seuil à haute résistance et rendrait discrètement l’autocollant impossible à retirer.",
+        "curl": "Largeur de la bande spéculaire qui longe le pli. C’est ce qui tient lieu de pli arrondi : un pli mathématiquement net se lit comme une coupure, et cette bande est le moyen le plus économique de suggérer une épaisseur.",
+        "threshold": "Jusqu’où le coin doit parcourir sa propre diagonale avant que le décollement ne s’engage. Faible donne un autocollant qui se détache presque au contact ; élevé en donne un qu’il faut vraiment vouloir décoller, le retour d’un coup de ressort restant l’issue habituelle.",
+        "stiffness": "Ressort derrière les deux issues — le retour d’un coup et le décollement complet. Délibérément le même ressort pour les deux, afin que les deux issues se ressentent comme un seul mécanisme qui se résout plutôt que comme deux animations distinctes.",
+        "damping": "Quelle part de ce ressort est absorbée. Faible laisse un rebond visible lorsque l’autocollant se recolle, ce qui est précisément ce qui le fait paraître comme un objet gardant encore un peu de ressort dans le vinyle.",
+        "shadow": "Intensité de l’ombre projetée par le rabat soulevé, et de l’assombrissement sur la face juste sous le pli. Les deux évoluent avec la distance parcourue par le décollement, si bien que l’autocollant ne semble jamais plus décollé de la surface qu’il ne l’est réellement.",
+        "backDim": "De combien le verso est plus sombre que la face. Le simple effet miroir ne suffit pas à se lire comme un revers — l’œil a besoin que la lumière ait changé, en plus du visuel.",
+        "content": "Ce qui est imprimé sur l’autocollant. Holo constitue le test de résistance utile : un dégradé conique inversé par le pli montre immédiatement si le reflet est authentique ou n’est qu’une copie mise à l’échelle.",
+        "corner": "Quel coin se soulève. Les quatre exécutent le même solveur avec un point de départ différent, plutôt que quatre cas écrits à la main, si bien que le pli se comporte de façon identique quel que soit son point de départ.",
+        "size": "Bord de l’autocollant. Le seuil est mesuré par rapport à la diagonale plutôt qu’en pixels, si bien que le geste demande le même glissement proportionnel à toute taille.",
+        "accent": "Le glyphe du badge, la typographie du libellé, et la teinte de base du film holographique."
+      }
+    },
+    "command-palette": {
+      "description": "Un menu de commandes cmdk avec une surface simple ou en verre liquide, et un déclenchement par raccourci clavier.",
+      "props": {
+        "hotkey": "Raccourci qui ouvre la palette. cmd+k se replie sur Ctrl+K sur les plateformes non Apple.",
+        "loop": "Reboucler la sélection au clavier aux extrémités de la liste.",
+        "glass": "Surface en verre liquide au lieu d’un panneau plein."
+      }
+    },
+    "physics-engine": {
+      "description": "Un laboratoire de physique 2D à corps rigides écrit de zéro — solveur d’impulsions à pas de temps fixe, corps que l’on glisse et lance, surcouches de force et de vitesse, et un affichage d’énergie en direct sur une grille façon plan technique.",
+      "props": {
+        "scene": "Monde prédéfini. Changer reconstruit la scène de façon déterministe à partir d’une graine fixe.",
+        "gravity": "Gravité uniforme vers le bas. 0 est l’apesanteur — lancez des corps et regardez-les dériver.",
+        "restitution": "Élasticité de chaque collision, appliquée en direct aux corps existants. Les impacts en dessous de 1 m/s sont absorbés afin que les empilements puissent se stabiliser.",
+        "friction": "Coefficient de frottement de Coulomb pour tous les contacts, appliqué en direct. 0, c’est de la glace ; les boîtes ont besoin d’environ 0,3 pour s’empiler.",
+        "timeScale": "Vitesse de simulation. La physique avance toujours à un pas fixe de 120 Hz — ce réglage détermine combien de temps simulé chaque image consomme. 0 fige le temps.",
+        "bodyCount": "Combien de corps le mode bac à sable fait pleuvoir, et quelle hauteur atteignent les tours d’empilement et de boulet de démolition. Projectile l’ignore.",
+        "sizeVariation": "Étalement des tailles de corps dans le bac à sable — 0 fait pleuvoir des corps uniformes, 1 mélange cailloux et rochers. La densité est fixe, donc plus gros signifie réellement plus lourd.",
+        "showVectors": "Flèches de vitesse (vert, plein) et de force nette (rouge, pointillé) ancrées au centre de masse de chaque corps, mises à l’échelle selon leur intensité.",
+        "trails": "Traînées de mouvement s’estompant derrière les corps en déplacement — lisez paraboles et arcs de pendule d’un coup d’œil.",
+        "showEnergy": "Affichage en direct de l’énergie cinétique, potentielle et totale en joules, calculée à partir de l’état du solveur à chaque pas — jamais simulée.",
+        "tint": "Couleur accent des corps dynamiques, des traînées et du ressort de préhension. La grille et l’habillage suivent le thème."
+      }
+    },
+    "black-hole": {
+      "description": "Un trou noir de Schwarzschild en temps réel, raytracé pixel par pixel dans un shader WebGL2 — des géodésiques nulles courbent un disque d’accrétion lentillé au-dessus de l’horizon des événements, avec effet Doppler, décalage vers le rouge gravitationnel, un anneau de photons et un champ d’étoiles lentillé, le tout sous une orbite cinématographique.",
+      "props": {
+        "steps": "Pas d’intégration géodésique par rayon. Plus élevé affine l’effet de lentille et l’anneau de photons ; plus bas s’exécute plus vite. Le poste de coût le plus lourd du shader, à lui seul.",
+        "diskInner": "Rayon interne du disque, en rayons de Schwarzschild. 3 Rs correspond à l’ISCO — l’orbite circulaire stable la plus interne autour d’un trou noir sans rotation.",
+        "diskOuter": "Bord externe du disque d’accrétion, en rayons de Schwarzschild.",
+        "diskBrightness": "Émission globale du disque d’accrétion.",
+        "ringColor": "Recolore le disque d’accrétion. Blanc conserve le dégradé physique de corps noir (or → blanc → bleu) et l’asymétrie Doppler ; choisissez une teinte pour colorer l’anneau sans l’assombrir.",
+        "dopplerMax": "Intensité de l’effet de projection Doppler relativiste et du décalage spectral. 0 aplatit le disque en une symétrie parfaite ; 1 restitue l’asymétrie physique : côté qui s’approche plus brillant, côté qui s’éloigne plus sombre.",
+        "starBrightness": "Luminosité des étoiles d’arrière-plan et de la bande de Voie lactée, lentillées gravitationnellement.",
+        "skyFloor": "Lueur ambiante de l’espace profond remplissant le vide derrière les étoiles. Teintée par la couleur du halo.",
+        "rotationSpeed": "Vitesse de l’orbite cinématographique de la caméra et du tourbillon différentiel du disque. 0 arrête les deux.",
+        "fov": "Champ de vision de la caméra de l’observateur. Plus large rapetisse le trou et exagère la courbure de lentille ; plus étroit zoome et aplatit la perspective.",
+        "bloomStrength": "Intensité de la lueur HDR qui embrase le disque lumineux et l’anneau de photons. 0 désactive entièrement les passes de bloom.",
+        "bloomRadius": "Étalement du flou de bloom. Désactivé lorsque bloom vaut 0.",
+        "vignette": "Assombrissement vers les bords du cadre.",
+        "grain": "Grain pellicule fin et animé sur l’image finale.",
+        "chromaticAberration": "Frange colorée en bord d’objectif, plus marquée vers les coins.",
+        "autoOrbit": "Faire tourner la caméra en continu de gauche à droite autour du trou, à distance fixe. Glissez pour prendre un contrôle manuel à 360° ; l’orbite reprend quelques secondes après que vous relâchez, et continue de tourner autour de votre vue actuelle — elle ne réinitialise jamais l’angle. Désactivé fige la vue actuelle, que vous pouvez toujours faire glisser.",
+        "debug": "Sorties de diagnostic du shader — carte de chaleur du nombre de pas, masque d’impact sur le disque, rayon d’approche minimale, direction d’échappement, et facteur de décalage spectral.",
+        "tint": "Accent qui ne teinte que le halo extérieur, l’anneau de photons, le fond du ciel et la lueur de l’étoile principale. Le disque d’accrétion conserve sa couleur physique de corps noir."
+      }
+    },
+    "vortex-bloom": {
+      "description": "Un entonnoir tourbillonnant d’or en fusion et d’obsidienne, spiralant vers un cœur SDF lumineux — lotus, gemme ou flamme — raymarché pixel par pixel dans un shader WebGL2, avec un champ de poussière GPU spiralant le long du flux vers le col, le tout sous une orbite déplaçable à la souris et un véritable bloom en deux passes.",
+      "props": {
+        "primary": "Ton clair or en fusion — la couleur des traînées tourbillonnantes et des reflets du col.",
+        "secondary": "Ton sombre obsidienne — les bandes ombrées de l’entonnoir et le vide derrière lui.",
+        "accent": "Teinte de l’émission lumineuse du cœur. Pilote la couleur du bloom de convergence et de la poussière lorsqu’elle atteint le cœur.",
+        "coreObject": "L’objet central situé au point de convergence du vortex — un lotus à pétales superposés, un cristal facetté, ou un panache de flamme animé. Le changer ne déplace jamais le point vers lequel la poussière converge.",
+        "coreScale": "Met à l’échelle l’objet central — lotus, gemme ou flamme — sans déplacer le point de convergence vers lequel la poussière afflue.",
+        "stemLength": "Longueur de la tige du lotus qui plonge dans le flux sous la fleur. Lotus uniquement ; 0 la retire.",
+        "vortexIntensity": "Vitesse du tourbillon, turbulence des traînées, et vitesse d’afflux de la poussière. Plus élevé, l’entonnoir s’enroule plus serré et plus vite.",
+        "glowIntensity": "Émission du cœur et intensité du bloom HDR. Pilote l’intensité de la lueur à la convergence et sur la poussière.",
+        "particleDensity": "Grains de poussière spiralant le long du flux. Plafonné à 1200 pour tenir 60 im/s sur un GPU milieu de gamme.",
+        "particleSpeed": "Vitesse à laquelle les grains de poussière descendent le flux vers le cœur, indépendamment de la vitesse du tourbillon.",
+        "smokeAmount": "Brume atmosphérique douce et basse fréquence dérivant derrière les rubans. 0 laisse des traînées nettes sur l’obsidienne ; plus élevé remplit le cadre de fumée.",
+        "cameraAutoRotate": "Faire orbiter l’entonnoir en continu. Glissez pour prendre un contrôle à 360° ; l’orbite reprend autour de votre vue actuelle un instant après que vous relâchez.",
+        "rotationSpeed": "Vitesse de l’orbite cinématographique de la caméra.",
+        "fov": "Champ de vision de l’observateur. Plus large exagère la profondeur du tourbillon ; plus étroit l’aplatit.",
+        "verticalOffset": "Déplace tout le vortex vers le haut ou le bas du cadre sans bouger la caméra — recentrez le regard où vous le souhaitez.",
+        "chromaticAberration": "Frange colorée en bord d’objectif, plus marquée vers les coins.",
+        "vignette": "Assombrissement vers les bords du cadre.",
+        "grain": "Grain pellicule fin et animé sur l’image finale."
+      }
+    },
+    "smoke-field": {
+      "description": "Un fluide GPU en temps réel que vous pouvez brasser — advection semi-lagrangienne, résolution de pression de Jacobi et confinement de vorticité s’exécutent à chaque image sur des tampons flottants en ping-pong, injectant un panache améthyste sombre qui s’enroule, gonfle et se répand dans le cadre partout où vous glissez.",
+      "props": {
+        "dyeColor": "Couleur du colorant injecté dans le fluide.",
+        "backgroundColor": "Fond sur lequel s’élève le panache.",
+        "quality": "Regroupe la résolution de la simulation et du tampon de colorant. Plus élevée est plus fine et plus coûteuse.",
+        "pressureIterations": "Passes de pression de Jacobi par image — plus élevé rend l’écoulement plus resserré et plus incompressible.",
+        "velocityFade": "Durée de persistance du mouvement avant dissipation.",
+        "densityFade": "Durée de persistance du colorant avant de s’estomper.",
+        "curl": "Intensité du confinement de vorticité — détail des tourbillons. 0 saute les passes de curl.",
+        "splatRadius": "Taille de l’éclaboussure de colorant et de force sous le pointeur.",
+        "splatForce": "Impulsion de vitesse transmise par un glissement du pointeur.",
+        "autoPlume": "Injecter en continu un panache ascendant à la base lorsque rien ne se passe.",
+        "buoyancy": "Force ascensionnelle qui soulève le colorant, faisant s’élever la fumée. 0 la laisse dériver de façon neutre.",
+        "exposure": "Luminosité du colorant rendu.",
+        "grain": "Grain animé sur l’image finale."
+      }
+    },
+    "ripple-field": {
+      "description": "Un bassin d’eau sombre, éclairé par la lune, que vous troublez à la main — une résolution en saute-mouton de l’équation d’onde 2D tourne sur un champ flottant en ping-pong, faisant rayonner chaque mouvement du pointeur vers l’extérieur, réfléchissant la houle sur les parois, et éclairant la surface par réfraction selon le gradient normal, des caustiques focalisées par la courbure, et un reflet de Fresnel qui chevauche chaque front d’onde.",
+      "props": {
+        "waterColor": "Teinte améthyste de l’eau — reflets spéculaires, caustiques et lumière des crêtes.",
+        "deepColor": "Couleur de fond du bassin profond, sur laquelle repose la surface.",
+        "quality": "Résolution de la grille de simulation. Plus élevée est plus nette et plus coûteuse.",
+        "tension": "Vitesse de propagation des ondes. Plus élevée propage les ondulations plus vite ; la résolution en saute-mouton se plafonne en dessous de 0,5 pour rester stable.",
+        "damping": "Rétention d’énergie par pas — vers 1, les ondulations persistent plus longtemps.",
+        "splatForce": "Déplacement qu’un glissement du pointeur ou une goutte ambiante creuse dans la surface.",
+        "splatRadius": "Taille du creux de surface sous le pointeur, en fraction de l’écran.",
+        "refraction": "Avec quelle force la pente de la surface courbe le fond du bassin sous les ondulations.",
+        "specular": "Intensité des reflets spéculaires et de Fresnel sur chaque front d’onde.",
+        "glossiness": "Resserrement du reflet spéculaire — plus élevé donne un reflet plus net, plus vitreux.",
+        "caustics": "Luminosité des filaments de caustiques là où des fronts d’onde convergents concentrent la lumière.",
+        "autoRipple": "Faire tomber des gouttes aléatoirement dans le bassin au repos, afin qu’il ne reste jamais parfaitement immobile.",
+        "grain": "Grain fin et animé sur l’image finale."
+      }
+    },
+    "umbral-orrery": {
+      "description": "Un planétaire de lunes projetant de véritables ombres d’éclipse sur un monde assombri ; glissez pour orbiter.",
+      "props": {
+        "moonCount": "Nombre de lunes en orbite.",
+        "orbitSpeed": "Vitesse orbitale globale.",
+        "sunIntensity": "Luminosité du soleil, qui pilote le contraste des ombres.",
+        "tilt": "Inclinaison des plans orbitaux.",
+        "planetSize": "Rayon de la planète assombrie.",
+        "moonSize": "Rayon des lunes.",
+        "sunColor": "Couleur chaude du soleil et de sa lumière.",
+        "glowColor": "Liseré atmosphérique améthyste sur la planète.",
+        "cameraDistance": "Rayon orbital de la caméra."
+      }
+    },
+    "parallax-rail": {
+      "description": "Une section épinglée où le défilement vers le bas entraîne le contenu latéralement, à travers des plans de profondeur se déplaçant à des vitesses différentes.",
+      "props": {
+        "planes": "Nombre de plans de profondeur à afficher.",
+        "travel": "Multiplicateur sur le déplacement du rail avant pendant l’épinglage.",
+        "depthSpread": "De combien le plan le plus reculé se déplace plus lentement que celui de devant.",
+        "damping": "Amortissement du ressort sur le pilotage — plus élevé suit le défilement à l’identique.",
+        "fadeEdges": "Largeur du masque doux à chaque extrémité du rail.",
+        "railGap": "Espace vertical entre les plans."
+      }
+    },
+    "approval-flow": {
+      "description": "Une checklist d’approbation étape par étape pour les permissions d’un agent — groupes de boutons radio et de cases à cocher, une échappatoire « Autre… » qui fait apparaître un champ sur place, et une validation par étape qui bloque l’engagement. Répondre à une étape envoie l’option choisie voler vers un registre courant de ce qui a déjà été décidé, si bien que l’écran accumule une piste de décision au lieu de se remplacer lui-même.",
+      "props": {
+        "layout": "Où se place le registre des étapes décidées. Un rail le range à côté de l’étape en cours sur les grands écrans ; en ligne l’empile au-dessus.",
+        "morphDuration": "Changement d’étape, révélation des options et ouverture de l’échappatoire. Le vol vers le registre est un ressort et ignore ce réglage — stiffness et damping en sont responsables.",
+        "stiffness": "Avec quelle force l’option choisie est tirée vers son emplacement dans le registre.",
+        "damping": "Vitesse à laquelle ce vol se stabilise. Des valeurs faibles laissent le libellé dépasser son emplacement avant d’atterrir.",
+        "density": "Hauteur des lignes, remplissage et taille des glyphes, partout.",
+        "revealStagger": "Délai ajouté par option à mesure que la liste d’une étape arrive. 0 fait atterrir tout le groupe d’un coup.",
+        "shakeIntensity": "Amplitude de la secousse lorsqu’une étape est rejetée. 0 la désactive — le message et la bordure rouge se déclenchent tout de même, car un rejet totalement silencieux serait une impasse.",
+        "shakeCycles": "Allers-retours de cette secousse. Chacun s’atténue, et le dernier se termine toujours au centre.",
+        "showProgress": "Barre de progression et nombre d’étapes au-dessus de l’étape en cours.",
+        "autoAdvance": "Valider une étape à choix unique dès qu’elle reçoit une réponse. Ne s’applique jamais à l’échappatoire, qui exige d’abord une phrase, et est forcé à désactivé en cas de mouvement réduit.",
+        "accentColor": "Sélection, glyphe coché, remplissage de la progression et bouton d’approbation.",
+        "dangerColor": "Bordure de ligne invalide et message de rejet."
+      }
+    },
+    "diff-review": {
+      "description": "Une surface de revue pour un correctif proposé par un agent — accepter ou rejeter chaque bloc, replier les longues suites de lignes inchangées, et basculer entre vue unifiée et vue scindée. Changer de vue ne redessine pas le diff : chaque ligne est un élément partagé qui vole du flux vers sa colonne et inversement, si bien que vous ne perdez jamais la ligne que vous étiez en train de lire.",
+      "props": {
+        "defaultView": "Mise en page de départ. Un flux entrelacé unique, ou l’ancien fichier à côté du nouveau. Le bouton de la barre d’outils la remplace en direct.",
+        "morphDuration": "Repliement de bloc, changement de verdict et première apparition d’une ligne. Le vol entre les vues est un ressort et ignore ce réglage — stiffness et damping en sont responsables.",
+        "stiffness": "Avec quelle force une ligne est tirée vers son emplacement dans l’autre vue.",
+        "damping": "Vitesse à laquelle ce vol se stabilise. Des valeurs faibles laissent une ligne dépasser sa colonne avant d’atterrir.",
+        "stagger": "Délai ajouté par ligne lors de la première apparition d’un bloc. Plafonné à douze lignes, si bien que déplier un long bloc ne laisse jamais la dernière ligne attendre à découvert.",
+        "density": "Hauteur des lignes et taille de police, partout.",
+        "showLineNumbers": "Anciens et nouveaux numéros de ligne dans la marge. La vue scindée en montre un de chaque côté ; la vue unifiée montre le numéro survivant.",
+        "contextLines": "Lignes inchangées conservées du côté d’une suite qui fait face à un changement. Le reste se replie derrière un bouton d’expansion — sauf un repli qui ne masquerait qu’une seule ligne, ce qui coûterait une ligne pour n’en économiser qu’une.",
+        "collapseDecided": "Replier le corps d’un bloc une fois qu’il a reçu un verdict, en ne laissant que l’en-tête et un bouton Annuler. Désactivé garde chaque bloc ouvert afin que vous puissiez relire ce sur quoi vous venez de statuer.",
+        "addColor": "Lignes ajoutées, leur signe en marge, et le bord d’un bloc accepté.",
+        "delColor": "Lignes supprimées, leur signe en marge, et le bord d’un bloc rejeté.",
+        "accentColor": "Bouton de vue active, boutons d’expansion des blocs repliés, anneaux de focus, et compteur de révision une fois que chaque bloc a reçu un verdict."
+      }
+    },
+    "ledger": {
+      "description": "Un journal d’activité en direct pour un agent au travail. Les événements consécutifs d’une même source se replient en un seul bloc au lieu de s’empiler en lignes identiques, la fenêtre retient un nombre fixe d’entrées et laisse le reste disparaître par le haut, et le défilement ne reste épinglé à la dernière ligne que tant que vous ne vous en écartez pas — au-delà, il continue de tourner et vous indique de combien vous êtes en retard.",
+      "props": {
+        "speed": "Multiplicateur sur toute la cadence — la frappe et les intervalles entre événements, ensemble.",
+        "charsPerSecond": "Cadence de frappe avant tremblement. Le texte complet d’un événement figure dans l’arbre d’accessibilité dès son arrivée, seul l’œil attend donc ce réglage.",
+        "entryGap": "Pause entre l’arrivée d’un événement et le début du suivant.",
+        "jitter": "Étalement de la cadence par événement, du métronome au très irrégulier. Une rafale rapide entraîne une respiration plus longue après elle, si bien que l’irrégularité se lit comme du travail plutôt que comme du bruit. À graine fixe, non aléatoire — la même séquence se reproduit à chaque montage.",
+        "maxEntries": "Événements conservés avant que le plus ancien ne disparaisse par le haut, sous un fondu qui garde la fenêtre lisible comme une vue sur un journal plus long.",
+        "group": "Replier les événements consécutifs d’une même source en un seul bloc avec un compteur. Le bloc porte la sévérité la plus grave qu’il contient, si bien qu’un refus replié parmi des lectures de routine s’affiche quand même en rouge.",
+        "showTimestamps": "Temps écoulé du flux à côté de chaque bloc. Mesuré à partir de l’horloge propre du composant, jamais de l’horloge murale, si bien qu’il est identique à chaque relecture.",
+        "caret": "Curseur bloc clignotant sur la ligne en cours d’écriture.",
+        "loop": "Reboucler vers le premier événement une fois la liste source épuisée. Désactivé laisse le flux s’arrêter une fois, et l’en-tête affiche terminé.",
+        "density": "Hauteur des lignes et taille de police, partout.",
+        "accentColor": "Indicateur en direct, curseur, pastille de rattrapage et sévérité ok.",
+        "warnColor": "La sévérité avertissement.",
+        "denyColor": "La sévérité refus."
+      }
+    },
+    "rotunda": {
+      "description": "De vrais panneaux HTML sur un cylindre 3D que l’on fait tourner par glissement. Une projection en perspective écrite à la main sur des éléments du DOM plutôt que sur un canvas — si bien que le texte reste sélectionnable, les liens restent cliquables, et un lecteur d’écran continue de lire chaque panneau pendant que l’anneau tourne.",
+      "props": {
+        "radius": "Distance de l’axe à la face de chaque panneau. Combinée au nombre de panneaux, elle décide si l’anneau se referme correctement : trop petite pour le nombre choisi, et les faces s’entrecroisent — la seule façon dont cet agencement peut paraître cassé plutôt que simplement serré.",
+        "perspective": "Profondeur de la projection, et le réglage qui décide si l’ensemble paraît qualitatif ou comme un éventail de papier bon marché. Trop proche, et le panneau de face se déforme violemment ; trop loin, et l’anneau s’aplatit en une simple rangée de cartes.",
+        "autoSpin": "Rotation au repos tant que rien n’est glissé. Elle s’arrête à l’instant où le pointeur arrive et ne reprend qu’à son départ, car un carrousel qui continue de bouger sous votre curseur est un carrousel illisible.",
+        "friction": "Quelle part d’un lancer survit, et toute la sensation du geste. Appliquée par seconde plutôt que par image, si bien que le même geste parcourt la même distance sur un écran à 60 Hz comme à 120 Hz — la formule naïve par image diviserait silencieusement le lancer par deux sur du matériel plus performant.",
+        "snap": "Se stabiliser sur le panneau le plus proche une fois qu’un lancer ralentit sous une certaine vitesse. Désactivé, l’anneau s’arrête où il s’arrête — honnête pour une texture, inadapté pour un menu.",
+        "snapStiffness": "Avec quelle force l’anneau est tiré vers la face la plus proche. L’amortissement en découle selon le ratio critique, si bien qu’augmenter ce réglage arrive plus vite sans jamais ajouter le dépassement qui se lirait comme un flottement sur un menu.",
+        "depthDim": "À quel point l’arrière de l’anneau s’assombrit vers le fond. L’indice de profondeur vend l’illusion bien plus efficacement que la rotation elle-même, car une transformation CSS ne fournit aucune occlusion avec laquelle travailler.",
+        "depthBlur": "Flou sur les panneaux passé le point médian. Appliqué à un conteneur interne plutôt qu’au panneau lui-même : un filtre sur un enfant d’un parent preserve-3d établirait un bloc englobant et aplatirait tout l’anneau en une simple pile.",
+        "faceCamera": "Garder chaque panneau bien en face du spectateur plutôt que tangent à l’anneau. Cela transforme le carrousel en présentoir à cartes, le bon choix dès que les panneaux portent du vrai contenu que l’on attend de voir lu même hors du centre.",
+        "dragSensitivity": "Degrés de rotation par pixel de glissement. Le test honnête consiste à vérifier si le panneau sous votre doigt reste sous votre doigt — trop faible, et l’anneau paraît démultiplié ; trop élevé, et un petit geste le fait tourner au-delà du panneau que vous visiez."
+      }
+    },
+    "ascii-engine": {
+      "description": "Un solide 3D éclairé et raymarché, rendu à exactement un pixel par cellule de caractère, puis quantifié dans une rampe de glyphes tracée une seule fois avec fillText. Glissez pour le faire orbiter sur un tour complet. De la vraie géométrie en dessous, un terminal au-dessus — sans scene graph, sans maillage, et sans seconde bibliothèque pour y arriver.",
+      "props": {
+        "solid": "Quel champ de distance est raymarché dans la première passe. Un champ plutôt qu’un maillage : la silhouette reste exacte à toute taille de cellule car elle est évaluée plutôt que rastérisée — c’est pourquoi cela ne nécessite ni scene graph ni envoi de géométrie.",
+        "charset": "La rampe de glyphes, du plus sombre au plus clair. L’atlas est dessiné une seule fois avec fillText dans un canvas hors écran puis envoyé comme une seule texture, si bien que le shader se contente de l’indexer et qu’une rampe plus longue ne coûte rien par image.",
+        "cellSize": "Largeur d’une cellule de caractère, et le véritable réglage de résolution. La première passe rend exactement un texel par cellule, si bien que diviser ce réglage par deux quadruple le raymarch sans rien changer d’autre — ce qui en fait le curseur de performance honnête plutôt qu’un simple réglage cosmétique.",
+        "spinSpeed": "Vitesse de rotation du solide. À zéro, il se fige — le seul moyen de juger si la rampe résout réellement la forme ou se contente de scintiller de façon convaincante.",
+        "tilt": "Élévation de repos de la caméra. Le glissement orbite depuis cette position plutôt que de la remplacer, si bien que ce réglage garde un sens même après avoir fait tourner le solide — et l’inclinaison est bridée avant les pôles, car une caméra qui bascule par-dessus se lit comme un bug plutôt que comme une rotation demandée.",
+        "zoom": "Quelle part du cadre le solide remplit. Ce réglage réduit le champ de vision plutôt que de rapprocher la caméra — un travelling avant tronquerait la face proche du solide bien avant que sa silhouette ne remplisse le cadre, ce qui ressemblerait à un plan proche cassé plutôt qu’à un gros plan.",
+        "contrast": "Gamma appliqué à la luminance avant de choisir un glyphe, et ce qui décide si le solide se lit comme une forme ou comme du bruit. La rampe compte dix paliers au maximum et l’éclairage doit se répartir sur tous — trop peu, et la forme s’effondre en seulement deux caractères.",
+        "edgeBoost": "Quelle part de la silhouette est réinjectée avant la quantification. La luminance pure perd le contour — une rampe à dix paliers ne peut porter à la fois l’ombrage et le contour, si bien que sans ce réglage la forme se dissout dans son propre dégradé.",
+        "glow": "Lueur qui déborde des glyphes éclairés, pilotée par la luminance de la cellule plutôt que par la couverture propre du glyphe — si bien qu’une cellule lumineuse rayonne, qu’elle soit tombée sur un bloc plein ou un simple point.",
+        "inkColor": "Le phosphore dans lequel les glyphes sont imprimés.",
+        "backgroundColor": "Le terminal éteint derrière eux."
+      }
+    },
+    "swarm": {
+      "description": "Jusqu’à un quart de million de particules intégrées entièrement sur le GPU, effectuant un morphing entre mots et solides, avec une caméra orbitale au glissement. Position et vitesse vivent dans des textures en virgule flottante et ne reviennent jamais au CPU ; les cibles textuelles sont échantillonnées une seule fois à partir d’un canvas hors écran, si bien que la forme peut être n’importe quelle chaîne, sans atlas de police.",
+      "props": {
+        "density": "Nombre de particules, par paliers discrets plutôt que par curseur continu. Chaque valeur réalloue quatre cibles en virgule flottante et reconstruit la géométrie, ce qu’un curseur continu ferait à chaque pixel de glissement. Soixante-cinq mille est le seuil où les formes des lettres se referment. Au-delà, la simulation est presque gratuite — tout le coût vient du taux de remplissage — le palier maximal est donc réservé à une machine dont vous connaissez déjà la réponse.",
+        "shape": "Vers quoi le nuage se dirige. Auto parcourt chaque forme à tour de rôle — texte, sphère, tore, grille — avant de recommencer, et avance la liste de mots d’une entrée à chaque retour sur texte ; les autres restent fixes. Disperser est l’exception sur laquelle auto n’atterrit jamais : ses cibles sont uniformément aléatoires, c’est donc un état vers lequel envoyer le nuage plutôt qu’une forme vers laquelle faire un morphing. Les cibles sont échantillonnées à partir d’un canvas 2D hors écran, si bien que la forme texte peut être n’importe quelle chaîne que vous passez — le GPU ne voit jamais un glyphe, seulement une texture de positions.",
+        "swapDuration": "Combien de temps une forme tient avant qu’auto ne passe à la suivante. C’est le maintien, pas le trajet — le morphing lui-même est cadencé par morphSpeed, si bien qu’une courte durée combinée à un morphing lent donne un nuage qui n’arrive jamais tout à fait nulle part, ce qui est un style plutôt qu’une erreur.",
+        "morphSpeed": "Avec quelle force chaque particule est tirée vers sa cible. C’est une accélération, pas une durée — le nuage arrive lorsque l’attraction et l’amortissement s’accordent, ce qui explique qu’il ne se fige jamais brusquement. Elle doit aussi l’emporter sur la turbulence : trop faible face à un curl élevé, et les formes des lettres ne se résolvent jamais, elles ne font que flotter.",
+        "stagger": "Quelle part du morphing est répartie dans le nuage au lieu de se produire d’un coup. À zéro, chaque particule part et arrive ensemble, et cela se lit comme un glissement ; proche de un, la forme s’assemble progressivement et vous pouvez la voir se construire. La phase provient du texel propre à chaque particule, elle ne se redistribue donc pas entre les formes.",
+        "curl": "Turbulence de bruit curl appliquée en chemin. Le curl d’un champ vectoriel est à divergence nulle par construction, il brasse donc le nuage sans jamais l’éclaircir ni l’entasser — c’est précisément la raison d’utiliser un bruit curl plutôt qu’un bruit ordinaire sur un champ de vitesse, où le nuage finit lentement par développer des trous.",
+        "damping": "Quelle part de la vitesse survit à chaque pas, appliquée par seconde plutôt que par image. En dessous d’environ 0,8, les particules arrivent sans vie et la forme paraît inerte ; au-dessus de 0,97, elles orbitent indéfiniment autour de leurs cibles sans jamais se stabiliser.",
+        "repel": "Avec quelle force le pointeur repousse les particules au survol. Le glissement fait plutôt orbiter la caméra — partager un seul geste entre les deux aurait signifié que chaque tentative de regarder autour créerait aussi un trou dans ce que vous regardiez. L’atténuation est exponentielle en distance au carré, si bien que le trou a un bord doux et que le nuage se referme derrière votre curseur au lieu de laisser une cicatrice permanente.",
+        "pointSize": "Largeur du sprite de point, et le véritable réglage de performance. Le doubler coûte quatre fois plus d’ombrage à toute densité — à un quart de million de particules, la simulation est triviale et c’est le taux de remplissage qui s’effondre, exactement l’inverse d’où la plupart des gens s’attendent à trouver le coût.",
+        "zoom": "À quelle distance la caméra se trouve du nuage. La taille des sprites suit l’échelle : laisser les points fixes ferait lire un nuage zoomé comme plus épars plutôt que plus proche — la preuve qu’un zoom n’est en réalité qu’un rognage de la fenêtre.",
+        "autoSpin": "Rotation au repos tant que rien n’est glissé. Désactivé fige le nuage et confie la caméra entièrement au pointeur — une orbite lancée continue tout de même de dériver jusqu’à l’arrêt, puisque ce mouvement a été demandé. La dérive existe pour montrer que la forme est solide plutôt qu’un simple sprite plat ; la désactiver relève donc d’un choix sur une image fixe, pas d’un choix de performance.",
+        "particleColor": "La couleur d’une particule stabilisée.",
+        "accentColor": "La couleur d’une particule en mouvement. Les particules sont mélangées entre les deux selon leur propre vitesse, si bien que la palette est une lecture de la simulation plutôt qu’une décoration posée par-dessus.",
+        "backgroundColor": "Le vide derrière le nuage. Les points se fondent de façon additive, ce fond doit donc rester véritablement sombre — plus clair, et le cœur dense sature au blanc avant même que le nombre ne devienne visible."
+      }
+    },
+    "mirage": {
+      "description": "Du HTML vivant, pleinement interactif, vu à travers un air en mouvement. Un champ de turbulence animé déplace pixel par pixel le véritable sous-arbre DOM — aucun instantané, aucune réplique canvas — si bien que le texte reste sélectionnable, le bouton conserve le focus et le lien reste un lien, pendant que tout le panneau miroite.",
+      "props": {
+        "mode": "Comment l’air se déplace. Les quatre modes diffèrent par l’anisotropie du bruit plutôt que par son intensité : des fréquences égales sur les deux axes donnent une soupe visuelle, tandis qu’un axe fortement dominant est ce qui fait lire une déchirure comme une déchirure plutôt que comme une brume supplémentaire.",
+        "intensity": "Jusqu’où le contenu est repoussé. Il s’agit d’un véritable déplacement par pixel, et non d’une transformation — une transformation ne peut déplacer que la boîte entière, ce qui explique pourquoi une brume de chaleur basée sur un simple cisaillement ne convainc jamais. Au-delà d’environ un, le texte cesse d’être lisible, ce qui reste un style légitime mais un très mauvais réglage par défaut.",
+        "speed": "Vitesse à laquelle le champ dérive. Le bruit est rastérisé une seule fois en une tuile sans raccord puis défilé, jamais régénéré avec une nouvelle graine — changer la graine de turbulence substituerait à chaque fois un champ totalement différent, ce qui se lirait comme un composant qui se déchire plutôt que comme de l’air en mouvement. Le raccord à chaque tuile est invisible car la tuile est sans raccord.",
+        "scale": "Taille des cellules de turbulence, mesurée par rapport à une tuile défilante plutôt qu’à l’élément — si bien que le même réglage donne le même air, que le panneau soit une carte ou une page entière. Ce réglage dimensionne la tuile elle-même, car une tuile ne peut contenir aucun motif plus grand que sa propre période, et le maillage de bruit ne se raccorde que sur un nombre entier de cellules ; libérer le nombre de cellules ferait perdre au champ son raccord, ce qui se manifesterait par tout le panneau qui saute vers une autre distorsion à chaque raccord. De petites cellules déchiquettent les glyphes, de grandes déplacent tout le bloc comme une seule unité ; la zone intéressante est celle où une cellule fait à peu près la hauteur d’une ligne de texte.",
+        "chroma": "Intensité de la dominante colorée que porte le miroitement, concentrée là où se trouve le pointeur. L’air chaud réfracte, une légère séparation des couleurs est donc l’indice qui fait passer l’effet pour de l’air plutôt que pour une image qui vacille.",
+        "trigger": "Ce qui déclenche l’effet. Quel que soit votre choix, il s’active en douceur plutôt que d’un coup — un déplacement qui apparaît brusquement se lit comme un élément que l’on substitue, un déplacement qui monte progressivement se lit comme de l’air qui commence à bouger.",
+        "edgeHold": "Quelle part de la silhouette propre de l’élément est protégée. Déplacer uniformément déplace aussi la bordure, si bien qu’une carte arrondie se dissout en amibe et que le seul bord qu’un lecteur utilise pour la localiser est la première chose détruite. Ce réglage atténue progressivement la poussée vers le neutre près de la limite — à zéro, le contour se déchiquette, et au-delà d’environ la moitié, le miroitement se confine au centre du panneau.",
+        "tintColor": "La couleur que porte le miroitement."
+      }
+    },
+    "submerge": {
+      "description": "Du contenu vivant maintenu sous l’eau. Un courant lent le courbe en continu, une pression fait tomber une pierre et un glissement laisse un sillage qui traîne derrière le curseur — et le texte en dessous reste sélectionnable, le bouton répond toujours et le lien reste un lien, car l’eau courbe le véritable arbre plutôt qu’une image de celui-ci.",
+      "props": {
+        "depth": "À quelle profondeur repose le contenu. Ce réglage pilote le lavis de couleur et s’ajoute à la courbure, car plus une chose est enfouie sous une surface, plus la même pente porte loin la lumière à travers elle. Au-delà d’environ 0,8, l’eau commence à l’emporter et le contenu cesse d’être le sujet.",
+        "flow": "Vitesse du courant ambiant. Le champ est rastérisé une seule fois en une tuile sans raccord puis défilé plutôt que régénéré — régénérer coûterait un encodage PNG par image, ce qui explique pourquoi tant d’effets d’eau sur navigateur se contentent d’une distorsion statique.",
+        "turbulence": "Avec quelle force le courant courbe le contenu. Il s’agit d’un véritable déplacement par pixel de l’arbre vivant, pas d’une transformation — une transformation ne peut déplacer que la boîte entière, ce qui explique pourquoi un texte « sous-marin » simplement cisaillé ne convainc jamais.",
+        "rippleForce": "Intensité de la perturbation laissée par le pointeur. Une pression émet un anneau isotrope ; un glissement laisse un sillage — le même paquet d’ondes étiré le long du trajet et pondéré vers l’arrière, si bien que l’eau est perturbée là où le pointeur est passé plutôt qu’autour de sa position actuelle. Les sources sont espacées selon la distance parcourue plutôt que selon les événements du pointeur, si bien que le même geste laisse le même sillage à 60 Hz comme à 120 Hz.",
+        "rippleSpread": "Jusqu’où une perturbation voyage avant de s’éteindre. La croissance suit une approche exponentielle plutôt qu’une racine carrée : les deux décélèrent, mais une racine carrée a une pente infinie en zéro, si bien que chaque anneau naît déjà en mouvement et que la naissance elle-même est brutale. Un sillage de glissement se propage plus lentement qu’un anneau de pression, car une traîne s’attarde là où elle a été laissée.",
+        "settle": "Secondes que met une perturbation à s’éteindre. Douze tournent simultanément et une treizième réutilise l’emplacement le plus ancien, si bien qu’un glissement rapide affiche toujours son sillage le plus récent plutôt que de faire la queue derrière des sillages périmés — et douze suffisent pour que l’éviction coupe rarement un sillage en pleine vie, ce qui produirait un à-coup perçu comme saccadé.",
+        "edgeHold": "Quelle part de la silhouette propre de l’élément est protégée. Déplacer uniformément déplace aussi la bordure, si bien qu’une carte arrondie se dissout en amibe et que le seul bord qu’un lecteur utilise pour la localiser est la première chose détruite. À zéro, le contour se déchiquette ; au-delà d’environ la moitié, l’eau se confine au centre.",
+        "waterColor": "Eau peu profonde — la couleur que porte la crête de chaque anneau.",
+        "deepColor": "Eau profonde. Appliquée en mode multiplication plutôt qu’incrustation, si bien que le contenu garde son propre contraste au lieu de s’aplatir derrière une nappe de couleur."
+      }
+    },
+    "weave": {
+      "description": "Une pièce de tissu sur un solveur à base de position — particules et contraintes de distance relaxées jusqu’à convergence à chaque pas fixe, sans forces, sans rotations et sans contacts. Faites-la glisser, chargez-la, tirez jusqu’à ce que les contraintes cèdent et que la déchirure se propage. Chaque quad est ombré selon sa propre extension par rapport au seuil de déchirure, si bien que le chemin de charge à travers le tissu est visible bien avant que quoi que ce soit ne se rompe.",
+      "props": {
+        "cols": "Particules à travers le tissu. Le nombre de contraintes croît environ comme deux fois cols multiplié par rows, et chacune est visitée à chaque passe de relaxation — ce réglage, combiné à rows, constitue donc le véritable curseur de coût.",
+        "rows": "Particules le long du tissu. Plus haut que large est ce qui fait lire le drapé comme du tissu ; une grille carrée pend comme une banderole et ne se plie jamais.",
+        "iterations": "Passes de relaxation sur la liste de contraintes par pas fixe. La dynamique à base de position n’a pas de résolution exacte — elle converge, et ce réglage détermine jusqu’où. Une passe donne du caoutchouc, six donnent du lin, et au-delà de dix vous payez pour une raideur que vous ne voyez plus.",
+        "gravity": "Accélération uniforme vers le bas. Zéro laisse le tissu flotter, si bien que le vent seul le pilote — le moyen le plus clair d’observer une onde de contrainte traverser le maillage.",
+        "wind": "Force latérale, appliquée avec une phase voyageuse plutôt qu’uniformément — une poussée uniforme ne fait que translater le tissu sans jamais le faire onduler.",
+        "stiffness": "Fraction de l’erreur de longueur de chaque contrainte corrigée par passe. Un, avec suffisamment de passes, donne une toile inextensible ; des valeurs faibles donnent un jersey qui s’étire sous son propre poids. Ce réglage s’échange presque multiplicativement contre iterations — diviser l’un par deux et doubler l’autre aboutit à peu près au même résultat.",
+        "damping": "Vitesse dissipée à chaque pas. Verlet porte la vitesse implicitement dans l’écart entre la position actuelle et la précédente, ce réglage met donc cet écart à l’échelle plutôt qu’un vecteur stocké — ce qui explique qu’il se lise comme une résistance de l’air plutôt que comme un frottement.",
+        "tearThreshold": "Extension à laquelle une contrainte cède, en multiple de sa longueur au repos. Évaluée après toutes les passes de relaxation, jamais pendant : une contrainte mesurée en cours de résolution est un artefact de l’ordre de balayage, et déchirer sur cette base produirait des ruptures qui suivent la liste des contraintes plutôt que la charge réelle. Au-delà d’environ quatre, rien ne se déchire, quel que soit le vent réglable.",
+        "pinMode": "Quelles particules sont maintenues. Coins est celui qu’il vaut la peine de tirer — la charge se concentre en deux diagonales visibles dans le champ de contrainte bien avant toute déchirure. Libre lâche tout le tissu, et démontre honnêtement que rien ici n’est animé par images clés.",
+        "shading": "Comment chaque quad est rempli. Contrainte l’ombre selon l’extension de ses quatre propres arêtes — c’est tout l’intérêt du composant : le chemin de charge à travers un tissu suspendu est invisible en fil de fer et devient évident dès qu’il est coloré.",
+        "tint": "Le tissu au repos — contrainte nulle. Aussi les ancrages et l’anneau sur une particule maintenue.",
+        "strainColor": "L’extrémité de la rampe de contrainte, atteinte exactement au seuil de déchirure — si bien qu’un quad qui devient entièrement chaud constitue une prédiction plutôt qu’une décoration."
+      }
+    },
+    "telemetry": {
+      "description": "Un tableau de métriques qui se comporte comme un seul instrument plutôt que comme huit sparklines. Survoler une tuile diffuse un horodatage unique, et chaque autre tuile résout sa propre valeur à ce même instant, si bien qu’un pic de latence et un engorgement de file d’attente se révèlent visiblement comme le même événement plutôt que comme deux coïncidences. Les dépassements de seuil sont enregistrés sur l’échantillon plutôt que sur un pixel, si bien que la cicatrice voyage avec sa donnée et reste visible quarante secondes après que la valeur est revenue à la normale.",
+      "props": {
+        "tiles": "Métriques du tableau. Chaque tuile partage une horloge et un curseur uniques, ce réglage détermine donc aussi combien de traces un seul survol doit faire répondre à la fois — la coordination est le composant lui-même, et elle ne devient lisible qu’au-delà d’environ six.",
+        "columns": "Largeur de la grille. Des colonnes étroites rendent chaque trace plus haute par rapport à sa largeur et exagèrent chaque oscillation ; des colonnes larges les aplatissent en quelque chose de réellement comparable d’une ligne à l’autre.",
+        "sampleRate": "À quelle fréquence chaque tampon circulaire prend un échantillon, délibérément indépendant de la fréquence d’images. Le tampon avance sur son propre accumulateur, si bien qu’une machine qui chute à 30 im/s affiche le même historique qu’une machine à 120 — un graphique dont le passé dépend du GPU du spectateur ment sur les données.",
+        "history": "Quelle quantité de passé chaque trace affiche. La capacité du tampon circulaire correspond à ce réglage multiplié par la fréquence d’échantillonnage, et elle est allouée une seule fois — augmenter l’un ou l’autre réalloue plutôt que de croître, et la mémoire reste bornée.",
+        "smoothing": "Moyenne mobile exponentielle appliquée à l’entrée du tampon. Elle lisse la série stockée plutôt que le tracé, si bien que le curseur lit exactement les nombres visibles à l’écran — un affichage qui contredit sa propre trace est pire qu’une trace bruyante.",
+        "threshold": "Niveau normalisé qu’une métrique doit franchir pour compter comme un dépassement. Normalisé car les tuiles ne partagent pas d’unités — un pourcentage et un mégaoctet doivent être comparables pour qu’un seul curseur et une seule règle aient un sens sur tout le tableau.",
+        "scars": "Conserver une marque permanente sur la trace là où un dépassement s’est produit. Un flash que vous avez manqué est un flash qui ne s’est pas produit ; la cicatrice est ce qui rend un tableau sans surveillance digne d’un coup d’œil.",
+        "cursor": "Le curseur temporel partagé. Le désactiver ne laisse que huit sparklines ordinaires — le moyen le plus clair de voir ce qu’il apportait.",
+        "fill": "Aire sous la trace. Dégradé se lit comme du volume sans concurrencer la ligne ; plein est plus dense et plus adapté aux petites tuiles ; aucun est le choix honnête lorsque plusieurs traces impliqueraient sinon un empilement qui n’existe pas.",
+        "traceColor": "La ligne, la rampe de remplissage, et le repère du curseur.",
+        "breachColor": "Le repère de seuil, la cicatrice, et l’affichage lorsque le curseur se trouve sur un échantillon en dépassement. Une seule couleur pour les trois, si bien qu’une cicatrice se révèle visiblement comme le même événement que la lecture qui l’a produite."
+      }
+    },
+    "rewind": {
+      "description": "Un historique d’annulation que l’on peut piloter, et qui refuse de jeter le futur. Faites glisser la tête et l’interface revient en arrière en direct, sous votre doigt, plutôt qu’au relâchement ; agissez depuis un point passé, et le futur abandonné reste dessiné sur le rail comme une branche sur laquelle vous pouvez revenir, au lieu d’être silencieusement détruit comme le fait toute vraie pile d’annulation. Contrôlé selon le même schéma que Ledger — il possède le rail, le geste et le graphe de branches, tandis que votre reducer possède les états.",
+      "props": {
+        "orientation": "Sur quel axe le rail se déroule. Horizontal se lit comme une barre de défilement temporel ; vertical se lit comme un journal de commits et s’empile mieux à côté d’un formulaire. Le geste est écrit contre une abstraction d’axe unique plutôt que deux gestionnaires, si bien que les modes ne peuvent pas diverger l’un de l’autre.",
+        "scrubSnap": "Verrouiller la tête sur l’état enregistré le plus proche pendant le glissement. Désactivé, elle se déplace en continu et la surface affiche l’état à sa position ou juste avant, ce qui rend visible la densité de l’historique — on peut sentir où l’on travaillait vite.",
+        "branching": "Dessiner les futurs abandonnés au lieu de les jeter. Désactivé est l’annulation destructive habituelle ; activé est le modèle honnête, et la différence entre les deux constitue tout le composant.",
+        "branchDepth": "Combien de branches abandonnées restent dessinées à côté du tronc avant que la plus ancienne ne se replie. Au-delà d’environ quatre, le rail cesse d’être une ligne temporelle et devient un graphe — un composant différent.",
+        "stiffness": "Tension du ressort sur la tête. Le marqueur et l’indice rapporté proviennent du même glissement, si bien que la surface ne peut jamais afficher un état que la tête n’a pas encore atteint — un affichage qui devance sa propre barre de défilement est la seule chose qui rendrait le voyage dans le temps artificiel.",
+        "damping": "Frottement du ressort. Faible laisse la tête dépasser un état puis revenir, ce qui est charmant sur une barre de défilement et désastreux sur les champs qu’elle pilote — c’est ce réglage qui décide lequel des deux vous obtenez.",
+        "tickDensity": "Combien d’états le rail dessine réellement. Tous est fidèle mais illisible au-delà d’environ soixante entrées ; régulier échantillonne à un pas fixe et laisse le nombre réel dans l’étiquette à la place.",
+        "showLabels": "Le nom de l’action et la position sous le rail. Sans cela, un défilement n’est qu’une position ; avec, c’est un historique que l’on peut lire en glissant.",
+        "railHeight": "Épaisseur du rail, et de chaque branche à ses côtés. Fine, elle se lit comme une barre de défilement sous un document ; épaisse, elle se lit comme le contrôle principal de l’écran.",
+        "accentColor": "Le tronc, la tête, et la portion déjà parcourue.",
+        "branchColor": "Les futurs abandonnés. Délibérément une teinte chaude distincte de l’accent plutôt qu’un tronc assombri — un futur abandonné est d’une autre nature qu’un futur discret, pas une version simplement plus pâle de la même chose."
+      }
+    }
+  },
+  "cookbookSections": {
+    "entrances-and-exits": {
+      "title": "Entrées & Sorties",
+      "blurb": "Comment les éléments apparaissent et disparaissent."
+    },
+    "sequencing-and-timing": {
+      "title": "Séquencement & Timing",
+      "blurb": "Coordonner plusieurs éléments ou moments."
+    },
+    "movement-and-transforms": {
+      "title": "Mouvement & Transformations",
+      "blurb": "Changer la position, la taille ou l’angle d’un élément."
+    },
+    "transitions-between-states": {
+      "title": "Transitions entre états",
+      "blurb": "Relier un état, une vue ou un élément à un autre."
+    },
+    "scroll": {
+      "title": "Défilement",
+      "blurb": "Mouvement lié au défilement ou à la navigation entre les vues."
+    },
+    "feedback-and-interaction": {
+      "title": "Retour & Interaction",
+      "blurb": "Répondre aux actions de l’utilisateur."
+    },
+    "easing": {
+      "title": "Accélération",
+      "blurb": "Comment la vitesse évolue au cours d’une animation."
+    },
+    "spring-animations": {
+      "title": "Animations à ressort",
+      "blurb": "Un mouvement basé sur la physique, alternative à l’accélération à durée fixe."
+    },
+    "looping-and-ambient-motion": {
+      "title": "Boucles & Mouvement ambiant",
+      "blurb": "Des animations qui tournent d’elles-mêmes."
+    },
+    "polish-and-effects": {
+      "title": "Finitions & Effets",
+      "blurb": "Les petites touches qui distinguent le bon de l’excellent."
+    },
+    "performance": {
+      "title": "Performance",
+      "blurb": "Ce qui garde un mouvement fluide plutôt que saccadé."
+    },
+    "principles-to-know": {
+      "title": "Principes à connaître",
+      "blurb": "Des concepts qui guident quand et comment animer."
+    }
+  },
+  "cookbookTerms": {
+    "fade-in-fade-out": "Un élément apparaît ou disparaît en modifiant son opacité.",
+    "slide-in": "Un élément entre en glissant depuis l’extérieur de l’écran (gauche, droite, haut ou bas).",
+    "scale-in": "Un élément grandit d’une taille réduite jusqu’à sa taille normale en apparaissant, souvent associé à un fondu.",
+    "pop-in": "Un élément apparaît avec un léger dépassement, comme s’il rebondissait à sa place.",
+    "reveal": "Le contenu est dévoilé progressivement, souvent en animant un clip-path ou un masque.",
+    "enter-exit": "L’animation qu’un élément joue lorsqu’il est ajouté à l’écran ou en est retiré.",
+    "keyframes": "Des points définis dans une animation (0 %, 50 %, 100 %) entre lesquels le navigateur comble les écarts.",
+    "interpolation-tween": "Générer toutes les images intermédiaires entre une valeur de départ et une valeur d’arrivée, pour que le mouvement soit continu.",
+    "stagger": "Animer plusieurs éléments les uns après les autres avec un léger délai entre chacun, créant une cascade.",
+    "orchestration": "Chronométrer délibérément plusieurs animations pour qu’elles se ressentent comme un seul mouvement coordonné.",
+    "delay": "Temps avant qu’une animation ne démarre.",
+    "duration": "Durée d’une animation.",
+    "fill-mode": "Si un élément conserve les styles de sa première ou dernière image avant le début de l’animation ou après sa fin (par ex. forwards).",
+    "stepped-animation": "Une animation divisée en étapes discrètes, comme un compte à rebours.",
+    "translate": "Déplacer un élément le long de l’axe X ou Y.",
+    "scale": "Rendre un élément plus grand ou plus petit.",
+    "rotate": "Faire tourner un élément autour d’un point.",
+    "skew": "Incliner un élément le long de l’axe X ou Y, le cisaillant hors de sa forme rectangulaire.",
+    "3d-tilt-flip": "Faire pivoter dans l’espace 3D (rotateX / rotateY) pour ajouter de la profondeur.",
+    "perspective": "L’intensité de l’effet 3D — une valeur plus faible exagère la profondeur, comme si le spectateur était plus proche.",
+    "transform-origin": "Le point d’ancrage depuis lequel une mise à l’échelle ou une rotation se développe.",
+    "origin-aware-animation": "Un élément s’anime depuis son déclencheur, comme une popover qui croît depuis le bouton qui l’a ouverte plutôt que depuis son propre centre, comportement par défaut en CSS.",
+    "crossfade": "Un élément s’estompe pendant qu’un autre apparaît en fondu, au même endroit.",
+    "continuity-transition": "Un changement qui garde l’utilisateur orienté en reliant visuellement l’avant et l’après. Par exemple, agrandir puis rétrécir le même rectangle.",
+    "morph": "Une forme se transforme en douceur en une autre forme, par ex. la Dynamic Island.",
+    "shared-element-transition": "Un élément voyage et se transforme d’une position à une autre, comme une vignette qui s’agrandit en carte.",
+    "layout-animation": "Lorsque la taille ou la position d’un élément change, il s’anime vers son nouvel emplacement au lieu de s’y déplacer brusquement.",
+    "accordion-collapse": "Une section déplie et replie sa hauteur en douceur pour afficher ou masquer du contenu.",
+    "direction-aware-transition": "Le contenu glisse dans un sens en avançant et dans le sens opposé en reculant, si bien que la navigation acquiert un sens de direction.",
+    "scroll-reveal": "Les éléments apparaissent en fondu ou en glissant à mesure qu’ils entrent dans le viewport.",
+    "scroll-driven-animation": "Une animation dont la progression est directement liée à la position de défilement.",
+    "parallax": "L’arrière-plan et le premier plan se déplacent à des vitesses différentes pendant le défilement, créant de la profondeur.",
+    "page-transition": "Une animation qui se joue lors de la navigation d’une page ou d’une route à une autre.",
+    "view-transition": "Le navigateur effectue un morphing entre deux états ou pages, en reliant les éléments partagés.",
+    "hover-effect": "Changement visuel lorsque le curseur passe sur un élément.",
+    "press-tap-feedback": "Une légère réduction d’échelle lorsqu’un élément est cliqué, pour lui donner une sensation physique.",
+    "hold-to-confirm": "Un effet de progression qui se remplit tant que l’utilisateur maintient un bouton.",
+    "drag": "Déplacer un élément en le saisissant, souvent avec de l’élan au relâchement.",
+    "drag-to-reorder": "Faire glisser des éléments d’une liste pour les réorganiser, pendant que les autres se décalent pour faire de la place.",
+    "swipe-to-dismiss": "Faire glisser un élément hors de l’écran pour le fermer, comme un tiroir ou une notification toast.",
+    "rubber-banding": "Résistance et retour élastique lorsqu’on fait glisser au-delà d’une limite (la sensation de sur-défilement d’iOS).",
+    "shake-wiggle": "Un rapide tremblement de gauche à droite signalant une erreur ou une saisie rejetée.",
+    "ripple": "Un cercle qui s’étend depuis le point de contact, confirmant la pression.",
+    "easing": "La vitesse à laquelle une animation accélère ou ralentit.",
+    "ease-out": "Démarre vite, se termine lentement. Le réglage par défaut pour la plupart des interfaces et tout ce qui répond à l’utilisateur.",
+    "ease-in": "Démarre lentement, se termine vite. Généralement évité ; peut paraître mou.",
+    "ease-in-out": "Lent, rapide, lent. Adapté aux éléments déjà à l’écran qui se déplacent d’un point A à un point B.",
+    "linear": "Vitesse constante. À éviter pour l’interface ; à réserver aux indicateurs de chargement ou aux défilements.",
+    "cubic-bezier": "Une courbe d’accélération personnalisée que vous définissez pour un contrôle précis.",
+    "asymmetric-easing": "Une courbe qui accélère et décélère à des rythmes différents. Paraît plus vivante qu’une courbe symétrique.",
+    "spring": "Un mouvement piloté par la physique (tension, masse, amortissement) plutôt que par une durée fixe.",
+    "stiffness-tension": "Avec quelle force le ressort tire vers sa cible. Plus élevé paraît plus vif.",
+    "damping": "À quelle vitesse un ressort se stabilise. Un amortissement plus faible signifie plus de rebond et d’oscillation.",
+    "mass": "À quel point l’élément animé paraît lourd. Plus de masse le rend plus lent et plus mou.",
+    "bounce": "Un ressort qui dépasse sa cible puis se stabilise, ajoutant une touche ludique.",
+    "perceptual-duration": "Le temps au bout duquel un ressort paraît terminé, même s’il continue de micro-s’ajuster en dessous.",
+    "momentum": "Un mouvement qui conserve sa vitesse, en particulier après un glissement ou une interruption.",
+    "velocity": "À quelle vitesse et dans quelle direction un élément se déplace. Un ressort la reporte dans l’animation suivante en cas d’interruption, si bien qu’un élément lancé d’une pichenette conserve sa vitesse.",
+    "interruptible-animation": "Une animation qui peut être redirigée en douceur en plein vol au lieu de devoir d’abord se terminer.",
+    "marquee": "Un texte ou un contenu qui défile en continu dans une boucle.",
+    "loop": "Une animation qui se répète, un nombre défini de fois ou indéfiniment.",
+    "alternate-yoyo": "Une boucle qui se joue en avant puis s’inverse à chaque itération, au lieu de revenir brusquement au début.",
+    "orbit": "Un élément qui tourne autour d’un autre selon une trajectoire continue.",
+    "pulse": "Un léger changement répété d’échelle ou d’opacité pour attirer l’attention.",
+    "float": "Une dérive douce et continue de haut en bas qui donne à un élément statique une sensation de vie et d’apesanteur.",
+    "idle-animation": "Un mouvement subtil qui se joue pendant qu’un élément attend simplement d’être manipulé.",
+    "blur": "Un filtre de flou utilisé pour adoucir un élément ou masquer de petites imperfections.",
+    "clip-path": "Découper un élément selon une forme, utilisé pour les révélations, les masques et les curseurs avant/après.",
+    "mask": "Masquer ou révéler des parties d’un élément à l’aide d’une forme ou d’un dégradé — comme clip-path, mais avec des bords doux et estompables.",
+    "before-after-slider": "Un séparateur déplaçable qui balaie entre deux images superposées pour les comparer.",
+    "line-drawing": "Un tracé SVG qui se dessine lui-même, comme un stylo invisible qui le trace.",
+    "text-morph": "Un texte qui s’anime caractère par caractère lorsqu’il change, attirant l’attention sur la nouvelle valeur.",
+    "skeleton-shimmer": "Un espace réservé avec un reflet mouvant, affiché pendant le chargement du contenu.",
+    "number-ticker": "Des chiffres qui défilent ou comptent jusqu’à une valeur.",
+    "tabular-numbers": "Des chiffres à largeur fixe pour que les nombres ne se déplacent pas en changeant. Essentiel pour les compteurs défilants, les minuteurs et les compteurs.",
+    "typewriter": "Un texte qui apparaît caractère par caractère, comme s’il était tapé.",
+    "frame-rate-fps": "Le nombre d’images dessinées par seconde. 60 im/s est la référence pour un mouvement fluide ; 120 im/s sur les écrans récents.",
+    "jank": "Un saccadement visible lorsque le navigateur perd des images faute de suivre l’animation.",
+    "dropped-frame": "Une image que le navigateur n’a pas réussi à dessiner à temps, provoquant un minuscule à-coup dans le mouvement.",
+    "compositing": "Laisser le GPU déplacer ou estomper un élément sur sa propre couche sans refaire la mise en page ni le rendu.",
+    "will-change": "Un indice CSS signalant qu’un élément est sur le point de s’animer, afin que le navigateur puisse le promouvoir à l’avance sur sa propre couche.",
+    "layout-thrashing": "Animer des propriétés comme width, height, top ou left, qui forcent le navigateur à recalculer la mise en page à chaque image, provoquant des saccades.",
+    "purposeful-animation": "Le mouvement doit servir une fonction — orienter, donner un retour, montrer des relations — pas seulement décorer.",
+    "anticipation": "Un léger élan dans la direction opposée avant un mouvement, annonçant ce qui va se produire.",
+    "follow-through": "Des parties d’un élément continuent de bouger et se stabilisent légèrement après l’arrêt du mouvement principal, ajoutant du poids.",
+    "squash-stretch": "Déformer un élément pendant son mouvement pour exprimer le poids, la vitesse et la flexibilité.",
+    "perceived-performance": "La bonne animation donne à une interface une sensation de rapidité, même quand elle ne l’est pas.",
+    "frequency-of-use": "Plus un utilisateur voit une animation souvent, plus elle doit être courte et subtile.",
+    "spatial-consistency": "Animer de façon à ce qu’un élément garde son identité et sa position à travers les états, afin que les utilisateurs ne perdent jamais la trace de ce qui s’est passé.",
+    "hardware-acceleration": "Animer transform et opacity permet au GPU de garder le mouvement fluide.",
+    "reduced-motion": "Respecter le réglage prefers-reduced-motion de l’utilisateur en atténuant ou en supprimant le mouvement."
+  },
+  "collections": {
+    "react-micro-interactions": {
+      "title": "Composants de micro-interactions React",
+      "intro": "Les petites réponses qui font qu’une interface semble répondre plutôt qu’obéir. Trente composants couvrant les états de survol, les effets de curseur, les transformations de cartes, les boîtes de dialogue, les menus et les contrôles façon pièce usinée — la couche que les utilisateurs ne remarquent jamais consciemment, et dont l’absence se fait immédiatement sentir. Chacun est piloté par un véritable événement de pointeur plutôt que par une simple transition CSS, si bien que le comportement tient bon sous un curseur rapide, un glissement lent, et sur un appareil tactile."
+    },
+    "react-background-components": {
+      "title": "Composants d’arrière-plan React",
+      "intro": "Du mouvement plein cadre pour la couche derrière tout le reste. Vingt-deux arrière-plans qui tournent au fond d’un hero, d’une section ou d’une page entière — champs shader WebGL, systèmes de particules sur canvas, cartes de contour à la dérive, et grilles en CSS pur. Chacun se dimensionne selon son conteneur plutôt que selon le viewport, si bien qu’il s’insère aussi facilement dans une section que dans une page entière, et chacun expose sa palette et sa vitesse comme des props que vous réglez dans le navigateur avant de copier quoi que ce soit."
+    },
+    "react-power-user-components": {
+      "title": "Composants React pour utilisateurs avancés",
+      "intro": "Des composants qui portent de l’état et de la physique plutôt que de la décoration. Palettes de commandes, journaux d’activité, systèmes orbitaux, moteurs de rendu ASCII, simulations de particules et de corps rigides. Ce sont les pièces les plus lourdes du registre, et celles dotées de véritables API — la plupart font tourner une boucle de simulation, plusieurs possèdent leur propre mise en page, et toutes s’attendent à être connectées à vos données plutôt que déposées comme un ornement."
+    },
+    "react-text-animations": {
+      "title": "Composants d’animation de texte React",
+      "intro": "Du texte qui bouge avec intention. Dix-sept composants pour le moment où un titre atterrit, où un nombre compte, ou où un mot se substitue à un autre — brouillage, panneau à palettes, proximité de police variable, défilement, caviardage, allumage néon, effets de givre et d’ombre. Chacun anime de véritables nœuds de texte plutôt qu’une image ou une réplique canvas, si bien que les mots restent sélectionnables, indexables et lisibles par un lecteur d’écran pendant qu’ils bougent."
+    },
+    "react-hover-effects": {
+      "title": "Effets de survol React",
+      "intro": "Vingt-huit composants dont le principal changement d’état est l’arrivée du pointeur. Des lueurs qui suivent le curseur, des cartes qui s’inclinent vers lui, des listes qui assombrissent toutes les lignes sauf une, des surfaces qui se dissolvent ou se déplacent en dessous de lui. Le survol est l’interaction la moins coûteuse du navigateur, et la plus facile à surexploiter — chacun de ces composants choisit une seule propriété à animer et s’y tient, plutôt que d’animer tout à la fois."
+    },
+    "react-stagger-animation": {
+      "title": "Animation en cascade React",
+      "intro": "Le stagger est le délai que l’on place entre des éléments frères pour qu’un groupe arrive en séquence plutôt qu’en bloc. Seize composants ici l’utilisent — des lettres qui se détachent d’un mot, des lignes qui entrent dans une liste, des cellules qui s’allument à travers une grille, des tubes néon qui s’amorcent un par un, des particules amorcées en déphasage. Le paramètre intéressant n’est jamais la durée ; c’est le décalage entre les éléments, et chacun de ces composants l’expose comme un contrôle que l’on peut faire glisser."
+    },
+    "react-drag-animations": {
+      "title": "Animations de glissement React",
+      "intro": "Dix-sept composants que l’on déplace du doigt ou du curseur, et qui continuent de bouger après le relâchement. Glissement avec élan, élasticité en butée, listes réorganisables, corps rigides que l’on peut lancer, tissu que l’on peut charger jusqu’à la déchirure, un bouton que l’on peut faire tourner à travers ses crans, un autocollant que l’on peut décoller par le coin. Tous se branchent sur des événements de pointeur plutôt que de souris, et fixent touch-action sur la surface de glissement — toute la différence entre un geste qui fonctionne sur un téléphone et un geste qui fait défiler la page à la place."
+    },
+    "react-reveal-animations": {
+      "title": "Animations de révélation React",
+      "intro": "Du contenu qui se dévoile plutôt qu’il n’apparaît en fondu. Dix composants animent un masque, un clip-path ou un balayage afin que l’élément soit progressivement exposé au lieu de simplement changer d’opacité — dissolutions en pixels, balayages en rideau, givre qui dégèle, entrées déclenchées au défilement. Une révélation se lit comme délibérée là où un fondu se lit comme une page encore en chargement — ce qui justifie la propriété supplémentaire à animer."
+    },
+    "react-spring-animation": {
+      "title": "Animation à ressort React",
+      "intro": "Un mouvement décrit par la physique plutôt que par une courbe. Un ressort possède une raideur, un amortissement et une masse plutôt qu’une durée, si bien qu’il se stabilise naturellement lorsqu’il est interrompu et dépasse sa cible comme le ferait un véritable objet. Quatorze composants ici sont pilotés par ressort — boutons magnétiques, boîtes de dialogue qui rebondissent, listes lancées, effet de continuité sur un curseur, une tête d’historique que l’on pilote, un bouton qui se stabilise dans son cran. Réduisez l’amortissement vers zéro sur n’importe lequel d’entre eux et observez où le dépassement cesse d’être charmant."
+    },
+    "react-blur-effects": {
+      "title": "Effets de flou React",
+      "intro": "Treize composants qui utilisent le flou comme un matériau plutôt que comme un filtre. Dégradés de bordure progressifs, atténuation de profondeur de champ, panneaux givrés, une ville construite en permanence hors focus derrière un verre mouillé, flou de mouvement sur un élément rapide, mises au point qui se nettoient à l’approche. Le flou est coûteux à composer, si bien que chacun de ces composants garde la couche floutée hors du chemin de rendu principal ou borne son rayon — un backdrop-filter non borné sur toute la page est le moyen le plus rapide de perdre des images."
+    },
+    "react-scroll-animations": {
+      "title": "Animations de défilement React",
+      "intro": "Six composants dont la ligne temporelle est la barre de défilement. Rails en parallaxe, entrées déclenchées au défilement, sections qui pilotent une transformation selon la progression. L’animation pilotée par le défilement est le seul cas où l’utilisateur contrôle la lecture, ce qui signifie qu’elle doit paraître juste à toute vitesse et dans les deux sens — chacun de ces composants est piloté par la position plutôt que par un déclencheur qui se déclenche une seule fois."
+    },
+    "react-clip-path-mask-effects": {
+      "title": "Effets Clip-Path et Masque React",
+      "intro": "Onze composants qui animent la forme de ce que l’on peut voir plutôt que l’élément lui-même. Balayages clip-path, masques en dégradé, découpes en projecteur, une ligne de pli qui sépare un autocollant en une face et un rabat, une torche qui révèle une couche en dessous. Le masquage se compose sur le GPU et ne déclenche jamais de mise en page, ce qui en fait le moyen le moins coûteux de faire apparaître quelque chose de nulle part — et le seul moyen de révéler une couche à travers une autre sans dupliquer le contenu."
+    },
+    "react-layout-animation": {
+      "title": "Animation de mise en page React",
+      "intro": "Sept composants qui animent entre deux mises en page plutôt qu’entre deux styles. Une carte qui s’agrandit en boîte de dialogue, une grille qui se réajuste lorsqu’un élément la quitte, un panneau qui se redimensionne sans que son contenu ne saute. L’animation de mise en page consiste à mesurer les positions avant et après puis à interpoler la différence — bien faite, elle garde l’élément continu, si bien que l’utilisateur suit un seul objet au lieu de voir l’un disparaître et un autre apparaître."
+    },
+    "react-3d-tilt-effects": {
+      "title": "Effets d’inclinaison 3D React",
+      "intro": "Six composants qui placent un élément en perspective et le font pivoter contre le pointeur. Cartes inclinables, surfaces holographiques, mises en page orbitales, profondeur qui répond à l’endroit où vous regardez. Le paramètre qui décide si cela paraît qualitatif ou bon marché est la distance de perspective, pas l’angle de rotation — trop proche, et une légère inclinaison se déforme violemment ; trop loin, et tout l’effet s’aplatit en un simple glissement."
+    },
+    "framer-motion-components": {
+      "title": "Composants Framer Motion pour React",
+      "intro": "Trente-deux composants construits sur Motion, la bibliothèque d’animation autrefois publiée sous le nom de Framer Motion. Elle est aujourd’hui distribuée sous le paquet motion, et ces composants s’appuient sur ce qu’elle fait de mieux : l’animation de mise en page, la gestion des gestes, et des ressorts qui survivent aux interruptions. Chacun s’installe avec une seule dépendance en plus de React, et la source est du Motion idiomatique non modifié, si bien qu’elle se lit comme du code que vous auriez écrit vous-même plutôt que comme une surcouche à apprendre."
+    },
+    "react-webgl-backgrounds": {
+      "title": "Arrière-plans WebGL React",
+      "intro": "Vingt composants qui se rendent sur le GPU via un contexte WebGL — dégradés en fragment shader, champs de particules, simulations de fluide, un myxomycète à base d’agents, de la pluie qui coule le long d’une vitre, un trou noir raymarché. Dix-neuf utilisent ogl, une surcouche assez légère pour que le bundle entier coûte moins qu’une seule image hero ; un utilise Three.js, là où la scène a réellement besoin d’un scene graph. Tous se dimensionnent selon leur conteneur et arrêtent leur boucle de rendu lorsque l’onglet est masqué."
+    }
+  },
+  "collectionGroups": {
+    "by-category": "Par catégorie",
+    "by-technique": "Par technique",
+    "by-library": "Par bibliothèque"
+  },
+  "landing": {
+    "hero": {
+      "eyebrowTagline": "Registre de composants",
+      "headlineCount": "{count, plural, one {# instrument} other {# instruments}}.",
+      "headlineBench": "Un seul établi.",
+      "description": "Des composants React tournés vers le mouvement, exposés en direct sur la page qu’ils animent. Chaque paramètre est un cadran. Chaque spécimen est catalogué.",
+      "ctaCatalog": "Entrer dans le catalogue",
+      "ctaCookbook": "le Livre de recettes",
+      "readoutCube": "Champ : RubiksCube · Rotation {duration} ms · Mélange {count}",
+      "readoutWaves": "Champ : Waves · Ampl {amplitude} · Dist {distance}",
+      "readoutRegistry": "{count, plural, one {Registre # unité [MIT · open source]} other {Registre # unités [MIT · open source]}}"
+    },
+    "manifesto": {
+      "dark": "Nous opérons dans l’ombre",
+      "light": "Nous rendons dans la lumière",
+      "parameters": "Chaque paramètre est pris en compte",
+      "uncalibrated": "Rien ne part sans étalonnage"
+    },
+    "footer": {
+      "tagline": "Un établi d’instruments pour le mouvement React. Prévisualisez en direct, réglez chaque paramètre, récupérez la source.",
+      "exhibitsAriaLabel": "Expositions",
+      "collectionsAriaLabel": "Collections",
+      "fullCatalog": "Catalogue complet",
+      "allCollections": "Toutes les collections",
+      "plateLabel": "Planche",
+      "colophonLabel": "Colophon",
+      "statsLine": "{specimens, plural, one {# spécimen} other {# spécimens}} · {exhibitCount, plural, one {# exposition} other {# expositions}} · 1 accent"
+    },
+    "tuning": {
+      "edgesInstruction": "{mode, select, tap {Touchez les bords} trace {Tracez les bords} other {les bords}}",
+      "dialsDescription": "Chaque spécimen du catalogue expose ses cadrans ainsi — réglés en direct, reflétés dans le tableau des props, prêts à copier.",
+      "sliders": {
+        "glowRadius": "Rayon de la lueur",
+        "coneSpread": "Étalement du cône"
+      }
+    },
+    "nav": {
+      "ariaLabel": "Navigation de section",
+      "hero": "Haut de page",
+      "calibration": "Étalonnage",
+      "sealed": "Archive scellée",
+      "colophon": "Colophon"
+    }
+  },
+  "pages": {
+    "categories": {
+      "backgrounds": "Arrière-plans",
+      "text-animations": "Animations de texte",
+      "micro-interactions": "Micro-interactions",
+      "power-user-systems": "Systèmes pour utilisateurs avancés"
+    },
+    "landing": {
+      "unitsMeta": "{count, plural, one {# unité} other {# unités}}",
+      "allInCategory": "Tous les {count} {category} →",
+      "openCommand": "Ouvrir {name}",
+      "blurbs": {
+        "backgrounds": "Des champs ambiants. La tonalité de fond d’une interface.",
+        "text-animations": "Des lettres sous tension. Morphing, comptage, défilement.",
+        "micro-interactions": "De petits mécanismes. Plus ressentis que vus.",
+        "power-user-systems": "Des machines entières. État, mémoire, pièces mobiles."
+      },
+      "calibration": {
+        "label": "Étalonnage",
+        "meta": "2 cadrans",
+        "blurb": "Chaque cadran est réel. Tournez-en un."
+      },
+      "archive": {
+        "plate": "Planche",
+        "openArchive": "Ouvrir l’archive",
+        "headline": "Rien ne reste dans l’ombre.",
+        "body": "Chaque spécimen est livré avec sa source complète — sous licence MIT, prête à copier, sans clé requise. Les pièces ci-dessous se rendent en direct sur cette page ; l’implémentation n’est qu’à un clic.",
+        "cta": "Parcourir la source"
+      }
+    },
+    "cookbook": {
+      "eyebrow": "Référence",
+      "title": "Livre de recettes du mouvement",
+      "intro": "Le mot exact pour la chose que vous visualisez sans pouvoir la nommer. Chaque terme qu’un designer, un brief ou un prompt pourrait employer — et partout où l’établi peut vous en montrer un en action, un lien direct vers celui-ci.",
+      "coverage": "{covered} termes sur {total} démontrés en direct"
+    },
+    "components": {
+      "eyebrow": "Catalogue",
+      "title": "Composants",
+      "intro": "Chaque composant est en direct et réglable. Ajustez les paramètres, partagez l’URL, copiez la source.",
+      "aboutCategory": "À propos de {category} →"
+    },
+    "componentDetail": {
+      "adaptedFrom": "Adapté de",
+      "cookbookLabel": "Livre de recettes",
+      "install": "Installation",
+      "props": "Props"
+    },
+    "collections": {
+      "eyebrow": "Catalogue",
+      "title": "Collections",
+      "intro": "Des tranches sélectionnées du catalogue Shadow Garden — par catégorie, par technique et par bibliothèque d’animation. Chaque collection est calculée à partir du registre, si bien qu’elle ne dévie jamais des composants qu’elle liste.",
+      "countMeta": "{count, plural, one {# composant} other {# composants}} · tous gratuits",
+      "inThisCollection": "Dans cette collection",
+      "theTerms": "Les termes",
+      "relatedCollections": "Collections associées"
+    },
+    "favorites": {
+      "eyebrow": "Collection",
+      "title": "Favoris"
+    },
+    "notFound": {
+      "title": "Rien dans cette ombre",
+      "body": "Cette page n’est pas sur l’établi. Le catalogue compte {count} composants — tous en direct, réglables et prêts à copier.",
+      "recovery": "Retour possible",
+      "browseAll": "Parcourir tous les composants",
+      "cookbook": "Livre de recettes du mouvement",
+      "home": "Accueil"
+    }
+  },
+  "commands": {
+    "placeholder": "Rechercher des composants ou exécuter une commande…",
+    "headings": {
+      "favorites": "Favoris",
+      "components": "Composants",
+      "actions": "Actions"
+    },
+    "actions": {
+      "catalog": "Catalogue",
+      "favoritesPage": "Favoris",
+      "cookbook": "Livre de recettes du mouvement",
+      "theme": "Thème",
+      "copyLink": "Copier le lien de la page",
+      "favoriteCurrent": "Ajouter aux favoris : {name}",
+      "unfavoriteCurrent": "Retirer des favoris : {name}"
+    },
+    "keywordAliases": {
+      "catalog": "catalogue, composants, parcourir, tout",
+      "favoritesPage": "favoris, enregistrés, collection",
+      "cookbook": "recettes, glossaire, termes, référence, lexique, nommage",
+      "theme": "sombre, clair, mode, thème",
+      "copyLink": "partager, url, lien, copier",
+      "favoriteCurrent": "favori, enregistrer, marque-page, basculer"
+    },
+    "toasts": {
+      "removedFavorite": "{name} retiré des favoris",
+      "addedFavorite": "{name} ajouté aux favoris",
+      "clipboardUnavailable": "Presse-papiers indisponible",
+      "linkCopied": "Lien copié",
+      "copyLinkFailed": "Impossible de copier le lien"
+    }
+  },
+  "feedback": {
+    "reasons": {
+      "too_short": {
+        "title": "Dites-nous en un peu plus",
+        "description": "Au moins {min} caractères, pour que nous puissions agir."
+      },
+      "too_long": {
+        "title": "C’est un peu long",
+        "description": "Restez sous {max} caractères."
+      },
+      "rate_limited": {
+        "title": "Beaucoup de retours en peu de temps",
+        "description": "Patientez une minute, puis réessayez."
+      },
+      "invalid_body": {
+        "title": "Envoi impossible",
+        "description": "Le message n’est pas arrivé intact. Réessayez."
+      },
+      "network": {
+        "title": "Impossible d’atteindre les ombres",
+        "description": "Vérifiez votre connexion et réessayez."
+      },
+      "server": {
+        "title": "Envoi impossible",
+        "description": "Un problème est survenu de notre côté. Réessayez sous peu."
+      }
+    }
+  }
+}

@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
+import { useDataCopy } from "@/lib/i18n/data-copy";
 import { termAnchor } from "@/lib/cookbook";
 import {
 	buildSearchIndex,
@@ -49,6 +51,17 @@ const ANCHOR_STOP = "scroll-mt-24 sm:scroll-mt-28"; // 96px / 112px
 // part the eye can actually follow is the only part that animates.
 const SMOOTH_MAX = 1.4;
 const APPROACH = 0.55;
+
+// Mirrors scripts/i18n/gen-catalog.ts — the slug the generated
+// cookbookSections keys are written under ("Entrances & Exits" →
+// "entrances-and-exits"). Distinct from termAnchor, which drops the "&"
+// entirely and keeps driving the in-page anchor ids unchanged.
+const sectionKey = (s: string) =>
+	s
+		.toLowerCase()
+		.replace(/&/g, "and")
+		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/^-+|-+$/g, "");
 
 function scrollToAnchor(el: HTMLElement, reduced: boolean) {
 	// Before anything measures the target: a card mid-entrance is still
@@ -123,6 +136,9 @@ export default function CookbookBrowser({
 	// underneath the scroll sends it to the wrong offset (§B10).
 	const [query, setQuery] = useState("");
 	const [committed, setCommitted] = useState("");
+
+	const t = useTranslations("chrome.cookbook");
+	const copy = useDataCopy();
 
 	// Normalized once, at mount. Every keystroke after that is a handful of
 	// indexOf calls over ~140 short strings, which is why nothing here is debounced.
@@ -280,11 +296,11 @@ export default function CookbookBrowser({
 				    section count. */}
 				<nav
 					ref={railRef}
-					aria-label="Sections"
+					aria-label={t("sections")}
 					className="h-full scrollbar-thin lg:overflow-y-auto"
 				>
 					<p className="mb-2 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
-						Sections
+						{t("sections")}
 					</p>
 					{/* Bottom padding so the last section can scroll clear of the
 					    gear pinned over the rail's floor. */}
@@ -317,7 +333,12 @@ export default function CookbookBrowser({
 												}
 											/>
 										)}
-										<span className="relative z-10">{section.title}</span>
+										<span className="relative z-10">
+											{copy(
+												`cookbookSections.${sectionKey(section.title)}.title`,
+												section.title,
+											)}
+										</span>
 									</a>
 								</li>
 							);
@@ -346,13 +367,13 @@ export default function CookbookBrowser({
 						{/* Typed but uncommitted, so the grid still shows everything — say
 						    why, or the untouched count reads as a broken filter. */}
 						{query.trim() && query !== committed
-							? "↵ to filter"
-							: `${shown} term${shown === 1 ? "" : "s"}`}
+							? t("enterToFilter")
+							: t("termCount", { count: shown })}
 					</p>
 				</div>
 
 				{filtered.length === 0 && (
-					<p className="font-mono text-xs text-ink-mute">No matching terms.</p>
+					<p className="font-mono text-xs text-ink-mute">{t("noMatches")}</p>
 				)}
 
 				<div className="space-y-8 md:space-y-12">
@@ -363,10 +384,16 @@ export default function CookbookBrowser({
 							className={ANCHOR_STOP}
 						>
 							<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-accent">
-								{section.title}
+								{copy(
+									`cookbookSections.${sectionKey(section.title)}.title`,
+									section.title,
+								)}
 							</h2>
 							<p className="mt-1 font-sans text-sm text-ink-dim">
-								{section.blurb}
+								{copy(
+									`cookbookSections.${sectionKey(section.title)}.blurb`,
+									section.blurb,
+								)}
 							</p>
 
 							{/* Card heights here disagree structurally, not incidentally: a
@@ -412,13 +439,16 @@ export default function CookbookBrowser({
 											{row.term}
 										</h3>
 										<p className="relative z-10 mt-1.5 font-sans text-[13px] leading-relaxed text-ink-dim">
-											{row.description}
+											{copy(
+												`cookbookTerms.${termAnchor(row.term)}`,
+												row.description,
+											)}
 										</p>
 
 										{row.components.length > 0 && (
 											<div className="relative z-10 mt-3 flex flex-wrap items-center gap-1.5 md:gap-2">
 												<span className="font-display text-[9px] uppercase tracking-[0.2em] text-ink-mute">
-													See it
+													{t("seeIt")}
 												</span>
 												{row.components.map((c) => (
 													<Link

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { ROLE_TABLE } from "@/lib/registry/roles";
 import type { SourceFile } from "@/lib/registry/source";
 import CodeBlock from "./CodeBlock";
@@ -19,10 +20,11 @@ export default function CodeTabs({
 }) {
   const [active, setActive] = useState(0);
   const current = files[active] ?? files[0]!;
+  const t = useTranslations("chrome.codeTabs");
 
   return (
     <div className="space-y-2">
-      <div role="tablist" aria-label="Source files" className="flex flex-wrap gap-0.5">
+      <div role="tablist" aria-label={t("sourceFilesAria")} className="flex flex-wrap gap-0.5">
         {files.map((file, index) => {
           const selected = index === active;
           return (

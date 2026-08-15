@@ -1,18 +1,26 @@
 "use client";
 
 import { useCallback, useEffect, useState, type MouseEvent } from "react";
+import { useTranslations } from "next-intl";
 import { useLenis } from "lenis/react";
-import type { NavSection } from "@/components/landing/data";
+import { SECTION_IDS, type NavSection } from "@/components/landing/data";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useDataCopy } from "@/lib/i18n/data-copy";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { useScramble } from "@/hooks/use-scramble";
 import { cn } from "@/lib/utils";
+
+// The four framing ticks (Top/Calibration/Sealed Archive/Colophon) key off
+// landing.nav.<id>; every other tick is a registry category and keys off the
+// shared pages.categories.<slug> namespace instead — anchorFor(category)
+// already produces that slug, and it's what `id` is built from in data.ts.
+const STATIC_NAV_IDS = new Set<string>(Object.values(SECTION_IDS));
 
 // The section rail — a fixed vertical column of ticks on the right edge, one per
 // plate, modeled on grok's conversation scrubber. Hover a tick and its label
@@ -23,9 +31,16 @@ import { cn } from "@/lib/utils";
 const ACTIVE_LINE = 96; // px below the fixed header where a section turns "current"
 
 export default function SectionRail({ sections }: { sections: NavSection[] }) {
+	const t = useTranslations("landing.nav");
+	const copy = useDataCopy();
 	const isDesktop = useMediaQuery("(min-width: 1024px)");
 	const lenis = useLenis();
 	const [activeId, setActiveId] = useState<string>(sections[0]?.id ?? "");
+
+	const labelFor = (section: NavSection) =>
+		STATIC_NAV_IDS.has(section.id)
+			? copy(`landing.nav.${section.id}`, section.label)
+			: copy(`pages.categories.${section.id}`, section.label);
 
 	// Active tick = the last section whose top has crossed the line, clamped to
 	// the final section once the page bottoms out (so the short η footer still
@@ -86,7 +101,7 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 	return (
 		<TooltipProvider delay={0}>
 			<nav
-				aria-label="Section navigation"
+				aria-label={t("ariaLabel")}
 				className="fixed right-0.5 top-1/2 z-120 hidden -translate-y-1/2 lg:block"
 			>
 				<ol className="flex flex-col items-end gap-3">
@@ -94,6 +109,7 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 						<li key={section.id}>
 							<RailTick
 								section={section}
+								label={labelFor(section)}
 								isActive={section.id === activeId}
 								onJump={jumpTo}
 							/>
@@ -107,10 +123,12 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 
 function RailTick({
 	section,
+	label,
 	isActive,
 	onJump,
 }: {
 	section: NavSection;
+	label: string;
 	isActive: boolean;
 	onJump: (id: string, e: MouseEvent<HTMLAnchorElement>) => void;
 }) {
@@ -124,7 +142,7 @@ function RailTick({
 				render={
 					<a
 						href={`#${section.id}`}
-						aria-label={section.label}
+						aria-label={label}
 						aria-current={isActive ? "true" : undefined}
 						onClick={(e) => onJump(section.id, e)}
 					/>
@@ -141,7 +159,7 @@ function RailTick({
 				/>
 			</TooltipTrigger>
 			<TooltipContent side="left" sideOffset={8}>
-				<TickLabel target={section.label} active={open} />
+				<TickLabel target={label} active={open} />
 			</TooltipContent>
 		</Tooltip>
 	);

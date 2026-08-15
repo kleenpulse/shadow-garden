@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { useTheme } from "next-themes";
 import gsap from "gsap";
@@ -69,6 +70,7 @@ const makeVariants = (reduce: boolean) => ({
 // up, Waves below it — running the same values the readout strip reports, and
 // paused once scrolled past.
 export default function LandingHero({ stats, hero }: LandingHeroProps) {
+	const t = useTranslations("landing.hero");
 	const ref = useRef<HTMLElement>(null);
 	const inView = useInView(ref);
 	const reduce = useReducedMotion() ?? false;
@@ -298,7 +300,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 					variants={rise}
 					className="font-display text-[11px] uppercase tracking-[0.34em] text-accent"
 				>
-					Shadow Garden · Component Registry
+					Shadow Garden · {t("eyebrowTagline")}
 				</motion.p>
 
 				{/* Self-inverting headline. `color: white` under difference resolves to
@@ -310,17 +312,16 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 					variants={rise}
 					className="mt-6 font-display text-hero uppercase leading-[0.95] tracking-[0.02em] text-white mix-blend-difference"
 				>
-					{stats.total} instruments.
+					{t("headlineCount", { count: stats.total })}
 					<br />
-					One bench.
+					{t("headlineBench")}
 				</motion.h1>
 
 				<motion.p
 					variants={rise}
 					className="mt-7 max-w-xl font-sans text-sm text-ink-dim sm:text-base"
 				>
-					Motion-forward React components, exhibited live on the page they
-					power. Every parameter is a dial. Every specimen is catalogued.
+					{t("description")}
 				</motion.p>
 
 				<motion.div
@@ -332,14 +333,14 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 						prefetch
 						className="rounded-md bg-accent px-3 w-full sm:w-auto sm:px-5 flex items-center h-8 text-on-accent transition-colors hover:bg-accent-hover"
 					>
-						Enter the catalog
+						{t("ctaCatalog")}
 					</Link>
 					<Link
 						href="/cookbook"
 						prefetch
 						className="rounded-md border border-hairline w-full sm:w-auto px-3 sm:px-5  h-8 text-ink-dim transition-colors hover:border-accent-muted hover:text-ink inline-flex items-center gap-1.5"
 					>
-						the Cook Book
+						{t("ctaCookbook")}
 						<CookBookIcon className="size-5.5" aria-hidden />
 					</Link>
 				</motion.div>
@@ -355,13 +356,19 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
               correctly reports Waves. */}
 					<span className="hidden sm:inline">
 						{isDesktop
-							? `Field: RubiksCube · Turn ${hero.cube.moveDuration}ms · Scramble ${hero.cube.scrambleMoveCount}`
+							? t("readoutCube", {
+									duration: hero.cube.moveDuration,
+									count: hero.cube.scrambleMoveCount,
+								})
 							: isMobile
-								? `Field: Waves · Amp ${hero.waves.amplitude.toFixed(2)} · Dist ${hero.waves.distance.toFixed(2)}`
+								? t("readoutWaves", {
+										amplitude: hero.waves.amplitude.toFixed(2),
+										distance: hero.waves.distance.toFixed(2),
+									})
 								: null}
 					</span>
 					<span className="w-full sm:w-auto">
-						Registry {stats.total} units [MIT · open source]
+						{t("readoutRegistry", { count: stats.total })}
 					</span>
 				</div>
 			</div>

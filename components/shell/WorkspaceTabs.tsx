@@ -1,13 +1,9 @@
 "use client";
 
 import { Fragment, useEffect, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { useUIStore, type WorkspaceTab } from "@/lib/store";
 import PillTabs, { type PillTabItem } from "./PillTabs";
-
-const TABS: PillTabItem<WorkspaceTab>[] = [
-	{ value: "preview", label: "preview" },
-	{ value: "code", label: "code" },
-];
 
 export default function WorkspaceTabs({
 	slug,
@@ -23,6 +19,11 @@ export default function WorkspaceTabs({
 }) {
 	const activeTab = useUIStore((state) => state.activeTab);
 	const setActiveTab = useUIStore((state) => state.setActiveTab);
+	const t = useTranslations("chrome.workspaceTabs");
+	const TABS: PillTabItem<WorkspaceTab>[] = [
+		{ value: "preview", label: t("preview") },
+		{ value: "code", label: t("code") },
+	];
 
 	// Reset to the preview tab when navigating to a different component.
 	useEffect(() => {
@@ -35,7 +36,7 @@ export default function WorkspaceTabs({
 			    left the right-hand control sitting 1rem below the tabs. */}
 			<div className="mb-4 flex w-full items-center justify-between gap-3">
 				<PillTabs
-					aria-label="Preview or source"
+					aria-label={t("ariaLabel")}
 					value={activeTab}
 					onValueChange={setActiveTab}
 					items={TABS}

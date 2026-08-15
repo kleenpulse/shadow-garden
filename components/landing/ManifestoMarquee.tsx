@@ -1,22 +1,22 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import MarqueeVelocity from "./marquee-velocity";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
-
-const CREED = [
-	"We operate in the dark",
-	"We render in the light",
-	"Every parameter accounted for",
-	"Nothing ships uncalibrated",
-];
 
 // One creed cycle — MarqueeVelocity tiles this to fill the band, so the
 // trailing separator is what keeps the seam reading as another beat.
 function Creed() {
+	const t = useTranslations("landing.manifesto");
+	// Four separate literal-key calls rather than mapping over an id array —
+	// next-intl's typed `t()` chokes on a union-typed key argument here
+	// (TS2590, "union type too complex"), same shape already tolerated
+	// elsewhere in the codebase (components/shell/PreviewErrorFallback.tsx).
+	const CREED = [t("dark"), t("light"), t("parameters"), t("uncalibrated")];
 	return (
 		<span className="flex items-center font-display text-[11px] uppercase tracking-[0.3em] text-ink-mute">
-			{CREED.map((line) => (
-				<span key={line} className="flex items-center">
+			{CREED.map((line, i) => (
+				<span key={i} className="flex items-center">
 					{line}
 					<span className="mx-6 text-accent/60">·</span>
 				</span>

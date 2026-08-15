@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import gsap from "gsap";
 import type CanvasConfetti from "canvas-confetti";
 
@@ -62,6 +63,7 @@ export default function SuccessOverlay({ onDismiss }: { onDismiss: () => void })
   const backdropRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dismissed = useRef(false);
+  const t = useTranslations("chrome.successOverlay");
 
   const dismiss = useCallback(() => {
     if (dismissed.current) return;
@@ -158,7 +160,7 @@ export default function SuccessOverlay({ onDismiss }: { onDismiss: () => void })
       ref={rootRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Purchase complete"
+      aria-label={t("ariaLabel")}
       className="fixed inset-0 flex touch-none items-center justify-center"
       style={{ zIndex: 10001 /* above IntroOverlay (10000) and GotoTop (9999) */ }}
     >
@@ -177,20 +179,19 @@ export default function SuccessOverlay({ onDismiss }: { onDismiss: () => void })
           data-rise
           className="font-display text-[11px] uppercase tracking-[0.28em] text-accent"
         >
-          Welcome to the shadows
+          {t("kicker")}
         </p>
         <h2
           data-rise
           className="mt-4 font-display text-2xl tracking-tight text-ink"
         >
-          The eminence is yours.
+          {t("title")}
         </h2>
         <p
           data-rise
           className="mt-3 font-sans text-sm leading-relaxed text-ink-dim"
         >
-          Your purchase is complete. The full arsenal of the Shadow Garden now
-          answers to you.
+          {t("body")}
         </p>
         <button
           data-rise
@@ -198,7 +199,7 @@ export default function SuccessOverlay({ onDismiss }: { onDismiss: () => void })
           onClick={() => dismiss()}
           className="mt-7 inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-accent px-5 font-sans text-sm font-medium text-on-accent transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
-          Enter the shadows
+          {t("cta")}
           <span aria-hidden>→</span>
         </button>
       </div>

@@ -8,6 +8,9 @@ import {
 	type KeyboardEvent,
 } from "react";
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
+import { useDataCopy } from "@/lib/i18n/data-copy";
+import { anchorFor } from "@/components/landing/data";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // Patched router: imperative navigations drive the route progress bar too.
@@ -34,22 +37,9 @@ import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
 import FeedbackWidget from "./FeedbackWidget";
 
-// The label carries the gradient itself rather than the button: a directly
-// applied `color: transparent` beats the track's inherited text-* utility, which
-// would otherwise repaint the clipped glyphs solid. The `-bright` ramp because
-// the fill below is black in both themes — the stock one's mid stop reads 2.9:1
-// there. Punch-out fill: the amethyst tint every other tab uses muddies gradient
-// glyphs.
-const FILTER_TABS: PillTabItem<CatalogFilter>[] = [
-	{ value: "all", label: "all" },
-	{
-		value: "new",
-		label: <span className="text-grainient-bright">new</span>,
-		activeFill: "bg-black dark:bg-black",
-	},
-];
-
 export default function Sidebar() {
+	const t = useTranslations("chrome.sidebar");
+	const copy = useDataCopy();
 	const pathname = usePathname();
 	const router = useRouter();
 	const search = useUIStore((state) => state.search);
@@ -60,6 +50,26 @@ export default function Sidebar() {
 	const setSidebarOpen = useUIStore((state) => state.setSidebarOpen);
 	const sidebarWidth = useUIStore((state) => state.sidebarWidth);
 	const setSidebarWidth = useUIStore((state) => state.setSidebarWidth);
+
+	// The label carries the gradient itself rather than the button: a directly
+	// applied `color: transparent` beats the track's inherited text-* utility, which
+	// would otherwise repaint the clipped glyphs solid. The `-bright` ramp because
+	// the fill below is black in both themes — the stock one's mid stop reads 2.9:1
+	// there. Punch-out fill: the amethyst tint every other tab uses muddies gradient
+	// glyphs.
+	const filterTabs: PillTabItem<CatalogFilter>[] = useMemo(
+		() => [
+			{ value: "all", label: t("filterTabs.all") },
+			{
+				value: "new",
+				label: (
+					<span className="text-grainient-bright">{t("filterTabs.new")}</span>
+				),
+				activeFill: "bg-black dark:bg-black",
+			},
+		],
+		[t],
+	);
 
 	// The persisted width differs from the SSR default, so defer the handle (which
 	// renders the live width into aria-valuenow) to after mount to avoid a
@@ -266,7 +276,7 @@ export default function Sidebar() {
 			{sidebarOpen && (
 				<button
 					type="button"
-					aria-label="Close navigation"
+					aria-label={t("closeNavigation")}
 					onClick={() => setSidebarOpen(false)}
 					className="fixed inset-0 z-30 bg-black/50 lg:hidden"
 				/>
@@ -298,16 +308,19 @@ export default function Sidebar() {
 						className="mb-1.5 px-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute"
 					>
 						{searching
-							? `${scored.length} / ${filtered.length} components`
-							: `${filtered.length} components`}
+							? t("catalogCountFiltered", {
+									matched: scored.length,
+									total: filtered.length,
+								})
+							: t("catalogCount", { count: filtered.length })}
 					</p>
 					<input
 						type="search"
 						value={search}
 						onChange={(event) => setSearch(event.target.value)}
 						onKeyDown={onSearchKeyDown}
-						placeholder="Search components…"
-						aria-label="Search components"
+						placeholder={t("searchPlaceholder")}
+						aria-label={t("searchLabel")}
 						className="w-full rounded-md border border-hairline bg-panel px-3 py-1.5 font-mono text-xs text-ink placeholder:text-ink-mute outline-none focus-visible:border-accent"
 					/>
 					{/* Pre-mount the active pill is drawn by CSS off html[data-catalog-filter]
@@ -315,10 +328,10 @@ export default function Sidebar() {
 					    React owns it — otherwise the indicator would slide across the track
 					    on every refresh as the persisted value landed. */}
 					<PillTabs<CatalogFilter>
-						aria-label="Filter components"
+						aria-label={t("filterLabel")}
 						value={effectiveFilter}
 						onValueChange={setCatalogFilter}
-						items={FILTER_TABS}
+						items={filterTabs}
 						layoutId="sidebar-catalog-filter"
 						fullWidth
 						size="md"
@@ -331,13 +344,13 @@ export default function Sidebar() {
 				<AutoMaskVertical
 					ref={listRef}
 					className="flex-1 px-3 pb-16 md:pb-20"
-					aria-label="Components"
+					aria-label={t("componentsLabel")}
 					role="navigation"
 				>
 					{searching ? (
 						scored.length === 0 ? (
 							<p className="px-2.5 py-2 font-mono text-xs text-ink-mute">
-								No matches.
+								{t("noMatches")}
 							</p>
 						) : (
 							<ul className="space-y-0.5">{scored.map(entryLink)}</ul>
@@ -358,7 +371,7 @@ export default function Sidebar() {
 										>
 											▾
 										</span>
-										{group.category}
+										{copy(`pages.categories.${anchorFor(group.category)}`, group.category)}
 									</button>
 									{!isCollapsed && (
 										<ul className="mt-0.5 space-y-0.5">
@@ -384,8 +397,8 @@ export default function Sidebar() {
 					<div
 						{...handleProps}
 						data-dragging={isDragging}
-						aria-label="Resize sidebar"
-						title="Drag to resize · double-click to reset"
+						aria-label={t("resizeHandle")}
+						title={t("resizeHint")}
 						className="group absolute inset-y-0 right-0 z-30 hidden w-px cursor-col-resize bg-transparent transition-colors hover:bg-accent/40 focus-visible:bg-accent/40 data-[dragging=true]:bg-accent lg:block"
 					>
 						<span className="absolute -inset-x-1 inset-y-0" />

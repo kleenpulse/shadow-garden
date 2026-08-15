@@ -3,6 +3,7 @@
 import { useEffect, useMemo, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Maximize2 } from "lucide-react";
 import type { ComponentEntry } from "@/lib/registry/types";
 import { trackEvent } from "@/lib/stats/track";
@@ -32,6 +33,7 @@ export default function LiveWorkspace({
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
+	const t = useTranslations("chrome.liveWorkspace");
 
 	// One view ping per component the user opens (fires once per slug, incl. on
 	// client-side nav between components). Fire-and-forget, anonymous.
@@ -81,7 +83,7 @@ export default function LiveWorkspace({
 						    touch, and revealed by keyboard focus either way. */}
 						<Link
 							href={fullHref}
-							aria-label="Open preview fullscreen"
+							aria-label={t("fullscreenAria")}
 							className="absolute right-2 top-2 z-10 grid h-8 w-8 place-items-center rounded-md border border-hairline bg-surface/80 text-ink-dim backdrop-blur transition-[color,opacity] hover:text-accent focus-visible:text-accent focus-visible:outline-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
 						>
 							<Maximize2 className="h-4 w-4" aria-hidden />

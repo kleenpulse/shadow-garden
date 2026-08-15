@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import type { PropKind, PropOfKind } from "@/lib/registry/kinds";
 import type { PropSchema, PropValue, TunedValues } from "@/lib/registry/types";
 import { useUIStore } from "@/lib/store";
@@ -58,6 +59,7 @@ export default function ControlsPanel({
 }) {
 	const paused = useUIStore((s) => s.paused);
 	const togglePaused = useUIStore((s) => s.togglePaused);
+	const t = useTranslations("chrome.controls");
 
 	if (props.length === 0) return null;
 
@@ -65,7 +67,7 @@ export default function ControlsPanel({
 		<section className="rounded-lg border border-hairline bg-panel/70 dark:bg-black/40 backdrop-blur-xs">
 			<header className="flex items-center justify-between border-b border-hairline px-4 py-2.5">
 				<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-dim">
-					Controls
+					{t("heading")}
 				</h2>
 				<div className="flex items-center gap-3">
 					{pausable && (
@@ -75,7 +77,7 @@ export default function ControlsPanel({
 							aria-pressed={paused}
 							className="font-mono text-[11px] text-ink-mute transition-colors hover:text-accent"
 						>
-							{paused ? "play" : "pause"}
+							{paused ? t("play") : t("pause")}
 						</button>
 					)}
 					<button
@@ -83,7 +85,7 @@ export default function ControlsPanel({
 						onClick={onReset}
 						className="font-mono text-[11px] text-ink-mute transition-colors hover:text-accent"
 					>
-						reset
+						{t("reset")}
 					</button>
 				</div>
 			</header>

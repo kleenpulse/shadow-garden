@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { useDataCopy } from "@/lib/i18n/data-copy";
 import { cn } from "@/lib/utils";
 import { displayName } from "@/lib/display-name";
 import GlowCard from "./GlowCard";
@@ -18,6 +20,9 @@ export default function CatalogCard({
 	description: string;
 	addedAt?: string;
 }) {
+	const t = useTranslations("chrome.catalogCard");
+	const copy = useDataCopy();
+
 	return (
 		// focus-within keeps an accent affordance for keyboard users — the glow
 		// only tracks the pointer.
@@ -29,7 +34,7 @@ export default function CatalogCard({
 			    above it as the only pointer-interactive child. */}
 			<Link
 				href={`/components/${slug}`}
-				aria-label={`Open ${name}`}
+				aria-label={t("open", { name })}
 				className="absolute inset-0 z-0 rounded-lg"
 			/>
 			<div className="pointer-events-none relative z-10 flex items-center justify-between gap-2">
@@ -56,7 +61,7 @@ export default function CatalogCard({
 				</div>
 			</div>
 			<p className="pointer-events-none relative z-10 font-sans text-xs leading-relaxed text-ink-dim line-clamp-3">
-				{description}
+				{copy(`catalog.${slug}.description`, description)}
 			</p>
 		</GlowCard>
 	);

@@ -8,6 +8,8 @@ import { DevFab } from "@/components/dev/DevFab";
 import JsonLd from "@/components/seo/JsonLd";
 import { siteSchema } from "@/lib/schema";
 import { catalogFilterScript } from "@/lib/catalog-filter-script";
+import { localeInitScript } from "@/lib/i18n/config";
+import { I18nProvider } from "@/lib/i18n/provider";
 import {
 	SITE_DESCRIPTION,
 	SITE_NAME,
@@ -126,17 +128,24 @@ export default function RootLayout({
 							"try{var ip=false;try{ip=sessionStorage.getItem('sg-intro-v1')==='1'}catch(e){}if(!ip||location.search.indexOf('sg-intro')>-1){document.documentElement.setAttribute('data-sg-intro','')}}catch(e){}",
 					}}
 				/>
+				{/* Pre-paint: stamp <html lang> from the stored locale (sg-locale) so
+            the document language is right before hydration. UI text stays
+            English until the client provider resolves — same accepted flash
+            class as the theme script. */}
+				<script dangerouslySetInnerHTML={{ __html: localeInitScript() }} />
 				<ThemeProvider
 					attribute="class"
 					defaultTheme="dark"
 					enableSystem={false}
 					disableTransitionOnChange
 				>
-					<RouteProgress>
-						<IntroOverlay />
-						<NuqsAdapter>{children}</NuqsAdapter>
-						{process.env.NODE_ENV === "development" && <DevFab />}
-					</RouteProgress>
+					<I18nProvider>
+						<RouteProgress>
+							<IntroOverlay />
+							<NuqsAdapter>{children}</NuqsAdapter>
+							{process.env.NODE_ENV === "development" && <DevFab />}
+						</RouteProgress>
+					</I18nProvider>
 				</ThemeProvider>
 			</body>
 		</html>

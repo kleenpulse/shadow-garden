@@ -17,6 +17,7 @@ import {
   type Transition,
 } from "motion/react";
 import { createPortal } from "react-dom";
+import { useTranslations } from "next-intl";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -287,6 +288,7 @@ export default function GrowDialog({
   const osReduce = useReducedMotion();
   const reduce = Boolean(osReduce) || Boolean(reducedMotion);
   const descId = useId();
+  const t = useTranslations("chrome.growDialog");
 
   return (
     <GrowPanel
@@ -328,7 +330,7 @@ export default function GrowDialog({
             type="button"
             onClick={() => onOpenChange(false)}
             className="-mt-0.5 -mr-1.5 rounded-md p-1.5 text-ink-dim transition-colors hover:bg-raised hover:text-ink"
-            aria-label="Close dialog"
+            aria-label={t("closeAria")}
           >
             <X className="size-4" />
           </button>

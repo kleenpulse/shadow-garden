@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useReducedMotion } from "motion/react";
 import BorderGlow from "@/components/registry/border-glow/border-glow";
 import { AnimatedNumber } from "@/components/registry/animated-number/animated-number";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import type { LandingData } from "@/components/landing/data";
+import { useDataCopy } from "@/lib/i18n/data-copy";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 // BorderGlow's glowColor is an "H S L" triplet string; convert from the hex the
@@ -50,11 +52,17 @@ export default function TuningProof({
 }: {
 	tuning: LandingData["tuning"];
 }) {
+	const t = useTranslations("landing.tuning");
+	const copy = useDataCopy();
 	const reduce = useReducedMotion() ?? false;
 	const [values, setValues] = useState<Record<string, number>>(() =>
 		Object.fromEntries(tuning.sliders.map((s) => [s.name, s.default])),
 	);
 	const compact = useMediaQuery("(max-width: 640px)");
+	// Precomputed rather than inlined as a ternary in the t() call — an inline
+	// ternary there triggers next-intl's typed t() to blow past TS's
+	// instantiation depth limit (TS2589) against this large a Messages tree.
+	const edgesMode: "tap" | "trace" = compact ? "tap" : "trace";
 
 	return (
 		<div className="grid items-center gap-10 lg:grid-cols-[1fr_320px]">
@@ -73,7 +81,7 @@ export default function TuningProof({
 						animateInView={!reduce}
 					>
 						<div className="flex h-52 w-full items-center justify-center p-6 text-center font-display text-xs uppercase tracking-[0.2em] text-ink-dim">
-							{compact ? "Tap " : "Trace "}the edges
+							{t("edgesInstruction", { mode: edgesMode })}
 						</div>
 					</BorderGlow>
 				</PreviewBoundary>
@@ -83,7 +91,9 @@ export default function TuningProof({
 				{tuning.sliders.map((slider) => (
 					<label key={slider.name} className="block">
 						<span className="flex items-baseline justify-between font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute">
-							<span>{slider.label}</span>
+							<span>
+								{copy(`landing.tuning.sliders.${slider.name}`, slider.label)}
+							</span>
 							<span className="flex items-baseline gap-1 text-ink">
 								<PreviewBoundary
 									slug="animated-number"
@@ -117,8 +127,7 @@ export default function TuningProof({
 					</label>
 				))}
 				<p className="font-sans text-xs leading-relaxed text-ink-mute">
-					Every specimen in the catalog exposes its dials like this — tuned
-					live, reflected in the props table, ready to copy.
+					{t("dialsDescription")}
 				</p>
 			</div>
 		</div>

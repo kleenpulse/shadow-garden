@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Heart } from "lucide-react";
 import { useFavoriteCount, useFavoritesHydrated } from "@/lib/favorites-store";
 import { cn } from "@/lib/utils";
@@ -16,11 +17,14 @@ export default function FavoritesLink({
 }) {
   const hydrated = useFavoritesHydrated();
   const count = useFavoriteCount();
+  const t = useTranslations("chrome.favorites");
 
   return (
     <Link
       href="/favorites"
-      aria-label={hydrated && count > 0 ? `Favorites (${count})` : "Favorites"}
+      aria-label={
+        hydrated && count > 0 ? t("linkWithCount", { count }) : t("link")
+      }
       onClick={onClick}
       onPointerEnter={onPointerEnter}
       className={cn(

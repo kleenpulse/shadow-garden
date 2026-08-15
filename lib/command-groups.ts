@@ -29,6 +29,41 @@ export interface CommandActions {
 	toggleFavorite: (slug: string) => void;
 }
 
+/**
+ * Display copy for the palette's own chrome — group headings, the five static
+ * action labels, and the favorite/unfavorite pair. Supplied by the caller
+ * (CommandMenu, a client component) rather than imported here, so this module
+ * stays framework-free and translation-agnostic.
+ *
+ * `keywordAliases` are localized search aliases APPENDED to the English
+ * keywords already hardcoded below — the English keywords are never replaced
+ * (§ commands namespace hard rule: keep every English keyword).
+ */
+export interface CommandLabels {
+	headings: {
+		favorites: string;
+		components: string;
+		actions: string;
+	};
+	actions: {
+		catalog: string;
+		favoritesPage: string;
+		cookbook: string;
+		theme: string;
+		copyLink: string;
+	};
+	/** Favorite/Unfavorite: current-component action label. */
+	favoriteCurrent: (favorited: boolean, name: string) => string;
+	keywordAliases?: {
+		catalog?: string[];
+		favoritesPage?: string[];
+		cookbook?: string[];
+		theme?: string[];
+		copyLink?: string[];
+		favoriteCurrent?: string[];
+	};
+}
+
 /** Slug of the component detail route currently open, if any. */
 export function currentComponentSlug(pathname: string): string | undefined {
 	const match = pathname.match(/^\/components\/([^/]+)$/);
@@ -45,6 +80,7 @@ export function buildCommandGroups(
 	favoriteSlugs: string[],
 	pathname: string,
 	actions: CommandActions,
+	labels: CommandLabels,
 ): CommandGroupDef[] {
 	const groups: CommandGroupDef[] = [];
 
@@ -60,7 +96,7 @@ export function buildCommandGroups(
 	if (favEntries.length > 0) {
 		groups.push({
 			id: "favorites",
-			heading: "Favorites",
+			heading: labels.headings.favorites,
 			commands: favEntries.map((entry) => ({
 				id: `fav:${entry.slug}`,
 				label: entry.name,
@@ -74,7 +110,7 @@ export function buildCommandGroups(
 
 	groups.push({
 		id: "components",
-		heading: "Components",
+		heading: labels.headings.components,
 		commands: entries.map((entry) => ({
 			id: `nav:${entry.slug}`,
 			label: entry.name,
@@ -88,23 +124,34 @@ export function buildCommandGroups(
 	const actionCommands: CommandGroupDef["commands"] = [
 		{
 			id: "action:catalog",
-			label: "Catalog",
+			label: labels.actions.catalog,
 			icon: LayoutGrid,
-			keywords: ["catalog", "components", "browse", "all"],
+			keywords: [
+				"catalog",
+				"components",
+				"browse",
+				"all",
+				...(labels.keywordAliases?.catalog ?? []),
+			],
 			active: pathname === "/components",
 			onRun: () => actions.navigate("/components"),
 		},
 		{
 			id: "action:favorites-page",
-			label: "Favorites",
+			label: labels.actions.favoritesPage,
 			icon: Heart,
-			keywords: ["favorites", "saved", "collection"],
+			keywords: [
+				"favorites",
+				"saved",
+				"collection",
+				...(labels.keywordAliases?.favoritesPage ?? []),
+			],
 			active: pathname === "/favorites",
 			onRun: () => actions.navigate("/favorites"),
 		},
 		{
 			id: "action:cookbook",
-			label: "Motion Cook Book",
+			label: labels.actions.cookbook,
 			icon: CookBookIcon,
 			keywords: [
 				"cookbook",
@@ -113,22 +160,35 @@ export function buildCommandGroups(
 				"terms",
 				"reference",
 				"naming",
+				...(labels.keywordAliases?.cookbook ?? []),
 			],
 			active: pathname === "/cookbook",
 			onRun: () => actions.navigate("/cookbook"),
 		},
 		{
 			id: "action:theme",
-			label: "Theme",
+			label: labels.actions.theme,
 			icon: SunMoon,
-			keywords: ["dark", "light", "mode", "theme"],
+			keywords: [
+				"dark",
+				"light",
+				"mode",
+				"theme",
+				...(labels.keywordAliases?.theme ?? []),
+			],
 			onRun: actions.toggleTheme,
 		},
 		{
 			id: "action:copy",
-			label: "Copy page link",
+			label: labels.actions.copyLink,
 			icon: Link2,
-			keywords: ["share", "url", "link", "copy"],
+			keywords: [
+				"share",
+				"url",
+				"link",
+				"copy",
+				...(labels.keywordAliases?.copyLink ?? []),
+			],
 			onRun: actions.copyLink,
 		},
 	];
@@ -138,9 +198,16 @@ export function buildCommandGroups(
 		const isFav = favoriteSlugs.includes(openSlug);
 		actionCommands.push({
 			id: "action:favorite-current",
-			label: isFav ? `Unfavorite: ${entry.name}` : `Favorite: ${entry.name}`,
+			label: labels.favoriteCurrent(isFav, entry.name),
 			icon: Heart,
-			keywords: ["favorite", "save", "bookmark", "toggle", entry.name],
+			keywords: [
+				"favorite",
+				"save",
+				"bookmark",
+				"toggle",
+				entry.name,
+				...(labels.keywordAliases?.favoriteCurrent ?? []),
+			],
 
 			onRun: () => actions.toggleFavorite(openSlug),
 		});
@@ -148,7 +215,7 @@ export function buildCommandGroups(
 
 	groups.push({
 		id: "actions",
-		heading: "Actions",
+		heading: labels.headings.actions,
 		commands: actionCommands,
 		pinned: true,
 	});

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Crumb } from "@/lib/schema";
+import BreadcrumbNav from "./BreadcrumbNav";
 
 // Server component, no state — renders in the static shell so a crawler sees the
 // trail without waiting on hydration. The matching BreadcrumbList JSON-LD is
@@ -10,7 +11,7 @@ import type { Crumb } from "@/lib/schema";
 // wrong announcement for a screen reader.
 export default function Breadcrumbs({ trail }: { trail: Crumb[] }) {
 	return (
-		<nav aria-label="Breadcrumb" className="mb-4">
+		<BreadcrumbNav className="mb-4">
 			<ol className="flex flex-wrap items-center gap-1.5 font-display text-[10px] uppercase tracking-[0.18em] text-ink-mute">
 				{trail.map((crumb, index) => {
 					const isLast = index === trail.length - 1;
@@ -45,6 +46,6 @@ export default function Breadcrumbs({ trail }: { trail: Crumb[] }) {
 					);
 				})}
 			</ol>
-		</nav>
+		</BreadcrumbNav>
 	);
 }

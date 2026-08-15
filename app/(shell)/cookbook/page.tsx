@@ -7,6 +7,7 @@ import CookbookBrowser, {
 // Client component, imported directly: `ssr: false` is illegal in a Server
 // Component under Next 16, and the leaf already renders null until mounted.
 import CookbookFlame from "@/components/shell/CookbookFlame";
+import CookbookHeader from "./_components/CookbookHeader";
 import GotoTop from "@/components/miscellaneous/goto-top";
 import PageBottomBlur from "@/components/landing/PageBottomBlur";
 import JsonLd from "@/components/seo/JsonLd";
@@ -81,22 +82,7 @@ export default function CookbookPage() {
 			<PageBottomBlur className="lg:hidden" />
 			<GotoTop />
 
-			<header className="mb-4 md:mb-10">
-				<p className="font-display text-[11px] uppercase tracking-[0.25em] text-ink-mute">
-					Reference
-				</p>
-				<h1 className="mt-2 font-display text-3xl uppercase tracking-[0.08em] text-ink">
-					Motion Cook Book
-				</h1>
-				<p className="mt-3 max-w-xl font-sans text-xs md:text-sm text-ink-dim">
-					The exact word for the thing you can picture but can&apos;t name.
-					Every term a designer, a brief, or a prompt might use — and wherever
-					the bench can show you one running, a link straight to it.
-				</p>
-				<p className="mt-4 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-mute">
-					{covered} of {total} terms demonstrated live
-				</p>
-			</header>
+			<CookbookHeader covered={covered} total={total} />
 
 			<CookbookBrowser sections={sections} />
 		</div>

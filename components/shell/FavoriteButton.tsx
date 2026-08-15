@@ -1,6 +1,7 @@
 "use client";
 
 import { type MouseEvent } from "react";
+import { useTranslations } from "next-intl";
 import { Heart } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -30,11 +31,12 @@ export default function FavoriteButton({
   const hydrated = useFavoritesHydrated();
   const favorited = useIsFavorite(slug);
   const toggle = useFavoritesStore((state) => state.toggle);
+  const t = useTranslations("chrome.favorites");
 
   // Hold a neutral (unfilled) state until the persisted store rehydrates, so SSR
   // and the first client paint agree.
   const isFav = hydrated && favorited;
-  const label = name ?? "component";
+  const label = name ?? t("genericComponent");
 
   const onClick = (event: MouseEvent) => {
     // These buttons sit over a card-sized <Link>; a toggle must never navigate.
@@ -44,10 +46,10 @@ export default function FavoriteButton({
     toggle(slug);
     // `favorited` is the state BEFORE the toggle: true means we just removed it.
     if (favorited) {
-      toast(`Removed ${label} from favorites`);
+      toast(t("removedToast", { name: label }));
       trackEvent(slug, "unfavorited");
     } else {
-      toast.success(`Added ${label} to favorites`);
+      toast.success(t("addedToast", { name: label }));
       trackEvent(slug, "favorited");
     }
   };
@@ -58,9 +60,11 @@ export default function FavoriteButton({
       onClick={onClick}
       aria-pressed={isFav}
       aria-label={
-        isFav ? `Remove ${label} from favorites` : `Add ${label} to favorites`
+        isFav
+          ? t("removeAria", { name: label })
+          : t("addAria", { name: label })
       }
-      title={isFav ? "Remove from favorites" : "Add to favorites"}
+      title={isFav ? t("removeTitle") : t("addTitle")}
       className={cn(
         "inline-grid place-items-center rounded-md p-1.5 text-ink-mute transition",
         "hover:text-accent focus-visible:text-accent focus-visible:outline-none",

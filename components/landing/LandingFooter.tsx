@@ -1,10 +1,14 @@
+"use client";
+
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import {
 	anchorFor,
 	SECTION_IDS,
 	type LandingData,
 } from "@/components/landing/data";
 import SmoothAnchor from "@/components/landing/SmoothAnchor";
+import { useDataCopy } from "@/lib/i18n/data-copy";
 import { COLLECTIONS, collectionPath } from "@/lib/collections";
 
 // The homepage is the strongest page on the site, so the collection spokes get a
@@ -26,6 +30,8 @@ export default function LandingFooter({
 	stats: LandingData["stats"];
 	exhibits: LandingData["exhibits"];
 }) {
+	const t = useTranslations("landing.footer");
+	const copy = useDataCopy();
 	const featured = FEATURED.map((slug) =>
 		COLLECTIONS.find((collection) => collection.slug === slug),
 	).filter((collection) => collection !== undefined);
@@ -41,12 +47,11 @@ export default function LandingFooter({
 						Shadow Garden
 					</p>
 					<p className="mt-3 max-w-sm font-sans text-xs leading-relaxed text-ink-mute">
-						An instrument bench for React motion. Preview live, tune every
-						parameter, take the source.
+						{t("tagline")}
 					</p>
 				</div>
 				<nav
-					aria-label="Exhibits"
+					aria-label={t("exhibitsAriaLabel")}
 					className="flex flex-col gap-2 font-display text-[10px] uppercase tracking-[0.22em]"
 				>
 					{exhibits.map((exhibit) => (
@@ -56,18 +61,21 @@ export default function LandingFooter({
 							className="text-ink-dim transition-colors hover:text-accent"
 						>
 							<span className="normal-case">{exhibit.greek}</span> ·{" "}
-							{exhibit.category}
+							{copy(
+								`pages.categories.${anchorFor(exhibit.category)}`,
+								exhibit.category,
+							)}
 						</SmoothAnchor>
 					))}
 					<Link
 						href="/components"
 						className="mt-2 text-accent transition-colors hover:text-accent-hover"
 					>
-						Full catalog →
+						{t("fullCatalog")} <span aria-hidden>→</span>
 					</Link>
 				</nav>
 				<nav
-					aria-label="Collections"
+					aria-label={t("collectionsAriaLabel")}
 					className="flex flex-col gap-2 font-display text-[10px] uppercase tracking-[0.22em]"
 				>
 					{featured.map((collection) => (
@@ -76,24 +84,28 @@ export default function LandingFooter({
 							href={collectionPath(collection)}
 							className="text-ink-dim transition-colors hover:text-accent"
 						>
-							{collection.title}
+							{copy(`collections.${collection.slug}.title`, collection.title)}
 						</Link>
 					))}
 					<Link
 						href="/collections"
 						className="mt-2 text-accent transition-colors hover:text-accent-hover"
 					>
-						All collections →
+						{t("allCollections")} <span aria-hidden>→</span>
 					</Link>
 				</nav>
 			</div>
 			<div className="border-t border-hairline">
 				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
 					<span>
-						Plate <span className="normal-case">η</span>-07 · Colophon
+						{t("plateLabel")} <span className="normal-case">η</span>-07 ·{" "}
+						{t("colophonLabel")}
 					</span>
 					<span>
-						{stats.total} specimens · {exhibits.length} exhibits · 1 accent
+						{t("statsLine", {
+							specimens: stats.total,
+							exhibitCount: exhibits.length,
+						})}
 					</span>
 				</div>
 			</div>

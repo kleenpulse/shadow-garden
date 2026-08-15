@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { TriangleAlert, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,9 +27,10 @@ export default function PreviewErrorFallback({
 	label,
 	showRetry = true,
 }: PreviewErrorFallbackProps) {
+	const t = useTranslations("chrome.preview");
 	const reduce = useReducedMotion() ?? false;
 	const inline = variant === "inline";
-	const title = label ? `${label} failed` : "Preview failed";
+	const title = label ? t("failedWithLabel", { label }) : t("failed");
 
 	const cardClass = cn(
 		"flex h-full w-full rounded-lg border border-danger/15 bg-danger/[0.03]",
@@ -47,7 +49,7 @@ export default function PreviewErrorFallback({
 				<button
 					type="button"
 					onClick={onRetry}
-					aria-label="Retry"
+					aria-label={t("retry")}
 					className="grid h-6 w-6 shrink-0 place-items-center rounded border border-hairline bg-surface text-ink-dim transition-colors hover:border-danger/40 hover:bg-danger/10 hover:text-ink"
 				>
 					<RotateCcw className="h-3 w-3" aria-hidden />
@@ -64,7 +66,7 @@ export default function PreviewErrorFallback({
 					{title}
 				</h3>
 				<p className="mx-auto max-w-sm font-sans text-xs leading-relaxed text-ink-dim line-clamp-3">
-					{error.message || "This component crashed while rendering."}
+					{error.message || t("crashedFallback")}
 				</p>
 			</div>
 			{showRetry && (
@@ -74,7 +76,7 @@ export default function PreviewErrorFallback({
 					className="inline-flex items-center gap-1.5 rounded-md border border-hairline bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-ink-dim transition-colors hover:border-danger/40 hover:bg-danger/10 hover:text-ink"
 				>
 					<RotateCcw className="h-3.5 w-3.5" aria-hidden />
-					Retry
+					{t("retry")}
 				</button>
 			)}
 		</>

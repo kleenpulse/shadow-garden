@@ -44,39 +44,22 @@ export type SubmitReason =
 
 export type SubmitResult = { ok: true } | { ok: false; reason: SubmitReason };
 
-/** What a human is told for each reason. Total over the union, so a new failure
- *  mode cannot ship without its copy. */
-export const REASON_COPY: Record<
-  SubmitReason,
-  { title: string; description: string }
-> = {
-  too_short: {
-    title: "Tell us a little more",
-    description: `At least ${LIMITS.messageMin} characters, so we can act on it.`,
-  },
-  too_long: {
-    title: "That's a bit long",
-    description: `Keep it under ${LIMITS.messageMax} characters.`,
-  },
-  rate_limited: {
-    title: "That's a lot of feedback fast",
-    description: "Give it a minute, then retry.",
-  },
-  invalid_body: {
-    title: "Couldn't send that",
-    description: "The message didn't come through intact. Try again.",
-  },
-  network: {
-    title: "Couldn't reach the shadows",
-    description: "Check your connection and try again.",
-  },
-  server: {
-    title: "Couldn't send that",
-    description: "Something went wrong on our side. Try again shortly.",
-  },
-};
+/** Exhaustive list of reasons — this module stays framework-free (the
+ *  /api/feedback route imports it too), so the human-facing copy for each
+ *  reason lives in the `feedback.reasons.*` message catalog and is looked up
+ *  by key at the render site (FeedbackWidget), not here. Keeping the union
+ *  closed still means a new server code can't silently become user-facing
+ *  text: `toReason` below falls back to "server" for anything unlisted. */
+export const SUBMIT_REASONS: readonly SubmitReason[] = [
+  "too_short",
+  "too_long",
+  "rate_limited",
+  "invalid_body",
+  "network",
+  "server",
+];
 
-const REASONS = new Set<string>(Object.keys(REASON_COPY));
+const REASONS = new Set<string>(SUBMIT_REASONS);
 
 /** Narrow an arbitrary server code onto the union; anything unrecognised is a
  *  server fault, not a message we'd show verbatim. */
