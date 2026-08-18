@@ -1128,22 +1128,6 @@
         "size": "Diámetro de la perilla. Todo el interior se dibuja contra una cuadrícula fija y se escala, así que el moleteado, el bisel y el puntero mantienen sus proporciones a cualquier tamaño."
       }
     },
-    "peel": {
-      "description": "Una calcomanía que despegas por la esquina. El pliegue es geometría real y no una rotación: arrastrar una esquina hacia un punto dobla la lámina a lo largo de la mediatriz de esas dos posiciones, porque esa es la única línea donde el papel puede plegarse y aun así hacer que la esquina caiga bajo la mano. Todo se deriva de ahí: la cara es la lámina recortada a un lado de esa línea, y la solapa es el otro lado reflejado a través de ella, reflejado por la misma matriz que la coloca. Pasado el umbral, se suelta; antes de él, rebota de vuelta hacia abajo.",
-      "props": {
-        "resistance": "Cuánto resiste la lámina al tirón. La ley es asintótica y no dividida, así que la esquina se aproxima a una diagonal completa por más que resista, y el umbral de confirmación sigue siendo alcanzable en cualquier ajuste; la forma obvia se estanca por debajo del umbral con alta resistencia y silenciosamente hace imposible quitar la calcomanía.",
-        "curl": "Ancho de la banda especular que se sitúa a lo largo del pliegue. Esto es lo que sustituye a un doblez redondeado: un pliegue matemáticamente agudo se lee como un corte, y la banda es lo más económico que se lee como grosor.",
-        "threshold": "Cuánto tiene que recorrer la esquina a lo largo de su propia diagonal antes de que soltarla quede confirmado. Bajo hace una calcomanía que se despega casi al contacto; alto hace una que hay que tomarse en serio, donde el rebote de vuelta es el resultado habitual.",
-        "stiffness": "Resorte detrás de ambos desenlaces: el rebote de vuelta hacia abajo y el barrido al soltarse. Es deliberadamente el mismo resorte para ambos, así que los dos desenlaces se sienten como un único mecanismo resolviéndose y no como dos animaciones separadas.",
-        "damping": "Cuánto de ese resorte se absorbe. Bajo deja un rebote visible mientras la calcomanía se vuelve a adherir, la parte que la vende como algo con algo de resorte todavía en el vinilo.",
-        "shadow": "Intensidad de la sombra que proyecta la solapa levantada, y del oscurecimiento en la cara justo bajo el pliegue. Ambos escalan con cuánto ha viajado el despegado, así que la calcomanía nunca está más lejos de la superficie de lo que parece.",
-        "backDim": "Cuánto más oscuro es el reverso que la cara. El reflejo por sí solo no basta para leerse como un revés; el ojo necesita que la luz haya cambiado además del arte.",
-        "content": "Qué está impreso en la calcomanía. Holo es la prueba de esfuerzo útil: un degradado cónico invertido por el pliegue muestra de inmediato si el reflejo es genuino o simplemente una copia escalada.",
-        "corner": "Qué esquina se levanta. Las cuatro ejecutan el mismo solucionador contra un punto de partida distinto, en vez de cuatro casos escritos a mano, así que el pliegue se comporta idénticamente sin importar dónde empiece.",
-        "size": "Borde de la calcomanía. El umbral se mide contra la diagonal y no en píxeles, así que el gesto exige el mismo arrastre proporcional a cualquier tamaño.",
-        "accent": "El glifo de la insignia, la tipografía de la etiqueta, y el tono base del papel holográfico."
-      }
-    },
     "command-palette": {
       "description": "Un menú de comandos cmdk con superficie plana o de vidrio líquido, y activación por atajo de teclado.",
       "props": {

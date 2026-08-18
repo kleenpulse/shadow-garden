@@ -1128,22 +1128,6 @@
         "size": "Knob diameter. Everything inside is drawn against a fixed grid and scaled, so the knurling, the bevel and the pointer keep their proportions at any size."
       }
     },
-    "peel": {
-      "description": "A sticker you take off by the corner. The fold is real geometry rather than a rotation: dragging a corner to a point bends the sheet along the perpendicular bisector of those two positions, because that is the only line where the paper can crease and still have the corner land under the hand. Everything follows from it — the face is the sheet clipped to one side of that line, and the flap is the other side reflected across it, mirrored by the same matrix that places it. Past the threshold it lets go; short of it, it springs back down.",
-      "props": {
-        "resistance": "How much the sheet fights the pull. The law is asymptotic rather than divided, so the corner approaches a full diagonal however hard it resists and the commit threshold stays reachable at every setting — the obvious form caps out below the threshold at high resistance and quietly makes the sticker impossible to remove.",
-        "curl": "Width of the specular band that sits along the fold. This is what stands in for a rounded crease: a mathematically sharp fold reads as a cut, and the band is the cheapest thing that reads as thickness.",
-        "threshold": "How far across its own diagonal the corner has to travel before letting go is committed. Low makes a sticker that comes away almost on contact; high makes one you have to mean, where the snap back is the usual outcome.",
-        "stiffness": "Spring behind both endings — the snap back down and the sweep off. It is deliberately the same spring for both, so the two outcomes feel like one mechanism resolving rather than two separate animations.",
-        "damping": "How much of that spring is absorbed. Low leaves a visible bounce as the sticker re-adheres, which is the part that sells it as something with a bit of spring left in the vinyl.",
-        "shadow": "Strength of the shadow the lifted flap casts, and of the darkening on the face just under the fold. Both scale with how far the peel has travelled, so the sticker is only ever as far off the surface as it looks.",
-        "backDim": "How much darker the backside is than the face. The mirroring alone is not enough to read as a reverse — the eye needs the light to have changed as well as the artwork.",
-        "content": "What is printed on the sticker. Holo is the useful stress test: a conic gradient reversed by the fold shows immediately whether the reflection is genuine or merely a scaled copy.",
-        "corner": "Which corner lifts. All four run the same solver against a different starting point rather than four hand-written cases, so the fold behaves identically wherever it starts.",
-        "size": "Sticker edge. The threshold is measured against the diagonal rather than in pixels, so the gesture asks for the same proportional drag at any size.",
-        "accent": "The badge glyph, the label type, and the base hue of the foil."
-      }
-    },
     "command-palette": {
       "description": "A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
       "props": {
@@ -1600,7 +1584,7 @@
   "collections": {
     "react-micro-interactions": {
       "title": "React Micro-Interaction Components",
-      "intro": "The small responses that make an interface feel answered rather than obedient. Thirty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device."
+      "intro": "The small responses that make an interface feel answered rather than obedient. Twenty-nine components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device."
     },
     "react-background-components": {
       "title": "React Background Components",
@@ -1624,7 +1608,7 @@
     },
     "react-drag-animations": {
       "title": "React Drag Animations",
-      "intro": "Seventeen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents, a sticker you can lift by the corner. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead."
+      "intro": "Sixteen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead."
     },
     "react-reveal-animations": {
       "title": "React Reveal Animations",
@@ -1632,7 +1616,7 @@
     },
     "react-spring-animation": {
       "title": "React Spring Animation",
-      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles naturally when it is interrupted and overshoots the way a real object does. Fourteen components here are spring-driven — magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
+      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles naturally when it is interrupted and overshoots the way a real object does. Thirteen components here are spring-driven — magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
     },
     "react-blur-effects": {
       "title": "React Blur Effects",
@@ -1644,7 +1628,7 @@
     },
     "react-clip-path-mask-effects": {
       "title": "React Clip-Path & Mask Effects",
-      "intro": "Eleven components that animate the shape of what you can see rather than the element itself. Clip-path wipes, gradient masks, spotlight cutouts, a fold line that splits a sticker into a face and a flap, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere — and the only way to reveal one layer through another without duplicating the content."
+      "intro": "Ten components that animate the shape of what you can see rather than the element itself. Clip-path wipes, gradient masks, spotlight cutouts, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere — and the only way to reveal one layer through another without duplicating the content."
     },
     "react-layout-animation": {
       "title": "React Layout Animation",
@@ -1656,7 +1640,7 @@
     },
     "framer-motion-components": {
       "title": "Framer Motion Components for React",
-      "intro": "Thirty-two components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn."
+      "intro": "Thirty-one components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn."
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL Backgrounds",

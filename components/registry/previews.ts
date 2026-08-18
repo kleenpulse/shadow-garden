@@ -96,5 +96,4 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   neon: dynamic(() => import("./neon/neon-preview"), { ssr: false }),
   rime: dynamic(() => import("./rime/rime-preview"), { ssr: false }),
   dial: dynamic(() => import("./dial/dial-preview"), { ssr: false }),
-  peel: dynamic(() => import("./peel/peel-preview"), { ssr: false }),
 };

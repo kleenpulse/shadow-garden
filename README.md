@@ -10,11 +10,11 @@ Every component ships with a live preview, a Controls panel that tunes each prop
 ## What's inside
 
 <!-- catalog:start -->
-**88 components** across 4 categories:
+**87 components** across 4 categories:
 
 - **Backgrounds** (22) — WebGL/canvas ambience
 - **Text Animations** (17) — type in motion
-- **Micro-interactions** (30) — small mechanisms, felt more than seen
+- **Micro-interactions** (29) — small mechanisms, felt more than seen
 - **Power-User Systems** (19) — command surfaces for operators
 
 Browse the full catalog with live previews by running the dev server (see below).

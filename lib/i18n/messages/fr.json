@@ -1128,22 +1128,6 @@
         "size": "Diamètre du bouton. Tout ce qui se trouve à l’intérieur est dessiné sur une grille fixe puis mis à l’échelle, si bien que le moletage, le biseau et le pointeur gardent leurs proportions à toute taille."
       }
     },
-    "peel": {
-      "description": "Un autocollant que l’on décolle par le coin. Le pli est une véritable géométrie plutôt qu’une rotation : faire glisser un coin vers un point courbe la feuille le long de la médiatrice de ces deux positions, car c’est la seule ligne où le papier peut se plier tout en laissant le coin atterrir sous la main. Tout en découle — la face est la feuille découpée d’un côté de cette ligne, et le rabat est l’autre côté réfléchi à travers elle, mis en miroir par la même matrice qui le positionne. Au-delà du seuil, il se détache ; en deçà, il retombe d’un coup de ressort.",
-      "props": {
-        "resistance": "Avec quelle force la feuille résiste à la traction. La loi est asymptotique plutôt que divisée, si bien que le coin s’approche toujours d’une diagonale complète, quelle que soit sa résistance, et que le seuil d’engagement reste atteignable à tout réglage — la formule évidente plafonnerait en dessous du seuil à haute résistance et rendrait discrètement l’autocollant impossible à retirer.",
-        "curl": "Largeur de la bande spéculaire qui longe le pli. C’est ce qui tient lieu de pli arrondi : un pli mathématiquement net se lit comme une coupure, et cette bande est le moyen le plus économique de suggérer une épaisseur.",
-        "threshold": "Jusqu’où le coin doit parcourir sa propre diagonale avant que le décollement ne s’engage. Faible donne un autocollant qui se détache presque au contact ; élevé en donne un qu’il faut vraiment vouloir décoller, le retour d’un coup de ressort restant l’issue habituelle.",
-        "stiffness": "Ressort derrière les deux issues — le retour d’un coup et le décollement complet. Délibérément le même ressort pour les deux, afin que les deux issues se ressentent comme un seul mécanisme qui se résout plutôt que comme deux animations distinctes.",
-        "damping": "Quelle part de ce ressort est absorbée. Faible laisse un rebond visible lorsque l’autocollant se recolle, ce qui est précisément ce qui le fait paraître comme un objet gardant encore un peu de ressort dans le vinyle.",
-        "shadow": "Intensité de l’ombre projetée par le rabat soulevé, et de l’assombrissement sur la face juste sous le pli. Les deux évoluent avec la distance parcourue par le décollement, si bien que l’autocollant ne semble jamais plus décollé de la surface qu’il ne l’est réellement.",
-        "backDim": "De combien le verso est plus sombre que la face. Le simple effet miroir ne suffit pas à se lire comme un revers — l’œil a besoin que la lumière ait changé, en plus du visuel.",
-        "content": "Ce qui est imprimé sur l’autocollant. Holo constitue le test de résistance utile : un dégradé conique inversé par le pli montre immédiatement si le reflet est authentique ou n’est qu’une copie mise à l’échelle.",
-        "corner": "Quel coin se soulève. Les quatre exécutent le même solveur avec un point de départ différent, plutôt que quatre cas écrits à la main, si bien que le pli se comporte de façon identique quel que soit son point de départ.",
-        "size": "Bord de l’autocollant. Le seuil est mesuré par rapport à la diagonale plutôt qu’en pixels, si bien que le geste demande le même glissement proportionnel à toute taille.",
-        "accent": "Le glyphe du badge, la typographie du libellé, et la teinte de base du film holographique."
-      }
-    },
     "command-palette": {
       "description": "Un menu de commandes cmdk avec une surface simple ou en verre liquide, et un déclenchement par raccourci clavier.",
       "props": {

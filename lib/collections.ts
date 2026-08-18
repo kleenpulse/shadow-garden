@@ -56,7 +56,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-micro-interactions",
     title: "React Micro-Interaction Components",
     intro:
-      "The small responses that make an interface feel answered rather than obedient. Thirty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device.",
+      "The small responses that make an interface feel answered rather than obedient. Twenty-nine components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device.",
     filter: { kind: "category", category: "Micro-interactions" },
   },
   {
@@ -100,7 +100,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-drag-animations",
     title: "React Drag Animations",
     intro:
-      "Seventeen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents, a sticker you can lift by the corner. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead.",
+      "Sixteen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead.",
     filter: { kind: "terms", terms: ["Drag", "Momentum", "Rubber-banding"] },
   },
   {
@@ -114,7 +114,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-spring-animation",
     title: "React Spring Animation",
     intro:
-      "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles naturally when it is interrupted and overshoots the way a real object does. Fourteen components here are spring-driven — magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming.",
+      "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles naturally when it is interrupted and overshoots the way a real object does. Thirteen components here are spring-driven — magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming.",
     filter: { kind: "terms", terms: ["Spring", "Bounce"] },
   },
   {
@@ -138,7 +138,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-clip-path-mask-effects",
     title: "React Clip-Path & Mask Effects",
     intro:
-      "Eleven components that animate the shape of what you can see rather than the element itself. Clip-path wipes, gradient masks, spotlight cutouts, a fold line that splits a sticker into a face and a flap, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere — and the only way to reveal one layer through another without duplicating the content.",
+      "Ten components that animate the shape of what you can see rather than the element itself. Clip-path wipes, gradient masks, spotlight cutouts, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere — and the only way to reveal one layer through another without duplicating the content.",
     filter: { kind: "terms", terms: ["Clip-path", "Mask"] },
   },
   {
@@ -161,7 +161,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "framer-motion-components",
     title: "Framer Motion Components for React",
     intro:
-      "Thirty-two components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn.",
+      "Thirty-one components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn.",
     filter: { kind: "deps", packages: ["motion"] },
   },
   {
