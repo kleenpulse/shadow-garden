@@ -36,6 +36,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "command-palette",
 		name: "CommandPalette",
 		category: "Power-User Systems",
+		addedAt: "2026-07-16",
 		description:
 			"A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
 		dependencies: ["cmdk", "motion", "clsx", "tailwind-merge"],
@@ -82,6 +83,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "physics-engine",
 		name: "PhysicsEngine",
 		category: "Power-User Systems",
+		addedAt: "2026-07-18",
 		pausable: true,
 		description:
 			"A from-scratch 2D rigid-body physics lab — fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
@@ -211,6 +213,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "black-hole",
 		name: "BlackHole",
 		category: "Power-User Systems",
+		addedAt: "2026-07-19",
 		pausable: true,
 		description:
 			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
@@ -411,6 +414,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "vortex-bloom",
 		name: "VortexBloom",
 		category: "Power-User Systems",
+		addedAt: "2026-07-21",
 		pausable: true,
 		description:
 			"A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
@@ -605,6 +609,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "smoke-field",
 		name: "SmokeField",
 		category: "Power-User Systems",
+		addedAt: "2026-07-22",
 		pausable: true,
 		description:
 			"A real-time GPU fluid you can stir — semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
@@ -744,6 +749,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		slug: "ripple-field",
 		name: "RippleField",
 		category: "Power-User Systems",
+		addedAt: "2026-07-22",
 		pausable: true,
 		description:
 			"A pool of dark, moonlit water you disturb by hand — a leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
@@ -2132,6 +2138,403 @@ export const powerUserSystems: ComponentEntry[] = [
 				default: "#d9e7f3",
 				description:
 					"Deep water. Applied as a multiply rather than an overlay, so the content keeps its own contrast instead of flattening behind a sheet of colour.",
+			},
+		],
+	},
+	{
+		slug: "weave",
+		name: "Weave",
+		category: "Power-User Systems",
+		addedAt: "2026-08-13",
+		pausable: true,
+		description:
+			"A sheet of cloth on a position-based solver — particles and distance constraints relaxed to convergence every fixed step, with no forces, no rotations and no contacts. Drag it, load it, and pull until the constraints fail and the tear runs. Every quad is shaded by its own extension against the tear threshold, so the load path through the sheet is visible long before anything breaks.",
+		dependencies: [],
+		cookbook: [
+			"Drag",
+			"Stiffness / Tension",
+			"Damping",
+			"Velocity",
+			"Momentum",
+			"Frame rate (FPS)",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/weave/weave.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "cols",
+				kind: "number",
+				default: 26,
+				min: 8,
+				max: 48,
+				step: 1,
+				description:
+					"Particles across the sheet. Constraint count grows as roughly twice cols times rows and every one is visited on every relaxation pass, so this and rows together are the honest cost dial.",
+			},
+			{
+				name: "rows",
+				kind: "number",
+				default: 18,
+				min: 6,
+				max: 36,
+				step: 1,
+				description:
+					"Particles down the sheet. Taller than it is wide is what makes the drape read as fabric; a square grid hangs like a banner and never folds.",
+			},
+			{
+				name: "iterations",
+				kind: "number",
+				default: 6,
+				min: 1,
+				max: 16,
+				step: 1,
+				description:
+					"Relaxation passes over the constraint list per fixed step. Position-based dynamics has no exact solve — it converges, and this is how far it gets. One pass is rubber, six is linen, and past ten you are paying for a stiffness you cannot see.",
+			},
+			{
+				name: "gravity",
+				kind: "number",
+				default: 9.8,
+				min: 0,
+				max: 30,
+				step: 0.2,
+				unit: "m/s²",
+				description:
+					"Uniform downward acceleration. Zero leaves the sheet floating so wind alone drives it, which is the clearest way to watch a strain wave cross the mesh.",
+			},
+			{
+				name: "wind",
+				kind: "number",
+				default: 4.2,
+				min: 0,
+				max: 20,
+				step: 0.2,
+				unit: "m/s²",
+				description:
+					"Lateral forcing, applied with a travelling phase rather than uniformly — a uniform push only translates the sheet and never ripples it.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 0.9,
+				min: 0.1,
+				max: 1,
+				step: 0.05,
+				description:
+					"Fraction of each constraint's length error corrected per pass. One with enough passes is inextensible canvas; low values are jersey that stretches under its own weight. It trades against iterations almost multiplicatively — halving one and doubling the other lands in nearly the same place.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 0.02,
+				min: 0,
+				max: 0.2,
+				step: 0.005,
+				description:
+					"Velocity bled off per step. Verlet carries velocity implicitly in the gap between the current and previous position, so this scales that gap rather than a stored vector — which is why it reads as air resistance and not as friction.",
+			},
+			{
+				name: "tearThreshold",
+				kind: "number",
+				default: 1.9,
+				min: 1.05,
+				max: 6,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Extension at which a constraint fails, as a multiple of its rest length. Evaluated after all relaxation passes, never during them: strain measured mid-solve is an artefact of the sweep order, and tearing on it produces failures that follow the constraint list rather than the load. Above about four nothing tears at any wind you can set.",
+			},
+			{
+				name: "pinMode",
+				kind: "enum",
+				default: "corners",
+				options: ["top-row", "corners", "top-and-bottom", "free"],
+				description:
+					"Which particles are held. Corners is the one worth pulling on — the load concentrates into two diagonals you can see in the strain field long before anything tears. Free drops the whole sheet, and is the honest demonstration that none of this is keyframed.",
+			},
+			{
+				name: "shading",
+				kind: "enum",
+				default: "strain",
+				options: ["strain", "wireframe", "solid"],
+				description:
+					"How each quad is filled. Strain shades it by the extension of its own four edges, which is the point of the component: the load path through a hanging sheet is invisible in a wireframe and obvious the moment it is coloured.",
+			},
+			{
+				name: "tint",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"The cloth at rest — zero strain. Also the anchors and the ring on a held particle.",
+			},
+			{
+				name: "strainColor",
+				kind: "color",
+				default: "#f87171",
+				disabledWhen: { prop: "shading", notEquals: "strain" },
+				description:
+					"The far end of the strain ramp, reached exactly at the tear threshold — so a quad going fully hot is a prediction rather than a decoration.",
+			},
+		],
+	},
+	{
+		slug: "telemetry",
+		name: "Telemetry",
+		category: "Power-User Systems",
+		addedAt: "2026-08-13",
+		pausable: true,
+		description:
+			"A metric board that behaves as one instrument instead of eight sparklines. Hovering any tile broadcasts a single timestamp and every other tile resolves its own value at that same instant, so a latency spike and a queue backing up are visibly the same event rather than two coincidences. Threshold breaches are recorded on the sample rather than on a pixel, so the scar travels with its data and is still there forty seconds after the value recovered.",
+		dependencies: [],
+		cookbook: [
+			"Loop",
+			"Idle animation",
+			"Hover effect",
+			"Tabular numbers",
+			"Reduced motion",
+			"Frame rate (FPS)",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/telemetry/telemetry.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "tiles",
+				kind: "number",
+				default: 8,
+				min: 3,
+				max: 12,
+				step: 1,
+				description:
+					"Metrics on the board. Every tile shares one clock and one cursor, so this is also how many traces a single hover has to answer at once — the coordination is the component, and it only becomes legible above about six.",
+			},
+			{
+				name: "columns",
+				kind: "enum",
+				default: "4",
+				options: ["2", "3", "4"],
+				description:
+					"Grid width. Narrow columns make each trace taller relative to its width and exaggerate every wobble; wide ones flatten them into something you can actually compare across rows.",
+			},
+			{
+				name: "sampleRate",
+				kind: "number",
+				default: 8,
+				min: 1,
+				max: 30,
+				step: 1,
+				unit: "Hz",
+				description:
+					"How often each ring buffer takes a sample, held independent of the frame rate on purpose. The buffer advances on its own accumulator, so a machine dropping to 30fps shows the same history as one at 120 — a chart whose past depends on the viewer's GPU is lying about the data.",
+			},
+			{
+				name: "history",
+				kind: "number",
+				default: 45,
+				min: 10,
+				max: 180,
+				step: 5,
+				unit: "s",
+				description:
+					"How much past each trace shows. Ring capacity is this times the sample rate and is allocated once, so raising either reallocates rather than grows and the memory stays bounded.",
+			},
+			{
+				name: "smoothing",
+				kind: "number",
+				default: 0.25,
+				min: 0,
+				max: 0.95,
+				step: 0.05,
+				description:
+					"Exponential moving average applied on the way into the buffer. It smooths the stored series rather than the drawing, so the cursor reads exactly the numbers you can see — a readout that disagrees with its own trace is worse than a noisy one.",
+			},
+			{
+				name: "threshold",
+				kind: "number",
+				default: 0.82,
+				min: 0.5,
+				max: 0.99,
+				step: 0.01,
+				description:
+					"Normalised level a metric has to cross to count as a breach. Normalised because the tiles do not share units — a percentage and a megabyte have to be comparable for one cursor and one rule to mean anything across the board.",
+			},
+			{
+				name: "scars",
+				kind: "boolean",
+				default: true,
+				description:
+					"Keep a permanent mark on the trace where a breach happened. A flash you missed is a flash that did not happen; the scar is what makes an unattended board worth glancing at.",
+			},
+			{
+				name: "cursor",
+				kind: "boolean",
+				default: true,
+				description:
+					"The shared time cursor. Turning it off leaves eight ordinary sparklines, which is the clearest way to see what it was doing.",
+			},
+			{
+				name: "fill",
+				kind: "enum",
+				default: "gradient",
+				options: ["none", "gradient", "solid"],
+				description:
+					"Area under the trace. Gradient reads as volume without competing with the line; solid is denser and better at small tile sizes; none is the honest choice when several traces would otherwise imply a stack that does not exist.",
+			},
+			{
+				name: "traceColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "The line, the fill ramp, and the cursor rule.",
+			},
+			{
+				name: "breachColor",
+				kind: "color",
+				default: "#f87171",
+				description:
+					"The threshold rule, the scar, and the readout while the cursor sits on a breached sample. One colour across all three, so a scar is visibly the same event as the reading that produced it.",
+			},
+		],
+	},
+	{
+		slug: "rewind",
+		name: "Rewind",
+		category: "Power-User Systems",
+		addedAt: "2026-08-13",
+		description:
+			"An undo history you can scrub, and that refuses to throw the future away. Drag the head and the interface reverts live under your finger rather than on release; act from a past point and the abandoned future stays drawn on the rail as a branch you can walk back onto, instead of being silently destroyed the way every real undo stack destroys it. Controlled in the same shape as Ledger — it owns the rail, the gesture and the branch graph, and your reducer owns the states.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Drag",
+			"Interruptible animation",
+			"Spatial consistency",
+			"Continuity transition",
+			"Stepped animation",
+			"Spring",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/rewind/rewind.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "orientation",
+				kind: "enum",
+				default: "horizontal",
+				options: ["horizontal", "vertical"],
+				description:
+					"Which axis the rail runs on. Horizontal reads as a scrubber; vertical reads as a commit log and stacks better beside a form. The gesture is written against one axis abstraction rather than two handlers, so the modes cannot drift apart.",
+			},
+			{
+				name: "scrubSnap",
+				kind: "boolean",
+				default: true,
+				description:
+					"Lock the head to the nearest recorded state while dragging. Off, it moves continuously and the surface shows the state at or before it, which makes the density of the history visible — you can feel where you were working fast.",
+			},
+			{
+				name: "branching",
+				kind: "boolean",
+				default: true,
+				description:
+					"Draw the futures you abandoned instead of discarding them. Off is the familiar destructive undo; on is the honest model, and the difference between the two is the whole component.",
+			},
+			{
+				name: "branchDepth",
+				kind: "number",
+				default: 3,
+				min: 1,
+				max: 8,
+				step: 1,
+				disabledWhen: { prop: "branching", equals: false },
+				description:
+					"How many abandoned branches stay drawn beside the trunk before the oldest is folded away. Past about four the rail stops being a timeline and becomes a graph, which is a different component.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 420,
+				min: 120,
+				max: 900,
+				step: 10,
+				description:
+					"Spring tension on the head. The marker and the reported index come off the same drag, so the surface can never show a state the head has not reached — a readout running ahead of its own scrubber is the single thing that makes time travel feel fake.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 34,
+				min: 8,
+				max: 60,
+				step: 1,
+				description:
+					"Spring friction. Low lets the head ring past a state and come back, which is charming on a scrubber and disastrous on the fields it drives — this is the control that decides which of those you get.",
+			},
+			{
+				name: "tickDensity",
+				kind: "enum",
+				default: "even",
+				options: ["sparse", "even", "all"],
+				description:
+					"How many states the rail actually draws. All is truthful and unreadable past about sixty entries; even samples at a fixed pitch and leaves the true count in the label instead.",
+			},
+			{
+				name: "showLabels",
+				kind: "boolean",
+				default: true,
+				description:
+					"The action name and position under the rail. Without it a scrub is a position; with it, it is a history you can read while dragging.",
+			},
+			{
+				name: "railHeight",
+				kind: "number",
+				default: 4,
+				min: 2,
+				max: 14,
+				step: 1,
+				unit: "px",
+				description:
+					"Thickness of the rail, and of every branch beside it. Thin reads as a scrubber under a document; thick reads as the primary control on the screen.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "The trunk, the head, and the travelled portion.",
+			},
+			{
+				name: "branchColor",
+				kind: "color",
+				default: "#f0a830",
+				disabledWhen: { prop: "branching", equals: false },
+				description:
+					"Abandoned futures. Deliberately a warm off-accent rather than a dimmed trunk — a discarded future is a different kind of thing from a quiet one, not a fainter version of the same thing.",
 			},
 		],
 	},

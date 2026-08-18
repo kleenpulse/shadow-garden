@@ -25,6 +25,7 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "waves",
 		name: "Waves",
 		category: "Backgrounds",
+		addedAt: "2026-07-16",
 		pausable: true,
 		description:
 			"A woven field of flowing waves rendered on a WebGL line shader.",
@@ -100,6 +101,7 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "Grainient",
 		category: "Backgrounds",
+		addedAt: "2026-07-16",
 		pausable: true,
 		description:
 			"An animated grainy mesh-gradient rendered on a WebGL2 shader.",
@@ -226,6 +228,7 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "LightRays",
 		category: "Backgrounds",
+		addedAt: "2026-07-16",
 		pausable: true,
 		description:
 			"Volumetric god-rays from a configurable origin, optionally mouse-following.",
@@ -344,6 +347,7 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "MaskBlur",
 		category: "Backgrounds",
+		addedAt: "2026-07-18",
 		description:
 			"Progressive edge blur — stacked backdrop-filter layers dissolve content toward a chosen edge.",
 		cookbook: ["Blur", "Mask", "Compositing"],
@@ -417,6 +421,7 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "SideRays",
 		category: "Backgrounds",
+		addedAt: "2026-07-16",
 		pausable: true,
 		description:
 			"Corner-anchored two-color light rays with adjustable tilt and blend.",
@@ -528,6 +533,7 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "DotField",
 		category: "Backgrounds",
+		addedAt: "2026-07-16",
 		pausable: true,
 		description:
 			"An interactive dot grid that bulges and glows around the cursor.",
@@ -652,6 +658,7 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "Strands",
 		category: "Backgrounds",
+		addedAt: "2026-07-16",
 		pausable: true,
 		description:
 			"Glowing wavy light-strands with an optional glass refraction lens.",
@@ -813,6 +820,7 @@ export const backgrounds: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "Ribbons",
 		category: "Backgrounds",
+		addedAt: "2026-07-16",
 		pausable: true,
 		description: "Flowing translucent ribbons drifting across a canvas.",
 		dependencies: [],
@@ -903,6 +911,7 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "world-map-ascii",
 		name: "WorldMap ASCII",
 		category: "Backgrounds",
+		addedAt: "2026-07-17",
 		pausable: true,
 		description:
 			"A dot-matrix world map whose particles scatter from the cursor.",
@@ -973,6 +982,7 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "constellation",
 		name: "Constellation",
 		category: "Backgrounds",
+		addedAt: "2026-07-19",
 		pausable: true,
 		description:
 			"A constellation network — drifting particles link by proximity, chase and flee the cursor, and glow.",
@@ -1083,6 +1093,7 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "plus-grid",
 		name: "PlusGrid",
 		category: "Backgrounds",
+		addedAt: "2026-07-19",
 		pausable: true,
 		description:
 			"A canvas field of '+' glyphs — scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
@@ -1187,6 +1198,7 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "barcode",
 		name: "Barcode",
 		category: "Backgrounds",
+		addedAt: "2026-07-19",
 		description:
 			"A procedural barcode whose bars light up like piano notes — looping on autoplay or scrubbed by scroll.",
 		dependencies: ["gsap"],
@@ -1262,6 +1274,7 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "aurora",
 		name: "Aurora",
 		category: "Backgrounds",
+		addedAt: "2026-07-22",
 		pausable: true,
 		description:
 			"Flowing curtains of amethyst light drifting across a starless night sky — an fbm-warped WebGL2 field where luminous bands ripple, fold, and dissolve into fine grain, like a polar aurora seen from the dark side of the world.",
@@ -1362,6 +1375,7 @@ export const backgrounds: ComponentEntry[] = [
 		slug: "starfield",
 		name: "Starfield",
 		category: "Backgrounds",
+		addedAt: "2026-07-22",
 		pausable: true,
 		description:
 			"Depth-layered stars drifting through a slow warp, each layer parallaxing at its own pace, with the occasional shooting star streaking a bright amethyst tail across the dark before the field settles back to its patient glimmer.",
@@ -2066,6 +2080,431 @@ export const backgrounds: ComponentEntry[] = [
 				default: "#05060a",
 				description:
 					"The floor of the reflected environment, and what the vignette falls away to — so the panel edge reads as the room ending rather than as a mask laid over it.",
+			},
+		],
+	},
+	{
+		slug: "mycelium",
+		name: "Mycelium",
+		category: "Backgrounds",
+		addedAt: "2026-08-13",
+		pausable: true,
+		description:
+			"A slime mould foraging in the dark. Every other field here is a differential equation on a grid; this one is a population — up to a million agents, each carrying a position and a heading, sampling the trail ahead of itself, turning toward whatever smells strongest and laying down more of it as it goes. The veins, the junctions and the slow reorganisation are nowhere in the code.",
+		dependencies: ["ogl"],
+		cookbook: [
+			"Loop",
+			"Idle animation",
+			"Hover effect",
+			"Hardware acceleration",
+			"Compositing",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/mycelium/mycelium.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "agentCount",
+				kind: "enum",
+				default: "1M",
+				options: ["65k", "262k", "1M"],
+				description:
+					"How many agents forage the field, in discrete steps rather than on a slider — each value reallocates the state textures and rebuilds the point geometry, which a slider would do on every pixel of a drag. Against a fixed 1024px field this is a density: a million closes the web into fine reticulation, and a quarter of that is the same behaviour drawn as a few sparse trunks. Step down if the frame rate needs it.",
+			},
+			{
+				name: "speed",
+				kind: "number",
+				default: 55,
+				min: 5,
+				max: 300,
+				step: 5,
+				unit: "px",
+				description:
+					"Forward travel per second, against the 1024px field. Push it far past the sensor distance and an agent steps clean over a vein without ever sensing it — the colony looks fast and builds nothing.",
+			},
+			{
+				name: "sensorDistance",
+				kind: "number",
+				default: 7,
+				min: 1,
+				max: 40,
+				step: 0.5,
+				unit: "px",
+				description:
+					"How far ahead the three sensors sit, measured against the trail map rather than the canvas so the structure holds its scale on a narrow strip. Short is myopic and knots; long lets an agent commit to a vein it can already see.",
+			},
+			{
+				name: "sensorAngle",
+				kind: "number",
+				default: 24,
+				min: 5,
+				max: 60,
+				step: 1,
+				unit: "°",
+				description:
+					"How far off its heading an agent looks when it samples left and right. This one control decides the topology: narrow makes long parallel veins that rarely meet, wide makes a dense web that merges everywhere. Past about 45° both flanks read the same trail and the colony loses its ability to choose.",
+			},
+			{
+				name: "turnSpeed",
+				kind: "number",
+				default: 24,
+				min: 1,
+				max: 60,
+				step: 1,
+				description:
+					"How sharply an agent can steer, in radians per second. The interesting band is where this is just under what the sensor angle asks for, so agents are always slightly behind the decision they have made. Too low and they cannot follow their own trail at all.",
+			},
+			{
+				name: "wander",
+				kind: "number",
+				default: 13,
+				min: 0,
+				max: 30,
+				step: 0.5,
+				description:
+					"Random walk added to every heading, in radians per second — exploration against exploitation. Trail-following is pure positive feedback, so at zero the colony converges onto two or three trunk roads within a minute and the rest of the field goes black. This is the noise that keeps leaking agents into empty space, where they seed the next generation of branches.",
+			},
+			{
+				name: "decay",
+				kind: "number",
+				default: 0.97,
+				min: 0.85,
+				max: 0.995,
+				step: 0.005,
+				description:
+					"Fraction of the trail surviving each 60th of a second — the colony's memory. Below about 0.95 nothing persists long enough for a second agent to find it and no structure forms; above 0.995 every path ever taken stays lit and the map fogs over.",
+			},
+			{
+				name: "diffuse",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Blend toward the blurred neighbourhood. Diffusion is what lets a vein be found from beside it rather than only from on it — at zero the trails are one texel wide, invisible to a sensor not already on them, and nothing ever aggregates.",
+			},
+			{
+				name: "deposit",
+				kind: "number",
+				default: 0.03,
+				min: 0.005,
+				max: 0.3,
+				step: 0.005,
+				description:
+					"Trail laid down by one agent in one step. Against decay this is the whole economy — a cell settles at deposit over one-minus-decay, so the pair decides whether open ground stays dark while the veins pin bright, or the entire field saturates into one flat sheet.",
+			},
+			{
+				name: "attract",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Strength of the food source under the pointer. It is laid into the trail map rather than applied as a force, so the colony has to find it and route to it over several seconds — the veins thicken toward your cursor the way they would toward an oat flake, instead of the swarm snapping to it. 0 turns it off.",
+			},
+			{
+				name: "spawn",
+				kind: "enum",
+				default: "scatter",
+				options: ["ring", "scatter", "disc"],
+				description:
+					"Where the population starts and which way it faces. Scatter is uniform and low-density, so the web self-organises within a couple of seconds. Ring faces inward and has to resolve its own collision first — slower to settle, and the only one where you can watch the first branches being forced.",
+			},
+			{
+				name: "trailColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "The trail itself.",
+			},
+			{
+				name: "background",
+				kind: "color",
+				default: "#07060c",
+				description: "The dark the network grows against.",
+			},
+			{
+				name: "glow",
+				kind: "number",
+				default: 0.8,
+				min: 0,
+				max: 2,
+				step: 0.05,
+				description:
+					"Extra light on the densest strands, where several trails have piled onto the same cell.",
+			},
+		],
+	},
+	{
+		slug: "contour",
+		name: "Contour",
+		category: "Backgrounds",
+		addedAt: "2026-08-14",
+		pausable: true,
+		description:
+			"A topographic map of terrain that will not hold still. The lines are not drawn, they are found — a height field is sampled onto a grid every frame and marching squares walks it once per altitude, emitting segments wherever the land crosses that height. Nothing here knows what a ridge is; ridges are where the crossings bunch up. The pointer raises a hill the contours have to route around, and because the interval is fixed rather than the line count, that extra altitude produces extra rings instead of restretching the ones already on screen.",
+		dependencies: [],
+		cookbook: ["Loop", "Idle animation", "Hover effect", "Linear"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/contour/contour.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "levels",
+				kind: "number",
+				default: 22,
+				min: 6,
+				max: 48,
+				step: 1,
+				description:
+					"Contours per unit of altitude — the map's contour interval, inverted into the number a reader actually wants. This is a density rather than a count: how many lines land on screen is whatever that interval yields across the range the terrain currently occupies, so raising a peak under the cursor adds rings instead of crowding the ones already drawn.",
+			},
+			{
+				name: "cellSize",
+				kind: "number",
+				default: 14,
+				min: 6,
+				max: 28,
+				step: 1,
+				unit: "px",
+				description:
+					"Spacing of the height samples, and therefore the resolution of the whole map. Contours can only turn at a cell boundary, so a coarse grid gives visibly faceted rings while a fine one costs another full field sweep every frame. Below about 10px on a wide canvas a cost cap takes over and the cell grows back on its own.",
+			},
+			{
+				name: "speed",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 3,
+				step: 0.05,
+				description:
+					"How fast the land drifts beneath the frame. It is scrolled, never regenerated — the same hills pass through and leave, which is why a feature holds its shape long enough to be recognised on the way out.",
+			},
+			{
+				name: "warp",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Domain warp: the sample coordinates are displaced by the field itself before it is read. At zero the map is concentric ovals and reads as a lava lamp. Raising it folds the contours into ridges, valleys and saddles, which is the point at which it starts to look surveyed rather than generated.",
+			},
+			{
+				name: "cursorRadius",
+				kind: "number",
+				default: 180,
+				min: 40,
+				max: 400,
+				step: 10,
+				unit: "px",
+				description:
+					"Width of the landform the pointer raises, as the sigma of a Gaussian. Small and sharp reads as a volcanic plug with rings stacked tight around it; wide and low reads as a swell the contours merely lean around.",
+			},
+			{
+				name: "cursorStrength",
+				kind: "number",
+				default: 0.55,
+				min: -1,
+				max: 1,
+				step: 0.05,
+				description:
+					"Height of that landform, in the same units as the terrain. Negative digs a depression instead and the map reads as a crater rather than a hill. Zero takes the pointer off the map entirely.",
+			},
+			{
+				name: "indexEvery",
+				kind: "number",
+				default: 5,
+				min: 2,
+				max: 10,
+				step: 1,
+				description:
+					"Every Nth contour is an index contour, drawn brighter and heavier the way a real map weights its counted lines. The emphasis is keyed to absolute altitude rather than to draw order, so a given ring keeps its weight as the land moves under it instead of the highlight crawling through the set.",
+			},
+			{
+				name: "lineWidth",
+				kind: "number",
+				default: 1,
+				min: 0.5,
+				max: 3,
+				step: 0.25,
+				unit: "px",
+				description:
+					"Weight of an ordinary contour. Index contours are always drawn at one and a half times this, so the hierarchy survives at any setting.",
+			},
+			{
+				name: "lineColor",
+				kind: "color",
+				default: "#5b5772",
+				description:
+					"The ordinary contours. Deliberately close to the paper — they are the texture, not the subject.",
+			},
+			{
+				name: "indexColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "The index contours, and the only real light on the map.",
+			},
+			{
+				name: "background",
+				kind: "color",
+				default: "#0d0d12",
+				description: "The paper.",
+			},
+		],
+	},
+	{
+		slug: "rainglass",
+		name: "Rainglass",
+		category: "Backgrounds",
+		addedAt: "2026-08-14",
+		pausable: true,
+		description:
+			"Rain on a window with a city somewhere behind it. There is no scene being blurred — the backdrop is built out of focus to begin with, so the drops have something to bend without a render target or a blur pass anywhere in the frame. Each drop is a pure function of time inside its own grid cell, which is why a thousand of them cost the same as one and a resize cannot lose the rain. They descend the way water actually does: holding by surface tension, breaking loose, running fast, stopping again — and the trail exists only above the drop that made it.",
+		dependencies: ["ogl"],
+		cookbook: [
+			"Loop",
+			"Idle animation",
+			"Blur",
+			"Hardware acceleration",
+			"Compositing",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/rainglass/rainglass.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "intensity",
+				kind: "number",
+				default: 0.55,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How much water is on the glass. Cells are gated by this rather than dimmed by it — a cell either has a drop in it or it does not, because a half-present drop reads as a smudge on the screen rather than as weather.",
+			},
+			{
+				name: "dropScale",
+				kind: "number",
+				default: 1,
+				min: 0.5,
+				max: 2,
+				step: 0.05,
+				description:
+					"Drop size, by way of the grid the drops live in. Large drops means fewer, heavier runs and a window you are standing close to; small means a fine spatter that reads as distance.",
+			},
+			{
+				name: "speed",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 3,
+				step: 0.05,
+				description:
+					"How often a drop breaks loose, and how fast it runs once it has. Because the descent is a held stair rather than a fall, raising this shortens the holds as much as it quickens the slips.",
+			},
+			{
+				name: "wander",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How far a running drop drifts sideways as it goes. At zero they run dead straight down, which is the one thing real water on glass never does.",
+			},
+			{
+				name: "refraction",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How hard each droplet bends the city behind it. The offset points out of the droplet's own centre, so this magnifies rather than smears — turn it off and the drops flatten into stickers on the glass.",
+			},
+			{
+				name: "fog",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Condensation film over the whole pane. It is removed by what the water has touched rather than drawn between the drops, so a trail is a clean stripe cut through the fog instead of a shape sitting on top of it.",
+			},
+			{
+				name: "layers",
+				kind: "number",
+				default: 2,
+				min: 1,
+				max: 3,
+				step: 1,
+				description:
+					"Depth planes of rain, each smaller and refracting less than the one in front. Two is enough to read as depth; the third is texture and costs a full extra evaluation of the drop field per pixel.",
+			},
+			{
+				name: "blur",
+				kind: "number",
+				default: 0.65,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How far out of focus the city is. This grows the bokeh discs rather than running a kernel over a rendered scene — there is nothing sharp behind the glass to soften, which is the whole reason this stays a single pass.",
+			},
+			{
+				name: "tintTop",
+				kind: "color",
+				default: "#241436",
+				description: "Sky, at the top of the frame.",
+			},
+			{
+				name: "tintBottom",
+				kind: "color",
+				default: "#0b0b12",
+				description: "Ground, at the bottom.",
+			},
+			{
+				name: "glow",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"The out-of-focus lights, and the highlight that catches on a wet edge.",
 			},
 		],
 	},

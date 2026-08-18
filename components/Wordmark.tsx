@@ -25,6 +25,8 @@ import { cn } from "@/lib/utils";
 // Initial render is that same static two-tone, so SSR == first client paint (no
 // hydration mismatch; same rule as components/landing/Reveal.tsx). Space Mono is
 // monospace, so glyph swaps never change width — no reflow, no spacer needed.
+// The wordmark never mirrors: it is pinned dir="ltr" so RTL locales (ar) get
+// the same logo, not a reversed one.
 
 const TEXT = "ShadowGarden";
 const SECOND = 6; // first index of "Garden"
@@ -231,6 +233,12 @@ export default function Wordmark({
 
 	return (
 		<span
+			// The wordmark is a brand name, not translated copy, and every glyph is
+			// its own inline-block cell — under an RTL document the bidi algorithm
+			// reorders those cells and paints "NEDRAGWODAHS". Pinning the embedding
+			// level to ltr keeps the logo identical in Arabic. Physical left/right on
+			// the cursor below is correct for the same reason.
+			dir="ltr"
 			className={cn(
 				"relative inline-block font-display uppercase tracking-[0.2em] text-xs min-[375.5px]:text-sm",
 

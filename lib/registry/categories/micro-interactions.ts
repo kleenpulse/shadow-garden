@@ -26,6 +26,7 @@ export const microInteractions: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "PixelTransition",
 		category: "Micro-interactions",
+		addedAt: "2026-07-16",
 		description:
 			"Reveal a second layer through a random pixelated dissolve on hover.",
 		dependencies: ["gsap", "clsx", "tailwind-merge"],
@@ -77,6 +78,7 @@ export const microInteractions: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "BorderGlow",
 		category: "Micro-interactions",
+		addedAt: "2026-07-16",
 		description: "A cursor-proximity gradient border with an outer glow.",
 		dependencies: [],
 		cookbook: ["Hover effect", "Interpolation / Tween"],
@@ -162,6 +164,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "spotlight-shell",
 		name: "SpotlightShell",
 		category: "Micro-interactions",
+		addedAt: "2026-07-16",
 		description:
 			"A card shell with 3D magnetic tilt, radial glow, and a shimmer sweep.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -192,6 +195,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "animated-hamburger",
 		name: "AnimatedHamburger",
 		category: "Micro-interactions",
+		addedAt: "2026-07-16",
 		description:
 			"A three-bar hamburger that morphs to an X, driven by a toggle prop.",
 		dependencies: ["motion"],
@@ -216,6 +220,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "morph-dialog",
 		name: "MorphDialog",
 		category: "Micro-interactions",
+		addedAt: "2026-07-17",
 		description:
 			"A dialog that morphs open from its trigger via shared-layout animation, with elements that travel between card and panel.",
 		dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
@@ -281,6 +286,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "blueprint-card",
 		name: "BlueprintCard",
 		category: "Micro-interactions",
+		addedAt: "2026-07-19",
 		description:
 			"A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
 		dependencies: ["clsx", "tailwind-merge"],
@@ -348,6 +354,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "corner-letters",
 		name: "CornerLetters",
 		category: "Micro-interactions",
+		addedAt: "2026-07-19",
 		description:
 			"Four glyphs pinned to the container corners that blur-and-scale in on mount and dissolve out on exit.",
 		dependencies: ["motion"],
@@ -426,6 +433,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "hover-list",
 		name: "HoverList",
 		category: "Micro-interactions",
+		addedAt: "2026-07-19",
 		description:
 			"A display-type list where a shared accent block springs between rows on hover while the text indents and inverts.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -513,6 +521,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "preloader",
 		name: "Preloader",
 		category: "Micro-interactions",
+		addedAt: "2026-07-19",
 		description:
 			"A percentage-counting load overlay — spinning ring, eased counter, and a fade-out that reveals the page beneath.",
 		dependencies: ["gsap", "clsx", "tailwind-merge"],
@@ -606,6 +615,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "stagger-menu",
 		name: "StaggerMenu",
 		category: "Micro-interactions",
+		addedAt: "2026-07-19",
 		description:
 			"A menu overlay that blooms open as a clip-path circle spring while items stagger in with blur and rotation, then collapses back to its pill.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -677,6 +687,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "magnetic-button",
 		name: "MagneticButton",
 		category: "Micro-interactions",
+		addedAt: "2026-07-22",
 		description:
 			"A button that leans into your cursor — caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
 		dependencies: ["motion"],
@@ -767,6 +778,7 @@ export const microInteractions: ComponentEntry[] = [
 		slug: "shadow-cursor",
 		name: "ShadowCursor",
 		category: "Micro-interactions",
+		addedAt: "2026-07-22",
 		description:
 			"A custom cursor with a shadow at its heel — a precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage; the page cursor is never touched.",
 		dependencies: ["motion"],
@@ -2442,6 +2454,390 @@ export const microInteractions: ComponentEntry[] = [
 				default: "#e9e6ff",
 				description:
 					"The colour of the rim highlight, masked to the outermost two pixels so it reads as the lit edge of the glass instead of a ring drawn on top of it.",
+			},
+		],
+	},
+	{
+		slug: "passcode",
+		name: "Passcode",
+		category: "Micro-interactions",
+		addedAt: "2026-08-13",
+		description:
+			"A one-time-code field whose cells answer every keystroke: each character lands compressed and springs back, a paste distributes across the row rather than filling it on one frame, a wrong code shakes and clears itself, and a right one folds the whole row into a tick. Underneath there is exactly one real input holding the whole code — which is what keeps SMS autofill, password managers, select-all and a screen reader working, none of which survive six inputs with maxLength one.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Spring",
+			"Stiffness / Tension",
+			"Anticipation",
+			"Scale",
+			"Pop in",
+			"Stagger",
+			"Shake / Wiggle",
+			"Morph",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/passcode/passcode.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "length",
+				kind: "number",
+				default: 6,
+				min: 4,
+				max: 8,
+				step: 1,
+				description:
+					"Cells in the code. Six is the industry default because it is about the longest string most people can hold in working memory between reading it and typing it — the control exists so you can feel where that stops being true.",
+			},
+			{
+				name: "mode",
+				kind: "enum",
+				default: "numeric",
+				options: ["numeric", "alphanumeric"],
+				description:
+					"What the field accepts. Numeric also asks for the number pad, which matters far more on a phone than the validation does — an alphanumeric code field that opens a full keyboard costs the user two taps every single time.",
+			},
+			{
+				name: "mask",
+				kind: "boolean",
+				default: false,
+				description:
+					"Render dots instead of characters. Off by default on purpose: a one-time code is worthless a minute after it arrives, and masking it only stops the person entitled to read it from checking their own typing.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 520,
+				min: 120,
+				max: 900,
+				step: 10,
+				description:
+					"Spring tension of the per-character pop. High enough to land inside the gap between two fast keystrokes, or the cells queue up behind a quick typist and the feedback arrives after the character it is confirming.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 26,
+				min: 8,
+				max: 60,
+				step: 1,
+				description:
+					"Spring friction. Low rings past and settles, which is the difference between a cell that acknowledges a keystroke and one that merely updates.",
+			},
+			{
+				name: "anticipation",
+				kind: "number",
+				default: 0.12,
+				min: 0,
+				max: 0.4,
+				step: 0.01,
+				description:
+					"How far a cell compresses before it springs back. A brief gather in the opposite direction is what makes the pop read as the cell reacting rather than as the cell being resized — at zero it is a plain overshoot and noticeably flatter.",
+			},
+			{
+				name: "pasteStagger",
+				kind: "number",
+				default: 45,
+				min: 0,
+				max: 200,
+				step: 5,
+				unit: "ms",
+				description:
+					"Delay between cells as a pasted or autofilled code distributes. Zero fills every cell on one frame, which is honest and reads as a glitch; the stagger turns an instantaneous state change into something the eye can follow.",
+			},
+			{
+				name: "shakeAmplitude",
+				kind: "number",
+				default: 10,
+				min: 0,
+				max: 24,
+				step: 1,
+				unit: "px",
+				description:
+					"Lateral travel of the rejection. It moves the whole row rather than the cells individually — a row that shakes has been judged, a set of cells that each shake looks broken.",
+			},
+			{
+				name: "autoSubmit",
+				kind: "boolean",
+				default: true,
+				description:
+					"Judge the code the moment the last cell fills instead of waiting for a button. Correct when a wrong answer costs nothing; wrong the instant it does.",
+			},
+			{
+				name: "submitDelay",
+				kind: "number",
+				default: 220,
+				min: 0,
+				max: 800,
+				step: 20,
+				unit: "ms",
+				disabledWhen: { prop: "autoSubmit", equals: false },
+				description:
+					"Pause between the last character landing and the verdict. It exists so the final cell finishes its own pop before the row is judged — validating on the same frame steals the confirmation of the keystroke that caused it, and the user never learns their last character registered.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"The focused cell's ring, the filled border, the caret, and the success tick.",
+			},
+			{
+				name: "errorColor",
+				kind: "color",
+				default: "#f87171",
+				description:
+					"The rejection. It takes the cell borders rather than flooding the fills, so the code you typed stays readable while you are being told it is wrong.",
+			},
+		],
+	},
+	{
+		slug: "dial",
+		name: "Dial",
+		category: "Micro-interactions",
+		addedAt: "2026-08-14",
+		description:
+			"A machined rotary knob: angular drag with detents you can feel on the way past, inertia on a flick, and a spring that settles into the nearest stop. The angle lives in a motion value rather than in React state — a drag writes it sixty times a second and a spring more often than that — so the only thing React holds is the detent index, and only when that integer actually changes. Arrow keys step through the same spring the hand does, so the keyboard is not a second, worse path to the same control.",
+		dependencies: ["motion"],
+		cookbook: [
+			"Drag",
+			"Momentum",
+			"Velocity",
+			"Spring",
+			"Stiffness / Tension",
+			"Damping",
+			"Interruptible animation",
+			"Stepped animation",
+			"Rotate",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/dial/dial.tsx",
+			},
+		],
+		props: [
+			{
+				name: "detents",
+				kind: "number",
+				default: 12,
+				min: 2,
+				max: 36,
+				step: 1,
+				description:
+					"Stops across the sweep. This is the resolution of the control and it changes how the drag feels as much as how it reads: few stops far apart give a decisive click between settings, many close together give something closer to a continuous ramp with a texture.",
+			},
+			{
+				name: "sweep",
+				kind: "number",
+				default: 270,
+				min: 90,
+				max: 360,
+				step: 10,
+				unit: "°",
+				description:
+					"Angular range, centred on twelve o'clock. Two hundred and seventy is the instrument convention because it leaves a visible gap at the bottom — the eye reads the gap as the end of the scale, so both limits are legible without a label. At a full turn there are no ends to see.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 380,
+				min: 50,
+				max: 900,
+				step: 10,
+				description:
+					"How hard the spring pulls toward the chosen stop after release. High makes a knob that arrives the instant you let go; low makes one with weight, where a flick keeps travelling for a moment after the finger is gone.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 26,
+				min: 5,
+				max: 60,
+				step: 1,
+				description:
+					"How much of that spring's energy is absorbed. Below about fifteen the knob overshoots its stop and comes back, which reads as a loose detent rather than a machined one.",
+			},
+			{
+				name: "inertia",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How far a flick carries past the point the hand let go. The throw is projected first and the nearest stop chosen second, so a fast spin travels several detents and settles — at zero the knob stops at whichever stop it happened to be passing, which throws the whole gesture away.",
+			},
+			{
+				name: "detentPull",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Magnetism felt during the drag itself, before any release. The pull falls off toward the midpoint between two stops, so the exact centre is an unstable point the knob slides off rather than a flat spot it can rest in — which is what makes a detent feel like a notch instead of a suggestion.",
+			},
+			{
+				name: "ticks",
+				kind: "enum",
+				default: "line",
+				options: ["line", "dot", "none"],
+				description:
+					"How the stops are marked on the panel around the knob. The scale never turns with the pointer — a mark that moves with the thing it is measuring tells you nothing about where you are.",
+			},
+			{
+				name: "readout",
+				kind: "boolean",
+				default: true,
+				description:
+					"The value under the knob, set in tabular figures so the number does not shuffle sideways as it counts.",
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#a855f7",
+				description: "The lit tick, the pointer line, and the live half of the readout.",
+			},
+			{
+				name: "size",
+				kind: "number",
+				default: 160,
+				min: 96,
+				max: 280,
+				step: 4,
+				unit: "px",
+				description:
+					"Knob diameter. Everything inside is drawn against a fixed grid and scaled, so the knurling, the bevel and the pointer keep their proportions at any size.",
+			},
+		],
+	},
+	{
+		slug: "peel",
+		name: "Peel",
+		category: "Micro-interactions",
+		addedAt: "2026-08-14",
+		description:
+			"A sticker you take off by the corner. The fold is real geometry rather than a rotation: dragging a corner to a point bends the sheet along the perpendicular bisector of those two positions, because that is the only line where the paper can crease and still have the corner land under the hand. Everything follows from it — the face is the sheet clipped to one side of that line, and the flap is the other side reflected across it, mirrored by the same matrix that places it. Past the threshold it lets go; short of it, it springs back down.",
+		dependencies: ["motion"],
+		cookbook: ["Drag", "Rubber-banding", "Spring", "Bounce", "Clip-path"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/peel/peel.tsx",
+			},
+		],
+		props: [
+			{
+				name: "resistance",
+				kind: "number",
+				default: 0.45,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How much the sheet fights the pull. The law is asymptotic rather than divided, so the corner approaches a full diagonal however hard it resists and the commit threshold stays reachable at every setting — the obvious form caps out below the threshold at high resistance and quietly makes the sticker impossible to remove.",
+			},
+			{
+				name: "curl",
+				kind: "number",
+				default: 48,
+				min: 12,
+				max: 120,
+				step: 2,
+				unit: "px",
+				description:
+					"Width of the specular band that sits along the fold. This is what stands in for a rounded crease: a mathematically sharp fold reads as a cut, and the band is the cheapest thing that reads as thickness.",
+			},
+			{
+				name: "threshold",
+				kind: "number",
+				default: 0.6,
+				min: 0.2,
+				max: 0.95,
+				step: 0.05,
+				description:
+					"How far across its own diagonal the corner has to travel before letting go is committed. Low makes a sticker that comes away almost on contact; high makes one you have to mean, where the snap back is the usual outcome.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 320,
+				min: 50,
+				max: 900,
+				step: 10,
+				description:
+					"Spring behind both endings — the snap back down and the sweep off. It is deliberately the same spring for both, so the two outcomes feel like one mechanism resolving rather than two separate animations.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 22,
+				min: 5,
+				max: 60,
+				step: 1,
+				description:
+					"How much of that spring is absorbed. Low leaves a visible bounce as the sticker re-adheres, which is the part that sells it as something with a bit of spring left in the vinyl.",
+			},
+			{
+				name: "shadow",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Strength of the shadow the lifted flap casts, and of the darkening on the face just under the fold. Both scale with how far the peel has travelled, so the sticker is only ever as far off the surface as it looks.",
+			},
+			{
+				name: "backDim",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 0.7,
+				step: 0.05,
+				description:
+					"How much darker the backside is than the face. The mirroring alone is not enough to read as a reverse — the eye needs the light to have changed as well as the artwork.",
+			},
+			{
+				name: "content",
+				kind: "enum",
+				default: "badge",
+				options: ["badge", "label", "holo"],
+				description:
+					"What is printed on the sticker. Holo is the useful stress test: a conic gradient reversed by the fold shows immediately whether the reflection is genuine or merely a scaled copy.",
+			},
+			{
+				name: "corner",
+				kind: "enum",
+				default: "bottom-right",
+				options: ["top-left", "top-right", "bottom-left", "bottom-right"],
+				description:
+					"Which corner lifts. All four run the same solver against a different starting point rather than four hand-written cases, so the fold behaves identically wherever it starts.",
+			},
+			{
+				name: "size",
+				kind: "number",
+				default: 180,
+				min: 120,
+				max: 280,
+				step: 4,
+				unit: "px",
+				description:
+					"Sticker edge. The threshold is measured against the diagonal rather than in pixels, so the gesture asks for the same proportional drag at any size.",
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#a855f7",
+				description: "The badge glyph, the label type, and the base hue of the foil.",
 			},
 		],
 	},

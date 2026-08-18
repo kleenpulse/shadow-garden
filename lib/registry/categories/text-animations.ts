@@ -26,6 +26,7 @@ export const textAnimations: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "MorphingText",
 		category: "Text Animations",
+		addedAt: "2026-07-16",
 		description:
 			"A gooey blur-morph that cross-dissolves between a list of words.",
 		dependencies: ["clsx", "tailwind-merge"],
@@ -51,6 +52,7 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "animated-number",
 		name: "AnimatedNumber",
 		category: "Text Animations",
+		addedAt: "2026-07-16",
 		description:
 			"Animated numeric transitions with flip, slide, fade, and bounce styles.",
 		dependencies: ["motion"],
@@ -112,6 +114,7 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "marquee-text",
 		name: "MarqueeText",
 		category: "Text Animations",
+		addedAt: "2026-07-16",
 		description:
 			"A marquee that scrolls only when its text overflows the container.",
 		dependencies: ["clsx", "tailwind-merge"],
@@ -168,6 +171,7 @@ export const textAnimations: ComponentEntry[] = [
 		attribution: REACTBITS,
 		name: "VariableProximity",
 		category: "Text Animations",
+		addedAt: "2026-07-16",
 		pausable: true,
 		description:
 			"Text whose letters interpolate font weight by cursor proximity.",
@@ -210,6 +214,7 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "letters-pull",
 		name: "LettersPull",
 		category: "Text Animations",
+		addedAt: "2026-07-19",
 		description:
 			"A per-letter pull-up reveal — letters rise, sharpen from a blur, and fade in with a stagger.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -275,6 +280,7 @@ export const textAnimations: ComponentEntry[] = [
 		slug: "scramble-text",
 		name: "ScrambleText",
 		category: "Text Animations",
+		addedAt: "2026-07-22",
 		description:
 			"Ciphered glyphs boiling out of noise and resolving into words — a decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
 		dependencies: [],
@@ -1250,6 +1256,382 @@ export const textAnimations: ComponentEntry[] = [
 				kind: "color",
 				default: "#a855f7",
 				description: "Tint of the wake.",
+			},
+		],
+	},
+	{
+		slug: "molten",
+		name: "Molten",
+		category: "Text Animations",
+		addedAt: "2026-08-13",
+		pausable: true,
+		description:
+			"Type that melts. Letters sag under their own weight, string out, and fuse into one surface where they touch — because the glyphs are a coverage field cut by a threshold rather than shapes being moved, so two stems raise the coverage between them past the cut and one outline closes over both. The word underneath is a real text node the whole time: selectable, searchable, and read correctly aloud while it runs.",
+		dependencies: ["ogl"],
+		cookbook: [
+			"Morph",
+			"Squash & stretch",
+			"Hover effect",
+			"Loop",
+			"Idle animation",
+			"Compositing",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/molten/molten.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "mode",
+				kind: "enum",
+				default: "loop",
+				options: ["loop", "hover", "hold"],
+				description:
+					"What drives the melt. Loop runs unattended; hover melts while the pointer is over the word and reforms when it leaves; hold melts only while the pointer is down, which turns the effect into a control rather than an ambient.",
+			},
+			{
+				name: "melt",
+				kind: "number",
+				default: 0.7,
+				min: 0,
+				max: 1,
+				step: 0.01,
+				description:
+					"How far the glyphs sag at the bottom of the cycle. Past about 0.8 the letterforms stop being readable at the extreme, which is either the point or a bug depending on how long the cycle holds there.",
+			},
+			{
+				name: "viscosity",
+				kind: "number",
+				default: 0.55,
+				min: 0.05,
+				max: 1,
+				step: 0.05,
+				description:
+					"How slowly the material yields — a shaping term on the sag, not a speed. High viscosity means the cap line has barely moved while the baseline is already stringing, which is what separates melting wax from a linear squash.",
+			},
+			{
+				name: "cycle",
+				kind: "number",
+				default: 5.2,
+				min: 1.5,
+				max: 16,
+				step: 0.1,
+				unit: "s",
+				disabledWhen: { prop: "mode", notEquals: "loop" },
+				description:
+					"Time for one full sag and reform. The recovery is deliberately the faster half — a symmetric cycle reads as a loop, an asymmetric one reads as a material.",
+			},
+			{
+				name: "threshold",
+				kind: "number",
+				default: 0.5,
+				min: 0.2,
+				max: 0.8,
+				step: 0.01,
+				description:
+					"Where the coverage field is cut into ink. Below 0.5 the glyphs fatten and neighbouring stems merge early; above it they thin and the melt breaks into droplets sooner. The only control that changes the weight of the type without changing the font.",
+			},
+			{
+				name: "softness",
+				kind: "number",
+				default: 0.06,
+				min: 0.005,
+				max: 0.3,
+				step: 0.005,
+				description:
+					"Width of the cut either side of the threshold. Narrow gives a hard vector edge; wide is what makes two approaching stems fuse into one blob instead of overlapping — this is the gooey merge, and the reason the glyphs are a field and not a mask.",
+			},
+			{
+				name: "drip",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Vertical elongation under the sag, so a falling stroke stretches into a string before it separates. At zero the letters slide down intact, which looks like a transform rather than a phase change.",
+			},
+			{
+				name: "wobble",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1,
+				step: 0.02,
+				description:
+					"Noise on the displacement. Zero is a clean symmetric melt; above about 0.6 the word stops surviving the bottom of the cycle.",
+			},
+			{
+				name: "phase",
+				kind: "number",
+				default: 0.18,
+				min: 0,
+				max: 0.6,
+				step: 0.01,
+				description:
+					"How far each column lags the one to its left. At zero the whole line sags as a slab; raise it and the melt travels across the word, which reads as heat arriving rather than as gravity being switched on.",
+			},
+			{
+				name: "baseColor",
+				kind: "color",
+				default: "#e9e6f2",
+				description: "The type at rest.",
+			},
+			{
+				name: "meltColor",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"Mixed in by local displacement, so whatever has moved furthest is hottest. Tying the colour to the field rather than to time means a hover melt and a loop melt colour identically with no second curve.",
+			},
+		],
+	},
+	{
+		slug: "neon",
+		name: "Neon",
+		category: "Text Animations",
+		addedAt: "2026-08-14",
+		pausable: true,
+		description:
+			"A neon sign, with everything that is wrong with a neon sign. Tubes strike one at a time rather than together, each settling at its own moment inside the ignition; the steady state carries a mains hum; and every so often one tube gives up for a third of a second and comes back. The glow is baked once per letter into a sprite, so a frame is a handful of draws no matter how wide the word — and the word itself never stops being a real, selectable text node underneath.",
+		dependencies: [],
+		cookbook: [
+			"Loop",
+			"Hover effect",
+			"Stagger",
+			"Stepped animation",
+			"Idle animation",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/neon/neon.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "mode",
+				kind: "enum",
+				default: "loop",
+				options: ["loop", "hover", "steady"],
+				description:
+					"What drives the ignition. Loop runs the sign as a shopfront does — lit, cut, struck again. Hover strikes it under the pointer and kills it a quarter of a second after the pointer leaves, because a sign does not fade out. Steady skips the start-up entirely and leaves only the hum and the failing tube.",
+			},
+			{
+				name: "tubeColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "The gas.",
+			},
+			{
+				name: "glow",
+				kind: "number",
+				default: 18,
+				min: 4,
+				max: 40,
+				step: 1,
+				unit: "px",
+				description:
+					"Halo spread, and also the layout room reserved for it — the root pads itself by twice this, because a halo that leaves its box gets painted over by whatever the page put beside it. Changing this rebakes every sprite, so it is a setting rather than something to animate.",
+			},
+			{
+				name: "core",
+				kind: "number",
+				default: 0.85,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How white-hot the centre of the tube runs against the saturated halo around it. It never reaches pure white on purpose: a white centre reads as a lightbulb behind a coloured filter rather than as excited gas.",
+			},
+			{
+				name: "ignition",
+				kind: "number",
+				default: 1.6,
+				min: 0.3,
+				max: 4,
+				step: 0.1,
+				unit: "s",
+				disabledWhen: { prop: "mode", equals: "steady" },
+				description:
+					"Seconds from cold to steady. Each letter picks its own settle point inside this window and its chance of holding climbs as it warms, so the stutter thins out by itself instead of stopping on a timer.",
+			},
+			{
+				name: "cycle",
+				kind: "number",
+				default: 7,
+				min: 3,
+				max: 20,
+				step: 0.5,
+				unit: "s",
+				disabledWhen: { prop: "mode", notEquals: "loop" },
+				description:
+					"Seconds lit before the power cuts and the sign strikes again. The dark between is fixed and short — long enough to register as off, short enough that nobody walks away during it.",
+			},
+			{
+				name: "hum",
+				kind: "number",
+				default: 0.18,
+				min: 0,
+				max: 1,
+				step: 0.02,
+				description:
+					"Depth of the mains hum once a tube is lit. Two frequencies rather than one, because a single sine reads as a pulse effect; the beat between them is what reads as electricity.",
+			},
+			{
+				name: "flicker",
+				kind: "number",
+				default: 0.3,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How often a tube gives up for a moment. One roll every one and a bit seconds decides whether a letter fails and which one, so failures are occasional and specific rather than a permanent shimmer across the whole word.",
+			},
+			{
+				name: "offGlass",
+				kind: "boolean",
+				default: true,
+				description:
+					"Show the dark glass where a tube is unlit. It carries no glow at all — a dark tube that still glows is the tell that the sign was never really off.",
+			},
+		],
+	},
+	{
+		slug: "rime",
+		name: "Rime",
+		category: "Text Animations",
+		addedAt: "2026-08-14",
+		pausable: true,
+		description:
+			"Hoarfrost taking a word — Molten's opposite number, the same idea of type as a coverage field run cold. Crystal tips seeded on the glyph edges creep across the letters, fork at a fixed lattice angle, and die where they run out of glyph or hit ice already there, so the cost tracks the growing edge rather than the area. The text underneath is never redrawn: it stays a real span at its real colour the whole time, which makes the thaw nothing more than fading the ice off type that was always there.",
+		dependencies: [],
+		cookbook: ["Loop", "Hover effect", "Idle animation", "Reveal"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/rime/rime.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "mode",
+				kind: "enum",
+				default: "loop",
+				options: ["loop", "hover", "hold"],
+				description:
+					"What drives the freeze. Loop grows the crystal, holds it, thaws it and starts a new one. Hover rests frozen and clears under the pointer, regrowing once it has fully melted. Hold is the mirror of a melt: ice advances only while the pointer is down and retreats the moment it lifts.",
+			},
+			{
+				name: "growth",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 3,
+				step: 0.05,
+				description:
+					"How fast the crystal front advances. This is a budget of steps per second shared across every live tip, so a heavily branched frost spreads each tip more slowly — which is exactly how a real front behaves as it runs out of room.",
+			},
+			{
+				name: "branching",
+				kind: "number",
+				default: 0.55,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How readily a tip splits in two, and the difference between needles and ferns. Forks are quantised to a sixty-degree lattice angle on purpose: free angles read as mould rather than as ice.",
+			},
+			{
+				name: "density",
+				kind: "number",
+				default: 0.7,
+				min: 0.1,
+				max: 1,
+				step: 0.05,
+				description:
+					"Ceiling on how many tips may be alive at once, which decides how much ice the letters hold before the front runs out of room and the freeze completes. Low leaves the type legible under a tracery; high buries it.",
+			},
+			{
+				name: "seeds",
+				kind: "number",
+				default: 14,
+				min: 3,
+				max: 40,
+				step: 1,
+				description:
+					"How many places the frost starts from. Every seed lands on a glyph edge rather than in the middle of a stem, because that is where condensation actually nucleates — and it is why the ice always looks like it arrived from outside the letter.",
+			},
+			{
+				name: "thaw",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 3,
+				step: 0.05,
+				description:
+					"How fast the ice clears. The crystal is not redrawn to melt it — the overlay simply fades — so this is free at any speed and the word beneath is legible throughout.",
+			},
+			{
+				name: "hold",
+				kind: "number",
+				default: 1.5,
+				min: 0,
+				max: 6,
+				step: 0.1,
+				unit: "s",
+				disabledWhen: { prop: "mode", notEquals: "loop" },
+				description:
+					"Seconds spent at full freeze before the thaw begins. The pause is what lets the finished crystal be looked at; without it the loop reads as a shimmer rather than as a process with an end.",
+			},
+			{
+				name: "sparkle",
+				kind: "number",
+				default: 0.35,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Glints on the facets, sampled from points the front actually passed through rather than scattered over the box. They fade with the thaw, so the last thing to go is the light.",
+			},
+			{
+				name: "frostColor",
+				kind: "color",
+				default: "#d6ecff",
+				description:
+					"The ice. The crystal is stored white and tinted on the way out, so this repaints the whole thing without touching a single stored segment.",
+			},
+			{
+				name: "baseColor",
+				kind: "color",
+				default: "#e9e6f2",
+				description: "The type underneath, which never moves and is never redrawn.",
 			},
 		],
 	},

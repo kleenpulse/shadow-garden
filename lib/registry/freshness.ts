@@ -1,4 +1,7 @@
-export const NEW_WINDOW_DAYS = 30;
+// 7, not 30: every entry now carries a real `addedAt`, and the oldest is the
+// repo's own initial commit — so any window wider than the project's age flags
+// the entire catalog. Keep this comfortably under that.
+export const NEW_WINDOW_DAYS = 7;
 
 const DAY_MS = 86_400_000;
 
