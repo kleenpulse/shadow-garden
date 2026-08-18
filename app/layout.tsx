@@ -114,9 +114,7 @@ export default function RootLayout({
 				{/* Pre-paint: restore the persisted sidebar catalog filter (All/Free/Pro/
             New) onto <html> so the first paint already shows the filtered list.
             Same persist key as the width above; globals.css owns the hiding. */}
-				<script
-					dangerouslySetInnerHTML={{ __html: catalogFilterScript() }}
-				/>
+				<script dangerouslySetInnerHTML={{ __html: catalogFilterScript() }} />
 				{/* Pre-paint: stamp html[data-sg-intro] when this session hasn't played
             the intro (or ?sg-intro forces a replay). globals.css keys the
             overlay's visibility + scroll lock off the attribute, so the first
@@ -143,7 +141,7 @@ export default function RootLayout({
 						<RouteProgress>
 							<IntroOverlay />
 							<NuqsAdapter>{children}</NuqsAdapter>
-							{process.env.NODE_ENV === "development" && <DevFab />}
+							{/* {process.env.NODE_ENV === "development" && <DevFab />} */}
 						</RouteProgress>
 					</I18nProvider>
 				</ThemeProvider>
