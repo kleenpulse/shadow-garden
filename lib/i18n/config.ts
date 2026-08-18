@@ -11,15 +11,20 @@
  */
 
 export const LOCALES = [
-	{ code: "en", nativeName: "English", englishName: "English", badge: "GB" },
-	{ code: "es", nativeName: "Español", englishName: "Spanish", badge: "ES" },
-	{ code: "fr", nativeName: "Français", englishName: "French", badge: "FR" },
-	{ code: "ja", nativeName: "日本語", englishName: "Japanese", badge: "JP" },
-	{ code: "zh", nativeName: "中文", englishName: "Chinese", badge: "CN" },
-	{ code: "ar", nativeName: "العربية", englishName: "Arabic", badge: "SA" },
+	{ code: "en", nativeName: "English", englishName: "English", badge: "GB", dir: "ltr" },
+	{ code: "es", nativeName: "Español", englishName: "Spanish", badge: "ES", dir: "ltr" },
+	{ code: "fr", nativeName: "Français", englishName: "French", badge: "FR", dir: "ltr" },
+	{ code: "ja", nativeName: "日本語", englishName: "Japanese", badge: "JP", dir: "ltr" },
+	{ code: "zh", nativeName: "中文", englishName: "Chinese", badge: "CN", dir: "ltr" },
+	{ code: "ar", nativeName: "العربية", englishName: "Arabic", badge: "SA", dir: "rtl" },
 ] as const;
 
 export type Locale = (typeof LOCALES)[number]["code"];
+
+/** Document direction for a locale — 'rtl' only for Arabic today. */
+export function dirFor(locale: Locale): "ltr" | "rtl" {
+	return LOCALES.find((l) => l.code === locale)?.dir ?? "ltr";
+}
 
 export const DEFAULT_LOCALE: Locale = "en";
 
@@ -69,5 +74,5 @@ export function writeStoredLocale(locale: Locale): void {
  */
 export function localeInitScript(): string {
 	const codes = JSON.stringify(LOCALES.map((l) => l.code));
-	return `try{var l=localStorage.getItem('${LOCALE_STORAGE_KEY}');if(${codes}.indexOf(l)>-1&&l!=='en'){document.documentElement.lang=l}}catch(e){}`;
+	return `try{var l=localStorage.getItem('${LOCALE_STORAGE_KEY}');if(${codes}.indexOf(l)>-1&&l!=='en'){document.documentElement.lang=l;if(l==='ar'){document.documentElement.dir='rtl'}}}catch(e){}`;
 }

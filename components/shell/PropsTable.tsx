@@ -19,7 +19,7 @@ export default function PropsTable({ entry }: { entry: ComponentEntry }) {
 
   return (
     <div className="overflow-x-auto rounded-lg border border-hairline bg-panel">
-      <table className="w-full border-collapse text-left">
+      <table className="w-full border-collapse text-start">
         <thead>
           <tr className="border-b border-hairline">
             {HEADINGS.map((heading) => (

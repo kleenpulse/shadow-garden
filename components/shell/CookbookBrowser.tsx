@@ -325,7 +325,7 @@ export default function CookbookBrowser({
 										{isActive && (
 											<motion.span
 												layoutId="sg-cookbook-rail__active"
-												className="pointer-events-none absolute inset-0 z-0 rounded-sm border-l-2 border-accent bg-accent/10"
+												className="pointer-events-none absolute inset-0 z-0 rounded-sm border-s-2 border-accent bg-accent/10"
 												transition={
 													reduced
 														? { duration: 0 }
@@ -348,7 +348,7 @@ export default function CookbookBrowser({
 
 				{/* Sits over the rail's floor rather than after the list, so it stays
 				    reachable however far the sections scroll. */}
-				<CookbookFlameControlsDesktop className="sticky bottom-1 left-0 -ml-7" />
+				<CookbookFlameControlsDesktop className="sticky bottom-1 start-0 -ms-7" />
 			</div>
 
 			<div className="min-w-0 flex-1 pb-[10svh]">

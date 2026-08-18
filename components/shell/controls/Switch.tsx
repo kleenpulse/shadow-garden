@@ -54,7 +54,7 @@ export default function Switch({
 			>
 				<span
 					className={`absolute top-0.5 h-3.5 w-3.5 rounded-full transition-all ${
-						checked ? "left-[18px] bg-accent" : "left-0.5 bg-ink-mute"
+						checked ? "start-[18px] bg-accent" : "start-0.5 bg-ink-mute"
 					}`}
 				/>
 			</button>

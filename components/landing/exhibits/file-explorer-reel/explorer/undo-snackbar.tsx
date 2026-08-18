@@ -30,7 +30,7 @@ export function UndoSnackbar({
 			exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
 			transition={{ duration: 0.18 }}
 			className={cn(
-				"pointer-events-auto absolute bottom-4 left-1/2 z-50 -translate-x-1/2",
+				"pointer-events-auto absolute bottom-4 start-1/2 z-50 -translate-x-1/2",
 				"flex items-center gap-3 overflow-hidden rounded-md border border-hairline bg-raised px-3 py-2 shadow-lg",
 				className,
 			)}

@@ -185,7 +185,7 @@ function SortMenu({
 					/>
 					<div
 						role="menu"
-						className="absolute right-0 top-full z-50 mt-1 min-w-44 overflow-hidden rounded-md border border-hairline bg-panel py-1 shadow-lg"
+						className="absolute end-0 top-full z-50 mt-1 min-w-44 overflow-hidden rounded-md border border-hairline bg-panel py-1 shadow-lg"
 					>
 						{(Object.keys(SORT_LABEL) as SortKey[]).map((key) => (
 							<button
@@ -198,7 +198,7 @@ function SortMenu({
 									setOpen(false);
 								}}
 								className={cn(
-									"flex w-full items-center justify-between px-3 py-1.5 text-left text-xs transition-colors hover:bg-raised",
+									"flex w-full items-center justify-between px-3 py-1.5 text-start text-xs transition-colors hover:bg-raised",
 									sortBy === key ? "text-accent" : "text-ink-dim",
 								)}
 							>

@@ -178,7 +178,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 				<div
 					ref={cubeRef}
 					className={cn(
-						"absolute left-1/2 top-10 -translate-x-1/2 sm:left-[69%]",
+						"absolute start-1/2 top-10 -translate-x-1/2 sm:start-[69%]",
 						"h-[min(92svh,108vw)] w-[min(92svh,108vw)]",
 						"[&_canvas]:touch-pan-y! cursor-default!",
 						fade("opacity-100"),

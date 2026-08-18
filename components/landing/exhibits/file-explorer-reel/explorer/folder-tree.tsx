@@ -111,7 +111,7 @@ function TreeRow({
 					onDropOnFolder(path, e);
 				}}
 				className={cn(
-					"group flex min-w-0 items-center gap-1 rounded-sm pr-1.5 transition-colors",
+					"group flex min-w-0 items-center gap-1 rounded-sm pe-1.5 transition-colors",
 					pad,
 					active ? "bg-accent/15 text-ink" : "text-ink-dim hover:bg-raised",
 					dragOver && "ring-1 ring-accent",

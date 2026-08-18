@@ -50,7 +50,7 @@ const GotoTop = () => {
 			aria-label={t("scrollToTop")}
 			onClick={handleTop}
 			className={cn(
-				"fixed right-2 bottom-12  z-9999 mx-auto grid size-10 max-w-360 place-items-center items-center rounded-full border border-accent bg-accent text-2xl mix-blend-difference transition-all duration-1000 select-none active:scale-95 active:duration-300 max-[400px]:bottom-16 sm:right-5 sm:bottom-16 sm:text-4xl",
+				"fixed end-2 bottom-12  z-9999 mx-auto grid size-10 max-w-360 place-items-center items-center rounded-full border border-accent bg-accent text-2xl mix-blend-difference transition-all duration-1000 select-none active:scale-95 active:duration-300 max-[400px]:bottom-16 sm:end-5 sm:bottom-16 sm:text-4xl",
 				scrollY > 700
 					? "translate-x-0 opacity-100 shadow-[0_0_40px_0_rgba(0,0,0,0.16)]"
 					: "translate-x-20 opacity-0",

@@ -34,7 +34,7 @@ export default function ReelCursor({ cursor }: { cursor: ReelTimeline["cursor"] 
 				style={{ x, y }}
 				animate={{ opacity: visible ? 1 : 0 }}
 				transition={{ duration: 0.22 }}
-				className="absolute left-0 top-0"
+				className="absolute start-0 top-0"
 			>
 				{/* Keyed so each click remounts the ring and replays it once. */}
 				{pulseKey > 0 ? (
@@ -43,7 +43,7 @@ export default function ReelCursor({ cursor }: { cursor: ReelTimeline["cursor"] 
 						initial={{ scale: 0.35, opacity: 0.5 }}
 						animate={{ scale: 1.7, opacity: 0 }}
 						transition={{ duration: 0.42, ease: "easeOut" }}
-						className="absolute -left-4 -top-4 h-8 w-8 rounded-full border border-accent bg-accent/20"
+						className="absolute -start-4 -top-4 h-8 w-8 rounded-full border border-accent bg-accent/20"
 					/>
 				) : null}
 
@@ -63,7 +63,7 @@ export default function ReelCursor({ cursor }: { cursor: ReelTimeline["cursor"] 
 						initial={{ opacity: 0, scale: 0.9 }}
 						animate={{ opacity: 1, scale: 1 }}
 						transition={{ duration: 0.14 }}
-						className="absolute left-4 top-4 flex max-w-40 items-center gap-1.5 rounded-md border border-accent/50 bg-panel/95 px-2 py-1 shadow-lg backdrop-blur-sm"
+						className="absolute start-4 top-4 flex max-w-40 items-center gap-1.5 rounded-md border border-accent/50 bg-panel/95 px-2 py-1 shadow-lg backdrop-blur-sm"
 					>
 						<span className="h-2 w-2 shrink-0 rounded-[2px] bg-accent" />
 						<span className="truncate font-mono text-[10px] text-ink-dim">{ghost}</span>

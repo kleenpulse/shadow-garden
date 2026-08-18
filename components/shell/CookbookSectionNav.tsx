@@ -160,7 +160,7 @@ export default function CookbookSectionNav({
 	if (total === 0) return null;
 
 	return (
-		<div className="fixed bottom-4 left-2 z-111 lg:hidden">
+		<div className="fixed bottom-4 start-2 z-111 lg:hidden">
 			<motion.button
 				ref={pillRef}
 				type="button"
@@ -190,7 +190,7 @@ export default function CookbookSectionNav({
 							{ type: "spring", bounce: 0.5, duration: 0.7 }
 				}
 				style={{ willChange: "width" }}
-				className="relative flex h-8 items-center gap-2 overflow-hidden rounded-full border border-hairline bg-panel/80 px-2 text-left shadow-lg shadow-black/20 backdrop-blur-2xl transition-colors hover:border-accent-muted focus-visible:border-accent focus-visible:outline-none"
+				className="relative flex h-8 items-center gap-2 overflow-hidden rounded-full border border-hairline bg-panel/80 px-2 text-start shadow-lg shadow-black/20 backdrop-blur-2xl transition-colors hover:border-accent-muted focus-visible:border-accent focus-visible:outline-none"
 			>
 				<MiniRing value={position / total} />
 
@@ -207,7 +207,7 @@ export default function CookbookSectionNav({
 					</motion.span>
 				</AnimatePresence>
 
-				<span className="ml-auto shrink-0 pr-1 font-mono text-[10px] tabular-nums text-ink-mute">
+				<span className="ms-auto shrink-0 pe-1 font-mono text-[10px] tabular-nums text-ink-mute">
 					{position}/{total}
 				</span>
 			</motion.button>
@@ -232,7 +232,7 @@ export default function CookbookSectionNav({
 							maxHeight: box.h,
 							willChange: "clip-path, opacity",
 						}}
-						className="absolute bottom-9 left-0 z-30 flex origin-bottom-left flex-col overflow-hidden rounded-xl border border-hairline bg-panel/80 backdrop-blur-2xl"
+						className="absolute bottom-9 start-0 z-30 flex origin-bottom-left flex-col overflow-hidden rounded-xl border border-hairline bg-panel/80 backdrop-blur-2xl"
 					>
 						{/* The scroll lives on this inner box, not the panel: the panel
 						    itself has to stay unscrolled so the footer below can hold
@@ -251,7 +251,7 @@ export default function CookbookSectionNav({
 												onClick={() => select(section.id)}
 												aria-current={isActive ? "true" : undefined}
 												className={cn(
-													"block truncate rounded-sm border-l-2 px-2 py-1.5 font-sans text-sm transition-colors",
+													"block truncate rounded-sm border-s-2 px-2 py-1.5 font-sans text-sm transition-colors",
 													isActive
 														? "border-accent bg-accent/10 text-accent"
 														: "border-transparent text-ink-dim hover:bg-raised/40 hover:text-ink",

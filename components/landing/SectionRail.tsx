@@ -102,7 +102,7 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 		<TooltipProvider delay={0}>
 			<nav
 				aria-label={t("ariaLabel")}
-				className="fixed right-0.5 top-1/2 z-120 hidden -translate-y-1/2 lg:block"
+				className="fixed end-0.5 top-1/2 z-120 hidden -translate-y-1/2 lg:block"
 			>
 				<ol className="flex flex-col items-end gap-3">
 					{sections.map((section) => (
@@ -138,7 +138,7 @@ function RailTick({
 	return (
 		<Tooltip onOpenChange={setOpen}>
 			<TooltipTrigger
-				className="group flex cursor-pointer items-center py-1.5 pl-6 outline-none"
+				className="group flex cursor-pointer items-center py-1.5 ps-6 outline-none"
 				render={
 					<a
 						href={`#${section.id}`}

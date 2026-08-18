@@ -26,7 +26,7 @@ const CHROME =
   "relative z-10 inline-flex h-8 shrink-0 items-center justify-center gap-2 rounded-md px-3 font-display text-[11px] uppercase tracking-[0.15em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent";
 
 /** Holds the row steady while the label swaps between the two words. */
-const LABEL = "min-w-[5.75rem] text-left";
+const LABEL = "min-w-[5.75rem] text-start";
 
 const RESET_MS = 1400;
 

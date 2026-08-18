@@ -94,7 +94,7 @@ export default function SparkleBurst({
   return (
     <span
       aria-hidden
-      className="pointer-events-none absolute left-1/2 top-1/2 z-20 block h-0 w-0"
+      className="pointer-events-none absolute start-1/2 top-1/2 z-20 block h-0 w-0"
     >
       <AnimatePresence>
         {sparks.map((spark) => (

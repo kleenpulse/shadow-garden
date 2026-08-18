@@ -37,7 +37,8 @@ export default function FavoriteThumbnailCard({
       ref={cardRef}
       className="group relative flex flex-col overflow-hidden rounded-lg border border-hairline bg-panel transition-colors hover:border-accent-muted"
     >
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-raised">
+      {/* dir="ltr": live previews render as authored regardless of page direction. */}
+      <div dir="ltr" className="relative aspect-[16/10] w-full overflow-hidden bg-raised">
         {showLive ? (
           <div className="pointer-events-none absolute inset-0">
             <PreviewBoundary
@@ -65,7 +66,7 @@ export default function FavoriteThumbnailCard({
                 : undefined
             }
           >
-            <span className="absolute bottom-2 left-3 font-mono text-[10px] uppercase tracking-widest text-ink-mute">
+            <span className="absolute bottom-2 start-3 font-mono text-[10px] uppercase tracking-widest text-ink-mute">
               {reduced ? "static" : "preview"}
             </span>
           </div>
@@ -80,7 +81,7 @@ export default function FavoriteThumbnailCard({
         <FavoriteButton
           slug={entry.slug}
           name={entry.name}
-          className="absolute right-2 top-2 z-10 border border-hairline bg-surface/70 backdrop-blur"
+          className="absolute end-2 top-2 z-10 border border-hairline bg-surface/70 backdrop-blur"
         />
       </div>
 

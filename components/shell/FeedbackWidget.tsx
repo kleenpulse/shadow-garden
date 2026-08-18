@@ -166,7 +166,7 @@ export default function FeedbackWidget({ className }: { className?: string }) {
                     setType(entry.value);
                     setStep("form");
                   }}
-                  className="group flex items-center gap-3 rounded-lg border border-hairline bg-panel p-3.5 text-left transition-colors hover:border-accent hover:bg-raised/40"
+                  className="group flex items-center gap-3 rounded-lg border border-hairline bg-panel p-3.5 text-start transition-colors hover:border-accent hover:bg-raised/40"
                 >
                   <span className="grid size-10 shrink-0 place-items-center rounded-md border border-hairline bg-raised/60 text-accent transition-colors group-hover:border-accent/40">
                     <Icon className="size-5" />
@@ -188,9 +188,9 @@ export default function FeedbackWidget({ className }: { className?: string }) {
             <button
               type="button"
               onClick={() => setStep("choose")}
-              className="-ml-1 inline-flex w-fit items-center gap-1 rounded px-1 py-0.5 font-mono text-[11px] uppercase tracking-wider text-ink-mute transition-colors hover:text-ink"
+              className="-ms-1 inline-flex w-fit items-center gap-1 rounded px-1 py-0.5 font-mono text-[11px] uppercase tracking-wider text-ink-mute transition-colors hover:text-ink"
             >
-              <ChevronLeft className="size-3.5" />
+              <ChevronLeft className="size-3.5 rtl:-scale-x-100" />
               {t("back")}
             </button>
 
@@ -259,7 +259,7 @@ export default function FeedbackWidget({ className }: { className?: string }) {
               aria-hidden="true"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
-              className="pointer-events-none absolute left-[-9999px] h-0 w-0 opacity-0"
+              className="pointer-events-none absolute start-[-9999px] h-0 w-0 opacity-0"
             />
 
             <div className="mt-1 flex items-center justify-end">

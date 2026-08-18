@@ -254,10 +254,10 @@ export default function Sidebar() {
 							transition={{ type: "spring", stiffness: 350, damping: 30 }}
 						>
 							{/* Corner-bracket reticle — the instrument-bench selection motif. */}
-							<span className="absolute -left-px -top-px size-2.5 border-l border-t border-accent" />
-							<span className="absolute -right-px -top-px size-2.5 border-r border-t border-accent" />
-							<span className="absolute -bottom-px -left-px size-2.5 border-b border-l border-accent" />
-							<span className="absolute -bottom-px -right-px size-2.5 border-b border-r border-accent" />
+							<span className="absolute -start-px -top-px size-2.5 border-s border-t border-accent" />
+							<span className="absolute -end-px -top-px size-2.5 border-e border-t border-accent" />
+							<span className="absolute -bottom-px -start-px size-2.5 border-b border-s border-accent" />
+							<span className="absolute -bottom-px -end-px size-2.5 border-b border-e border-accent" />
 						</motion.span>
 					)}
 					<span className="relative z-10 min-w-0 flex-1">
@@ -282,7 +282,7 @@ export default function Sidebar() {
 				/>
 			)}
 			<aside
-				className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-hairline bg-surface transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-(--sg-sidebar-w,18rem) lg:translate-x-0 ${
+				className={`fixed inset-y-0 start-0 z-40 flex w-72 flex-col border-e border-hairline bg-surface transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-(--sg-sidebar-w,18rem) lg:translate-x-0 ${
 					sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
 				}`}
 			>
@@ -399,7 +399,7 @@ export default function Sidebar() {
 						data-dragging={isDragging}
 						aria-label={t("resizeHandle")}
 						title={t("resizeHint")}
-						className="group absolute inset-y-0 right-0 z-30 hidden w-px cursor-col-resize bg-transparent transition-colors hover:bg-accent/40 focus-visible:bg-accent/40 data-[dragging=true]:bg-accent lg:block"
+						className="group absolute inset-y-0 end-0 z-30 hidden w-px cursor-col-resize bg-transparent transition-colors hover:bg-accent/40 focus-visible:bg-accent/40 data-[dragging=true]:bg-accent lg:block"
 					>
 						<span className="absolute -inset-x-1 inset-y-0" />
 					</div>

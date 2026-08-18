@@ -233,7 +233,7 @@ export default function CookbookFilter({
 				spellCheck={false}
 				inputMode="search"
 				enterKeyHint="go"
-				className="w-full rounded-md border border-hairline bg-panel py-2 pl-3 pr-8 font-mono text-xs text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
+				className="w-full rounded-md border border-hairline bg-panel py-2 ps-3 pe-8 font-mono text-xs text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
 			/>
 
 			{query.length > 0 && (
@@ -248,7 +248,7 @@ export default function CookbookFilter({
 						inputRef.current?.focus();
 					}}
 					aria-label={t("clearLabel")}
-					className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-sm p-1 text-ink-mute transition-colors hover:text-ink"
+					className="absolute end-1.5 top-1/2 -translate-y-1/2 rounded-sm p-1 text-ink-mute transition-colors hover:text-ink"
 				>
 					<svg
 						viewBox="0 0 16 16"
@@ -273,7 +273,7 @@ export default function CookbookFilter({
 					// z-10, not higher: the shell's TopBar is sticky at z-20, and a
 					// popup that paints over it while the page is scrolled reads broken.
 					onMouseDown={(event) => event.preventDefault()}
-					className="absolute left-0 right-0 top-full z-10 mt-1 max-h-65 sm:max-h-72 overflow-y-auto scrollbar-thin rounded-md border border-hairline bg-panel p-1 shadow-lg dark:shadow-2xl shadow-black/25 dark:shadow-black/60"
+					className="absolute start-0 end-0 top-full z-10 mt-1 max-h-65 sm:max-h-72 overflow-y-auto scrollbar-thin rounded-md border border-hairline bg-panel p-1 shadow-lg dark:shadow-2xl shadow-black/25 dark:shadow-black/60"
 				>
 					{suggestions.map((suggestion, i) => {
 						const isActive = i === active;

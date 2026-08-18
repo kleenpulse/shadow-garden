@@ -53,7 +53,12 @@ export default function FullscreenStage({
 	return (
 		// grid, not block: previews size with `h-full`, which needs a definite
 		// grid area to resolve against (same reason as the workspace stage).
-		<div className="relative grid h-dvh overflow-hidden bg-surface">
+		// dir="ltr": the previewed component is the shipped product and renders
+		// as authored regardless of the page's direction. The whole fullscreen
+		// view — minimal overlay chrome included — is one LTR island; the
+		// content IS the demo here, so mirroring three corner buttons isn't
+		// worth splitting the direction context.
+		<div dir="ltr" className="relative grid h-dvh overflow-hidden bg-surface">
 			<PreviewBoundary
 				slug={entry.slug}
 				variant="stage"
@@ -65,7 +70,7 @@ export default function FullscreenStage({
 					paused={paused}
 				/>
 			</PreviewBoundary>
-			<div className="absolute left-3 top-3 z-10 flex items-center gap-2">
+			<div className="absolute start-3 top-3 z-10 flex items-center gap-2">
 				<Link
 					href={backHref}
 					aria-label={t("exitAria", { name: entry.name })}
@@ -85,7 +90,7 @@ export default function FullscreenStage({
 							initial={reducedMotion ? false : { opacity: 0, y: 8 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.2, ease: "easeOut" }}
-							className="absolute bottom-14 right-3 z-10 max-h-[70dvh] w-[min(380px,calc(100vw-1.5rem))] overflow-y-auto"
+							className="absolute bottom-14 end-3 z-10 max-h-[70dvh] w-[min(380px,calc(100vw-1.5rem))] overflow-y-auto"
 						>
 							<ControlsPanel
 								dense
@@ -103,7 +108,7 @@ export default function FullscreenStage({
 						aria-expanded={controlsOpen}
 						aria-controls="sg-fullscreen-controls"
 						aria-label={controlsOpen ? t("hideControls") : t("showControls")}
-						className="absolute bottom-3 right-3 z-10 grid h-8 w-8 place-items-center rounded-md border border-hairline bg-surface/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+						className="absolute bottom-3 end-3 z-10 grid h-8 w-8 place-items-center rounded-md border border-hairline bg-surface/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
 					>
 						<SlidersHorizontal className="h-4 w-4" aria-hidden />
 					</button>

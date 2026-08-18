@@ -518,7 +518,7 @@ export default function FileExplorer({
 					{showFolderRail ? (
 						<>
 							<Panel id="rail" defaultSize="22%" minSize="14%" maxSize="34%">
-								<AutoScroll className="h-full border-r border-hairline bg-panel/40 px-1">
+								<AutoScroll className="h-full border-e border-hairline bg-panel/40 px-1">
 									<FolderTree
 										store={store}
 										revision={revision}

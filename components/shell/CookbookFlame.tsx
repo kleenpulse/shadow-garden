@@ -527,7 +527,7 @@ function FlameCanvas() {
 			// every in-flow element, so the grid reads through the flame's alpha and the
 			// opaque cards still occlude it cleanly. Offset past the sidebar so the
 			// flame centres on the column the reader is actually looking at.
-			className="pointer-events-none fixed bottom-0 left-0 right-0 -z-10 h-svh overflow-hidden lg:left-(--sg-sidebar-w,18rem) opacity-20 dark:opacity-50"
+			className="pointer-events-none fixed bottom-0 start-0 end-0 -z-10 h-svh overflow-hidden lg:start-(--sg-sidebar-w,18rem) opacity-20 dark:opacity-50"
 			style={{
 				maskImage: "linear-gradient(to top, black 55%, transparent 100%)",
 				WebkitMaskImage: "linear-gradient(to top, black 55%, transparent 100%)",

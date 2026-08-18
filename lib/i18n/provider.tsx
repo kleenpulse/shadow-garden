@@ -8,8 +8,10 @@ import {
 	useState,
 } from "react";
 import { NextIntlClientProvider } from "next-intl";
+import { DirectionProvider } from "@base-ui/react/direction-provider";
 import {
 	DEFAULT_LOCALE,
+	dirFor,
 	type Locale,
 	readStoredLocale,
 	resolveBrowserLocale,
@@ -36,6 +38,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 	const applyLocale = useCallback((next: Locale) => {
 		setLocaleState(next);
 		document.documentElement.lang = next;
+		document.documentElement.dir = dirFor(next);
 		writeStoredLocale(next);
 	}, []);
 
@@ -52,7 +55,11 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 				messages={MESSAGES[locale]}
 				timeZone="UTC"
 			>
-				{children}
+				{/* base-ui primitives (popover/select/tooltip) read direction from
+				    here so positioning and keyboard nav mirror in RTL. */}
+				<DirectionProvider direction={dirFor(locale)}>
+					{children}
+				</DirectionProvider>
 			</NextIntlClientProvider>
 		</I18nContext.Provider>
 	);

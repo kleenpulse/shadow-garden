@@ -329,7 +329,7 @@ export default function GrowDialog({
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            className="-mt-0.5 -mr-1.5 rounded-md p-1.5 text-ink-dim transition-colors hover:bg-raised hover:text-ink"
+            className="-mt-0.5 -me-1.5 rounded-md p-1.5 text-ink-dim transition-colors hover:bg-raised hover:text-ink"
             aria-label={t("closeAria")}
           >
             <X className="size-4" />

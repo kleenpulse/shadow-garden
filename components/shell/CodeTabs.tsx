@@ -39,7 +39,7 @@ export default function CodeTabs({
             >
               {file.label}
               {ROLE_TABLE[file.role].badge ? (
-                <span className="ml-1.5 text-ink-mute">
+                <span className="ms-1.5 text-ink-mute">
                   {ROLE_TABLE[file.role].badge}
                 </span>
               ) : null}

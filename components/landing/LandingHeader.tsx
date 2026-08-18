@@ -22,7 +22,7 @@ export default function LandingHeader() {
 	return (
 		<div
 			className={cn(
-				"fixed inset-x-0 top-0 z-99 flex items-center justify-between px-3 py-4 transition-colors duration-300 sm:px-6 sm:pl-8",
+				"fixed inset-x-0 top-0 z-99 flex items-center justify-between px-3 py-4 transition-colors duration-300 sm:px-6 sm:ps-8",
 				scrolled
 					? " bg-surface/70 dark:bg-surface/40 backdrop-blur-xl"
 					: "bg-transparent",

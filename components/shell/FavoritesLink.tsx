@@ -34,7 +34,7 @@ export default function FavoritesLink({
     >
       <Heart className="h-4 w-4" aria-hidden />
       {hydrated && count > 0 && (
-        <span className="absolute -right-1.5 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 font-mono text-[9px] font-bold text-on-accent">
+        <span className="absolute -end-1.5 -top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-accent px-1 font-mono text-[9px] font-bold text-on-accent">
           {count}
         </span>
       )}

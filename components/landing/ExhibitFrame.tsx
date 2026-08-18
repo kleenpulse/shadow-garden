@@ -42,6 +42,9 @@ export default function ExhibitFrame({
   return (
     <div
       ref={ref}
+      // dir="ltr": exhibits are live component demos — they render as
+      // authored regardless of the page's direction.
+      dir="ltr"
       className={cn(
         "relative overflow-hidden rounded-lg border border-hairline",
         plate ? "exhibit-plate" : "bg-panel",

@@ -88,7 +88,7 @@ export function DetailPanel({
 								type="button"
 								onDoubleClick={() => setRenaming(true)}
 								title="Double-click to rename"
-								className="block w-full wrap-break-word text-left text-sm font-medium text-ink"
+								className="block w-full wrap-break-word text-start text-sm font-medium text-ink"
 							>
 								{node.name}
 							</button>
@@ -272,7 +272,7 @@ function Preview({
 				}
 				title={canEdit ? "Double-click to edit" : undefined}
 				className={cn(
-					"h-full w-full overflow-auto p-3 text-left font-mono text-[11px] leading-relaxed text-ink-dim",
+					"h-full w-full overflow-auto p-3 text-start font-mono text-[11px] leading-relaxed text-ink-dim",
 					canEdit && "cursor-text",
 					autoScrollClasses,
 				)}
@@ -294,7 +294,7 @@ function Meta({ label, value }: { label: string; value: string }) {
 			<dt className="shrink-0 font-display text-[10px] uppercase tracking-[0.15em] text-ink-mute">
 				{label}
 			</dt>
-			<dd className="min-w-0 truncate text-right font-mono text-ink-dim">{value}</dd>
+			<dd className="min-w-0 truncate text-end font-mono text-ink-dim">{value}</dd>
 		</div>
 	);
 }

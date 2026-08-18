@@ -172,10 +172,10 @@ function ListRow({
 					</span>
 				)}
 			</div>
-			<span className="text-right font-mono text-[11px] tabular-nums text-ink-mute">
+			<span className="text-end font-mono text-[11px] tabular-nums text-ink-mute">
 				{isDir ? "—" : formatBytes(node.size)}
 			</span>
-			<span className="truncate text-right font-mono text-[11px] text-ink-mute">
+			<span className="truncate text-end font-mono text-[11px] text-ink-mute">
 				{isDir
 					? fileExtension(node.name) || "folder"
 					: formatRelativeTime(node.mtime)}

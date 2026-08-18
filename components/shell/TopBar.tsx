@@ -29,7 +29,7 @@ export default function TopBar() {
 			<button
 				type="button"
 				onClick={() => setPaletteOpen(true)}
-				className="group flex h-9 w-full max-w-sm items-center gap-2 rounded-md border border-hairline bg-panel px-3 text-left text-ink-mute transition-colors hover:border-accent-muted hover:text-ink-dim"
+				className="group flex h-9 w-full max-w-sm items-center gap-2 rounded-md border border-hairline bg-panel px-3 text-start text-ink-mute transition-colors hover:border-accent-muted hover:text-ink-dim"
 			>
 				<Search className="h-4 w-4" aria-hidden />
 				<span className="flex-1 font-sans text-sm">{t("searchPlaceholder")}</span>
@@ -38,7 +38,7 @@ export default function TopBar() {
 				</kbd>
 			</button>
 
-			<div className="ml-auto flex items-center gap-2">
+			<div className="ms-auto flex items-center gap-2">
 				<Link
 					href="/cookbook"
 					aria-label={t("cookbookLabel")}

@@ -66,6 +66,9 @@ export default function LiveWorkspace({
 					// worse than none.
 					<div
 						data-preview-stage
+						// Previews are the shipped product — they render as authored (LTR)
+						// regardless of the page's direction.
+						dir="ltr"
 						className="group relative grid min-h-90 md:min-h-120 xl:min-h-150 overflow-hidden rounded-lg border border-hairline bg-panel"
 					>
 						<PreviewBoundary
@@ -84,7 +87,7 @@ export default function LiveWorkspace({
 						<Link
 							href={fullHref}
 							aria-label={t("fullscreenAria")}
-							className="absolute right-2 top-2 z-10 grid h-8 w-8 place-items-center rounded-md border border-hairline bg-surface/80 text-ink-dim backdrop-blur transition-[color,opacity] hover:text-accent focus-visible:text-accent focus-visible:outline-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
+							className="absolute end-2 top-2 z-10 grid h-8 w-8 place-items-center rounded-md border border-hairline bg-surface/80 text-ink-dim backdrop-blur transition-[color,opacity] hover:text-accent focus-visible:text-accent focus-visible:outline-none [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100"
 						>
 							<Maximize2 className="h-4 w-4" aria-hidden />
 						</Link>

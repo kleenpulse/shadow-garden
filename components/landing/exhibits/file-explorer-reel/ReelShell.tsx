@@ -115,7 +115,7 @@ export default function ReelShell({
 					<Panel id="reel-rail" defaultSize="22%" minSize="14%" maxSize="34%">
 						<AutoScroll
 							data-reel="rail"
-							className="h-full border-r border-hairline bg-panel/40 px-1"
+							className="h-full border-e border-hairline bg-panel/40 px-1"
 						>
 							<FolderTree
 								store={store}

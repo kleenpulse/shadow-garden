@@ -37,7 +37,7 @@ export default function NewBadge({
 			<span
 				role="img"
 				aria-label={t("label")}
-				className="pointer-events-none absolute -left-1 -top-1 text-[6px] rounded-xl bg-accent text-white px-0.5 py-px"
+				className="pointer-events-none absolute -start-1 -top-1 text-[6px] rounded-xl bg-accent text-white px-0.5 py-px"
 			>
 				{t("label")}
 			</span>

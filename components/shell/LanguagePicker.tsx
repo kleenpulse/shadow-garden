@@ -50,7 +50,7 @@ export default function LanguagePicker() {
 				<div
 					role="listbox"
 					aria-label={t("label")}
-					className="absolute right-0 top-full z-30 mt-1.5 w-56 rounded-lg border border-hairline bg-surface p-1.5 shadow-lg"
+					className="absolute end-0 top-full z-30 mt-1.5 w-56 rounded-lg border border-hairline bg-surface p-1.5 shadow-lg"
 				>
 					<p className="px-2 pb-1.5 pt-1 font-mono text-[10px] uppercase tracking-wide text-ink-mute">
 						{t("label")}
@@ -68,7 +68,7 @@ export default function LanguagePicker() {
 										setLocale(l.code);
 										setOpen(false);
 									}}
-									className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors hover:bg-panel ${
+									className={`flex items-center gap-2 rounded-md px-2 py-1.5 text-start text-sm transition-colors hover:bg-panel ${
 										isActive ? "bg-panel text-accent" : "text-ink-dim"
 									}`}
 								>

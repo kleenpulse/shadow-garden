@@ -91,7 +91,7 @@ export default function PlaceholderPreview({
     <div className="relative h-full w-full">
       <canvas ref={canvasRef} className="h-full w-full" aria-hidden />
       {showLabel && (
-        <span className="pointer-events-none absolute bottom-3 left-3 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
+        <span className="pointer-events-none absolute bottom-3 start-3 font-display text-[10px] uppercase tracking-[0.2em] text-ink-mute">
           {t("label")}
         </span>
       )}
