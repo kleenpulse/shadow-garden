@@ -1584,11 +1584,11 @@
   "collections": {
     "react-micro-interactions": {
       "title": "React Micro-Interaction Components",
-      "intro": "The small responses that make an interface feel answered rather than obedient. Twenty-nine components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device."
+      "intro": "The small responses that make an interface feel answered rather than obedient. Thirty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device."
     },
     "react-background-components": {
       "title": "React Background Components",
-      "intro": "Full-bleed motion for the layer behind everything else. Twenty-two backgrounds that run at the back of a hero, a section, or a whole page — WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one is sized by its container rather than the viewport, so it drops into a section as easily as a page, and each exposes its palette and speed as props you tune in the browser before copying anything."
+      "intro": "Full-bleed motion for the layer behind everything else. Twenty-four backgrounds that run at the back of a hero, a section, or a whole page — WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one is sized by its container rather than the viewport, so it drops into a section as easily as a page, and each exposes its palette and speed as props you tune in the browser before copying anything."
     },
     "react-power-user-components": {
       "title": "React Power-User Components",
@@ -1604,11 +1604,11 @@
     },
     "react-stagger-animation": {
       "title": "React Stagger Animation",
-      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Sixteen components here use it — letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting parameter is never the duration; it is the offset between items, and every one of these exposes it as a control you can drag."
+      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Seventeen components here use it — letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting parameter is never the duration; it is the offset between items, and every one of these exposes it as a control you can drag."
     },
     "react-drag-animations": {
       "title": "React Drag Animations",
-      "intro": "Sixteen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead."
+      "intro": "Nineteen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead."
     },
     "react-reveal-animations": {
       "title": "React Reveal Animations",
@@ -1620,7 +1620,7 @@
     },
     "react-blur-effects": {
       "title": "React Blur Effects",
-      "intro": "Thirteen components that use blur as a material rather than a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen on approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius — an unbounded full-page backdrop-filter is the fastest way to drop frames."
+      "intro": "Fifteen components that use blur as a material rather than a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen on approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius — an unbounded full-page backdrop-filter is the fastest way to drop frames."
     },
     "react-scroll-animations": {
       "title": "React Scroll Animations",
@@ -1640,11 +1640,11 @@
     },
     "framer-motion-components": {
       "title": "Framer Motion Components for React",
-      "intro": "Thirty-one components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn."
+      "intro": "Thirty-two components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn."
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL Backgrounds",
-      "intro": "Twenty components that render on the GPU through a WebGL context — fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Nineteen use ogl, a wrapper small enough that the whole bundle costs less than one hero image; one uses Three.js, where the scene genuinely needs a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Twenty-two components that render on the GPU through a WebGL context — fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Twenty-one use ogl, a wrapper small enough that the whole bundle costs less than one hero image; one uses Three.js, where the scene genuinely needs a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {
