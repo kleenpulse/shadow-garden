@@ -1588,7 +1588,7 @@
     },
     "react-background-components": {
       "title": "Componentes de Fondo en React",
-      "intro": "Movimiento a sangre completa para la capa detrás de todo lo demás. Veintidós fondos que corren detrás de un hero, una sección, o una página entera: campos de shader en WebGL, sistemas de partículas en canvas, mapas de curvas de nivel a la deriva, y cuadrículas de CSS puro. Cada uno se dimensiona según su contenedor y no el viewport, así que encaja en una sección con la misma facilidad que en una página, y cada uno expone su paleta y velocidad como props que ajustas en el navegador antes de copiar nada."
+      "intro": "Movimiento a sangre completa para la capa detrás de todo lo demás. Veinticuatro fondos que corren detrás de un hero, una sección, o una página entera: campos de shader en WebGL, sistemas de partículas en canvas, mapas de curvas de nivel a la deriva, y cuadrículas de CSS puro. Cada uno se dimensiona según su contenedor y no el viewport, así que encaja en una sección con la misma facilidad que en una página, y cada uno expone su paleta y velocidad como props que ajustas en el navegador antes de copiar nada."
     },
     "react-power-user-components": {
       "title": "Componentes para Usuarios Avanzados en React",
@@ -1604,11 +1604,11 @@
     },
     "react-stagger-animation": {
       "title": "Animación Escalonada en React",
-      "intro": "El stagger es el retraso que pones entre elementos hermanos para que un grupo llegue como una secuencia en vez de como un bloque. Dieciséis componentes aquí lo usan: letras que se desprenden de una palabra, filas que entran a una lista, celdas que se iluminan por una cuadrícula, tubos de neón que se encienden uno a la vez, partículas sembradas fuera de fase. El parámetro interesante nunca es la duración; es el desfase entre elementos, y cada uno de estos lo expone como un control que puedes arrastrar."
+      "intro": "El stagger es el retraso que pones entre elementos hermanos para que un grupo llegue como una secuencia en vez de como un bloque. Diecisiete componentes aquí lo usan: letras que se desprenden de una palabra, filas que entran a una lista, celdas que se iluminan por una cuadrícula, tubos de neón que se encienden uno a la vez, partículas sembradas fuera de fase. El parámetro interesante nunca es la duración; es el desfase entre elementos, y cada uno de estos lo expone como un control que puedes arrastrar."
     },
     "react-drag-animations": {
       "title": "Animaciones de Arrastre en React",
-      "intro": "Diecisiete componentes que mueves con un dedo o un cursor, y que siguen moviéndose después de soltar. Arrastre con inercia, elasticidad en un límite, listas reordenables, cuerpos rígidos que puedes lanzar, tela que puedes cargar hasta que se desgarre, una perilla que puedes girar a través de sus retenes, una calcomanía que puedes levantar por la esquina. Todos vinculan eventos de puntero en vez de eventos de mouse, y configuran touch-action en la superficie de arrastre, la diferencia entre un gesto que funciona en un teléfono y uno que desplaza la página en su lugar."
+      "intro": "Diecinueve componentes que mueves con un dedo o un cursor, y que siguen moviéndose después de soltar. Arrastre con inercia, elasticidad en un límite, listas reordenables, cuerpos rígidos que puedes lanzar, tela que puedes cargar hasta que se desgarre, una perilla que puedes girar a través de sus retenes, una calcomanía que puedes levantar por la esquina. Todos vinculan eventos de puntero en vez de eventos de mouse, y configuran touch-action en la superficie de arrastre, la diferencia entre un gesto que funciona en un teléfono y uno que desplaza la página en su lugar."
     },
     "react-reveal-animations": {
       "title": "Animaciones de Revelación en React",
@@ -1620,7 +1620,7 @@
     },
     "react-blur-effects": {
       "title": "Efectos de Desenfoque en React",
-      "intro": "Trece componentes que usan el desenfoque como material y no como filtro. Degradados progresivos de borde, atenuación de profundidad de campo, paneles esmerilados, una ciudad construida permanentemente fuera de foco detrás de un cristal mojado, desenfoque de movimiento en un elemento que se mueve rápido, cambios de enfoque que se agudizan al acercarse. El desenfoque es costoso de componer, así que cada uno de estos mantiene la capa desenfocada fuera de la ruta principal de pintado o acota su radio; un backdrop-filter de página completa sin límites es la forma más rápida de perder cuadros."
+      "intro": "Quince componentes que usan el desenfoque como material y no como filtro. Degradados progresivos de borde, atenuación de profundidad de campo, paneles esmerilados, una ciudad construida permanentemente fuera de foco detrás de un cristal mojado, desenfoque de movimiento en un elemento que se mueve rápido, cambios de enfoque que se agudizan al acercarse. El desenfoque es costoso de componer, así que cada uno de estos mantiene la capa desenfocada fuera de la ruta principal de pintado o acota su radio; un backdrop-filter de página completa sin límites es la forma más rápida de perder cuadros."
     },
     "react-scroll-animations": {
       "title": "Animaciones de Desplazamiento en React",
@@ -1644,7 +1644,7 @@
     },
     "react-webgl-backgrounds": {
       "title": "Fondos WebGL en React",
-      "intro": "Veinte componentes que se renderizan en la GPU a través de un contexto WebGL: degradados de fragment shader, campos de partículas, simulaciones de fluidos, un moho mucilaginoso basado en agentes, lluvia que corre por un cristal, un agujero negro trazado por marcha de rayos. Diecinueve usan ogl, un wrapper lo bastante pequeño como para que todo el bundle cueste menos que una sola imagen hero; uno usa Three.js, donde la escena realmente necesita un grafo de escena. Todos se dimensionan según su contenedor y detienen el bucle de renderizado cuando la pestaña está oculta."
+      "intro": "Veintidós componentes que se renderizan en la GPU a través de un contexto WebGL: degradados de fragment shader, campos de partículas, simulaciones de fluidos, un moho mucilaginoso basado en agentes, lluvia que corre por un cristal, un agujero negro trazado por marcha de rayos. Veintiuno usan ogl, un wrapper lo bastante pequeño como para que todo el bundle cueste menos que una sola imagen hero; uno usa Three.js, donde la escena realmente necesita un grafo de escena. Todos se dimensionan según su contenedor y detienen el bucle de renderizado cuando la pestaña está oculta."
     }
   },
   "collectionGroups": {

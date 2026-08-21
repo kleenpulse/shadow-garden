@@ -17,7 +17,11 @@ export default function ThemeToggle({ className }: { className?: string }) {
 	useEffect(() => setMounted(true), []);
 	const t = useTranslations("chrome.themeToggle");
 
-	const isDark = resolvedTheme !== "light"; // dark is the default identity
+	// Until mounted, assume dark (the default identity) on BOTH sides: the server
+	// cannot know the visitor's stored theme, so the label must not read
+	// `resolvedTheme` before hydration — that was a hydration mismatch on every
+	// page for light-theme visitors. The icon below is gated the same way.
+	const isDark = !mounted || resolvedTheme !== "light";
 	const label = isDark ? t("switchToLight") : t("switchToDark");
 
 	return (

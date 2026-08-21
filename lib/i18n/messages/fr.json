@@ -1588,7 +1588,7 @@
     },
     "react-background-components": {
       "title": "Composants d’arrière-plan React",
-      "intro": "Du mouvement plein cadre pour la couche derrière tout le reste. Vingt-deux arrière-plans qui tournent au fond d’un hero, d’une section ou d’une page entière — champs shader WebGL, systèmes de particules sur canvas, cartes de contour à la dérive, et grilles en CSS pur. Chacun se dimensionne selon son conteneur plutôt que selon le viewport, si bien qu’il s’insère aussi facilement dans une section que dans une page entière, et chacun expose sa palette et sa vitesse comme des props que vous réglez dans le navigateur avant de copier quoi que ce soit."
+      "intro": "Du mouvement plein cadre pour la couche derrière tout le reste. Vingt-quatre arrière-plans qui tournent au fond d’un hero, d’une section ou d’une page entière — champs shader WebGL, systèmes de particules sur canvas, cartes de contour à la dérive, et grilles en CSS pur. Chacun se dimensionne selon son conteneur plutôt que selon le viewport, si bien qu’il s’insère aussi facilement dans une section que dans une page entière, et chacun expose sa palette et sa vitesse comme des props que vous réglez dans le navigateur avant de copier quoi que ce soit."
     },
     "react-power-user-components": {
       "title": "Composants React pour utilisateurs avancés",
@@ -1604,11 +1604,11 @@
     },
     "react-stagger-animation": {
       "title": "Animation en cascade React",
-      "intro": "Le stagger est le délai que l’on place entre des éléments frères pour qu’un groupe arrive en séquence plutôt qu’en bloc. Seize composants ici l’utilisent — des lettres qui se détachent d’un mot, des lignes qui entrent dans une liste, des cellules qui s’allument à travers une grille, des tubes néon qui s’amorcent un par un, des particules amorcées en déphasage. Le paramètre intéressant n’est jamais la durée ; c’est le décalage entre les éléments, et chacun de ces composants l’expose comme un contrôle que l’on peut faire glisser."
+      "intro": "Le stagger est le délai que l’on place entre des éléments frères pour qu’un groupe arrive en séquence plutôt qu’en bloc. Dix-sept composants ici l’utilisent — des lettres qui se détachent d’un mot, des lignes qui entrent dans une liste, des cellules qui s’allument à travers une grille, des tubes néon qui s’amorcent un par un, des particules amorcées en déphasage. Le paramètre intéressant n’est jamais la durée ; c’est le décalage entre les éléments, et chacun de ces composants l’expose comme un contrôle que l’on peut faire glisser."
     },
     "react-drag-animations": {
       "title": "Animations de glissement React",
-      "intro": "Dix-sept composants que l’on déplace du doigt ou du curseur, et qui continuent de bouger après le relâchement. Glissement avec élan, élasticité en butée, listes réorganisables, corps rigides que l’on peut lancer, tissu que l’on peut charger jusqu’à la déchirure, un bouton que l’on peut faire tourner à travers ses crans, un autocollant que l’on peut décoller par le coin. Tous se branchent sur des événements de pointeur plutôt que de souris, et fixent touch-action sur la surface de glissement — toute la différence entre un geste qui fonctionne sur un téléphone et un geste qui fait défiler la page à la place."
+      "intro": "Dix-neuf composants que l’on déplace du doigt ou du curseur, et qui continuent de bouger après le relâchement. Glissement avec élan, élasticité en butée, listes réorganisables, corps rigides que l’on peut lancer, tissu que l’on peut charger jusqu’à la déchirure, un bouton que l’on peut faire tourner à travers ses crans, un autocollant que l’on peut décoller par le coin. Tous se branchent sur des événements de pointeur plutôt que de souris, et fixent touch-action sur la surface de glissement — toute la différence entre un geste qui fonctionne sur un téléphone et un geste qui fait défiler la page à la place."
     },
     "react-reveal-animations": {
       "title": "Animations de révélation React",
@@ -1620,7 +1620,7 @@
     },
     "react-blur-effects": {
       "title": "Effets de flou React",
-      "intro": "Treize composants qui utilisent le flou comme un matériau plutôt que comme un filtre. Dégradés de bordure progressifs, atténuation de profondeur de champ, panneaux givrés, une ville construite en permanence hors focus derrière un verre mouillé, flou de mouvement sur un élément rapide, mises au point qui se nettoient à l’approche. Le flou est coûteux à composer, si bien que chacun de ces composants garde la couche floutée hors du chemin de rendu principal ou borne son rayon — un backdrop-filter non borné sur toute la page est le moyen le plus rapide de perdre des images."
+      "intro": "Quinze composants qui utilisent le flou comme un matériau plutôt que comme un filtre. Dégradés de bordure progressifs, atténuation de profondeur de champ, panneaux givrés, une ville construite en permanence hors focus derrière un verre mouillé, flou de mouvement sur un élément rapide, mises au point qui se nettoient à l’approche. Le flou est coûteux à composer, si bien que chacun de ces composants garde la couche floutée hors du chemin de rendu principal ou borne son rayon — un backdrop-filter non borné sur toute la page est le moyen le plus rapide de perdre des images."
     },
     "react-scroll-animations": {
       "title": "Animations de défilement React",
@@ -1644,7 +1644,7 @@
     },
     "react-webgl-backgrounds": {
       "title": "Arrière-plans WebGL React",
-      "intro": "Vingt composants qui se rendent sur le GPU via un contexte WebGL — dégradés en fragment shader, champs de particules, simulations de fluide, un myxomycète à base d’agents, de la pluie qui coule le long d’une vitre, un trou noir raymarché. Dix-neuf utilisent ogl, une surcouche assez légère pour que le bundle entier coûte moins qu’une seule image hero ; un utilise Three.js, là où la scène a réellement besoin d’un scene graph. Tous se dimensionnent selon leur conteneur et arrêtent leur boucle de rendu lorsque l’onglet est masqué."
+      "intro": "Vingt-deux composants qui se rendent sur le GPU via un contexte WebGL — dégradés en fragment shader, champs de particules, simulations de fluide, un myxomycète à base d’agents, de la pluie qui coule le long d’une vitre, un trou noir raymarché. Vingt et un utilisent ogl, une surcouche assez légère pour que le bundle entier coûte moins qu’une seule image hero ; un utilise Three.js, là où la scène a réellement besoin d’un scene graph. Tous se dimensionnent selon leur conteneur et arrêtent leur boucle de rendu lorsque l’onglet est masqué."
     }
   },
   "collectionGroups": {

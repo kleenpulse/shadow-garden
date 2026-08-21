@@ -96,4 +96,9 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   neon: dynamic(() => import("./neon/neon-preview"), { ssr: false }),
   rime: dynamic(() => import("./rime/rime-preview"), { ssr: false }),
   dial: dynamic(() => import("./dial/dial-preview"), { ssr: false }),
+  stipple: dynamic(() => import("./stipple/stipple-preview"), { ssr: false }),
+  prism: dynamic(() => import("./prism/prism-preview"), { ssr: false }),
+  refract: dynamic(() => import("./refract/refract-preview"), { ssr: false }),
+  stream: dynamic(() => import("./stream/stream-preview"), { ssr: false }),
+  "infinite-canvas": dynamic(() => import("./infinite-canvas/infinite-canvas-preview"), { ssr: false }),
 };
