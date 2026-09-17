@@ -6,7 +6,8 @@ export type Category =
   | "Backgrounds"
   | "Text Animations"
   | "Micro-interactions"
-  | "Power-User Systems";
+  | "Power-User Systems"
+  | "Hero Templates";
 
 // Fixed display order for the sidebar / catalog grouping.
 export const CATEGORY_ORDER: Category[] = [
@@ -14,6 +15,7 @@ export const CATEGORY_ORDER: Category[] = [
   "Text Animations",
   "Micro-interactions",
   "Power-User Systems",
+  "Hero Templates",
 ];
 
 export type PropValue = number | string | boolean;

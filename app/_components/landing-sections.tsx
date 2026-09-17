@@ -20,6 +20,7 @@ import AlphaExhibit from "@/components/landing/exhibits/AlphaExhibit";
 import BetaExhibit from "@/components/landing/exhibits/BetaExhibit";
 import GammaExhibit from "@/components/landing/exhibits/GammaExhibit";
 import DeltaExhibit from "@/components/landing/exhibits/DeltaExhibit";
+import HeroExhibit from "@/components/landing/exhibits/HeroExhibit";
 
 // Each index shows a curated few — the full catalog lives at /components.
 // γ counts in cards on a two-column grid, so its cap keeps the rows even.
@@ -76,6 +77,8 @@ export function ExhibitSections({
 						}))}
 					/>
 				);
+			case "Hero Templates":
+				return <HeroExhibit />;
 		}
 	};
 

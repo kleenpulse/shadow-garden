@@ -56,28 +56,28 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-micro-interactions",
     title: "React Micro-Interaction Components",
     intro:
-      "The small responses that make an interface feel answered rather than obedient. Thirty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device.",
+      "The small responses that make an interface feel like it answered you. Thirty-two components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen.",
     filter: { kind: "category", category: "Micro-interactions" },
   },
   {
     slug: "react-background-components",
     title: "React Background Components",
     intro:
-      "Full-bleed motion for the layer behind everything else. Twenty-four backgrounds that run at the back of a hero, a section, or a whole page — WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one is sized by its container rather than the viewport, so it drops into a section as easily as a page, and each exposes its palette and speed as props you tune in the browser before copying anything.",
+      "Motion for the layer that sits behind everything else. Twenty-six backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything.",
     filter: { kind: "category", category: "Backgrounds" },
   },
   {
     slug: "react-power-user-components",
     title: "React Power-User Components",
     intro:
-      "Components that carry state and physics rather than decoration. Command palettes, ledgers, orbital systems, ASCII render engines, particle and rigid-body simulations. These are the heaviest pieces in the registry and the ones with real APIs — most run a simulation loop, several own their own layout, and all of them expect to be wired to your data rather than dropped in as ornament.",
+      "Components that carry state and physics instead of decoration. Command palettes, ledgers, orbital systems, ASCII render engines, particle and rigid-body simulations. These are the heaviest pieces in the registry and the ones with real APIs. Most run a simulation loop, several own their own layout, and all of them expect to be wired to your data rather than dropped in as ornament.",
     filter: { kind: "category", category: "Power-User Systems" },
   },
   {
     slug: "react-text-animations",
     title: "React Text Animation Components",
     intro:
-      "Type that moves on purpose. Seventeen components for the moment a headline lands, a number counts, or a word swaps — scramble, split-flap, variable-font proximity, marquee, redaction, neon ignition, frost and shadow effects. Each animates real text nodes rather than an image or a canvas replica, so the words stay selectable, searchable, and legible to a screen reader while they move.",
+      "Type that moves for a reason. Nineteen components for the moment a headline lands, a number counts, or a word swaps: scramble, split-flap, variable-font proximity, marquee, redaction, neon ignition, frost and shadow effects. Each one animates real text nodes, not an image or a canvas copy, so the words stay selectable, searchable, and readable to a screen reader while they move.",
     filter: { kind: "category", category: "Text Animations" },
   },
 
@@ -86,49 +86,49 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-hover-effects",
     title: "React Hover Effects",
     intro:
-      "Twenty-eight components whose primary state change is the pointer arriving. Glows that track the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or displace underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo — each of these picks one property to move and commits to it rather than animating everything at once.",
+      "Thirty-four components whose main state change is the pointer arriving. Glows that follow the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or shift underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo, so each of these picks one property to move and commits to it instead of animating everything at once.",
     filter: { kind: "terms", terms: ["Hover effect"] },
   },
   {
     slug: "react-stagger-animation",
     title: "React Stagger Animation",
     intro:
-      "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Seventeen components here use it — letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting parameter is never the duration; it is the offset between items, and every one of these exposes it as a control you can drag.",
+      "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Twenty components here use it: letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting number is never the duration. It is the offset between items, and every one of these exposes it as a control you can drag.",
     filter: { kind: "terms", terms: ["Stagger"] },
   },
   {
     slug: "react-drag-animations",
     title: "React Drag Animations",
     intro:
-      "Nineteen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead.",
+      "Twenty-three components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events instead of mouse events and set touch-action on the drag surface. That is the difference between a gesture that works on a phone and one that scrolls the page instead.",
     filter: { kind: "terms", terms: ["Drag", "Momentum", "Rubber-banding"] },
   },
   {
     slug: "react-reveal-animations",
     title: "React Reveal Animations",
     intro:
-      "Content that is uncovered rather than faded in. Ten components animate a mask, a clip-path, or a wipe so the element is progressively exposed instead of simply changing opacity — pixel dissolves, curtain wipes, thawing frost, scroll-triggered entrances. A reveal reads as deliberate where a fade reads as a page still loading, which is why it is worth the extra property to animate.",
+      "Content that is uncovered instead of faded in. Ten components animate a mask, a clip-path, or a wipe, so the element is exposed a piece at a time rather than only changing opacity: pixel dissolves, curtain wipes, thawing frost, scroll-triggered entrances. A reveal reads as deliberate where a fade reads as a page still loading. That is why the extra property is worth animating.",
     filter: { kind: "terms", terms: ["Reveal", "Scroll reveal"] },
   },
   {
     slug: "react-spring-animation",
     title: "React Spring Animation",
     intro:
-      "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles naturally when it is interrupted and overshoots the way a real object does. Thirteen components here are spring-driven — magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming.",
+      "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Sixteen components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming.",
     filter: { kind: "terms", terms: ["Spring", "Bounce"] },
   },
   {
     slug: "react-blur-effects",
     title: "React Blur Effects",
     intro:
-      "Fifteen components that use blur as a material rather than a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen on approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius — an unbounded full-page backdrop-filter is the fastest way to drop frames.",
+      "Fifteen components that use blur as a material, not a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen as you approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius. An unbounded full-page backdrop-filter is the fastest way to drop frames.",
     filter: { kind: "terms", terms: ["Blur"] },
   },
   {
     slug: "react-scroll-animations",
     title: "React Scroll Animations",
     intro:
-      "Six components whose timeline is the scrollbar. Parallax rails, scroll-triggered entrances, sections that scrub a transform against progress. Scroll-driven animation is the one case where the user controls playback, which means it has to look right at any speed and in both directions — every one of these is driven by position rather than by a trigger that fires once.",
+      "Eight components whose timeline is the scrollbar. Parallax rails, scroll-triggered entrances, sections that scrub a transform against progress. Scroll-driven animation is the one case where the user controls playback, so it has to look right at any speed and in both directions. Every one of these is driven by position, not by a trigger that fires once.",
     filter: {
       kind: "terms",
       terms: ["Scroll-driven animation", "Scroll reveal", "Parallax"],
@@ -138,21 +138,21 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-clip-path-mask-effects",
     title: "React Clip-Path & Mask Effects",
     intro:
-      "Ten components that animate the shape of what you can see rather than the element itself. Clip-path wipes, gradient masks, spotlight cutouts, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere — and the only way to reveal one layer through another without duplicating the content.",
+      "Eleven components that animate the shape of what you can see instead of the element itself. Clip-path wipes, gradient masks, spotlight cutouts, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere. It is also the only way to show one layer through another without copying the content.",
     filter: { kind: "terms", terms: ["Clip-path", "Mask"] },
   },
   {
     slug: "react-layout-animation",
     title: "React Layout Animation",
     intro:
-      "Seven components that animate between two layouts rather than between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference — done properly it keeps the element continuous, so the user tracks one object instead of watching one disappear and another appear.",
+      "Seven components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear.",
     filter: { kind: "terms", terms: ["Layout animation"] },
   },
   {
     slug: "react-3d-tilt-effects",
     title: "React 3D Tilt Effects",
     intro:
-      "Six components that put an element in perspective and rotate it against the pointer. Tilting cards, holofoil surfaces, orbital layouts, depth that responds to where you are looking. The parameter that decides whether this reads as expensive or cheap is the perspective distance, not the rotation angle — too near and a small tilt distorts violently, too far and the whole effect flattens into a slide.",
+      "Seven components that put an element in perspective and rotate it against the pointer. Tilting cards, holofoil surfaces, orbital layouts, depth that reacts to where you are looking. What decides whether this reads as expensive or cheap is the perspective distance, not the rotation angle. Too near and a small tilt distorts violently. Too far and the whole effect flattens into a slide.",
     filter: { kind: "terms", terms: ["3D tilt / Flip", "Perspective"] },
   },
 
@@ -161,14 +161,14 @@ export const COLLECTIONS: Collection[] = [
     slug: "framer-motion-components",
     title: "Framer Motion Components for React",
     intro:
-      "Thirty-two components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn.",
+      "Thirty-four components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn.",
     filter: { kind: "deps", packages: ["motion"] },
   },
   {
     slug: "react-webgl-backgrounds",
     title: "React WebGL Backgrounds",
     intro:
-      "Twenty-two components that render on the GPU through a WebGL context — fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Twenty-one use ogl, a wrapper small enough that the whole bundle costs less than one hero image; one uses Three.js, where the scene genuinely needs a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
+      "Thirty components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Twenty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Two use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
     filter: { kind: "deps", packages: ["ogl", "three"] },
   },
 ];

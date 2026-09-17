@@ -12,7 +12,7 @@ export interface LandingEntry {
 }
 
 export interface LandingExhibit {
-	/** Section index glyph — the four categories, in registry order. */
+	/** Section index glyph — the five categories, in landing order. */
 	greek: string;
 	/** Zero-padded ordinal, e.g. "01". */
 	index: string;
@@ -94,7 +94,7 @@ export interface LandingData {
 	};
 }
 
-const GREEK = ["α", "β", "γ", "δ"] as const;
+const GREEK = ["α", "β", "γ", "δ", "ε"] as const;
 
 /**
  * Landing running order — deliberately not the registry's. Power-User Systems
@@ -114,6 +114,7 @@ const EXHIBIT_ORDER: readonly Category[] = [
 	"Text Animations",
 	"Power-User Systems",
 	"Micro-interactions",
+	"Hero Templates",
 ];
 
 /** "MorphingText" → "Morphing Text" — registry names are PascalCase; the page displays them spaced. */
@@ -135,6 +136,7 @@ const BLURBS: Record<Category, string> = {
 	// actually shares is weight. These are the ones with a simulation loop and
 	// state that outlives a frame.
 	"Power-User Systems": "Whole machines. State, memory, moving parts.",
+	"Hero Templates": "Landing openers. One big moment, above the fold.",
 };
 
 function numberProp(slug: string, name: string): NumberProp {
@@ -176,8 +178,8 @@ export function buildLandingData(): LandingData {
 		})),
 	}));
 
-	// Rail ticks: Top, then the four registry-derived category plates (so they
-	// can't drift from the catalog), then the three framing plates ε/ζ/η.
+	// Rail ticks: Top, then the five registry-derived category plates (so they
+	// can't drift from the catalog), then the three framing plates ζ/η/θ.
 	const navSections: NavSection[] = [
 		{ id: SECTION_IDS.hero, label: "TOP", glyph: "·" },
 		...exhibits.map((e) => ({
@@ -185,9 +187,9 @@ export function buildLandingData(): LandingData {
 			label: e.category.toUpperCase(),
 			glyph: e.greek,
 		})),
-		{ id: SECTION_IDS.calibration, label: "CALIBRATION", glyph: "ε" },
-		{ id: SECTION_IDS.sealed, label: "SEALED ARCHIVE", glyph: "ζ" },
-		{ id: SECTION_IDS.colophon, label: "COLOPHON", glyph: "η" },
+		{ id: SECTION_IDS.calibration, label: "CALIBRATION", glyph: "ζ" },
+		{ id: SECTION_IDS.sealed, label: "SEALED ARCHIVE", glyph: "η" },
+		{ id: SECTION_IDS.colophon, label: "COLOPHON", glyph: "θ" },
 	];
 
 	const toSlider = (

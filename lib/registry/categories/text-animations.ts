@@ -174,7 +174,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-07-16",
 		pausable: true,
 		description:
-			"Text whose letters interpolate font weight by cursor proximity.",
+			"Text whose letters shift font weight as the cursor gets closer.",
 		dependencies: ["motion"],
 		cookbook: ["Hover effect", "Interpolation / Tween"],
 		variants: [
@@ -216,7 +216,7 @@ export const textAnimations: ComponentEntry[] = [
 		category: "Text Animations",
 		addedAt: "2026-07-19",
 		description:
-			"A per-letter pull-up reveal — letters rise, sharpen from a blur, and fade in with a stagger.",
+			"A per-letter pull-up reveal. Letters rise, sharpen from a blur, and fade in with a stagger.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Stagger",
@@ -282,7 +282,7 @@ export const textAnimations: ComponentEntry[] = [
 		category: "Text Animations",
 		addedAt: "2026-07-22",
 		description:
-			"Ciphered glyphs boiling out of noise and resolving into words — a decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
+			"Ciphered glyphs boiling out of noise and resolving into words. A decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
 		dependencies: [],
 		cookbook: ["Text morph", "Stepped animation", "Hover effect", "Stagger"],
 		variants: [
@@ -547,7 +547,7 @@ export const textAnimations: ComponentEntry[] = [
 		category: "Text Animations",
 		addedAt: "2026-07-26",
 		description:
-			"Copy that lights up as you read it — words ahead sit dim and unfocused, and stay lit once you pass them.",
+			"Copy that lights up as you read it. Words ahead sit dim and unfocused, and stay lit once you pass them.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Scroll-driven animation",
@@ -628,7 +628,7 @@ export const textAnimations: ComponentEntry[] = [
 		category: "Text Animations",
 		addedAt: "2026-07-31",
 		description:
-			"Copy that arrives fully classified under solid bars, then declassifies word by word — each bar clearing its own word and leaving an amethyst edge behind as the only evidence it was ever there.",
+			"Copy that arrives fully classified under solid bars, then declassifies word by word. Each bar clears its own word and leaves an amethyst edge behind as the only evidence it was ever there.",
 		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Reveal",
@@ -749,7 +749,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-07-31",
 		pausable: true,
 		description:
-			"A Solari departure board. Every column walks the charset one flap at a time until it reaches its letter, so the word is never revealed — it is arrived at, with a real hinged half falling away as the next one seats behind it.",
+			"A Solari departure board. Every column walks the charset one flap at a time until it reaches its letter, so the word is never revealed. It is arrived at, with a real hinged half falling away as the next one seats behind it.",
 		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Stepped animation",
@@ -1008,7 +1008,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-08-06",
 		pausable: true,
 		description:
-			"Text whose words keep their identity when the line breaks move — narrow the measure and the sentence travels instead of re-wrapping.",
+			"Text whose words keep their identity when the line breaks move. Narrow the measure and the sentence travels instead of re-wrapping.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Layout animation",
@@ -1142,7 +1142,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-08-06",
 		pausable: true,
 		description:
-			"Chrome poured into a headline — a metal ramp clipped to real glyphs, a specular travelling across them, and a tinted wake following a beat behind.",
+			"Chrome poured into a headline. A metal ramp clipped to real glyphs, a specular travelling across them, and a tinted wake following a beat behind.",
 		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Mask",
@@ -1266,7 +1266,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-08-13",
 		pausable: true,
 		description:
-			"Type that melts. Letters sag under their own weight, string out, and fuse into one surface where they touch — because the glyphs are a coverage field cut by a threshold rather than shapes being moved, so two stems raise the coverage between them past the cut and one outline closes over both. The word underneath is a real text node the whole time: selectable, searchable, and read correctly aloud while it runs.",
+			"Type that melts. Letters sag under their own weight, string out, and fuse into one surface where they touch, because the glyphs are a coverage field cut by a threshold rather than shapes being moved: two stems raise the coverage between them past the cut and one outline closes over both. The word underneath is a real text node the whole time, so it stays selectable, searchable, and read correctly aloud while it runs.",
 		dependencies: ["ogl"],
 		cookbook: [
 			"Morph",
@@ -1403,7 +1403,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-08-14",
 		pausable: true,
 		description:
-			"A neon sign, with everything that is wrong with a neon sign. Tubes strike one at a time rather than together, each settling at its own moment inside the ignition; the steady state carries a mains hum; and every so often one tube gives up for a third of a second and comes back. The glow is baked once per letter into a sprite, so a frame is a handful of draws no matter how wide the word — and the word itself never stops being a real, selectable text node underneath.",
+			"A neon sign, with everything that is wrong with a neon sign. Tubes strike one at a time rather than together, each settling at its own moment inside the ignition. The steady state carries a mains hum, and every so often one tube gives up for a third of a second and comes back. The glow is baked once per letter into a sprite, so a frame is a handful of draws no matter how wide the word, and the word itself never stops being a real, selectable text node underneath.",
 		dependencies: [],
 		cookbook: [
 			"Loop",
@@ -1522,7 +1522,7 @@ export const textAnimations: ComponentEntry[] = [
 		addedAt: "2026-08-14",
 		pausable: true,
 		description:
-			"Hoarfrost taking a word — Molten's opposite number, the same idea of type as a coverage field run cold. Crystal tips seeded on the glyph edges creep across the letters, fork at a fixed lattice angle, and die where they run out of glyph or hit ice already there, so the cost tracks the growing edge rather than the area. The text underneath is never redrawn: it stays a real span at its real colour the whole time, which makes the thaw nothing more than fading the ice off type that was always there.",
+			"Hoarfrost taking a word. This is Molten's opposite number, the same idea of type as a coverage field run cold. Crystal tips seeded on the glyph edges creep across the letters, fork at a fixed lattice angle, and die where they run out of glyph or hit ice already there, so the cost tracks the growing edge rather than the area. The text underneath is never redrawn. It stays a real span at its real colour the whole time, which makes the thaw nothing more than fading the ice off type that was always there.",
 		dependencies: [],
 		cookbook: ["Loop", "Hover effect", "Idle animation", "Reveal"],
 		variants: [
@@ -1632,6 +1632,196 @@ export const textAnimations: ComponentEntry[] = [
 				kind: "color",
 				default: "#e9e6f2",
 				description: "The type underneath, which never moves and is never redrawn.",
+			},
+		],
+	},
+	{
+		slug: "anaglyph",
+		name: "Anaglyph",
+		category: "Text Animations",
+		addedAt: "2026-08-27",
+		pausable: true,
+		description:
+			"Stereoscopic channel-split type. The real headline stays put, selectable, one announcement to a screen reader, while two aria-hidden copies in opposing ink colors slide against each other under the pointer, and the blend mode resolves their overlap back toward white, so the depth lives entirely in the fringes, exactly as it does on a printed anaglyph. The channels chase the cursor through an exponential lerp written straight to transform, and once the pointer goes quiet a slow bounded-phase sway takes the target over so the split keeps breathing on an idle pane.",
+		dependencies: [],
+		cookbook: ["Hover effect", "Translate", "Interpolation / Tween", "Idle animation"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/anaglyph/anaglyph.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "maxShift",
+				kind: "number",
+				default: 14,
+				min: 0,
+				max: 40,
+				step: 1,
+				unit: "px",
+				description: "Peak channel separation at the pane edge.",
+			},
+			{
+				name: "response",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				description: "How much pointer travel converts into separation.",
+			},
+			{
+				name: "lag",
+				kind: "number",
+				default: 0.18,
+				min: 0.02,
+				max: 0.6,
+				step: 0.02,
+				unit: "s",
+				description: "Chase time constant — the channels arrive after the cursor.",
+			},
+			{
+				name: "sway",
+				kind: "number",
+				default: 0.5,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Idle drift amplitude once the pointer has gone quiet.",
+			},
+			{
+				name: "layers",
+				kind: "enum",
+				default: "three",
+				options: ["two", "three"],
+				description:
+					"Two channels split on one axis; three adds a perpendicular half-shift ghost.",
+			},
+			{
+				name: "blend",
+				kind: "enum",
+				default: "screen",
+				options: ["screen", "lighten", "difference"],
+				description: "How the channels composite where they overlap.",
+			},
+			{
+				name: "channelA",
+				kind: "color",
+				default: "#c4b5fd",
+				description: "First offset layer.",
+			},
+			{
+				name: "channelB",
+				kind: "color",
+				default: "#67e8f9",
+				description: "Opposing offset layer.",
+			},
+		],
+	},
+	{
+		slug: "inscribe",
+		name: "Inscribe",
+		category: "Text Animations",
+		addedAt: "2026-08-27",
+		pausable: true,
+		description:
+			"Text engraved stroke by stroke. Every character is a real SVG tspan with native kerning and selectable words, wearing the uniform-dash trick, because glyph outlines expose no pathLength and measuring their true perimeter has no API: the chisel simply travels each letter at its own apparent speed. When a stroke closes, its fill carves in after a beat, and the engraved finish darkens the fill and adds an inset relief so the word reads as cut into the panel rather than printed on it. The whole timeline runs on the animation-loop clock, so the bench pause freezes the chisel mid-stroke, and with no JavaScript at all the text simply sits there finished.",
+		dependencies: [],
+		cookbook: ["Line drawing", "Stagger", "Fade in / Fade out", "Delay", "Duration"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/inscribe/inscribe.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "duration",
+				kind: "number",
+				default: 900,
+				min: 300,
+				max: 3000,
+				step: 50,
+				unit: "ms",
+				description: "Time for one character's stroke to draw.",
+			},
+			{
+				name: "stagger",
+				kind: "number",
+				default: 90,
+				min: 0,
+				max: 400,
+				step: 10,
+				unit: "ms",
+				description: "Delay between one chisel start and the next.",
+			},
+			{
+				name: "fillDelay",
+				kind: "number",
+				default: 250,
+				min: 0,
+				max: 1500,
+				step: 50,
+				unit: "ms",
+				description: "Beat between a finished stroke and its fill arriving.",
+			},
+			{
+				name: "strokeWidth",
+				kind: "number",
+				default: 1.5,
+				min: 0.5,
+				max: 4,
+				step: 0.25,
+				description: "Chisel line weight in viewBox units.",
+			},
+			{
+				name: "finish",
+				kind: "enum",
+				default: "engraved",
+				options: ["engraved", "inlay", "stroke-only"],
+				description: "Carved-in fill, bright accent inlay, or the bare trace.",
+			},
+			{
+				name: "replay",
+				kind: "boolean",
+				default: true,
+				description: "Wipe and re-engrave on a timer.",
+			},
+			{
+				name: "replayDelay",
+				kind: "number",
+				default: 2500,
+				min: 500,
+				max: 8000,
+				step: 100,
+				unit: "ms",
+				disabledWhen: { prop: "replay", equals: false },
+				description: "Dwell on the finished engraving before the wipe.",
+			},
+			{
+				name: "strokeColor",
+				kind: "color",
+				default: "#c4b5fd",
+				description:
+					"The chisel trace; the engraved fill derives from it at lower luminance, the inlay at full.",
 			},
 		],
 	},

@@ -9,6 +9,7 @@ import { backgrounds } from "./categories/backgrounds";
 import { textAnimations } from "./categories/text-animations";
 import { microInteractions } from "./categories/micro-interactions";
 import { powerUserSystems } from "./categories/power-user-systems";
+import { heroTemplates } from "./categories/hero-templates";
 
 // The registry. Sidebar nav, catalog, routes, and generateStaticParams all derive
 // from this array. Adding a component = one entry in the matching
@@ -19,6 +20,7 @@ export const registry: ComponentEntry[] = [
 	...textAnimations,
 	...microInteractions,
 	...powerUserSystems,
+	...heroTemplates,
 ];
 
 export function getEntry(slug: string): ComponentEntry | undefined {
@@ -68,4 +70,31 @@ export function defaultsFromSchema(props: PropSchema[]): TunedValues {
 	const out: TunedValues = {};
 	for (const prop of props) out[prop.name] = prop.default;
 	return out;
+}
+
+export interface Neighbors {
+	prev: ComponentEntry;
+	next: ComponentEntry;
+	/** 1-based position in catalog order. */
+	index: number;
+	total: number;
+}
+
+/**
+ * Catalog neighbours of a slug, in the order the sidebar lists them (grouped
+ * by CATEGORY_ORDER, registry order within a group) — not raw array order, so
+ * prev/next in the fullscreen stage walk the same path the eye does. Wraps at
+ * both ends: the catalog is a ring, the last entry's next is the first.
+ */
+export function getNeighbors(slug: string): Neighbors | undefined {
+	const ordered = groupByCategory().flatMap((group) => group.entries);
+	const i = ordered.findIndex((entry) => entry.slug === slug);
+	if (i === -1) return undefined;
+	const total = ordered.length;
+	return {
+		prev: ordered[(i - 1 + total) % total],
+		next: ordered[(i + 1) % total],
+		index: i + 1,
+		total,
+	};
 }

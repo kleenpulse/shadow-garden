@@ -35,6 +35,7 @@ const CATEGORY_NOUN: Record<Category, string> = {
 	"Text Animations": "Text Animation",
 	"Micro-interactions": "Micro-interaction",
 	"Power-User Systems": "Component",
+	"Hero Templates": "Hero Section",
 };
 
 export function entryPath(entry: ComponentEntry): string {

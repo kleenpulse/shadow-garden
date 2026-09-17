@@ -19,6 +19,7 @@ const BLURB: Record<string, string> = {
 	"Text Animations": "type in motion",
 	"Micro-interactions": "small mechanisms, felt more than seen",
 	"Power-User Systems": "command surfaces for operators",
+	"Hero Templates": "landing openers with dimension",
 };
 
 const total = registry.length;

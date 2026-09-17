@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getAllSlugs, getEntry } from "@/lib/registry";
+import { getAllSlugs, getEntry, getNeighbors } from "@/lib/registry";
 import FullscreenStage from "@/components/shell/FullscreenStage";
 
 export function generateStaticParams() {
@@ -19,10 +19,7 @@ export async function generateMetadata({
 	return {
 		title: `${entry.name} — Fullscreen`,
 		description: entry.description,
-		// A stage, not a document: the whole body is one Suspense hole, so the
-		// prerendered HTML has no heading, no copy and no links. 70 of these would be
-		// half the site's URL inventory, all of it empty. `follow` stays on so the
-		// links that hydrate in still pass equity back to the catalog.
+
 		robots: { index: false, follow: true },
 		alternates: { canonical: `/components/${slug}/full` },
 	};
@@ -33,16 +30,15 @@ export default async function FullscreenPage({
 }: {
 	params: Promise<{ slug: string }>;
 }) {
-	// Next 16: params is a Promise and must be awaited.
 	const { slug } = await params;
 	const entry = getEntry(slug);
 	if (!entry) notFound();
 
+	const neighbors = getNeighbors(slug);
+
 	return (
-		// The stage reads tuned values from the URL (nuqs) — dynamic under Cache
-		// Components, so it streams as the one hole in the static shell.
 		<Suspense fallback={<div className="h-dvh animate-pulse bg-panel" />}>
-			<FullscreenStage entry={entry} />
+			<FullscreenStage entry={entry} neighbors={neighbors} />
 		</Suspense>
 	);
 }

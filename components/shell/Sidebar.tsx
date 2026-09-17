@@ -101,11 +101,28 @@ export default function Sidebar() {
 	// Snap the current page's entry into view on load. Centered so its
 	// neighbors stay visible; runs once — later navigation happens via clicks
 	// on already-visible items, where auto-scrolling would only be jarring.
+	//
+	// Manual scrollTop arithmetic on the sidebar's own scroller, never
+	// scrollIntoView: that call walks up EVERY scroll ancestor, so it also
+	// dragged the document down on each reload and every page opened
+	// mid-scroll with the hero half off-screen. Same trap, same fix, as the
+	// cookbook filter and the section rail.
 	const listRef = useRef<HTMLDivElement>(null);
 	useEffect(() => {
-		listRef.current
-			?.querySelector('[aria-current="page"]')
-			?.scrollIntoView({ block: "center" });
+		const list = listRef.current;
+		const item = list?.querySelector<HTMLElement>('[aria-current="page"]');
+		if (!list || !item) return;
+		let scroller: HTMLElement | null = item.parentElement;
+		while (scroller && scroller !== document.body) {
+			const { overflowY } = getComputedStyle(scroller);
+			if (overflowY === "auto" || overflowY === "scroll") break;
+			scroller = scroller.parentElement;
+		}
+		if (!scroller || scroller === document.body) return;
+		const box = scroller.getBoundingClientRect();
+		const row = item.getBoundingClientRect();
+		scroller.scrollTop +=
+			row.top - box.top - box.height / 2 + row.height / 2;
 	}, []);
 
 	// Freshness is wall-clock-dependent — same constraint as NewBadge: reading the

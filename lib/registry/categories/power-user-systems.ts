@@ -86,7 +86,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-07-18",
 		pausable: true,
 		description:
-			"A from-scratch 2D rigid-body physics lab — fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
+			"A from-scratch 2D rigid-body physics lab. Fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
 		cookbook: [
 			"Drag",
 			"Momentum",
@@ -216,7 +216,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-07-19",
 		pausable: true,
 		description:
-			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
+			"A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader. Null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
 		dependencies: ["ogl", "clsx", "tailwind-merge"],
 		cookbook: ["Orbit", "Loop", "Drag", "Frame rate (FPS)"],
 		variants: [
@@ -417,7 +417,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-07-21",
 		pausable: true,
 		description:
-			"A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
+			"A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core, either lotus, gem, or flame, raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
 		dependencies: ["ogl", "clsx", "tailwind-merge"],
 		cookbook: ["Orbit", "Loop", "Drag", "Blur"],
 		variants: [
@@ -612,7 +612,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-07-22",
 		pausable: true,
 		description:
-			"A real-time GPU fluid you can stir — semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
+			"A real-time GPU fluid you can stir. Semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
 		dependencies: ["ogl"],
 		cookbook: ["Drag", "Loop", "Idle animation"],
 		variants: [
@@ -752,7 +752,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-07-22",
 		pausable: true,
 		description:
-			"A pool of dark, moonlit water you disturb by hand — a leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
+			"A pool of dark, moonlit water you disturb by hand. A leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
 		dependencies: ["ogl"],
 		cookbook: ["Ripple", "Drag", "Loop"],
 		variants: [
@@ -1081,7 +1081,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-06",
 		description:
-			'A step-by-step approval checklist for agent permissions — radio and checkbox groups, an "Other…" escape hatch that grows a field in place, and per-step validation that blocks the commit. Answering a step sends the chosen option flying into a running record of what you have already decided, so the screen accumulates a decision trail instead of replacing itself.',
+			'A step-by-step approval checklist for agent permissions. Radio and checkbox groups, an "Other…" escape hatch that grows a field in place, and per-step validation that blocks the commit. Answering a step sends the chosen option flying into a running record of what you have already decided, so the screen accumulates a decision trail instead of replacing itself.',
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Morph",
@@ -1215,7 +1215,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-06",
 		description:
-			"A review surface for a patch an agent has proposed — accept or reject each hunk, fold long runs of unchanged lines away, and flip between unified and split. Switching views does not redraw the diff: every line is a shared element that flies from the stream into its column and back, so you never lose the line you were reading.",
+			"A review surface for a patch an agent has proposed. Accept or reject each hunk, fold long runs of unchanged lines away, and flip between unified and split. Switching views does not redraw the diff: every line is a shared element that flies from the stream into its column and back, so you never lose the line you were reading.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Morph",
@@ -1346,7 +1346,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-08-06",
 		pausable: true,
 		description:
-			"A live activity log for a working agent. Consecutive events from the same source fold into one block instead of stacking as identical rows, the window holds a fixed number and lets the rest fall off the top, and the scroll stays pinned to the newest line only until you scroll away from it — after that it keeps running and tells you how far behind you are.",
+			"A live activity log for a working agent. Consecutive events from the same source fold into one block instead of stacking as identical rows, the window holds a fixed number and lets the rest fall off the top, and the scroll stays pinned to the newest line only until you scroll away from it. After that it keeps running and tells you how far behind you are.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Loop",
@@ -1484,7 +1484,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-06",
 		description:
-			"Real HTML panels on a drag-spun 3D cylinder. A hand-rolled perspective projection written onto DOM elements rather than a canvas — so the text stays selectable, the links stay clickable, and a screen reader still reads every panel while the ring turns.",
+			"Real HTML panels on a drag-spun 3D cylinder. A hand-rolled perspective projection written onto DOM elements rather than a canvas, so the text stays selectable, the links stay clickable, and a screen reader still reads every panel while the ring turns.",
 		dependencies: [],
 		cookbook: [
 			"Drag",
@@ -1618,7 +1618,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-07",
 		description:
-			"A lit, raymarched 3D solid rendered at exactly one pixel per character cell, then quantised into a glyph ramp drawn once with fillText. Drag to orbit it through a full three-sixty. Real geometry underneath, terminal on top — and no scene graph, no mesh, and no second library to get there.",
+			"A lit, raymarched 3D solid rendered at exactly one pixel per character cell, then quantised into a glyph ramp drawn once with fillText. Drag to orbit it through a full three-sixty. Real geometry underneath, terminal on top, with no scene graph, no mesh, and no second library to get there.",
 		dependencies: ["ogl"],
 		cookbook: [
 			"Loop",
@@ -1754,7 +1754,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-07",
 		description:
-			"Up to a quarter of a million particles integrated entirely on the GPU, morphing between words and solids, with a drag-orbit camera. Position and velocity live in floating-point textures and never come back to the CPU; text targets are sampled once out of an offscreen canvas, so the shape can be any string with no font atlas.",
+			"Up to a quarter of a million particles integrated entirely on the GPU, morphing between words and solids, with a drag-orbit camera. Position and velocity live in floating-point textures and never come back to the CPU. Text targets are sampled once out of an offscreen canvas, so the shape can be any string with no font atlas.",
 		dependencies: ["ogl"],
 		cookbook: [
 			"Loop",
@@ -1919,7 +1919,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-07",
 		description:
-			"Live, fully interactive HTML seen through moving air. An animated turbulence field displaces the real DOM subtree per pixel — no snapshot, no canvas replica — so the text stays selectable, the button still takes focus and the link is still a link while the whole panel shimmers.",
+			"Live, fully interactive HTML seen through moving air. An animated turbulence field displaces the real DOM subtree per pixel, with no snapshot and no canvas replica, so the text stays selectable, the button still takes focus and the link is still a link while the whole panel shimmers.",
 		dependencies: [],
 		cookbook: [
 			"Hover effect",
@@ -2026,7 +2026,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-07",
 		description:
-			"Live content held under water. A slow current bends it continuously, a press drops a stone and a drag leaves a wake that trails behind the cursor — and the text underneath stays selectable, the button still answers and the link is still a link, because the water bends the real tree rather than a picture of it.",
+			"Live content held under water. A slow current bends it continuously, a press drops a stone and a drag leaves a wake that trails behind the cursor. The text underneath stays selectable, the button still answers and the link is still a link, because the water bends the real tree rather than a picture of it.",
 		dependencies: [],
 		cookbook: [
 			"Ripple",
@@ -2148,7 +2148,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-08-13",
 		pausable: true,
 		description:
-			"A sheet of cloth on a position-based solver — particles and distance constraints relaxed to convergence every fixed step, with no forces, no rotations and no contacts. Drag it, load it, and pull until the constraints fail and the tear runs. Every quad is shaded by its own extension against the tear threshold, so the load path through the sheet is visible long before anything breaks.",
+			"A sheet of cloth on a position-based solver. Particles and distance constraints relaxed to convergence every fixed step, with no forces, no rotations and no contacts. Drag it, load it, and pull until the constraints fail and the tear runs. Every quad is shaded by its own extension against the tear threshold, so the load path through the sheet is visible long before anything breaks.",
 		dependencies: [],
 		cookbook: [
 			"Drag",
@@ -2424,7 +2424,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-13",
 		description:
-			"An undo history you can scrub, and that refuses to throw the future away. Drag the head and the interface reverts live under your finger rather than on release; act from a past point and the abandoned future stays drawn on the rail as a branch you can walk back onto, instead of being silently destroyed the way every real undo stack destroys it. Controlled in the same shape as Ledger — it owns the rail, the gesture and the branch graph, and your reducer owns the states.",
+			"An undo history you can scrub, and that refuses to throw the future away. Drag the head and the interface reverts live under your finger rather than on release. Act from a past point and the abandoned future stays drawn on the rail as a branch you can walk back onto, instead of being silently destroyed the way every real undo stack destroys it. Controlled in the same shape as Ledger: it owns the rail, the gesture and the branch graph, and your reducer owns the states.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Drag",
@@ -2545,7 +2545,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		addedAt: "2026-08-21",
 		pausable: true,
 		description:
-			"An AI response surface that streams the way live chat UIs stream — a shimmer while the model thinks, tokens arriving on an irregular clock and blurring into place, a generation caret riding the last word, and stop and regenerate controls that actually interrupt. The cadence rides the animation clock rather than timer chains, so pausing the bench freezes generation mid-word. Only the trailing window of tokens are live animated elements — everything older folds into one static text node, so a long answer never accumulates a thousand springs — and an invisible ghost of the full answer holds the final height, so neither the thinking-to-streaming swap nor the stream itself ever moves layout.",
+			"An AI response surface that streams the way live chat UIs stream. A shimmer while the model thinks, tokens arriving on an irregular clock and blurring into place, a generation caret riding the last word, and stop and regenerate controls that actually interrupt. The cadence rides the animation clock rather than timer chains, so pausing the bench freezes generation mid-word. Only the trailing window of tokens are live animated elements, and everything older folds into one static text node, so a long answer never accumulates a thousand springs. An invisible ghost of the full answer holds the final height, so neither the thinking-to-streaming swap nor the stream itself ever moves layout.",
 		dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
 		cookbook: ["Typewriter", "Skeleton / Shimmer", "Blur", "Stagger"],
 		variants: [
@@ -2640,7 +2640,7 @@ export const powerUserSystems: ComponentEntry[] = [
 		category: "Power-User Systems",
 		addedAt: "2026-08-21",
 		description:
-			"A pannable, zoomable infinite board holding real DOM cards — one world element under a single translate-and-scale, so focus survives and nothing ever remounts when the camera moves. Drag the background to pan with inertia; the wheel zooms to the cursor by holding the world point under it fixed; cards drag independently and glide onto the grid on release; the corner minimap mirrors the extent and jumps the camera where you click. Camera state lives in one ref written by handlers and the loop, and every consumer — world transform, backdrop plane, minimap — derives from it in a single write pass per frame, so React never renders a camera frame. Arrow keys pan and plus and minus zoom when the board holds focus.",
+			"A pannable, zoomable infinite board holding real DOM cards. One world element under a single translate-and-scale, so focus survives and nothing ever remounts when the camera moves. Drag the background to pan with inertia. The wheel zooms to the cursor by holding the world point under it fixed, cards drag independently and glide onto the grid on release, and the corner minimap mirrors the extent and jumps the camera where you click. Camera state lives in one ref written by handlers and the loop, and every consumer, from the world transform to the backdrop plane to the minimap, derives from it in a single write pass per frame, so React never renders a camera frame. Arrow keys pan and plus and minus zoom when the board holds focus.",
 		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: ["Drag", "Momentum", "Velocity", "Hardware acceleration"],
 		variants: [
@@ -2729,6 +2729,188 @@ export const powerUserSystems: ComponentEntry[] = [
 				options: ["dots", "lines", "none"],
 				description:
 					"The plane texture that moves with the camera — it is what makes the pan legible.",
+			},
+		],
+	},
+	{
+		slug: "patchbay",
+		name: "Patchbay",
+		category: "Power-User Systems",
+		addedAt: "2026-08-27",
+		pausable: true,
+		description:
+			"A modular-synth patch bay. The jacks are real DOM buttons, focusable, labelled and keyboard-patchable, and only the cables live on a canvas underneath the pointer's reach, because a cable is pure paint: a quadratic Bézier whose control point hangs below the midpoint by a sprung sag. Drag from any jack and a live cable follows the hand. Release near a jack on the opposite bank and it seats with an overshoot-and-settle wobble, elsewhere it retracts. Seated cables carry signal pulses on a bounded phase, grabbing an occupied input picks its cable up to repatch, and resizing the bay shakes every cable, which is follow-through, cheaply.",
+		dependencies: [],
+		cookbook: ["Drag", "Spring", "Follow-through", "Loop"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/patchbay/patchbay.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "droop",
+				kind: "number",
+				default: 46,
+				min: 0,
+				max: 120,
+				step: 2,
+				unit: "px",
+				description: "Cable slack at rest — how far the middle hangs.",
+			},
+			{
+				name: "wobble",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Spring in the sag when a cable seats or the bay resizes.",
+			},
+			{
+				name: "pulseSpeed",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				description: "Signal travel rate along a connected cable.",
+			},
+			{
+				name: "pulseCount",
+				kind: "number",
+				default: 3,
+				min: 0,
+				max: 8,
+				step: 1,
+				description: "Pulses in flight per cable; 0 runs the bay dark.",
+			},
+			{
+				name: "cableWidth",
+				kind: "number",
+				default: 2.5,
+				min: 1,
+				max: 5,
+				step: 0.25,
+				unit: "px",
+				description: "Cable gauge.",
+			},
+			{
+				name: "showLabels",
+				kind: "boolean",
+				default: true,
+				description: "Module names under the jacks.",
+			},
+			{
+				name: "cableColor",
+				kind: "color",
+				default: "#a78bfa",
+				description: "The patch cables.",
+			},
+			{
+				name: "pulseColor",
+				kind: "color",
+				default: "#e9e6ff",
+				description: "The signal riding them.",
+			},
+		],
+	},
+	{
+		slug: "keycast",
+		name: "Keycast",
+		category: "Power-User Systems",
+		addedAt: "2026-08-27",
+		pausable: true,
+		description:
+			"A streamer-style keyboard HUD: every chord you press appears as a row of keycaps and ages away, with a hammered key folding into one cap wearing a ×n badge. The listener is display-only by contract. It never prevents or stops an event, bails inside editable targets and mid-IME composition, and ignores lone modifiers, so the page underneath keeps every shortcut it had and the HUD merely reports what the hands did. Entry timestamps ride the loop clock rather than the wall clock, so pausing the bench freezes the stack mid-fade instead of evicting it all on resume, and a scripted demo reel keeps the pane alive whenever the real keyboard goes quiet.",
+		dependencies: [],
+		cookbook: ["Pop in", "Enter / Exit", "Fade in / Fade out"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/keycast/keycast.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "lifetime",
+				kind: "number",
+				default: 2.4,
+				min: 0.8,
+				max: 6,
+				step: 0.1,
+				unit: "s",
+				description: "How long a chord stays on the HUD before it fades out.",
+			},
+			{
+				name: "maxVisible",
+				kind: "number",
+				default: 5,
+				min: 1,
+				max: 10,
+				step: 1,
+				description: "History depth; older entries are evicted early.",
+			},
+			{
+				name: "corner",
+				kind: "enum",
+				default: "bottom-center",
+				options: ["bottom-left", "bottom-center", "bottom-right"],
+				description: "Where the stack anchors in its pane.",
+			},
+			{
+				name: "combineRepeats",
+				kind: "boolean",
+				default: true,
+				description: "Fold a hammered key into one cap with a ×n badge.",
+			},
+			{
+				name: "platform",
+				kind: "enum",
+				default: "mac",
+				options: ["mac", "pc"],
+				description: "⌘⌥⇧⌃ glyphs or Ctrl / Alt / Shift words.",
+			},
+			{
+				name: "demo",
+				kind: "boolean",
+				default: true,
+				description:
+					"Replay a scripted set of chords whenever the keyboard goes quiet.",
+			},
+			{
+				name: "capSize",
+				kind: "number",
+				default: 34,
+				min: 24,
+				max: 56,
+				step: 2,
+				unit: "px",
+				description: "Keycap height; legends scale with it.",
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#c4b5fd",
+				description: "Modifier caps and the ring on the newest chord.",
 			},
 		],
 	},

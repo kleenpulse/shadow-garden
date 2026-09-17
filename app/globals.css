@@ -466,6 +466,9 @@ html[data-sg-intro] {
 	html[data-catalog-filter="new"] .sg-catalog-tabs [role="tab"][data-value="new"] {
 		color: var(--color-accent);
 	}
+	/* New's stand-in takes the punch-out fill its React indicator uses, or the
+	   pill would flash solid amethyst on refresh before handing over. Black in
+	   both themes, matching NEW_TAB's `activeFill` — keep the two in step. */
 	html[data-catalog-filter="new"]
 		.sg-catalog-tabs
 		[role="tab"][data-value="new"]::before {
@@ -474,7 +477,7 @@ html[data-sg-intro] {
 		inset: 0;
 		z-index: 0;
 		border-radius: 0.375rem; /* rounded-md */
-		background: color-mix(in oklab, var(--color-accent) 10%, transparent);
+		background: #000;
 	}
 	/* next-themes puts the class on <html>, so it's the same element the filter
 	   attribute lands on — one compound selector, not a descendant. */
@@ -482,16 +485,6 @@ html[data-sg-intro] {
 		.sg-catalog-tabs
 		[role="tab"][data-value="new"]::before {
 		border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
-		background: color-mix(in oklab, var(--color-accent) 15%, transparent);
-	}
-	/* New's stand-in takes the punch-out fill its React indicator uses, or the
-	   pill would flash amethyst on refresh before handing over. Black in both
-	   themes, matching NEW_TAB's `activeFill` — keep the two in step. Must stay
-	   after the dark rule above: same specificity, source order decides. */
-	html[data-catalog-filter="new"]
-		.sg-catalog-tabs
-		[role="tab"][data-value="new"]::before {
-		background: #000;
 	}
 
 	/* The list's "new" row-hiding pair is injected by the script, which owns the

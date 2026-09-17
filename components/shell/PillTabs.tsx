@@ -10,7 +10,7 @@ export type PillTabItem<V extends string = string> = {
 	value: V;
 	label: ReactNode;
 	/** Overrides the indicator's fill for this tab only — merged through `cn`, so
-	 *  a `bg-*` here beats the default amethyst tint. The border is left alone. */
+	 *  a `bg-*` here beats the default solid amethyst. The border is left alone. */
 	activeFill?: string;
 };
 
@@ -99,15 +99,17 @@ export default function PillTabs<V extends string = string>({
 							// flex-1 already distributes the track, so the horizontal padding
 							// only costs label room — a fourth tab in a narrow sidebar clips without this.
 							fullWidth && "flex-1 px-1",
-							active ? "text-accent" : "text-ink-dim hover:text-ink",
+							active ? "text-on-accent" : "text-ink-dim hover:text-ink",
 						)}
 					>
 						{active && (
 							<motion.span
 								layoutId={effectiveLayoutId}
-								// Inner radius stays rounded-md (ours). Amethyst-tinted fill.
+								// Inner radius stays rounded-md (ours). Solid amethyst fill —
+								// the label above it is text-on-accent, so a per-item
+								// `activeFill` must keep its own label legible.
 								className={cn(
-									"absolute inset-0 z-0 rounded-md bg-accent/10 dark:border dark:border-accent/40 dark:bg-accent/15",
+									"absolute inset-0 z-0 rounded-md bg-accent dark:border dark:border-accent/40",
 									item.activeFill,
 								)}
 								transition={TAB_SPRING}

@@ -171,6 +171,9 @@
     },
     "fullscreenStage": {
       "exitAria": "Exit fullscreen, back to {name}",
+      "navAria": "Browse components",
+      "nextAria": "Next: {name}",
+      "prevAria": "Previous: {name}",
       "hideControls": "Hide controls",
       "showControls": "Show controls"
     },
@@ -249,7 +252,7 @@
       }
     },
     "light-rays": {
-      "description": "Volumetric god-rays from a configurable origin, optionally mouse-following.",
+      "description": "Volumetric god-rays from a configurable origin, optionally following the mouse.",
       "props": {
         "raysColor": "Ray color.",
         "raysSpeed": "Animation speed.",
@@ -265,7 +268,7 @@
       }
     },
     "mask-blur": {
-      "description": "Progressive edge blur — stacked backdrop-filter layers dissolve content toward a chosen edge.",
+      "description": "Progressive edge blur. Stacked backdrop-filter layers dissolve content toward a chosen edge.",
       "props": {
         "position": "Edge the blur attaches to.",
         "strength": "Base blur multiplier applied to every layer.",
@@ -352,7 +355,7 @@
       }
     },
     "constellation": {
-      "description": "A constellation network — drifting particles link by proximity, chase and flee the cursor, and glow.",
+      "description": "A constellation network. Drifting particles link by proximity, chase and flee the cursor, and glow.",
       "props": {
         "density": "Particle density relative to area.",
         "speed": "Top drift speed of particles.",
@@ -367,7 +370,7 @@
       }
     },
     "plus-grid": {
-      "description": "A canvas field of '+' glyphs — scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
+      "description": "A canvas field of '+' glyphs. Scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
       "props": {
         "gapX": "Horizontal gap between glyphs.",
         "gapY": "Vertical gap between glyphs.",
@@ -381,7 +384,7 @@
       }
     },
     "barcode": {
-      "description": "A procedural barcode whose bars light up like piano notes — looping on autoplay or scrubbed by scroll.",
+      "description": "A procedural barcode whose bars light up like piano notes, looping on autoplay or scrubbed by scroll.",
       "props": {
         "mode": "Autoplay loops the note timeline; scrub ties it to scroll position.",
         "restOpacity": "Opacity a bar settles at after its note.",
@@ -392,7 +395,7 @@
       }
     },
     "aurora": {
-      "description": "Flowing curtains of amethyst light drifting across a starless night sky — an fbm-warped WebGL2 field where luminous bands ripple, fold, and dissolve into fine grain, like a polar aurora seen from the dark side of the world.",
+      "description": "Flowing curtains of amethyst light drifting across a starless night sky. An fbm-warped WebGL2 field where luminous bands ripple, fold, and dissolve into fine grain, like a polar aurora seen from the dark side of the world.",
       "props": {
         "baseColor": "Deep background the curtains glow against.",
         "auroraColor": "Primary amethyst light of the bands.",
@@ -466,7 +469,7 @@
       }
     },
     "turing": {
-      "description": "Gray-Scott reaction-diffusion on the GPU. Two reagents, four terms, and coral, labyrinths and colonies that settle and stop all fall out of the arithmetic — a background that grows rather than loops, and never reaches the same frame twice.",
+      "description": "Gray-Scott reaction-diffusion on the GPU. Two reagents, four terms, and coral, labyrinths and colonies that settle and stop all fall out of the arithmetic. A background that grows rather than loops, and never reaches the same frame twice.",
       "props": {
         "feed": "Rate at which fresh reagent arrives everywhere. Feed and kill together pick the creature, and these coordinates were measured rather than inherited: 0.050/0.062 keeps colonising and is the default, 0.030/0.062 settles into stable spots and then genuinely stops, 0.039/0.058 floods to a dense labyrinth, and 0.022/0.051 oscillates without ever settling. Push feed past about 0.055 at this kill and the colonies die outright — the living band is a few thousandths wide, which is why the step is this fine.",
         "kill": "Rate at which the reacted product is removed. Pull it down and the pattern floods until it fills the plate; push it up and it starves back to nothing. The edge of the living band is a cliff rather than a slope, so this control does nothing and then does everything.",
@@ -481,7 +484,7 @@
       }
     },
     "quicksilver": {
-      "description": "Molten chrome. Every other shader background emits light; this one reflects a studio that does not exist, synthesised from the surface normal — sharp softbox edges, a conductor's Fresnel wash, thin-film iridescence, and a wake that keeps moving where you dragged.",
+      "description": "Molten chrome. Every other shader background emits light. This one reflects a studio that does not exist, built out of the surface normal: sharp softbox edges, a conductor's Fresnel wash, thin-film iridescence, and a wake that keeps moving where you dragged.",
       "props": {
         "flowSpeed": "How fast the surface churns. At zero the metal sets, and a still frame is the only honest way to see how much of what you are looking at is the height field and how much is the light sitting on it.",
         "warp": "How far the noise drags its own coordinates before it is sampled again. Low is rolled sheet metal; past about one the surface folds back through itself and stops reading as a liquid at all.",
@@ -496,7 +499,7 @@
       }
     },
     "mycelium": {
-      "description": "A slime mould foraging in the dark. Every other field here is a differential equation on a grid; this one is a population — up to a million agents, each carrying a position and a heading, sampling the trail ahead of itself, turning toward whatever smells strongest and laying down more of it as it goes. The veins, the junctions and the slow reorganisation are nowhere in the code.",
+      "description": "A slime mould foraging in the dark. Every other field here is a differential equation on a grid. This one is a population: up to a million agents, each carrying a position and a heading, sampling the trail ahead of itself, turning toward whatever smells strongest and laying down more of it as it goes. The veins, the junctions and the slow reorganisation are nowhere in the code.",
       "props": {
         "agentCount": "How many agents forage the field, in discrete steps rather than on a slider — each value reallocates the state textures and rebuilds the point geometry, which a slider would do on every pixel of a drag. Against a fixed 1024px field this is a density: a million closes the web into fine reticulation, and a quarter of that is the same behaviour drawn as a few sparse trunks. Step down if the frame rate needs it.",
         "speed": "Forward travel per second, against the 1024px field. Push it far past the sensor distance and an agent steps clean over a vein without ever sensing it — the colony looks fast and builds nothing.",
@@ -515,7 +518,7 @@
       }
     },
     "contour": {
-      "description": "A topographic map of terrain that will not hold still. The lines are not drawn, they are found — a height field is sampled onto a grid every frame and marching squares walks it once per altitude, emitting segments wherever the land crosses that height. Nothing here knows what a ridge is; ridges are where the crossings bunch up. The pointer raises a hill the contours have to route around, and because the interval is fixed rather than the line count, that extra altitude produces extra rings instead of restretching the ones already on screen.",
+      "description": "A topographic map of terrain that will not hold still. The lines are not drawn, they are found. A height field is sampled onto a grid every frame and marching squares walks it once per altitude, emitting segments wherever the land crosses that height. Nothing here knows what a ridge is. Ridges are where the crossings bunch up. The pointer raises a hill the contours have to route around, and because the interval is fixed rather than the line count, that extra altitude produces extra rings instead of restretching the ones already on screen.",
       "props": {
         "levels": "Contours per unit of altitude — the map's contour interval, inverted into the number a reader actually wants. This is a density rather than a count: how many lines land on screen is whatever that interval yields across the range the terrain currently occupies, so raising a peak under the cursor adds rings instead of crowding the ones already drawn.",
         "cellSize": "Spacing of the height samples, and therefore the resolution of the whole map. Contours can only turn at a cell boundary, so a coarse grid gives visibly faceted rings while a fine one costs another full field sweep every frame. Below about 10px on a wide canvas a cost cap takes over and the cell grows back on its own.",
@@ -531,7 +534,7 @@
       }
     },
     "rainglass": {
-      "description": "Rain on a window with a city somewhere behind it. There is no scene being blurred — the backdrop is built out of focus to begin with, so the drops have something to bend without a render target or a blur pass anywhere in the frame. Each drop is a pure function of time inside its own grid cell, which is why a thousand of them cost the same as one and a resize cannot lose the rain. They descend the way water actually does: holding by surface tension, breaking loose, running fast, stopping again — and the trail exists only above the drop that made it.",
+      "description": "Rain on a window with a city somewhere behind it. There is no scene being blurred. The backdrop is built out of focus to begin with, so the drops have something to bend without a render target or a blur pass anywhere in the frame. Each drop is a pure function of time inside its own grid cell, which is why a thousand of them cost the same as one and a resize cannot lose the rain. They descend the way water actually does: holding by surface tension, breaking loose, running fast, stopping again. The trail exists only above the drop that made it.",
       "props": {
         "intensity": "How much water is on the glass. Cells are gated by this rather than dimmed by it — a cell either has a drop in it or it does not, because a half-present drop reads as a smudge on the screen rather than as weather.",
         "dropScale": "Drop size, by way of the grid the drops live in. Large drops means fewer, heavier runs and a window you are standing close to; small means a fine spatter that reads as distance.",
@@ -544,6 +547,60 @@
         "tintTop": "Sky, at the top of the frame.",
         "tintBottom": "Ground, at the bottom.",
         "glow": "The out-of-focus lights, and the highlight that catches on a wet edge."
+      }
+    },
+    "stipple": {
+      "description": "A flowing luminance field crushed to ink and paper by error diffusion. Each cell's quantization error is pushed onto its unvisited neighbours in a serpentine scan, so mid-tones resolve into the organic scattered grain of a stippled engraving instead of a fixed lattice. Atkinson forwards only three-quarters of the error, which is why the classic-Mac look keeps its blown highlights. Floyd–Steinberg and Sierra spread all of it for a smoother ramp. The field is diffused on the CPU into an ImageData at one cell per CSS pixel-group, then scaled up with smoothing off, so the grid survives retina intact.",
+      "props": {
+        "algorithm": "Error-diffusion kernel. Atkinson drops a quarter of the error for punchy highlights; Floyd–Steinberg is the textbook 4-tap spread; Sierra pushes across three rows for the smoothest grain.",
+        "pixelSize": "CSS pixels per dither cell. The grid is measured in CSS pixels so a retina screen doesn't silently halve the cells.",
+        "fieldScale": "Spatial scale of the underlying luminance field.",
+        "speed": "Flow speed of the field. Zero freezes the pattern without blanking it.",
+        "contrast": "Contrast curve applied around mid-grey before quantization — low values are all grain, high values are all shape.",
+        "serpentine": "Alternate the scan direction per row. One-way scans drag directional worm artifacts across flat regions; the boustrophedon hides them.",
+        "ink": "The quantized on tone.",
+        "paper": "The quantized off tone."
+      }
+    },
+    "prism": {
+      "description": "A raymarched glass prism splitting a beam into its spectrum. An SDF solid turned in a hazy volume, a white shaft entering one face and a fan of spectral bands leaving another, each band bent by its own wavelength-dependent deviation so the fan spreads the way dispersion actually spreads. The beams are analytic capsule glows integrated against the view ray, not a second march, which is what keeps sixty-four steps and eight bands inside a frame budget. Drag orbits the solid with momentum. The haze is what makes the shafts readable at all, because light in clean air is invisible until it hits something.",
+      "props": {
+        "dispersion": "Wavelength spread across the fan — zero collapses the spectrum back into one refracted shaft.",
+        "bands": "Spectral samples in the exit fan.",
+        "beamIntensity": "Brightness of the shaft and the fan together.",
+        "beamColor": "Tint of the incoming shaft.",
+        "saturation": "Spectral saturation of the fan — zero washes every band back to the beam color.",
+        "fog": "Density of the participating haze. The beams are only as visible as the air is dirty.",
+        "autoRotate": "Idle turn; a drag takes over and momentum hands back.",
+        "rotateSpeed": "Idle rotation rate."
+      }
+    },
+    "ferrofluid": {
+      "description": "A pool of magnetic fluid rendered as a per-pixel metaball field. A handful of blobs orbit on closed integer-harmonic paths and merge wherever their fields overlap. The cursor is a magnet held over the pool: the surface reaches toward it, and inside its influence the iso-edge erupts into the radial spike crown that makes ferrofluid unmistakable. Lighting is free, because the metaball gradient is analytic, so the same loop that sums the field also yields the surface normal for the specular sheen and the amethyst rim, with no extra field evaluations.",
+      "props": {
+        "blobs": "Metaball count in the ambient orbit.",
+        "speed": "Orbit speed of the blob field.",
+        "cohesion": "Iso-surface softness — how eagerly blobs merge into one body.",
+        "spikes": "Needle amplitude where the cursor magnet touches the surface.",
+        "spikeFrequency": "Needles around the cursor — the tooth count of the spike crown.",
+        "magnetRadius": "Cursor influence radius as a fraction of the pane.",
+        "sheen": "Specular highlight strength on the fluid surface.",
+        "fluidColor": "Body of the fluid — near-black violet, read by its highlights.",
+        "accentColor": "Rim light and specular tint on the iso edge."
+      }
+    },
+    "lissajous": {
+      "description": "A phosphor oscilloscope tracing Lissajous figures. The beam dwells on one frequency ratio, then retunes to the next by sliding both frequencies continuously, and the chirp while the figure comes apart and re-locks is the same thing you see turning a real scope's timebase knob. Persistence is data, not paint. Instead of the classic translucent-fill fade, which never fully clears and cannot survive a paused repaint, the beam keeps a ring buffer of recent samples and redraws the whole trail from scratch each frame, so the phosphor hold re-grades live when you tune it and a still frame reproduces the exact screen.",
+      "props": {
+        "speed": "Beam speed along the curve.",
+        "persistence": "Phosphor hold — how long the trail stays lit behind the beam.",
+        "dwell": "Seconds a figure holds before tuning to the next ratio.",
+        "morphSeconds": "Length of the chirp between one ratio and the next.",
+        "beamWidth": "Trace stroke width.",
+        "glow": "Bloom on the beam head.",
+        "showGraticule": "Faint scope grid behind the trace.",
+        "phosphorColor": "The phosphor — amethyst, not heritage green.",
+        "backgroundColor": "Dead glass behind the trace."
       }
     },
     "morphing-text": {
@@ -570,14 +627,14 @@
       }
     },
     "variable-proximity": {
-      "description": "Text whose letters interpolate font weight by cursor proximity.",
+      "description": "Text whose letters shift font weight as the cursor gets closer.",
       "props": {
         "radius": "Cursor influence radius.",
         "falloff": "How influence falls off with distance."
       }
     },
     "letters-pull": {
-      "description": "A per-letter pull-up reveal — letters rise, sharpen from a blur, and fade in with a stagger.",
+      "description": "A per-letter pull-up reveal. Letters rise, sharpen from a blur, and fade in with a stagger.",
       "props": {
         "duration": "Per-letter animation duration.",
         "delay": "Delay between successive letters.",
@@ -586,7 +643,7 @@
       }
     },
     "scramble-text": {
-      "description": "Ciphered glyphs boiling out of noise and resolving into words — a decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
+      "description": "Ciphered glyphs boiling out of noise and resolving into words. A decode cascade that settles character by character, a hover that re-scrambles on demand, or a continuous low glitch that keeps the type restless, each freshly-resolved letter flashing accent before it cools to ink.",
       "props": {
         "mode": "Decode once on mount, re-scramble on hover, or glitch forever.",
         "charset": "Pool of cipher glyphs shown before a character settles.",
@@ -624,7 +681,7 @@
       }
     },
     "lumen": {
-      "description": "Copy that lights up as you read it — words ahead sit dim and unfocused, and stay lit once you pass them.",
+      "description": "Copy that lights up as you read it. Words ahead sit dim and unfocused, and stay lit once you pass them.",
       "props": {
         "dimOpacity": "Opacity of words that haven't been reached yet.",
         "fadeSpan": "Width of the reading band — words mid-transition at once.",
@@ -635,7 +692,7 @@
       }
     },
     "redact": {
-      "description": "Copy that arrives fully classified under solid bars, then declassifies word by word — each bar clearing its own word and leaving an amethyst edge behind as the only evidence it was ever there.",
+      "description": "Copy that arrives fully classified under solid bars, then declassifies word by word. Each bar clears its own word and leaves an amethyst edge behind as the only evidence it was ever there.",
       "props": {
         "mode": "How a bar leaves. Wipe retracts it into its own edge, slide throws it clear of the word, lift peels it off the page — wipe reads as redaction being undone, slide reads as tape being pulled.",
         "direction": "The order words declassify in. Random is the only one that reads as a machine working through a document rather than a person reading it.",
@@ -650,7 +707,7 @@
       }
     },
     "split-flap": {
-      "description": "A Solari departure board. Every column walks the charset one flap at a time until it reaches its letter, so the word is never revealed — it is arrived at, with a real hinged half falling away as the next one seats behind it.",
+      "description": "A Solari departure board. Every column walks the charset one flap at a time until it reaches its letter, so the word is never revealed. It is arrived at, with a real hinged half falling away as the next one seats behind it.",
       "props": {
         "charset": "Which glyphs a column walks through on its way to its letter. This is what sets the length of the journey — a digits-only board lands almost immediately, a full alphanumeric one takes its time.",
         "flapDuration": "Time for one flap. Under about 50ms the column reads as a blur rather than as discrete cards, which throws away the whole point of the mechanism.",
@@ -681,7 +738,7 @@
       }
     },
     "reflow": {
-      "description": "Text whose words keep their identity when the line breaks move — narrow the measure and the sentence travels instead of re-wrapping.",
+      "description": "Text whose words keep their identity when the line breaks move. Narrow the measure and the sentence travels instead of re-wrapping.",
       "props": {
         "columnWidth": "Width of the text column as a percentage of its container — the measure. Dragging this is the reflow, with not one word changing.",
         "stiffness": "Spring tension on the travel.",
@@ -698,7 +755,7 @@
       }
     },
     "metallic-text": {
-      "description": "Chrome poured into a headline — a metal ramp clipped to real glyphs, a specular travelling across them, and a tinted wake following a beat behind.",
+      "description": "Chrome poured into a headline. A metal ramp clipped to real glyphs, a specular travelling across them, and a tinted wake following a beat behind.",
       "props": {
         "sweepSpeed": "Time for the highlight to cross the line once.",
         "sweepWidth": "Width of the specular band as a share of the text box. Narrow reads as polished chrome, wide as brushed steel — the band is the light source, so its size is the softness of the reflection.",
@@ -714,7 +771,7 @@
       }
     },
     "molten": {
-      "description": "Type that melts. Letters sag under their own weight, string out, and fuse into one surface where they touch — because the glyphs are a coverage field cut by a threshold rather than shapes being moved, so two stems raise the coverage between them past the cut and one outline closes over both. The word underneath is a real text node the whole time: selectable, searchable, and read correctly aloud while it runs.",
+      "description": "Type that melts. Letters sag under their own weight, string out, and fuse into one surface where they touch, because the glyphs are a coverage field cut by a threshold rather than shapes being moved: two stems raise the coverage between them past the cut and one outline closes over both. The word underneath is a real text node the whole time, so it stays selectable, searchable, and read correctly aloud while it runs.",
       "props": {
         "mode": "What drives the melt. Loop runs unattended; hover melts while the pointer is over the word and reforms when it leaves; hold melts only while the pointer is down, which turns the effect into a control rather than an ambient.",
         "melt": "How far the glyphs sag at the bottom of the cycle. Past about 0.8 the letterforms stop being readable at the extreme, which is either the point or a bug depending on how long the cycle holds there.",
@@ -730,7 +787,7 @@
       }
     },
     "neon": {
-      "description": "A neon sign, with everything that is wrong with a neon sign. Tubes strike one at a time rather than together, each settling at its own moment inside the ignition; the steady state carries a mains hum; and every so often one tube gives up for a third of a second and comes back. The glow is baked once per letter into a sprite, so a frame is a handful of draws no matter how wide the word — and the word itself never stops being a real, selectable text node underneath.",
+      "description": "A neon sign, with everything that is wrong with a neon sign. Tubes strike one at a time rather than together, each settling at its own moment inside the ignition. The steady state carries a mains hum, and every so often one tube gives up for a third of a second and comes back. The glow is baked once per letter into a sprite, so a frame is a handful of draws no matter how wide the word, and the word itself never stops being a real, selectable text node underneath.",
       "props": {
         "mode": "What drives the ignition. Loop runs the sign as a shopfront does — lit, cut, struck again. Hover strikes it under the pointer and kills it a quarter of a second after the pointer leaves, because a sign does not fade out. Steady skips the start-up entirely and leaves only the hum and the failing tube.",
         "tubeColor": "The gas.",
@@ -744,7 +801,7 @@
       }
     },
     "rime": {
-      "description": "Hoarfrost taking a word — Molten's opposite number, the same idea of type as a coverage field run cold. Crystal tips seeded on the glyph edges creep across the letters, fork at a fixed lattice angle, and die where they run out of glyph or hit ice already there, so the cost tracks the growing edge rather than the area. The text underneath is never redrawn: it stays a real span at its real colour the whole time, which makes the thaw nothing more than fading the ice off type that was always there.",
+      "description": "Hoarfrost taking a word. This is Molten's opposite number, the same idea of type as a coverage field run cold. Crystal tips seeded on the glyph edges creep across the letters, fork at a fixed lattice angle, and die where they run out of glyph or hit ice already there, so the cost tracks the growing edge rather than the area. The text underneath is never redrawn. It stays a real span at its real colour the whole time, which makes the thaw nothing more than fading the ice off type that was always there.",
       "props": {
         "mode": "What drives the freeze. Loop grows the crystal, holds it, thaws it and starts a new one. Hover rests frozen and clears under the pointer, regrowing once it has fully melted. Hold is the mirror of a melt: ice advances only while the pointer is down and retreats the moment it lifts.",
         "growth": "How fast the crystal front advances. This is a budget of steps per second shared across every live tip, so a heavily branched frost spreads each tip more slowly — which is exactly how a real front behaves as it runs out of room.",
@@ -756,6 +813,32 @@
         "sparkle": "Glints on the facets, sampled from points the front actually passed through rather than scattered over the box. They fade with the thaw, so the last thing to go is the light.",
         "frostColor": "The ice. The crystal is stored white and tinted on the way out, so this repaints the whole thing without touching a single stored segment.",
         "baseColor": "The type underneath, which never moves and is never redrawn."
+      }
+    },
+    "anaglyph": {
+      "description": "Stereoscopic channel-split type. The real headline stays put, selectable, one announcement to a screen reader, while two aria-hidden copies in opposing ink colors slide against each other under the pointer, and the blend mode resolves their overlap back toward white, so the depth lives entirely in the fringes, exactly as it does on a printed anaglyph. The channels chase the cursor through an exponential lerp written straight to transform, and once the pointer goes quiet a slow bounded-phase sway takes the target over so the split keeps breathing on an idle pane.",
+      "props": {
+        "maxShift": "Peak channel separation at the pane edge.",
+        "response": "How much pointer travel converts into separation.",
+        "lag": "Chase time constant — the channels arrive after the cursor.",
+        "sway": "Idle drift amplitude once the pointer has gone quiet.",
+        "layers": "Two channels split on one axis; three adds a perpendicular half-shift ghost.",
+        "blend": "How the channels composite where they overlap.",
+        "channelA": "First offset layer.",
+        "channelB": "Opposing offset layer."
+      }
+    },
+    "inscribe": {
+      "description": "Text engraved stroke by stroke. Every character is a real SVG tspan with native kerning and selectable words, wearing the uniform-dash trick, because glyph outlines expose no pathLength and measuring their true perimeter has no API: the chisel simply travels each letter at its own apparent speed. When a stroke closes, its fill carves in after a beat, and the engraved finish darkens the fill and adds an inset relief so the word reads as cut into the panel rather than printed on it. The whole timeline runs on the animation-loop clock, so the bench pause freezes the chisel mid-stroke, and with no JavaScript at all the text simply sits there finished.",
+      "props": {
+        "duration": "Time for one character's stroke to draw.",
+        "stagger": "Delay between one chisel start and the next.",
+        "fillDelay": "Beat between a finished stroke and its fill arriving.",
+        "strokeWidth": "Chisel line weight in viewBox units.",
+        "finish": "Carved-in fill, bright accent inlay, or the bare trace.",
+        "replay": "Wipe and re-engrave on a timer.",
+        "replayDelay": "Dwell on the finished engraving before the wipe.",
+        "strokeColor": "The chisel trace; the engraved fill derives from it at lower luminance, the inlay at full."
       }
     },
     "pixel-transition": {
@@ -803,7 +886,7 @@
       }
     },
     "blueprint-card": {
-      "description": "A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
+      "description": "A technical-drawing card. Dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
       "props": {
         "accentColor": "Accent color for the frame, nodes, and glow.",
         "dashed": "Dashed outer border; solid when off.",
@@ -839,7 +922,7 @@
       }
     },
     "preloader": {
-      "description": "A percentage-counting load overlay — spinning ring, eased counter, and a fade-out that reveals the page beneath.",
+      "description": "A percentage-counting load overlay. A spinning ring, an eased counter, and a fade-out that reveals the page beneath.",
       "props": {
         "duration": "Simulated load time.",
         "ringColor": "Color of the spinner, counter, and label.",
@@ -862,7 +945,7 @@
       }
     },
     "magnetic-button": {
-      "description": "A button that leans into your cursor — caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
+      "description": "A button that leans into your cursor. Caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
       "props": {
         "pullStrength": "Fraction of the cursor offset the button follows.",
         "radius": "Field radius where the magnetic pull begins.",
@@ -875,7 +958,7 @@
       }
     },
     "shadow-cursor": {
-      "description": "A custom cursor with a shadow at its heel — a precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage; the page cursor is never touched.",
+      "description": "A custom cursor with a shadow at its heel. A precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage, so the page cursor is never touched.",
       "props": {
         "dotSize": "Size of the leading precise dot.",
         "trailSize": "Size of the lagging trailing ring.",
@@ -937,7 +1020,7 @@
       }
     },
     "rift": {
-      "description": "A draggable tear between two overlaid scenes — push past an edge and it resists, then snaps back.",
+      "description": "A draggable tear between two overlaid scenes. Push past an edge and it resists, then snaps back.",
       "props": {
         "position": "Resting position of the tear.",
         "handleWidth": "Thickness of the divider line.",
@@ -960,7 +1043,7 @@
       }
     },
     "hold": {
-      "description": "A confirm that has to be earned — the ring fills while you hold, snaps shut when it commits, and empties on a different curve entirely if you let go early.",
+      "description": "A confirm that has to be earned. The ring fills while you hold, snaps shut when it commits, and empties on a different curve entirely if you let go early.",
       "props": {
         "duration": "How long a full press has to be held before it commits. Under about 600ms people let go by reflex; past 2s they assume it is broken.",
         "indicator": "Where the progress lives — a ring traced around the glyph, a bar under the control, or the control's own face flooding left to right.",
@@ -975,7 +1058,7 @@
       }
     },
     "aperture": {
-      "description": "A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism — wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
+      "description": "A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism: wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
       "props": {
         "bladeCount": "How many leaves in the mechanism. Low counts give the hard hexagonal bokeh of a cheap lens; past nine the opening is indistinguishable from a circle, which is exactly what expensive glass is sold on.",
         "openness": "Where the blades rest, 0 shut to 1 wide. At 0 they cross past the centre rather than merely meeting it — an iris that only just touches leaks light.",
@@ -1021,7 +1104,7 @@
       }
     },
     "inline-edit": {
-      "description": "Text that becomes its own input with nothing moving — one padded box, two contents, sized in CSS.",
+      "description": "Text that becomes its own input with nothing moving. One padded box, two contents, sized in CSS.",
       "props": {
         "commitOn": "Blur commits when focus leaves. Explicit grows a confirm and a cancel outside the box and treats losing focus as a cancel. Both are defensible, which is why it is a prop rather than a decision.",
         "stiffness": "Spring tension on the border, wash and ring arriving. This is the only thing that animates — everything else is already exactly where it will be.",
@@ -1051,7 +1134,7 @@
       }
     },
     "reorder": {
-      "description": "A sortable list that answers to a finger and to a keyboard equally — grab a row, and the rest step aside to make the space.",
+      "description": "A sortable list that answers to a finger and to a keyboard equally. Grab a row, and the rest step aside to make the space.",
       "props": {
         "axis": "Which way the list runs, and which arrow keys move a row.",
         "stiffness": "Spring tension as the displaced rows close up. This is the only motion in the component that is not under your finger, so it is the one that decides whether the list feels attached to the drag.",
@@ -1067,7 +1150,7 @@
       }
     },
     "holofoil": {
-      "description": "Holographic trading-card foil over real content. The diffraction band travels against the tilt while the specular follows it, and the flake only lights where the rainbow currently falls — which is what stops the whole thing reading as one gradient sliding around.",
+      "description": "Holographic trading-card foil over real content. The diffraction band travels against the tilt while the specular follows it, and the flake only lights where the rainbow currently falls, which is what stops the whole thing reading as one gradient sliding around.",
       "props": {
         "maxTilt": "Maximum lean at the card's edge. The tilt is only the carrier here — set it to zero and the foil still moves, because the bands are driven by pointer position rather than by the rotation.",
         "perspective": "Depth of the projection. Lower exaggerates the lean; the value that reads as expensive is nearly always further away than instinct suggests.",
@@ -1082,7 +1165,7 @@
       }
     },
     "lens": {
-      "description": "A glass lens you drag across live content, bending it through an SVG displacement field with a real bevel and three-channel dispersion. It refracts a live duplicate of its own children rather than the page backdrop — which is the only version of this effect that works in Chrome, Safari and Firefox alike.",
+      "description": "A glass lens you drag across live content, bending it through an SVG displacement field with a real bevel and three-channel dispersion. It refracts a live duplicate of its own children rather than the page backdrop, which is the only version of this effect that works in Chrome, Safari and Firefox alike.",
       "props": {
         "size": "Diameter of the disc, measured against the shorter side of whatever it is dropped into rather than in pixels — so the glass keeps its proportion in a wide hero and in a narrow column alike, and can never outgrow the box on either axis. The displacement map is rasterised once at a fixed resolution and stretched to fit, so dragging this is cheap; regenerating a bitmap per frame would cost far more than the pixels are worth.",
         "refraction": "How far the map pushes the content, and the one number this component is about. It runs through the filter property on a live duplicate rather than through backdrop-filter, because backdrop-filter with an SVG reference is Chromium-only — and CSS.supports reports true in WebKit and Gecko too, so the capability cannot even be detected honestly.",
@@ -1097,7 +1180,7 @@
       }
     },
     "passcode": {
-      "description": "A one-time-code field whose cells answer every keystroke: each character lands compressed and springs back, a paste distributes across the row rather than filling it on one frame, a wrong code shakes and clears itself, and a right one folds the whole row into a tick. Underneath there is exactly one real input holding the whole code — which is what keeps SMS autofill, password managers, select-all and a screen reader working, none of which survive six inputs with maxLength one.",
+      "description": "A one-time-code field whose cells answer every keystroke. Each character lands compressed and springs back, a paste distributes across the row rather than filling it on one frame, a wrong code shakes and clears itself, and a right one folds the whole row into a tick. Underneath there is exactly one real input holding the whole code, which is what keeps SMS autofill, password managers, select-all and a screen reader working. None of those survive six inputs with maxLength one.",
       "props": {
         "length": "Cells in the code. Six is the industry default because it is about the longest string most people can hold in working memory between reading it and typing it — the control exists so you can feel where that stops being true.",
         "mode": "What the field accepts. Numeric also asks for the number pad, which matters far more on a phone than the validation does — an alphanumeric code field that opens a full keyboard costs the user two taps every single time.",
@@ -1114,7 +1197,7 @@
       }
     },
     "dial": {
-      "description": "A machined rotary knob: angular drag with detents you can feel on the way past, inertia on a flick, and a spring that settles into the nearest stop. The angle lives in a motion value rather than in React state — a drag writes it sixty times a second and a spring more often than that — so the only thing React holds is the detent index, and only when that integer actually changes. Arrow keys step through the same spring the hand does, so the keyboard is not a second, worse path to the same control.",
+      "description": "A machined rotary knob: angular drag with detents you can feel on the way past, inertia on a flick, and a spring that settles into the nearest stop. The angle lives in a motion value rather than in React state, because a drag writes it sixty times a second and a spring more often than that, so the only thing React holds is the detent index, and only when that integer actually changes. Arrow keys step through the same spring the hand does, so the keyboard is not a second, worse path to the same control.",
       "props": {
         "detents": "Stops across the sweep. This is the resolution of the control and it changes how the drag feels as much as how it reads: few stops far apart give a decisive click between settings, many close together give something closer to a continuous ramp with a texture.",
         "sweep": "Angular range, centred on twelve o'clock. Two hundred and seventy is the instrument convention because it leaves a visible gap at the bottom — the eye reads the gap as the end of the scale, so both limits are legible without a label. At a full turn there are no ends to see.",
@@ -1128,6 +1211,46 @@
         "size": "Knob diameter. Everything inside is drawn against a fixed grid and scaled, so the knurling, the bevel and the pointer keep their proportions at any size."
       }
     },
+    "refract": {
+      "description": "A frosted-glass slab you drag across a live scene, refracting it through a real shader optic. A rounded-rect height field bends three separately-sampled color channels along its gradient, with a Fresnel-bright rim, a travelling specular streak, and a frost that is a genuine multi-tap blur of what sits beneath the pane. Where Lens bends its DOM children through an SVG displacement map and magnifies, Refract is a flat pane over a scene texture with true angle-of-incidence refraction, dispersion and glare, and the scene it bends is drawn in the same shader, because no browser lets WebGL read the rendered page. Throw it and it glides on momentum, rubber-banding off the container walls.",
+      "props": {
+        "ior": "Refraction strength at the bevel. The flat middle passes almost straight through, exactly like a real pane.",
+        "dispersion": "R/G/B sample spread — the chromatic fringe that gathers on the bevel.",
+        "frost": "Blur radius under the glass.",
+        "edgeWidth": "Fraction of the slab that is bevel — all of the bending and most of the glare lives there.",
+        "glare": "Fresnel rim and travelling specular strength.",
+        "slabWidth": "Slab width as a fraction of the container.",
+        "scene": "The procedural backdrop being refracted. High-frequency scenes show the dispersion hardest.",
+        "tint": "Glass body tint."
+      }
+    },
+    "lever": {
+      "description": "An industrial breaker lever with a real over-centre mechanism. Displayed travel lags the raw pointer travel by a bump curve peaked at the threshold, so approaching it the handle drags heavier, and crossing it the lag collapses and the handle races ahead of the finger. That is why a half-hearted push falls back the way a real breaker does. Release projects the flick's velocity past the threshold before choosing a side, so momentum can finish a throw the finger only started, and the keyboard commits through exactly the same spring the hand uses. The throw is a motion value. React holds only the committed side.",
+      "props": {
+        "orientation": "Throw axis. Vertical reads as a breaker; horizontal as a transfer switch.",
+        "stiffness": "Spring tension on the snap.",
+        "damping": "Spring friction — low enough by default to overshoot and settle.",
+        "threshold": "Breakover point of the throw.",
+        "resistance": "The hump — how hard the mechanism fights before it commits.",
+        "led": "State lamp above the track.",
+        "labels": "ON / OFF stencils on the housing.",
+        "accent": "The lamp, the lit end of the track, and the handle stripe.",
+        "size": "Housing height (width when horizontal); internals scale on a fixed grid."
+      }
+    },
+    "tear": {
+      "description": "A ticket with a perforated stub you tear off for real. The ticket is drawn twice and cut from one seeded jag polygon: an attached layer holds everything still connected, the body plus the stub below the tear front, and a flap layer holds only the freed part, rotated about the frontmost attached point, so the torn edges mate tooth for tooth and the swing can never overlap the body. The seam fights back through a resistance curve, a failed tear springs shut, and a completed one lets the stub fall under gravity carrying the release velocity. The jag array comes from a seeded PRNG so the edge never boils between renders.",
+      "props": {
+        "perforationAt": "Where the seam sits across the ticket.",
+        "jag": "Roughness of the torn edge — 0 is a die-cut, 1 is a bad day.",
+        "teeth": "Perforation tooth count; also the resolution of the torn edge.",
+        "resistance": "How hard the seam fights before it lets go.",
+        "gravity": "How fast the freed stub falls away.",
+        "autoReset": "Heal the ticket after the stub is gone.",
+        "resetDelay": "Dwell before the ticket heals.",
+        "inkColor": "The ticket's printed ink — title, seat block, barcode."
+      }
+    },
     "command-palette": {
       "description": "A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
       "props": {
@@ -1137,7 +1260,7 @@
       }
     },
     "physics-engine": {
-      "description": "A from-scratch 2D rigid-body physics lab — fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
+      "description": "A from-scratch 2D rigid-body physics lab. Fixed-timestep impulse solver, drag-to-throw bodies, force and velocity overlays, and a live energy readout on a blueprint grid.",
       "props": {
         "scene": "Preset world. Switching rebuilds the scene deterministically from a fixed seed.",
         "gravity": "Uniform downward gravity. 0 is zero-g — throw bodies and watch them coast.",
@@ -1153,7 +1276,7 @@
       }
     },
     "black-hole": {
-      "description": "A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader — null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
+      "description": "A real-time Schwarzschild black hole raytraced per-pixel in a WebGL2 shader. Null geodesics bend a lensed accretion disk over the event horizon, with Doppler beaming, gravitational redshift, a photon ring, and a lensed starfield, all under a cinematic orbit.",
       "props": {
         "steps": "Geodesic integration steps per ray. Higher sharpens the lensing and photon ring; lower runs faster. The single heaviest cost in the shader.",
         "diskInner": "Inner disk radius in Schwarzschild radii. 3 Rs is the ISCO — the innermost stable circular orbit around a non-spinning hole.",
@@ -1176,7 +1299,7 @@
       }
     },
     "vortex-bloom": {
-      "description": "A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core — lotus, gem, or flame — raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
+      "description": "A molten-gold-and-obsidian vortex funnel spiraling into a luminous SDF core, either lotus, gem, or flame, raymarched per-pixel in a WebGL2 shader, with a GPU dust field spiraling down the flow toward the throat, all under a draggable orbit and a real two-pass bloom.",
       "props": {
         "primary": "Molten-gold high tone — the color of the swirling streaks and the throat glints.",
         "secondary": "Obsidian deep tone — the funnel's shadowed lanes and the void behind it.",
@@ -1199,7 +1322,7 @@
       }
     },
     "smoke-field": {
-      "description": "A real-time GPU fluid you can stir — semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
+      "description": "A real-time GPU fluid you can stir. Semi-Lagrangian advection, a Jacobi pressure solve, and vorticity confinement run every frame across ping-ponged float buffers, injecting a dark amethyst plume that curls, billows, and bleeds through the frame wherever you drag.",
       "props": {
         "dyeColor": "Color of the dye injected into the fluid.",
         "backgroundColor": "Background the plume rises against.",
@@ -1217,7 +1340,7 @@
       }
     },
     "ripple-field": {
-      "description": "A pool of dark, moonlit water you disturb by hand — a leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
+      "description": "A pool of dark, moonlit water you disturb by hand. A leapfrog solve of the 2D wave equation runs on a ping-ponged float field, ringing every pointer move outward, reflecting the swell off the walls, and lighting the surface with gradient-normal refraction, curvature-focused caustics, and a Fresnel glint riding each wavefront.",
       "props": {
         "waterColor": "Amethyst tint of the water — specular glints, caustics, and crest light.",
         "deepColor": "Deep pool base color the surface sits over.",
@@ -1260,7 +1383,7 @@
       }
     },
     "approval-flow": {
-      "description": "A step-by-step approval checklist for agent permissions — radio and checkbox groups, an \"Other…\" escape hatch that grows a field in place, and per-step validation that blocks the commit. Answering a step sends the chosen option flying into a running record of what you have already decided, so the screen accumulates a decision trail instead of replacing itself.",
+      "description": "A step-by-step approval checklist for agent permissions. Radio and checkbox groups, an \"Other…\" escape hatch that grows a field in place, and per-step validation that blocks the commit. Answering a step sends the chosen option flying into a running record of what you have already decided, so the screen accumulates a decision trail instead of replacing itself.",
       "props": {
         "layout": "Where the record of decided steps sits. A rail parks it beside the live step on wide screens; inline stacks it above.",
         "morphDuration": "Step change, option reveal and the escape hatch growing open. The flight into the record is a spring and ignores this — stiffness and damping own that one.",
@@ -1277,7 +1400,7 @@
       }
     },
     "diff-review": {
-      "description": "A review surface for a patch an agent has proposed — accept or reject each hunk, fold long runs of unchanged lines away, and flip between unified and split. Switching views does not redraw the diff: every line is a shared element that flies from the stream into its column and back, so you never lose the line you were reading.",
+      "description": "A review surface for a patch an agent has proposed. Accept or reject each hunk, fold long runs of unchanged lines away, and flip between unified and split. Switching views does not redraw the diff: every line is a shared element that flies from the stream into its column and back, so you never lose the line you were reading.",
       "props": {
         "defaultView": "Starting layout. One interleaved stream, or the old file beside the new one. The toolbar toggle overrides it live.",
         "morphDuration": "Hunk fold, verdict change and the first reveal of a line. The flight between views is a spring and ignores this — stiffness and damping own that one.",
@@ -1294,7 +1417,7 @@
       }
     },
     "ledger": {
-      "description": "A live activity log for a working agent. Consecutive events from the same source fold into one block instead of stacking as identical rows, the window holds a fixed number and lets the rest fall off the top, and the scroll stays pinned to the newest line only until you scroll away from it — after that it keeps running and tells you how far behind you are.",
+      "description": "A live activity log for a working agent. Consecutive events from the same source fold into one block instead of stacking as identical rows, the window holds a fixed number and lets the rest fall off the top, and the scroll stays pinned to the newest line only until you scroll away from it. After that it keeps running and tells you how far behind you are.",
       "props": {
         "speed": "Multiplier on the whole cadence — typing and the gaps between events together.",
         "charsPerSecond": "Typing rate before jitter. The full text of an event is in the accessibility tree from the moment it arrives, so only the eye waits for this.",
@@ -1312,7 +1435,7 @@
       }
     },
     "rotunda": {
-      "description": "Real HTML panels on a drag-spun 3D cylinder. A hand-rolled perspective projection written onto DOM elements rather than a canvas — so the text stays selectable, the links stay clickable, and a screen reader still reads every panel while the ring turns.",
+      "description": "Real HTML panels on a drag-spun 3D cylinder. A hand-rolled perspective projection written onto DOM elements rather than a canvas, so the text stays selectable, the links stay clickable, and a screen reader still reads every panel while the ring turns.",
       "props": {
         "radius": "Distance from the axis to each panel face. Together with the number of panels this decides whether the ring closes: too small for the count and the faces intersect, which is the one way this arrangement can look broken rather than tight.",
         "perspective": "Depth of the projection, and the control that decides whether this reads as expensive or as a cheap paper fan. Near enough and the front panel distorts violently; far enough and the ring flattens into a row of cards.",
@@ -1327,7 +1450,7 @@
       }
     },
     "ascii-engine": {
-      "description": "A lit, raymarched 3D solid rendered at exactly one pixel per character cell, then quantised into a glyph ramp drawn once with fillText. Drag to orbit it through a full three-sixty. Real geometry underneath, terminal on top — and no scene graph, no mesh, and no second library to get there.",
+      "description": "A lit, raymarched 3D solid rendered at exactly one pixel per character cell, then quantised into a glyph ramp drawn once with fillText. Drag to orbit it through a full three-sixty. Real geometry underneath, terminal on top, with no scene graph, no mesh, and no second library to get there.",
       "props": {
         "solid": "Which distance field is raymarched into the first pass. A field rather than a mesh: the silhouette stays exact at any cell size because it is evaluated instead of rasterised, which is why this needs no scene graph and no geometry upload.",
         "charset": "The glyph ramp, darkest to lightest. The atlas is drawn once with fillText into an offscreen canvas and uploaded as a single texture, so the shader just indexes it and a longer ramp costs nothing per frame.",
@@ -1343,7 +1466,7 @@
       }
     },
     "swarm": {
-      "description": "Up to a quarter of a million particles integrated entirely on the GPU, morphing between words and solids, with a drag-orbit camera. Position and velocity live in floating-point textures and never come back to the CPU; text targets are sampled once out of an offscreen canvas, so the shape can be any string with no font atlas.",
+      "description": "Up to a quarter of a million particles integrated entirely on the GPU, morphing between words and solids, with a drag-orbit camera. Position and velocity live in floating-point textures and never come back to the CPU. Text targets are sampled once out of an offscreen canvas, so the shape can be any string with no font atlas.",
       "props": {
         "density": "Particle count, as discrete steps rather than a slider. Each value reallocates four floating-point targets and rebuilds the geometry, and a slider would do that on every pixel of a drag. Sixty-five thousand is where letterforms close up. The simulation is nearly free above that — the cost is all fill rate — so the top step is for a machine you already know the answer about.",
         "shape": "What the cloud is heading for. Auto walks every form in turn — text, sphere, torus, grid — before repeating, and advances the word list one entry each time it comes back around to text; the rest hold. Disperse is the exception auto never lands on: its targets are uniformly random, so it is a state to send the cloud into rather than a form to morph between. Targets are sampled out of an offscreen 2D canvas, so the text form is whatever string you pass — the GPU never sees a glyph, only a texture of positions.",
@@ -1362,7 +1485,7 @@
       }
     },
     "mirage": {
-      "description": "Live, fully interactive HTML seen through moving air. An animated turbulence field displaces the real DOM subtree per pixel — no snapshot, no canvas replica — so the text stays selectable, the button still takes focus and the link is still a link while the whole panel shimmers.",
+      "description": "Live, fully interactive HTML seen through moving air. An animated turbulence field displaces the real DOM subtree per pixel, with no snapshot and no canvas replica, so the text stays selectable, the button still takes focus and the link is still a link while the whole panel shimmers.",
       "props": {
         "mode": "How the air moves. The four differ by the anisotropy of the noise rather than by strength: equal frequencies on both axes give soup, and a strongly biased axis is what makes a tear read as a tear instead of as more haze.",
         "intensity": "How far the content is pushed. This is genuine per-pixel displacement rather than a transform — a transform can only move the whole box, which is why skew-based heat haze never convinces. Past about one the text stops being readable, which is a legitimate look and a terrible default.",
@@ -1375,7 +1498,7 @@
       }
     },
     "submerge": {
-      "description": "Live content held under water. A slow current bends it continuously, a press drops a stone and a drag leaves a wake that trails behind the cursor — and the text underneath stays selectable, the button still answers and the link is still a link, because the water bends the real tree rather than a picture of it.",
+      "description": "Live content held under water. A slow current bends it continuously, a press drops a stone and a drag leaves a wake that trails behind the cursor. The text underneath stays selectable, the button still answers and the link is still a link, because the water bends the real tree rather than a picture of it.",
       "props": {
         "depth": "How deep the content sits. It drives the colour wash and adds to the bend, because the further under a surface something lies the further the same slope carries the light across it. Past about 0.8 the water starts winning and the content stops being the subject.",
         "flow": "Speed of the ambient current. The field is rasterised once as a seamless tile and scrolled rather than regenerated — regenerating costs a PNG encode per frame, which is why so many browser water effects settle for a static distortion instead.",
@@ -1389,7 +1512,7 @@
       }
     },
     "weave": {
-      "description": "A sheet of cloth on a position-based solver — particles and distance constraints relaxed to convergence every fixed step, with no forces, no rotations and no contacts. Drag it, load it, and pull until the constraints fail and the tear runs. Every quad is shaded by its own extension against the tear threshold, so the load path through the sheet is visible long before anything breaks.",
+      "description": "A sheet of cloth on a position-based solver. Particles and distance constraints relaxed to convergence every fixed step, with no forces, no rotations and no contacts. Drag it, load it, and pull until the constraints fail and the tear runs. Every quad is shaded by its own extension against the tear threshold, so the load path through the sheet is visible long before anything breaks.",
       "props": {
         "cols": "Particles across the sheet. Constraint count grows as roughly twice cols times rows and every one is visited on every relaxation pass, so this and rows together are the honest cost dial.",
         "rows": "Particles down the sheet. Taller than it is wide is what makes the drape read as fabric; a square grid hangs like a banner and never folds.",
@@ -1422,7 +1545,7 @@
       }
     },
     "rewind": {
-      "description": "An undo history you can scrub, and that refuses to throw the future away. Drag the head and the interface reverts live under your finger rather than on release; act from a past point and the abandoned future stays drawn on the rail as a branch you can walk back onto, instead of being silently destroyed the way every real undo stack destroys it. Controlled in the same shape as Ledger — it owns the rail, the gesture and the branch graph, and your reducer owns the states.",
+      "description": "An undo history you can scrub, and that refuses to throw the future away. Drag the head and the interface reverts live under your finger rather than on release. Act from a past point and the abandoned future stays drawn on the rail as a branch you can walk back onto, instead of being silently destroyed the way every real undo stack destroys it. Controlled in the same shape as Ledger: it owns the rail, the gesture and the branch graph, and your reducer owns the states.",
       "props": {
         "orientation": "Which axis the rail runs on. Horizontal reads as a scrubber; vertical reads as a commit log and stacks better beside a form. The gesture is written against one axis abstraction rather than two handlers, so the modes cannot drift apart.",
         "scrubSnap": "Lock the head to the nearest recorded state while dragging. Off, it moves continuously and the surface shows the state at or before it, which makes the density of the history visible — you can feel where you were working fast.",
@@ -1435,6 +1558,175 @@
         "railHeight": "Thickness of the rail, and of every branch beside it. Thin reads as a scrubber under a document; thick reads as the primary control on the screen.",
         "accentColor": "The trunk, the head, and the travelled portion.",
         "branchColor": "Abandoned futures. Deliberately a warm off-accent rather than a dimmed trunk — a discarded future is a different kind of thing from a quiet one, not a fainter version of the same thing."
+      }
+    },
+    "stream": {
+      "description": "An AI response surface that streams the way live chat UIs stream. A shimmer while the model thinks, tokens arriving on an irregular clock and blurring into place, a generation caret riding the last word, and stop and regenerate controls that actually interrupt. The cadence rides the animation clock rather than timer chains, so pausing the bench freezes generation mid-word. Only the trailing window of tokens are live animated elements, and everything older folds into one static text node, so a long answer never accumulates a thousand springs. An invisible ghost of the full answer holds the final height, so neither the thinking-to-streaming swap nor the stream itself ever moves layout.",
+      "props": {
+        "tokensPerSecond": "Average emission rate.",
+        "jitter": "Cadence irregularity — bursts and occasional stalls that make it read as a live model rather than a metronome.",
+        "chunking": "Emission granularity. Words read like a model; characters read like a terminal.",
+        "blurAmount": "Blur each token arrives from.",
+        "thinkingMs": "Shimmer skeleton phase before the first token.",
+        "caret": "Generation caret riding the last token.",
+        "caretColor": "Caret tint.",
+        "autoReplay": "Regenerate automatically after settling, so the demo loops hands-free."
+      }
+    },
+    "infinite-canvas": {
+      "description": "A pannable, zoomable infinite board holding real DOM cards. One world element under a single translate-and-scale, so focus survives and nothing ever remounts when the camera moves. Drag the background to pan with inertia. The wheel zooms to the cursor by holding the world point under it fixed, cards drag independently and glide onto the grid on release, and the corner minimap mirrors the extent and jumps the camera where you click. Camera state lives in one ref written by handlers and the loop, and every consumer, from the world transform to the backdrop plane to the minimap, derives from it in a single write pass per frame, so React never renders a camera frame. Arrow keys pan and plus and minus zoom when the board holds focus.",
+      "props": {
+        "friction": "Glide decay after a thrown pan — low stops dead, high coasts.",
+        "zoomSpeed": "Wheel-to-zoom gearing.",
+        "minZoom": "How far out the camera may pull.",
+        "maxZoom": "How far in the camera may push.",
+        "gridSnap": "Dropped cards glide onto the nearest grid point.",
+        "gridSize": "World-space grid pitch — the snap target and the backdrop's cell size both.",
+        "minimap": "Corner map of the extent; click it to jump the camera.",
+        "backdrop": "The plane texture that moves with the camera — it is what makes the pan legible."
+      }
+    },
+    "patchbay": {
+      "description": "A modular-synth patch bay. The jacks are real DOM buttons, focusable, labelled and keyboard-patchable, and only the cables live on a canvas underneath the pointer's reach, because a cable is pure paint: a quadratic Bézier whose control point hangs below the midpoint by a sprung sag. Drag from any jack and a live cable follows the hand. Release near a jack on the opposite bank and it seats with an overshoot-and-settle wobble, elsewhere it retracts. Seated cables carry signal pulses on a bounded phase, grabbing an occupied input picks its cable up to repatch, and resizing the bay shakes every cable, which is follow-through, cheaply.",
+      "props": {
+        "droop": "Cable slack at rest — how far the middle hangs.",
+        "wobble": "Spring in the sag when a cable seats or the bay resizes.",
+        "pulseSpeed": "Signal travel rate along a connected cable.",
+        "pulseCount": "Pulses in flight per cable; 0 runs the bay dark.",
+        "cableWidth": "Cable gauge.",
+        "showLabels": "Module names under the jacks.",
+        "cableColor": "The patch cables.",
+        "pulseColor": "The signal riding them."
+      }
+    },
+    "keycast": {
+      "description": "A streamer-style keyboard HUD: every chord you press appears as a row of keycaps and ages away, with a hammered key folding into one cap wearing a ×n badge. The listener is display-only by contract. It never prevents or stops an event, bails inside editable targets and mid-IME composition, and ignores lone modifiers, so the page underneath keeps every shortcut it had and the HUD merely reports what the hands did. Entry timestamps ride the loop clock rather than the wall clock, so pausing the bench freezes the stack mid-fade instead of evicting it all on resume, and a scripted demo reel keeps the pane alive whenever the real keyboard goes quiet.",
+      "props": {
+        "lifetime": "How long a chord stays on the HUD before it fades out.",
+        "maxVisible": "History depth; older entries are evicted early.",
+        "corner": "Where the stack anchors in its pane.",
+        "combineRepeats": "Fold a hammered key into one cap with a ×n badge.",
+        "platform": "⌘⌥⇧⌃ glyphs or Ctrl / Alt / Shift words.",
+        "demo": "Replay a scripted set of chords whenever the keyboard goes quiet.",
+        "capSize": "Keycap height; legends scale with it.",
+        "accent": "Modifier caps and the ring on the newest chord."
+      }
+    },
+    "monolith": {
+      "description": "A monumental slab floating over a reflective grid floor, rendered as a fogged 3D scene you can orbit.",
+      "props": {
+        "slabColor": "Base stone color of the slab.",
+        "rimColor": "Fresnel edge light on the slab.",
+        "sun": "Show the sun. Off leaves the sky to the stars.",
+        "sunColor": "Color of the sun and the tint it throws on the slab.",
+        "backgroundColor": "Sky and fog color.",
+        "spinSpeed": "Idle yaw rate while nothing is held.",
+        "floatAmp": "Bob lift-off amplitude — 0.00 rests the slab on the grid.",
+        "scale": "Slab size multiplier — grows up from its hover height; 1 is the minimum.",
+        "zoom": "Camera distance multiplier.",
+        "autoSpin": "Resume idle rotation when the drag ends.",
+        "parallax": "The view leans toward the pointer, easing back on leave."
+      }
+    },
+    "shard-orbit": {
+      "description": "A giant crystal monolith turning on its axis in a glitter field, or a halo or helix of instanced shards lit by the pulsing core, drag-orbited beside left-aligned copy, fully GPU-driven.",
+      "props": {
+        "count": "Shard count, as discrete steps — each value rebuilds the instance buffer.",
+        "formation": "How the shards are arranged: one giant stone on its axis, a rigid halo around it, or a rising double helix.",
+        "shardColor": "Lit face color of a shard.",
+        "coreColor": "Core glow at the centre — and the light every shard catches.",
+        "backgroundColor": "Scene backdrop.",
+        "orbitRadius": "Orbit radius, and the monolith's size.",
+        "spread": "Halo only: height of the ripple running through the ring.",
+        "beltSpeed": "Base angular speed of the orbiting shards.",
+        "ringSpeed": "Halo only: how fast the ring orbits, as a multiple of the base speed.",
+        "tumbleSpeed": "Per-shard tumbling rate.",
+        "corePulse": "Core pulse intensity.",
+        "glow": "Core glow brightness — the bloom around the core and its light on the backdrop.",
+        "zoom": "Camera distance multiplier.",
+        "autoSpin": "Idle camera drift while nothing is held."
+      }
+    },
+    "grid-horizon": {
+      "description": "A synthwave horizon in one fragment shader. A glowing grid floor, a banded sun, parallax ridges and a pulse rolling out of the vanishing point.",
+      "props": {
+        "lineColor": "Grid line color.",
+        "sunColor": "Sun disc color.",
+        "hazeColor": "Horizon haze band.",
+        "backgroundColor": "Sky gradient base.",
+        "scrollSpeed": "How fast the floor streams underfoot.",
+        "gridDensity": "Grid spacing multiplier.",
+        "sunSize": "Sun disc angular radius.",
+        "horizonGlow": "Haze and ridge-rim strength.",
+        "enableMouseInteraction": "Let the cursor steer the vanishing point."
+      }
+    },
+    "warp-run": {
+      "description": "A star-streak tunnel rendered as velocity-stretched lines; the pointer steers, dragging banks the ship.",
+      "props": {
+        "density": "Streak count, as discrete steps — each value rebuilds the line buffer.",
+        "streakColor": "Cruising streak color.",
+        "accentColor": "Fast-streak burn color.",
+        "backgroundColor": "Tunnel void.",
+        "speed": "Forward throttle.",
+        "streakLength": "Motion-blur stretch per streak.",
+        "steer": "How hard the pointer bends the tunnel.",
+        "rollOnDrag": "Bank (roll) while orbit-dragging."
+      }
+    },
+    "depth-stage": {
+      "description": "A DOM hero stage where any children become parallax layers in real 3D. Pointer-tracked tilt, spring physics, a following spotlight, depth of field, staggered entrance, zero canvas.",
+      "props": {
+        "accentColor": "Accent wash behind the layers.",
+        "depth": "Full-stack parallax travel at the deepest layer.",
+        "tiltMax": "Stage tilt at the pointer extremes.",
+        "entrance": "Stagger the layers up on mount.",
+        "float": "Slow CSS drift on every layer while idle.",
+        "spotlight": "A pointer-following light across the stage.",
+        "depthOfField": "Blur the far layers the way a lens would."
+      }
+    },
+    "eclipse-flare": {
+      "description": "A total eclipse under liquid-glass copy: a streamered corona, a diamond-ring flare on the breath, god-rays marched through drifting cirrus in one jittered pass.",
+      "props": {
+        "coreColor": "The light burning behind the disc.",
+        "rimColor": "Edge light grazing the eclipse rim.",
+        "backgroundColor": "The dark the rays cut through.",
+        "discSize": "Occluder radius, as a fraction of the frame.",
+        "rayIntensity": "God-ray strength past the silhouette.",
+        "breathe": "How deeply the corona swells and the diamond ring flares.",
+        "speed": "Global clock rate for the breathing.",
+        "quality": "Scatter sample count per pixel — the jitter hides the banding between steps.",
+        "parallax": "The eclipse leans toward the pointer, easing back on leave."
+      }
+    },
+    "tidal": {
+      "description": "A dusk ocean under flat, left-aligned copy: noise-warped swells with wind ripple, sunlit crests, a sun path and breaking foam, raymarched in one bounded pass.",
+      "props": {
+        "waterColor": "Deep water under the swells.",
+        "skyColor": "Dusk overhead, falling to ember at the horizon.",
+        "sunColor": "Sun disc and its path on the water.",
+        "foamColor": "Crest sparkle.",
+        "swellHeight": "Amplitude of the rolling swells.",
+        "choppiness": "How sharply the crests peak — 0 is glass.",
+        "speed": "How fast the sea rolls.",
+        "sunHeight": "Sun elevation above the horizon.",
+        "quality": "March step count — more steps resolve finer crests toward the horizon.",
+        "parallax": "The horizon leans toward the pointer, easing back on leave."
+      }
+    },
+    "liquid-chrome": {
+      "description": "A liquid-chrome form of fused spheres over a black mirror floor: rectangular studio softboxes, one mirror bounce and soft occlusion, sphere-traced in one pass beside left-aligned copy.",
+      "props": {
+        "chromeColor": "Metal tint on the reflections.",
+        "accentColor": "The second softbox — the colored glint in the chrome.",
+        "backgroundColor": "Studio void behind the blob.",
+        "blobCount": "How many spheres melt into the form.",
+        "morphSpeed": "How fast the form breathes and reflows.",
+        "smoothness": "Blend radius where the blobs fuse — low is lumpy, high is one mass.",
+        "gloss": "Softbox sharpness — below 1 the metal goes to pewter, above 1 the studio lights harden.",
+        "quality": "March step ceiling — the mirror bounce and the floor reflection run at half of it.",
+        "parallax": "The camera sways toward the pointer, easing back on leave."
       }
     }
   },
@@ -1584,67 +1876,67 @@
   "collections": {
     "react-micro-interactions": {
       "title": "React Micro-Interaction Components",
-      "intro": "The small responses that make an interface feel answered rather than obedient. Thirty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls — the layer users never consciously notice and immediately miss when it is gone. Every one is driven by a real pointer event rather than a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch device."
+      "intro": "The small responses that make an interface feel like it answered you. Thirty-two components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen."
     },
     "react-background-components": {
       "title": "React Background Components",
-      "intro": "Full-bleed motion for the layer behind everything else. Twenty-four backgrounds that run at the back of a hero, a section, or a whole page — WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one is sized by its container rather than the viewport, so it drops into a section as easily as a page, and each exposes its palette and speed as props you tune in the browser before copying anything."
+      "intro": "Motion for the layer that sits behind everything else. Twenty-six backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything."
     },
     "react-power-user-components": {
       "title": "React Power-User Components",
-      "intro": "Components that carry state and physics rather than decoration. Command palettes, ledgers, orbital systems, ASCII render engines, particle and rigid-body simulations. These are the heaviest pieces in the registry and the ones with real APIs — most run a simulation loop, several own their own layout, and all of them expect to be wired to your data rather than dropped in as ornament."
+      "intro": "Components that carry state and physics instead of decoration. Command palettes, ledgers, orbital systems, ASCII render engines, particle and rigid-body simulations. These are the heaviest pieces in the registry and the ones with real APIs. Most run a simulation loop, several own their own layout, and all of them expect to be wired to your data rather than dropped in as ornament."
     },
     "react-text-animations": {
       "title": "React Text Animation Components",
-      "intro": "Type that moves on purpose. Seventeen components for the moment a headline lands, a number counts, or a word swaps — scramble, split-flap, variable-font proximity, marquee, redaction, neon ignition, frost and shadow effects. Each animates real text nodes rather than an image or a canvas replica, so the words stay selectable, searchable, and legible to a screen reader while they move."
+      "intro": "Type that moves for a reason. Nineteen components for the moment a headline lands, a number counts, or a word swaps: scramble, split-flap, variable-font proximity, marquee, redaction, neon ignition, frost and shadow effects. Each one animates real text nodes, not an image or a canvas copy, so the words stay selectable, searchable, and readable to a screen reader while they move."
     },
     "react-hover-effects": {
       "title": "React Hover Effects",
-      "intro": "Twenty-eight components whose primary state change is the pointer arriving. Glows that track the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or displace underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo — each of these picks one property to move and commits to it rather than animating everything at once."
+      "intro": "Thirty-four components whose main state change is the pointer arriving. Glows that follow the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or shift underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo, so each of these picks one property to move and commits to it instead of animating everything at once."
     },
     "react-stagger-animation": {
       "title": "React Stagger Animation",
-      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Seventeen components here use it — letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting parameter is never the duration; it is the offset between items, and every one of these exposes it as a control you can drag."
+      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Twenty components here use it: letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting number is never the duration. It is the offset between items, and every one of these exposes it as a control you can drag."
     },
     "react-drag-animations": {
       "title": "React Drag Animations",
-      "intro": "Nineteen components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events rather than mouse events and set touch-action on the drag surface, which is the difference between a gesture that works on a phone and one that scrolls the page instead."
+      "intro": "Twenty-three components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events instead of mouse events and set touch-action on the drag surface. That is the difference between a gesture that works on a phone and one that scrolls the page instead."
     },
     "react-reveal-animations": {
       "title": "React Reveal Animations",
-      "intro": "Content that is uncovered rather than faded in. Ten components animate a mask, a clip-path, or a wipe so the element is progressively exposed instead of simply changing opacity — pixel dissolves, curtain wipes, thawing frost, scroll-triggered entrances. A reveal reads as deliberate where a fade reads as a page still loading, which is why it is worth the extra property to animate."
+      "intro": "Content that is uncovered instead of faded in. Ten components animate a mask, a clip-path, or a wipe, so the element is exposed a piece at a time rather than only changing opacity: pixel dissolves, curtain wipes, thawing frost, scroll-triggered entrances. A reveal reads as deliberate where a fade reads as a page still loading. That is why the extra property is worth animating."
     },
     "react-spring-animation": {
       "title": "React Spring Animation",
-      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles naturally when it is interrupted and overshoots the way a real object does. Thirteen components here are spring-driven — magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
+      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Sixteen components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
     },
     "react-blur-effects": {
       "title": "React Blur Effects",
-      "intro": "Fifteen components that use blur as a material rather than a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen on approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius — an unbounded full-page backdrop-filter is the fastest way to drop frames."
+      "intro": "Fifteen components that use blur as a material, not a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen as you approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius. An unbounded full-page backdrop-filter is the fastest way to drop frames."
     },
     "react-scroll-animations": {
       "title": "React Scroll Animations",
-      "intro": "Six components whose timeline is the scrollbar. Parallax rails, scroll-triggered entrances, sections that scrub a transform against progress. Scroll-driven animation is the one case where the user controls playback, which means it has to look right at any speed and in both directions — every one of these is driven by position rather than by a trigger that fires once."
+      "intro": "Eight components whose timeline is the scrollbar. Parallax rails, scroll-triggered entrances, sections that scrub a transform against progress. Scroll-driven animation is the one case where the user controls playback, so it has to look right at any speed and in both directions. Every one of these is driven by position, not by a trigger that fires once."
     },
     "react-clip-path-mask-effects": {
       "title": "React Clip-Path & Mask Effects",
-      "intro": "Ten components that animate the shape of what you can see rather than the element itself. Clip-path wipes, gradient masks, spotlight cutouts, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere — and the only way to reveal one layer through another without duplicating the content."
+      "intro": "Eleven components that animate the shape of what you can see instead of the element itself. Clip-path wipes, gradient masks, spotlight cutouts, torchlight that reveals a layer beneath. Masking composites on the GPU and never triggers layout, so it is the cheapest way to make something appear from nowhere. It is also the only way to show one layer through another without copying the content."
     },
     "react-layout-animation": {
       "title": "React Layout Animation",
-      "intro": "Seven components that animate between two layouts rather than between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference — done properly it keeps the element continuous, so the user tracks one object instead of watching one disappear and another appear."
+      "intro": "Seven components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear."
     },
     "react-3d-tilt-effects": {
       "title": "React 3D Tilt Effects",
-      "intro": "Six components that put an element in perspective and rotate it against the pointer. Tilting cards, holofoil surfaces, orbital layouts, depth that responds to where you are looking. The parameter that decides whether this reads as expensive or cheap is the perspective distance, not the rotation angle — too near and a small tilt distorts violently, too far and the whole effect flattens into a slide."
+      "intro": "Seven components that put an element in perspective and rotate it against the pointer. Tilting cards, holofoil surfaces, orbital layouts, depth that reacts to where you are looking. What decides whether this reads as expensive or cheap is the perspective distance, not the rotation angle. Too near and a small tilt distorts violently. Too far and the whole effect flattens into a slide."
     },
     "framer-motion-components": {
       "title": "Framer Motion Components for React",
-      "intro": "Thirty-two components built on Motion, the animation library formerly published as Framer Motion. It ships as the motion package now, and these lean on it for what it does best: layout animation, gesture handling, and springs that survive interruption. Every one installs with a single dependency beyond React, and the source is unmodified idiomatic Motion, so it reads like code you would have written rather than a wrapper you have to learn."
+      "intro": "Thirty-four components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn."
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL Backgrounds",
-      "intro": "Twenty-two components that render on the GPU through a WebGL context — fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Twenty-one use ogl, a wrapper small enough that the whole bundle costs less than one hero image; one uses Three.js, where the scene genuinely needs a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Thirty components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Twenty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Two use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {

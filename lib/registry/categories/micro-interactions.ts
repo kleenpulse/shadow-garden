@@ -288,7 +288,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-07-19",
 		description:
-			"A technical-drawing card — dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
+			"A technical-drawing card. Dashed envelope, accent rules, corner nodes, and a soft glow that draw in on mount.",
 		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: ["Line drawing", "Enter / Exit", "Stagger"],
 		variants: [
@@ -523,7 +523,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-07-19",
 		description:
-			"A percentage-counting load overlay — spinning ring, eased counter, and a fade-out that reveals the page beneath.",
+			"A percentage-counting load overlay. A spinning ring, an eased counter, and a fade-out that reveals the page beneath.",
 		dependencies: ["gsap", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Loop",
@@ -689,7 +689,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-07-22",
 		description:
-			"A button that leans into your cursor — caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
+			"A button that leans into your cursor. Caught in a magnetic field it slides toward the pointer while an amethyst aura swells with proximity, then snaps home on a spring and answers every click with a dark ripple bursting outward from the point of contact.",
 		dependencies: ["motion"],
 		cookbook: [
 			"Hover effect",
@@ -780,7 +780,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-07-22",
 		description:
-			"A custom cursor with a shadow at its heel — a precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage; the page cursor is never touched.",
+			"A custom cursor with a shadow at its heel. A precise dot leads while a lagging blade trails on a spring, and when it crosses an interactive element the trail pools and swells around it, inverting whatever lies beneath. Scoped entirely to its own stage, so the page cursor is never touched.",
 		dependencies: ["motion"],
 		cookbook: ["Spring", "Follow-through", "Hover effect", "Momentum"],
 		variants: [
@@ -1215,7 +1215,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-07-26",
 		description:
-			"A draggable tear between two overlaid scenes — push past an edge and it resists, then snaps back.",
+			"A draggable tear between two overlaid scenes. Push past an edge and it resists, then snaps back.",
 		dependencies: ["clsx", "tailwind-merge"],
 		cookbook: [
 			"Clip-path",
@@ -1385,7 +1385,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-07-31",
 		description:
-			"A confirm that has to be earned — the ring fills while you hold, snaps shut when it commits, and empties on a different curve entirely if you let go early.",
+			"A confirm that has to be earned. The ring fills while you hold, snaps shut when it commits, and empties on a different curve entirely if you let go early.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Hold to confirm",
@@ -1510,7 +1510,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-07-31",
 		description:
-			"A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism — wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
+			"A camera iris. Blades pivot on a ring of pins and one shared angle drives the whole mechanism: wide open at 64% of the housing, past the centre and light-tight at zero, cutting the scalloped polygon a real iris makes on the way through.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Reveal",
@@ -1868,7 +1868,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-08-06",
 		description:
-			"Text that becomes its own input with nothing moving — one padded box, two contents, sized in CSS.",
+			"Text that becomes its own input with nothing moving. One padded box, two contents, sized in CSS.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: ["Morph", "Continuity transition", "Spatial consistency"],
 		variants: [
@@ -2082,7 +2082,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-08-06",
 		description:
-			"A sortable list that answers to a finger and to a keyboard equally — grab a row, and the rest step aside to make the space.",
+			"A sortable list that answers to a finger and to a keyboard equally. Grab a row, and the rest step aside to make the space.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Drag to reorder",
@@ -2201,7 +2201,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-08-06",
 		description:
-			"Holographic trading-card foil over real content. The diffraction band travels against the tilt while the specular follows it, and the flake only lights where the rainbow currently falls — which is what stops the whole thing reading as one gradient sliding around.",
+			"Holographic trading-card foil over real content. The diffraction band travels against the tilt while the specular follows it, and the flake only lights where the rainbow currently falls, which is what stops the whole thing reading as one gradient sliding around.",
 		dependencies: [],
 		cookbook: [
 			"Hover effect",
@@ -2331,7 +2331,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-08-06",
 		description:
-			"A glass lens you drag across live content, bending it through an SVG displacement field with a real bevel and three-channel dispersion. It refracts a live duplicate of its own children rather than the page backdrop — which is the only version of this effect that works in Chrome, Safari and Firefox alike.",
+			"A glass lens you drag across live content, bending it through an SVG displacement field with a real bevel and three-channel dispersion. It refracts a live duplicate of its own children rather than the page backdrop, which is the only version of this effect that works in Chrome, Safari and Firefox alike.",
 		dependencies: [],
 		cookbook: [
 			"Drag",
@@ -2463,7 +2463,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-08-13",
 		description:
-			"A one-time-code field whose cells answer every keystroke: each character lands compressed and springs back, a paste distributes across the row rather than filling it on one frame, a wrong code shakes and clears itself, and a right one folds the whole row into a tick. Underneath there is exactly one real input holding the whole code — which is what keeps SMS autofill, password managers, select-all and a screen reader working, none of which survive six inputs with maxLength one.",
+			"A one-time-code field whose cells answer every keystroke. Each character lands compressed and springs back, a paste distributes across the row rather than filling it on one frame, a wrong code shakes and clears itself, and a right one folds the whole row into a tick. Underneath there is exactly one real input holding the whole code, which is what keeps SMS autofill, password managers, select-all and a screen reader working. None of those survive six inputs with maxLength one.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		cookbook: [
 			"Spring",
@@ -2602,7 +2602,7 @@ export const microInteractions: ComponentEntry[] = [
 		category: "Micro-interactions",
 		addedAt: "2026-08-14",
 		description:
-			"A machined rotary knob: angular drag with detents you can feel on the way past, inertia on a flick, and a spring that settles into the nearest stop. The angle lives in a motion value rather than in React state — a drag writes it sixty times a second and a spring more often than that — so the only thing React holds is the detent index, and only when that integer actually changes. Arrow keys step through the same spring the hand does, so the keyboard is not a second, worse path to the same control.",
+			"A machined rotary knob: angular drag with detents you can feel on the way past, inertia on a flick, and a spring that settles into the nearest stop. The angle lives in a motion value rather than in React state, because a drag writes it sixty times a second and a spring more often than that, so the only thing React holds is the detent index, and only when that integer actually changes. Arrow keys step through the same spring the hand does, so the keyboard is not a second, worse path to the same control.",
 		dependencies: ["motion"],
 		cookbook: [
 			"Drag",
@@ -2725,7 +2725,7 @@ export const microInteractions: ComponentEntry[] = [
 		addedAt: "2026-08-21",
 		pausable: true,
 		description:
-			"A frosted-glass slab you drag across a live scene, refracting it through a real shader optic — a rounded-rect height field whose gradient bends three separately-sampled color channels, with a Fresnel-bright rim, a travelling specular streak, and a frost that is a genuine multi-tap blur of what sits beneath the pane. Where Lens bends its DOM children through an SVG displacement map and magnifies, Refract is a flat pane over a scene texture: true angle-of-incidence refraction, dispersion and glare — and the scene it bends is drawn in the same shader, because no browser lets WebGL read the rendered page. Throw it and it glides on momentum, rubber-banding off the container walls.",
+			"A frosted-glass slab you drag across a live scene, refracting it through a real shader optic. A rounded-rect height field bends three separately-sampled color channels along its gradient, with a Fresnel-bright rim, a travelling specular streak, and a frost that is a genuine multi-tap blur of what sits beneath the pane. Where Lens bends its DOM children through an SVG displacement map and magnifies, Refract is a flat pane over a scene texture with true angle-of-incidence refraction, dispersion and glare, and the scene it bends is drawn in the same shader, because no browser lets WebGL read the rendered page. Throw it and it glides on momentum, rubber-banding off the container walls.",
 		dependencies: ["ogl"],
 		cookbook: ["Drag", "Momentum", "Blur", "Loop"],
 		variants: [
@@ -2815,6 +2815,194 @@ export const microInteractions: ComponentEntry[] = [
 				kind: "color",
 				default: "#e9e6ff",
 				description: "Glass body tint.",
+			},
+		],
+	},
+	{
+		slug: "lever",
+		name: "Lever",
+		category: "Micro-interactions",
+		addedAt: "2026-08-27",
+		description:
+			"An industrial breaker lever with a real over-centre mechanism. Displayed travel lags the raw pointer travel by a bump curve peaked at the threshold, so approaching it the handle drags heavier, and crossing it the lag collapses and the handle races ahead of the finger. That is why a half-hearted push falls back the way a real breaker does. Release projects the flick's velocity past the threshold before choosing a side, so momentum can finish a throw the finger only started, and the keyboard commits through exactly the same spring the hand uses. The throw is a motion value. React holds only the committed side.",
+		dependencies: ["motion"],
+		cookbook: ["Drag", "Spring", "Bounce", "Stiffness / Tension", "Damping"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/lever/lever.tsx",
+			},
+		],
+		props: [
+			{
+				name: "orientation",
+				kind: "enum",
+				default: "vertical",
+				options: ["vertical", "horizontal"],
+				description:
+					"Throw axis. Vertical reads as a breaker; horizontal as a transfer switch.",
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 520,
+				min: 120,
+				max: 900,
+				step: 10,
+				description: "Spring tension on the snap.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 18,
+				min: 8,
+				max: 60,
+				step: 1,
+				description:
+					"Spring friction — low enough by default to overshoot and settle.",
+			},
+			{
+				name: "threshold",
+				kind: "number",
+				default: 0.5,
+				min: 0.2,
+				max: 0.8,
+				step: 0.05,
+				description: "Breakover point of the throw.",
+			},
+			{
+				name: "resistance",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "The hump — how hard the mechanism fights before it commits.",
+			},
+			{
+				name: "led",
+				kind: "boolean",
+				default: true,
+				description: "State lamp above the track.",
+			},
+			{
+				name: "labels",
+				kind: "boolean",
+				default: true,
+				description: "ON / OFF stencils on the housing.",
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#a855f7",
+				description: "The lamp, the lit end of the track, and the handle stripe.",
+			},
+			{
+				name: "size",
+				kind: "number",
+				default: 140,
+				min: 100,
+				max: 240,
+				step: 4,
+				unit: "px",
+				description:
+					"Housing height (width when horizontal); internals scale on a fixed grid.",
+			},
+		],
+	},
+	{
+		slug: "tear",
+		name: "Tear",
+		category: "Micro-interactions",
+		addedAt: "2026-08-27",
+		description:
+			"A ticket with a perforated stub you tear off for real. The ticket is drawn twice and cut from one seeded jag polygon: an attached layer holds everything still connected, the body plus the stub below the tear front, and a flap layer holds only the freed part, rotated about the frontmost attached point, so the torn edges mate tooth for tooth and the swing can never overlap the body. The seam fights back through a resistance curve, a failed tear springs shut, and a completed one lets the stub fall under gravity carrying the release velocity. The jag array comes from a seeded PRNG so the edge never boils between renders.",
+		dependencies: [],
+		cookbook: ["Drag", "Rubber-banding", "Clip-path", "Velocity"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/tear/tear.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "perforationAt",
+				kind: "number",
+				default: 0.62,
+				min: 0.35,
+				max: 0.8,
+				step: 0.01,
+				description: "Where the seam sits across the ticket.",
+			},
+			{
+				name: "jag",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Roughness of the torn edge — 0 is a die-cut, 1 is a bad day.",
+			},
+			{
+				name: "teeth",
+				kind: "number",
+				default: 26,
+				min: 10,
+				max: 48,
+				step: 1,
+				description: "Perforation tooth count; also the resolution of the torn edge.",
+			},
+			{
+				name: "resistance",
+				kind: "number",
+				default: 0.6,
+				min: 0.1,
+				max: 1,
+				step: 0.05,
+				description: "How hard the seam fights before it lets go.",
+			},
+			{
+				name: "gravity",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 3,
+				step: 0.1,
+				unit: "×",
+				description: "How fast the freed stub falls away.",
+			},
+			{
+				name: "autoReset",
+				kind: "boolean",
+				default: true,
+				description: "Heal the ticket after the stub is gone.",
+			},
+			{
+				name: "resetDelay",
+				kind: "number",
+				default: 1800,
+				min: 500,
+				max: 5000,
+				step: 100,
+				unit: "ms",
+				disabledWhen: { prop: "autoReset", equals: false },
+				description: "Dwell before the ticket heals.",
+			},
+			{
+				name: "inkColor",
+				kind: "color",
+				default: "#c4b5fd",
+				description: "The ticket's printed ink — title, seat block, barcode.",
 			},
 		],
 	},

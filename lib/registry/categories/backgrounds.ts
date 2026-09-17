@@ -231,7 +231,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-07-16",
 		pausable: true,
 		description:
-			"Volumetric god-rays from a configurable origin, optionally mouse-following.",
+			"Volumetric god-rays from a configurable origin, optionally following the mouse.",
 		dependencies: ["ogl"],
 		cookbook: ["Loop", "Idle animation", "Hover effect"],
 		variants: [
@@ -349,7 +349,7 @@ export const backgrounds: ComponentEntry[] = [
 		category: "Backgrounds",
 		addedAt: "2026-07-18",
 		description:
-			"Progressive edge blur — stacked backdrop-filter layers dissolve content toward a chosen edge.",
+			"Progressive edge blur. Stacked backdrop-filter layers dissolve content toward a chosen edge.",
 		cookbook: ["Blur", "Mask", "Compositing"],
 		dependencies: ["motion", "clsx", "tailwind-merge"],
 		variants: [
@@ -985,7 +985,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-07-19",
 		pausable: true,
 		description:
-			"A constellation network — drifting particles link by proximity, chase and flee the cursor, and glow.",
+			"A constellation network. Drifting particles link by proximity, chase and flee the cursor, and glow.",
 		dependencies: [],
 		cookbook: ["Idle animation", "Hover effect", "Float", "Loop"],
 		variants: [
@@ -1096,7 +1096,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-07-19",
 		pausable: true,
 		description:
-			"A canvas field of '+' glyphs — scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
+			"A canvas field of '+' glyphs. Scroll or pointer motion injects a traveling wave that ripples and decays across the grid.",
 		cookbook: ["Ripple", "Scroll-driven animation", "Hover effect", "Loop"],
 		variants: [
 			{
@@ -1200,7 +1200,7 @@ export const backgrounds: ComponentEntry[] = [
 		category: "Backgrounds",
 		addedAt: "2026-07-19",
 		description:
-			"A procedural barcode whose bars light up like piano notes — looping on autoplay or scrubbed by scroll.",
+			"A procedural barcode whose bars light up like piano notes, looping on autoplay or scrubbed by scroll.",
 		dependencies: ["gsap"],
 		cookbook: [
 			"Loop",
@@ -1277,7 +1277,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-07-22",
 		pausable: true,
 		description:
-			"Flowing curtains of amethyst light drifting across a starless night sky — an fbm-warped WebGL2 field where luminous bands ripple, fold, and dissolve into fine grain, like a polar aurora seen from the dark side of the world.",
+			"Flowing curtains of amethyst light drifting across a starless night sky. An fbm-warped WebGL2 field where luminous bands ripple, fold, and dissolve into fine grain, like a polar aurora seen from the dark side of the world.",
 		dependencies: ["ogl"],
 		cookbook: ["Loop", "Idle animation", "Float"],
 		variants: [
@@ -1841,7 +1841,7 @@ export const backgrounds: ComponentEntry[] = [
 		category: "Backgrounds",
 		addedAt: "2026-08-06",
 		description:
-			"Gray-Scott reaction-diffusion on the GPU. Two reagents, four terms, and coral, labyrinths and colonies that settle and stop all fall out of the arithmetic — a background that grows rather than loops, and never reaches the same frame twice.",
+			"Gray-Scott reaction-diffusion on the GPU. Two reagents, four terms, and coral, labyrinths and colonies that settle and stop all fall out of the arithmetic. A background that grows rather than loops, and never reaches the same frame twice.",
 		dependencies: ["ogl"],
 		cookbook: [
 			"Loop",
@@ -1964,7 +1964,7 @@ export const backgrounds: ComponentEntry[] = [
 		category: "Backgrounds",
 		addedAt: "2026-08-06",
 		description:
-			"Molten chrome. Every other shader background emits light; this one reflects a studio that does not exist, synthesised from the surface normal — sharp softbox edges, a conductor's Fresnel wash, thin-film iridescence, and a wake that keeps moving where you dragged.",
+			"Molten chrome. Every other shader background emits light. This one reflects a studio that does not exist, built out of the surface normal: sharp softbox edges, a conductor's Fresnel wash, thin-film iridescence, and a wake that keeps moving where you dragged.",
 		dependencies: ["ogl"],
 		cookbook: [
 			"Loop",
@@ -2090,7 +2090,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-08-13",
 		pausable: true,
 		description:
-			"A slime mould foraging in the dark. Every other field here is a differential equation on a grid; this one is a population — up to a million agents, each carrying a position and a heading, sampling the trail ahead of itself, turning toward whatever smells strongest and laying down more of it as it goes. The veins, the junctions and the slow reorganisation are nowhere in the code.",
+			"A slime mould foraging in the dark. Every other field here is a differential equation on a grid. This one is a population: up to a million agents, each carrying a position and a heading, sampling the trail ahead of itself, turning toward whatever smells strongest and laying down more of it as it goes. The veins, the junctions and the slow reorganisation are nowhere in the code.",
 		dependencies: ["ogl"],
 		cookbook: [
 			"Loop",
@@ -2254,7 +2254,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-08-14",
 		pausable: true,
 		description:
-			"A topographic map of terrain that will not hold still. The lines are not drawn, they are found — a height field is sampled onto a grid every frame and marching squares walks it once per altitude, emitting segments wherever the land crosses that height. Nothing here knows what a ridge is; ridges are where the crossings bunch up. The pointer raises a hill the contours have to route around, and because the interval is fixed rather than the line count, that extra altitude produces extra rings instead of restretching the ones already on screen.",
+			"A topographic map of terrain that will not hold still. The lines are not drawn, they are found. A height field is sampled onto a grid every frame and marching squares walks it once per altitude, emitting segments wherever the land crosses that height. Nothing here knows what a ridge is. Ridges are where the crossings bunch up. The pointer raises a hill the contours have to route around, and because the interval is fixed rather than the line count, that extra altitude produces extra rings instead of restretching the ones already on screen.",
 		dependencies: [],
 		cookbook: ["Loop", "Idle animation", "Hover effect", "Linear"],
 		variants: [
@@ -2383,7 +2383,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-08-14",
 		pausable: true,
 		description:
-			"Rain on a window with a city somewhere behind it. There is no scene being blurred — the backdrop is built out of focus to begin with, so the drops have something to bend without a render target or a blur pass anywhere in the frame. Each drop is a pure function of time inside its own grid cell, which is why a thousand of them cost the same as one and a resize cannot lose the rain. They descend the way water actually does: holding by surface tension, breaking loose, running fast, stopping again — and the trail exists only above the drop that made it.",
+			"Rain on a window with a city somewhere behind it. There is no scene being blurred. The backdrop is built out of focus to begin with, so the drops have something to bend without a render target or a blur pass anywhere in the frame. Each drop is a pure function of time inside its own grid cell, which is why a thousand of them cost the same as one and a resize cannot lose the rain. They descend the way water actually does: holding by surface tension, breaking loose, running fast, stopping again. The trail exists only above the drop that made it.",
 		dependencies: ["ogl"],
 		cookbook: [
 			"Loop",
@@ -2515,7 +2515,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-08-21",
 		pausable: true,
 		description:
-			"A flowing luminance field crushed to ink and paper by error diffusion — each cell's quantization error is pushed onto its unvisited neighbours in a serpentine scan, so mid-tones resolve into the organic scattered grain of a stippled engraving instead of a fixed lattice. Atkinson forwards only three-quarters of the error, which is why the classic-Mac look keeps its blown highlights; Floyd–Steinberg and Sierra spread all of it for a smoother ramp. The field is diffused on the CPU into an ImageData at one cell per CSS pixel-group, then scaled up with smoothing off, so the grid survives retina intact.",
+			"A flowing luminance field crushed to ink and paper by error diffusion. Each cell's quantization error is pushed onto its unvisited neighbours in a serpentine scan, so mid-tones resolve into the organic scattered grain of a stippled engraving instead of a fixed lattice. Atkinson forwards only three-quarters of the error, which is why the classic-Mac look keeps its blown highlights. Floyd–Steinberg and Sierra spread all of it for a smoother ramp. The field is diffused on the CPU into an ImageData at one cell per CSS pixel-group, then scaled up with smoothing off, so the grid survives retina intact.",
 		dependencies: [],
 		cookbook: ["Loop", "Stepped animation"],
 		variants: [
@@ -2610,7 +2610,7 @@ export const backgrounds: ComponentEntry[] = [
 		addedAt: "2026-08-21",
 		pausable: true,
 		description:
-			"A raymarched glass prism splitting a beam into its spectrum — an SDF solid turned in a hazy volume, a white shaft entering one face and a fan of spectral bands leaving another, each band bent by its own wavelength-dependent deviation so the fan spreads the way dispersion actually spreads. The beams are analytic capsule glows integrated against the view ray, not a second march, which is what keeps sixty-four steps and eight bands inside a frame budget. Drag orbits the solid with momentum; the haze is what makes the shafts readable at all, because light in clean air is invisible until it hits something.",
+			"A raymarched glass prism splitting a beam into its spectrum. An SDF solid turned in a hazy volume, a white shaft entering one face and a fan of spectral bands leaving another, each band bent by its own wavelength-dependent deviation so the fan spreads the way dispersion actually spreads. The beams are analytic capsule glows integrated against the view ray, not a second march, which is what keeps sixty-four steps and eight bands inside a frame budget. Drag orbits the solid with momentum. The haze is what makes the shafts readable at all, because light in clean air is invisible until it hits something.",
 		dependencies: ["ogl"],
 		cookbook: ["Orbit", "Drag", "Momentum", "Loop"],
 		variants: [
@@ -2698,6 +2698,218 @@ export const backgrounds: ComponentEntry[] = [
 				unit: "×",
 				disabledWhen: { prop: "autoRotate", equals: false },
 				description: "Idle rotation rate.",
+			},
+		],
+	},
+	{
+		slug: "ferrofluid",
+		name: "Ferrofluid",
+		category: "Backgrounds",
+		addedAt: "2026-08-27",
+		pausable: true,
+		description:
+			"A pool of magnetic fluid rendered as a per-pixel metaball field. A handful of blobs orbit on closed integer-harmonic paths and merge wherever their fields overlap. The cursor is a magnet held over the pool: the surface reaches toward it, and inside its influence the iso-edge erupts into the radial spike crown that makes ferrofluid unmistakable. Lighting is free, because the metaball gradient is analytic, so the same loop that sums the field also yields the surface normal for the specular sheen and the amethyst rim, with no extra field evaluations.",
+		dependencies: ["ogl"],
+		cookbook: ["Loop", "Idle animation", "Morph", "Hardware acceleration"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/ferrofluid/ferrofluid.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "blobs",
+				kind: "number",
+				default: 5,
+				min: 2,
+				max: 9,
+				step: 1,
+				description: "Metaball count in the ambient orbit.",
+			},
+			{
+				name: "speed",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				description: "Orbit speed of the blob field.",
+			},
+			{
+				name: "cohesion",
+				kind: "number",
+				default: 0.35,
+				min: 0.1,
+				max: 0.8,
+				step: 0.01,
+				description:
+					"Iso-surface softness — how eagerly blobs merge into one body.",
+			},
+			{
+				name: "spikes",
+				kind: "number",
+				default: 0.7,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"Needle amplitude where the cursor magnet touches the surface.",
+			},
+			{
+				name: "spikeFrequency",
+				kind: "number",
+				default: 14,
+				min: 6,
+				max: 28,
+				step: 1,
+				description:
+					"Needles around the cursor — the tooth count of the spike crown.",
+			},
+			{
+				name: "magnetRadius",
+				kind: "number",
+				default: 0.35,
+				min: 0.1,
+				max: 0.8,
+				step: 0.01,
+				description: "Cursor influence radius as a fraction of the pane.",
+			},
+			{
+				name: "sheen",
+				kind: "number",
+				default: 0.6,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Specular highlight strength on the fluid surface.",
+			},
+			{
+				name: "fluidColor",
+				kind: "color",
+				default: "#17121f",
+				description:
+					"Body of the fluid — near-black violet, read by its highlights.",
+			},
+			{
+				name: "accentColor",
+				kind: "color",
+				default: "#c4b5fd",
+				description: "Rim light and specular tint on the iso edge.",
+			},
+		],
+	},
+	{
+		slug: "lissajous",
+		name: "Lissajous",
+		category: "Backgrounds",
+		addedAt: "2026-08-27",
+		pausable: true,
+		description:
+			"A phosphor oscilloscope tracing Lissajous figures. The beam dwells on one frequency ratio, then retunes to the next by sliding both frequencies continuously, and the chirp while the figure comes apart and re-locks is the same thing you see turning a real scope's timebase knob. Persistence is data, not paint. Instead of the classic translucent-fill fade, which never fully clears and cannot survive a paused repaint, the beam keeps a ring buffer of recent samples and redraws the whole trail from scratch each frame, so the phosphor hold re-grades live when you tune it and a still frame reproduces the exact screen.",
+		dependencies: [],
+		cookbook: ["Loop", "Idle animation", "Interpolation / Tween", "Morph"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/lissajous/lissajous.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "speed",
+				kind: "number",
+				default: 1,
+				min: 0.1,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				description: "Beam speed along the curve.",
+			},
+			{
+				name: "persistence",
+				kind: "number",
+				default: 0.6,
+				min: 0.05,
+				max: 0.98,
+				step: 0.01,
+				description:
+					"Phosphor hold — how long the trail stays lit behind the beam.",
+			},
+			{
+				name: "dwell",
+				kind: "number",
+				default: 4,
+				min: 1,
+				max: 10,
+				step: 0.5,
+				unit: "s",
+				description: "Seconds a figure holds before tuning to the next ratio.",
+			},
+			{
+				name: "morphSeconds",
+				kind: "number",
+				default: 1.4,
+				min: 0.3,
+				max: 4,
+				step: 0.1,
+				unit: "s",
+				description: "Length of the chirp between one ratio and the next.",
+			},
+			{
+				name: "beamWidth",
+				kind: "number",
+				default: 1.6,
+				min: 0.5,
+				max: 4,
+				step: 0.1,
+				unit: "px",
+				description: "Trace stroke width.",
+			},
+			{
+				name: "glow",
+				kind: "number",
+				default: 12,
+				min: 0,
+				max: 30,
+				step: 1,
+				unit: "px",
+				description: "Bloom on the beam head.",
+			},
+			{
+				name: "showGraticule",
+				kind: "boolean",
+				default: true,
+				description: "Faint scope grid behind the trace.",
+			},
+			{
+				name: "phosphorColor",
+				kind: "color",
+				default: "#c4b5fd",
+				description: "The phosphor — amethyst, not heritage green.",
+			},
+			{
+				name: "backgroundColor",
+				kind: "color",
+				default: "#0b0812",
+				description: "Dead glass behind the trace.",
 			},
 		],
 	},

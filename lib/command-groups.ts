@@ -8,6 +8,7 @@ import {
 	SunMoon,
 	Link2,
 	LayoutGrid,
+	PanelTop,
 } from "lucide-react";
 import CookBookIcon from "@/components/icons/cook-book";
 import { getEntry } from "@/lib/registry";
@@ -19,6 +20,7 @@ const CATEGORY_ICON: Record<Category, ComponentType<{ className?: string }>> = {
 	"Text Animations": Type,
 	"Micro-interactions": Sparkles,
 	"Power-User Systems": CommandIcon,
+	"Hero Templates": PanelTop,
 };
 
 /** The side effects the palette can trigger; supplied by the shell wrapper. */

@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "app/globals.css"
+        ],
+        "createdAt": "2026-09-10T18:25:44.299Z",
+        "reason": "pre-existing grainient brand utility (NEW tab label, wordmark); intentional per Sidebar.tsx contrast notes; not introduced by this change"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "app/globals.css"
+        ],
+        "createdAt": "2026-09-10T18:28:17.655Z",
+        "reason": "pre-existing SPEC V37 collapsed code surface: interpolate-size allow-keywords + max-height tween is the intended intrinsic-size animation; reduced-motion and non-Chromium fallbacks handled; untouched by this change"
+      }
+    ]
+  }
+}
