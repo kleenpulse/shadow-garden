@@ -1,7 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useState, type MouseEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { useTranslations } from "next-intl";
+import { motion } from "motion/react";
 import { useLenis } from "lenis/react";
 import { SECTION_IDS, type NavSection } from "@/components/landing/data";
 import {
@@ -22,20 +23,64 @@ import { cn } from "@/lib/utils";
 // already produces that slug, and it's what `id` is built from in data.ts.
 const STATIC_NAV_IDS = new Set<string>(Object.values(SECTION_IDS));
 
-// The section rail — a fixed vertical column of ticks on the right edge, one per
-// plate, modeled on grok's conversation scrubber. Hover a tick and its label
-// decodes from cryptic glyphs; click it and lenis glides you there. Desktop-only
-// (a tick-rail has no place on touch), and it renders null on the server + first
-// client paint so there's no hydration seam and no portal during SSR.
+// The section rail — a fixed column of ticks in the frame's right gutter, one
+// per plate. Context aware: idle (no scroll, no hover) every tick is a dot;
+// while the page scrolls or the pointer is anywhere over the gutter they grow
+// to full length. Hover a tick and its label decodes from cryptic glyphs;
+// click it and lenis glides you there. Desktop with a real pointer only —
+// a tick-rail has no place on touch, and below `lg` the gutter is too narrow
+// to hold it. It renders null on the server + first client paint so there's
+// no hydration seam.
 
-const ACTIVE_LINE = 96; // px below the fixed header where a section turns "current"
+const EASE = [0.22, 1, 0.36, 1] as const;
+const RAIL_MEDIA = "(min-width: 1024px) and (hover: hover) and (pointer: fine)";
+// px from the viewport top. A section is "current" once its top crosses this.
+// Deeper than the widest landing offset (header + scroll-mt) so a jump never
+// hands the tick straight back to the previous section.
+const ACTIVE_LINE = 120;
+// Extra hold after Lenis goes idle / the pointer leaves before ticks shrink.
+const HOLD_MS = 600;
+// easeOutCubic — the glide from the source rail.
+const JUMP = { duration: 1.4, easing: (t: number) => 1 - Math.pow(1 - t, 3) };
+// Dot ↔ line morph. A soft ease-in-out, not the site's quint: on a ~28px width
+// change the quint's hard start reads as a snap. The change ripples outward
+// from the active tick, `TICK_STAGGER_MS` per step.
+const TICK_MS = 550;
+const TICK_EASE = "cubic-bezier(0.45, 0.05, 0.2, 1)";
+const TICK_STAGGER_MS = 25;
 
 export default function SectionRail({ sections }: { sections: NavSection[] }) {
 	const t = useTranslations("landing.nav");
 	const copy = useDataCopy();
-	const isDesktop = useMediaQuery("(min-width: 1024px)");
-	const lenis = useLenis();
+	const isDesktop = useMediaQuery(RAIL_MEDIA);
 	const [activeId, setActiveId] = useState<string>(sections[0]?.id ?? "");
+	const [expanded, setExpanded] = useState(false);
+
+	// The three inputs live in refs so per-frame calls cost nothing when
+	// nothing changed; `sync` folds them into the one rendered boolean.
+	const hovering = useRef(false);
+	const focusWithin = useRef(false);
+	const scrolling = useRef(false);
+	const hold = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const lastScroll = useRef<number | null>(null);
+
+	const sync = () =>
+		setExpanded(hovering.current || focusWithin.current || scrolling.current);
+	const clearHold = () => {
+		if (hold.current) clearTimeout(hold.current);
+		hold.current = null;
+	};
+	// One timer for both idle paths. It always ends the scrolling state; if the
+	// pointer is still over the gutter `sync` keeps the rail open anyway.
+	const armHold = () => {
+		clearHold();
+		hold.current = setTimeout(() => {
+			hold.current = null;
+			scrolling.current = false;
+			sync();
+		}, HOLD_MS);
+	};
+	useEffect(() => clearHold, []);
 
 	const labelFor = (section: NavSection) =>
 		STATIC_NAV_IDS.has(section.id)
@@ -44,34 +89,64 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 
 	// Active tick = the last section whose top has crossed the line, clamped to
 	// the final section once the page bottoms out (so the short η footer still
-	// lights). rAF-throttled; the zero-height #hero at top is the base case.
-	useEffect(() => {
-		if (!isDesktop) return;
-		const ids = sections.map((s) => s.id);
-		let frame = 0;
+	// lights).
+	const spy = (scroll: number, limit: number) => {
+		if (sections.length === 0) return;
+		let current = sections[0].id;
+		if (scroll >= limit - 2) {
+			current = sections[sections.length - 1].id;
+		} else {
+			for (const s of sections) {
+				const el = document.getElementById(s.id);
+				if (el && el.getBoundingClientRect().top <= ACTIVE_LINE) current = s.id;
+			}
+		}
+		setActiveId(current);
+	};
 
+	const lenis = useLenis((lenis) => {
+		// Clamp ignores rubber-band overscroll.
+		const scroll = Math.max(0, Math.min(lenis.scroll, lenis.limit));
+		const prev = lastScroll.current;
+		lastScroll.current = scroll;
+		// useLenis invokes the callback on registration (every render); that is
+		// not a scroll, and a reload mid-page must not pop the rail open.
+		if (prev !== null && scroll !== prev) {
+			clearHold();
+			if (!scrolling.current) {
+				scrolling.current = true;
+				sync();
+			}
+		}
+		if (lenis.isScrolling === false && scrolling.current && !hold.current)
+			armHold();
+		spy(scroll, lenis.limit);
+	});
+
+	// Lenis does not emit on resize; the line a section has to cross does move.
+	useEffect(() => {
+		if (!lenis) return;
+		const onResize = () => spy(lenis.scroll, lenis.limit);
+		window.addEventListener("resize", onResize);
+		return () => window.removeEventListener("resize", onResize);
+		// `spy` closes over `sections`; re-binding per section list keeps it fresh.
+	}, [lenis, sections]);
+
+	// Reduced-motion fallback: SmoothScroll is absent, so there is no lenis to
+	// drive the spy — a rAF-throttled window scroll listener covers it instead.
+	useEffect(() => {
+		if (lenis || !isDesktop) return;
+		let frame = 0;
 		const measure = () => {
 			frame = 0;
-			const atBottom =
-				window.innerHeight + window.scrollY >=
-				document.documentElement.scrollHeight - 2;
-			if (atBottom) {
-				setActiveId(ids[ids.length - 1] ?? "");
-				return;
-			}
-			let current = ids[0] ?? "";
-			for (const id of ids) {
-				const el = document.getElementById(id);
-				if (el && el.getBoundingClientRect().top <= ACTIVE_LINE) current = id;
-			}
-			setActiveId(current);
+			const limit =
+				document.documentElement.scrollHeight - window.innerHeight;
+			spy(Math.max(0, Math.min(window.scrollY, limit)), limit);
 		};
-
 		const onScroll = () => {
 			if (frame) return;
 			frame = window.requestAnimationFrame(measure);
 		};
-
 		measure();
 		window.addEventListener("scroll", onScroll, { passive: true });
 		window.addEventListener("resize", onScroll);
@@ -80,44 +155,78 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 			window.removeEventListener("scroll", onScroll);
 			window.removeEventListener("resize", onScroll);
 		};
-	}, [isDesktop, sections]);
+	}, [lenis, isDesktop, sections]);
 
 	const jumpTo = useCallback(
 		(id: string, e: MouseEvent<HTMLAnchorElement>) => {
 			if (!lenis) return; // reduced motion → SmoothScroll is absent → native jump
 			e.preventDefault();
-			// scrollTo reads the target's scroll-margin-top, so scroll-mt-10 holds.
-			lenis.scrollTo(`#${id}`, {
-				duration: 2,
-				easing: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic — matches SmoothAnchor
-			});
+			// The header never hides, and every section carries scroll-mt-10, so
+			// the anchor scroll lands under it on its own — no manual offset
+			// math needed. The first section just means "top".
+			if (id === sections[0]?.id) lenis.scrollTo(0, JUMP);
+			else lenis.scrollTo(`#${id}`, JUMP);
 			history.pushState(null, "", `#${id}`);
 		},
-		[lenis],
+		[lenis, sections],
 	);
 
-	if (!isDesktop) return null;
+	if (!isDesktop || sections.length === 0) return null;
+
+	const activeIndex = sections.findIndex((s) => s.id === activeId);
 
 	return (
-		<TooltipProvider delay={0}>
-			<nav
-				aria-label={t("ariaLabel")}
-				className="fixed end-0.5 top-1/2 z-120 hidden -translate-y-1/2 lg:block"
-			>
-				<ol className="flex flex-col items-end gap-3">
-					{sections.map((section) => (
-						<li key={section.id}>
-							<RailTick
-								section={section}
-								label={labelFor(section)}
-								isActive={section.id === activeId}
-								onJump={jumpTo}
-							/>
-						</li>
-					))}
-				</ol>
-			</nav>
-		</TooltipProvider>
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.5, ease: EASE }}
+			data-expanded={expanded}
+			// The hover zone is the whole right gutter. Nothing else lives there
+			// except GotoTop, which sits above at z-9999 and stays clickable —
+			// as does the header (z-99) over this z-40 strip.
+			className="fixed inset-y-0 right-0 z-40 w-10"
+			onPointerEnter={() => {
+				hovering.current = true;
+				sync();
+			}}
+			onPointerLeave={() => {
+				hovering.current = false;
+				armHold();
+			}}
+			onFocusCapture={() => {
+				focusWithin.current = true;
+				sync();
+			}}
+			onBlurCapture={(e) => {
+				if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+				focusWithin.current = false;
+				armHold();
+			}}
+		>
+			<TooltipProvider delay={0}>
+				<nav
+					aria-label={t("ariaLabel")}
+					className="absolute top-1/2 right-0.5 -translate-y-1/2"
+				>
+					<ol className="flex flex-col items-end gap-3">
+						{sections.map((section, i) => (
+							<li key={section.id}>
+								<RailTick
+									section={section}
+									label={labelFor(section)}
+									isActive={section.id === activeId}
+									expanded={expanded}
+									delay={
+										Math.abs(i - Math.max(0, activeIndex)) * TICK_STAGGER_MS
+									}
+									onJump={jumpTo}
+								/>
+							</li>
+						))}
+					</ol>
+				</nav>
+			</TooltipProvider>
+		</motion.div>
 	);
 }
 
@@ -125,11 +234,15 @@ function RailTick({
 	section,
 	label,
 	isActive,
+	expanded,
+	delay,
 	onJump,
 }: {
 	section: NavSection;
 	label: string;
 	isActive: boolean;
+	expanded: boolean;
+	delay: number;
 	onJump: (id: string, e: MouseEvent<HTMLAnchorElement>) => void;
 }) {
 	// Mirror Base UI's open state so the scramble only runs while the popup shows.
@@ -150,11 +263,24 @@ function RailTick({
 			>
 				<span
 					aria-hidden
+					// Only width morphs. Height is fixed per tick (active vs not) so the
+					// dot grows sideways into a line of the same weight; a height that
+					// also tweened would flatten every tick on the way out.
+					style={{
+						transition: `width ${TICK_MS}ms ${TICK_EASE} ${delay}ms, background-color 300ms ease`,
+					}}
 					className={cn(
-						"block h-0.5 rounded-full transition-all duration-300 ease-out",
+						"block rounded-full",
 						isActive
-							? "w-8 bg-accent"
-							: "w-4.5 bg-ink-mute/50 group-hover:w-5 group-hover:bg-ink group-focus-visible:w-5 group-focus-visible:bg-ink",
+							? "h-1.5 bg-accent"
+							: "h-1 bg-ink-mute/50 group-hover:bg-ink group-focus-visible:bg-ink",
+						expanded
+							? isActive
+								? "w-7"
+								: "w-4 group-hover:w-5 group-focus-visible:w-5"
+							: isActive
+								? "w-1.5"
+								: "w-1",
 					)}
 				/>
 			</TooltipTrigger>
