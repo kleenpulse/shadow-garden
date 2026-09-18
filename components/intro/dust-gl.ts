@@ -218,6 +218,38 @@ function supportsWebGL(): boolean {
 }
 
 /**
+ * Resolve a CSS custom property to its computed color via a probe element —
+ * getComputedStyle is the only resolver that flattens var() + color-mix().
+ */
+function resolveVarColor(name: string): string {
+  const probe = document.createElement("span");
+  probe.style.color = `var(${name})`;
+  document.body.appendChild(probe);
+  const color = getComputedStyle(probe).color;
+  probe.remove();
+  return color;
+}
+
+/**
+ * Any CSS color → rgb 0..1 via a painted pixel. Canvas fillStyle only
+ * serializes to "#rrggbb" for sRGB colors; the light theme's color-mix()
+ * tokens serialize as color()/oklab() strings, so a hex parse silently fell
+ * back to white — invisible dust over the light surface. A painted pixel is
+ * right for every color space.
+ */
+function paintRgb(css: string): [number, number, number] {
+  const c = document.createElement("canvas");
+  c.width = 1;
+  c.height = 1;
+  const ctx = c.getContext("2d", { willReadFrequently: true });
+  if (!ctx) return [1, 1, 1];
+  ctx.fillStyle = css;
+  ctx.fillRect(0, 0, 1, 1);
+  const d = ctx.getImageData(0, 0, 1, 1).data;
+  return [d[0] / 255, d[1] / 255, d[2] / 255];
+}
+
+/**
  * Rasterize every char span's glyph into grain arrays at its current viewport
  * position. Offscreen 2D sampling at scale 1 — device-independent counts.
  */
@@ -230,6 +262,13 @@ export function sampleWord(
   const rand: number[] = [];
   const rand2: number[] = [];
   const edge: number[] = [];
+
+  // Light theme: theme-matched ink dust reads as faint grit over the light
+  // surface, so every grain flies in the accent instead — the glyph tints
+  // amethyst for the GRAIN_IN beat, then erodes as purple dust. Dark theme
+  // keeps per-span colors (white SHADOW, accent GARDEN).
+  const dark = document.documentElement.classList.contains("dark");
+  const accentRgb = dark ? null : paintRgb(resolveVarColor("--sg-accent"));
 
   for (const span of spans) {
     if (!span) continue;
@@ -248,18 +287,7 @@ export function sampleWord(
     const ctx = off.getContext("2d", { willReadFrequently: true });
     if (!ctx) continue;
 
-    // Canvas normalizes any computed color to "#rrggbb" — free theme-correct
-    // parsing (computed colors here are always opaque).
-    ctx.fillStyle = cs.color;
-    const hex = String(ctx.fillStyle);
-    let r = 1;
-    let g = 1;
-    let b = 1;
-    if (hex.startsWith("#") && hex.length === 7) {
-      r = parseInt(hex.slice(1, 3), 16) / 255;
-      g = parseInt(hex.slice(3, 5), 16) / 255;
-      b = parseInt(hex.slice(5, 7), 16) / 255;
-    }
+    const [r, g, b] = accentRgb ?? paintRgb(cs.color);
 
     // Firefox's computed `font` shorthand is empty — build it from parts.
     ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${fontSize}px ${cs.fontFamily}`;
