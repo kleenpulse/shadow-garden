@@ -94,10 +94,10 @@ export default function HanamiPreview({
 					}}
 				/>
 				<span
-					className="font-display text-[max(8px,1.05cqi)] tracking-[0.24em] uppercase"
+					className="font-display text-[max(12px,1.5cqi)] font-bold tracking-[0.24em] uppercase"
 					style={{ color: INK_DIM }}
 				>
-					full bloom · 98%
+					HANAMI
 				</span>
 			</div>
 
