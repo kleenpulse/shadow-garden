@@ -674,13 +674,18 @@ function HanamiScene({
       <hemisphereLight args={["#fbf3f0", "#c0b2ae", wx.ambient * 1.15]} />
       <directionalLight position={[-2, 8, 6]} intensity={wx.sun * 0.7} color="#fff4ec" />
 
-      {/* Horizon disc: unlit so fog alone blends it into the sky */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[60, 48]} />
-        <meshBasicMaterial color={groundColor} />
-      </mesh>
-
+      {/* Everything visible waits behind ONE boundary. The disc, decals and
+          lantern are procedural and would paint instantly — a lantern floating
+          on shadow puddles over a bare disc while the GLBs stream in. Until
+          the whole scene is ready the canvas is flat sky, identical to the
+          root div's background, so loading reads as a still sky, not a flash. */}
       <Suspense fallback={null}>
+        {/* Horizon disc: unlit so fog alone blends it into the sky */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[60, 48]} />
+          <meshBasicMaterial color={groundColor} />
+        </mesh>
+
         <GreenField tint={wx.ground} />
         <BlossomTree
           wind={wind}
@@ -692,9 +697,8 @@ function HanamiScene({
           petalGeo={resources.petalGeo}
           petalMat={resources.petalMat}
         />
-      </Suspense>
 
-      {/* Contact shadows + fallen-petal wash */}
+        {/* Contact shadows + fallen-petal wash */}
       {/* Decals float just above the field's highest turf bumps */}
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
@@ -763,6 +767,7 @@ function HanamiScene({
         </mesh>
         <pointLight position={[0, 0.95, 0]} color="#ffb066" intensity={0.7} distance={2.2} decay={2} />
       </group>
+      </Suspense>
     </>
   );
 }
