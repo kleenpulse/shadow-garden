@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { highlightToHtml } from "@/lib/shiki";
 import { stripComments } from "./strip-comments";
+import { stripCssComments } from "./strip-css-comments";
 import { roleOf } from "./roles";
 import type { ComponentEntry, Variant, VariantRole } from "./types";
 
@@ -61,6 +62,7 @@ export interface SourceFile {
 
 export type SourceResult =
   | { status: "ok"; files: SourceFile[] }
+  | { status: "locked" }
   | { status: "pending" };
 
 /** Resolve a repo-relative variant path inside one of the allowed roots. */
@@ -90,13 +92,15 @@ async function readVariant(variant: Variant): Promise<SourceFile | null> {
     // Stripped here, once, so the Code tab, the copy button, the line count and
     // the AI prompt all agree — this is the only place the canonical bytes are
     // turned into customer bytes. The checked-in file keeps its comments.
-    raw = stripComments(await readFile(absolute, "utf8"));
+    const text = await readFile(absolute, "utf8");
+    raw = variant.lang === "css" ? stripCssComments(text) : stripComments(text);
   } catch {
     // Source file not dropped in yet — the preview spine still works.
     return null;
   }
 
-  const lang = variant.lang === "ts" ? "tsx" : "jsx";
+  const lang =
+    variant.lang === "css" ? "css" : variant.lang === "ts" ? "tsx" : "jsx";
   return {
     file: variant.file,
     label: variant.label ?? (variant.file.split("/").pop() ?? variant.file),
@@ -110,6 +114,15 @@ async function readVariant(variant: Variant): Promise<SourceFile | null> {
 }
 
 async function readSource(entry: ComponentEntry): Promise<SourceResult> {
+  // The one server-side gate on the paid artifact: raw bytes never cross to the
+  // client for a locked entry. getEntitlement() is armed-aware — an unarmed
+  // deployment (no commerce env) answers pro for everyone, so nothing locks.
+  if (entry.pro) {
+    const { getEntitlement } = await import("./entitlement");
+    const { pro } = await getEntitlement();
+    if (!pro) return { status: "locked" };
+  }
+
   const files: SourceFile[] = [];
   for (const variant of entry.variants) {
     const file = await readVariant(variant);

@@ -33,10 +33,10 @@ function distinctAddedDates(): string[] {
  * script at the top of <body> can't touch a sidebar the parser hasn't reached
  * yet — so it stamps an attribute and injects the row-hiding rules.
  *
- * "new" is the only filter left (the free/pro tiers are gone — everything is
- * free), and it's exactly the one CSS can't express statically: a date
- * comparison against the live clock. The script resolves the fresh dates and
- * injects the two rules itself.
+ * "new" is the one filter CSS can't express statically: a date comparison
+ * against the live clock. The script resolves the fresh dates and injects the
+ * two rules itself. "pro" is static — rows carry data-pro, its row-hiding pair
+ * lives in globals.css — so the script only stamps the attribute for it.
  */
 export function catalogFilterScript(): string {
 	const dates = JSON.stringify(distinctAddedDates());
@@ -49,7 +49,9 @@ var sel=fresh.length?':is('+fresh.map(function(x){return '[data-added="'+x+'"]'}
 if(fresh.length)d.setAttribute('${CATALOG_HAS_NEW_ATTR}','');
 var s=JSON.parse(localStorage.getItem('sg-ui'));
 var f=s&&s.state&&s.state.catalogFilter;
-if(f==='new'&&fresh.length){
+if(f==='pro'){
+d.setAttribute('${CATALOG_FILTER_ATTR}',f);
+}else if(f==='new'&&fresh.length){
 d.setAttribute('${CATALOG_FILTER_ATTR}',f);
 var st=document.createElement('style');
 st.textContent='html[${CATALOG_FILTER_ATTR}="new"] [data-entry]:not('+sel+'){display:none}'+

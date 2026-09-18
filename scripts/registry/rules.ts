@@ -3,6 +3,7 @@ import { defaultsAgree } from "./source-defaults";
 import { validateDefault } from "../../lib/registry/kinds";
 import { COOKBOOK_TERMS } from "../../lib/cookbook";
 import { collectionTerms, resolveCollection } from "../../lib/collections";
+import { TEMPLATE_TOKEN_NAMES } from "../../lib/registry/template-tokens";
 
 // The cheap rules — pure data plus one readdir and one package.json read. Each
 // one closes an invariant that used to fail silently at runtime: a wrong entry
@@ -210,6 +211,29 @@ const addedAtFormat: Rule = {
       .map((entry) => ({
         slug: entry.slug,
         detail: `addedAt "${entry.addedAt}" is not a parseable YYYY-MM-DD date — the New badge silently never appears`,
+      }));
+  },
+};
+
+// The two whole-page categories are all-Pro by decision (2026-09-18): a new
+// hero template or landing page added without the flag would silently ship
+// unbadged and ungated. The 24 scattered pro components are editorial picks —
+// no rule polices those; the `pro?: true` literal type polices the format.
+const proCategoryConsistency: Rule = {
+  id: "pro-category-consistency",
+  severity: "error",
+  what: 'every "Hero Templates" / "Landing Pages" entry carries pro: true',
+  run(ctx) {
+    return ctx.registry
+      .filter(
+        (entry) =>
+          (entry.category === "Hero Templates" ||
+            entry.category === "Landing Pages") &&
+          entry.pro !== true,
+      )
+      .map((entry) => ({
+        slug: entry.slug,
+        detail: `category "${entry.category}" is all-Pro but the entry has no pro: true — it would ship unbadged and ungated`,
       }));
   },
 };
@@ -505,6 +529,11 @@ const NOT_A_LOOP = new Map<string, string>([
   [
     "morphing-text",
     "text morph tween; loops only in auto mode and drives no canvas",
+  ],
+  ["marquee-velocity", "RO measures for a scroll-driven transform"],
+  [
+    "masonry",
+    "RO watches item heights and one rAF coalesces repacks; layout only, no render loop",
   ],
 ]);
 
@@ -948,6 +977,151 @@ const collectionOverlap: Rule = {
   },
 };
 
+// ─── Landing-page templates ──────────────────────────────────────────────────
+//
+// A template reuses ComponentEntry wholesale, which means every rule above
+// already applies to it. These six close the gaps that only open once an entry
+// stops being one file with one effect.
+
+const templateKindCategory: Rule = {
+  id: "template-kind-category",
+  severity: "error",
+  what: 'kind:"template" and category "Landing Pages" always travel together',
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const isTemplate = entry.kind === "template";
+      const inSection = entry.category === "Landing Pages";
+      if (isTemplate === inSection) continue;
+      out.push({
+        slug: entry.slug,
+        detail: isTemplate
+          ? `kind:"template" but category "${entry.category}" — it would sit in a component category rendering an iframe`
+          : `category "Landing Pages" without kind:"template" — the bench would mount it as a live preview and the code panel would render 40 tabs`,
+      });
+    }
+    return out;
+  },
+};
+
+const templateEntryIsPage: Rule = {
+  id: "template-entry-is-page",
+  severity: "error",
+  what: "every template's variants[0] is its page.tsx, role component",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      if (entry.kind !== "template") continue;
+      const first = entry.variants[0];
+      if (!first) {
+        out.push({ slug: entry.slug, detail: "template declares no variants" });
+        continue;
+      }
+      // getSource() returns `pending` unless files[0] is the component, and the
+      // code tree opens on files[0] — so the wrong first variant is both a blank
+      // Code tab and a browser that opens on a stylesheet.
+      if (!first.file.endsWith("/page.tsx")) {
+        out.push({
+          slug: entry.slug,
+          detail: `variants[0] is ${first.file}, not the template's page.tsx — the Code panel opens on the wrong file`,
+        });
+      }
+      if ((first.role ?? "component") !== "component") {
+        out.push({
+          slug: entry.slug,
+          detail: `variants[0] has role "${first.role}" — getSource() returns "pending" unless it is the component`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const templateDeclaresTokens: Rule = {
+  id: "template-declares-tokens",
+  severity: "error",
+  what: "every template declares exactly the shared theme tokens, in order",
+  run(ctx) {
+    const expected = TEMPLATE_TOKEN_NAMES.join(", ");
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      if (entry.kind !== "template") continue;
+      const actual = entry.props.map((prop) => prop.name).join(", ");
+      if (actual === expected) continue;
+      // Order matters as much as membership: the Controls panel renders in
+      // declaration order, and a section whose panel reshuffles per template
+      // reads as five different products.
+      out.push({
+        slug: entry.slug,
+        detail: `props are [${actual}] — every template ships TEMPLATE_TOKENS verbatim: [${expected}]`,
+      });
+    }
+    return out;
+  },
+};
+const templateNoLocalAssets: Rule = {
+  id: "template-no-local-assets",
+  severity: "error",
+  what: "no template source references a root-relative media file",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const audit = ctx.templateAudit(entry.slug);
+      if (!audit) continue;
+      for (const { file, value } of audit.localAssets) {
+        out.push({
+          slug: entry.slug,
+          detail: `${file} references ${value} — the repo ships no binaries, so this 404s the moment it is copied. Deliver it with asset() from _shared/cdn.ts`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const templateCssScoped: Rule = {
+  id: "template-css-scoped",
+  severity: "error",
+  what: "every top-level selector in a template stylesheet is scoped to that template",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const audit = ctx.templateAudit(entry.slug);
+      if (!audit) continue;
+      for (const { file, selector } of audit.unscopedSelectors) {
+        out.push({
+          slug: entry.slug,
+          detail: `${file} declares "${selector}" globally — a template stylesheet must stay inside [data-template="${entry.slug}"] or it repaints the bench`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
+const templateTokenResolves: Rule = {
+  id: "template-token-resolves",
+  severity: "error",
+  what: "every design token a template references resolves to a declaration",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      const audit = ctx.templateAudit(entry.slug);
+      if (!audit) continue;
+      for (const { file, token, kind } of audit.deadTokens) {
+        out.push({
+          slug: entry.slug,
+          detail:
+            kind === "utility"
+              ? `${file} uses \`${token}\` — that name came from the source project's @theme block, which is global and cannot travel with a template. Tailwind emits no rule for it, so it renders as nothing at all. Use the arbitrary-value form, e.g. \`bg-[var(--background)]\`, against the variables template.css declares`
+              : `${file} reads \`${token}\` and nothing declares it — the declaration is invalid at computed-value time and the property is silently dropped`,
+        });
+      }
+    }
+    return out;
+  },
+};
+
 export const RULES: Rule[] = [
   slugUnique,
   slugMatchesDir,
@@ -958,6 +1132,7 @@ export const RULES: Rule[] = [
   defaultInDomain,
   disabledWhenTarget,
   addedAtFormat,
+  proCategoryConsistency,
   cookbookTermExists,
   promptOverlaySlug,
   dependenciesDeclared,
@@ -982,4 +1157,10 @@ export const RULES: Rule[] = [
   collectionIntro,
   collectionIntroCount,
   collectionOverlap,
+  templateKindCategory,
+  templateEntryIsPage,
+  templateDeclaresTokens,
+  templateNoLocalAssets,
+  templateCssScoped,
+  templateTokenResolves,
 ];

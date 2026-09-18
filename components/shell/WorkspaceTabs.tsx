@@ -3,6 +3,7 @@
 import { Fragment, useEffect, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { useUIStore, type WorkspaceTab } from "@/lib/store";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import PillTabs, { type PillTabItem } from "./PillTabs";
 
 export default function WorkspaceTabs({
@@ -19,6 +20,7 @@ export default function WorkspaceTabs({
 }) {
 	const activeTab = useUIStore((state) => state.activeTab);
 	const setActiveTab = useUIStore((state) => state.setActiveTab);
+	const { play } = useInteractionSound();
 	const t = useTranslations("chrome.workspaceTabs");
 	const TABS: PillTabItem<WorkspaceTab>[] = [
 		{ value: "preview", label: t("preview") },
@@ -38,7 +40,10 @@ export default function WorkspaceTabs({
 				<PillTabs
 					aria-label={t("ariaLabel")}
 					value={activeTab}
-					onValueChange={setActiveTab}
+					onValueChange={(tab) => {
+						play(tab === "code" ? "toggle-on" : "toggle-off");
+						setActiveTab(tab);
+					}}
 					items={TABS}
 					// Scoped per page: motion's layoutId registry is global and outlives a
 					// route change, so a constant id makes the fresh strip inherit the OLD

@@ -3,6 +3,7 @@ import type { Collection } from "../../lib/collections";
 import type { SourceDefault } from "./source-defaults";
 import type { LoopUsage } from "./loop-usage";
 import type { FilterRegions } from "./filter-region";
+import type { TemplateAudit } from "./template-audit";
 
 // The registry check core. Pure: every piece of IO arrives on the context, so
 // the same rules run against the real repo (scripts/check-registry.ts) or against
@@ -91,6 +92,12 @@ export interface CheckContext {
    * owns that failure, so this stays quiet about it.
    */
   entryImports(slug: string): EntryImports | null;
+  /**
+   * Landing-page-only facts: shipped references to files that are not shipped,
+   * and stylesheet selectors that escape the template's scope. `null` for a
+   * component entry — neither question applies to one.
+   */
+  templateAudit(slug: string): TemplateAudit | null;
   /** Basenames (no extension) of the AI-prompt overlays in prompts/. */
   promptOverlays: Set<string>;
 }

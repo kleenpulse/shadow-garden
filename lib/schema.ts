@@ -1,4 +1,5 @@
 import { registry } from "@/lib/registry";
+import { commerceArmed } from "@/lib/capabilities";
 import type { ComponentEntry } from "@/lib/registry/types";
 import { COOKBOOK, termAnchor } from "@/lib/cookbook";
 import { displayName } from "@/lib/display-name";
@@ -49,7 +50,9 @@ export function siteSchema() {
 	};
 }
 
-/** Homepage: the product itself — free and open source. */
+/** Homepage: the product itself. Browsing is free; on an armed deployment the
+    Pro tier sells, so the offer widens to the real price range. `commerceArmed`
+    reads build-time env → the schema stays a static build constant. */
 export function productSchema() {
 	return {
 		"@context": "https://schema.org",
@@ -66,13 +69,22 @@ export function productSchema() {
 		publisher: { "@id": ORG_ID },
 		isPartOf: { "@id": SITE_ID },
 		license: SITE_REPO ? `${SITE_REPO}/blob/main/LICENSE` : undefined,
-		offers: {
-			"@type": "Offer",
-			price: "0",
-			priceCurrency: "USD",
-			url: absoluteUrl("/components"),
-			availability: "https://schema.org/InStock",
-		},
+		offers: commerceArmed()
+			? {
+					"@type": "AggregateOffer",
+					lowPrice: "0",
+					highPrice: "99",
+					priceCurrency: "USD",
+					offerCount: "3",
+					url: absoluteUrl("/components"),
+				}
+			: {
+					"@type": "Offer",
+					price: "0",
+					priceCurrency: "USD",
+					url: absoluteUrl("/components"),
+					availability: "https://schema.org/InStock",
+				},
 	};
 }
 
@@ -141,9 +153,9 @@ export function componentSchema(entry: ComponentEntry) {
 		programmingLanguage: "TypeScript",
 		runtimePlatform: "React",
 		codeSampleType: "full solution",
-		// The whole catalog is MIT — every entry is free, and saying so is the one
-		// fact a visitor most wants before clicking.
-		isAccessibleForFree: true,
+		// True unless this entry's source actually locks: only Pro entries on an
+		// armed deployment. Both inputs are build constants, so this stays static.
+		isAccessibleForFree: !(commerceArmed() && entry.pro === true),
 		keywords: [entry.category, ...(entry.cookbook ?? [])].join(", "),
 		...(entry.dependencies?.length
 			? { softwareRequirements: entry.dependencies.join(", ") }

@@ -6,10 +6,24 @@ import { installCommand, PKG_MANAGERS, type PkgManager } from "@/lib/registry/in
 import type { ComponentEntry } from "@/lib/registry/types";
 import { trackEvent } from "@/lib/stats/track";
 
-export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
+export default function InstallBlock({
+  entry,
+  locked = false,
+}: {
+  entry: ComponentEntry;
+  locked?: boolean;
+}) {
   const [pm, setPm] = useState<PkgManager>("bun");
   const [copied, setCopied] = useState(false);
   const t = useTranslations("chrome.install");
+
+  if (locked) {
+    return (
+      <div className="rounded-lg bg-panel px-4 py-6 text-center">
+        <p className="font-mono text-xs text-ink-mute">{t("locked")}</p>
+      </div>
+    );
+  }
 
   const command = installCommand(pm, entry);
 

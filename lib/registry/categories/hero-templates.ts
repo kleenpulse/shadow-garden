@@ -23,6 +23,7 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Monolith",
 		category: "Hero Templates",
 		addedAt: ADDED,
+		pro: true,
 		pausable: true,
 		description:
 			"A monumental slab floating over a reflective grid floor, rendered as a fogged 3D scene you can orbit.",
@@ -127,6 +128,7 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Shard Orbit",
 		category: "Hero Templates",
 		addedAt: ADDED,
+		pro: true,
 		pausable: true,
 		description:
 			"A giant crystal monolith turning on its axis in a glitter field, or a halo or helix of instanced shards lit by the pulsing core, drag-orbited beside left-aligned copy, fully GPU-driven.",
@@ -263,6 +265,7 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Grid Horizon",
 		category: "Hero Templates",
 		addedAt: ADDED,
+		pro: true,
 		pausable: true,
 		description:
 			"A synthwave horizon in one fragment shader. A glowing grid floor, a banded sun, parallax ridges and a pulse rolling out of the vanishing point.",
@@ -350,6 +353,7 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Warp Run",
 		category: "Hero Templates",
 		addedAt: ADDED,
+		pro: true,
 		pausable: true,
 		description:
 			"A star-streak tunnel rendered as velocity-stretched lines; the pointer steers, dragging banks the ship.",
@@ -430,6 +434,7 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Depth Stage",
 		category: "Hero Templates",
 		addedAt: ADDED,
+		pro: true,
 		pausable: false,
 		description:
 			"A DOM hero stage where any children become parallax layers in real 3D. Pointer-tracked tilt, spring physics, a following spotlight, depth of field, staggered entrance, zero canvas.",
@@ -506,6 +511,7 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Eclipse Flare",
 		category: "Hero Templates",
 		addedAt: ADDED_VOL,
+		pro: true,
 		pausable: true,
 		description:
 			"A total eclipse under liquid-glass copy: a streamered corona, a diamond-ring flare on the breath, god-rays marched through drifting cirrus in one jittered pass.",
@@ -601,6 +607,7 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Tidal",
 		category: "Hero Templates",
 		addedAt: ADDED_VOL,
+		pro: true,
 		pausable: true,
 		description:
 			"A dusk ocean under flat, left-aligned copy: noise-warped swells with wind ripple, sunlit crests, a sun path and breaking foam, raymarched in one bounded pass.",
@@ -702,6 +709,7 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Liquid Chrome",
 		category: "Hero Templates",
 		addedAt: ADDED_VOL,
+		pro: true,
 		pausable: true,
 		description:
 			"A liquid-chrome form of fused spheres over a black mirror floor: rectangular studio softboxes, one mirror bounce and soft occlusion, sphere-traced in one pass beside left-aligned copy.",
@@ -783,6 +791,101 @@ export const heroTemplates: ComponentEntry[] = [
 				kind: "boolean",
 				default: true,
 				description: "The camera sways toward the pointer, easing back on leave.",
+			},
+		],
+	},
+	{
+		slug: "hanami",
+		name: "Hanami",
+		category: "Hero Templates",
+		addedAt: "2026-09-18",
+		pro: true,
+		pausable: true,
+		description:
+			"A painterly 3D cherry-blossom hero: a toon-shaded tree over an unbroken meadow, wind-driven petals drifting across left-anchored copy, orbitable by drag.",
+		dependencies: ["three", "@react-three/fiber"],
+		cookbook: ["Loop", "Float", "Idle animation"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/hanami/hanami.tsx",
+			},
+		],
+		props: [
+			{
+				name: "windSpeed",
+				kind: "number",
+				default: 3,
+				min: 0,
+				max: 10,
+				step: 0.5,
+				description: "Branch sway and petal drift speed.",
+			},
+			{
+				name: "fallingPetals",
+				kind: "number",
+				default: 129,
+				min: 0,
+				max: 300,
+				step: 1,
+				description:
+					"Number of petals drifting through the air. Fades out and disables when bloom is zero.",
+				disabledWhen: { prop: "bloomAmount", equals: 0 },
+			},
+			{
+				name: "bloomAmount",
+				kind: "number",
+				default: 0.85,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Canopy fullness, bare branches to full blossom.",
+			},
+			{
+				name: "weather",
+				kind: "enum",
+				default: "clear",
+				options: ["clear", "breezy", "overcast", "storm"],
+				description:
+					"Bundles ambient light, fog density and a wind multiplier.",
+			},
+			{
+				name: "windDirection",
+				kind: "number",
+				default: 45,
+				min: 0,
+				max: 360,
+				step: 15,
+				unit: "°",
+				description: "Compass direction the petals drift toward.",
+			},
+			{
+				name: "cameraDistance",
+				kind: "number",
+				default: 8,
+				min: 4,
+				max: 12,
+				step: 0.5,
+				description: "Orbit radius — how far the camera sits from the tree.",
+			},
+			{
+				name: "parallax",
+				kind: "boolean",
+				default: true,
+				description:
+					"The camera sways sideways toward the pointer, easing back on leave.",
+			},
+			{
+				name: "parallaxStrength",
+				kind: "number",
+				default: 4,
+				min: 1,
+				max: 12,
+				step: 0.5,
+				unit: "°",
+				description: "How far the sway carries, degrees of orbit at the frame edge.",
+				disabledWhen: { prop: "parallax", equals: false },
 			},
 		],
 	},

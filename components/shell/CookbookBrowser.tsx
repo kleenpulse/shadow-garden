@@ -17,9 +17,7 @@ import { useScrollSpy } from "@/hooks/use-scroll-spy";
 // Imported, not forked. It packs synchronously in a layout effect, which runs
 // before this component's passive jump effect — so the scroll below always
 // measures final geometry (§V27, §V31).
-import Masonry, {
-	settleMasonryReveal,
-} from "./masonry";
+import Masonry, { settleMasonryReveal } from "./masonry";
 import CookbookFilter from "./CookbookFilter";
 import GlowCard from "./GlowCard";
 import { CookbookFlameControlsDesktop } from "./CookbookFlameControls";
@@ -352,7 +350,7 @@ export default function CookbookBrowser({
 			</div>
 
 			<div className="min-w-0 flex-1 pb-[10svh]">
-				<div className="mb-4 md:mb-8 flex gap-2 items-center top-10 sticky sm:top-14 z-10 bg-panel/80 backdrop-blur py-2">
+				<div className="mb-4 md:mb-8 flex gap-2 items-center top-10 sticky sm:top-14 z-10 bg-panel/80 backdrop-blur py-2 rounded-r-md">
 					<CookbookFilter
 						query={query}
 						onQueryChange={onQueryChange}

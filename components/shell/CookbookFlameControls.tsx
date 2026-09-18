@@ -9,6 +9,7 @@ import {
 	PopoverTrigger,
 } from "@/components/ui/popover";
 import { useFlameStore } from "@/lib/cookbook-flame-store";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { cn } from "@/lib/utils";
 
 // Reader controls for the ambient flame behind /cookbook. Two switches over
@@ -22,6 +23,7 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 	const paused = useFlameStore((s) => s.paused);
 	const setEnabled = useFlameStore((s) => s.setEnabled);
 	const setPaused = useFlameStore((s) => s.setPaused);
+	const { play } = useInteractionSound();
 	const t = useTranslations("chrome.cookbookFlame");
 
 	return (
@@ -32,7 +34,10 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 				id="sg-flame-enabled"
 				label={t("flame")}
 				checked={enabled}
-				onChange={setEnabled}
+				onChange={(v) => {
+					play("select");
+					setEnabled(v);
+				}}
 				className="justify-between"
 			/>
 			{/* Motion over a torn-down canvas is a dead control, so it follows. */}
@@ -41,7 +46,10 @@ function FlameControlRows({ dense = false }: { dense?: boolean }) {
 				label={t("motion")}
 				checked={enabled && !paused}
 				disabled={!enabled}
-				onChange={(v) => setPaused(!v)}
+				onChange={(v) => {
+					play("select");
+					setPaused(!v);
+				}}
 			/>
 		</div>
 	);

@@ -106,7 +106,7 @@ export default function Image() {
 							>
 								{total} components
 							</div>
-							<div style={{ display: "flex" }}>MIT · open source</div>
+							<div style={{ display: "flex" }}>Live previews · tunable props</div>
 							<div style={{ display: "flex", color: HAIRLINE }}>·</div>
 							<div style={{ display: "flex" }}>React · Next.js · TypeScript</div>
 						</div>

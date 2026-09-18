@@ -44,25 +44,50 @@ const GotoTop = () => {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
+	// The circle is painted three times, one fixed sibling per blend layer, so
+	// the blend result can only land between the accent and black — never the
+	// green that raw `difference` makes of purple over white. Accent is the
+	// resting color; black only appears where the backdrop itself is
+	// accent-colored (difference with itself cancels to zero), which is exactly
+	// where an accent circle would vanish:
+	//   1 accent  difference   accent-distance of the backdrop; accent bg → black
+	//   2 accent  color        locks hue + saturation to the accent
+	//   3 accent  darken       caps the ceiling at the accent, floor at black
+	// They must be siblings, not children of the button: the button's
+	// z-index/transform forms a stacking context, which would isolate a child's
+	// mix-blend-mode to the button's own (transparent) backdrop. An element's
+	// own blend is unaffected by its own stacking context, so each fixed layer
+	// still blends against the page. The `contents` wrapper carries `group` so
+	// :active on the button (which propagates to ancestors) scales all layers
+	// in lockstep.
+	const layer = cn(
+		"pointer-events-none fixed end-2 bottom-12 z-9999 size-10 rounded-full transition-all duration-1000 group-active:scale-95 group-active:duration-300 max-[400px]:bottom-16 sm:end-5 sm:bottom-16",
+		scrollY > 700 ? "translate-x-0 opacity-100" : "translate-x-20 opacity-0",
+	);
+
 	return hideToTop || navOverlayOpen ? null : (
-		<button
-			type="button"
-			aria-label={t("scrollToTop")}
-			onClick={handleTop}
-			className={cn(
-				"fixed end-2 bottom-12  z-9999 mx-auto grid size-10 max-w-360 place-items-center items-center rounded-full border border-accent bg-accent text-2xl mix-blend-difference transition-all duration-1000 select-none active:scale-95 active:duration-300 max-[400px]:bottom-16 sm:end-5 sm:bottom-16 sm:text-4xl",
-				scrollY > 700
-					? "translate-x-0 opacity-100 shadow-[0_0_40px_0_rgba(0,0,0,0.16)]"
-					: "translate-x-20 opacity-0",
-			)}
-		>
-			<div
-				style={{
-					backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M18 15l-6-6-6 6'/%3E%3C/svg%3E")`,
-				}}
-				className="pointer-events-none size-8  transition-opacity duration-500"
-			/>
-		</button>
+		<div className="group contents">
+			<span aria-hidden className={cn(layer, "bg-accent mix-blend-difference")} />
+			<span aria-hidden className={cn(layer, "bg-accent mix-blend-color")} />
+			<span aria-hidden className={cn(layer, "bg-accent mix-blend-darken")} />
+			<button
+				type="button"
+				aria-label={t("scrollToTop")}
+				onClick={handleTop}
+				className={cn(
+					layer,
+					"pointer-events-auto grid place-items-center select-none",
+					scrollY > 700 && "shadow-[0_0_40px_0_rgba(0,0,0,0.16)]",
+				)}
+			>
+				<div
+					style={{
+						backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M18 15l-6-6-6 6'/%3E%3C/svg%3E")`,
+					}}
+					className="pointer-events-none size-8 transition-opacity duration-500"
+				/>
+			</button>
+		</div>
 	);
 };
 

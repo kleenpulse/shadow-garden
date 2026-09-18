@@ -10,13 +10,20 @@ import {
   useRef,
   useState,
 } from "react";
+import { motion, type HTMLMotionProps } from "motion/react";
 import { cn } from "@/lib/utils";
 
 // A vertical scroll container that (1) fades its top/bottom edges with a
 // mask-image gradient based on scroll position and (2) hides its scrollbar,
 // revealing it only on hover or while actively scrolling (md+).
-export interface AutoMaskVerticalProps
-  extends React.ComponentPropsWithoutRef<"div"> {
+//
+// Rendered as a motion.div with `layoutScroll`: layout animations inside a
+// plain scroll container measure against stale pre-scroll boxes, so a shared
+// `layoutId` element (the sidebar's active-row reticle) would fly in from
+// wherever the list sat at its LAST layout pass — thousands of pixels off
+// after the snap-to-active scroll. `layoutScroll` tells motion to read this
+// element's scroll offset when snapshotting. Inert for non-motion children.
+export interface AutoMaskVerticalProps extends HTMLMotionProps<"div"> {
   topThreshold?: number;
   bottomThreshold?: number;
   fadeSizePercent?: number;
@@ -135,7 +142,7 @@ export const AutoMaskVertical = forwardRef<HTMLDivElement, AutoMaskVerticalProps
       return "none";
     }, [canScrollDown, canScrollUp, fadeSizePercent]);
 
-    const mergedStyle = useMemo<React.CSSProperties>(
+    const mergedStyle = useMemo<AutoMaskVerticalProps["style"]>(
       () => ({
         ...style,
         maskImage,
@@ -149,7 +156,8 @@ export const AutoMaskVertical = forwardRef<HTMLDivElement, AutoMaskVerticalProps
     );
 
     return (
-      <div
+      <motion.div
+        layoutScroll
         {...rest}
         ref={setRefs}
         className={cn(
@@ -168,7 +176,7 @@ export const AutoMaskVertical = forwardRef<HTMLDivElement, AutoMaskVerticalProps
         style={mergedStyle}
       >
         {children}
-      </div>
+      </motion.div>
     );
   },
 );

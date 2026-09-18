@@ -1,0 +1,48 @@
+"use client";
+
+import { useState } from "react";
+
+import { cn } from "@/lib/utils";
+import { useLenis } from "lenis/react";
+
+const GotoTop = () => {
+	const [scrollY, setScrollY] = useState(0);
+	const [hideToTop, setHideToTop] = useState(false);
+
+	const lenis = useLenis(({ scroll, direction }) => {
+		setScrollY(scroll);
+		// direction: 1 = scrolling down, -1 = scrolling up
+		setHideToTop(direction === 1);
+	});
+
+	const handleTop = () => {
+		if (!lenis) return;
+
+		lenis.scrollTo(0, {
+			duration: 2,
+			easing: (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic
+		});
+	};
+
+	return hideToTop ? null : (
+		<div
+			role="button"
+			onClick={handleTop}
+			className={cn(
+				"fixed right-2 bottom-12 z-9999 mx-auto grid size-10 max-w-360 place-items-center items-center rounded-full border border-white bg-white text-2xl mix-blend-difference transition-all duration-1000 select-none active:scale-95 active:duration-300 max-[400px]:bottom-16 sm:right-5 sm:bottom-16 sm:text-4xl",
+				scrollY > 700
+					? "translate-x-0 opacity-100 shadow-[0_0_40px_0_rgba(0,0,0,0.16)]"
+					: "translate-x-20 opacity-0",
+			)}
+		>
+			<div
+				style={{
+					backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2.5' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M18 15l-6-6-6 6'/%3E%3C/svg%3E")`,
+				}}
+				className="pointer-events-none size-8 transition-opacity duration-500"
+			/>
+		</div>
+	);
+};
+
+export default GotoTop;

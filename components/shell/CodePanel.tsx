@@ -1,12 +1,21 @@
 import { getSource } from "@/lib/registry/source";
 import type { ComponentEntry } from "@/lib/registry/types";
 import CodeBlock from "./CodeBlock";
+import CodePanelLocked from "./CodePanelLocked";
 import CodeTabs from "./CodeTabs";
+import CodeTree from "./CodeTree";
 
 // Server component: reads the shipped source from disk (comments stripped) and
-// renders the highlighted panel.
+// renders the highlighted panel. The gated read happens in getSource — for a
+// locked Pro component the raw source never crosses to the client. Pro entries
+// read cookies there and are therefore dynamic, so callers render this inside
+// <Suspense> (they already do).
 export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
   const result = await getSource(entry);
+
+  if (result.status === "locked") {
+    return <CodePanelLocked name={entry.name} />;
+  }
 
   if (result.status === "pending") {
     return (
@@ -33,6 +42,12 @@ export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
         lineCount={only.lineCount}
       />
     );
+  }
+
+  // A template ships its whole directory, so it browses as a tree; a component
+  // ships a handful of files, so it stays a strip.
+  if (entry.kind === "template") {
+    return <CodeTree files={result.files} slug={entry.slug} />;
   }
 
   return <CodeTabs files={result.files} slug={entry.slug} />;

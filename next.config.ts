@@ -14,8 +14,17 @@ const nextConfig: NextConfig = {
   // which turns every Code tab into a silent "pending" 404-of-content in prod. Declaring the
   // two roots here restores the trace explicitly. Route key is the one page that reads
   // source: app/(shell)/components/[slug]/page.tsx → route `/components/[slug]`.
+  // Landing-page templates live under the same registry root, and the bare
+  // /templates/<slug> stage renders them directly — so it needs the same trace
+  // the bench page does.
   outputFileTracingIncludes: {
     "/components/*": ["./components/registry/**/*", "./hooks/**/*"],
+    "/templates/*": ["./components/registry/**/*", "./hooks/**/*"],
+  },
+  // Every template asset is delivered by Cloudinary. Without this, next/image
+  // refuses the host and nothing in the section renders.
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
   },
 };
 

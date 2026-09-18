@@ -17,6 +17,7 @@ import { SITE_URL } from "@/lib/site";
 
 export type PromptResult =
   | { status: "ok"; text: string }
+  | { status: "locked" }
   | { status: "pending" };
 
 // Literal root, same reason as source.ts: a computed base defeats Turbopack's

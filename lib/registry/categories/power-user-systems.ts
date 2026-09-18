@@ -30,6 +30,88 @@ const APPROVAL_FLOW_PEERS: Variant[] = [
 	label: name,
 }));
 
+/** FileExplorer is assembled from its whole directory, not one file. Listed as a
+ *  mapped array rather than 23 literals so the entry stays readable; the set is
+ *  the component's transitive closure, which `check:registry` verifies. It
+ *  carries its own `cn` in ./util, so it takes no UTILS_VARIANT. */
+const FILE_EXPLORER_PEERS: Variant[] = [
+	"auto-scroll.tsx",
+	"breadcrumb.tsx",
+	"context-menu.tsx",
+	"detail-panel.tsx",
+	"empty-state.tsx",
+	"file-grid.tsx",
+	"file-list.tsx",
+	"folder-tree.tsx",
+	"inline-rename.tsx",
+	"storage-meter.tsx",
+	"thumbnail.tsx",
+	"toolbar.tsx",
+	"undo-snackbar.tsx",
+	"types.ts",
+	"use-file-explorer.ts",
+	"use-file-store.ts",
+	"use-object-url.ts",
+	"util.ts",
+	"store/index.ts",
+	"store/types.ts",
+	"store/idb-store.ts",
+	"store/memory-store.ts",
+	"store/opfs-store.ts",
+].map((name) => ({
+	lang: "ts",
+	style: "tailwind",
+	file: `components/registry/file-explorer/${name}`,
+	role: "peer",
+	label: name,
+}));
+
+/** The animation runtime host, shipped alongside any entry whose closure
+ *  reaches it (§C1b). */
+const LOOP_HOST_VARIANT: Variant = {
+	lang: "ts",
+	style: "tailwind",
+	file: "hooks/use-animation-loop.ts",
+	role: "hook",
+	label: "use-animation-loop.ts",
+};
+
+/** TimelineScrubber's supporting files — same mapped-array shape as the
+ *  explorer's, for the same reason: the set IS the component's transitive
+ *  closure, and `check:registry` is what proves it. */
+const TIMELINE_PEERS: Variant[] = [
+	"types.ts",
+	"util.ts",
+	"use-timeline.ts",
+	"ruler.tsx",
+	"markers.tsx",
+	"playhead.tsx",
+	"transport.tsx",
+].map((name) => ({
+	lang: "ts",
+	style: "tailwind",
+	file: `components/registry/timeline-scrubber/${name}`,
+	role: "peer",
+	label: name,
+}));
+
+/** DataGrid's supporting files. Same shape and the same guarantee. */
+const DATA_GRID_PEERS: Variant[] = [
+	"types.ts",
+	"util.ts",
+	"use-columns.ts",
+	"use-virtual-rows.ts",
+	"header-row.tsx",
+	"body-rows.tsx",
+	"skeleton-rows.tsx",
+].map((name) => ({
+	lang: "ts",
+	style: "tailwind",
+	file: `components/registry/data-grid/${name}`,
+	role: "peer",
+	label: name,
+}));
+
 /** Power-User Systems — composite, stateful showcase pieces. */
 export const powerUserSystems: ComponentEntry[] = [
 	{
@@ -2911,6 +2993,721 @@ export const powerUserSystems: ComponentEntry[] = [
 				kind: "color",
 				default: "#c4b5fd",
 				description: "Modifier caps and the ring on the newest chord.",
+			},
+		],
+	},
+	{
+		slug: "file-explorer",
+		name: "FileExplorer",
+		category: "Power-User Systems",
+		addedAt: "2026-09-18",
+		pro: true,
+		description:
+			"A persistent three-pane file manager that stores real image, video, and blob uploads 100% client-side — OPFS when available, IndexedDB everywhere else — with nested folders, search, sort, drag-and-drop upload, move, and a live preview panel.",
+		dependencies: ["lucide-react", "motion", "react-resizable-panels"],
+		cookbook: ["Drag", "Layout animation"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/file-explorer/file-explorer.tsx",
+			},
+			...FILE_EXPLORER_PEERS,
+		],
+		props: [
+			{
+				name: "defaultView",
+				kind: "enum",
+				default: "grid",
+				options: ["grid", "list"],
+				description:
+					"Initial content layout. The toolbar toggle overrides it live.",
+			},
+			{
+				name: "thumbnailSize",
+				kind: "number",
+				default: 112,
+				min: 72,
+				max: 220,
+				step: 4,
+				unit: "px",
+				description: "Grid tile edge length. Larger tiles, fewer columns.",
+			},
+			{
+				name: "density",
+				kind: "enum",
+				default: "comfortable",
+				options: ["comfortable", "compact"],
+				description:
+					"Row height and padding for the list view and folder rail.",
+			},
+			{
+				name: "sortBy",
+				kind: "enum",
+				default: "name",
+				options: ["name", "date", "size", "type"],
+				description:
+					"Initial sort field. The toolbar sort menu overrides it live.",
+			},
+			{
+				name: "sortDir",
+				kind: "enum",
+				default: "asc",
+				options: ["asc", "desc"],
+				description: "Initial sort direction.",
+			},
+			{
+				name: "showFolderRail",
+				kind: "boolean",
+				default: true,
+				description: "Show the left folder-tree rail.",
+			},
+			{
+				name: "showDetails",
+				kind: "boolean",
+				default: true,
+				description: "Open the detail panel when a single file is selected.",
+			},
+			{
+				name: "showHidden",
+				kind: "boolean",
+				default: false,
+				description: "Reveal entries whose name starts with a dot.",
+			},
+			{
+				name: "allowUpload",
+				kind: "boolean",
+				default: true,
+				description:
+					"Enable drag-and-drop and the Add button. Off makes the explorer read-only for new files.",
+			},
+			{
+				name: "allowDelete",
+				kind: "boolean",
+				default: true,
+				description:
+					"Enable delete, rename, and move. Off locks the store's contents.",
+			},
+			{
+				name: "undoWindowMs",
+				kind: "number",
+				default: 5000,
+				min: 0,
+				max: 15000,
+				step: 500,
+				unit: "ms",
+				description: "Grace period to undo a delete. 0 deletes immediately.",
+				disabledWhen: { prop: "allowDelete", equals: false },
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#a855f7",
+				description: "Selection highlight, active folder, and focus accent.",
+			},
+		],
+	},
+	{
+		slug: "elastic",
+		name: "Elastic",
+		category: "Power-User Systems",
+		addedAt: "2026-09-18",
+		pro: true,
+		description:
+			"Throw the top card and the speed you released it at carries into the spring — throw it far enough and it cycles to the back of the deck instead of coming home.",
+		dependencies: ["motion", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Spring",
+			"Swipe to dismiss",
+			"Stiffness / Tension",
+			"Damping",
+			"Mass",
+			"Momentum",
+			"Velocity",
+			"Interruptible animation",
+			"Rubber-banding",
+			"Drag",
+			"Bounce",
+			"Follow-through",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/elastic/elastic.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 320,
+				min: 60,
+				max: 800,
+				step: 20,
+				description: "How strongly the spring pulls home. Higher is snappier.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 22,
+				min: 5,
+				max: 60,
+				step: 1,
+				description: "How fast it settles. Lower overshoots and oscillates.",
+			},
+			{
+				name: "mass",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 4,
+				step: 0.1,
+				description: "How heavy the card feels. More mass is more sluggish.",
+			},
+			{
+				name: "bounds",
+				kind: "number",
+				default: 140,
+				min: 40,
+				max: 400,
+				step: 10,
+				unit: "px",
+				description: "How far the card may travel from home.",
+			},
+			{
+				name: "rubberBand",
+				kind: "number",
+				default: 0.45,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description: "Give past the bounds, hard wall → loose.",
+			},
+			{
+				name: "flickPower",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 3,
+				step: 0.1,
+				unit: "×",
+				description: "Multiplier on the release velocity handed to the spring.",
+			},
+			{
+				name: "cards",
+				kind: "number",
+				default: 3,
+				min: 1,
+				max: 5,
+				step: 1,
+				description: "How many cards in the stack.",
+			},
+			{
+				name: "throwThreshold",
+				kind: "number",
+				default: 90,
+				min: 20,
+				max: 260,
+				step: 10,
+				unit: "px",
+				description:
+					"Throw distance past which the card cycles to the back instead of springing home. Capped at 90% of bounds so it stays reachable.",
+			},
+		],
+	},
+	{
+		slug: "masonry",
+		name: "Masonry",
+		category: "Power-User Systems",
+		addedAt: "2026-09-18",
+		pro: true,
+		description:
+			"A Pinterest-style grid where every item drops into the shortest column, packed by measurement rather than by a shared row baseline.",
+		dependencies: ["clsx", "tailwind-merge"],
+		cookbook: [
+			"Layout animation",
+			"Stagger",
+			"Scroll reveal",
+			"Spatial consistency",
+			"Layout thrashing",
+			"will-change",
+			"Compositing",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/masonry/masonry.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "minColumnWidth",
+				kind: "number",
+				default: 240,
+				min: 120,
+				max: 480,
+				step: 10,
+				unit: "px",
+				description:
+					"Target column width. The column count is derived from the container, not the viewport.",
+			},
+			{
+				name: "maxColumns",
+				kind: "number",
+				default: 4,
+				min: 1,
+				max: 8,
+				step: 1,
+				description:
+					"Ceiling on the derived column count, however wide the container gets.",
+			},
+			{
+				name: "gap",
+				kind: "number",
+				default: 16,
+				min: 0,
+				max: 48,
+				step: 2,
+				unit: "px",
+				description: "Space between columns and between stacked items.",
+			},
+			{
+				name: "packing",
+				kind: "enum",
+				default: "balanced",
+				options: ["balanced", "sequential"],
+				description:
+					"Balanced packs into the shortest column; sequential keeps strict left-to-right order.",
+			},
+			{
+				name: "transition",
+				kind: "number",
+				default: 320,
+				min: 0,
+				max: 800,
+				step: 20,
+				unit: "ms",
+				description: "How long an item takes to glide to a new slot. 0 snaps.",
+			},
+			{
+				name: "stagger",
+				kind: "number",
+				default: 45,
+				min: 0,
+				max: 120,
+				step: 5,
+				unit: "ms",
+				description: "Delay added per item as a batch reveals.",
+				disabledWhen: { prop: "revealOnScroll", equals: false },
+			},
+			{
+				name: "revealOnScroll",
+				kind: "boolean",
+				default: true,
+				description: "Fade and rise each item in as it enters the viewport.",
+			},
+			{
+				name: "revealDistance",
+				kind: "number",
+				default: 16,
+				min: 0,
+				max: 64,
+				step: 4,
+				unit: "px",
+				description: "How far an item rises on reveal.",
+				disabledWhen: { prop: "revealOnScroll", equals: false },
+			},
+		],
+	},
+	{
+		slug: "rubiks-cube",
+		name: "RubiksCube",
+		category: "Power-User Systems",
+		addedAt: "2026-09-18",
+		pro: true,
+		pausable: true,
+		description:
+			"A Rubik's cube that scrambles and solves itself on an endless loop while spinning like a planet. Two independent rotation layers, and every quarter-turn is quantised back to exact integers, so an hour of turns drifts by nothing at all.",
+		dependencies: ["three", "@react-three/fiber", "clsx", "tailwind-merge"],
+		cookbook: ["Rotate", "Orbit", "Loop", "Drag", "Easing", "Idle animation"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/rubiks-cube/rubiks-cube.tsx",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "autoRotate",
+				kind: "boolean",
+				default: true,
+				description:
+					"Spin the whole cube on its own axis, independently of the solve loop. Off leaves the cube still while it keeps scrambling and solving.",
+			},
+			{
+				name: "rotationSpeed",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Multiplier on the ambient spin rate. A drag re-aims the spin axis but never changes this — direction is yours, speed is the component's.",
+				disabledWhen: { prop: "autoRotate", equals: false },
+			},
+			{
+				name: "moveDuration",
+				kind: "number",
+				default: 380,
+				min: 120,
+				max: 1200,
+				step: 10,
+				unit: "ms",
+				description:
+					"How long one quarter-turn takes. The ease overshoots slightly and settles back, which is the mechanical click a real cube makes.",
+			},
+			{
+				name: "scrambleMoveCount",
+				kind: "number",
+				default: 12,
+				min: 1,
+				max: 30,
+				step: 1,
+				description:
+					"Quarter-turns per scramble. The solve is this sequence replayed backwards and negated, so a longer scramble buys a longer solve for free.",
+			},
+			{
+				name: "pauseBetweenCycles",
+				kind: "number",
+				default: 700,
+				min: 0,
+				max: 3000,
+				step: 50,
+				unit: "ms",
+				description:
+					"Beat of stillness between scramble and solve. Zero runs the two together into one continuous churn.",
+			},
+			{
+				name: "cameraDistance",
+				kind: "number",
+				default: 11,
+				min: 6,
+				max: 22,
+				step: 0.5,
+				description:
+					"Orbit radius, which is what sets the cube's apparent size. Drag anywhere to orbit; elevation stops short of the poles so the cube never tumbles sideways.",
+			},
+			{
+				name: "gap",
+				kind: "number",
+				default: 0.06,
+				min: 0,
+				max: 0.3,
+				step: 0.01,
+				description:
+					"Space between cubies, in cubie widths. Widen it and the black core shows through the seams, exactly as a real cube's does.",
+			},
+			{
+				name: "palette",
+				kind: "enum",
+				default: "classic",
+				options: ["classic", "amethyst", "mono", "neon"],
+				description:
+					"Named sticker scheme. The component also takes a `colors` record to override any individual face.",
+			},
+			{
+				name: "bodyColor",
+				kind: "color",
+				default: "#16161c",
+				description:
+					"Plastic behind the stickers, and the core seen through the seams.",
+			},
+			{
+				name: "background",
+				kind: "color",
+				default: "#0b0d14",
+				description: "The dark field the cube turns in.",
+			},
+			{
+				name: "glossy",
+				kind: "boolean",
+				default: true,
+				description:
+					"Wet-lacquer clearcoat plus a faint oil-slick sheen, lit by a small studio environment. Off leaves flat matte plastic.",
+			},
+			{
+				name: "glow",
+				kind: "boolean",
+				default: false,
+				description:
+					"Emissive stickers plus an additive amethyst halo at the silhouette. Off by default: it is a flourish, not the point.",
+			},
+		],
+	},
+	{
+		slug: "timeline-scrubber",
+		name: "TimelineScrubber",
+		category: "Power-User Systems",
+		addedAt: "2026-09-18",
+		pro: true,
+		pausable: true,
+		description:
+			"Drag the head, snap it to markers, zoom into the track and let the viewport follow playback. One derived number — pixels per second — places the ticks, the pips, the head, the drag target and the follow scroll, so nothing on screen can disagree about where a time actually is.",
+		dependencies: ["lucide-react", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Drag",
+			"Tabular numbers",
+			"Interruptible animation",
+			"Frame rate (FPS)",
+			"Spatial consistency",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/timeline-scrubber/timeline-scrubber.tsx",
+			},
+			...TIMELINE_PEERS,
+			UTILS_VARIANT,
+			LOOP_HOST_VARIANT,
+		],
+		props: [
+			{
+				name: "duration",
+				kind: "number",
+				default: 24,
+				min: 4,
+				max: 600,
+				step: 1,
+				unit: "s",
+				description:
+					"Total length of the timeline. Everything on screen is a fraction of it, so shortening it zooms the whole track in rather than trimming the right-hand end off.",
+			},
+			{
+				name: "fps",
+				kind: "number",
+				default: 30,
+				min: 8,
+				max: 120,
+				step: 1,
+				description:
+					"Frames per second. Sets the last field of the timecode and the size of an arrow-key step — one frame, because a finer step would move the head without moving the readout, which reads as the control being broken.",
+			},
+			{
+				name: "zoom",
+				kind: "number",
+				default: 1,
+				min: 1,
+				max: 40,
+				step: 0.5,
+				unit: "×",
+				description:
+					"Initial horizontal zoom; Ctrl/Cmd + wheel overrides it live and holds the time under the cursor fixed while it does. 1 fits the whole duration in the viewport, which is the only zoom at which the scrollbar is guaranteed absent.",
+			},
+			{
+				name: "snapThreshold",
+				kind: "number",
+				default: 10,
+				min: 0,
+				max: 40,
+				step: 1,
+				unit: "px",
+				description:
+					"How close the pointer has to be to a marker to snap onto it. Specified in pixels and converted through the current zoom, because what makes a snap feel right is the distance on screen — a tolerance in seconds is generous zoomed out, unusable zoomed in, and needs re-tuning at every zoom. Hold Alt while dragging to bypass it.",
+			},
+			{
+				name: "showRuler",
+				kind: "boolean",
+				default: true,
+				description:
+					"Show the tick ruler above the lane. Its divisions come off a fixed 1-2-5 ladder rather than being computed, so zooming walks through the same handful of intervals instead of inventing a new one at every step.",
+			},
+			{
+				name: "showMarkers",
+				kind: "boolean",
+				default: true,
+				description:
+					"Show the marker pips. Off also disables snapping — there is nothing to snap to, and leaving invisible snap targets on the track is how a scrubber earns a reputation for fighting you.",
+			},
+			{
+				name: "loop",
+				kind: "boolean",
+				default: true,
+				description:
+					"Wrap to the start on reaching the end. The overshoot carries across the wrap rather than being discarded, so a looping timeline does not run gradually slow at high playback rates.",
+			},
+			{
+				name: "playbackRate",
+				kind: "number",
+				default: 1,
+				min: 0.1,
+				max: 8,
+				step: 0.1,
+				unit: "×",
+				description:
+					"Playback speed. The clock advances by real elapsed time from the runtime host, not by a fixed increment per frame, so a dropped frame costs a frame of smoothness and never a frame of time.",
+			},
+			{
+				name: "follow",
+				kind: "enum",
+				default: "page",
+				options: ["off", "page", "center"],
+				description:
+					"What the viewport does when the head runs past its edge while playing. Page jumps a whole viewport and leaves the ruler still most of the time, which is what makes it readable; center pins the head and moves the world instead, which never loses it but never lets the ruler rest.",
+			},
+			{
+				name: "trackHeight",
+				kind: "number",
+				default: 72,
+				min: 40,
+				max: 180,
+				step: 4,
+				unit: "px",
+				description:
+					"Height of the lane under the ruler. The playhead spans ruler and lane together, so this changes how much of the track the head has to cross rather than how tall the component's chrome is.",
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"Playhead, the active transport button, and any marker that does not carry its own colour.",
+			},
+		],
+	},
+	{
+		slug: "data-grid",
+		name: "DataGrid",
+		category: "Power-User Systems",
+		addedAt: "2026-09-18",
+		pro: true,
+		description:
+			"A virtualised grid over thousands of rows: resizable columns, multi-key sorting, range selection and keyboard navigation. Header and body share one scroller so they can never desync, selection is keyed by row id so it survives a re-sort, and focus stays on the viewport so a recycled row can never take the arrow keys down with it. Give it a parent with a bounded height — like every windowing implementation, in an auto-height parent it quietly stops windowing and renders every row.",
+		dependencies: ["lucide-react", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Skeleton / Shimmer",
+			"Layout thrashing",
+			"Frame rate (FPS)",
+			"Spatial consistency",
+			"Frequency of use",
+		],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/data-grid/data-grid.tsx",
+			},
+			...DATA_GRID_PEERS,
+			UTILS_VARIANT,
+			LOOP_HOST_VARIANT,
+		],
+		props: [
+			{
+				name: "rowHeight",
+				kind: "number",
+				default: 34,
+				min: 22,
+				max: 72,
+				step: 2,
+				unit: "px",
+				description:
+					"Height of one row. Fixed rather than measured, and that is the whole performance story — a constant height makes the first visible row a division instead of a search, so scrolling to row 90,000 costs exactly what scrolling to row 3 costs.",
+			},
+			{
+				name: "headerHeight",
+				kind: "number",
+				default: 34,
+				min: 24,
+				max: 64,
+				step: 2,
+				unit: "px",
+				description:
+					"Height of the header. It shares the body's scroller, so this is also the offset the window calculation has to subtract from `scrollTop` — get it wrong and the rendered slice lags the scroll by exactly one header.",
+			},
+			{
+				name: "overscan",
+				kind: "number",
+				default: 6,
+				min: 0,
+				max: 30,
+				step: 1,
+				description:
+					"Extra rows rendered above and below the fold. At 0 you can out-scroll the renderer and see white bands at the leading edge; past about fifteen you are paying for rows nobody will reach before they are recycled.",
+			},
+			{
+				name: "minColumnWidth",
+				kind: "number",
+				default: 80,
+				min: 40,
+				max: 240,
+				step: 4,
+				unit: "px",
+				description:
+					"Floor a column can be dragged to. Without one a column can be collapsed to nothing and then cannot be grabbed again, because the handle it would be grabbed by has no width either.",
+			},
+			{
+				name: "stickyHeader",
+				kind: "boolean",
+				default: true,
+				description:
+					"Pin the header while the body scrolls. It sits inside the same scroller rather than in a second one kept in sync by hand — that synchronisation is never actually synchronous, and the header lagging the body on a fast horizontal flick is its signature.",
+			},
+			{
+				name: "resizableColumns",
+				kind: "boolean",
+				default: true,
+				description:
+					"Allow dragging column edges. The handle is a sibling of the sort button, not a child: nested, every resize would end by firing a click on the header and re-sorting the grid you were only trying to widen.",
+			},
+			{
+				name: "sortable",
+				kind: "boolean",
+				default: true,
+				description:
+					"Allow clicking a header to sort. The cycle has three states — ascending, descending, unsorted — because without the third there is no way back to the order the data arrived in, and for a feed that is most-recent-first one click destroys it permanently.",
+			},
+			{
+				name: "multiSort",
+				kind: "boolean",
+				default: true,
+				description:
+					"Shift-click a second header to sort by it as a tiebreak. The rank is printed beside each arrow: two arrows with no numbers do not say which key is primary, and that is the entire difference between two different orderings.",
+			},
+			{
+				name: "selectionMode",
+				kind: "enum",
+				default: "range",
+				options: ["none", "single", "range"],
+				description:
+					"How rows may be selected. Range adds Shift-click for a span and Ctrl/Cmd-click for a toggle, both anchored the same way the keyboard's Shift+Arrow is — one code path, so the two can never disagree about what is selected.",
+			},
+			{
+				name: "zebra",
+				kind: "boolean",
+				default: true,
+				description:
+					"Band alternate rows. Computed from the absolute row index rather than from the position inside the rendered window, which is what stops the stripes from crawling as you scroll.",
+			},
+			{
+				name: "showSkeleton",
+				kind: "boolean",
+				default: false,
+				description:
+					"Render placeholder rows instead of data. They hold the exact row height and column widths the real rows will, so nothing moves when the data lands — a spinner in an empty box only promises a wait, and then rearranges the page at the end of it.",
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"Selection wash, the active-row marker down the left edge, and the colour a sorted header takes.",
 			},
 		],
 	},

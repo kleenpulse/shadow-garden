@@ -1,0 +1,232 @@
+/*
+ * Jinlong — template tokens and base styles.
+ *
+ * Every selector here is scoped to [data-template="jinlong"] (SPEC §V56). A
+ * template renders inside a host page, and a stylesheet that declares `body`, `*`
+ * or `::selection` globally repaints that host. Scoped, it can only reach itself.
+ *
+ * Imported once, from the template's page.tsx.
+ *
+ * ── Rebranding ──────────────────────────────────────────────────────────────
+ * The palette is shadcn-shaped: these variables hold HSL TRIPLETS, not colours,
+ * and are read as `hsl(var(--x))`. That is why the utilities look like
+ * `bg-[hsl(var(--primary-red))]` rather than `bg-[var(--primary-red)]` — a bare
+ * var() would emit a rule and paint nothing.
+ *
+ * --primary-red is the brand. --background is the ground. Everything else follows.
+ */
+
+[data-template="jinlong"] {
+  --radius: var(--sg-radius, 8px);
+
+  /* Triplets, not colours — see above. The bench hands its accent through as a
+     hex, so the fallback chain converts rather than substitutes. */
+  --primary-red: 0 100% 50%;
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 4%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 4%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 45 93% 47%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 0 0% 12%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 14%;
+  --muted-foreground: 0 0% 64%;
+  --accent: 45 93% 47%;
+  --accent-foreground: 0 0% 0%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 100%;
+  --input: 0 0% 20%;
+  --ring: 45 93% 47%;
+}
+
+/* The painted surface. Separate from the token block because next/font writes the
+   --jinlong-* families onto THIS element, and a font mapping that referenced them
+   from an ancestor would resolve against an element that does not have them —
+   invalid at computed-value time, and silently unstyled.
+
+   The bench's accent and background tokens are applied here rather than above,
+   because they arrive as real colours and cannot be substituted into an hsl(). */
+[data-template="jinlong"] [data-jinlong-root] {
+  /* The CJK fallbacks are load-bearing: the display face is Latin-only, so the
+     two Chinese glyphs on the page resolve from the system instead. */
+  --font-display: var(--jinlong-display), "Noto Serif CJK SC", "Source Han Serif SC",
+    "Songti SC", "SimSun", ui-serif, serif;
+  --font-body: var(--jinlong-body), system-ui, sans-serif;
+
+  min-height: 100vh;
+  background-color: var(--sg-bg, hsl(var(--background)));
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-template="jinlong"][data-font-pair="grotesk"] [data-jinlong-root] {
+  --font-display: var(--jinlong-body), system-ui, sans-serif;
+}
+
+[data-template="jinlong"][data-font-pair="serif"] [data-jinlong-root] {
+  --font-display: ui-serif, Georgia, "Times New Roman", serif;
+}
+
+[data-template="jinlong"][data-font-pair="mono"] [data-jinlong-root] {
+  --font-display: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-body: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/*
+ * Held-still mode. hooks/use-still.tsx reads the same signal in JS and skips the
+ * scroll-driven work outright; this covers the CSS half.
+ *
+ * Not `animation: none`: an animation removed mid-flight snaps its element back to
+ * the un-animated position, which moves the page. Collapsing the duration pins it
+ * where it is.
+ */
+[data-template="jinlong"][data-motion="reduced"],
+[data-template="jinlong"][data-motion="reduced"] *,
+[data-template="jinlong"][data-motion="reduced"] *::before,
+[data-template="jinlong"][data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* ── ported from the source stylesheet, scoped ──────────────────────────────── */
+
+@layer base {
+[data-template="jinlong"] {
+		--background: 0 0% 100%;
+		--foreground: 222.2 84% 4.9%;
+		--card: 0 0% 100%;
+		--card-foreground: 222.2 84% 4.9%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 222.2 84% 4.9%;
+		--primary: 222.2 47.4% 11.2%;
+		--primary-foreground: 210 40% 98%;
+		--secondary: 210 40% 96.1%;
+		--secondary-foreground: 222.2 47.4% 11.2%;
+		--muted: 210 40% 96.1%;
+		--muted-foreground: 215.4 16.3% 46.9%;
+		--accent: 210 40% 96.1%;
+		--accent-foreground: 222.2 47.4% 11.2%;
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 210 40% 98%;
+		--border: 214.3 31.8% 91.4%;
+		--input: 214.3 31.8% 91.4%;
+		--ring: 222.2 84% 4.9%;
+		--radius: 0.5rem;
+		--chart-1: 12 76% 61%;
+		--chart-2: 173 58% 39%;
+		--chart-3: 197 37% 24%;
+		--chart-4: 43 74% 66%;
+		--chart-5: 27 87% 67%;
+	}
+
+}
+
+[data-template="jinlong"] #hero__title {
+	mix-blend-mode: luminosity;
+}
+
+[data-template="jinlong"] #menu-button span {
+	transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out,
+		background-color 0.5s ease-in-out;
+	transform-origin: center;
+}
+
+[data-template="jinlong"] [data-menu-open="true"] span:nth-child(1) {
+	transform: translate3d(0, 8px, 0) rotate(45deg);
+}
+
+[data-template="jinlong"] [data-menu-open="true"] span:nth-child(2) {
+	opacity: 0;
+	transform: scaleX(0);
+}
+
+[data-template="jinlong"] [data-menu-open="true"] span:nth-child(3) {
+	transform: translate3d(0, -8px, 0) rotate(-45deg);
+}
+
+[data-template="jinlong"] [data-menu-ul] {
+	box-shadow: 0px 0px 5px rgba(97, 2, 2, 0.641);
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 0px;
+	height: 0px;
+	border-radius: 8px;
+
+	opacity: 0;
+}
+
+[data-template="jinlong"] [data-menu-ul] li {
+	list-style: none;
+	margin: 0;
+	padding: 5px 0;
+	color: #fff0bf;
+}
+
+[data-template="jinlong"] .hide-welcome {
+	animation: jinlong-hide-welcome 1s 0.3s forwards;
+}
+
+[data-template="jinlong"] .animate__welcome {
+	animation: jinlong-rotate-welcome 3s linear infinite;
+}
+
+[data-template="jinlong"] .hero__circle {
+	animation: jinlong-rotate-welcome 10s linear infinite;
+}
+
+[data-template="jinlong"] .hero__circle--hidden {
+	animation: jinlong-deacelerate 5s ease-out alternate;
+}
+
+@keyframes jinlong-deacelerate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes jinlong-rotate-welcome {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes jinlong-hide-welcome {
+	to {
+		transform: translateY(-100%);
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
+[data-template="jinlong"] ::-webkit-scrollbar {
+	width: 8px;
+	height: 0.1px;
+}
+
+/* Written out rather than @apply-ed: the source resolved these through its own
+   tailwind.config, which cannot travel with a template. An @apply naming a utility
+   the host does not define is a hard build error, not a silent miss. */
+[data-template="jinlong"] ::-webkit-scrollbar-thumb {
+	background-color: hsl(var(--primary-red));
+}
+
+[data-template="jinlong"] ::selection {
+	background-color: hsl(var(--primary-red));
+	color: #000;
+}
+

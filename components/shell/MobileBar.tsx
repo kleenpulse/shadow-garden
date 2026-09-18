@@ -6,16 +6,21 @@ import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import CookBookIcon from "@/components/icons/cook-book";
 import { useUIStore } from "@/lib/store";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
+import AuthMenu from "./AuthMenu";
 import Wordmark from "@/components/Wordmark";
-import GithubIcon from "../icons/github";
 
-export default function MobileBar() {
+// `commerce` is resolved server-side in the (shell) layout — armed deployments
+// only. The Go Pro CTA is desktop-only; mobile gets the account menu, whose
+// dropdown carries its own bottom utility row.
+export default function MobileBar({ commerce = false }: { commerce?: boolean }) {
 	const t = useTranslations("chrome.mobileBar");
 	const tc = useTranslations("common");
 	const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
+	const { play, hoverProps } = useInteractionSound();
 	const pathname = usePathname();
 
 	const isCookbook = pathname === "/cookbook";
@@ -53,6 +58,8 @@ export default function MobileBar() {
 					aria-label={t("cookbookLabel")}
 					title={t("cookbookLabel")}
 					aria-current={isCookbook ? "page" : undefined}
+					{...hoverProps()}
+					onClick={() => play("select")}
 					className={`grid size-7 place-items-center rounded-md bg-surface transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none ${
 						isCookbook ? "text-accent" : "text-ink-dim"
 					}`}
@@ -61,16 +68,7 @@ export default function MobileBar() {
 				</Link>
 				<FavoritesLink />
 				<ThemeToggle />
-				<a
-					href="https://github.com/kleenpulse/shadow-garden"
-					target="_blank"
-					rel="noreferrer"
-					aria-label={t("githubLabel")}
-					title={t("githubLabel")}
-					className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim hover:text-accent"
-				>
-					<GithubIcon className="size-4" aria-hidden />
-				</a>
+				{commerce && <AuthMenu />}
 			</div>
 		</div>
 	);

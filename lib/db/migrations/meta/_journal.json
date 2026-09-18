@@ -22,6 +22,20 @@
       "when": 1786213754765,
       "tag": "0002_enable-rls",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789748378101,
+      "tag": "0003_lumpy_mercury",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789748392728,
+      "tag": "0004_auth_link_and_trigger",
+      "breakpoints": true
     }
   ]
 }

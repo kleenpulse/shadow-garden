@@ -28,7 +28,9 @@ import {
 	type CatalogFilter,
 } from "@/lib/store";
 import { useResizable } from "./use-resizable";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import NewBadge from "./NewBadge";
+import ProBadge from "./ProBadge";
 import PillTabs, { type PillTabItem } from "./PillTabs";
 import {
 	CATALOG_FILTER_ATTR,
@@ -51,6 +53,7 @@ export default function Sidebar() {
 	const setSidebarOpen = useUIStore((state) => state.setSidebarOpen);
 	const sidebarWidth = useUIStore((state) => state.sidebarWidth);
 	const setSidebarWidth = useUIStore((state) => state.setSidebarWidth);
+	const { play, typeKey, hoverProps } = useInteractionSound();
 
 	// The label carries the gradient itself rather than the button: a directly
 	// applied `color: transparent` beats the track's inherited text-* utility, which
@@ -58,9 +61,12 @@ export default function Sidebar() {
 	// the fill below is black in both themes — the stock one's mid stop reads 2.9:1
 	// there. Punch-out fill: the amethyst tint every other tab uses muddies gradient
 	// glyphs.
+	// All three tabs always render; CSS hides the New tab (not the strip) while
+	// nothing is fresh, keyed off the has-new attribute — see globals.css.
 	const filterTabs: PillTabItem<CatalogFilter>[] = useMemo(
 		() => [
 			{ value: "all", label: t("filterTabs.all") },
+			{ value: "pro", label: t("filterTabs.pro") },
 			{
 				value: "new",
 				label: (
@@ -99,6 +105,18 @@ export default function Sidebar() {
 	const [collapsed, setCollapsed] = useState<Set<Category>>(new Set());
 	const [active, setActive] = useState(0);
 
+	// The active-row reticle's shared `layoutId` only arms after the first
+	// in-app navigation. motion's snapshot of a span registered at page load is
+	// taken before the snap-to-center effect scrolls the list, so the first
+	// click after a refresh would fly the reticle in from the row's PRE-snap
+	// position — thousands of pixels of streak. Arming on the post-navigation
+	// re-render registers a fresh box; every later flight starts from reality.
+	const initialPathname = useRef(pathname);
+	const [hasNavigated, setHasNavigated] = useState(false);
+	useEffect(() => {
+		if (pathname !== initialPathname.current) setHasNavigated(true);
+	}, [pathname]);
+
 	// Snap the current page's entry into view on load. Centered so its
 	// neighbors stay visible; runs once — later navigation happens via clicks
 	// on already-visible items, where auto-scrolling would only be jarring.
@@ -122,8 +140,7 @@ export default function Sidebar() {
 		if (!scroller || scroller === document.body) return;
 		const box = scroller.getBoundingClientRect();
 		const row = item.getBoundingClientRect();
-		scroller.scrollTop +=
-			row.top - box.top - box.height / 2 + row.height / 2;
+		scroller.scrollTop += row.top - box.top - box.height / 2 + row.height / 2;
 	}, []);
 
 	// Freshness is wall-clock-dependent — same constraint as NewBadge: reading the
@@ -138,11 +155,11 @@ export default function Sidebar() {
 		[now],
 	);
 
-	// The filter strip only means anything while something is New — All alone is
-	// not a choice. It always renders and CSS keys its visibility off the has-new
-	// attribute: the pre-paint script stamps it with the browser clock, and React
-	// re-syncs it here once it has read the same clock (never before `now` lands,
-	// or the sync pass would strip the script's attribute for a frame).
+	// The New tab only means anything while something is New. It always renders
+	// and CSS keys its visibility off the has-new attribute: the pre-paint script
+	// stamps it with the browser clock, and React re-syncs it here once it has
+	// read the same clock (never before `now` lands, or the sync pass would strip
+	// the script's attribute for a frame).
 	useEffect(() => {
 		if (now === null) return;
 		document.documentElement.toggleAttribute(CATALOG_HAS_NEW_ATTR, hasNew);
@@ -168,30 +185,46 @@ export default function Sidebar() {
 		if (mounted) document.documentElement.removeAttribute(CATALOG_FILTER_ATTR);
 	}, [mounted]);
 
+	// Free entries lead, Pro trails — stable sort, so the authored order survives
+	// within each half, and grouping later keeps the split per category.
+	const proLast = useMemo(
+		() => [...registry].sort((a, b) => Number(!!a.pro) - Number(!!b.pro)),
+		[],
+	);
+
 	const filtered = useMemo(() => {
 		if (effectiveFilter === "new") {
 			if (now === null) return [];
-			return registry.filter((entry) => isWithinNewWindow(entry.addedAt, now));
+			return proLast.filter((entry) => isWithinNewWindow(entry.addedAt, now));
 		}
-		return registry;
-	}, [effectiveFilter, now]);
+		if (effectiveFilter === "pro") {
+			return proLast.filter((entry) => entry.pro);
+		}
+		return proLast;
+	}, [effectiveFilter, now, proLast]);
 
 	const searching = search.trim().length > 0;
 
 	const scored = useMemo(() => {
 		if (!searching) return filtered;
-		return filtered
-			.map((entry) => ({
-				entry,
-				score: Math.max(
-					fuzzyScore(search, entry.name),
-					fuzzyScore(search, entry.category),
-					fuzzyScore(search, entry.description),
-				),
-			}))
-			.filter((row) => row.score > 0)
-			.sort((a, b) => b.score - a.score)
-			.map((row) => row.entry);
+		return (
+			filtered
+				.map((entry) => ({
+					entry,
+					score: Math.max(
+						fuzzyScore(search, entry.name),
+						fuzzyScore(search, entry.category),
+						fuzzyScore(search, entry.description),
+					),
+				}))
+				.filter((row) => row.score > 0)
+				// Relevance first; Pro sinks only on a tie, matching the browse order.
+				.sort(
+					(a, b) =>
+						b.score - a.score || Number(!!a.entry.pro) - Number(!!b.entry.pro),
+				)
+				.map((row) => row.entry)
+		);
 	}, [search, searching, filtered]);
 
 	const groups = useMemo(
@@ -252,22 +285,35 @@ export default function Sidebar() {
 		return (
 			// data-* are the pre-paint filter's only handles on a row: the script runs
 			// before this markup is parsed, so it can't inspect anything computed.
-			<li key={entry.slug} data-entry data-added={entry.addedAt}>
+			<li
+				key={entry.slug}
+				data-entry
+				data-added={entry.addedAt}
+				data-pro={entry.pro ? "" : undefined}
+			>
 				<Link
 					href={href}
-					onClick={() => setSidebarOpen(false)}
+					{...hoverProps()}
+					onClick={() => {
+						if (!isActive) play("select"); // no cue re-selecting the current page
+						setSidebarOpen(false);
+					}}
 					aria-current={isActive ? "page" : undefined}
 					className={`relative flex items-center justify-between gap-2 rounded-sm px-2.5 py-1.5 text-sm transition-colors ${
 						isActive
 							? "font-medium text-accent"
 							: isHighlighted
-								? "bg-raised/50 text-ink"
-								: "text-ink-dim hover:bg-raised/40 hover:text-ink"
+							? "bg-raised/50 text-ink"
+							: "text-ink-dim hover:bg-raised/40 hover:text-ink"
 					}`}
 				>
 					{isActive && (
 						<motion.span
-							layoutId="sg-sidebar__active"
+							// Armed only after the first navigation — see `hasNavigated` above.
+							// The key forces a re-register so motion measures a fresh box at
+							// arming time instead of reusing the pre-arm node.
+							key={hasNavigated ? "sg-live" : "sg-ssr"}
+							layoutId={hasNavigated ? "sg-sidebar__active" : undefined}
 							className="pointer-events-none absolute inset-0 z-0 rounded-sm bg-accent/10"
 							transition={{ type: "spring", stiffness: 350, damping: 30 }}
 						>
@@ -278,11 +324,14 @@ export default function Sidebar() {
 							<span className="absolute -bottom-px -end-px size-2.5 border-b border-e border-accent" />
 						</motion.span>
 					)}
-					<span className="relative z-10 min-w-0 flex-1">
+					<span className="relative z-10 flex min-w-0 flex-1 items-center gap-1.5">
 						{/* Tiny corner dot instead of the full pill — sidebar rows are
 						    narrow, and absolute positioning keeps the name column aligned. */}
 						<NewBadge addedAt={entry.addedAt} variant="tiny" />
-						<span className="block truncate font-sans">{entry.name}</span>
+						<span className="min-w-0 flex-1 truncate font-sans">
+							{entry.name}
+						</span>
+						<ProBadge pro={entry.pro} variant="tiny" />
 					</span>
 				</Link>
 			</li>
@@ -296,7 +345,7 @@ export default function Sidebar() {
 					type="button"
 					aria-label={t("closeNavigation")}
 					onClick={() => setSidebarOpen(false)}
-					className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+					className="fixed inset-0 z-30 bg-white/40 backdrop-blur-xs lg:hidden dark:bg-black/50"
 				/>
 			)}
 			<aside
@@ -329,13 +378,16 @@ export default function Sidebar() {
 							? t("catalogCountFiltered", {
 									matched: scored.length,
 									total: filtered.length,
-								})
+							  })
 							: t("catalogCount", { count: filtered.length })}
 					</p>
 					<input
 						type="search"
 						value={search}
-						onChange={(event) => setSearch(event.target.value)}
+						onChange={(event) => {
+							typeKey();
+							setSearch(event.target.value);
+						}}
 						onKeyDown={onSearchKeyDown}
 						placeholder={t("searchPlaceholder")}
 						aria-label={t("searchLabel")}
@@ -396,9 +448,14 @@ export default function Sidebar() {
 									>
 										<ChevronDown
 											aria-hidden
-											className={`size-3.5 shrink-0 transition-transform ${isCollapsed ? "-rotate-90" : ""}`}
+											className={`size-3.5 shrink-0 transition-transform ${
+												isCollapsed ? "-rotate-90" : ""
+											}`}
 										/>
-										{copy(`pages.categories.${anchorFor(group.category)}`, group.category)}
+										{copy(
+											`pages.categories.${anchorFor(group.category)}`,
+											group.category,
+										)}
 									</button>
 									{!isCollapsed && (
 										<ul className="mt-0.5 space-y-0.5">

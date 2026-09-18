@@ -13,6 +13,7 @@ import type { ComponentEntry } from "@/lib/registry/types";
 import { cn } from "@/lib/utils";
 import { displayName } from "@/lib/display-name";
 import NewBadge from "@/components/shell/NewBadge";
+import ProBadge from "@/components/shell/ProBadge";
 import FavoriteButton from "@/components/shell/FavoriteButton";
 
 export function ComponentHeader({ entry }: { entry: ComponentEntry }) {
@@ -33,6 +34,7 @@ export function ComponentHeader({ entry }: { entry: ComponentEntry }) {
 				>
 					{displayName(entry.name)}
 				</h1>
+				<ProBadge pro={entry.pro} />
 				<NewBadge addedAt={entry.addedAt} />
 				<FavoriteButton
 					slug={entry.slug}

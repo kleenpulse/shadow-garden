@@ -10,13 +10,14 @@ Every component ships with a live preview, a Controls panel that tunes each prop
 ## What's inside
 
 <!-- catalog:start -->
-**108 components** across 5 categories:
+**142 components** across 6 categories:
 
-- **Backgrounds** (26) — WebGL/canvas ambience
-- **Text Animations** (19) — type in motion
-- **Micro-interactions** (32) — small mechanisms, felt more than seen
-- **Power-User Systems** (23) — command surfaces for operators
-- **Hero Templates** (8) — landing openers with dimension
+- **Backgrounds** (32) — WebGL/canvas ambience
+- **Text Animations** (24) — type in motion
+- **Micro-interactions** (39) — small mechanisms, felt more than seen
+- **Power-User Systems** (29) — command surfaces for operators
+- **Hero Templates** (9) — landing openers with dimension
+- **Landing Pages** (9) — whole-page scroll machines
 
 Browse the full catalog with live previews by running the dev server (see below).
 <!-- catalog:end -->

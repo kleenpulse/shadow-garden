@@ -20,6 +20,7 @@ const BLURB: Record<string, string> = {
 	"Micro-interactions": "small mechanisms, felt more than seen",
 	"Power-User Systems": "command surfaces for operators",
 	"Hero Templates": "landing openers with dimension",
+	"Landing Pages": "whole-page scroll machines",
 };
 
 const total = registry.length;

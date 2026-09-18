@@ -1,0 +1,221 @@
+/*
+ * Aphelion — template tokens and base styles.
+ *
+ * Every selector in this file is scoped to [data-template="aphelion"] (SPEC
+ * §V56). A template renders inside a host page — the Shadow Garden bench, a
+ * Storybook, whatever you drop it into — and a stylesheet that declares `body`
+ * or `::selection` globally repaints that host. Scoped, it can only ever touch
+ * itself.
+ *
+ * Import it once, from the template's page.tsx.
+ *
+ * ── Rebranding this template ────────────────────────────────────────────────
+ * The block below IS the brand. --accent tints the aurora, the starfield haze,
+ * the eyebrows and every hover; --background is the night itself. Both feed
+ * the WebGPU shaders too — lib/token-colors.ts reads the resolved values into
+ * uniforms, so a color change here recolors the sky without touching WGSL.
+ *
+ * The var(--sg-*, fallback) indirection lets a host override a token live
+ * without a rebuild. Delete the var() wrapper and keep the fallback if you
+ * would rather not carry that seam.
+ */
+
+/* Everything below lives in @layer base. Unlayered CSS outranks ALL layered
+   CSS, and Tailwind v4 puts utilities in @layer utilities — so an unlayered
+   `* { margin: 0 }` reset here would silently zero every m-* / p-* utility in
+   the template (SPEC §B29). Inside `base`, the reset still applies wherever no
+   utility speaks, and utilities win wherever one does. */
+@layer base {
+
+[data-template="aphelion"] {
+  --radius: var(--sg-radius, 6px);
+
+  --background: var(--sg-bg, #050810);
+  --foreground: #e8ecf4;
+  --muted-foreground: #8b93a7;
+  --border: #1a2030;
+  --accent: var(--sg-accent, #7fd4c1);
+}
+
+/* The painted surface. Separate from the token block above because next/font
+   writes the --aphelion-* families onto THIS element, and a font mapping that
+   referenced them from an ancestor would resolve against an element that does
+   not have them — invalid at computed-value time, and silently unstyled. */
+[data-template="aphelion"] [data-aphelion-root] {
+  --font-display: var(--aphelion-display), ui-serif, Georgia, serif;
+  --font-body: var(--aphelion-grotesk), system-ui, sans-serif;
+
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-template="aphelion"][data-font-pair="grotesk"] [data-aphelion-root] {
+  --font-display: var(--aphelion-grotesk), system-ui, sans-serif;
+}
+
+[data-template="aphelion"][data-font-pair="serif"] [data-aphelion-root] {
+  --font-display: ui-serif, Georgia, "Times New Roman", serif;
+  --font-body: var(--aphelion-grotesk), system-ui, sans-serif;
+}
+
+[data-template="aphelion"][data-font-pair="mono"] [data-aphelion-root] {
+  --font-display: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-body: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+[data-template="aphelion"] * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[data-template="aphelion"] ::selection {
+  background-color: var(--accent);
+  color: var(--background);
+}
+
+[data-template="aphelion"] button:not(:disabled),
+[data-template="aphelion"] [role="button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+/* ── CSS night sky — the no-WebGPU fallback, and the loading state ──────────
+   These two layers stand in for the shaders (SPEC §V68): tiled radial-gradient
+   stars and a color-mixed aurora wash. Deliberately designed, not apologetic —
+   a Firefox visitor gets a finished page, only a stiller one. */
+
+[data-template="aphelion"] .aphelion-stars-fallback {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(1px 1px at 22% 34%, rgba(232, 236, 244, 0.9), transparent 60%),
+    radial-gradient(1px 1px at 68% 12%, rgba(232, 236, 244, 0.7), transparent 60%),
+    radial-gradient(1.5px 1.5px at 84% 56%, rgba(232, 236, 244, 0.8), transparent 60%),
+    radial-gradient(1px 1px at 41% 79%, rgba(232, 236, 244, 0.6), transparent 60%),
+    radial-gradient(1px 1px at 8% 61%, rgba(232, 236, 244, 0.5), transparent 60%);
+  background-size:
+    260px 260px,
+    340px 340px,
+    420px 420px,
+    300px 300px,
+    380px 380px;
+}
+
+[data-template="aphelion"] .aphelion-hero-fallback {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(1px 1px at 30% 24%, rgba(232, 236, 244, 0.8), transparent 60%),
+    radial-gradient(1px 1px at 74% 42%, rgba(232, 236, 244, 0.6), transparent 60%),
+    radial-gradient(1.5px 1.5px at 56% 14%, rgba(232, 236, 244, 0.7), transparent 60%),
+    linear-gradient(
+      to top,
+      transparent 30%,
+      color-mix(in srgb, var(--accent) 12%, transparent) 55%,
+      color-mix(in srgb, var(--accent) 22%, transparent) 72%,
+      transparent 95%
+    );
+  background-size:
+    300px 300px,
+    360px 360px,
+    320px 320px,
+    100% 100%;
+}
+
+[data-template="aphelion"] .aphelion-hero-fallback::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    115deg,
+    transparent 25%,
+    color-mix(in srgb, var(--accent) 16%, transparent) 45%,
+    transparent 60%,
+    color-mix(in srgb, var(--accent) 10%, transparent) 75%,
+    transparent 90%
+  );
+  background-size: 220% 100%;
+  animation: aphelion-aurora-drift 22s ease-in-out infinite alternate;
+}
+
+/* ── Room windows — pure-CSS night views, one per orientation ─────────────── */
+
+[data-template="aphelion"] .aphelion-window {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(1px 1px at 24% 30%, rgba(232, 236, 244, 0.9), transparent 60%),
+    radial-gradient(1px 1px at 70% 60%, rgba(232, 236, 244, 0.7), transparent 60%),
+    radial-gradient(1.5px 1.5px at 48% 18%, rgba(232, 236, 244, 0.8), transparent 60%),
+    linear-gradient(to top, color-mix(in srgb, var(--accent) 10%, var(--background)) 0%, transparent 45%);
+  background-size:
+    180px 180px,
+    220px 220px,
+    200px 200px,
+    100% 100%;
+}
+
+[data-template="aphelion"] .aphelion-window-east {
+  background-image:
+    radial-gradient(1px 1px at 24% 30%, rgba(232, 236, 244, 0.9), transparent 60%),
+    radial-gradient(1px 1px at 70% 60%, rgba(232, 236, 244, 0.7), transparent 60%),
+    radial-gradient(circle at 85% 85%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 55%),
+    linear-gradient(to top, #101626 0%, transparent 60%);
+  background-size:
+    180px 180px,
+    220px 220px,
+    100% 100%,
+    100% 100%;
+}
+
+[data-template="aphelion"] .aphelion-window-south {
+  background-image:
+    radial-gradient(1px 1px at 30% 40%, rgba(232, 236, 244, 0.9), transparent 60%),
+    radial-gradient(1.5px 1.5px at 62% 22%, rgba(232, 236, 244, 0.8), transparent 60%),
+    linear-gradient(160deg, transparent 40%, color-mix(in srgb, var(--accent) 14%, transparent) 70%, transparent 95%),
+    linear-gradient(to top, #0d1322 0%, transparent 55%);
+  background-size:
+    200px 200px,
+    240px 240px,
+    100% 100%,
+    100% 100%;
+}
+
+[data-template="aphelion"] .aphelion-window-zenith {
+  background-image:
+    radial-gradient(1px 1px at 20% 25%, rgba(232, 236, 244, 0.95), transparent 60%),
+    radial-gradient(1px 1px at 75% 70%, rgba(232, 236, 244, 0.8), transparent 60%),
+    radial-gradient(1.5px 1.5px at 55% 45%, rgba(232, 236, 244, 0.9), transparent 60%),
+    radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%);
+  background-size:
+    160px 160px,
+    190px 190px,
+    210px 210px,
+    100% 100%;
+}
+
+/* Namespaced — a bare keyframe name is global no matter where the rule sits,
+   so two templates on one page would silently share one animation. */
+@keyframes aphelion-aurora-drift {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+/* ── Reduced motion: the fallback layers hold still too (SPEC §V70) ───────── */
+
+[data-template="aphelion"][data-motion="reduced"] .aphelion-hero-fallback::after {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-template="aphelion"] .aphelion-hero-fallback::after {
+    animation: none;
+  }
+}
+
+}

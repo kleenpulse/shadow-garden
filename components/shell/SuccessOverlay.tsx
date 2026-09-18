@@ -168,7 +168,7 @@ export default function SuccessOverlay({ onDismiss }: { onDismiss: () => void })
         ref={backdropRef}
         aria-hidden
         onClick={() => dismiss()}
-        className="absolute inset-0 bg-surface/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-white/40 backdrop-blur-xs dark:bg-black/50"
       />
 
       <div

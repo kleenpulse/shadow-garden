@@ -7,7 +7,8 @@ export type Category =
   | "Text Animations"
   | "Micro-interactions"
   | "Power-User Systems"
-  | "Hero Templates";
+  | "Hero Templates"
+  | "Landing Pages";
 
 // Fixed display order for the sidebar / catalog grouping.
 export const CATEGORY_ORDER: Category[] = [
@@ -16,7 +17,24 @@ export const CATEGORY_ORDER: Category[] = [
   "Micro-interactions",
   "Power-User Systems",
   "Hero Templates",
+  "Landing Pages",
 ];
+
+/**
+ * What an entry IS. A component is one effect in one file (plus peers); a
+ * template is a whole landing page — 25-40 files, no tunable effect, and a
+ * scroll machine that cannot render inside the bench's overflow-hidden stage.
+ *
+ * This is the ONLY branch point between the two. It drives three renderers —
+ * the preview (iframe vs live), the code panel (tree vs tab strip) and the
+ * install copy — and nothing else. Everything downstream of the registry
+ * (sidebar, catalog, favorites, cookbook, getSource, the AI prompt) reads an
+ * entry the same way regardless.
+ *
+ * Optional, defaulting to "component": existing entries would otherwise all
+ * need a field that says what they already are.
+ */
+export type EntryKind = "component" | "template";
 
 export type PropValue = number | string | boolean;
 export type TunedValues = Record<string, PropValue>;
@@ -84,7 +102,9 @@ export type PropSchema = NumberProp | EnumProp | BooleanProp | ColorProp;
 export type VariantRole = "component" | "hook" | "util" | "peer";
 
 export type Variant = {
-  lang: "js" | "ts";
+  /** `css` ships a template's scoped token sheet. It takes a different comment
+      stripper from the TS/JS files — see strip-css-comments.ts. */
+  lang: "js" | "ts" | "css";
   style: "css" | "tailwind";
   /** Path to the canonical source file on disk, relative to the repo root. */
   file: string;
@@ -98,9 +118,15 @@ export interface ComponentEntry {
   slug: string;
   name: string;
   category: Category;
+  /** Defaults to `"component"`. See EntryKind. */
+  kind?: EntryKind;
   /** ISO date (YYYY-MM-DD) the component was added. Drives the transient "New"
       badge (< NEW_WINDOW_DAYS old); absent means never-new. */
   addedAt?: string;
+  /** Member of the paid tier. The Code tab, install block and AI prompt lock
+      for it only while the commerce stack is armed (lib/capabilities.ts
+      commerceArmed); the badge shows regardless. Absent means free. */
+  pro?: true;
   description: string;
   /** Drives the Controls panel and the Props API table. */
   props: PropSchema[];

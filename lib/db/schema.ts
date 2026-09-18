@@ -1,4 +1,5 @@
 import {
+	boolean,
 	index,
 	integer,
 	jsonb,
@@ -9,10 +10,16 @@ import {
 	timestamp,
 	uuid,
 } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
-// The database is anonymous engagement tracking only — no accounts, no
-// billing. Identity, where a row needs one, is the per-browser `sg_vid`
-// cookie minted by the API routes.
+// Engagement tracking stays anonymous (per-browser `sg_vid` cookie minted by
+// the API routes); accounts exist only for billing — `profiles` mirrors the
+// Supabase auth uid and `entitlements` holds the Pro purchase state.
+//
+// Supabase owns `auth.users` (in the `auth` schema, not Drizzle-managed). Drizzle
+// manages the `public` schema only. `profiles.id` mirrors the auth uid; the actual
+// FK to auth.users(id) + the insert trigger are added in a hand-written SQL
+// migration, since Drizzle can't reference a table in a schema it doesn't own.
 //
 // Every table carries `.enableRLS()` with NO policies: all access goes through
 // the server's DATABASE_URL connection (table owner, bypasses RLS), and
@@ -20,9 +27,72 @@ import {
 // can neither read nor write these tables. Declared here so a freshly migrated
 // table can never ship "UNRESTRICTED" again.
 
+export const entitlementType = pgEnum("entitlement_type", [
+	"subscription",
+	"lifetime",
+]);
+
+export const entitlementStatus = pgEnum("entitlement_status", [
+	"active",
+	"canceled",
+	"revoked",
+	"past_due",
+	"expired",
+	"incomplete",
+]);
+
 // What a feedback submission is about. Stable domain → native pg enum.
 // Adding a value later needs an ALTER TYPE migration.
 export const feedbackType = pgEnum("feedback_type", ["bug", "idea", "other"]);
+
+export const profiles = pgTable("profiles", {
+	id: uuid("id").primaryKey(), // == auth.users(id); FK added via SQL migration
+	email: text("email"),
+	displayName: text("display_name"),
+	// Set the first time we send the welcome email. The auth callback claims it
+	// with a conditional UPDATE (WHERE ... IS NULL) so the welcome fires exactly
+	// once even though the callback runs on every login.
+	welcomeEmailSentAt: timestamp("welcome_email_sent_at", { withTimezone: true }),
+	// Admin gate — read by the operations console on every gated request. Nothing
+	// in the customer app writes it; it is granted by hand in SQL. 'user' | 'admin'.
+	role: text("role").notNull().default("user"),
+	// Kill Switch — the durable ban record. auth.users.banned_until blocks token
+	// REFRESH at the auth server, so an already-issued access token survives until
+	// it expires; these columns are what an app-side gate re-checks in the meantime.
+	banned: boolean("banned").notNull().default(false),
+	bannedAt: timestamp("banned_at", { withTimezone: true }),
+	bannedReason: text("banned_reason"),
+	createdAt: timestamp("created_at", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+}).enableRLS();
+
+// Single row per user — the resolved source of truth for the `pro` flag. `pro` is
+// DERIVED, never stored: status='active' AND (current_period_end IS NULL OR > now()).
+export const entitlements = pgTable("entitlements", {
+	id: uuid("id").primaryKey().defaultRandom(),
+	userId: uuid("user_id")
+		.notNull()
+		.unique()
+		.references(() => profiles.id, { onDelete: "cascade" }),
+	type: entitlementType("type").notNull(),
+	status: entitlementStatus("status").notNull(),
+	polarCustomerId: text("polar_customer_id"),
+	polarSubscriptionId: text("polar_subscription_id"), // subscription only
+	polarOrderId: text("polar_order_id"), // lifetime only
+	polarProductId: text("polar_product_id"),
+	currentPeriodEnd: timestamp("current_period_end", { withTimezone: true }), // NULL == lifetime
+	cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true })
+		.defaultNow()
+		.notNull(),
+}).enableRLS();
 
 // Per-component engagement ledger, keyed by the registry `slug` (no FK — the
 // code-side registry is the catalog of record; this table only holds counters).
@@ -102,3 +172,17 @@ export const feedback = pgTable(
 		index("feedback_status_idx").on(t.status),
 	],
 ).enableRLS();
+
+export const profilesRelations = relations(profiles, ({ one }) => ({
+	entitlement: one(entitlements, {
+		fields: [profiles.id],
+		references: [entitlements.userId],
+	}),
+}));
+
+export const entitlementsRelations = relations(entitlements, ({ one }) => ({
+	profile: one(profiles, {
+		fields: [entitlements.userId],
+		references: [profiles.id],
+	}),
+}));

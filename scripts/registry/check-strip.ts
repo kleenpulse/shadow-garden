@@ -13,6 +13,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import ts from "typescript";
 import { stripComments } from "../../lib/registry/strip-comments";
+import { stripCssComments } from "../../lib/registry/strip-css-comments";
 import { registry } from "../../lib/registry/index";
 
 const ROOT = process.cwd();
@@ -144,12 +145,72 @@ const files = [
   ]),
 ].filter((file) => existsSync(file));
 
+/**
+ * Structural signature of a stylesheet: the braces, semicolons and colons that
+ * are neither inside a string nor inside a comment. A stripper that ate a
+ * declaration, unbalanced a block, or chewed into `content: "…"` changes these
+ * counts; removing comments cannot.
+ *
+ * Written index-first rather than reusing the stripper, deliberately. This is the
+ * CSS analogue of parsing the TS output with typescript above: the check has to
+ * be a second, independent opinion about where the comments are, or it only
+ * proves the stripper agrees with itself.
+ */
+function cssShape(text: string): string {
+  const counts = { "{": 0, "}": 0, ";": 0, ":": 0 } as Record<string, number>;
+  let i = 0;
+  while (i < text.length) {
+    const c = text[i]!;
+    if (c === "/" && text[i + 1] === "*") {
+      const close = text.indexOf("*/", i + 2);
+      i = close === -1 ? text.length : close + 2;
+      continue;
+    }
+    if (c === '"' || c === "'") {
+      let j = i + 1;
+      while (j < text.length && text[j] !== c && text[j] !== "\n") {
+        j += text[j] === "\\" ? 2 : 1;
+      }
+      i = j + 1;
+      continue;
+    }
+    if (c in counts) counts[c]!++;
+    i++;
+  }
+  return Object.entries(counts)
+    .map(([k, n]) => k + n)
+    .join(" ");
+}
+
 let failed = 0;
 let stripped = 0;
 
 for (const file of files) {
   const rel = path.relative(ROOT, file).replace(/\\/g, "/");
   const original = readFileSync(file, "utf8");
+
+  if (rel.endsWith(".css")) {
+    const cleanCss = stripCssComments(original);
+    if (cleanCss !== original) stripped++;
+    if (cssShape(cleanCss) !== cssShape(original)) {
+      console.error(
+        `✗ ${rel}\n    css shape changed: ${cssShape(original)} → ${cssShape(cleanCss)}`,
+      );
+      failed++;
+      continue;
+    }
+    if (cleanCss.includes("/*")) {
+      console.error(`✗ ${rel}\n    comment survived stripping`);
+      failed++;
+      continue;
+    }
+    if (stripCssComments(cleanCss) !== cleanCss) {
+      console.error(`✗ ${rel}\n    stripping is not idempotent`);
+      failed++;
+    }
+    continue;
+  }
+
   const clean = stripComments(original);
   if (clean !== original) stripped++;
 

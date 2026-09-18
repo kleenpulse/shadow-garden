@@ -1,0 +1,185 @@
+/*
+ * Vellum — template tokens and base styles.
+ *
+ * Every selector in this file is scoped to [data-template="vellum"] (SPEC §V56).
+ * That is not a style preference: a template renders inside a host page — the
+ * Shadow Garden bench, a Storybook, whatever you drop it into — and a stylesheet
+ * that declares `body` or `::selection` globally repaints that host. Scoped, it
+ * can only ever touch itself.
+ *
+ * Import it once, from the template's page.tsx.
+ *
+ * ── Rebranding this template ────────────────────────────────────────────────
+ * The block below IS the brand. Change --accent and --background and the whole
+ * page follows: the marks, the buttons, the canvases, the scroll bar. Nothing
+ * else in the template hard-codes a colour.
+ *
+ * The var(--sg-*, fallback) indirection lets a host override a token live
+ * without a rebuild. Delete the var() wrapper and keep the fallback if you would
+ * rather not carry that seam.
+ */
+
+/* Everything below lives in @layer base. Unlayered CSS outranks ALL layered
+   CSS, and Tailwind v4 puts utilities in @layer utilities — so an unlayered
+   `* { margin: 0 }` reset here would silently zero every m-* / p-* utility in
+   the template (SPEC §B29). Inside `base`, the reset still applies wherever no
+   utility speaks, and utilities win wherever one does. */
+@layer base {
+
+[data-template="vellum"] {
+  --radius: var(--sg-radius, 8px);
+
+  /* Light */
+  --background: var(--sg-bg, #eeeeee);
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #ffffff;
+  --muted: #f0f0f0;
+  --muted-foreground: #000a1d;
+  --border: #e0e0e0;
+  --accent: var(--sg-accent, #1b263b);
+  --scroll__color: rgb(0, 0, 0);
+
+}
+
+/* The painted surface. Separate from the token block above because next/font
+   writes the --vellum-* families onto THIS element, and a font mapping that
+   referenced them from an ancestor would resolve against an element that does
+   not have them — invalid at computed-value time, and silently unstyled. */
+[data-template="vellum"] [data-vellum-root] {
+  --font-display: var(--vellum-display), "Arial Black", system-ui, sans-serif;
+  --font-body: var(--vellum-grotesk), system-ui, sans-serif;
+
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Dark is this template's native mode; light is the variant. The `dark` class on
+   an ancestor is written by next-themes, by any other theme library, or by hand —
+   hooks/use-is-dark.ts observes the same signal so the canvases agree with the CSS. */
+.dark [data-template="vellum"] {
+  --background: var(--sg-bg, #000715);
+  --foreground: #f5f5f5;
+  --card: #000610;
+  --card-foreground: #f5f5f5;
+  --primary: #f5f5f5;
+  --primary-foreground: #0a0a0a;
+  --muted: #1a1a1a;
+  --muted-foreground: #f2f2f2;
+  --border: #191919;
+  --accent: var(--sg-accent, #c8a961);
+  --scroll__color: rgb(83, 83, 83);
+}
+
+[data-template="vellum"][data-font-pair="grotesk"] [data-vellum-root] {
+  --font-display: var(--vellum-grotesk), system-ui, sans-serif;
+}
+
+/* System stacks, deliberately. These two voices are readable and universal
+   without costing a webfont download — see the note in page.tsx. */
+[data-template="vellum"][data-font-pair="serif"] [data-vellum-root] {
+  --font-display: ui-serif, Georgia, "Times New Roman", serif;
+  --font-body: var(--vellum-grotesk), system-ui, sans-serif;
+}
+
+[data-template="vellum"][data-font-pair="mono"] [data-vellum-root] {
+  --font-display: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-body: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+[data-template="vellum"] * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+[data-template="vellum"] button:not(:disabled),
+[data-template="vellum"] [role="button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+/* Namespaced. A bare `marquee` keyframe name is global no matter where the rule
+   sits, so two templates on one page would silently share one animation. */
+@keyframes vellum-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+[data-template="vellum"] .animate-marquee {
+  animation: vellum-marquee 28s linear infinite;
+}
+
+[data-template="vellum"] .animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+[data-template="vellum"] .dot-grid {
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.12) 1px,
+    transparent 1px
+  );
+  background-size: 24px 24px;
+}
+
+[data-template="vellum"] [data-horizontal-mask="true"] {
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(14, 14, 14) 10%,
+    rgb(14, 14, 14) 90%,
+    transparent 100%
+  );
+}
+
+[data-template="vellum"] ::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+[data-template="vellum"] ::-webkit-scrollbar-thumb {
+  background: var(--scroll__color);
+}
+
+[data-template="vellum"] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-template="vellum"] ::selection {
+  background: var(--foreground);
+  color: var(--background);
+}
+
+/*
+ * Held-still mode. hooks/use-still.ts reads the same signal in JS and skips the
+ * scroll-driven work outright; this covers the CSS half — the marquee, the
+ * transitions, anything not owned by GSAP.
+ *
+ * Not `animation: none`: an animation removed mid-flight snaps its element back
+ * to the un-animated position, which moves the page. Collapsing the duration
+ * pins it where it is.
+ */
+[data-template="vellum"][data-motion="reduced"],
+[data-template="vellum"][data-motion="reduced"] *,
+[data-template="vellum"][data-motion="reduced"] *::before,
+[data-template="vellum"][data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+}

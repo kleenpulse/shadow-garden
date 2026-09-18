@@ -4,12 +4,14 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useDataCopy } from "@/lib/i18n/data-copy";
 import { displayName } from "@/lib/display-name";
+import ProBadge from "./ProBadge";
 
 export interface CollectionMemberRow {
 	slug: string;
 	name: string;
 	description: string;
 	href: string;
+	pro?: boolean;
 	/** Library names ("motion + ogl") — joined server-side, names stay English. */
 	builtWith?: string;
 	/** Non-deps reason line ("Stagger · Reveal") — cookbook term names stay English. */
@@ -35,8 +37,9 @@ export default function CollectionMembersList({
 						href={row.href}
 						className="flex h-full flex-col gap-2 rounded-lg bg-panel p-4 transition-colors hover:bg-raised"
 					>
-						<h3 className="font-display text-sm uppercase tracking-[0.08em] text-ink">
+						<h3 className="flex items-center gap-1.5 font-display text-sm uppercase tracking-[0.08em] text-ink">
 							{displayName(row.name)}
+							<ProBadge pro={row.pro} variant="tiny" />
 						</h3>
 						<p className="font-sans text-xs leading-relaxed text-ink-dim">
 							{copy(`catalog.${row.slug}.description`, row.description)}

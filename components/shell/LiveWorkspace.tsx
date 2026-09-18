@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, type ReactNode } from "react";
+import { use, useEffect, useMemo, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -14,6 +14,8 @@ import { previews } from "@/components/registry/previews";
 import PlaceholderPreview from "./PlaceholderPreview";
 import PreviewBoundary from "./PreviewBoundary";
 import ControlsPanel from "./ControlsPanel";
+import ControlsLocked from "./ControlsLocked";
+import SubscribeButton from "./SubscribeButton";
 import WorkspaceTabs from "./WorkspaceTabs";
 
 // Owns the tuned-state source (the URL, via nuqs) shared by the preview stage and
@@ -25,15 +27,22 @@ export default function LiveWorkspace({
 	entry,
 	code,
 	promptSlot,
+	controlsLocked,
 }: {
 	entry: ComponentEntry;
 	code: ReactNode;
 	promptSlot?: ReactNode;
+	/** Server-created promise (isControlsLocked), read here via use() so the
+	    dynamic access forms under this page's <Suspense> — never an async server
+	    wrapper above this component (that breaks Flight decode on soft nav). */
+	controlsLocked?: Promise<boolean>;
 }) {
+	const locked = controlsLocked ? use(controlsLocked) : false;
 	const { values, setValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
 	const t = useTranslations("chrome.liveWorkspace");
+	const tLocked = useTranslations("chrome.controlsLocked");
 
 	// One view ping per component the user opens (fires once per slug, incl. on
 	// client-side nav between components). Fire-and-forget, anonymous.
@@ -46,10 +55,14 @@ export default function LiveWorkspace({
 	// change lets a crash caused by a bad control value auto-recover on the next tweak.
 	const valuesKey = useMemo(() => JSON.stringify(values), [values]);
 
+	const isTemplate = entry.kind === "template";
 	const qs = searchParams.toString();
-	const fullHref = qs
-		? `/components/${entry.slug}/full?${qs}`
+	// A template's fullscreen IS its own route: it is already a whole page, so
+	// the /full stage would only wrap a page in a stage.
+	const fullBase = isTemplate
+		? `/templates/${entry.slug}`
 		: `/components/${entry.slug}/full`;
+	const fullHref = qs ? `${fullBase}?${qs}` : fullBase;
 
 	return (
 		<div className="space-y-4">
@@ -69,7 +82,14 @@ export default function LiveWorkspace({
 						// Previews are the shipped product — they render as authored (LTR)
 						// regardless of the page's direction.
 						dir="ltr"
-						className="group relative grid min-h-90 md:min-h-120 xl:min-h-150 overflow-hidden rounded-lg bg-panel"
+						// A template is a page, not an effect. A 360px stage shows the hero
+						// and nothing after it — the half of a landing page nobody needs
+						// convincing about.
+						className={`group relative grid ${
+							isTemplate
+								? "min-h-140 md:min-h-160 xl:min-h-[78vh]"
+								: "min-h-90 md:min-h-120 xl:min-h-150"
+						} overflow-hidden rounded-lg bg-panel`}
 					>
 						<PreviewBoundary
 							slug={entry.slug}
@@ -102,6 +122,15 @@ export default function LiveWorkspace({
 				onChange={setValue}
 				onReset={reset}
 				pausable={entry.pausable}
+				locked={
+					locked ? (
+						<ControlsLocked
+							name={entry.name}
+							propCount={entry.props.length}
+							cta={<SubscribeButton label={tLocked("cta")} />}
+						/>
+					) : null
+				}
 			/>
 		</div>
 	);

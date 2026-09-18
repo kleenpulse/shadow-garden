@@ -9,6 +9,7 @@ import { displayName } from "@/lib/display-name";
 import { previews } from "@/components/registry/previews";
 import PreviewBoundary from "./PreviewBoundary";
 import FavoriteButton from "./FavoriteButton";
+import ProBadge from "./ProBadge";
 import { useThumbnailSlot } from "./thumbnail-slots";
 
 type ColorProp = Extract<PropSchema, { kind: "color" }>;
@@ -89,9 +90,10 @@ export default function FavoriteThumbnailCard({
         <div className="min-w-0">
           <Link
             href={href}
-            className="font-display text-sm uppercase tracking-[0.08em] text-ink transition-colors hover:text-accent"
+            className="inline-flex items-center gap-1.5 font-display text-sm uppercase tracking-[0.08em] text-ink transition-colors hover:text-accent"
           >
             {displayName(entry.name)}
+            <ProBadge pro={entry.pro} variant="tiny" />
           </Link>
           <p className="mt-1 line-clamp-2 font-sans text-xs leading-relaxed text-ink-dim">
             {entry.description}

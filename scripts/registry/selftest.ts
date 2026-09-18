@@ -13,6 +13,7 @@ import type { ComponentEntry } from "../../lib/registry/types";
 import type { Collection } from "../../lib/collections";
 import { checkRegistry, type CheckContext } from "./check";
 import { RULES } from "./rules";
+import { TEMPLATE_TOKENS } from "../../lib/registry/template-tokens";
 
 function entry(over: Partial<ComponentEntry> = {}): ComponentEntry {
   return {
@@ -30,6 +31,32 @@ function entry(over: Partial<ComponentEntry> = {}): ComponentEntry {
     ],
     ...over,
   };
+}
+
+/**
+ * A landing-page template that passes every rule. The template rules are all
+ * about the ways an entry stops being one file with one effect, so the baseline
+ * has to be a real one: page.tsx first, the shared tokens verbatim, and the
+ * Landing Pages category.
+ */
+function template(over: Partial<ComponentEntry> = {}): ComponentEntry {
+  return entry({
+    slug: "ok-template",
+    name: "OkTemplate",
+    category: "Landing Pages",
+    kind: "template",
+    pro: true, // the whole-page categories are all-Pro (pro-category-consistency)
+    pausable: true,
+    props: TEMPLATE_TOKENS,
+    variants: [
+      {
+        lang: "ts",
+        style: "tailwind",
+        file: "components/registry/ok-template/page.tsx",
+      },
+    ],
+    ...over,
+  });
 }
 
 /**
@@ -85,6 +112,8 @@ function context(registry: ComponentEntry[], over: Partial<CheckContext> = {}): 
     sourceDefaults: () => new Map(),
     loopUsage: () => ({ rafCalls: 0, resizeObservers: 0, usesHost: false, nullishHalts: 0 }),
     filterRegions: () => ({ displacementFilters: 0, unpinned: [] }),
+    // null = not a template. Every template case below supplies its own.
+    templateAudit: () => null,
     // Seeded with the framework packages on purpose: the clean-entry assertion
     // below then doubles as the proof that FRAMEWORK_PROVIDED still exempts
     // them. If someone ever makes the rule demand `react` in dependencies, this
@@ -214,6 +243,12 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
   {
     rule: "added-at-format",
     ctx: context([entry({ addedAt: "25-07-2026" })]),
+  },
+  {
+    // A hero template someone added without the pro flag — the all-Pro
+    // categories must never ship an unbadged, ungated entry.
+    rule: "pro-category-consistency",
+    ctx: context([entry({ category: "Hero Templates" })]),
   },
   {
     rule: "cookbook-term-exists",
@@ -458,6 +493,93 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
   },
 ];
 
+cases.push(
+  {
+    rule: "template-kind-category",
+    ctx: context([template({ category: "Backgrounds" })]),
+  },
+  {
+    rule: "template-entry-is-page",
+    ctx: context([
+      template({
+        variants: [
+          {
+            lang: "ts",
+            style: "tailwind",
+            file: "components/registry/ok-template/hero.tsx",
+          },
+        ],
+      }),
+    ]),
+  },
+  {
+    rule: "template-declares-tokens",
+    ctx: context([template({ props: [] })]),
+  },
+  {
+    rule: "template-no-local-assets",
+    ctx: context([template()], {
+      templateAudit: () => ({
+        localAssets: [
+          {
+            file: "components/registry/ok-template/sections/hero.tsx",
+            value: "/hero.webp",
+          },
+        ],
+        unscopedSelectors: [],
+        deadTokens: [],
+      }),
+    }),
+  },
+  {
+    rule: "template-token-resolves",
+    ctx: context([template()], {
+      templateAudit: () => ({
+        localAssets: [],
+        unscopedSelectors: [],
+        deadTokens: [
+          {
+            file: "components/registry/ok-template/sections/hero.tsx",
+            token: "bg-background",
+            kind: "utility" as const,
+          },
+        ],
+      }),
+    }),
+  },
+  {
+    rule: "template-token-resolves",
+    ctx: context([template()], {
+      templateAudit: () => ({
+        localAssets: [],
+        unscopedSelectors: [],
+        deadTokens: [
+          {
+            file: "components/registry/ok-template/page.tsx",
+            token: "var(--font-grotesk)",
+            kind: "var" as const,
+          },
+        ],
+      }),
+    }),
+  },
+  {
+    rule: "template-css-scoped",
+    ctx: context([template()], {
+      templateAudit: () => ({
+        localAssets: [],
+        deadTokens: [],
+        unscopedSelectors: [
+          {
+            file: "components/registry/ok-template/template.css",
+            selector: "body",
+          },
+        ],
+      }),
+    }),
+  },
+);
+
 let failed = 0;
 
 // Every rule must have a case, or a rule could rot undetected.
@@ -513,6 +635,21 @@ if (cleanViolations.length > 0) {
   failed++;
 } else {
   console.log("detects    nothing on a clean entry");
+}
+
+// The template rules are six new ways to be wrong about an entry that is
+// otherwise correct, so a correct template has to be proven silent — not just
+// a correct component.
+const cleanTemplate = checkRegistry(context([template()]), RULES);
+if (cleanTemplate.length > 0) {
+  console.log(
+    `FALSE POSITIVE on a clean template: ${cleanTemplate
+      .map((v) => v.rule)
+      .join(", ")}`,
+  );
+  failed++;
+} else {
+  console.log("detects    nothing on a clean template");
 }
 
 if (failed > 0) {

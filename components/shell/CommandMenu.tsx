@@ -17,6 +17,7 @@ import {
   type CommandLabels,
 } from "@/lib/command-groups";
 import { useUIStore } from "@/lib/store";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { useFavoritesStore } from "@/lib/favorites-store";
 import { useThemeTransition } from "@/hooks/use-theme-transition";
 
@@ -41,6 +42,7 @@ export default function CommandMenu() {
   const pathname = usePathname();
   const paletteOpen = useUIStore((state) => state.paletteOpen);
   const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
+  const { play, typeKey } = useInteractionSound();
   const favoriteSlugs = useFavoritesStore((state) => state.slugs);
   const toggleFav = useFavoritesStore((state) => state.toggle);
   const { resolvedTheme, pickTheme } = useThemeTransition();
@@ -176,6 +178,8 @@ export default function CommandMenu() {
       groups={groups}
       hotkey={onPalettePage ? [] : HOTKEYS}
       initialValue={initialValue}
+      onValueChange={typeKey}
+      onItemHover={() => play("hover")}
       fixed
       placeholder={t("placeholder")}
     />

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useDataCopy } from "@/lib/i18n/data-copy";
@@ -77,6 +78,7 @@ export default function CookbookSectionNav({
 
 	const t = useTranslations("chrome.cookbookNav");
 	const copy = useDataCopy();
+	const { play, hoverProps } = useInteractionSound();
 	const sectionTitle = (title: string) =>
 		copy(`cookbookSections.${sectionKey(title)}.title`, title);
 
@@ -150,10 +152,11 @@ export default function CookbookSectionNav({
 
 	const select = useCallback(
 		(id: string) => {
+			play("select");
 			onJump(id);
 			setOpen(false);
 		},
-		[onJump],
+		[onJump, play],
 	);
 
 	// Filtered down to nothing — a nav with no destinations is a dead control.
@@ -179,7 +182,10 @@ export default function CookbookSectionNav({
 								total,
 							})
 				}
-				onClick={() => setOpen((o) => !o)}
+				onClick={() => {
+					play("select");
+					setOpen((o) => !o);
+				}}
 				initial={false}
 				animate={{ width: open ? box.w : CLOSED_W }}
 				transition={
@@ -248,6 +254,7 @@ export default function CookbookSectionNav({
 										<li key={section.id}>
 											<a
 												href={`#${section.id}`}
+												{...hoverProps()}
 												onClick={() => select(section.id)}
 												aria-current={isActive ? "true" : undefined}
 												className={cn(

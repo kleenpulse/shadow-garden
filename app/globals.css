@@ -82,7 +82,7 @@
 	--sg-dusk: 0;
 	--sg-dusk-p: calc(var(--sg-dusk) * 100%);
 	--sg-dusk-ink: calc(clamp(0, (var(--sg-dusk) - 0.4) * 5, 1) * 100%);
-	--sg-surface: color-mix(in oklab, var(--color-bench-950) var(--sg-dusk-p), #f5f5f7);
+	--sg-surface: color-mix(in oklab, var(--color-bench-950) var(--sg-dusk-p), #f9f9fb);
 	--sg-panel: color-mix(in oklab, var(--color-bench-875) var(--sg-dusk-p), #ffffff);
 	--sg-raised: color-mix(in oklab, var(--color-bench-800) var(--sg-dusk-p), #eceaef);
 	--sg-hairline: color-mix(in oklab, var(--color-bench-700) var(--sg-dusk-p), #dde2e7);
@@ -129,13 +129,24 @@
 		background-color: var(--color-surface);
 		color: var(--color-ink);
 		font-family: var(--font-sans);
-		/* Faint measurement grid — reads as a workbench, stays under opaque panels */
+		/* Faint measurement grid — reads as a workbench, stays under opaque panels.
+		   The first layer is a surface-colored veil that fades the grid out by
+		   ~40% of the viewport, so the lines live near the top and the lower
+		   body stays clean. All layers share `fixed` attachment, so the fade is
+		   viewport-relative like the grid itself. */
 		background-image:
+			linear-gradient(to bottom, transparent 15%, var(--color-surface) 40%),
 			linear-gradient(to right, var(--sg-grid) 1px, transparent 1px),
 			linear-gradient(to bottom, var(--sg-grid) 1px, transparent 1px);
-		background-size: 50px 50px;
+		background-size:
+			100% 100%,
+			50px 50px,
+			50px 50px;
 		@media (min-width: 640px) {
-			background-size: 114px 104px;
+			background-size:
+				100% 100%,
+				114px 104px,
+				114px 104px;
 		}
 		background-attachment: fixed;
 	}
@@ -461,12 +472,14 @@ html[data-sg-intro] {
 	   Sidebar removes the attribute once its own filtering has committed, so
 	   every rule below is dead weight for all but the first frames. */
 
-	/* The whole strip is clock-dependent now that New is the only real filter
-	   (All alone is not a choice), so it ships hidden and the script reveals it.
-	   Rendering it conditionally in React instead made it pop in a frame late,
-	   which is the same jump one level up. Sidebar re-syncs the attribute
-	   post-mount, so the strip follows React's clock from then on. */
-	html:not([data-catalog-has-new]) .sg-catalog-tabs {
+	/* Only the New tab is clock-dependent (All/Pro always mean something), so it
+	   alone ships hidden and the script reveals it. Rendering it conditionally in
+	   React instead made it pop in a frame late, which is the same jump one level
+	   up. Sidebar re-syncs the attribute post-mount, so the tab follows React's
+	   clock from then on. */
+	html:not([data-catalog-has-new])
+		.sg-catalog-tabs
+		[role="tab"][data-value="new"] {
 		display: none;
 	}
 
@@ -506,8 +519,38 @@ html[data-sg-intro] {
 		border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
 	}
 
+	/* Pro's stand-in mirrors the default PillTabs indicator (solid amethyst,
+	   text-on-accent label) — keep the two in step. */
+	html[data-catalog-filter="pro"] .sg-catalog-tabs [role="tab"][data-value="pro"] {
+		color: var(--color-on-accent);
+	}
+	html[data-catalog-filter="pro"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="pro"]::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		border-radius: 0.375rem; /* rounded-md */
+		background: var(--color-accent);
+	}
+	html.dark[data-catalog-filter="pro"]
+		.sg-catalog-tabs
+		[role="tab"][data-value="pro"]::before {
+		border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
+	}
+
+	/* Pro is a static slice — rows are stamped data-pro in markup, so its
+	   row-hiding pair lives here; the script only sets the attribute. */
+	html[data-catalog-filter="pro"] [data-entry]:not([data-pro]) {
+		display: none;
+	}
+	html[data-catalog-filter="pro"] [data-group]:not(:has([data-pro])) {
+		display: none;
+	}
+
 	/* The list's "new" row-hiding pair is injected by the script, which owns the
-	   date comparison — no static filter rules remain now that tiers are gone. */
+	   date comparison. */
 	/* The one thing CSS can't recompute. Held invisible (space reserved) rather
 	   than showing a total that's about to change under the reader. */
 	html[data-catalog-filter] [data-catalog-count] {
@@ -621,6 +664,16 @@ html[data-sg-hero] .sg-scrim-tail::after {
 .sg-palette .rounded.border {
 	border-color: transparent;
 	background-color: color-mix(in oklab, var(--sg-raised) 60%, transparent);
+}
+/* The shell instance's scrim matches the app-wide modal backdrop
+   (GrowDialog's bg-white/40 dark:bg-black/50 + backdrop-blur-xs) instead of
+   the component's default black, so it reads correctly in light mode too. */
+.sg-palette .bg-black\/50 {
+	background-color: rgb(255 255 255 / 0.4);
+	backdrop-filter: blur(4px);
+}
+.dark .sg-palette .bg-black\/50 {
+	background-color: rgb(0 0 0 / 0.5);
 }
 /* Hairlines are the one thing that cuts straight across the cube's sweep.
    `sg-rule` marks every decorative rule on the landing page; frames and cards

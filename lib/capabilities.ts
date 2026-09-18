@@ -15,7 +15,7 @@
 // silently resolve to undefined in the browser. That is why this is a table of
 // closures rather than a table of variable names.
 
-export type Capability = "db" | "supabase";
+export type Capability = "db" | "supabase" | "polar" | "polarWebhook" | "email";
 
 /** The Supabase URL, or undefined. Public — inlines into the browser bundle. */
 export function supabaseUrl(): string | undefined {
@@ -34,6 +34,10 @@ export function supabaseKey(): string | undefined {
 const PREDICATES: Record<Capability, () => boolean> = {
   db: () => Boolean(process.env.DATABASE_URL),
   supabase: () => Boolean(supabaseUrl() && supabaseKey()),
+  polar: () => Boolean(process.env.POLAR_ACCESS_TOKEN),
+  polarWebhook: () => Boolean(process.env.POLAR_WEBHOOK_SECRET),
+  email: () =>
+    Boolean(process.env.NODEMAILER_EMAIL && process.env.NODEMAILER_PW),
 };
 
 /**
@@ -46,4 +50,15 @@ const PREDICATES: Record<Capability, () => boolean> = {
  */
 export function has(capability: Capability): boolean {
   return PREDICATES[capability]();
+}
+
+/**
+ * Checkout → auth → entitlement row: all three legs configured. The commerce UI
+ * (Go Pro, auth menu, pricing modal) mounts and the Pro gate locks only when
+ * this answers true — an unarmed deployment sells nothing, so it locks nothing.
+ * Server-only meaningful: `polar`/`db` read server env and answer false in a
+ * browser bundle.
+ */
+export function commerceArmed(): boolean {
+  return has("polar") && has("supabase") && has("db");
 }

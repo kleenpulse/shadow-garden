@@ -4,9 +4,9 @@ import { persist } from "zustand/middleware";
 // Ephemeral shell chrome only. Tunable component state lives in the URL (nuqs),
 // not here — this store never holds anything worth sharing or deep-linking.
 export type WorkspaceTab = "preview" | "code";
-// "new" is a freshness slice — the whole filter strip only appears once at least
-// one entry is inside the New window (lib/registry/freshness).
-export type CatalogFilter = "all" | "new";
+// "new" is a freshness slice — its tab only appears once at least one entry is
+// inside the New window (lib/registry/freshness). "pro" slices on the tier flag.
+export type CatalogFilter = "all" | "new" | "pro";
 
 // Desktop sidebar resize band. Default matches the historical `w-72` (288px).
 // The pre-paint script in app/layout.tsx reads the same clamps — keep in sync.
@@ -35,7 +35,7 @@ interface UIState {
   search: string;
   setSearch: (query: string) => void;
 
-  /** Sidebar catalog filter (All/New). */
+  /** Sidebar catalog filter (All/New/Pro). */
   catalogFilter: CatalogFilter;
   setCatalogFilter: (filter: CatalogFilter) => void;
 

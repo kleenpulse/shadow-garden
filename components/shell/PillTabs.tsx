@@ -105,6 +105,13 @@ export default function PillTabs<V extends string = string>({
 						{active && (
 							<motion.span
 								layoutId={effectiveLayoutId}
+								// Only re-evaluate layout when the selected tab changes. Without
+								// this, ANY shared-layout pass on the page (e.g. the sidebar's
+								// active-row reticle remounting on navigation) re-measures this
+								// pill too — and since the sidebar is sticky/fixed, the page
+								// scroll resetting during a route change reads as a phantom
+								// vertical move, springing the pill by the old scroll offset.
+								layoutDependency={value}
 								// Inner radius stays rounded-md (ours). Solid amethyst fill —
 								// the label above it is text-on-accent, so a per-item
 								// `activeFill` must keep its own label legible.

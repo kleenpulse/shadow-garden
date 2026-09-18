@@ -51,6 +51,11 @@ function classify(raw: string): Specifier {
  * still means the customer has to copy that file, or their build fails.
  */
 export function parseImports(fileName: string, text: string): Specifier[] {
+  // A .css variant has no module graph and is not TypeScript. Feeding it to the
+  // TS parser yields a garbage AST that happens to contain no imports — the right
+  // answer for the wrong reason, and one bad `@import` away from being wrong.
+  if (fileName.endsWith(".css")) return [];
+
   const source = ts.createSourceFile(
     fileName,
     text,

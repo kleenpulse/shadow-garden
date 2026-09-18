@@ -1,0 +1,152 @@
+/*
+ * Signal — template tokens and base styles.
+ *
+ * Every selector here is scoped to [data-template="signal"] (SPEC §V56). A template
+ * renders inside a host page, and a stylesheet that declares `::-webkit-scrollbar`
+ * or `[data-menu-ul]` globally reaches straight into that host. Scoped, it can only
+ * touch itself.
+ *
+ * Imported once, from the template's page.tsx.
+ *
+ * ── Rebranding ──────────────────────────────────────────────────────────────
+ * The source kept its palette in a Tailwind v3 `theme.extend.colors` block loaded
+ * through `@config`. That block is global by construction and cannot travel with a
+ * template, so the four colours live here as variables and the markup reads them
+ * through arbitrary-value utilities — `bg-[var(--secondary)]` rather than
+ * `bg-secondary`, which would compile to nothing at all (§B29).
+ *
+ * --accent-yellow is the call-to-action colour; --secondary is the page ground.
+ */
+
+[data-template="signal"] {
+  --radius: var(--sg-radius, 9999px);
+
+  /* Deep navy the page sits on, and the mid blue the hero washes into. */
+  --primary: #01012b;
+  --secondary: var(--sg-bg, #2b49bb);
+  --accent-yellow: var(--sg-accent, #fbdf3c);
+  --accent-purple: #647af5;
+  --scroll-track: #02022d;
+  --scroll-thumb: rgba(194, 186, 243, 0.72);
+}
+
+/* The painted surface. Separate from the token block because next/font writes the
+   --signal-* families onto THIS element, and a font mapping that referenced them
+   from an ancestor would resolve against an element that does not have them —
+   invalid at computed-value time, and silently unstyled. */
+[data-template="signal"] [data-signal-root] {
+  --font-display: var(--signal-display), "Helvetica Neue", Arial, sans-serif;
+  --font-body: var(--signal-body), system-ui, sans-serif;
+
+  min-height: 100vh;
+  background-color: var(--secondary);
+  color: #ffffff;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-template="signal"][data-font-pair="grotesk"] [data-signal-root] {
+  --font-display: var(--signal-body), system-ui, sans-serif;
+}
+
+/* System stacks for the remaining two voices — readable, universal, and free of a
+   webfont download per control option. */
+[data-template="signal"][data-font-pair="serif"] [data-signal-root] {
+  --font-display: ui-serif, Georgia, "Times New Roman", serif;
+}
+
+[data-template="signal"][data-font-pair="mono"] [data-signal-root] {
+  --font-display: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-body: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Hamburger bars. The three spans animate into a cross; the transform origin and
+   the nth-child widths are what make it read as one object rather than three. */
+[data-template="signal"] #menu-button span {
+  width: 27px;
+  height: 3px;
+  border-radius: 2px;
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out,
+    background-color 0.5s ease-in-out;
+  transform-origin: center;
+}
+
+[data-template="signal"] #menu-button span:nth-child(2) {
+  width: 22px;
+}
+
+[data-template="signal"] [data-menu-open="true"] span:nth-child(1) {
+  transform: translate3d(0, 6px, 0) rotate(45deg);
+  background: #fff;
+}
+
+[data-template="signal"] [data-menu-open="true"] span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+[data-template="signal"] [data-menu-open="true"] span:nth-child(3) {
+  transform: translate3d(0, -6px, 0) rotate(-45deg);
+  background: #fff;
+}
+
+/* Motion animates this open from zero, so the closed state has to be a real zero
+   rather than `display: none` — there is nothing to tween from otherwise. */
+[data-template="signal"] [data-menu-ul] {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 0;
+  height: 0;
+  border-radius: 8px;
+  opacity: 0;
+}
+
+[data-template="signal"] [data-menu-ul] li {
+  list-style: none;
+  margin: 0;
+  padding: 5px 0;
+}
+
+[data-template="signal"] ::-webkit-scrollbar {
+  width: 4px;
+  height: 2px;
+  background-color: var(--scroll-track);
+}
+
+[data-template="signal"] ::-webkit-scrollbar-thumb {
+  background-color: #efefef;
+}
+
+[data-template="signal"] .custom_scroll::-webkit-scrollbar {
+  width: 4px;
+  height: 12px;
+  background-color: transparent;
+}
+
+[data-template="signal"] .custom_scroll::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+  border-radius: 10px;
+}
+
+/*
+ * Held-still mode. hooks/use-still.tsx reads the same signal in JS and skips the
+ * scroll-driven work outright; this covers the CSS half.
+ *
+ * Not `animation: none`: an animation removed mid-flight snaps its element back to
+ * the un-animated position, which moves the page. Collapsing the duration pins it
+ * where it is.
+ */
+[data-template="signal"][data-motion="reduced"],
+[data-template="signal"][data-motion="reduced"] *,
+[data-template="signal"][data-motion="reduced"] *::before,
+[data-template="signal"][data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}

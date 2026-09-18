@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getEntry, getNeighbors } from "@/lib/registry";
 import FullscreenStage from "@/components/shell/FullscreenStage";
+import { isControlsLocked } from "@/lib/registry/entitlement";
 
 export function generateStaticParams() {
 	return getAllSlugs().map((slug) => ({ slug }));
@@ -36,9 +37,15 @@ export default async function FullscreenPage({
 
 	const neighbors = getNeighbors(slug);
 
+	// Direct child + promise-shaped gate for the same Flight soft-nav reason as
+	// the shell page — never wrap the stage in an async server layer.
 	return (
 		<Suspense fallback={<div className="h-dvh animate-pulse bg-panel" />}>
-			<FullscreenStage entry={entry} neighbors={neighbors} />
+			<FullscreenStage
+				entry={entry}
+				neighbors={neighbors}
+				controlsLocked={isControlsLocked(entry.pro)}
+			/>
 		</Suspense>
 	);
 }

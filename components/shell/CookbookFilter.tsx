@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { useTranslations } from "next-intl";
 import type { Range, Suggestion } from "@/lib/cookbook-search";
 import { useDataCopy } from "@/lib/i18n/data-copy";
+import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { cn } from "@/lib/utils";
 
 // Mirrors scripts/i18n/gen-catalog.ts's slugify exactly — it's the key the
@@ -69,6 +70,7 @@ export default function CookbookFilter({
 }) {
 	const t = useTranslations("chrome.cookbookFilter");
 	const copy = useDataCopy();
+	const { play, typeKey, hoverProps } = useInteractionSound();
 	// Kind headings, keyed by the closed Suggestion["kind"] union.
 	const headings: Record<Suggestion["kind"], string> = {
 		term: t("headings.term"),
@@ -85,7 +87,6 @@ export default function CookbookFilter({
 	const inputRef = useRef<HTMLInputElement>(null);
 	const listRef = useRef<HTMLUListElement>(null);
 
-
 	const uid = useId();
 	const listboxId = `sg-cookbook-listbox-${uid}`;
 	const optionId = (i: number) => `sg-cookbook-option-${uid}-${i}`;
@@ -98,6 +99,7 @@ export default function CookbookFilter({
 	};
 
 	const commit = (suggestion: Suggestion) => {
+		play("select");
 		close();
 		onSelect(suggestion);
 	};
@@ -213,6 +215,7 @@ export default function CookbookFilter({
 				value={query}
 				onChange={(event) => {
 					const next = event.target.value;
+					typeKey();
 					onQueryChange(next);
 					setOpen(next.trim().length > 0);
 				}}
@@ -233,7 +236,7 @@ export default function CookbookFilter({
 				spellCheck={false}
 				inputMode="search"
 				enterKeyHint="go"
-				className="w-full rounded-md border border-transparent bg-surface py-2 ps-3 pe-8 font-mono text-xs text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
+				className="w-full rounded-r-md border border-transparent bg-surface py-2 ps-3 pe-8 font-mono text-xs text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
 			/>
 
 			{query.length > 0 && (
@@ -300,6 +303,7 @@ export default function CookbookFilter({
 									role="option"
 									aria-selected={isActive}
 									data-index={i}
+									{...hoverProps()}
 									// pointermove, not pointerenter: scrolling the list under a
 									// stationary cursor would otherwise steal the keyboard cursor.
 									onPointerMove={() => setActive(i)}
@@ -319,7 +323,9 @@ export default function CookbookFilter({
 									{suggestion.kind === "term" && (
 										<span className="shrink-0 font-display text-[9px] uppercase tracking-[0.16em] text-ink-mute">
 											{copy(
-												`cookbookSections.${slugify(suggestion.sectionTitle)}.title`,
+												`cookbookSections.${slugify(
+													suggestion.sectionTitle,
+												)}.title`,
 												suggestion.sectionTitle,
 											)}
 										</span>

@@ -123,7 +123,7 @@ export default function RootLayout({
 				<script
 					dangerouslySetInnerHTML={{
 						__html:
-							"try{var ip=false;try{ip=sessionStorage.getItem('sg-intro-v1')==='1'}catch(e){}if(!ip||location.search.indexOf('sg-intro')>-1){document.documentElement.setAttribute('data-sg-intro','')}}catch(e){}",
+							"try{var bare=location.pathname.indexOf('/templates/')===0;var ip=false;try{ip=sessionStorage.getItem('sg-intro-v1')==='1'}catch(e){}if(!bare&&(!ip||location.search.indexOf('sg-intro')>-1)){document.documentElement.setAttribute('data-sg-intro','')}}catch(e){}",
 					}}
 				/>
 				{/* Pre-paint: stamp <html lang> from the stored locale (sg-locale) so

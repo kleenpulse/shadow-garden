@@ -10,17 +10,29 @@ import { textAnimations } from "./categories/text-animations";
 import { microInteractions } from "./categories/micro-interactions";
 import { powerUserSystems } from "./categories/power-user-systems";
 import { heroTemplates } from "./categories/hero-templates";
+import { landingPages } from "./categories/landing-pages";
+// Relative import on purpose — this file runs under plain `bun` (check scripts,
+// gen-readme, gen-catalog), where the alias still resolves but the habit of
+// framework-free edges keeps it obviously safe there.
+import { IS_LOCAL_DEV } from "../env";
 
 // The registry. Sidebar nav, catalog, routes, and generateStaticParams all derive
 // from this array. Adding a component = one entry in the matching
 // lib/registry/categories/<category>.ts file + one canonical source file
 // + one preview module registered in components/registry/previews.ts.
+//
+// Landing Pages is TEMPORARILY hidden from production builds (pre-launch): the
+// conditional spread is the single seam every consumer inherits — sitemap,
+// counts, palette, generateStaticParams, collections. Checks run under plain
+// bun with NODE_ENV unset, so check:registry keeps validating all 141 entries;
+// `next build` sets production and ships 132. Delete the ternary to launch.
 export const registry: ComponentEntry[] = [
 	...backgrounds,
 	...textAnimations,
 	...microInteractions,
 	...powerUserSystems,
 	...heroTemplates,
+	...(IS_LOCAL_DEV ? landingPages : []),
 ];
 
 export function getEntry(slug: string): ComponentEntry | undefined {

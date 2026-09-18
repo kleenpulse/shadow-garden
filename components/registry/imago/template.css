@@ -1,0 +1,233 @@
+/*
+ * Imago — template tokens and base styles.
+ *
+ * Every selector here is scoped to [data-template="imago"] (SPEC §V56). A template
+ * renders inside a host page, and a stylesheet that declares `body`, `*` or
+ * `::selection` globally repaints that host. Scoped, it can only reach itself.
+ *
+ * Imported once, from the template's page.tsx.
+ *
+ * ── Rebranding ──────────────────────────────────────────────────────────────
+ * --accent and --background are the whole identity. The butterfly's material tint,
+ * the link underlines, the glow, the scroll cues and every border derive from them.
+ * Nothing else in the template hard-codes a colour.
+ *
+ * The var(--sg-*, fallback) indirection lets a host retint the page live without a
+ * rebuild. Drop the var() wrapper and keep the fallback if you would rather not
+ * carry that seam.
+ */
+
+[data-template="imago"] {
+  --radius: var(--sg-radius, 10px);
+
+  --accent: var(--sg-accent, oklch(65.591% 0.23279 34.513));
+  --background: var(--sg-bg, oklch(0% 0 0));
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.929 0.013 255.508);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(40.202% 0.0017 285.927);
+  --muted-foreground: oklch(89.143% 0.0001 271.152);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
+}
+
+/* The painted surface. Separate from the token block because next/font writes the
+   --imago-* families onto THIS element, and a font mapping that referenced them
+   from an ancestor would resolve against an element that does not have them —
+   invalid at computed-value time, and silently unstyled. */
+[data-template="imago"] [data-imago-root] {
+  --font-display: var(--imago-display), "Arial Narrow", system-ui, sans-serif;
+  --font-body: var(--imago-body), system-ui, sans-serif;
+
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[data-template="imago"][data-font-pair="grotesk"] [data-imago-root] {
+  --font-display: var(--imago-body), system-ui, sans-serif;
+}
+
+/* System stacks for the remaining two voices. Readable, universal, and free —
+   a template that downloaded a webfont per control option would multiply that
+   cost by every template in the section. */
+[data-template="imago"][data-font-pair="serif"] [data-imago-root] {
+  --font-display: ui-serif, Georgia, "Times New Roman", serif;
+}
+
+[data-template="imago"][data-font-pair="mono"] [data-imago-root] {
+  --font-display: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-body: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* The source applied these through `@apply border-border outline-ring/50`, which
+   depends on a global @theme that cannot travel. Written out as plain CSS, which
+   is what those utilities compiled to anyway. */
+[data-template="imago"] * {
+  border-color: var(--border);
+}
+
+[data-template="imago"] button:not(:disabled),
+[data-template="imago"] [role="button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+/* Keyframe names are global no matter where the rule sits, so two templates on one
+   page would silently share one animation. Namespaced. */
+@keyframes imago-spin3d {
+  0% {
+    transform: rotateY(0deg) rotateX(5deg);
+  }
+  100% {
+    transform: rotateY(360deg) rotateX(5deg);
+  }
+}
+
+@keyframes imago-flicker {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes imago-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes imago-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+[data-template="imago"] .world-map-3d {
+  transform-style: preserve-3d;
+  animation: imago-spin3d 30s linear infinite;
+}
+
+[data-template="imago"] .world-map-3d-container {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+[data-template="imago"] .ascii-map {
+  animation: imago-flicker 4s ease-in-out infinite;
+}
+
+[data-template="imago"] .animate-fade-in-up {
+  animation: imago-fade-in-up 0.8s ease-out forwards;
+}
+
+[data-template="imago"] .animate-fade-in {
+  animation: imago-fade-in 0.6s ease-out forwards;
+}
+
+[data-template="imago"] .stagger-1 {
+  animation-delay: 0.1s;
+}
+[data-template="imago"] .stagger-2 {
+  animation-delay: 0.2s;
+}
+[data-template="imago"] .stagger-3 {
+  animation-delay: 0.3s;
+}
+[data-template="imago"] .stagger-4 {
+  animation-delay: 0.4s;
+}
+[data-template="imago"] .stagger-5 {
+  animation-delay: 0.5s;
+}
+
+/* Second stop derived from the accent rather than the original's hard-coded
+   #ff8a65, so retinting the template carries the gradient with it. */
+[data-template="imago"] .gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--accent) 0%,
+    color-mix(in oklch, var(--accent) 55%, white) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-template="imago"] .glow-accent {
+  text-shadow: 0 0 40px color-mix(in oklch, var(--accent) 30%, transparent);
+}
+
+[data-template="imago"] .link-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+[data-template="imago"] .link-underline:hover::after {
+  width: 100%;
+}
+
+[data-template="imago"] [data-vertical-mask="true"] {
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(14, 14, 14) 10%,
+    rgb(14, 14, 14) 90%,
+    transparent 100%
+  );
+}
+
+[data-template="imago"] ::selection {
+  background: var(--accent);
+  color: var(--background);
+}
+
+[data-template="imago"] ::-webkit-scrollbar {
+  display: none;
+}
+
+/*
+ * Held-still mode. hooks/use-still.tsx reads the same signal in JS and skips the
+ * scroll-driven work outright; this covers the CSS half.
+ *
+ * Not `animation: none`: an animation removed mid-flight snaps its element back to
+ * the un-animated position, which moves the page. Collapsing the duration pins it
+ * where it is.
+ */
+[data-template="imago"][data-motion="reduced"],
+[data-template="imago"][data-motion="reduced"] *,
+[data-template="imago"][data-motion="reduced"] *::before,
+[data-template="imago"][data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}

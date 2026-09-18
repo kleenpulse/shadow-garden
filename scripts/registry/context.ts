@@ -9,6 +9,19 @@ import { parseSourceDefaults, type SourceDefault } from "./source-defaults";
 import { parseLoopUsage, type LoopUsage } from "./loop-usage";
 import { parseFilterRegions, type FilterRegions } from "./filter-region";
 import { parseImports, type Specifier } from "./imports";
+import { stripComments } from "../../lib/registry/strip-comments";
+import { stripCssComments } from "../../lib/registry/strip-css-comments";
+import {
+  findLocalAssets,
+  findUnscopedSelectors,
+  type TemplateAudit,
+} from "./template-audit";
+import {
+  findDeadUtilities,
+  findDeclaredVars,
+  findReferencedVars,
+  isAmbientVar,
+} from "./token-audit";
 
 // The one place the check touches disk. Everything the rules need arrives here so
 // the rules themselves stay pure. lib/registry/index.ts and categories/*.ts are
@@ -141,6 +154,77 @@ export function buildContext(): CheckContext {
     return result;
   }
 
+  const templateCache = new Map<string, TemplateAudit | null>();
+
+  function templateAudit(slug: string): TemplateAudit | null {
+    if (templateCache.has(slug)) return templateCache.get(slug) ?? null;
+
+    const entry = registry.find((e) => e.slug === slug);
+    let result: TemplateAudit | null = null;
+
+    if (entry?.kind === "template") {
+      // Every variant, not just the component: a stray `/hero.webp` is far more
+      // likely in section twelve than in page.tsx.
+      const localAssets: TemplateAudit["localAssets"] = [];
+      const unscopedSelectors: TemplateAudit["unscopedSelectors"] = [];
+      const deadTokens: TemplateAudit["deadTokens"] = [];
+
+      // Read once, use twice. Variable resolution is a whole-template question —
+      // `template.css` declares what `page.tsx` reads and vice versa — so it needs
+      // every file in hand before it can answer anything.
+      const files: Array<{ file: string; text: string; isCss: boolean }> = [];
+      for (const variant of entry.variants) {
+        const file = variant.file;
+        const absolute = path.join(ROOT, ...file.split(/[\\/]/));
+        if (!existsSync(absolute)) continue;
+        const raw = readFileSync(absolute, "utf8");
+        const isCss = variant.lang === "css";
+        // Token scanning runs on the STRIPPED bytes, for the reason imports.ts
+        // spells out: a mention inside a comment is not a reference. These files
+        // document their own token contract in prose — "read as `hsl(var(--x))`" —
+        // and a scanner that counts that flags the documentation as the defect.
+        //
+        // Stripping is also what the customer actually receives, so this asks the
+        // question of the same bytes the browser will.
+        const text = isCss ? stripCssComments(raw) : stripComments(raw);
+        files.push({ file, text, isCss });
+
+        if (isCss) {
+          for (const selector of findUnscopedSelectors(text, slug)) {
+            unscopedSelectors.push({ file, selector });
+          }
+          continue;
+        }
+
+        for (const value of findLocalAssets(absolute, text)) {
+          localAssets.push({ file, value });
+        }
+        for (const token of findDeadUtilities(text)) {
+          deadTokens.push({ file, token, kind: "utility" });
+        }
+      }
+
+      const declared = new Set<string>();
+      for (const { text, isCss } of files) {
+        for (const name of findDeclaredVars(text, isCss)) declared.add(name);
+      }
+
+      for (const { file, text } of files) {
+        const seen = new Set<string>();
+        for (const name of findReferencedVars(text)) {
+          if (declared.has(name) || isAmbientVar(name) || seen.has(name)) continue;
+          seen.add(name);
+          deadTokens.push({ file, token: `var(${name})`, kind: "var" });
+        }
+      }
+
+      result = { localAssets, unscopedSelectors, deadTokens };
+    }
+
+    templateCache.set(slug, result);
+    return result;
+  }
+
   // Parsed once per FILE, not once per entry that reaches it: lib/utils.ts is in
   // 37 closures and the animation host in 24, so without this the same two files
   // are re-parsed sixty-odd times per run.
@@ -232,6 +316,7 @@ export function buildContext(): CheckContext {
     loopUsage,
     filterRegions,
     entryImports,
+    templateAudit,
     promptOverlays,
   };
 }

@@ -36,6 +36,7 @@ const CATEGORY_NOUN: Record<Category, string> = {
 	"Micro-interactions": "Micro-interaction",
 	"Power-User Systems": "Component",
 	"Hero Templates": "Hero Section",
+	"Landing Pages": "Landing Page",
 };
 
 export function entryPath(entry: ComponentEntry): string {
@@ -74,5 +75,5 @@ export function collectionDescription(
 	entries: ComponentEntry[],
 ): string {
 	const [opening] = collection.intro.split(/(?<=\.)\s/, 1);
-	return `${opening} ${entries.length} live, tunable components, all free.`;
+	return `${opening} ${entries.length} live, tunable components.`;
 }

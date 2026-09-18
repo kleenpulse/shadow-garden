@@ -15,10 +15,11 @@ import DemonstratedTerms from "@/components/shell/DemonstratedTerms";
 import RelatedComponents from "@/components/shell/RelatedComponents";
 import AppearsIn from "@/components/shell/AppearsIn";
 import LiveWorkspace from "@/components/shell/LiveWorkspace";
+import { isControlsLocked } from "@/lib/registry/entitlement";
 import CodePanel from "@/components/shell/CodePanel";
 import PromptButton from "@/components/shell/PromptButton";
-import InstallBlock from "@/components/shell/InstallBlock";
-import PropsTable from "@/components/shell/PropsTable";
+import InstallSection from "@/components/shell/InstallSection";
+import PropsSection from "@/components/shell/PropsSection";
 import {
 	ComponentHeader,
 	InstallHeading,
@@ -95,9 +96,16 @@ export default async function ComponentPage({
           Cache Components, so it streams as a hole in the static shell. The Code
           tab's source and the Copy Prompt control are rendered server-side and
           passed in. */}
+			{/* LiveWorkspace must stay a DIRECT child here — an async server
+			    component wrapping it corrupts Flight decode on client-side nav
+			    (chunk.reason.enqueueModel, Next 16.3.5 + Cache Components). The
+			    controls gate travels as an unawaited promise instead; use() inside
+			    the workspace suspends against this boundary. Off-flag deploys get
+			    an already-resolved false and stay static. */}
 			<Suspense fallback={<PanelSkeleton />}>
 				<LiveWorkspace
 					entry={entry}
+					controlsLocked={isControlsLocked(entry.pro)}
 					code={
 						<Suspense fallback={<PanelSkeleton />}>
 							<CodePanel entry={entry} />
@@ -111,14 +119,21 @@ export default async function ComponentPage({
 				/>
 			</Suspense>
 
+			{/* Pro entries resolve entitlement (a cookie read) in these sections, so
+			    each sits behind its own Suspense; free entries stay static inside the
+			    same boundaries. */}
 			<section className="space-y-3">
 				<InstallHeading />
-				<InstallBlock entry={entry} />
+				<Suspense fallback={<div className="min-h-20 animate-pulse rounded-lg bg-panel" />}>
+					<InstallSection entry={entry} />
+				</Suspense>
 			</section>
 
 			<section className="space-y-3">
 				<PropsHeading />
-				<PropsTable entry={entry} />
+				<Suspense fallback={<div className="min-h-40 animate-pulse rounded-lg bg-panel" />}>
+					<PropsSection entry={entry} />
+				</Suspense>
 			</section>
 
 			{/* Both derived from the registry entry — no cookie read, no URL read, so
