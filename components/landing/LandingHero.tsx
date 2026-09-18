@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	type PointerEvent,
+	type RefObject,
+} from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
@@ -12,7 +19,10 @@ import { useLenis } from "lenis/react";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import CookBookIcon from "@/components/icons/cook-book";
 import type { LandingData } from "@/components/landing/data";
+import ModeToggle from "@/components/landing/ModeToggle";
+import type { RubiksCubeHandle } from "@/components/landing/rubiks-cube";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import type { HeroVariant } from "@/lib/hero-variant";
 import { cn } from "@/lib/utils";
 
 if (typeof window !== "undefined") {
@@ -34,6 +44,15 @@ const SideRays = dynamic(
 interface LandingHeroProps {
 	stats: { total: number };
 	hero: LandingData["hero"];
+	/** Which backdrop runs. In the scroll variants the cube belongs to
+	 *  CubeTraveler (a fixed layer behind the page) and the hero mounts a drag
+	 *  pad in its place; classic mounts the cube here as before. */
+	variant: HeroVariant;
+	/** The traveler's cube, for the drag pad to orbit. */
+	travelerRef: RefObject<RubiksCubeHandle | null>;
+	onVariantChange: (next: HeroVariant) => void;
+	/** False under reduced motion, where every variant collapses to classic. */
+	canToggle: boolean;
 }
 
 // The hidden state is identical either way — SSR can't know the motion
@@ -69,8 +88,16 @@ const makeVariants = (reduce: boolean) => ({
 // Full-viewport hero. The backdrop is the living instrument — the cube from md
 // up, Waves below it — running the same values the readout strip reports, and
 // paused once scrolled past.
-export default function LandingHero({ stats, hero }: LandingHeroProps) {
+export default function LandingHero({
+	stats,
+	hero,
+	variant,
+	travelerRef,
+	onVariantChange,
+	canToggle,
+}: LandingHeroProps) {
 	const t = useTranslations("landing.hero");
+	const scrolling = variant !== "classic";
 	const ref = useRef<HTMLElement>(null);
 	const inView = useInView(ref);
 	const reduce = useReducedMotion() ?? false;
@@ -115,7 +142,9 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 	const light = useCallback(() => setLit(true), []);
 	useEffect(() => {
 		if (!decided) return;
-		const frame = isMobile ? requestAnimationFrame(light) : 0;
+		// Scroll variants have no cube in here to wait for; the traveler runs
+		// its own canvas fade.
+		const frame = isMobile || scrolling ? requestAnimationFrame(light) : 0;
 		// Backstop: if the backdrop never signals — chunk failed to load, WebGL
 		// refused, PreviewBoundary caught and rendered null — light anyway rather
 		// than leave the hero stranded at opacity 0.
@@ -124,7 +153,52 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 			cancelAnimationFrame(frame);
 			clearTimeout(timer);
 		};
-	}, [decided, isMobile, light]);
+	}, [decided, isMobile, scrolling, light]);
+
+	// Scroll variants: the readout prints the playhead's whole-move index. The
+	// traveler lerps toward this same target, so the strip leads the cube by a
+	// few frames and never contradicts it. At most 2N state changes per visit.
+	// At the very top the cube runs its own idle cycle rather than the scrub,
+	// so the strip reports the classic values there — the ones actually driving
+	// the field — and switches to the scrub readout once scroll owns it.
+	const moveTotal = Math.max(1, Math.round(hero.cube.scrambleMoveCount)) * 2;
+	const [turn, setTurn] = useState(0);
+	const [atTop, setAtTop] = useState(true);
+	useLenis((lenis) => {
+		if (!scrolling) return;
+		const p = Math.max(0, Math.min(1, lenis.scroll / Math.max(1, lenis.limit)));
+		const next = Math.min(moveTotal, Math.floor(p * moveTotal));
+		setTurn((prev) => (prev === next ? prev : next));
+		const top = lenis.scroll < 1;
+		setAtTop((prev) => (prev === top ? prev : top));
+	});
+
+	// The drag pad. The traveler's layer sits at negative z and can never be
+	// hit-tested, so the hero keeps the cube's box as a pointer surface and
+	// relays deltas through the handle: the same re-aim the canvas's own drag
+	// performs. pointermove, never mousemove — a touch drag emits no mouse
+	// events. touch-pan-y keeps a vertical finger scrolling the page.
+	const drag = useRef({ active: false, x: 0, y: 0 });
+	const onPadDown = (e: PointerEvent<HTMLDivElement>) => {
+		if (e.pointerType === "mouse" && e.button !== 0) return;
+		drag.current = { active: true, x: e.clientX, y: e.clientY };
+		e.currentTarget.setPointerCapture(e.pointerId);
+	};
+	const onPadMove = (e: PointerEvent<HTMLDivElement>) => {
+		const d = drag.current;
+		if (!d.active) return;
+		const dx = e.clientX - d.x;
+		const dy = e.clientY - d.y;
+		d.x = e.clientX;
+		d.y = e.clientY;
+		travelerRef.current?.orbitBy(dx, dy);
+	};
+	const onPadUp = (e: PointerEvent<HTMLDivElement>) => {
+		drag.current.active = false;
+		if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+			e.currentTarget.releasePointerCapture(e.pointerId);
+		}
+	};
 
 	// A function, not a constant: tailwind-merge treats every `opacity-*` as the
 	// same class group, so folding a steady-state `opacity-70` and the fade's
@@ -168,7 +242,26 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 			{/* Exactly one backdrop is ever mounted. A `hidden md:block` swap would
           allocate both WebGL contexts and only hide one — the same reasoning
           SectionRail uses to gate on the query rather than on CSS. */}
-			{isDesktop ? (
+			{isDesktop && scrolling ? (
+				/* Same box as the cube below, empty: the cube itself is in the
+           traveler behind the page, and this pad is how the hero's drag
+           reaches it. It scrolls away with the hero, which is exactly the
+           route leg where the cube is big enough to be worth turning. */
+				<div
+					aria-hidden
+					className={cn(
+						"absolute start-1/2 top-10 -translate-x-1/2 sm:start-[69%]",
+						"h-[min(92svh,108vw)] w-[min(92svh,108vw)]",
+						"cursor-grab touch-pan-y select-none active:cursor-grabbing",
+					)}
+					onPointerDown={onPadDown}
+					onPointerMove={onPadMove}
+					onPointerUp={onPadUp}
+					onPointerCancel={onPadUp}
+				/>
+			) : null}
+
+			{isDesktop && !scrolling ? (
 				/* The cube is a bounded drag surface, not a full-bleed one: it sits
            clear of the copy and the CTA row below, so grabbing it never
            competes with them. `touch-pan-y` is re-declared over the
@@ -347,7 +440,7 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 			</motion.div>
 
 			{/* Instrument readout — the actual prop values driving the field above. */}
-			<div className="relative z-10 border-t border-hairline bg-surface/60 backdrop-blur-sm">
+			<div className="sg-rule relative z-10 border-t border-hairline bg-surface/60 backdrop-blur-sm">
 				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
 					{/* Names whichever field is actually mounted, and stays blank until
               one is — naming a field before the viewport is known would print
@@ -356,10 +449,12 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
               correctly reports Waves. */}
 					<span className="hidden sm:inline">
 						{isDesktop
-							? t("readoutCube", {
-									duration: hero.cube.moveDuration,
-									count: hero.cube.scrambleMoveCount,
-								})
+							? scrolling && !atTop
+								? `${t("readoutScrub", { count: hero.cube.scrambleMoveCount })} · ${t("readoutTurn", { turn, total: moveTotal })}`
+								: t("readoutCube", {
+										duration: hero.cube.moveDuration,
+										count: hero.cube.scrambleMoveCount,
+									})
 							: isMobile
 								? t("readoutWaves", {
 										amplitude: hero.waves.amplitude.toFixed(2),
@@ -367,6 +462,15 @@ export default function LandingHero({ stats, hero }: LandingHeroProps) {
 									})
 								: null}
 					</span>
+					{/* Desktop only, like the cube it switches. Hidden under reduced
+					    motion, where the variants do not exist. */}
+					{canToggle && isDesktop ? (
+						<ModeToggle
+							value={variant}
+							onChange={onVariantChange}
+							className="pointer-events-auto"
+						/>
+					) : null}
 					<span className="w-full sm:w-auto">
 						{t("readoutRegistry", { count: stats.total })}
 					</span>

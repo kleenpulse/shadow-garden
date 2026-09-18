@@ -1954,7 +1954,12 @@
       "ctaCookbook": "クックブック",
       "readoutCube": "フィールド: RubiksCube · 回転 {duration}ms · スクランブル {count}",
       "readoutWaves": "フィールド: Waves · 振幅 {amplitude} · 距離 {distance}",
-      "readoutRegistry": "{count, plural, one {レジストリ # 件 [MIT · オープンソース]} other {レジストリ # 件 [MIT · オープンソース]}}"
+      "readoutRegistry": "{count, plural, one {レジストリ # 件 [MIT · オープンソース]} other {レジストリ # 件 [MIT · オープンソース]}}",
+      "readoutScrub": "フィールド: RubiksCube · スクロール駆動 · スクランブル {count}",
+      "readoutTurn": "回転 {turn}/{total}",
+      "modeLabel": "モード",
+      "modeClassic": "クラシック",
+      "modeScroll": "Mhiztri"
     },
     "manifesto": {
       "dark": "私たちは闇の中で活動します",

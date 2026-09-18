@@ -190,7 +190,7 @@ export default function CookbookSectionNav({
 							{ type: "spring", bounce: 0.5, duration: 0.7 }
 				}
 				style={{ willChange: "width" }}
-				className="relative flex h-8 items-center gap-2 overflow-hidden rounded-full border border-hairline bg-panel/80 px-2 text-start shadow-lg shadow-black/20 backdrop-blur-2xl transition-colors hover:border-accent-muted focus-visible:border-accent focus-visible:outline-none"
+				className="relative flex h-8 items-center gap-2 overflow-hidden rounded-full bg-panel/80 px-2 text-start shadow-lg shadow-black/20 backdrop-blur-2xl transition-colors hover:border-accent-muted focus-visible:border-accent focus-visible:outline-none"
 			>
 				<MiniRing value={position / total} />
 
@@ -267,7 +267,7 @@ export default function CookbookSectionNav({
 
 						{/* Flame controls. Deliberately does not close the panel — the
 						    point is to watch the background react while toggling. */}
-						<div className="shrink-0 border-t border-hairline bg-panel/60 px-3 py-2">
+						<div className="shrink-0 bg-surface/40 px-3 py-2">
 							<CookbookFlameControlsMobile />
 						</div>
 					</motion.div>

@@ -28,7 +28,7 @@ export default function FavoritesLink({
       onClick={onClick}
       onPointerEnter={onPointerEnter}
       className={cn(
-        "relative grid size-7 md:size-8 place-items-center rounded-md border border-hairline text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none",
+        "relative grid size-7 md:size-8 place-items-center rounded-md bg-surface text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none",
         className,
       )}
     >

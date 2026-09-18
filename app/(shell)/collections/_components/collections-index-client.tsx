@@ -42,7 +42,7 @@ export default function CollectionsIndexClient({
 
 	return (
 		<>
-			<header className="border-b border-hairline pb-6">
+			<header className="pb-2">
 				<p className="font-display text-[11px] uppercase tracking-[0.25em] text-ink-mute">
 					{t("eyebrow")}
 				</p>
@@ -65,7 +65,7 @@ export default function CollectionsIndexClient({
 								<li key={item.slug}>
 									<Link
 										href={item.href}
-										className="flex h-full flex-col gap-2 rounded-lg border border-hairline bg-panel p-4 transition-colors hover:border-accent-muted"
+										className="flex h-full flex-col gap-2 rounded-lg bg-panel p-4 transition-colors hover:bg-raised"
 									>
 										<div className="flex items-baseline justify-between gap-2">
 											<h3 className="font-display text-sm uppercase tracking-[0.08em] text-ink">

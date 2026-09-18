@@ -25,15 +25,15 @@ export default function TopBar() {
 	const isMac = useIsMac();
 
 	return (
-		<div className="sticky top-0 z-20 hidden h-10 md:h-14 items-center gap-3 border-b border-hairline bg-surface/80 px-3 backdrop-blur lg:flex lg:px-4">
+		<div className="sticky top-0 z-20 hidden h-10 md:h-14 items-center gap-3 bg-panel/80 px-3 backdrop-blur lg:flex lg:px-4">
 			<button
 				type="button"
 				onClick={() => setPaletteOpen(true)}
-				className="group flex h-9 w-full max-w-sm items-center gap-2 rounded-md border border-hairline bg-panel px-3 text-start text-ink-mute transition-colors hover:border-accent-muted hover:text-ink-dim"
+				className="group flex h-9 w-full max-w-sm items-center gap-2 rounded-md border border-transparent bg-surface px-3 text-start text-ink-mute transition-colors hover:text-ink-dim focus-visible:border-accent focus-visible:outline-none"
 			>
 				<Search className="h-4 w-4" aria-hidden />
 				<span className="flex-1 font-sans text-sm">{t("searchPlaceholder")}</span>
-				<kbd className="rounded border border-hairline px-1.5 py-0.5 font-mono text-[10px] leading-none text-ink-mute">
+				<kbd className="rounded bg-panel px-1.5 py-0.5 font-mono text-[10px] leading-none text-ink-mute">
 					{isMac ? "⌘K" : "Ctrl K"}
 				</kbd>
 			</button>
@@ -59,7 +59,7 @@ export default function TopBar() {
 					rel="noreferrer"
 					aria-label={t("githubLabel")}
 					title={t("githubLabel")}
-					className="grid size-7 place-items-center rounded-md text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8"
+					className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8"
 				>
 					<GithubIcon className="size-4" aria-hidden />
 				</a>

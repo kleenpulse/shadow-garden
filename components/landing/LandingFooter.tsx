@@ -39,7 +39,7 @@ export default function LandingFooter({
 	return (
 		<footer
 			id={SECTION_IDS.colophon}
-			className="scroll-mt-10 border-t border-hairline"
+			className="sg-rule scroll-mt-10 border-t border-hairline"
 		>
 			<div className="mx-auto grid w-full max-w-7xl gap-10 px-3 py-14 sm:px-6 sm:grid-cols-[1fr_auto_auto]">
 				<div>
@@ -95,7 +95,7 @@ export default function LandingFooter({
 					</Link>
 				</nav>
 			</div>
-			<div className="border-t border-hairline">
+			<div className="sg-rule border-t border-hairline">
 				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
 					<span>
 						{t("plateLabel")} <span className="normal-case">η</span>-07 ·{" "}

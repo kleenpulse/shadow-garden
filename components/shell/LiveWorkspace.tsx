@@ -69,7 +69,7 @@ export default function LiveWorkspace({
 						// Previews are the shipped product — they render as authored (LTR)
 						// regardless of the page's direction.
 						dir="ltr"
-						className="group relative grid min-h-90 md:min-h-120 xl:min-h-150 overflow-hidden rounded-lg border border-hairline bg-panel"
+						className="group relative grid min-h-90 md:min-h-120 xl:min-h-150 overflow-hidden rounded-lg bg-panel"
 					>
 						<PreviewBoundary
 							slug={entry.slug}

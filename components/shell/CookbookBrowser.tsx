@@ -431,7 +431,7 @@ export default function CookbookBrowser({
 										}}
 										className={cn(
 											ANCHOR_STOP,
-											"rounded-xl border border-hairline bg-linear-to-b from-panel via-panel/90 to-panel/70 backdrop-blur-2xl p-4 transition-shadow",
+											"rounded-xl bg-linear-to-b from-panel via-panel/90 to-panel/70 backdrop-blur-2xl p-4 transition-shadow",
 											pulse === termAnchor(row.term) && "ring-1 ring-accent",
 										)}
 									>
@@ -454,7 +454,7 @@ export default function CookbookBrowser({
 													<Link
 														key={c.slug}
 														href={`/components/${c.slug}`}
-														className="flex items-center gap-1.5 rounded-lg border border-hairline px-1 py-0.5 font-sans text-[10px] text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
+														className="flex items-center gap-1.5 rounded-lg bg-raised/60 px-1.5 py-0.5 font-sans text-[10px] text-ink-dim transition-colors hover:bg-raised hover:text-accent"
 													>
 														{c.name}
 													</Link>

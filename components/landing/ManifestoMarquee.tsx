@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import MarqueeVelocity from "./marquee-velocity";
+import { SECTION_IDS } from "@/components/landing/data";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 
 // One creed cycle — MarqueeVelocity tiles this to fill the band, so the
@@ -31,7 +32,10 @@ function Creed() {
 export default function ManifestoMarquee() {
 	return (
 		<div
-			className="flex h-10.5 items-center border-y border-hairline"
+			id={SECTION_IDS.manifesto}
+			// sg-scrim-tail: under the scroll hero the band carries the hero
+			// scrim's end colour and fades it out below (globals.css).
+			className="sg-rule sg-scrim-tail flex h-10.5 items-center border-y border-hairline"
 			aria-hidden
 		>
 			<PreviewBoundary
@@ -40,9 +44,10 @@ export default function ManifestoMarquee() {
 				variant="silent"
 			>
 				<MarqueeVelocity
-					velocity={28}
-					damping={30}
+					velocity={25}
+					damping={15}
 					stiffness={650}
+					velocityMapping={{ input: [0, 800], output: [0, 14] }}
 					containerClassName="w-full"
 				>
 					<Creed />

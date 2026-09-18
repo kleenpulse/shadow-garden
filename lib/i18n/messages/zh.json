@@ -1954,7 +1954,12 @@
       "ctaCookbook": "动效秘籍",
       "readoutCube": "场：RubiksCube · 旋转 {duration}ms · 打乱 {count}",
       "readoutWaves": "场：Waves · 振幅 {amplitude} · 距离 {distance}",
-      "readoutRegistry": "{count, plural, one {注册表 # 单位 [MIT · 开源]} other {注册表 # 单位 [MIT · 开源]}}"
+      "readoutRegistry": "{count, plural, one {注册表 # 单位 [MIT · 开源]} other {注册表 # 单位 [MIT · 开源]}}",
+      "readoutScrub": "场：RubiksCube · 滚动驱动 · 打乱 {count}",
+      "readoutTurn": "旋转 {turn}/{total}",
+      "modeLabel": "模式",
+      "modeClassic": "经典",
+      "modeScroll": "Mhiztri"
     },
     "manifesto": {
       "dark": "我们在暗处运作",

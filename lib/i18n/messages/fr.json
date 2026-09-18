@@ -1954,7 +1954,12 @@
       "ctaCookbook": "le Livre de recettes",
       "readoutCube": "Champ : RubiksCube · Rotation {duration} ms · Mélange {count}",
       "readoutWaves": "Champ : Waves · Ampl {amplitude} · Dist {distance}",
-      "readoutRegistry": "{count, plural, one {Registre # unité [MIT · open source]} other {Registre # unités [MIT · open source]}}"
+      "readoutRegistry": "{count, plural, one {Registre # unité [MIT · open source]} other {Registre # unités [MIT · open source]}}",
+      "readoutScrub": "Champ : RubiksCube · Piloté au défilement · Mélange {count}",
+      "readoutTurn": "Rotation {turn}/{total}",
+      "modeLabel": "Mode",
+      "modeClassic": "Classique",
+      "modeScroll": "Mhiztri"
     },
     "manifesto": {
       "dark": "Nous opérons dans l’ombre",

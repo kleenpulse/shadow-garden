@@ -10,7 +10,7 @@ export type PillTabItem<V extends string = string> = {
 	value: V;
 	label: ReactNode;
 	/** Overrides the indicator's fill for this tab only — merged through `cn`, so
-	 *  a `bg-*` here beats the default solid amethyst. The border is left alone. */
+	 *  a `bg-*` here beats the default solid amethyst. The track is left alone. */
 	activeFill?: string;
 };
 
@@ -75,7 +75,7 @@ export default function PillTabs<V extends string = string>({
 			onKeyDown={onKeyDown}
 			className={cn(
 				// Shadow Garden radius (rounded-lg) + hairline panel chrome kept as-is.
-				"relative inline-flex items-center gap-1 rounded-lg border border-hairline bg-panel",
+				"relative inline-flex items-center gap-1 rounded-lg bg-panel",
 				sizeClasses.track,
 				fullWidth ? "w-full" : "w-fit",
 				className,

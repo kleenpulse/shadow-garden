@@ -25,7 +25,7 @@ export default function AppearsInList({
 					<li key={collection.slug}>
 						<Link
 							href={collection.href}
-							className="inline-block rounded-full border border-hairline px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
+							className="inline-block rounded-full bg-panel px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:bg-raised hover:text-accent"
 						>
 							{copy(`collections.${collection.slug}.title`, collection.title)}
 						</Link>

@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
+import {
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+	type MouseEvent,
+} from "react";
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import { useLenis } from "lenis/react";
@@ -139,8 +145,7 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 		let frame = 0;
 		const measure = () => {
 			frame = 0;
-			const limit =
-				document.documentElement.scrollHeight - window.innerHeight;
+			const limit = document.documentElement.scrollHeight - window.innerHeight;
 			spy(Math.max(0, Math.min(window.scrollY, limit)), limit);
 		};
 		const onScroll = () => {
@@ -161,9 +166,12 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 		(id: string, e: MouseEvent<HTMLAnchorElement>) => {
 			if (!lenis) return; // reduced motion → SmoothScroll is absent → native jump
 			e.preventDefault();
-			// The header never hides, and every section carries scroll-mt-10, so
-			// the anchor scroll lands under it on its own — no manual offset
-			// math needed. The first section just means "top".
+			// Every section carries scroll-mt-10, so the anchor scroll lands clear
+			// of the top edge on its own — no manual offset math needed. The
+			// header is taller than that margin, but it auto-hides: a downward
+			// jump pushes it off screen before the target lands, and an upward
+			// jump reveals it over the same 24px it already covered back when the
+			// header was permanently fixed. The first section just means "top".
 			if (id === sections[0]?.id) lenis.scrollTo(0, JUMP);
 			else lenis.scrollTo(`#${id}`, JUMP);
 			history.pushState(null, "", `#${id}`);
@@ -184,7 +192,7 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 			// The hover zone is the whole right gutter. Nothing else lives there
 			// except GotoTop, which sits above at z-9999 and stays clickable —
 			// as does the header (z-99) over this z-40 strip.
-			className="fixed inset-y-0 right-0 z-40 w-10"
+			className="fixed inset-y-0 right-1.5 z-40 w-10"
 			onPointerEnter={() => {
 				hovering.current = true;
 				sync();
@@ -279,8 +287,8 @@ function RailTick({
 								? "w-7"
 								: "w-4 group-hover:w-5 group-focus-visible:w-5"
 							: isActive
-								? "w-1.5"
-								: "w-1",
+							? "w-1.5"
+							: "w-1",
 					)}
 				/>
 			</TooltipTrigger>

@@ -20,7 +20,7 @@ export function ComponentHeader({ entry }: { entry: ComponentEntry }) {
 	const copy = useDataCopy();
 
 	return (
-		<header className="border-b border-hairline pb-6">
+		<header className="pb-2">
 			<p className="font-display text-[11px] uppercase tracking-[0.22em] text-ink-mute">
 				{copy(`pages.categories.${anchorFor(entry.category)}`, entry.category)}
 			</p>
@@ -38,7 +38,7 @@ export function ComponentHeader({ entry }: { entry: ComponentEntry }) {
 					slug={entry.slug}
 					name={entry.name}
 					iconSize={18}
-					className="border border-hairline"
+					className="bg-panel"
 				/>
 			</div>
 			<p className="mt-3 max-w-2xl font-sans text-sm text-ink-dim">
@@ -72,7 +72,7 @@ export function ComponentHeader({ entry }: { entry: ComponentEntry }) {
 						<Link
 							key={term}
 							href={`/cookbook#${termAnchor(term)}`}
-							className="rounded-full border border-hairline px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
+							className="rounded-full bg-panel px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:bg-raised hover:text-accent"
 						>
 							{term}
 						</Link>

@@ -7,6 +7,7 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useHeroVariant } from "@/hooks/use-hero-variant";
 import { useDataCopy } from "@/lib/i18n/data-copy";
 import {
 	anchorFor,
@@ -15,6 +16,8 @@ import {
 import type { Category } from "@/lib/registry/types";
 import SpecimenPlate from "@/components/landing/SpecimenPlate";
 import Reveal from "@/components/landing/Reveal";
+import SweepReveal from "@/components/landing/SweepReveal";
+import ScrubReveal from "@/components/landing/ScrubReveal";
 import SpotlightList from "@/components/landing/SpotlightList";
 import AlphaExhibit from "@/components/landing/exhibits/AlphaExhibit";
 import BetaExhibit from "@/components/landing/exhibits/BetaExhibit";
@@ -36,6 +39,13 @@ export function ExhibitSections({
 }) {
 	const t = useTranslations("pages.landing");
 	const copy = useDataCopy();
+	// The header sweep belongs to the scroll hero; classic keeps its rise. Read
+	// here, not in the wrapper, so the blurb's fade can trail the sweep too.
+	const [variant] = useHeroVariant();
+	const sweep = variant === "scroll";
+	// Same fade-and-rise either way; the scrub version chains behind the sweep
+	// in scroll-space, replacing the old 0.9s time delay.
+	const BlurbReveal = sweep ? ScrubReveal : Reveal;
 	const categoryName = (category: Category) =>
 		copy(`pages.categories.${anchorFor(category)}`, category);
 
@@ -90,28 +100,34 @@ export function ExhibitSections({
 					id={anchorFor(exhibit.category)}
 					className="mx-auto w-full max-w-7xl scroll-mt-10 px-3 py-14 lg:px-6 sm:py-24"
 				>
-					<Reveal>
+					{/* Below sm the plate spreads its three readouts across the row, so
+					    the sweep bar spans the row there and hugs the text from sm up. */}
+					<SweepReveal active={sweep} className="max-sm:w-full">
 						<SpecimenPlate
 							greek={exhibit.greek}
 							index={exhibit.index}
 							label={categoryName(exhibit.category)}
 							meta={t("unitsMeta", { count: exhibit.entries.length })}
 						/>
-						<div className="mt-8 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+					</SweepReveal>
+					<div className="mt-8 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+						<SweepReveal active={sweep} className="-mx-1 px-1">
 							<h2 className="font-display text-3xl uppercase tracking-[0.04em] text-ink sm:text-4xl">
 								{/* normal-case: uppercase would turn α into Α (reads as Latin A) */}
 								<span className="normal-case text-accent">{exhibit.greek}</span>
 								<span aria-hidden> · </span>
 								{categoryName(exhibit.category)}
 							</h2>
+						</SweepReveal>
+						<BlurbReveal>
 							<p className="max-w-xs font-sans text-sm text-ink-dim">
 								{copy(
 									`pages.landing.blurbs.${anchorFor(exhibit.category)}`,
 									exhibit.blurb,
 								)}
 							</p>
-						</div>
-					</Reveal>
+						</BlurbReveal>
+					</div>
 
 					<Reveal delay={0.1} className="mt-10">
 						{exhibitFor(exhibit)}
@@ -176,7 +192,7 @@ export function ArchiveSection({
 
 	return (
 		<div className="mx-auto w-full max-w-7xl px-3 py-14 sm:px-6 sm:py-28">
-			<div className="flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-bench-700 py-2 font-display text-[9px] uppercase tracking-widest text-bench-500 sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
+			<div className="sg-rule flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-bench-700 py-2 font-display text-[9px] uppercase tracking-widest text-bench-500 sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
 				<span className="text-[#a855f7]">
 					{t("archive.plate")} <span className="normal-case">ζ</span>-06
 				</span>

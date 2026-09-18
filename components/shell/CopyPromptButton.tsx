@@ -18,7 +18,7 @@ import SparkleBurst, { useSparkleBurst } from "./SparkleBurst";
 // which is the only stacking order where the ring is visible. A border on the
 // button would sit on top of the ring and hide it.
 const SHELL =
-	"relative isolate inline-flex shrink-0 rounded-md border border-hairline bg-panel";
+	"relative isolate inline-flex shrink-0 rounded-md border border-transparent bg-panel";
 
 // `relative` anchors the sparks; `z-10` keeps the label above the outer glow
 // layer. No `overflow-hidden` — the burst is meant to leave the box.

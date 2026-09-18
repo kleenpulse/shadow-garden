@@ -24,7 +24,7 @@ export function CollectionHeader({
 	const copy = useDataCopy();
 
 	return (
-		<header className="border-b border-hairline pb-6">
+		<header className="pb-2">
 			<h1 className="font-display text-2xl uppercase tracking-[0.08em] text-ink">
 				{copy(`collections.${slug}.title`, title)}
 			</h1>
@@ -60,11 +60,11 @@ export function CollectionGlossary({
 			<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-mute">
 				{t("theTerms")}
 			</h2>
-			<dl className="divide-y divide-hairline rounded-lg border border-hairline bg-panel">
+			<dl className="space-y-1">
 				{rows.map(({ term, anchor, definition }) => (
 					<div
 						key={term}
-						className="flex flex-col gap-1 px-4 py-3 sm:flex-row sm:gap-6"
+						className="flex flex-col gap-1 rounded-md bg-panel px-4 py-3 sm:flex-row sm:gap-6"
 					>
 						<dt className="shrink-0 sm:w-52">
 							<Link
@@ -102,7 +102,7 @@ export function RelatedCollections({
 					<li key={sibling.slug}>
 						<Link
 							href={sibling.href}
-							className="inline-block rounded-full border border-hairline px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:border-accent-muted hover:text-accent"
+							className="inline-block rounded-full bg-panel px-2.5 py-1 font-sans text-xs text-ink-dim transition-colors hover:bg-raised hover:text-accent"
 						>
 							{copy(`collections.${sibling.slug}.title`, sibling.title)}
 						</Link>

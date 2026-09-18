@@ -1954,7 +1954,12 @@
       "ctaCookbook": "دفتر الوصفات",
       "readoutCube": "الحقل: RubiksCube · دوران {duration} مللي ثانية · تشويش {count}",
       "readoutWaves": "الحقل: Waves · السعة {amplitude} · المسافة {distance}",
-      "readoutRegistry": "{count, plural, one {السجل # وحدة [MIT · مفتوح المصدر]} other {السجل # وحدات [MIT · مفتوح المصدر]}}"
+      "readoutRegistry": "{count, plural, one {السجل # وحدة [MIT · مفتوح المصدر]} other {السجل # وحدات [MIT · مفتوح المصدر]}}",
+      "readoutScrub": "الحقل: RubiksCube · مقاد بالتمرير · تشويش {count}",
+      "readoutTurn": "دوران {turn}/{total}",
+      "modeLabel": "الوضع",
+      "modeClassic": "كلاسيكي",
+      "modeScroll": "Mhiztri"
     },
     "manifesto": {
       "dark": "نعمل في الظلام",

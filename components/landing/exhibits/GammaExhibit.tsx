@@ -16,7 +16,9 @@ export default function GammaExhibit({
   accentColor: string;
 }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2">
+    // `exhibit-cards`: globals.css thins the cards' panel in the scroll hero
+    // variants so the traveling cube reads through them.
+    <div className="exhibit-cards grid gap-4 sm:grid-cols-2">
       {items.map((item) => (
         <PreviewBoundary
           key={item.slug}

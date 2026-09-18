@@ -169,6 +169,7 @@ export default function CommandMenu() {
   }, [paletteOpen, pathname, toggleFavorite]);
 
   return (
+    <div className="sg-palette contents">
     <CommandPalette
       open={paletteOpen}
       onOpenChange={setPaletteOpen}
@@ -178,5 +179,6 @@ export default function CommandMenu() {
       fixed
       placeholder={t("placeholder")}
     />
+    </div>
   );
 }

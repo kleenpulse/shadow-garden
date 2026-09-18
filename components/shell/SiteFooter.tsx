@@ -44,7 +44,7 @@ export default function SiteFooter() {
 	})).filter((row) => row.items.length > 0);
 
 	return (
-		<footer className="mt-16 border-t border-hairline">
+		<footer className="mt-16 bg-panel">
 			<div className="mx-auto w-full max-w-7xl px-3 py-12 lg:px-8">
 				<div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
 					<div>
@@ -102,7 +102,7 @@ export default function SiteFooter() {
 				</div>
 			</div>
 
-			<div className="border-t border-hairline">
+			<div className="bg-surface/50">
 				{/* min-h-11 = the sidebar's pinned footer (py-3 + text-sm leading), so the
 				    two bottom bars line up where they meet at the sidebar edge. */}
 				<div className="mx-auto flex min-h-11 w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute lg:px-8">

@@ -1954,7 +1954,12 @@
       "ctaCookbook": "el Recetario",
       "readoutCube": "Campo: RubiksCube · Giro {duration}ms · Scramble {count}",
       "readoutWaves": "Campo: Waves · Amp {amplitude} · Dist {distance}",
-      "readoutRegistry": "{count, plural, one {Registro # unidad [MIT · código abierto]} other {Registro # unidades [MIT · código abierto]}}"
+      "readoutRegistry": "{count, plural, one {Registro # unidad [MIT · código abierto]} other {Registro # unidades [MIT · código abierto]}}",
+      "readoutScrub": "Campo: RubiksCube · Guiado por scroll · Scramble {count}",
+      "readoutTurn": "Giro {turn}/{total}",
+      "modeLabel": "Modo",
+      "modeClassic": "Clásico",
+      "modeScroll": "Mhiztri"
     },
     "manifesto": {
       "dark": "Operamos en la oscuridad",

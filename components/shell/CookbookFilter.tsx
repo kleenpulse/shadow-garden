@@ -233,7 +233,7 @@ export default function CookbookFilter({
 				spellCheck={false}
 				inputMode="search"
 				enterKeyHint="go"
-				className="w-full rounded-md border border-hairline bg-panel py-2 ps-3 pe-8 font-mono text-xs text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
+				className="w-full rounded-md border border-transparent bg-surface py-2 ps-3 pe-8 font-mono text-xs text-ink outline-none placeholder:text-ink-mute focus-visible:border-accent"
 			/>
 
 			{query.length > 0 && (

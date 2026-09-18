@@ -28,12 +28,15 @@ export default function HeroExhibit() {
 							reducedMotion={reducedMotion}
 						/>
 					</PreviewBoundary>
+					{/* The plate is hardcoded dark (Monolith is a dark-only scene), so the
+					    overlay hardcodes light text too — semantic ink tokens would flip
+					    dark in light mode and vanish. Same rule as the sealed archive. */}
 					<div className="pointer-events-none absolute inset-x-6 bottom-6 sm:inset-x-10">
-						<p className="font-display text-[10px] tracking-[0.32em] text-ink-mute uppercase">
+						<p className="font-display text-[10px] tracking-[0.32em] text-bench-500 uppercase">
 							hero templates
 						</p>
-						<h3 className="mt-2 font-display text-2xl leading-none tracking-tight text-ink sm:text-4xl">
-							MONO<span className="text-accent">·</span>LITH
+						<h3 className="mt-2 font-display text-2xl leading-none tracking-tight text-bench-100 sm:text-4xl">
+							MONO<span className="text-amethyst">·</span>LITH
 						</h3>
 					</div>
 				</div>

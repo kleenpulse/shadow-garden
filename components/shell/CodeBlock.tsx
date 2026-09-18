@@ -120,9 +120,9 @@ export default function CodeBlock({
     // rounds the corners the same way without becoming a scrollport.
     <div
       ref={rootRef}
-      className="overflow-clip rounded-lg border border-hairline bg-panel"
+      className="overflow-clip rounded-lg bg-panel"
     >
-      <div className="flex items-center justify-between border-b border-hairline px-4 py-2">
+      <div className="flex items-center justify-between bg-raised/30 px-4 py-2">
         <span className="font-mono text-[11px] text-ink-mute">{filename ?? "source"}</span>
         <button
           type="button"

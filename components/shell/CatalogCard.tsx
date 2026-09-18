@@ -28,7 +28,7 @@ export default function CatalogCard({
 		// only tracks the pointer.
 		<GlowCard
 			as="article"
-			className="flex flex-col gap-2 rounded-lg border border-hairline bg-panel p-4 transition-colors focus-within:border-accent-muted"
+			className="flex flex-col gap-2 rounded-lg bg-panel p-4 transition-colors focus-within:bg-raised"
 		>
 			{/* Overlay link keeps the whole card clickable; the heart sits
 			    above it as the only pointer-interactive child. */}

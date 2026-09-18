@@ -1954,7 +1954,12 @@
       "ctaCookbook": "the Cook Book",
       "readoutCube": "Field: RubiksCube · Turn {duration}ms · Scramble {count}",
       "readoutWaves": "Field: Waves · Amp {amplitude} · Dist {distance}",
-      "readoutRegistry": "{count, plural, one {Registry # unit [MIT · open source]} other {Registry # units [MIT · open source]}}"
+      "readoutRegistry": "{count, plural, one {Registry # unit [MIT · open source]} other {Registry # units [MIT · open source]}}",
+      "readoutScrub": "Field: RubiksCube · Scroll-scrubbed · Scramble {count}",
+      "readoutTurn": "Turn {turn}/{total}",
+      "modeLabel": "Mode",
+      "modeClassic": "Classic",
+      "modeScroll": "Mhiztri"
     },
     "manifesto": {
       "dark": "We operate in the dark",

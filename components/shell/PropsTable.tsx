@@ -18,10 +18,10 @@ export default function PropsTable({ entry }: { entry: ComponentEntry }) {
   const copy = useDataCopy();
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-hairline bg-panel">
+    <div className="overflow-x-auto rounded-lg bg-panel">
       <table className="w-full border-collapse text-start">
         <thead>
-          <tr className="border-b border-hairline">
+          <tr className="bg-raised/30">
             {HEADINGS.map((heading) => (
               <th
                 key={heading}
@@ -34,7 +34,7 @@ export default function PropsTable({ entry }: { entry: ComponentEntry }) {
         </thead>
         <tbody>
           {entry.props.map((prop) => (
-            <tr key={prop.name} className="border-b border-hairline/60 last:border-0 align-top">
+            <tr key={prop.name} className="align-top even:bg-surface/40">
               <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-accent">{prop.name}</td>
               <td className="px-4 py-2.5 font-mono text-xs text-ink-dim">{typeLabel(prop)}</td>
               <td className="whitespace-nowrap px-4 py-2.5 font-mono text-xs text-ink-dim">

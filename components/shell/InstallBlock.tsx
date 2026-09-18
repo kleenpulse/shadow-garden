@@ -25,8 +25,8 @@ export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
   };
 
   return (
-    <div className="overflow-hidden rounded-lg border border-hairline bg-panel">
-      <div className="flex items-center justify-between border-b border-hairline px-2 py-1.5">
+    <div className="overflow-hidden rounded-lg bg-panel">
+      <div className="flex items-center justify-between bg-raised/30 px-2 py-1.5">
         <div role="tablist" aria-label={t("pkgManagerAria")} className="flex gap-0.5">
           {PKG_MANAGERS.map((manager) => {
             const active = manager === pm;
@@ -57,7 +57,7 @@ export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
         <code className="font-mono text-xs text-ink">{command}</code>
       </pre>
       {entry.variants.length > 1 ? (
-        <div className="border-t border-hairline px-4 py-3">
+        <div className="bg-surface/40 px-4 py-3">
           <p className="font-mono text-[11px] text-ink-mute">
             {t("thenCopy", { count: entry.variants.length })}
           </p>

@@ -17,8 +17,13 @@ export interface SpotlightItem {
 // bench = themed surfaces, semantic tokens only (light mode must keep working).
 // sealed = ProSection's static graphite ground, which hardcodes its palette by
 // design (same rule as .shiki-wrap) — so this variant matches that convention.
+// `row` is a hook for globals.css: under the scroll hero the rows become
+// translucent slats over the travelling cube. Bench only — the sealed archive
+// is a hardcoded graphite plate, and a --sg-panel tint over it is wrong in
+// light mode, so its rows just lose the line.
 const VARIANTS = {
 	bench: {
+		row: "sg-row",
 		border: "border-hairline",
 		fill: "bg-accent",
 		text: "text-ink",
@@ -27,6 +32,7 @@ const VARIANTS = {
 		tagAccent: "text-accent",
 	},
 	sealed: {
+		row: "",
 		border: "border-bench-700",
 		fill: "bg-[#a855f7]",
 		text: "text-bench-100",
@@ -56,7 +62,7 @@ export default function SpotlightList({
 
 	return (
 		<ul
-			className={cn("border-t", v.border, className)}
+			className={cn("sg-list sg-rule border-t", v.border, className)}
 			onMouseLeave={() => setHovered(null)}
 		>
 			{items.map((item, i) => {
@@ -82,7 +88,8 @@ export default function SpotlightList({
 							onFocus={() => setHovered(item.slug)}
 							onBlur={() => setHovered(null)}
 							className={cn(
-								"group relative flex items-center justify-between gap-6 border-b px-2 py-4 outline-none sm:px-4",
+								"sg-rule group relative flex items-center justify-between gap-6 border-b px-2 py-4 outline-none sm:px-4",
+								v.row,
 								v.border,
 							)}
 						>
@@ -91,7 +98,10 @@ export default function SpotlightList({
 									aria-hidden
 									layoutId={`${id}-fill`}
 									transition={{ type: "spring", stiffness: 300, damping: 30 }}
-									className={cn("absolute inset-0", v.fill)}
+									// rounded-[inherit]: matches the slat radius under the scroll
+									// hero without the row clipping it (overflow:hidden would hide
+									// the fill mid-flight between rows).
+									className={cn("absolute inset-0 rounded-[inherit]", v.fill)}
 								/>
 							)}
 							<span

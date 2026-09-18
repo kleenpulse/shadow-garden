@@ -56,7 +56,7 @@ export async function generateMetadata({
 
 function PanelSkeleton() {
 	return (
-		<div className="min-h-[220px] animate-pulse rounded-lg border border-hairline bg-panel" />
+		<div className="min-h-[220px] animate-pulse rounded-lg bg-panel" />
 	);
 }
 
@@ -64,7 +64,7 @@ function PanelSkeleton() {
 // the gated control streams in.
 function PromptButtonSkeleton() {
 	return (
-		<div className="h-8 w-38 shrink-0 animate-pulse rounded-md border border-hairline bg-panel" />
+		<div className="h-8 w-38 shrink-0 animate-pulse rounded-md bg-panel" />
 	);
 }
 

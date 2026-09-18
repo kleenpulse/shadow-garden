@@ -21,12 +21,12 @@ export default function MobileBar() {
 	const isCookbook = pathname === "/cookbook";
 
 	return (
-		<div className="sticky top-0 z-20 flex items-center gap-3 border-b border-hairline bg-surface/90 px-2 py-3 backdrop-blur lg:hidden h-10">
+		<div className="sticky top-0 z-20 flex items-center gap-3 bg-panel/90 px-2 py-3 backdrop-blur lg:hidden h-10">
 			<button
 				type="button"
 				onClick={toggleSidebar}
 				aria-label={t("openNavigation")}
-				className="grid size-7 place-items-center rounded-md border border-hairline text-ink-dim hover:text-accent"
+				className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim hover:text-accent"
 			>
 				<span aria-hidden className="text-base leading-none">
 					≡
@@ -44,7 +44,7 @@ export default function MobileBar() {
 					type="button"
 					onClick={() => setPaletteOpen(true)}
 					aria-label={tc("search")}
-					className="grid size-7 place-items-center rounded-md border border-hairline text-ink-dim hover:text-accent"
+					className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim hover:text-accent"
 				>
 					<Search className="h-4 w-4" aria-hidden />
 				</button>
@@ -53,7 +53,7 @@ export default function MobileBar() {
 					aria-label={t("cookbookLabel")}
 					title={t("cookbookLabel")}
 					aria-current={isCookbook ? "page" : undefined}
-					className={`grid size-7 place-items-center rounded-md border border-hairline transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none ${
+					className={`grid size-7 place-items-center rounded-md bg-surface transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none ${
 						isCookbook ? "text-accent" : "text-ink-dim"
 					}`}
 				>
@@ -67,7 +67,7 @@ export default function MobileBar() {
 					rel="noreferrer"
 					aria-label={t("githubLabel")}
 					title={t("githubLabel")}
-					className="grid size-7 place-items-center rounded-md border border-hairline text-ink-dim hover:text-accent"
+					className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim hover:text-accent"
 				>
 					<GithubIcon className="size-4" aria-hidden />
 				</a>

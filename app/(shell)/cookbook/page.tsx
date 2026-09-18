@@ -79,7 +79,7 @@ export default function CookbookPage() {
 				]}
 			/>
 			<CookbookFlame />
-			<PageBottomBlur className="lg:hidden" />
+			<PageBottomBlur static className="lg:hidden" />
 			<GotoTop />
 
 			<CookbookHeader covered={covered} total={total} />

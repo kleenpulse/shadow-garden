@@ -35,7 +35,7 @@ export default function FavoriteThumbnailCard({
   return (
     <article
       ref={cardRef}
-      className="group relative flex flex-col overflow-hidden rounded-lg border border-hairline bg-panel transition-colors hover:border-accent-muted"
+      className="group relative flex flex-col overflow-hidden rounded-lg bg-panel transition-colors hover:bg-raised"
     >
       {/* dir="ltr": live previews render as authored regardless of page direction. */}
       <div dir="ltr" className="relative aspect-[16/10] w-full overflow-hidden bg-raised">

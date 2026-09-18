@@ -33,7 +33,7 @@ export default function CollectionMembersList({
 				<li key={row.slug}>
 					<Link
 						href={row.href}
-						className="flex h-full flex-col gap-2 rounded-lg border border-hairline bg-panel p-4 transition-colors hover:border-accent-muted"
+						className="flex h-full flex-col gap-2 rounded-lg bg-panel p-4 transition-colors hover:bg-raised"
 					>
 						<h3 className="font-display text-sm uppercase tracking-[0.08em] text-ink">
 							{displayName(row.name)}

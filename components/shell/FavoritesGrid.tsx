@@ -22,7 +22,7 @@ export default function FavoritesGrid() {
         {Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i}
-            className="aspect-[16/10] animate-pulse rounded-lg border border-hairline bg-panel"
+            className="aspect-[16/10] animate-pulse rounded-lg bg-panel"
           />
         ))}
       </div>

@@ -1,6 +1,7 @@
 import LandingHeader from "@/components/landing/LandingHeader";
 import { buildLandingData, SECTION_IDS } from "@/components/landing/data";
-import LandingHero from "@/components/landing/LandingHero";
+import HeroVariantGate from "@/components/landing/HeroVariantGate";
+import { heroVariantInitScript } from "@/lib/hero-variant";
 import ManifestoMarquee from "@/components/landing/ManifestoMarquee";
 import Reveal from "@/components/landing/Reveal";
 import TuningProof from "@/components/landing/TuningProof";
@@ -30,6 +31,11 @@ export default function Home() {
 
 	return (
 		<main className="relative w-full overflow-x-clip">
+			{/* Pre-paint: stamp html[data-sg-hero] from ?v= so the hero's mode
+			    toggle paints its active state on the first frame. A pure string
+			    from a static whitelist, so the page stays prerendered — the
+			    variant is never read from searchParams. */}
+			<script dangerouslySetInnerHTML={{ __html: heroVariantInitScript() }} />
 			<JsonLd data={productSchema()} />
 			<div id="hero" />
 			<SmoothScroll />
@@ -39,7 +45,10 @@ export default function Home() {
 
 			<LandingHeader />
 
-			<LandingHero stats={data.stats} hero={data.hero} />
+			{/* Hero plus, in the scroll variants, the fixed cube traveler that
+			    rides the whole page behind the content. The gate decides the
+			    variant on the client so `/` stays static. */}
+			<HeroVariantGate stats={data.stats} hero={data.hero} />
 
 			<ManifestoMarquee />
 

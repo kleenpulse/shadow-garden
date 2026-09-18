@@ -1,14 +1,56 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+  type Ref,
+  type RefObject,
+} from "react";
 import * as THREE from "three";
 import { cn } from "@/lib/utils";
 
 export type CubeFace = "up" | "down" | "right" | "left" | "front" | "back";
 export type CubePalette = "classic" | "amethyst" | "mono" | "neon";
 
+/** Host-written per-frame state for a scroll-driven cube. Read inside the
+ *  frame loop, never React state — a host writes it sixty times a second. */
+export interface CubeDrive {
+  /** Radians added to the orbit rig's azimuth, on top of any drag. */
+  azimuth: number;
+  /** Radians added to the orbit rig's elevation; the pole clamp still applies. */
+  elevation: number;
+  /** Multiplier on the ambient spin rate, so scroll speed animates the cube. */
+  spinBoost: number;
+  /** 0..1. Strength of the specular sweep across the stickers and body. The
+   *  sweep runs on the cube's own clock (one pass every SHEEN_PERIOD_MS);
+   *  this only sets how bright it is, and 0 switches it off. */
+  sheen: number;
+}
+
+export interface RubiksCubeHandle {
+  /** Playhead in quarter-turns, 0..2·scrambleMoveCount. Requires `scrub`. The
+   *  first N moves scramble, the next N replay them inverted, so t = 2N is
+   *  solved again. Fully reversible: seeking backwards undoes moves. */
+  seek(t: number): void;
+  setDrive(drive: Partial<CubeDrive>): void;
+  /** Pointer delta from an external drag surface — the same re-aim the
+   *  canvas's own drag performs, for hosts whose canvas cannot be hit. */
+  orbitBy(dx: number, dy: number): void;
+}
+
 export interface RubiksCubeProps {
+  /** Bind the scramble→solve cycle to an external playhead (`seek` on the
+   *  handle) instead of the timers. The sequence is seeded, so the same seed
+   *  scrubs the same cube on every load. */
+  scrub?: { seed: number };
+  /** Device-pixel-ratio cap. */
+  maxDpr?: number;
+  ref?: Ref<RubiksCubeHandle>;
   /** Spin the whole cube on its own axis, independently of the solve loop. */
   autoRotate?: boolean;
   /** Multiplier on the ambient spin rate. */
@@ -83,6 +125,24 @@ const BASE_SPIN = 13;
 const SWIPE_MIN = 2;
 // Rate the spin axis eases toward a swiped one — roughly a third of a second.
 const AXIS_EASE = 3;
+// Rate the scrub playhead eases toward the host's target (1/s). Wheel events do
+// not arrive at a constant rate; a 1:1 write reproduces every gap as a stutter
+// in the turning layer.
+const SEEK_RATE = 10;
+// The scrub playhead never turns faster than the cube's own pace (one
+// quarter-turn per moveDuration), the same speed the idle cycle and the classic
+// hero run at. Scroll decides where the cube is heading; it never hurries it.
+// Idle hysteresis, in quarter-turns of target. A smoothed scroll hovers a few
+// pixels either side of zero as it settles; without a band the cube would flip
+// between its idle cycle and the scrub every frame and stutter at the top.
+const IDLE_ENTER = 0.02;
+const IDLE_EXIT = 0.12;
+// The scrub's per-move detent. Monotonic, unlike easeTurn's ease-out-back: the
+// overshoot is the mechanical click that sells a timer-driven turn, but under a
+// scrubbed or fast-moving playhead it reads as every layer wobbling.
+function detent(f: number): number {
+  return f * f * (3 - 2 * f);
+}
 const STICKER_SCALE = 0.86;
 const AXIS_KEY = ["x", "y", "z"] as const;
 const AXIS_VEC = [
@@ -185,19 +245,19 @@ function easeTurn(t: number): number {
   return 1 + c3 * u * u * u + c1 * u * u;
 }
 
-function makeScramble(count: number): Move[] {
+function makeScramble(count: number, rng: () => number = Math.random): Move[] {
   const out: Move[] = [];
   let lastAxis = -1;
   for (let i = 0; i < count; i++) {
     let axis: Axis;
     do {
-      axis = Math.floor(Math.random() * 3) as Axis;
+      axis = Math.floor(rng() * 3) as Axis;
     } while (axis === lastAxis);
     lastAxis = axis;
     out.push({
       axis,
-      layer: (Math.floor(Math.random() * 3) - 1) as Layer,
-      dir: Math.random() < 0.5 ? 1 : -1,
+      layer: (Math.floor(rng() * 3) - 1) as Layer,
+      dir: rng() < 0.5 ? 1 : -1,
     });
   }
   return out;
@@ -210,17 +270,50 @@ function invert(moves: Move[]): Move[] {
     .map((m) => ({ axis: m.axis, layer: m.layer, dir: -m.dir as Dir }));
 }
 
+// mulberry32: a 32-bit seeded generator, good enough that a fixed seed
+// reproduces one scramble across every visitor and every reload.
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** The scrubbed timeline: N seeded moves, then the same N inverted, so the
+ *  playhead runs solved → scrambled → solved. */
+function buildScrubSequence(count: number, seed: number): Move[] {
+  const scramble = makeScramble(count, mulberry32(seed));
+  return [...scramble, ...invert(scramble)];
+}
+
 // Light spilling from behind the cube, drawn as one camera-facing quad. A
 // fresnel shell is the obvious idea here and it is the wrong one: a box has a
 // constant normal per face, so 1 - dot(N, V) is uniform across each face and
 // the shader can only ever draw a flat, hard-edged stroke around the
 // silhouette. Fresnel needs curvature. A radial falloff in screen space has the
 // gradient a box never will.
+// vNdc is the fragment's position across the canvas (-1..1). Both quads project
+// larger than the canvas at the tuned camera distance, so a falloff written in
+// quad space is still lit where the canvas ends and the whole element reads as
+// a hard-edged square of light over the page. Fading on the screen radius
+// instead guarantees zero at the canvas edge whatever the camera does.
 const GLOW_VERT = /* glsl */ `
 varying vec2 vUv;
+varying vec2 vNdc;
 void main() {
   vUv = uv;
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  vec4 clip = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  vNdc = clip.xy / clip.w;
+  gl_Position = clip;
+}
+`;
+const SCREEN_FADE = /* glsl */ `
+float screenFade(vec2 ndc) {
+  return 1.0 - smoothstep(0.68, 0.97, length(ndc));
 }
 `;
 // Two falloffs summed at one tint: a tighter inner term that concentrates light
@@ -228,17 +321,71 @@ void main() {
 // the quad. No white core — a white centre on an additive quad clips to pure
 // white and reads as a lens flare bolted onto the cube rather than light coming
 // off it.
+//
+// Alpha is written as 0, and the additive materials below are flagged
+// premultipliedAlpha so three blends them ONE/ONE on every channel. Light is
+// added to the colour buffer while the canvas's own alpha is left alone — on a
+// `transparent` canvas an alpha of 1 here would turn every covered pixel into
+// the opaque clear colour, and the whole quad shows up as a hard black square
+// over the page.
 const GLOW_FRAG = /* glsl */ `
 uniform vec3 uColor;
 uniform float uIntensity;
 varying vec2 vUv;
+varying vec2 vNdc;
+${SCREEN_FADE}
 void main() {
   float r = clamp(length(vUv - 0.5) * 2.0, 0.0, 1.0);
   float d = 1.0 - r;
   float a = pow(d, 2.6) * 0.8 + pow(d, 1.15) * 0.28;
-  gl_FragColor = vec4(uColor * a * uIntensity, 1.0);
+  gl_FragColor = vec4(uColor * a * uIntensity * screenFade(vNdc), 0.0);
 }
 `;
+
+// The shimmer: a band of light swept diagonally across every lacquered surface,
+// patched into the physical materials rather than drawn as a quad, so it lands
+// on the stickers and the body exactly where they are and nowhere else. The
+// band lives in view space (vViewPosition), so it always crosses the cube
+// corner to corner on screen whatever the orbit. A thin bright core inside a
+// wide soft skirt: one gaussian alone reads as a stripe.
+const SHEEN_HEAD = /* glsl */ `
+uniform vec4 uSheen;
+uniform vec3 uSheenColor;
+`;
+const SHEEN_BODY = /* glsl */ `
+{
+  float s = dot(vViewPosition.xy, normalize(vec2(1.0, 0.85)));
+  float d = (s - uSheen.x) / max(uSheen.y, 0.001);
+  float band = exp(-d * d) * 0.3 + exp(-d * d * 9.0) * 0.7;
+  outgoingLight += uSheenColor * band * uSheen.z;
+}
+#include <opaque_fragment>
+`;
+/** Sweep extent in view units — a little past the cube's projected half-diagonal
+ *  each way, so the band enters and leaves cleanly. */
+const SHEEN_SPAN = 3.8;
+const SHEEN_WIDTH = 1.15;
+/** One unhurried sweep per period: the band takes most of it to cross, eased
+ *  in and out, with its brightness rising and falling under a sine envelope
+ *  so it arrives and leaves like light moving over lacquer, never a flash. */
+const SHEEN_PERIOD_MS = 4200;
+const SHEEN_SWEEP_FRACTION = 0.8;
+interface SheenUniforms {
+  uSheen: { value: THREE.Vector4 };
+  uSheenColor: { value: THREE.Color };
+}
+function patchSheen(mat: THREE.MeshPhysicalMaterial, uniforms: SheenUniforms): void {
+  mat.onBeforeCompile = (shader) => {
+    shader.uniforms.uSheen = uniforms.uSheen;
+    shader.uniforms.uSheenColor = uniforms.uSheenColor;
+    shader.fragmentShader = shader.fragmentShader
+      .replace("#include <common>", `#include <common>\n${SHEEN_HEAD}`)
+      .replace("#include <opaque_fragment>", SHEEN_BODY);
+  };
+  // The cache key is combined with the material's own parameters, so one
+  // constant is enough to keep patched and unpatched programs apart.
+  mat.customProgramCacheKey = () => "sg-sheen";
+}
 
 // How far the sticker's centre stands proud of its edge. The mesh is scaled
 // uniformly by STICKER_SCALE, which scales z too, so the dome is shallower on
@@ -425,6 +572,7 @@ function GlowHalo({ extent, tint }: { extent: number; tint: string }) {
         fragmentShader: GLOW_FRAG,
         transparent: true,
         blending: THREE.AdditiveBlending,
+        premultipliedAlpha: true,
         depthWrite: false,
         toneMapped: false,
       }),
@@ -466,9 +614,15 @@ function snapQuaternion(q: THREE.Quaternion): void {
 function CameraRig({
   distance,
   onDrag,
+  drive,
+  orbitApi,
 }: {
   distance: number;
   onDrag: (dx: number, dy: number, camera: THREE.Camera) => void;
+  /** Host offsets added at position time, so a drag's own targets survive. */
+  drive?: RefObject<CubeDrive>;
+  /** Filled with the rig's re-aim so an external surface can drive it. */
+  orbitApi?: RefObject<((dx: number, dy: number) => void) | null>;
 }) {
   const gl = useThree((s) => s.gl);
   const camera = useThree((s) => s.camera);
@@ -483,6 +637,28 @@ function CameraRig({
   dragRef.current = onDrag;
 
   useEffect(() => invalidate(), [distance, invalidate]);
+
+  // One re-aim for both the canvas's own drag and an external drag pad.
+  const orbitBy = useCallback(
+    (dx: number, dy: number) => {
+      azimuth.current.target -= dx * 0.006;
+      elevation.current.target = THREE.MathUtils.clamp(
+        elevation.current.target + dy * 0.005,
+        -1.35,
+        1.35,
+      );
+      dragRef.current(dx, dy, camera);
+      invalidate();
+    },
+    [camera, invalidate],
+  );
+  useEffect(() => {
+    if (!orbitApi) return;
+    orbitApi.current = orbitBy;
+    return () => {
+      orbitApi.current = null;
+    };
+  }, [orbitApi, orbitBy]);
 
   useEffect(() => {
     const el = gl.domElement;
@@ -500,16 +676,9 @@ function CameraRig({
       if (!dragging) return;
       const dx = e.clientX - lastX;
       const dy = e.clientY - lastY;
-      azimuth.current.target -= dx * 0.006;
-      elevation.current.target = THREE.MathUtils.clamp(
-        elevation.current.target + dy * 0.005,
-        -1.35,
-        1.35,
-      );
       lastX = e.clientX;
       lastY = e.clientY;
-      dragRef.current(dx, dy, camera);
-      invalidate();
+      orbitBy(dx, dy);
     };
     const up = (e: PointerEvent) => {
       dragging = false;
@@ -525,7 +694,7 @@ function CameraRig({
       el.removeEventListener("pointerup", up);
       el.removeEventListener("pointercancel", up);
     };
-  }, [gl, camera, invalidate]);
+  }, [gl, orbitBy]);
 
   useFrame((state, delta) => {
     const az = azimuth.current;
@@ -542,11 +711,20 @@ function CameraRig({
       invalidate();
     }
     const r = radius.current;
-    const ce = Math.cos(el.current);
+    // Host offsets are applied here rather than folded into the targets, so a
+    // drag and a scroll-driven drift compose instead of fighting over one
+    // number. The pole clamp is re-applied after the add for the same reason.
+    const azOut = az.current + (drive?.current.azimuth ?? 0);
+    const elOut = THREE.MathUtils.clamp(
+      el.current + (drive?.current.elevation ?? 0),
+      -1.35,
+      1.35,
+    );
+    const ce = Math.cos(elOut);
     state.camera.position.set(
-      r * ce * Math.sin(az.current),
-      r * Math.sin(el.current),
-      r * ce * Math.cos(az.current),
+      r * ce * Math.sin(azOut),
+      r * Math.sin(elOut),
+      r * ce * Math.cos(azOut),
     );
     state.camera.lookAt(0, 0, 0);
   });
@@ -559,6 +737,7 @@ const _basisUp = new THREE.Vector3();
 const _basisFwd = new THREE.Vector3();
 const _swipeAxis = new THREE.Vector3();
 const _spinDelta = new THREE.Quaternion();
+const _moveQ = new THREE.Quaternion();
 
 function CubeScene({
   autoRotate = true,
@@ -577,7 +756,15 @@ function CubeScene({
   glow = false,
   paused = false,
   reducedMotion = false,
-}: Omit<RubiksCubeProps, "className">) {
+  scrub,
+  drive,
+  seek,
+  orbitApi,
+}: Omit<RubiksCubeProps, "className" | "ref" | "maxDpr" | "onReady"> & {
+  drive: RefObject<CubeDrive>;
+  seek: RefObject<{ t: number }>;
+  orbitApi: RefObject<((dx: number, dy: number) => void) | null>;
+}) {
   const invalidate = useThree((s) => s.invalidate);
   const halted = paused || reducedMotion;
 
@@ -629,6 +816,39 @@ function CubeScene({
     target: new THREE.Vector3(0.32, 1, 0.16).normalize(),
   });
 
+  // Scrub mode. The sequence is the whole timeline; the bookkeeping tracks how
+  // many of its moves are baked into `coords` and which one (if any) is
+  // currently on loan to the pivot. Zero always means "the pose the cube had
+  // when scrub mode began" — a host that wants it to mean "solved" mounts the
+  // cube in scrub mode, as the traveler does.
+  const scrubSeed = scrub?.seed;
+  const sequence = useMemo(
+    () =>
+      scrubSeed === undefined
+        ? null
+        : buildScrubSequence(Math.max(1, Math.round(scrambleMoveCount)), scrubSeed),
+    [scrubSeed, scrambleMoveCount],
+  );
+  const scrubRef = useRef<{
+    committed: number;
+    activeIndex: number;
+    members: THREE.Object3D[];
+  }>({ committed: 0, activeIndex: -1, members: [] });
+  // The smoothed playhead the engine actually renders. `seek` is only the
+  // host's target: at rest (target 0) the idle loop advances this itself, and
+  // under scroll it eases toward the target so wheel gaps never stutter.
+  const playhead = useRef<{
+    t: number;
+    hold: number;
+    wrapping: boolean;
+    /** True once a target has been seen; the first one is snapped to, not eased. */
+    primed: boolean;
+    /** Set while the idle cycle owns the playhead, so leaving it is detectable. */
+    idle: boolean;
+    /** Leaving idle mid-cycle: finish solving forward, or rewind, whichever is nearer. */
+    handoff: "forward" | "back" | null;
+  }>({ t: 0, hold: 0, wrapping: false, primed: false, idle: false, handoff: null });
+
   const boxGeo = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []);
   const planeGeo = useMemo(() => makeStickerGeometry(), []);
   useEffect(() => {
@@ -638,10 +858,19 @@ function CubeScene({
     };
   }, [boxGeo, planeGeo]);
 
-  const plasticMat = useMemo(
-    () => new THREE.MeshPhysicalMaterial({ color: "#16161c", roughness: 0.68, metalness: 0.05 }),
+  // One uniform set shared by every surface, written per frame from the drive.
+  const sheen = useMemo<SheenUniforms>(
+    () => ({
+      uSheen: { value: new THREE.Vector4(-SHEEN_SPAN, SHEEN_WIDTH, 0, 0) },
+      uSheenColor: { value: new THREE.Color("#ffffff") },
+    }),
     [],
   );
+  const plasticMat = useMemo(() => {
+    const mat = new THREE.MeshPhysicalMaterial({ color: "#16161c", roughness: 0.68, metalness: 0.05 });
+    patchSheen(mat, sheen);
+    return mat;
+  }, [sheen]);
   const faceMats = useMemo(() => {
     const out = {} as Record<CubeFace, THREE.MeshPhysicalMaterial>;
     for (const f of FACES) {
@@ -653,9 +882,10 @@ function CubeScene({
         metalness: 0,
         toneMapped: false,
       });
+      patchSheen(out[f.face], sheen);
     }
     return out;
-  }, []);
+  }, [sheen]);
   useEffect(() => {
     return () => {
       plasticMat.dispose();
@@ -667,6 +897,9 @@ function CubeScene({
     plasticMat.color.set(bodyColor);
     invalidate();
   }, [bodyColor, plasticMat, invalidate]);
+
+  /** Sweep clock in ms, wrapped every period. */
+  const sheenClock = useRef(0);
 
   useEffect(() => {
     const scheme = PALETTES[palette] ?? PALETTES.classic;
@@ -775,13 +1008,129 @@ function CubeScene({
     s.t = 0;
   }, []);
 
+  // --- scrub mode ---------------------------------------------------------
+  // Returns the active layer to the root at exactly its committed pose. The
+  // pivot is zeroed first so `attach` (which preserves world transforms) lands
+  // every cubie back where it was before the loan.
+  const detachScrub = useCallback(() => {
+    const S = scrubRef.current;
+    const pivot = pivotRef.current;
+    const root = rootRef.current;
+    if (!pivot || !root) return;
+    pivot.rotation.set(0, 0, 0);
+    pivot.updateMatrixWorld(true);
+    const step = 1 + live.current.gap;
+    for (const obj of S.members) {
+      root.attach(obj);
+      const c = coords.current[obj.userData.cubieIndex as number];
+      obj.position.set(c.x * step, c.y * step, c.z * step);
+      snapQuaternion(obj.quaternion);
+    }
+    S.members = [];
+    S.activeIndex = -1;
+  }, []);
+
+  const attachScrub = useCallback((move: Move, index: number) => {
+    const S = scrubRef.current;
+    const pivot = pivotRef.current;
+    if (!pivot) return;
+    pivot.rotation.set(0, 0, 0);
+    pivot.updateMatrixWorld(true);
+    S.members = [];
+    for (let i = 0; i < CUBIES.length; i++) {
+      const c = coords.current[i];
+      const slot = move.axis === 0 ? c.x : move.axis === 1 ? c.y : c.z;
+      if (slot !== move.layer) continue;
+      const obj = cubieRefs.current[i];
+      if (!obj) continue;
+      pivot.attach(obj);
+      S.members.push(obj);
+    }
+    S.activeIndex = index;
+  }, []);
+
+  // Bakes one whole quarter-turn into the cubies directly, forwards (+1) or
+  // undone (-1): finalizeTurn's arithmetic applied to root children, with no
+  // reparenting, so a fast wheel that skips several moves in one frame
+  // commits them all at once. Premultiplying the world rotation is exactly
+  // what a pivot turn followed by `attach` would have produced.
+  const applyMove = useCallback((move: Move, sign: 1 | -1) => {
+    const step = 1 + live.current.gap;
+    const angle = sign * move.dir * QUARTER;
+    _moveQ.setFromAxisAngle(AXIS_VEC[move.axis], angle);
+    for (let i = 0; i < CUBIES.length; i++) {
+      const c = coords.current[i];
+      const slot = move.axis === 0 ? c.x : move.axis === 1 ? c.y : c.z;
+      if (slot !== move.layer) continue;
+      const obj = cubieRefs.current[i];
+      if (!obj) continue;
+      c.applyAxisAngle(AXIS_VEC[move.axis], angle);
+      c.set(Math.round(c.x), Math.round(c.y), Math.round(c.z));
+      obj.position.set(c.x * step, c.y * step, c.z * step);
+      obj.quaternion.premultiply(_moveQ);
+      snapQuaternion(obj.quaternion);
+    }
+  }, []);
+
+  // The reversible playhead. Integer part = moves baked into the cube,
+  // fraction = how far the next move has turned on the pivot. Crossing a
+  // boundary in either direction is a commit or an uncommit; the loan is
+  // returned whenever the active move changes or lands exactly on a boundary.
+  const scrubTo = useCallback(
+    (t: number) => {
+      const seq = sequence;
+      const pivot = pivotRef.current;
+      if (!seq || !pivot) return;
+      const total = seq.length;
+      const target = Math.min(total, Math.max(0, t));
+      let k = Math.floor(target);
+      let f = target - k;
+      if (k >= total) {
+        k = total;
+        f = 0;
+      }
+      const S = scrubRef.current;
+      if (S.activeIndex !== -1 && (S.activeIndex !== k || f === 0)) detachScrub();
+      while (S.committed < k) {
+        applyMove(seq[S.committed], 1);
+        S.committed++;
+      }
+      while (S.committed > k) {
+        S.committed--;
+        applyMove(seq[S.committed], -1);
+      }
+      if (f > 0) {
+        const move = seq[k];
+        if (S.activeIndex !== k) attachScrub(move, k);
+        pivot.rotation[AXIS_KEY[move.axis]] = detent(f) * move.dir * QUARTER;
+      }
+    },
+    [sequence, detachScrub, attachScrub, applyMove],
+  );
+
+  // Entering or leaving scrub mode hands the pivot over cleanly: the timer
+  // loop's in-flight turn is completed, the scrub loan is returned, and the
+  // playhead's zero is re-based on whatever pose the cube now holds.
+  useEffect(() => {
+    if (sched.current.active) finalizeTurn();
+    detachScrub();
+    scrubRef.current.committed = 0;
+    playhead.current = { t: 0, hold: 0, wrapping: false, primed: false, idle: false, handoff: null };
+    invalidate();
+  }, [sequence, finalizeTurn, detachScrub, invalidate]);
+
   // A layer stopped at 43° reads as broken, so pausing completes the turn in
-  // flight and freezes on a pose the cube could actually be in.
+  // flight and freezes on a pose the cube could actually be in. In scrub mode
+  // that is the nearest whole move.
   useEffect(() => {
     if (!halted) return;
-    if (sched.current.active) finalizeTurn();
+    if (sequence) {
+      const P = playhead.current;
+      P.t = Math.round(P.t);
+      scrubTo(P.t);
+    } else if (sched.current.active) finalizeTurn();
     invalidate();
-  }, [halted, finalizeTurn, invalidate]);
+  }, [halted, sequence, scrubTo, finalizeTurn, invalidate]);
 
   const handleDrag = useCallback((dx: number, dy: number, camera: THREE.Camera) => {
     if (Math.hypot(dx, dy) < SWIPE_MIN) return;
@@ -798,14 +1147,112 @@ function CubeScene({
     const L = live.current;
     if (L.halted) return;
     const dt = Math.min(delta, 0.05);
+    const D = drive.current;
 
     if (L.autoRotate && spinRef.current) {
       const st = spin.current;
       st.axis.lerp(st.target, Math.min(1, dt * AXIS_EASE));
       if (st.axis.lengthSq() < 1e-6) st.axis.copy(st.target);
       st.axis.normalize();
-      _spinDelta.setFromAxisAngle(st.axis, BASE_SPIN * DEG * L.rotationSpeed * dt);
+      _spinDelta.setFromAxisAngle(
+        st.axis,
+        BASE_SPIN * DEG * L.rotationSpeed * D.spinBoost * dt,
+      );
       spinRef.current.quaternion.premultiply(_spinDelta);
+    }
+
+    // The sweep. Timed here, not by the host: one pass per period, strength
+    // from the drive. Plain uniform writes shared by every surface.
+    if (D.sheen > 0.001) {
+      sheenClock.current = (sheenClock.current + dt * 1000) % SHEEN_PERIOD_MS;
+      const phase = sheenClock.current / SHEEN_PERIOD_MS;
+      const progress = Math.min(1, phase / SHEEN_SWEEP_FRACTION);
+      // Quintic ease-in-out on the travel: slow to leave, slow to arrive.
+      const eased =
+        progress < 0.5
+          ? 16 * progress ** 5
+          : 1 - (-2 * progress + 2) ** 5 / 2;
+      // Parked just past the far edge between sweeps, so it is off the cube.
+      const x = -SHEEN_SPAN + eased * (2 * SHEEN_SPAN + 2 * SHEEN_WIDTH);
+      const envelope = Math.sin(Math.PI * progress);
+      sheen.uSheen.value.set(x, SHEEN_WIDTH, D.sheen * envelope, 0);
+    } else if (sheen.uSheen.value.z !== 0) {
+      sheen.uSheen.value.z = 0;
+    }
+
+    if (sequence) {
+      const total = sequence.length;
+      const half = total / 2;
+      const target = Math.min(total, Math.max(0, seek.current.t));
+      const P = playhead.current;
+      // A mid-page load lands on its pose; only later targets are eased.
+      if (!P.primed) {
+        P.primed = true;
+        P.t = target;
+      }
+      // Never faster than the cube's own turn, whatever the target asks. An
+      // exponential ease alone covers a page-long jump in half a second, and
+      // sixteen quarter-turns in half a second is a flurry, not a solve.
+      const maxStep = (dt * 1000) / Math.max(1, L.moveDuration);
+      const wrap = () => {
+        scrubTo(total);
+        scrubRef.current.committed = 0;
+        P.t = 0;
+      };
+      const idle = P.idle ? target < IDLE_EXIT : target < IDLE_ENTER;
+      if (idle) {
+        // At rest the cube runs the original cycle, but along this same
+        // timeline: scramble to the midpoint, hold, solve to the end, hold,
+        // wrap. The end pose IS the start pose, so the wrap is invisible.
+        P.idle = true;
+        P.handoff = null;
+        if (P.hold > 0) {
+          P.hold -= dt * 1000;
+          if (P.hold <= 0 && P.wrapping) {
+            P.wrapping = false;
+            wrap();
+          }
+        } else {
+          const before = P.t;
+          P.t += (dt * 1000) / Math.max(1, L.moveDuration);
+          if (before < half && P.t >= half) {
+            P.t = half;
+            P.hold = L.pauseBetweenCycles;
+          } else if (P.t >= total) {
+            P.t = total;
+            P.hold = L.pauseBetweenCycles;
+            P.wrapping = true;
+          }
+        }
+      } else {
+        P.hold = 0;
+        P.wrapping = false;
+        // Leaving the idle cycle part-way: the scroll timeline starts from
+        // solved, so get there by the shorter road — finish the solve if past
+        // the midpoint, otherwise undo the scramble — at a legible pace, then
+        // hand over. Easing straight to the target from, say, move twelve
+        // would rewind the whole cycle in a blur.
+        if (P.idle) {
+          P.idle = false;
+          if (P.t > 1e-3) P.handoff = P.t > half ? "forward" : "back";
+        }
+        if (P.handoff) {
+          const goal = P.handoff === "forward" ? total : 0;
+          const remaining = goal - P.t;
+          if (Math.abs(remaining) <= maxStep) {
+            if (P.handoff === "forward") wrap();
+            else P.t = 0;
+            P.handoff = null;
+          } else {
+            P.t += Math.sign(remaining) * maxStep;
+          }
+        } else {
+          const step = (target - P.t) * (1 - Math.exp(-dt * SEEK_RATE));
+          P.t += Math.max(-maxStep, Math.min(maxStep, step));
+        }
+      }
+      scrubTo(P.t);
+      return;
     }
 
     const s = sched.current;
@@ -843,7 +1290,12 @@ function CubeScene({
 
   return (
     <>
-      <CameraRig distance={cameraDistance} onDrag={handleDrag} />
+      <CameraRig
+        distance={cameraDistance}
+        onDrag={handleDrag}
+        drive={drive}
+        orbitApi={orbitApi}
+      />
       {transparent ? null : <color attach="background" args={[background]} />}
       <StudioEnvironment intensity={glossy ? 1.25 : 0.55} />
       {glow ? (
@@ -904,7 +1356,12 @@ function FitGate({
   useEffect(() => {
     const host = hostRef.current;
     if (!host) return;
-    const hostWidth = host.getBoundingClientRect().width;
+    // offsetWidth, not getBoundingClientRect: the rect is the *transformed*
+    // box, and a host scaled by its parent (the classic recede, the traveler
+    // from its very first frame) would never measure within 2px of the
+    // canvas's layout width — the fit would never fire and the cube would sit
+    // at opacity 0 for the life of the page.
+    const hostWidth = host.offsetWidth;
     if (hostWidth > 0 && Math.abs(width - hostWidth) <= 2) onFit();
   }, [width, hostRef, onFit]);
   return null;
@@ -929,9 +1386,34 @@ export default function RubiksCube({
   reducedMotion = false,
   transparent = false,
   cameraDistance = 11,
+  maxDpr = 1.75,
   onReady,
+  ref,
   ...props
 }: RubiksCubeProps) {
+  // The handle's three channels, all refs: a host writes them per frame and the
+  // scene reads them per frame, and React never hears about any of it.
+  const drive = useRef<CubeDrive>({
+    azimuth: 0,
+    elevation: 0,
+    spinBoost: 1,
+    sheen: 0,
+  });
+  const seek = useRef({ t: 0 });
+  const orbitApi = useRef<((dx: number, dy: number) => void) | null>(null);
+  useImperativeHandle(
+    ref,
+    () => ({
+      seek: (t) => {
+        seek.current.t = t;
+      },
+      setDrive: (next) => {
+        Object.assign(drive.current, next);
+      },
+      orbitBy: (dx, dy) => orbitApi.current?.(dx, dy),
+    }),
+    [],
+  );
   // Activity-hidden routers force-lose the WebGL context but keep the <canvas>
   // in the DOM; a lost canvas can never re-acquire a context, so we remount a
   // fresh canvas element by bumping the key on hide. Harmless on real unmount.
@@ -986,7 +1468,7 @@ export default function RubiksCube({
       <Canvas
         key={canvasEpoch}
         flat
-        dpr={[1, 1.75]}
+        dpr={[1, maxDpr]}
         frameloop={halted ? "demand" : "always"}
         camera={{ position: orbitPosition(cameraDistance), fov: 42 }}
         gl={{ antialias: true, alpha: true }}
@@ -1008,6 +1490,9 @@ export default function RubiksCube({
           reducedMotion={reducedMotion}
           transparent={transparent}
           cameraDistance={cameraDistance}
+          drive={drive}
+          seek={seek}
+          orbitApi={orbitApi}
           {...props}
         />
       </Canvas>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { groupByCategory } from "@/lib/registry";
 import { categoryCollection, collectionPath } from "@/lib/collections";
 import CatalogCard from "@/components/shell/CatalogCard";
+import PageBottomBlur from "@/components/landing/PageBottomBlur";
 import { CatalogHeader, CategoryHeading } from "./_components/catalog-client";
 import JsonLd from "@/components/seo/JsonLd";
 import { breadcrumbSchema, catalogSchema } from "@/lib/schema";
@@ -35,6 +36,9 @@ export default function CatalogPage() {
 
 	return (
 		<div className="mx-auto max-w-7xl">
+			{/* The landing's frosted bottom strip, kept off the sidebar column. No
+			    hero here, so it is up from the first pixel and sinks at the footer. */}
+			<PageBottomBlur hero={false} shade className="lg:start-(--sg-sidebar-w,18rem)" />
 			<JsonLd
 				data={[
 					catalogSchema(),

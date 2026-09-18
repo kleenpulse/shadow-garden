@@ -29,7 +29,7 @@ export default function RelatedComponentsList({
 					<GlowCard
 						as="li"
 						key={item.slug}
-						className="rounded-lg border border-hairline bg-panel transition-colors  "
+						className="rounded-lg bg-panel"
 					>
 						<Link
 							href={`/components/${item.slug}`}

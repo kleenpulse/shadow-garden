@@ -64,8 +64,8 @@ export default function ControlsPanel({
 	if (props.length === 0) return null;
 
 	return (
-		<section className="rounded-lg border border-hairline bg-panel/70 dark:bg-black/40 backdrop-blur-xs">
-			<header className="flex items-center justify-between border-b border-hairline px-4 py-2.5">
+		<section className="overflow-hidden rounded-lg bg-panel">
+			<header className="flex items-center justify-between bg-raised/30 px-4 py-2.5">
 				<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-dim">
 					{t("heading")}
 				</h2>

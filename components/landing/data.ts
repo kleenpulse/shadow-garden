@@ -26,6 +26,8 @@ export interface LandingExhibit {
  *  and the section rail so the ids can never drift apart. */
 export const SECTION_IDS = {
 	hero: "hero",
+	// Not a rail tick — a route waypoint for the scroll-variant cube traveler.
+	manifesto: "manifesto",
 	calibration: "calibration",
 	sealed: "sealed",
 	colophon: "colophon",

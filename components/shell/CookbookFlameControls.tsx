@@ -59,7 +59,7 @@ export function CookbookFlameControlsDesktop({
 			<PopoverTrigger
 				aria-label={t("backgroundSettings")}
 				className={cn(
-					"grid size-9 place-items-center rounded-md border border-hairline bg-panel/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none data-popup-open:text-accent",
+					"grid size-9 place-items-center rounded-md bg-panel/80 text-ink-dim backdrop-blur transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none data-popup-open:text-accent",
 					className,
 				)}
 			>

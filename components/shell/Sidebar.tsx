@@ -7,6 +7,7 @@ import {
 	useState,
 	type KeyboardEvent,
 } from "react";
+import { ChevronDown } from "lucide-react";
 import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useDataCopy } from "@/lib/i18n/data-copy";
@@ -299,11 +300,11 @@ export default function Sidebar() {
 				/>
 			)}
 			<aside
-				className={`fixed inset-y-0 start-0 z-40 flex w-72 flex-col border-e border-hairline bg-surface transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-(--sg-sidebar-w,18rem) lg:translate-x-0 ${
+				className={`fixed inset-y-0 start-0 z-40 flex w-72 flex-col bg-panel transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:w-(--sg-sidebar-w,18rem) lg:translate-x-0 ${
 					sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
 				}`}
 			>
-				<div className="flex items-center border-b border-hairline px-4 h-10 md:h-14">
+				<div className="flex items-center px-4 h-10 md:h-14">
 					<Link
 						href={pathname === "/components" ? "/" : "/components"}
 						className="flex items-baseline gap-0"
@@ -338,7 +339,7 @@ export default function Sidebar() {
 						onKeyDown={onSearchKeyDown}
 						placeholder={t("searchPlaceholder")}
 						aria-label={t("searchLabel")}
-						className="w-full rounded-md border border-hairline bg-panel px-3 py-1.5 font-mono text-xs text-ink placeholder:text-ink-mute outline-none focus-visible:border-accent"
+						className="w-full rounded-md border border-transparent bg-surface px-3 py-1.5 font-mono text-xs text-ink placeholder:text-ink-mute outline-none focus-visible:border-accent"
 					/>
 					{/* Pre-mount the active pill is drawn by CSS off html[data-catalog-filter]
 					    (see the pre-paint script), so `value` stays at the SSR default until
@@ -352,14 +353,18 @@ export default function Sidebar() {
 						layoutId="sidebar-catalog-filter"
 						fullWidth
 						size="md"
-						className="sg-catalog-tabs mt-2"
+						className="sg-catalog-tabs mt-2 bg-surface"
 					/>
 				</div>
 
-				{/* AutoMaskVertical fades the scroll edges and auto-hides the scrollbar
-			      (reveals on hover / while scrolling), same treatment as the palette. */}
+				{/* AutoMaskVertical auto-hides the scrollbar (reveals on hover / while
+			      scrolling), same treatment as the palette. Its edge fade is off here:
+			      the category headers are sticky, and a mask on the scroller would
+			      fade the pinned header along with the rows sliding under it. The
+			      bottom edge gets its fade from the footer strip below instead. */}
 				<AutoMaskVertical
 					ref={listRef}
+					fadeSizePercent={0}
 					className="flex-1 px-3 pb-16 md:pb-20"
 					aria-label={t("componentsLabel")}
 					role="navigation"
@@ -381,13 +386,18 @@ export default function Sidebar() {
 										type="button"
 										onClick={() => toggleCategory(group.category)}
 										aria-expanded={!isCollapsed}
-										className="flex w-full items-center gap-1.5 px-2.5 py-1 font-display text-[10px] uppercase tracking-[0.18em] text-ink-mute hover:text-ink-dim"
+										// z-20, not z-10: each row's label span is `relative z-10` (it has
+										// to clear the active row's fill at z-0), the row's own `relative`
+										// carries no z so it opens no stacking context, and the label
+										// therefore lands in the same layer as this header. A tie is
+										// settled by DOM order and the rows come later, so at z-10 the
+										// names scrolled straight over the pinned header's opaque ground.
+										className="sticky top-0 z-20 flex w-full items-center gap-1.5 bg-panel px-2.5 py-1 font-display text-[10px] uppercase tracking-[0.18em] text-ink-mute hover:text-ink-dim"
 									>
-										<span
-											className={`transition-transform md:text-base ${isCollapsed ? "-rotate-90" : ""}`}
-										>
-											▾
-										</span>
+										<ChevronDown
+											aria-hidden
+											className={`size-3.5 shrink-0 transition-transform ${isCollapsed ? "-rotate-90" : ""}`}
+										/>
 										{copy(`pages.categories.${anchorFor(group.category)}`, group.category)}
 									</button>
 									{!isCollapsed && (
@@ -404,7 +414,13 @@ export default function Sidebar() {
 				{/* Feedback trigger — pinned to the bottom, offset by the list padding
 				    above so the last nav items never hide behind it. Opens the two-step
 				    feedback/bug-report modal (portals out via GrowDialog). */}
-				<div className=" inset-x-0 bottom-0 z-20 border-t border-hairline bg-surface">
+				<div className="relative inset-x-0 bottom-0 z-20 bg-surface">
+					{/* Bottom fade for the list above, standing in for the scroller's
+					    own mask (see AutoMaskVertical above). */}
+					<div
+						aria-hidden
+						className="pointer-events-none absolute inset-x-0 bottom-full h-10 bg-linear-to-t from-panel to-transparent"
+					/>
 					<FeedbackWidget />
 				</div>
 

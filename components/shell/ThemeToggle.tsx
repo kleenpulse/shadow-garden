@@ -33,7 +33,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
 				pickTheme(isDark ? "light" : "dark", event.currentTarget)
 			}
 			className={cn(
-				"grid size-7 md:size-8 place-items-center rounded-md border border-hairline text-ink-dim transition-colors hover:text-accent focus-visible:text-accent",
+				"grid size-7 md:size-8 place-items-center rounded-md bg-surface text-ink-dim transition-colors hover:text-accent focus-visible:text-accent",
 				className,
 			)}
 		>

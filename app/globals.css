@@ -4,6 +4,9 @@
 
 /* next-themes toggles `.dark` on <html>; drive the dark variant off it. */
 @custom-variant dark (&:where(.dark, .dark *));
+/* Landing hero variant, stamped on <html> pre-paint from ?v= (lib/hero-variant.ts).
+   The mode toggle styles its active state off this so the first frame is right. */
+@custom-variant hero-scroll (&:where(html[data-sg-hero="scroll"] *));
 
 /*
   Shadow Garden — an instrument-bench identity.
@@ -15,6 +18,7 @@
 	/* Graphite ramp — the raw palette, theme-independent */
 	--color-bench-950: #0a0b0c;
 	--color-bench-900: #0e1012;
+	--color-bench-875: #101215;
 	--color-bench-850: #131619;
 	--color-bench-800: #191d21;
 	--color-bench-750: #20242a;
@@ -65,30 +69,45 @@
 	--color-danger: var(--sg-danger);
 }
 
-/* Light — the lab bench under bright light (default when no class is present). */
+/* Light — the lab bench under bright light (default when no class is present).
+   Every role is a mix toward its dark value by `--sg-dusk` (0..1): the landing
+   page's archive plate is graphite in both themes, and on the way down to it
+   ProSection.tsx tweens the dusk so the light page dims into the plate instead
+   of hitting it on a line, then lifts again at the colophon. At 0 each mix is
+   exactly the light literal. Dark sets the roles outright, so the dusk is a
+   no-op there. Grounds follow the dusk as it is; type flips on a steep curve
+   around the midpoint, because a ground at mid grey has no ink that reads on
+   it, and the less time the type spends between its two ends the better. */
 :root {
-	--sg-surface: #fdfdfd;
-	--sg-panel: #ffffff;
-	--sg-raised: #f0edf1;
-	--sg-hairline: #dde2e7;
-	--sg-ink: #16191d;
-	--sg-ink-dim: #545b64;
-	--sg-ink-mute: #878e97;
-	--sg-accent: #7e22ce;
-	--sg-accent-hover: #6b21a8;
-	--sg-accent-active: #581c87;
-	--sg-accent-muted: #d8b4fe;
-	--sg-on-accent: #ffffff;
-	--sg-danger: #dc2626;
-	--sg-grid: color-mix(in oklab, var(--color-bench-500) 4%, transparent);
-	--sg-scroll: #c3c9cf;
+	--sg-dusk: 0;
+	--sg-dusk-p: calc(var(--sg-dusk) * 100%);
+	--sg-dusk-ink: calc(clamp(0, (var(--sg-dusk) - 0.4) * 5, 1) * 100%);
+	--sg-surface: color-mix(in oklab, var(--color-bench-950) var(--sg-dusk-p), #f5f5f7);
+	--sg-panel: color-mix(in oklab, var(--color-bench-875) var(--sg-dusk-p), #ffffff);
+	--sg-raised: color-mix(in oklab, var(--color-bench-800) var(--sg-dusk-p), #eceaef);
+	--sg-hairline: color-mix(in oklab, var(--color-bench-700) var(--sg-dusk-p), #dde2e7);
+	--sg-ink: color-mix(in oklab, var(--color-bench-100) var(--sg-dusk-ink), #16191d);
+	--sg-ink-dim: color-mix(in oklab, var(--color-bench-200) var(--sg-dusk-ink), #545b64);
+	--sg-ink-mute: color-mix(in oklab, var(--color-bench-400) var(--sg-dusk-ink), #878e97);
+	--sg-accent: color-mix(in oklab, #a855f7 var(--sg-dusk-p), #7e22ce);
+	--sg-accent-hover: color-mix(in oklab, #b87df9 var(--sg-dusk-p), #6b21a8);
+	--sg-accent-active: color-mix(in oklab, #9333ea var(--sg-dusk-p), #581c87);
+	--sg-accent-muted: color-mix(in oklab, #5b3a7a var(--sg-dusk-p), #d8b4fe);
+	--sg-on-accent: color-mix(in oklab, var(--color-bench-950) var(--sg-dusk-ink), #ffffff);
+	--sg-danger: color-mix(in oklab, #f87171 var(--sg-dusk-p), #dc2626);
+	--sg-grid: color-mix(
+		in oklab,
+		color-mix(in oklab, var(--color-bench-600) 6%, transparent) var(--sg-dusk-p),
+		color-mix(in oklab, var(--color-bench-500) 3%, transparent)
+	);
+	--sg-scroll: color-mix(in oklab, #464d56 var(--sg-dusk-p), #c3c9cf);
 	color-scheme: light;
 }
 
 /* Dark — the native graphite instrument. next-themes applies `.dark` pre-paint. */
 .dark {
 	--sg-surface: var(--color-bench-950);
-	--sg-panel: var(--color-bench-900);
+	--sg-panel: var(--color-bench-875);
 	--sg-raised: var(--color-bench-800);
 	--sg-hairline: var(--color-bench-700);
 	--sg-ink: var(--color-bench-100);
@@ -100,7 +119,7 @@
 	--sg-accent-muted: #5b3a7a;
 	--sg-on-accent: var(--color-bench-950);
 	--sg-danger: #f87171;
-	--sg-grid: color-mix(in oklab, var(--color-bench-600) 12%, transparent);
+	--sg-grid: color-mix(in oklab, var(--color-bench-600) 6%, transparent);
 	--sg-scroll: #464d56;
 	color-scheme: dark;
 }
@@ -494,4 +513,132 @@ html[data-sg-intro] {
 	html[data-catalog-filter] [data-catalog-count] {
 		visibility: hidden;
 	}
+}
+
+/* Scroll hero (the default; ?v=classic opts out): the cube travels behind
+   the page on a fixed negative-z layer, so every opaque surface gives a little
+   back and every decorative rule goes. Our own grounds go translucent; content
+   that paints its own opaque pixels (a canvas, the explorer reel's panels) is
+   thinned through opacity instead, which is the only lever that reaches inside
+   it. Keyed on the html attribute so the classic hero stays pixel-identical.
+   Unlayered on purpose: `bg-panel` is a utility, and a utility outranks any
+   rule inside @layer components whatever its specificity. And `--sg-panel`,
+   not `--color-panel`: the @theme inline bridge inlines its values into the
+   utilities and emits no variable of its own. */
+html[data-sg-hero] .exhibit-cards .bg-panel {
+	background-color: color-mix(in oklab, var(--sg-panel) 60%, transparent);
+}
+html[data-sg-hero] .exhibit-frame > * {
+	opacity: 0.86;
+}
+/* Large grounds (exhibit frames, the full-bleed archive plate) carry their
+   tint on a masked ::before instead of the element, so the ground feathers out
+   at the edges while the demo inside stays crisp. `isolation` keeps the
+   pseudo's z -1 inside the element: under every child, above nothing else. */
+html[data-sg-hero] .exhibit-frame,
+html[data-sg-hero] .exhibit-plate {
+	isolation: isolate;
+	background: transparent;
+}
+html[data-sg-hero] :is(.exhibit-frame, .exhibit-plate)::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background-color: color-mix(in oklab, var(--sg-panel) 60%, transparent);
+}
+html[data-sg-hero] .exhibit-plate::before {
+	background-color: color-mix(in oklab, var(--color-bench-950) 50%, transparent);
+}
+/* The plate is graphite in both themes (its type is set in bench greys), and
+   half-strength graphite is only graphite over a dark page. Over the light
+   page it composites to mid grey and the light type loses its ground, so in
+   light the plate is solid until the dusk has darkened the page under it,
+   then thins to the same strength as dark so the cube shows through. The two
+   move together: the dusk tween drives both. */
+html[data-sg-hero]:not(.dark) .exhibit-plate::before {
+	background-color: color-mix(
+		in oklab,
+		var(--color-bench-950) calc(100% - 50% * var(--sg-dusk)),
+		transparent
+	);
+}
+/* Cards feather on all four edges; the full-bleed plate only top and bottom.
+   The plate's LightRays canvas (`sg-plate-glow`, ProSection.tsx) takes the
+   same top/bottom mask: a WebGL layer paints to its own box, so an unmasked
+   glow would restore the hard line the tint just lost. */
+html[data-sg-hero] .exhibit-frame::before {
+	--sg-feather: 40px;
+	mask-image:
+		linear-gradient(to right, transparent, #000 var(--sg-feather), #000 calc(100% - var(--sg-feather)), transparent),
+		linear-gradient(to bottom, transparent, #000 var(--sg-feather), #000 calc(100% - var(--sg-feather)), transparent);
+	mask-composite: intersect;
+}
+html[data-sg-hero] .exhibit-plate:not(.exhibit-frame)::before,
+html[data-sg-hero] .sg-plate-glow {
+	--sg-feather: 128px;
+	mask-image: linear-gradient(to bottom, transparent, #000 var(--sg-feather), #000 calc(100% - var(--sg-feather)), transparent);
+}
+/* Light page to graphite is the biggest jump on the page, and any ramp across
+   it reads as fog rather than an edge. Light cuts the plate sharp. */
+html[data-sg-hero]:not(.dark) .exhibit-plate:not(.exhibit-frame)::before,
+html[data-sg-hero]:not(.dark) .sg-plate-glow {
+	mask-image: none;
+}
+/* The hero's bottom scrim ends at the hero's edge; under it the band was
+   naked and the cube jumped from dim to bright along one line. The band
+   carries the scrim's end colour and a tail that dies out below it. z -1 puts
+   band and tail in the root context (main is not a stacking context) above
+   the cube layer at -10 and below all in-flow content, so the tail never
+   veils the next section's heading. */
+html[data-sg-hero] .sg-scrim-tail {
+	position: relative;
+	z-index: -1;
+	background-color: var(--sg-surface);
+}
+html[data-sg-hero] .sg-scrim-tail::after {
+	content: "";
+	position: absolute;
+	inset: 100% 0 auto;
+	height: 32svh;
+	background: linear-gradient(to bottom, var(--sg-surface), transparent);
+	pointer-events: none;
+}
+/* The shell's command palette is the registry's CommandPalette, whose source
+   ships to customers and stays as designed. The shell's own instance goes
+   borderless like the rest of the bench: the dialog edge and the two dividers
+   turn transparent, and the dividers' rows take a tonal step instead. Keyed on
+   the utility classes the component renders, so it lives with the wrapper in
+   CommandMenu.tsx. */
+.sg-palette .rounded-xl.border {
+	border-color: transparent;
+}
+.sg-palette :is(.border-b, .border-t) {
+	border-color: transparent;
+	background-color: color-mix(in oklab, var(--sg-raised) 30%, transparent);
+}
+.sg-palette .rounded.border {
+	border-color: transparent;
+	background-color: color-mix(in oklab, var(--sg-raised) 60%, transparent);
+}
+/* Hairlines are the one thing that cuts straight across the cube's sweep.
+   `sg-rule` marks every decorative rule on the landing page; frames and cards
+   carry their own hooks. Colour, not width: the box keeps its size, so the two
+   heroes never shift layout against each other. Control edges (sliders,
+   buttons, the CTA) and focus rings are not marked and stay. */
+html[data-sg-hero] :is(.sg-rule, .exhibit-frame, .exhibit-cards .bg-panel) {
+	border-color: transparent;
+}
+/* Index rows read as a stack of glass slats instead of a ruled list. No
+   overflow:hidden here: the hover fill is a shared-layout element that flies
+   between rows, and mid-flight it sits outside its own row's box — clipping
+   the row kills the travel. The fill carries rounded-[inherit] instead, so it
+   matches the slat's corners on its own. */
+html[data-sg-hero] .sg-row {
+	background-color: color-mix(in oklab, var(--sg-panel) 40%, transparent);
+	border-radius: 0.375rem;
+}
+html[data-sg-hero] .sg-list > li + li {
+	margin-top: 0.25rem;
 }

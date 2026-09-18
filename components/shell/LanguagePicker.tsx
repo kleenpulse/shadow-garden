@@ -40,7 +40,7 @@ export default function LanguagePicker() {
 				aria-expanded={open}
 				aria-haspopup="listbox"
 				onClick={() => setOpen((v) => !v)}
-				className="flex h-8 items-center gap-1.5 rounded-md border border-hairline bg-panel px-2 font-mono text-[11px] leading-none text-ink-dim transition-colors hover:border-accent-muted hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+				className="flex h-8 items-center gap-1.5 rounded-md bg-surface px-2 font-mono text-[11px] leading-none text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
 			>
 				<span className="text-ink-mute">{active.badge}</span>
 				<span className="uppercase">{active.code}</span>
@@ -72,7 +72,7 @@ export default function LanguagePicker() {
 										isActive ? "bg-panel text-accent" : "text-ink-dim"
 									}`}
 								>
-									<span className="grid size-6 shrink-0 place-items-center rounded border border-hairline font-mono text-[9px] text-ink-mute">
+									<span className="grid size-6 shrink-0 place-items-center rounded bg-raised font-mono text-[9px] text-ink-mute">
 										{l.badge}
 									</span>
 									<span className="min-w-0 flex-1 truncate">
