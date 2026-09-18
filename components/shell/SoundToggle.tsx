@@ -6,6 +6,12 @@ import { Lock, Volume2, VolumeX } from "lucide-react";
 import { useAudioStore } from "@/lib/audio-store";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { useAudioAvailable } from "@/hooks/use-audio-available";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 // Consent control for interaction audio, sits beside ThemeToggle. Pro-gated:
@@ -48,40 +54,56 @@ export default function SoundToggle({ className }: { className?: string }) {
 
 	if (!soundPro) {
 		return (
-			<button
-				type="button"
-				aria-label={t("proAria")}
-				title={t("proAria")}
-				onClick={() => {
-					window.location.hash = "subscribe";
-				}}
-				className={cn(boxClass, "text-ink-mute")}
-			>
-				<Lock className="h-4 w-4" aria-hidden />
-			</button>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger
+						render={
+							<button
+								type="button"
+								aria-label={t("proAria")}
+								onClick={() => {
+									window.location.hash = "subscribe";
+								}}
+								className={cn(boxClass, "text-ink-mute")}
+							>
+								<Lock className="h-4 w-4" aria-hidden />
+							</button>
+						}
+					/>
+					<TooltipContent side="bottom">{t("proAria")}</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 		);
 	}
 
 	const label = enabled ? t("mute") : t("enable");
 
 	return (
-		<button
-			type="button"
-			aria-label={label}
-			aria-pressed={enabled}
-			title={label}
-			onClick={() => {
-				const next = !enabled;
-				toggle();
-				if (next) play("enable"); // greet on enable (context now unlocked)
-			}}
-			className={cn(boxClass, enabled && "text-accent")}
-		>
-			{enabled ? (
-				<Volume2 className="h-4 w-4" aria-hidden />
-			) : (
-				<VolumeX className="h-4 w-4" aria-hidden />
-			)}
-		</button>
+		<TooltipProvider>
+			<Tooltip>
+				<TooltipTrigger
+					render={
+						<button
+							type="button"
+							aria-label={label}
+							aria-pressed={enabled}
+							onClick={() => {
+								const next = !enabled;
+								toggle();
+								if (next) play("enable"); // greet on enable (context now unlocked)
+							}}
+							className={cn(boxClass, enabled && "text-accent")}
+						>
+							{enabled ? (
+								<Volume2 className="h-4 w-4" aria-hidden />
+							) : (
+								<VolumeX className="h-4 w-4" aria-hidden />
+							)}
+						</button>
+					}
+				/>
+				<TooltipContent side="bottom">{label}</TooltipContent>
+			</Tooltip>
+		</TooltipProvider>
 	);
 }
