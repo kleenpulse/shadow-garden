@@ -13,13 +13,21 @@ import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
 import LanguagePicker from "./LanguagePicker";
 import GoProButton from "./GoProButton";
+import ProComingSoon from "./ProComingSoon";
 import AuthMenu from "./AuthMenu";
 
 // Slim desktop chrome strip: palette trigger on the left, favorites + theme on
 // the right. Hidden on mobile — MobileBar carries the same affordances there.
 // `commerce` is resolved server-side in the (shell) layout: the Go Pro CTA and
-// account menu exist only on armed deployments.
-export default function TopBar({ commerce = false }: { commerce?: boolean }) {
+// account menu exist only on armed deployments. `comingSoon` fills the Go Pro
+// slot with a muted marker while payments are switched off.
+export default function TopBar({
+	commerce = false,
+	comingSoon = false,
+}: {
+	commerce?: boolean;
+	comingSoon?: boolean;
+}) {
 	const t = useTranslations("chrome.topBar");
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
 	const { play, hoverProps } = useInteractionSound();
@@ -48,7 +56,7 @@ export default function TopBar({ commerce = false }: { commerce?: boolean }) {
 			</button>
 
 			<div className="ms-auto flex items-center gap-2">
-				{commerce && <GoProButton />}
+				{commerce ? <GoProButton /> : comingSoon ? <ProComingSoon /> : null}
 				<Link
 					href="/cookbook"
 					aria-label={t("cookbookLabel")}

@@ -1,5 +1,5 @@
 import { Suspense, type ReactNode } from "react";
-import { commerceArmed } from "@/lib/capabilities";
+import { COMMERCE_COMING_SOON, commerceArmed } from "@/lib/capabilities";
 import { IS_LOCAL_DEV } from "@/lib/env";
 import Sidebar from "@/components/shell/Sidebar";
 import MobileBar from "@/components/shell/MobileBar";
@@ -19,12 +19,15 @@ import PricingModal from "@/components/shell/PricingModal";
 // mounts in local dev so #subscribe is exercisable before any env exists.
 export default function ShellLayout({ children }: { children: ReactNode }) {
 	const commerce = commerceArmed();
+	// Payments switched off but the tier still teased: the Go Pro slot shows a
+	// muted marker and the pricing modal renders with disabled CTAs.
+	const comingSoon = COMMERCE_COMING_SOON && !commerce;
 	return (
 		<div className="lg:flex">
 			<Sidebar />
 			<div className="flex min-h-screen min-w-0 flex-1 flex-col">
 				<MobileBar commerce={commerce} />
-				<TopBar commerce={commerce} />
+				<TopBar commerce={commerce} comingSoon={comingSoon} />
 				<main className="min-w-0 flex-1 px-3 py-6 lg:px-8 lg:py-10">
 					{children}
 				</main>
@@ -36,14 +39,14 @@ export default function ShellLayout({ children }: { children: ReactNode }) {
 			</div>
 			<CommandMenu />
 			<ToasterBench />
-			{(commerce || IS_LOCAL_DEV) && (
+			{(commerce || IS_LOCAL_DEV || comingSoon) && (
 				<>
 					{/* Reads the URL (nuqs) → must sit under Suspense so the static
 					    shell prerender keeps its shape. Hash-driven modal needs none. */}
 					<Suspense fallback={null}>
 						<CheckoutResult />
 					</Suspense>
-					<PricingModal />
+					<PricingModal comingSoon={comingSoon} />
 				</>
 			)}
 		</div>

@@ -226,7 +226,8 @@
       "label": "Pro"
     },
     "goPro": {
-      "label": "Passer Pro"
+      "label": "Passer Pro",
+      "comingSoon": "Pro arrive bientôt"
     },
     "codePanel": {
       "lockedEyebrow": "Pro",
@@ -245,6 +246,7 @@
     },
     "pricingModal": {
       "ariaLabel": "Passer à Shadow Garden Pro",
+      "comingSoon": "Bientôt disponible",
       "eyebrow": "Shadow Garden Pro",
       "title": "Débloquez le code complet de chaque spécimen Pro",
       "subtitle": "Les aperçus restent gratuits. Pro débloque le code complet et typé de chaque composant Pro — copiez, collez, livrez.",

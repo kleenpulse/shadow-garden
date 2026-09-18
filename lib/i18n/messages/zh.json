@@ -226,7 +226,8 @@
       "label": "Pro"
     },
     "goPro": {
-      "label": "升级 Pro"
+      "label": "升级 Pro",
+      "comingSoon": "Pro 即将推出"
     },
     "codePanel": {
       "lockedEyebrow": "Pro",
@@ -245,6 +246,7 @@
     },
     "pricingModal": {
       "ariaLabel": "升级到 Shadow Garden Pro",
+      "comingSoon": "即将推出",
       "eyebrow": "Shadow Garden Pro",
       "title": "解锁每个 Pro 样本的完整源码",
       "subtitle": "预览始终免费。Pro 解锁每个 Pro 组件的完整类型化源码 — 复制、粘贴、上线。",

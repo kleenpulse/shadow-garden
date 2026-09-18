@@ -226,7 +226,8 @@
       "label": "Pro"
     },
     "goPro": {
-      "label": "Go Pro"
+      "label": "Go Pro",
+      "comingSoon": "Pro coming soon"
     },
     "codePanel": {
       "lockedEyebrow": "Pro",
@@ -245,6 +246,7 @@
     },
     "pricingModal": {
       "ariaLabel": "Upgrade to Shadow Garden Pro",
+      "comingSoon": "Coming soon",
       "eyebrow": "Shadow Garden Pro",
       "title": "Unlock the full source of every Pro specimen",
       "subtitle": "Previews stay free. Pro unlocks the complete, typed source for every Pro component — copy, paste, ship.",

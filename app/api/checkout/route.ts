@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { commerceArmed } from "@/lib/capabilities";
 import { getPolar, polarConfigured } from "@/lib/polar";
 import { supabaseConfigured } from "@/lib/supabase/server";
 import { getCurrentUserClaims } from "@/lib/supabase/current-user";
@@ -16,7 +17,10 @@ export async function GET(request: Request) {
     searchParams.get("plan") === "lifetime" ? "lifetime" : "subscription";
   const site = process.env.NEXT_PUBLIC_SITE_URL ?? origin;
 
-  if (!polarConfigured() || !supabaseConfigured()) {
+  // commerceArmed also folds in COMMERCE_COMING_SOON: while payments are
+  // switched off, a hand-crafted GET here must not reach Polar even though the
+  // env is fully configured.
+  if (!commerceArmed() || !polarConfigured() || !supabaseConfigured()) {
     return NextResponse.redirect(`${site}/components?checkout_error=unconfigured`);
   }
 

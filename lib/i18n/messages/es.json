@@ -226,7 +226,8 @@
       "label": "Pro"
     },
     "goPro": {
-      "label": "Hazte Pro"
+      "label": "Hazte Pro",
+      "comingSoon": "Pro llega pronto"
     },
     "codePanel": {
       "lockedEyebrow": "Pro",
@@ -245,6 +246,7 @@
     },
     "pricingModal": {
       "ariaLabel": "Mejora a Shadow Garden Pro",
+      "comingSoon": "Muy pronto",
       "eyebrow": "Shadow Garden Pro",
       "title": "Desbloquea el código completo de cada espécimen Pro",
       "subtitle": "Las vistas previas siguen gratis. Pro desbloquea el código completo y tipado de cada componente Pro: copia, pega, publica.",

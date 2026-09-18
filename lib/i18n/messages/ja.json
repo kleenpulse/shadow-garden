@@ -226,7 +226,8 @@
       "label": "Pro"
     },
     "goPro": {
-      "label": "Proにする"
+      "label": "Proにする",
+      "comingSoon": "Pro は近日公開"
     },
     "codePanel": {
       "lockedEyebrow": "Pro",
@@ -245,6 +246,7 @@
     },
     "pricingModal": {
       "ariaLabel": "Shadow Garden Proへアップグレード",
+      "comingSoon": "近日公開",
       "eyebrow": "Shadow Garden Pro",
       "title": "すべてのPro標本のソースを解錠",
       "subtitle": "プレビューは無料のまま。Proは全Proコンポーネントの完全な型付きソースを解錠します — コピーして、貼って、出荷。",

@@ -21,7 +21,13 @@ function prefersReducedMotion() {
 	);
 }
 
-export default function PricingModal() {
+// `comingSoon`: payments are switched off (COMMERCE_COMING_SOON) — the tiers
+// still show, but the checkout CTAs are replaced by an inert "coming soon" tag.
+export default function PricingModal({
+	comingSoon = false,
+}: {
+	comingSoon?: boolean;
+}) {
 	const [open, setOpen] = useState(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const panelRef = useRef<HTMLDivElement>(null);
@@ -199,17 +205,23 @@ export default function PricingModal() {
 										</li>
 									))}
 								</ul>
-								<a
-									href={`/api/checkout?plan=${plan.slug}`}
-									className={cn(
-										"mt-5 inline-flex h-11 items-center justify-center rounded-lg px-4 font-sans text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:h-10",
-										plan.highlighted
-											? "bg-accent text-on-accent hover:bg-accent-hover"
-											: "border border-hairline bg-panel text-ink hover:border-accent-muted hover:text-accent",
-									)}
-								>
-									{t(`plans.${plan.slug}.cta`)}
-								</a>
+								{comingSoon ? (
+									<span className="mt-5 inline-flex h-11 select-none items-center justify-center rounded-lg border border-hairline bg-panel px-4 font-sans text-sm font-medium text-ink-mute sm:h-10">
+										{t("comingSoon")}
+									</span>
+								) : (
+									<a
+										href={`/api/checkout?plan=${plan.slug}`}
+										className={cn(
+											"mt-5 inline-flex h-11 items-center justify-center rounded-lg px-4 font-sans text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:h-10",
+											plan.highlighted
+												? "bg-accent text-on-accent hover:bg-accent-hover"
+												: "border border-hairline bg-panel text-ink hover:border-accent-muted hover:text-accent",
+										)}
+									>
+										{t(`plans.${plan.slug}.cta`)}
+									</a>
+								)}
 							</div>
 						))}
 					</div>

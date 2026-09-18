@@ -17,6 +17,16 @@
 
 export type Capability = "db" | "supabase" | "polar" | "polarWebhook" | "email";
 
+/**
+ * Launch switch. While true, every real build (preview + prod) reports commerce
+ * as unarmed no matter what env is set: nothing sells, so nothing locks, and the
+ * shell shows a "coming soon" marker instead of Go Pro. Local dev is exempt so
+ * the full commerce stack stays exercisable against dev env. Read at build time
+ * (module-scope consumers), so flipping it means a deploy — same contract as
+ * GATE_CONTROLS. Set to false to launch payments.
+ */
+export const COMMERCE_COMING_SOON = true;
+
 /** The Supabase URL, or undefined. Public — inlines into the browser bundle. */
 export function supabaseUrl(): string | undefined {
   return process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -60,5 +70,10 @@ export function has(capability: Capability): boolean {
  * browser bundle.
  */
 export function commerceArmed(): boolean {
+  // NODE_ENV is statically inlined in every runtime this file reaches (see
+  // lib/env.ts); inlined here rather than imported to keep this module
+  // dependency-free for the edge proxy.
+  if (COMMERCE_COMING_SOON && process.env.NODE_ENV === "production")
+    return false;
   return has("polar") && has("supabase") && has("db");
 }
