@@ -76,6 +76,11 @@ const WEATHER: Record<
 // even before instance colors upload.
 const PETAL_COLORS = ["#ffffff", "#ffe4ef", "#f2cfdd", "#ffd3e2"];
 
+// Shared endpoints for the weather blend: the grass tint lifts toward white,
+// the horizon disc sinks toward the contact-shadow green.
+const WHITE = new THREE.Color("#ffffff");
+const DISC_SHADOW = new THREE.Color("#3f4a3a");
+
 // Deterministic PRNG so petal seeding is identical on every mount.
 function mulberry32(seed: number): () => number {
   let a = seed;
@@ -421,7 +426,13 @@ function BlossomTree({
 // meadow runs unbroken past every orbit angle at max camera distance, with
 // fog owning everything beyond the rim. Node clones share the tinted
 // materials and geometry buffers, so GPU memory and the retint stay 1×.
-function GreenField({ tint }: { tint: string }) {
+function GreenField({
+  tint,
+  grassMats,
+}: {
+  tint: string;
+  grassMats: { current: THREE.MeshBasicMaterial[] };
+}) {
   const gltf = useLoader(GLTFLoader, FIELD_URL);
   const model = useMemo(() => {
     const base = gltf.scene.clone(true);
@@ -450,9 +461,15 @@ function GreenField({ tint }: { tint: string }) {
   useEffect(() => () => model.dispose(), [model]);
 
   useEffect(() => {
-    const c = new THREE.Color(tint).lerp(new THREE.Color("#ffffff"), 0.3);
+    // Initial paint only — once registered, the WeatherRig owns this color
+    // every frame (its useFrame write lands before the next paint).
+    const c = new THREE.Color(tint).lerp(WHITE, 0.3);
     model.mats.forEach((m) => m.color.copy(c));
-  }, [model, tint]);
+    grassMats.current = model.mats;
+    return () => {
+      grassMats.current = [];
+    };
+  }, [model, tint, grassMats]);
 
   // Checkerboard 180° yaw plus an x-mirror on the outer columns breaks the
   // repeat pattern; both are safe on a double-sided alpha-cutout material and
@@ -480,6 +497,97 @@ function GreenField({ tint }: { tint: string }) {
       ))}
     </>
   );
+}
+
+// Weather is a crossfade, not a cut: sky, fog, ground and light all ease
+// toward the active preset over ~0.6s. Current values live in a lazily
+// seeded ref the loop owns (never React state), and every write happens in
+// useFrame — BEFORE the next paint — so the instant jump the weather
+// re-render commits to scene.background, the fog and the materials is
+// overwritten and never reaches the screen. Paused (and reduced motion)
+// snaps to the target in a single frame instead.
+function WeatherRig({
+  weather,
+  paused,
+  hemi,
+  sun,
+  discMat,
+  grassMats,
+}: {
+  weather: HanamiWeather;
+  paused: boolean;
+  hemi: { current: THREE.HemisphereLight | null };
+  sun: { current: THREE.DirectionalLight | null };
+  discMat: { current: THREE.MeshBasicMaterial | null };
+  grassMats: { current: THREE.MeshBasicMaterial[] };
+}) {
+  const scene = useThree((s) => s.scene);
+  const invalidate = useThree((s) => s.invalidate);
+  const live = useRef<{
+    sky: THREE.Color;
+    ground: THREE.Color;
+    near: number;
+    far: number;
+    ambient: number;
+    sun: number;
+    tmp: THREE.Color;
+    target: THREE.Color;
+  } | null>(null);
+
+  // A weather change must wake the demand frameloop; while paused the snap
+  // then lands in that one frame.
+  useEffect(() => invalidate(), [weather, invalidate]);
+
+  useFrame((_, delta) => {
+    const w = WEATHER[weather];
+    let l = live.current;
+    if (!l) {
+      // Seeded from the mount-time weather so first paint starts on target.
+      l = live.current = {
+        sky: new THREE.Color(w.sky),
+        ground: new THREE.Color(w.ground),
+        near: w.fogNear,
+        far: w.fogFar,
+        ambient: w.ambient,
+        sun: w.sun,
+        tmp: new THREE.Color(),
+        target: new THREE.Color(),
+      };
+    }
+    const k = paused ? 1 : Math.min(1, delta * 2.4);
+    l.target.set(w.sky);
+    // Drift measured before the step so demand mode keeps rendering until
+    // the blend lands.
+    const drift =
+      Math.abs(l.target.r - l.sky.r) +
+      Math.abs(l.target.g - l.sky.g) +
+      Math.abs(l.target.b - l.sky.b) +
+      Math.abs(w.fogNear - l.near) / 20 +
+      Math.abs(w.fogFar - l.far) / 20;
+    l.sky.lerp(l.target, k);
+    l.ground.lerp(l.target.set(w.ground), k);
+    l.near += (w.fogNear - l.near) * k;
+    l.far += (w.fogFar - l.far) * k;
+    l.ambient += (w.ambient - l.ambient) * k;
+    l.sun += (w.sun - l.sun) * k;
+
+    scene.background = l.sky;
+    const fog = scene.fog as THREE.Fog | null;
+    if (fog) {
+      fog.color.copy(l.sky);
+      fog.near = l.near;
+      fog.far = l.far;
+    }
+    if (hemi.current) hemi.current.intensity = l.ambient * 1.15;
+    if (sun.current) sun.current.intensity = l.sun * 0.7;
+    if (discMat.current) discMat.current.color.copy(l.ground).lerp(DISC_SHADOW, 0.35);
+    const grass = l.tmp.copy(l.ground).lerp(WHITE, 0.3);
+    for (const m of grassMats.current) m.color.copy(grass);
+
+    if (drift > 0.004) invalidate();
+  });
+
+  return null;
 }
 
 // Camera pivot and orbit geometry, derived from the reference framing.
@@ -659,6 +767,11 @@ function HanamiScene({
 
   const petalCount = Math.max(0, Math.min(PETAL_POOL, Math.round(fallingPetals)));
 
+  const hemiRef = useRef<THREE.HemisphereLight>(null);
+  const sunRef = useRef<THREE.DirectionalLight>(null);
+  const discMatRef = useRef<THREE.MeshBasicMaterial>(null);
+  const grassMatsRef = useRef<THREE.MeshBasicMaterial[]>([]);
+
   return (
     <>
       <CameraRig
@@ -667,12 +780,25 @@ function HanamiScene({
         swayDegrees={parallaxStrength}
         distance={cameraDistance}
       />
+      <WeatherRig
+        weather={weather}
+        paused={paused}
+        hemi={hemiRef}
+        sun={sunRef}
+        discMat={discMatRef}
+        grassMats={grassMatsRef}
+      />
       <color attach="background" args={[wx.sky]} />
       <fog attach="fog" args={[wx.sky, wx.fogNear, wx.fogFar]} />
       {/* Warm grey underside light — a green-tinted ground color here muddies
           the blossom shadows */}
-      <hemisphereLight args={["#fbf3f0", "#c0b2ae", wx.ambient * 1.15]} />
-      <directionalLight position={[-2, 8, 6]} intensity={wx.sun * 0.7} color="#fff4ec" />
+      <hemisphereLight ref={hemiRef} args={["#fbf3f0", "#c0b2ae", wx.ambient * 1.15]} />
+      <directionalLight
+        ref={sunRef}
+        position={[-2, 8, 6]}
+        intensity={wx.sun * 0.7}
+        color="#fff4ec"
+      />
 
       {/* Everything visible waits behind ONE boundary. The disc, decals and
           lantern are procedural and would paint instantly — a lantern floating
@@ -683,10 +809,10 @@ function HanamiScene({
         {/* Horizon disc: unlit so fog alone blends it into the sky */}
         <mesh rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[60, 48]} />
-          <meshBasicMaterial color={groundColor} />
+          <meshBasicMaterial ref={discMatRef} color={groundColor} />
         </mesh>
 
-        <GreenField tint={wx.ground} />
+        <GreenField tint={wx.ground} grassMats={grassMatsRef} />
         <BlossomTree
           wind={wind}
           windVec={windVec}
@@ -883,7 +1009,9 @@ export default function Hanami({
   // No grab cursor: a hero reads as a page, not an instrument — the orbit is
   // a bonus for whoever tries it. touch-action stays, or a finger drag
   // scrolls the page instead of orbiting.
-  const rootClass = `relative h-full w-full overflow-hidden select-none @container-size [&_canvas]:touch-none ${className ?? ""}`;
+  // The CSS transition keeps the root's sky backdrop in step with the
+  // WeatherRig's in-canvas blend when the weather changes.
+  const rootClass = `relative h-full w-full overflow-hidden select-none @container-size transition-[background-color] duration-700 [&_canvas]:touch-none ${className ?? ""}`;
 
   if (fallback) {
     // No WebGL: the same copy over a flat rendition of the weather palette —
