@@ -131,16 +131,16 @@ export function anchorFor(category: Category): string {
 }
 
 const BLURBS: Record<Category, string> = {
-	Backgrounds: "Ambient fields. The room tone of an interface.",
-	"Text Animations": "Letters under tension. Morph, count, scroll.",
-	"Micro-interactions": "Small mechanisms. Felt more than seen.",
+	Backgrounds: "Full-screen animated backgrounds. They sit behind your content and set the tone.",
+	"Text Animations": "Text that moves: morphing headlines, counters, and scroll effects.",
+	"Micro-interactions": "Small touches on buttons and cards. You feel them more than you see them.",
 	// Not "command surfaces": only the palette is that. The rest are a physics
 	// engine, an orrery, an ASCII render engine, a ledger — what the category
 	// actually shares is weight. These are the ones with a simulation loop and
 	// state that outlives a frame.
-	"Power-User Systems": "Whole machines. State, memory, moving parts.",
-	"Hero Templates": "Landing openers. One big moment, above the fold.",
-	"Landing Pages": "Whole pages, shipped. Scroll machines with a brand dial.",
+	"Power-User Systems": "Complete widgets with real state: command menus, file trees, and docks.",
+	"Hero Templates": "Ready-made hero sections. One strong opening above the fold.",
+	"Landing Pages": "Full landing pages you can ship. Scroll-driven, with brand colors you can swap.",
 };
 
 function numberProp(slug: string, name: string): NumberProp {

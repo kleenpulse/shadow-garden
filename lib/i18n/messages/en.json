@@ -117,7 +117,7 @@
       "cookbookLabel": "Motion cook book"
     },
     "footer": {
-      "tagline": "An instrument bench for React motion. Preview live, tune every parameter, take the source.",
+      "tagline": "A library of animated React components. Preview each one live, tune every prop, and take the source.",
       "siteNavLabel": "Site",
       "nav": {
         "allComponents": "All components",
@@ -2522,7 +2522,7 @@
       "eyebrowTagline": "Component Registry",
       "headlineCount": "{count, plural, one {# instrument} other {# instruments}}.",
       "headlineBench": "One bench.",
-      "description": "Motion-forward React components, exhibited live on the page they power. Every parameter is a dial. Every specimen is catalogued.",
+      "description": "Animated React components that run live on this page. Every prop is a control you can tune. Every component is in the catalog.",
       "ctaCatalog": "Enter the catalog",
       "ctaCookbook": "the Cook Book",
       "readoutCube": "Field: RubiksCube · Turn {duration}ms · Scramble {count}",
@@ -2541,7 +2541,7 @@
       "uncalibrated": "Nothing ships uncalibrated"
     },
     "footer": {
-      "tagline": "An instrument bench for React motion. Preview live, tune every parameter, take the source.",
+      "tagline": "A library of animated React components. Preview each one live, tune every prop, and take the source.",
       "exhibitsAriaLabel": "Exhibits",
       "collectionsAriaLabel": "Collections",
       "fullCatalog": "Full catalog",
@@ -2552,7 +2552,7 @@
     },
     "tuning": {
       "edgesInstruction": "{mode, select, tap {Tap the edges} trace {Trace the edges} other {the edges}}",
-      "dialsDescription": "Every specimen in the catalog exposes its dials like this — tuned live, reflected in the props table, ready to copy.",
+      "dialsDescription": "Every component in the catalog has controls like this. Tune it live, watch the props table update, and copy the code.",
       "sliders": {
         "glowRadius": "Glow radius",
         "coneSpread": "Cone spread"
@@ -2578,10 +2578,12 @@
       "allInCategory": "All {count} {category} →",
       "openCommand": "Open {name}",
       "blurbs": {
-        "backgrounds": "Ambient fields. The room tone of an interface.",
-        "text-animations": "Letters under tension. Morph, count, scroll.",
-        "micro-interactions": "Small mechanisms. Felt more than seen.",
-        "power-user-systems": "Whole machines. State, memory, moving parts."
+        "backgrounds": "Full-screen animated backgrounds. They sit behind your content and set the tone.",
+        "text-animations": "Text that moves: morphing headlines, counters, and scroll effects.",
+        "micro-interactions": "Small touches on buttons and cards. You feel them more than you see them.",
+        "power-user-systems": "Complete widgets with real state: command menus, file trees, and docks.",
+        "hero-templates": "Ready-made hero sections. One strong opening above the fold.",
+        "landing-pages": "Full landing pages you can ship. Scroll-driven, with brand colors you can swap."
       },
       "calibration": {
         "label": "Calibration",
@@ -2592,7 +2594,7 @@
         "plate": "Plate",
         "openArchive": "Open archive",
         "headline": "Nothing stays in the shadow.",
-        "body": "Every specimen renders live — tune it in the browser before you commit. The pieces below run on this page; the full bench is one click away.",
+        "body": "Every component renders live, so you can tune it in the browser before you commit. The pieces below run on this page. The full catalog is one click away.",
         "cta": "Browse the source"
       }
     },

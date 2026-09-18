@@ -117,7 +117,7 @@
       "cookbookLabel": "モーション・クックブック"
     },
     "footer": {
-      "tagline": "React モーションのための計測ベンチ。ライブでプレビューし、あらゆるパラメータを調整し、ソースを持ち帰りましょう。",
+      "tagline": "アニメーション付き React コンポーネントのライブラリ。1つずつライブでプレビューし、あらゆる props を調整して、ソースを持ち帰れます。",
       "siteNavLabel": "サイト",
       "nav": {
         "allComponents": "すべてのコンポーネント",
@@ -2522,7 +2522,7 @@
       "eyebrowTagline": "コンポーネントレジストリ",
       "headlineCount": "{count, plural, one {# 個の計器} other {# 個の計器}}。",
       "headlineBench": "1つのベンチ。",
-      "description": "モーションを前面に押し出した React コンポーネントを、それが動かすまさにそのページ上でライブに展示しています。あらゆるパラメータはダイヤルであり、あらゆる標本はカタログ化されています。",
+      "description": "このページ上でライブに動くアニメーション付き React コンポーネント。あらゆる props は調整できるコントロールで、すべてのコンポーネントはカタログに載っています。",
       "ctaCatalog": "カタログへ進む",
       "ctaCookbook": "クックブック",
       "readoutCube": "フィールド: RubiksCube · 回転 {duration}ms · スクランブル {count}",
@@ -2541,7 +2541,7 @@
       "uncalibrated": "調整されていないものは何も出荷しません"
     },
     "footer": {
-      "tagline": "React モーションのための計測ベンチ。ライブでプレビューし、あらゆるパラメータを調整し、ソースを持ち帰りましょう。",
+      "tagline": "アニメーション付き React コンポーネントのライブラリ。1つずつライブでプレビューし、あらゆる props を調整して、ソースを持ち帰れます。",
       "exhibitsAriaLabel": "展示",
       "collectionsAriaLabel": "コレクション",
       "fullCatalog": "フルカタログ",
@@ -2552,7 +2552,7 @@
     },
     "tuning": {
       "edgesInstruction": "{mode, select, tap {端をタップ} trace {端をなぞる} other {端}}",
-      "dialsDescription": "カタログ内のあらゆる標本が、このようにダイヤルを公開しています — ライブで調整でき、props テーブルに反映され、いつでもコピーできます。",
+      "dialsDescription": "カタログ内のすべてのコンポーネントに、このようなコントロールがあります。ライブで調整すると props テーブルに反映され、コードをコピーできます。",
       "sliders": {
         "glowRadius": "グロー半径",
         "coneSpread": "円錐の広がり"
@@ -2578,10 +2578,12 @@
       "allInCategory": "{category} をすべて表示 ({count}) →",
       "openCommand": "{name} を開く",
       "blurbs": {
-        "backgrounds": "環境的なフィールド。インターフェースの空気感。",
-        "text-animations": "張り詰めた文字たち。モーフし、カウントし、スクロールする。",
-        "micro-interactions": "小さな機構。見るというより感じるもの。",
-        "power-user-systems": "1つの機械そのもの。状態、記憶、可動部品。"
+        "backgrounds": "全画面のアニメーション背景。コンテンツの背後に置かれ、雰囲気を決めます。",
+        "text-animations": "動くテキスト。モーフィングする見出し、カウンター、スクロール演出。",
+        "micro-interactions": "ボタンやカードへの小さな仕掛け。目で見るより、手で感じるものです。",
+        "power-user-systems": "本物の状態を持つ完成したウィジェット。コマンドメニュー、ファイルツリー、ドック。",
+        "hero-templates": "すぐ使えるヒーローセクション。ファーストビューでの力強いオープニング。",
+        "landing-pages": "そのまま公開できるランディングページ。スクロール駆動で、ブランドカラーは差し替え可能。"
       },
       "calibration": {
         "label": "キャリブレーション",
@@ -2592,7 +2594,7 @@
         "plate": "プレート",
         "openArchive": "アーカイブを開く",
         "headline": "何も影に隠れたままにはしません。",
-        "body": "Every specimen renders live — tune it in the browser before you commit. The pieces below run on this page; the full bench is one click away.",
+        "body": "すべてのコンポーネントはライブでレンダリングされるので、採用する前にブラウザ上で調整できます。下のピースはこのページ上で動いています。フルカタログはワンクリック先です。",
         "cta": "ソースを見る"
       }
     },

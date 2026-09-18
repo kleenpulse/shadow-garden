@@ -117,7 +117,7 @@
       "cookbookLabel": "动效秘籍"
     },
     "footer": {
-      "tagline": "一座为 React 动效打造的仪器台。实时预览，调校每一个参数，随取源码。",
+      "tagline": "一个动画 React 组件库。逐个实时预览，调节每一个 prop，随取源码。",
       "siteNavLabel": "站点",
       "nav": {
         "allComponents": "全部组件",
@@ -2522,7 +2522,7 @@
       "eyebrowTagline": "组件注册表",
       "headlineCount": "{count, plural, one {# 件仪器} other {# 件仪器}}。",
       "headlineBench": "一张工作台。",
-      "description": "以动效为先的 React 组件，实时展示于它们所驱动的页面之上。每一个参数都是一个可调旋钮。每一件标本都被编目在册。",
+      "description": "在这个页面上实时运行的动画 React 组件。每一个 prop 都是可以调节的控件。每一个组件都收录在目录里。",
       "ctaCatalog": "进入目录",
       "ctaCookbook": "动效秘籍",
       "readoutCube": "场：RubiksCube · 旋转 {duration}ms · 打乱 {count}",
@@ -2541,7 +2541,7 @@
       "uncalibrated": "绝不发布未经校准之物"
     },
     "footer": {
-      "tagline": "一座为 React 动效打造的仪器台。实时预览，调校每一个参数，随取源码。",
+      "tagline": "一个动画 React 组件库。逐个实时预览，调节每一个 prop，随取源码。",
       "exhibitsAriaLabel": "展品",
       "collectionsAriaLabel": "合集",
       "fullCatalog": "完整目录",
@@ -2552,7 +2552,7 @@
     },
     "tuning": {
       "edgesInstruction": "{mode, select, tap {点击边缘} trace {描摹边缘} other {边缘}}",
-      "dialsDescription": "目录中的每一件标本都以这种方式暴露其调节旋钮 — 实时调校，同步反映在属性表中，随时可复制。",
+      "dialsDescription": "目录中的每一个组件都有这样的控件。实时调节，属性表同步更新，代码随时可复制。",
       "sliders": {
         "glowRadius": "光晕半径",
         "coneSpread": "光锥扩散"
@@ -2578,10 +2578,12 @@
       "allInCategory": "查看全部 {count} 个{category} →",
       "openCommand": "打开 {name}",
       "blurbs": {
-        "backgrounds": "环境场域。界面的“室内基调”。",
-        "text-animations": "承载张力的文字。变形、计数、滚动。",
-        "micro-interactions": "细小的机制。用感受多过用眼睛。",
-        "power-user-systems": "完整的机器。状态、记忆、运转的部件。"
+        "backgrounds": "全屏动画背景。位于内容之后，定下整体基调。",
+        "text-animations": "会动的文字：变形标题、数字滚动和滚动效果。",
+        "micro-interactions": "按钮和卡片上的小细节。用感受多过用眼睛。",
+        "power-user-systems": "带真实状态的完整组件：命令菜单、文件树和 Dock。",
+        "hero-templates": "现成的 Hero 区块。首屏上一个有力的开场。",
+        "landing-pages": "可以直接上线的完整落地页。滚动驱动，品牌色可替换。"
       },
       "calibration": {
         "label": "校准",
@@ -2592,7 +2594,7 @@
         "plate": "图版",
         "openArchive": "打开档案",
         "headline": "没有什么会永远藏在暗处。",
-        "body": "Every specimen renders live — tune it in the browser before you commit. The pieces below run on this page; the full bench is one click away.",
+        "body": "每一个组件都实时渲染，你可以先在浏览器里调好再决定。下面这些组件就运行在本页上。完整目录只需一次点击。",
         "cta": "浏览源码"
       }
     },

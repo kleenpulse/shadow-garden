@@ -13,7 +13,7 @@ export const SITE_NAME = "Shadow Garden";
 export const SITE_TAGLINE = "Animated React components, live and tunable";
 
 export const SITE_DESCRIPTION =
-	"A tunable gallery of animation-forward React components. Preview live, dial in every parameter, copy the source. WebGL backgrounds, text animations, micro-interactions and command surfaces for React and Next.js.";
+	"A gallery of animated React components you can tune live. Preview each one, adjust every prop, and copy the source. WebGL backgrounds, text animations, micro-interactions and command menus for React and Next.js.";
 
 export const SITE_REPO = "https://github.com/kleenpulse/shadow-garden";
 

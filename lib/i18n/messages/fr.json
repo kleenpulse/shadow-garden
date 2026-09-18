@@ -117,7 +117,7 @@
       "cookbookLabel": "Livre de recettes du mouvement"
     },
     "footer": {
-      "tagline": "Un établi d’instruments pour le mouvement React. Prévisualisez en direct, réglez chaque paramètre, récupérez la source.",
+      "tagline": "Une bibliothèque de composants React animés. Prévisualisez chacun en direct, réglez chaque prop et récupérez la source.",
       "siteNavLabel": "Site",
       "nav": {
         "allComponents": "Tous les composants",
@@ -2522,7 +2522,7 @@
       "eyebrowTagline": "Registre de composants",
       "headlineCount": "{count, plural, one {# instrument} other {# instruments}}.",
       "headlineBench": "Un seul établi.",
-      "description": "Des composants React tournés vers le mouvement, exposés en direct sur la page qu’ils animent. Chaque paramètre est un cadran. Chaque spécimen est catalogué.",
+      "description": "Des composants React animés qui tournent en direct sur cette page. Chaque prop est un contrôle que vous pouvez régler. Chaque composant est dans le catalogue.",
       "ctaCatalog": "Entrer dans le catalogue",
       "ctaCookbook": "le Livre de recettes",
       "readoutCube": "Champ : RubiksCube · Rotation {duration} ms · Mélange {count}",
@@ -2541,7 +2541,7 @@
       "uncalibrated": "Rien ne part sans étalonnage"
     },
     "footer": {
-      "tagline": "Un établi d’instruments pour le mouvement React. Prévisualisez en direct, réglez chaque paramètre, récupérez la source.",
+      "tagline": "Une bibliothèque de composants React animés. Prévisualisez chacun en direct, réglez chaque prop et récupérez la source.",
       "exhibitsAriaLabel": "Expositions",
       "collectionsAriaLabel": "Collections",
       "fullCatalog": "Catalogue complet",
@@ -2552,7 +2552,7 @@
     },
     "tuning": {
       "edgesInstruction": "{mode, select, tap {Touchez les bords} trace {Tracez les bords} other {les bords}}",
-      "dialsDescription": "Chaque spécimen du catalogue expose ses cadrans ainsi — réglés en direct, reflétés dans le tableau des props, prêts à copier.",
+      "dialsDescription": "Chaque composant du catalogue a des contrôles comme ceux-ci. Réglez-le en direct, regardez le tableau des props se mettre à jour et copiez le code.",
       "sliders": {
         "glowRadius": "Rayon de la lueur",
         "coneSpread": "Étalement du cône"
@@ -2578,10 +2578,12 @@
       "allInCategory": "Tous les {count} {category} →",
       "openCommand": "Ouvrir {name}",
       "blurbs": {
-        "backgrounds": "Des champs ambiants. La tonalité de fond d’une interface.",
-        "text-animations": "Des lettres sous tension. Morphing, comptage, défilement.",
-        "micro-interactions": "De petits mécanismes. Plus ressentis que vus.",
-        "power-user-systems": "Des machines entières. État, mémoire, pièces mobiles."
+        "backgrounds": "Des arrière-plans animés en plein écran. Ils se placent derrière votre contenu et donnent le ton.",
+        "text-animations": "Du texte qui bouge : titres en morphing, compteurs et effets de défilement.",
+        "micro-interactions": "De petites touches sur les boutons et les cartes. On les ressent plus qu’on ne les voit.",
+        "power-user-systems": "Des widgets complets avec un vrai état : menus de commandes, arborescences de fichiers et docks.",
+        "hero-templates": "Des sections hero prêtes à l’emploi. Une ouverture forte en haut de page.",
+        "landing-pages": "Des pages d’atterrissage complètes, prêtes à publier. Pilotées au défilement, avec des couleurs de marque interchangeables."
       },
       "calibration": {
         "label": "Étalonnage",
@@ -2592,7 +2594,7 @@
         "plate": "Planche",
         "openArchive": "Ouvrir l’archive",
         "headline": "Rien ne reste dans l’ombre.",
-        "body": "Every specimen renders live — tune it in the browser before you commit. The pieces below run on this page; the full bench is one click away.",
+        "body": "Chaque composant est rendu en direct, vous pouvez donc le régler dans le navigateur avant de vous décider. Les pièces ci-dessous tournent sur cette page. Le catalogue complet est à un clic.",
         "cta": "Parcourir la source"
       }
     },

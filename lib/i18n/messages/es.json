@@ -117,7 +117,7 @@
       "cookbookLabel": "Recetario de movimiento"
     },
     "footer": {
-      "tagline": "Un banco de instrumentos para el movimiento en React. Previsualiza en vivo, ajusta cada parámetro, llévate el código fuente.",
+      "tagline": "Una biblioteca de componentes React animados. Previsualiza cada uno en vivo, ajusta cada prop y llévate el código fuente.",
       "siteNavLabel": "Sitio",
       "nav": {
         "allComponents": "Todos los componentes",
@@ -2522,7 +2522,7 @@
       "eyebrowTagline": "Registro de Componentes",
       "headlineCount": "{count, plural, one {# instrumento} other {# instrumentos}}.",
       "headlineBench": "Un banco.",
-      "description": "Componentes de React centrados en el movimiento, exhibidos en vivo en la página que impulsan. Cada parámetro es un dial. Cada espécimen está catalogado.",
+      "description": "Componentes de React animados que corren en vivo en esta página. Cada prop es un control que puedes ajustar. Cada componente está en el catálogo.",
       "ctaCatalog": "Entra al catálogo",
       "ctaCookbook": "el Recetario",
       "readoutCube": "Campo: RubiksCube · Giro {duration}ms · Scramble {count}",
@@ -2541,7 +2541,7 @@
       "uncalibrated": "Nada se envía sin calibrar"
     },
     "footer": {
-      "tagline": "Un banco de instrumentos para el movimiento en React. Previsualiza en vivo, ajusta cada parámetro, llévate el código fuente.",
+      "tagline": "Una biblioteca de componentes React animados. Previsualiza cada uno en vivo, ajusta cada prop y llévate el código fuente.",
       "exhibitsAriaLabel": "Exhibiciones",
       "collectionsAriaLabel": "Colecciones",
       "fullCatalog": "Catálogo completo",
@@ -2552,7 +2552,7 @@
     },
     "tuning": {
       "edgesInstruction": "{mode, select, tap {Toca los bordes} trace {Traza los bordes} other {los bordes}}",
-      "dialsDescription": "Cada espécimen del catálogo expone sus diales así: ajustados en vivo, reflejados en la tabla de props, listos para copiar.",
+      "dialsDescription": "Cada componente del catálogo tiene controles como estos. Ajústalo en vivo, mira cómo se actualiza la tabla de props y copia el código.",
       "sliders": {
         "glowRadius": "Radio del resplandor",
         "coneSpread": "Dispersión del cono"
@@ -2578,10 +2578,12 @@
       "allInCategory": "Todos los {count} {category} →",
       "openCommand": "Abrir {name}",
       "blurbs": {
-        "backgrounds": "Campos ambientales. El tono de sala de una interfaz.",
-        "text-animations": "Letras bajo tensión. Transforman, cuentan, se desplazan.",
-        "micro-interactions": "Pequeños mecanismos. Se sienten más de lo que se ven.",
-        "power-user-systems": "Máquinas completas. Estado, memoria, piezas en movimiento."
+        "backgrounds": "Fondos animados a pantalla completa. Se colocan detrás de tu contenido y marcan el tono.",
+        "text-animations": "Texto que se mueve: titulares que se transforman, contadores y efectos de scroll.",
+        "micro-interactions": "Pequeños detalles en botones y tarjetas. Se sienten más de lo que se ven.",
+        "power-user-systems": "Widgets completos con estado real: menús de comandos, árboles de archivos y docks.",
+        "hero-templates": "Secciones hero listas para usar. Una apertura fuerte en la parte superior de la página.",
+        "landing-pages": "Páginas de aterrizaje completas listas para publicar. Guiadas por scroll, con colores de marca intercambiables."
       },
       "calibration": {
         "label": "Calibración",
@@ -2592,7 +2594,7 @@
         "plate": "Placa",
         "openArchive": "Abrir archivo",
         "headline": "Nada permanece en la sombra.",
-        "body": "Every specimen renders live — tune it in the browser before you commit. The pieces below run on this page; the full bench is one click away.",
+        "body": "Cada componente se renderiza en vivo, así que puedes ajustarlo en el navegador antes de decidirte. Las piezas de abajo corren en esta página. El catálogo completo está a un clic.",
         "cta": "Explorar el código fuente"
       }
     },
