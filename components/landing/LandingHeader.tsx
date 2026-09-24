@@ -157,8 +157,8 @@ export default function LandingHeader() {
 			)}
 		>
 			{/* The surface stays full-bleed; the controls sit on the page's
-			    max-w-7xl column so they line up with the content below. */}
-			<div className="mx-auto flex w-full max-w-7xl items-center justify-between px-3 sm:px-6">
+			    max-w-landing column so they line up with the content below. */}
+			<div className="mx-auto flex w-full max-w-landing items-center justify-between px-3 sm:px-6">
 				<Link href="/components" className="pointer-events-auto inline-flex items-baseline">
 					<Wordmark size="sm" boldSecond />
 				</Link>

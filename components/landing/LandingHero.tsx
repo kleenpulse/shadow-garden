@@ -387,7 +387,7 @@ export default function LandingHero({
 				variants={container}
 				initial="hidden"
 				animate="show"
-				className="pointer-events-none relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-end px-3 pb-16 pt-24 sm:px-6 sm:pb-32"
+				className="pointer-events-none relative mx-auto flex w-full max-w-landing flex-1 flex-col justify-end px-3 pb-16 pt-24 sm:px-6 sm:pb-32"
 			>
 				<motion.p
 					variants={rise}
@@ -441,7 +441,7 @@ export default function LandingHero({
 
 			{/* Instrument readout — the actual prop values driving the field above. */}
 			<div className="sg-rule relative z-10 border-t border-hairline bg-surface/60 backdrop-blur-sm">
-				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
+				<div className="mx-auto flex w-full max-w-landing flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
 					{/* Names whichever field is actually mounted, and stays blank until
               one is — naming a field before the viewport is known would print
               the same wrong answer the backdrop itself used to render. The span

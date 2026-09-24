@@ -46,6 +46,11 @@
 	/* Fluid hero display: one clamp across the wide 0-639px base range — a
 	   monospace unbreakable word can't be served by fixed steps. Ceiling = text-8xl. */
 	--text-hero: clamp(1.75rem, 8.5vw, 6rem);
+
+	/* Landing page content column (`max-w-landing`). One token so the header,
+	   hero, sections and footer can't drift apart. The marquee mask breakpoint in
+	   ManifestoMarquee.tsx repeats this value (a variant can't read a token). */
+	--container-landing: 1900px;
 }
 
 /*

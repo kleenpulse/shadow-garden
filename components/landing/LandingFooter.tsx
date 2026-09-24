@@ -41,7 +41,7 @@ export default function LandingFooter({
 			id={SECTION_IDS.colophon}
 			className="sg-rule scroll-mt-10 border-t border-hairline"
 		>
-			<div className="mx-auto grid w-full max-w-7xl gap-10 px-3 py-14 sm:px-6 sm:grid-cols-[1fr_auto_auto]">
+			<div className="mx-auto grid w-full max-w-landing gap-10 px-3 py-14 sm:px-6 sm:grid-cols-[1fr_auto_auto]">
 				<div>
 					<p className="font-display text-sm uppercase tracking-[0.28em] text-ink">
 						Motion Garden
@@ -96,7 +96,7 @@ export default function LandingFooter({
 				</nav>
 			</div>
 			<div className="sg-rule border-t border-hairline">
-				<div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
+				<div className="mx-auto flex w-full max-w-landing flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] sm:px-6 uppercase tracking-[0.22em] text-ink-mute">
 					<span>
 						{t("plateLabel")} <span className="normal-case">η</span>-07 ·{" "}
 						{t("colophonLabel")}

@@ -98,7 +98,7 @@ export function ExhibitSections({
 				<section
 					key={exhibit.category}
 					id={anchorFor(exhibit.category)}
-					className="mx-auto w-full max-w-7xl scroll-mt-10 px-3 py-14 lg:px-6 sm:py-24"
+					className="mx-auto w-full max-w-landing scroll-mt-10 px-3 py-14 lg:px-6 sm:py-24"
 				>
 					{/* Below sm the plate spreads its three readouts across the row, so
 					    the sweep bar spans the row there and hugs the text from sm up. */}
@@ -191,7 +191,7 @@ export function ArchiveSection({
 	const copy = useDataCopy();
 
 	return (
-		<div className="mx-auto w-full max-w-7xl px-3 py-14 sm:px-6 sm:py-28">
+		<div className="mx-auto w-full max-w-landing px-3 py-14 sm:px-6 sm:py-28">
 			<div className="sg-rule flex items-baseline justify-between gap-1.5 whitespace-nowrap border-y border-bench-700 py-2 font-display text-[9px] uppercase tracking-widest text-bench-500 sm:justify-start sm:gap-3 sm:text-[10px] sm:tracking-[0.28em]">
 				<span className="text-[#a855f7]">
 					{t("archive.plate")} <span className="normal-case">ζ</span>-06

@@ -62,7 +62,7 @@ export default function Home() {
 			{/* ε — Calibration: the "tunable" promise, proven with real dials. */}
 			<section
 				id={SECTION_IDS.calibration}
-				className="mx-auto w-full max-w-7xl scroll-mt-10 px-3 py-14 sm:px-6 sm:py-24"
+				className="mx-auto w-full max-w-landing scroll-mt-10 px-3 py-14 sm:px-6 sm:py-24"
 			>
 				<Reveal>
 					<CalibrationIntro />

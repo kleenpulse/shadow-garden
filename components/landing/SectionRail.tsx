@@ -191,10 +191,9 @@ export default function SectionRail({ sections }: { sections: NavSection[] }) {
 			data-expanded={expanded}
 			// The hover zone is the whole right gutter. Nothing else lives there
 			// except GotoTop, which sits above at z-9999 and stays clickable —
-			// as does the header (z-99) over this z-40 strip. Anchored to the
-			// page's max-w-7xl column, not the viewport: past 80rem the strip
-			// keeps the same 6px inset from the column edge it has at `lg`.
-			className="fixed inset-y-0 right-[calc(max(0px,(100%_-_80rem)/2)_+_0.375rem)] z-40 w-10"
+			// as does the header (z-99) over this z-40 strip. Pinned to the
+			// viewport edge at every width, never to the content column.
+			className="fixed inset-y-0 right-1.5 z-40 w-10"
 			onPointerEnter={() => {
 				hovering.current = true;
 				sync();
