@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { registry } from "@/lib/registry";
-import { SITE_NAME } from "@/lib/site";
+import { SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 
 // The brand card. Shared by every route that doesn't ship its own.
 //
@@ -14,7 +14,7 @@ import { SITE_NAME } from "@/lib/site";
 // route-segment runtime export. This route is `ƒ` (on demand) for the same reason
 // the per-component card is; see the note there before trying to make it static.
 
-export const alt = `${SITE_NAME} — animated React components, live and tunable`;
+export const alt = `${SITE_NAME} — ${SITE_TAGLINE}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -63,7 +63,7 @@ export default function Image() {
 							Component Registry
 						</div>
 						<div style={{ display: "flex", marginTop: 40, fontSize: 96, fontWeight: 700, letterSpacing: -2 }}>
-							<span style={{ color: INK }}>Shadow</span>
+							<span style={{ color: INK }}>Motion</span>
 							<span style={{ color: ACCENT, marginLeft: 24 }}>Garden</span>
 						</div>
 						<div
@@ -76,8 +76,8 @@ export default function Image() {
 								maxWidth: 880,
 							}}
 						>
-							Animated React components, exhibited live on the page they power.
-							Every parameter is a dial.
+							Animated React components, live on the page they power. One copy
+							hands your coding agent the full brief.
 						</div>
 					</div>
 
@@ -106,9 +106,9 @@ export default function Image() {
 							>
 								{total} components
 							</div>
-							<div style={{ display: "flex" }}>Live previews · tunable props</div>
+							<div style={{ display: "flex" }}>Live · agent-ready</div>
 							<div style={{ display: "flex", color: HAIRLINE }}>·</div>
-							<div style={{ display: "flex" }}>React · Next.js · TypeScript</div>
+							<div style={{ display: "flex" }}>React · Next.js</div>
 						</div>
 					</div>
 				</div>

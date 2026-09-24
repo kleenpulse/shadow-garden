@@ -138,7 +138,7 @@ const BLURBS: Record<Category, string> = {
 	// engine, an orrery, an ASCII render engine, a ledger — what the category
 	// actually shares is weight. These are the ones with a simulation loop and
 	// state that outlives a frame.
-	"Power-User Systems": "Complete widgets with real state: command menus, file trees, and docks.",
+	"Power-User Systems": "Complete widgets with real state: command menus, file trees, docks, and agent UIs for permissions, patch review and activity logs.",
 	"Hero Templates": "Ready-made hero sections. One strong opening above the fold.",
 	"Landing Pages": "Full landing pages you can ship. Scroll-driven, with brand colors you can swap.",
 };

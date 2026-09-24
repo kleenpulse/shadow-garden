@@ -5,7 +5,9 @@
 
 An animation-forward React component showcase — a dark, instrument-bench docs shell for browsing, tuning, and copying production-ready motion components. The demo copy still nods to _The Eminence in the Shadow_, where the original name came from.
 
-Every component ships with a live preview, a Controls panel that tunes each prop in real time, the source on a Code tab, an install block, a Props API table, and a one-click AI integration prompt — all generated from a single registry entry per component, so the docs never drift.
+Every component ships with a live preview, a Controls panel that tunes each prop in real time, the source on a Code tab, an install block, a Props API table, and a one-click **agent brief** — full source, dependency closure, props and integration rules in one paste for Claude Code, Cursor or any coding agent. All of it is generated from a single registry entry per component, so the docs never drift.
+
+Agents can start at [`/llms.txt`](https://shadow-garden-ui.vercel.app/llms.txt): a registry-generated index of every component, its page and its prop count, following the [llms.txt](https://llmstxt.org) convention.
 
 ## What's inside
 

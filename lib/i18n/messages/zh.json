@@ -117,7 +117,7 @@
       "cookbookLabel": "动效秘籍"
     },
     "footer": {
-      "tagline": "一个动画 React 组件库。逐个实时预览，调节每一个 prop，随取源码。",
+      "tagline": "实时可调的动画 React 组件。每一个都附带一份编程智能体可直接据此构建的简报。",
       "siteNavLabel": "站点",
       "nav": {
         "allComponents": "全部组件",
@@ -127,12 +127,12 @@
       "componentsAccent": "{count, plural, one {# 个组件} other {# 个组件}} · 1 种强调色"
     },
     "copyPrompt": {
-      "label": "复制提示词",
-      "ariaLabel": "复制 {name} 的 AI 集成提示词",
-      "copiedAnnouncement": "{name} 的提示词已复制到剪贴板",
+      "label": "复制给智能体",
+      "ariaLabel": "复制 {name} 给编程智能体的完整简报",
+      "copiedAnnouncement": "{name} 的智能体简报已复制到剪贴板",
       "clipboardUnavailable": "当前连接下剪贴板不可用",
       "copyFailed": "提示词复制失败",
-      "lockedAria": "{name} 的 AI 提示词在 Pro 层可用"
+      "lockedAria": "{name} 的智能体简报在 Pro 层可用"
     },
     "successOverlay": {
       "ariaLabel": "购买完成",
@@ -207,6 +207,14 @@
     "growDialog": {
       "closeAria": "关闭对话框"
     },
+    "renameAnnouncement": {
+      "eyebrow": "新名称",
+      "title": "Shadow Garden 现已更名为 Motion Garden",
+      "body": "同样的组件、同样的实时预览、同样的代码。只是换了个名字。",
+      "videoLabel": "Motion Garden 发布动画",
+      "close": "关闭",
+      "cta": "知道了"
+    },
     "codeTabs": {
       "sourceFilesAria": "源文件"
     },
@@ -231,7 +239,7 @@
     },
     "codePanel": {
       "lockedEyebrow": "Pro",
-      "lockedBody": "{name} 的源码在 Pro 层可用。预览始终免费 — 订阅即可查看并复制代码。",
+      "lockedBody": "{name} 的源码和智能体简报在 Pro 层可用。预览始终免费 — 订阅即可查看代码，或直接交给你的智能体。",
       "lockedCta": "查看源码 →"
     },
     "controlsLocked": {
@@ -249,7 +257,7 @@
       "comingSoon": "即将推出",
       "eyebrow": "Motion Garden Pro",
       "title": "解锁每个 Pro 样本的完整源码",
-      "subtitle": "预览始终免费。Pro 解锁每个 Pro 组件的完整类型化源码 — 复制、粘贴、上线。",
+      "subtitle": "预览始终免费。Pro 解锁每个 Pro 组件的完整类型化源码和完整智能体简报 — 复制、粘贴、上线。",
       "close": "关闭",
       "bestValue": "超值之选",
       "finePrintFinal": "所有交易均为最终交易。Pro 即时授予可复制源码的访问权限，付款处理后不可退款。",
@@ -262,7 +270,7 @@
           "tagline": "买断一次，永久拥有。",
           "cta": "购买终身版",
           "features": {
-            "0": "每个 Pro 组件的完整源码",
+            "0": "每个 Pro 组件的完整源码 + 智能体简报",
             "1": "个人与商用不受限",
             "2": "包含所有未来的 Pro 组件",
             "3": "无循环费用"
@@ -275,7 +283,7 @@
           "tagline": "完整访问，按月计费。",
           "cta": "订阅",
           "features": {
-            "0": "每个 Pro 组件的完整源码",
+            "0": "每个 Pro 组件的完整源码 + 智能体简报",
             "1": "个人与商用不受限",
             "2": "新组件上线即刻可用",
             "3": "随时取消"
@@ -2521,10 +2529,10 @@
   },
   "landing": {
     "hero": {
-      "eyebrowTagline": "组件注册表",
+      "eyebrowTagline": "面向 AI 智能体的注册表",
       "headlineCount": "{count, plural, one {# 件仪器} other {# 件仪器}}。",
       "headlineBench": "一张工作台。",
-      "description": "在这个页面上实时运行的动画 React 组件。每一个 prop 都是可以调节的控件。每一个组件都收录在目录里。",
+      "description": "动画 React 组件，在本页实时运行，每个 prop 都是一个旋钮。一次复制，就能把完整简报交给你的编程智能体：源码、依赖、props 和集成规则。",
       "ctaCatalog": "进入目录",
       "ctaCookbook": "动效秘籍",
       "readoutCube": "场：RubiksCube · 旋转 {duration}ms · 打乱 {count}",
@@ -2543,7 +2551,7 @@
       "uncalibrated": "绝不发布未经校准之物"
     },
     "footer": {
-      "tagline": "一个动画 React 组件库。逐个实时预览，调节每一个 prop，随取源码。",
+      "tagline": "实时可调的动画 React 组件。每一个都附带一份编程智能体可直接据此构建的简报。",
       "exhibitsAriaLabel": "展品",
       "collectionsAriaLabel": "合集",
       "fullCatalog": "完整目录",
@@ -2554,7 +2562,7 @@
     },
     "tuning": {
       "edgesInstruction": "{mode, select, tap {点击边缘} trace {描摹边缘} other {边缘}}",
-      "dialsDescription": "目录中的每一个组件都有这样的控件。实时调节，属性表同步更新，代码随时可复制。",
+      "dialsDescription": "目录中的每一个组件都有这样的控件。实时调节，属性表同步更新，然后复制代码 — 或者复制给智能体的完整简报。",
       "sliders": {
         "glowRadius": "光晕半径",
         "coneSpread": "光锥扩散"
@@ -2583,7 +2591,7 @@
         "backgrounds": "全屏动画背景。位于内容之后，定下整体基调。",
         "text-animations": "会动的文字：变形标题、数字滚动和滚动效果。",
         "micro-interactions": "按钮和卡片上的小细节。用感受多过用眼睛。",
-        "power-user-systems": "带真实状态的完整组件：命令菜单、文件树和 Dock。",
+        "power-user-systems": "带真实状态的完整组件：命令菜单、文件树、Dock，以及用于权限、补丁审阅和活动日志的智能体界面。",
         "hero-templates": "现成的 Hero 区块。首屏上一个有力的开场。",
         "landing-pages": "可以直接上线的完整落地页。滚动驱动，品牌色可替换。"
       },
@@ -2596,20 +2604,20 @@
         "plate": "图版",
         "openArchive": "打开档案",
         "headline": "没有什么会永远藏在暗处。",
-        "body": "每一个组件都实时渲染，你可以先在浏览器里调好再决定。下面这些组件就运行在本页上。完整目录只需一次点击。",
+        "body": "每一个组件都实时渲染，在你的智能体写下第一行代码之前就能调好。下面这些组件就运行在本页上。完整目录只需一次点击。",
         "cta": "浏览源码"
       }
     },
     "cookbook": {
       "eyebrow": "参考手册",
       "title": "动效秘籍",
-      "intro": "为那些你能想象、却叫不出名字的效果，找到确切的词。每一个设计师、需求文档或提示词可能用到的术语 — 只要工作台能展示它的实际运行效果，就会附上直达链接。",
+      "intro": "为那些你能想象、却叫不出名字的效果，找到确切的词。每一个你会对设计师说、写进需求文档、或交给编程智能体的术语 — 只要工作台能展示它的实际运行效果，就会附上直达链接。",
       "coverage": "已实时演示 {covered} / {total} 个术语"
     },
     "components": {
       "eyebrow": "目录",
       "title": "组件",
-      "intro": "每一个组件都是实时可调的。调校参数，分享链接，复制源码。",
+      "intro": "每一个组件都是实时可调的。调校参数，分享链接，复制源码 — 或复制给编程智能体的完整简报。",
       "aboutCategory": "关于{category} →"
     },
     "componentDetail": {
@@ -2621,7 +2629,7 @@
     "collections": {
       "eyebrow": "目录",
       "title": "合集",
-      "intro": "从 Motion Garden 目录中精选出的切片 — 按分类、按技术、按动画库划分。每个合集都由注册表实时计算生成，因此永远不会与其收录的组件产生偏差。",
+      "intro": "从 Motion Garden 目录中精选出的切片 — 按分类、按技术、按动画库划分。每个合集都由注册表实时计算生成，因此永远不会与其收录的组件产生偏差。当你需要的是一整组组件而非单个组件时，把智能体指向一个合集即可。",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "本合集包含",
       "theTerms": "相关术语",
@@ -2633,7 +2641,7 @@
     },
     "notFound": {
       "title": "此处暗影中空无一物",
-      "body": "该页面不在工作台上。目录中共有 {count} 个组件 — 每一个都实时可用、可调校，随时可复制。",
+      "body": "该页面不在工作台上。目录中共有 {count} 个组件 — 每一个都实时可用、可调校，随时可交给你的智能体。",
       "recovery": "返回途径",
       "browseAll": "浏览全部组件",
       "cookbook": "动效秘籍",

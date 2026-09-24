@@ -53,15 +53,16 @@ export function entryTitle(entry: ComponentEntry): string {
 }
 
 /**
- * The entry's own sentence, plus the three facts that decide whether a developer
- * clicks: it's live, it's tunable, and the source is there.
+ * The entry's own sentence, plus the facts that decide whether a developer
+ * clicks: it's live, it's tunable, and the source (and a brief for their coding
+ * agent) is there.
  */
 export function entryDescription(entry: ComponentEntry): string {
 	const props = entry.props.length;
 	const tail =
 		props > 0
-			? `Live preview, ${props} tunable props, source you can copy.`
-			: "Live preview and source you can copy.";
+			? `Live preview, ${props} tunable props, source and a coding-agent brief you can copy.`
+			: "Live preview, source and a coding-agent brief you can copy.";
 	return `${entry.description} ${tail}`;
 }
 

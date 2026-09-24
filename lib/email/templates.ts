@@ -17,11 +17,11 @@ export function welcomeEmail(args: { name: string | null }): Built {
     subject: "Welcome to Motion Garden",
     html: renderShell({
       title: "Welcome to Motion Garden",
-      preheader: "Preview live, dial in the parameters, copy the source.",
+      preheader: "Preview live, dial in the parameters, hand it to your agent.",
       marketing: true,
       bodyHtml:
         h1(`Welcome to ${accent("Motion Garden")}`) +
-        p(`Hi ${greeting(args.name)}, you're in. Motion Garden is a tunable gallery of animation-forward React components — preview them live, dial in the parameters, and copy the source straight into your project.`) +
+        p(`Hi ${greeting(args.name)}, you're in. Motion Garden is a tunable gallery of animation-forward React components — preview them live, dial in the parameters, then copy the source or hand your coding agent the full brief in one click.`) +
         p("Free components are open right now. Go Pro to unlock the full source on every Pro specimen — the Power-User Systems, the hero templates, and more.") +
         note("Tip: hit any component, open the Controls panel, and make it yours before you copy."),
       cta: { label: "Browse components", href: `${SITE_URL}/components` },
@@ -29,7 +29,7 @@ export function welcomeEmail(args: { name: string | null }): Built {
     text: [
       "Welcome to Motion Garden",
       "",
-      `Hi ${greeting(args.name)}, you're in. Motion Garden is a tunable gallery of animation-forward React components — preview them live, dial in the parameters, and copy the source straight into your project.`,
+      `Hi ${greeting(args.name)}, you're in. Motion Garden is a tunable gallery of animation-forward React components — preview them live, dial in the parameters, then copy the source or hand your coding agent the full brief in one click.`,
       "",
       "Free components are open right now. Go Pro to unlock the full source on every Pro specimen — the Power-User Systems, the hero templates, and more.",
       "",

@@ -81,6 +81,12 @@ export interface GrowPanelProps {
   role?: "dialog" | "alertdialog";
   "aria-label"?: string;
   "aria-describedby"?: string;
+  /**
+   * Stacking base: backdrop at `layer`, panel at `layer + 1`. Omit for the
+   * shell default (z-40/z-50); pass a higher value to clear fixed chrome that
+   * sits above that, e.g. the landing header at z-99.
+   */
+  layer?: number;
 }
 
 export function GrowPanel({
@@ -102,6 +108,7 @@ export function GrowPanel({
   role = "dialog",
   "aria-label": ariaLabel,
   "aria-describedby": ariaDescribedby,
+  layer,
 }: GrowPanelProps) {
   const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -210,12 +217,16 @@ export function GrowPanel({
                     blurBackdrop && "backdrop-blur-xs",
                   ),
               )}
+              style={layer === undefined ? undefined : { zIndex: layer }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => onOpenChange(false)}
             />
-            <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div
+              className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4"
+              style={layer === undefined ? undefined : { zIndex: layer + 1 }}
+            >
               <motion.div
                 ref={containerRef}
                 initial={growFrom ?? fade.initial}

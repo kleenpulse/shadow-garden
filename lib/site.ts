@@ -10,10 +10,10 @@ export const SITE_URL = normalize(process.env.NEXT_PUBLIC_SITE_URL || FALLBACK);
 
 export const SITE_NAME = "Motion Garden";
 
-export const SITE_TAGLINE = "Animated React components, live and tunable";
+export const SITE_TAGLINE = "Animated React components, ready for your coding agent";
 
 export const SITE_DESCRIPTION =
-	"A gallery of animated React components you can tune live. Preview each one, adjust every prop, and copy the source. WebGL backgrounds, text animations, micro-interactions and command menus for React and Next.js.";
+	"Animated React and Next.js components you can tune live, each with a one-click brief for your coding agent: full typed source, dependencies, props and integration rules. WebGL backgrounds, text animations, micro-interactions and command menus.";
 
 export const SITE_REPO = "https://github.com/kleenpulse/shadow-garden";
 

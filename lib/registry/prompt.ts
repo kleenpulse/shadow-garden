@@ -169,6 +169,7 @@ function buildPrompt(
       `- **Category:** ${entry.category}`,
       `- **Summary:** ${entry.description}`,
       `- **Reference:** ${SITE_URL}/components/${entry.slug}`,
+      `- **Full catalog (for you, the agent):** ${SITE_URL}/llms.txt`,
     ].join("\n"),
   );
 

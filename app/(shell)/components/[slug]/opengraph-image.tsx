@@ -141,7 +141,7 @@ export default async function Image({
 							</div>
 							{propCount > 0 && <div style={{ display: "flex" }}>{propCount} tunable props</div>}
 							<div style={{ display: "flex", color: HAIRLINE }}>·</div>
-							<div style={{ display: "flex" }}>Live preview</div>
+							<div style={{ display: "flex" }}>Live · agent brief</div>
 						</div>
 					</div>
 				</div>

@@ -8,6 +8,8 @@ import { DevFab } from "@/components/dev/DevFab";
 import JsonLd from "@/components/seo/JsonLd";
 import { siteSchema } from "@/lib/schema";
 import { catalogFilterScript } from "@/lib/catalog-filter-script";
+import { renameAnnouncementScript } from "@/lib/announcement";
+import RenameAnnouncement from "@/components/shell/RenameAnnouncement";
 import { localeInitScript } from "@/lib/i18n/config";
 import { I18nProvider } from "@/lib/i18n/provider";
 import {
@@ -62,6 +64,11 @@ export const metadata: Metadata = {
 		"react ui components",
 		"motion design system",
 		"typescript react components",
+		"ai coding agent components",
+		"claude code components",
+		"cursor react components",
+		"llm-ready react components",
+		"llms.txt",
 	],
 	openGraph: {
 		type: "website",
@@ -126,6 +133,10 @@ export default function RootLayout({
 							"try{var bare=location.pathname.indexOf('/templates/')===0;var ip=false;try{ip=sessionStorage.getItem('sg-intro-v1')==='1'}catch(e){}if(!bare&&(!ip||location.search.indexOf('sg-intro')>-1)){document.documentElement.setAttribute('data-sg-intro','')}}catch(e){}",
 					}}
 				/>
+				{/* Pre-paint: decide whether this browser knew the old name. Must run
+            before any app code writes a storage key, or a first visit would read
+            as returning on the next one. See lib/announcement.ts. */}
+				<script dangerouslySetInnerHTML={{ __html: renameAnnouncementScript() }} />
 				{/* Pre-paint: stamp <html lang> from the stored locale (sg-locale) so
             the document language is right before hydration. UI text stays
             English until the client provider resolves — same accepted flash
@@ -140,6 +151,7 @@ export default function RootLayout({
 					<I18nProvider>
 						<RouteProgress>
 							<IntroOverlay />
+							<RenameAnnouncement />
 							<NuqsAdapter>{children}</NuqsAdapter>
 							{/* {process.env.NODE_ENV === "development" && <DevFab />} */}
 						</RouteProgress>

@@ -117,7 +117,7 @@
       "cookbookLabel": "Motion cook book"
     },
     "footer": {
-      "tagline": "A library of animated React components. Preview each one live, tune every prop, and take the source.",
+      "tagline": "Animated React components, live and tunable. Every one ships with a brief your coding agent can build from.",
       "siteNavLabel": "Site",
       "nav": {
         "allComponents": "All components",
@@ -127,12 +127,12 @@
       "componentsAccent": "{count, plural, one {# component} other {# components}} · 1 accent"
     },
     "copyPrompt": {
-      "label": "Copy Prompt",
-      "ariaLabel": "Copy the AI integration prompt for {name}",
-      "copiedAnnouncement": "Prompt for {name} copied to clipboard",
+      "label": "Copy for Agent",
+      "ariaLabel": "Copy the full coding-agent brief for {name}",
+      "copiedAnnouncement": "Agent brief for {name} copied to clipboard",
       "clipboardUnavailable": "Clipboard unavailable on this connection",
       "copyFailed": "Couldn't copy the prompt",
-      "lockedAria": "The AI prompt for {name} is available on the Pro tier"
+      "lockedAria": "The agent brief for {name} is available on the Pro tier"
     },
     "successOverlay": {
       "ariaLabel": "Purchase complete",
@@ -207,6 +207,14 @@
     "growDialog": {
       "closeAria": "Close dialog"
     },
+    "renameAnnouncement": {
+      "eyebrow": "New name",
+      "title": "Shadow Garden is now Motion Garden",
+      "body": "Same components, same live previews, same code. Only the name changed.",
+      "videoLabel": "Motion Garden reveal animation",
+      "close": "Close",
+      "cta": "Got it"
+    },
     "codeTabs": {
       "sourceFilesAria": "Source files"
     },
@@ -231,7 +239,7 @@
     },
     "codePanel": {
       "lockedEyebrow": "Pro",
-      "lockedBody": "The source for {name} is available on the Pro tier. The preview stays free — subscribe to view and copy the code.",
+      "lockedBody": "The source and agent brief for {name} are available on the Pro tier. The preview stays free — subscribe to view the code or hand it to your agent.",
       "lockedCta": "View the source →"
     },
     "controlsLocked": {
@@ -249,7 +257,7 @@
       "comingSoon": "Coming soon",
       "eyebrow": "Motion Garden Pro",
       "title": "Unlock the full source of every Pro specimen",
-      "subtitle": "Previews stay free. Pro unlocks the complete, typed source for every Pro component — copy, paste, ship.",
+      "subtitle": "Previews stay free. Pro unlocks the complete, typed source and the full agent brief for every Pro component — copy, paste, ship.",
       "close": "Close",
       "bestValue": "Best value",
       "finePrintFinal": "All sales are final. Pro grants instant access to copyable source, so payments are non-refundable once processed.",
@@ -262,7 +270,7 @@
           "tagline": "Buy once, own it forever.",
           "cta": "Buy Lifetime",
           "features": {
-            "0": "Full source for every Pro component",
+            "0": "Full source + agent brief for every Pro component",
             "1": "Unlimited personal & commercial use",
             "2": "All future Pro components included",
             "3": "No recurring fees"
@@ -275,7 +283,7 @@
           "tagline": "Full access, billed monthly.",
           "cta": "Subscribe",
           "features": {
-            "0": "Full source for every Pro component",
+            "0": "Full source + agent brief for every Pro component",
             "1": "Unlimited personal & commercial use",
             "2": "New components the moment they ship",
             "3": "Cancel anytime"
@@ -2521,10 +2529,10 @@
   },
   "landing": {
     "hero": {
-      "eyebrowTagline": "Component Registry",
+      "eyebrowTagline": "Agent-ready registry",
       "headlineCount": "{count, plural, one {# instrument} other {# instruments}}.",
       "headlineBench": "One bench.",
-      "description": "Animated React components that run live on this page. Every prop is a control you can tune. Every component is in the catalog.",
+      "description": "Animated React components, live on this page, every prop a dial. One copy hands your coding agent the full brief: source, dependencies, props and integration rules.",
       "ctaCatalog": "Enter the catalog",
       "ctaCookbook": "the Cook Book",
       "readoutCube": "Field: RubiksCube · Turn {duration}ms · Scramble {count}",
@@ -2543,7 +2551,7 @@
       "uncalibrated": "Nothing ships uncalibrated"
     },
     "footer": {
-      "tagline": "A library of animated React components. Preview each one live, tune every prop, and take the source.",
+      "tagline": "Animated React components, live and tunable. Every one ships with a brief your coding agent can build from.",
       "exhibitsAriaLabel": "Exhibits",
       "collectionsAriaLabel": "Collections",
       "fullCatalog": "Full catalog",
@@ -2554,7 +2562,7 @@
     },
     "tuning": {
       "edgesInstruction": "{mode, select, tap {Tap the edges} trace {Trace the edges} other {the edges}}",
-      "dialsDescription": "Every component in the catalog has controls like this. Tune it live, watch the props table update, and copy the code.",
+      "dialsDescription": "Every component in the catalog has controls like these. Tune it live, watch the props table update, then copy the code — or the full brief for your agent.",
       "sliders": {
         "glowRadius": "Glow radius",
         "coneSpread": "Cone spread"
@@ -2583,7 +2591,7 @@
         "backgrounds": "Full-screen animated backgrounds. They sit behind your content and set the tone.",
         "text-animations": "Text that moves: morphing headlines, counters, and scroll effects.",
         "micro-interactions": "Small touches on buttons and cards. You feel them more than you see them.",
-        "power-user-systems": "Complete widgets with real state: command menus, file trees, and docks.",
+        "power-user-systems": "Complete widgets with real state: command menus, file trees, docks, and agent UIs for permissions, patch review and activity logs.",
         "hero-templates": "Ready-made hero sections. One strong opening above the fold.",
         "landing-pages": "Full landing pages you can ship. Scroll-driven, with brand colors you can swap."
       },
@@ -2596,20 +2604,20 @@
         "plate": "Plate",
         "openArchive": "Open archive",
         "headline": "Nothing stays in the shadow.",
-        "body": "Every component renders live, so you can tune it in the browser before you commit. The pieces below run on this page. The full catalog is one click away.",
+        "body": "Every component renders live, so you can tune it before your agent writes a line. The pieces below run on this page. The full catalog is one click away.",
         "cta": "Browse the source"
       }
     },
     "cookbook": {
       "eyebrow": "Reference",
       "title": "Motion Cook Book",
-      "intro": "The exact word for the thing you can picture but can't name. Every term a designer, a brief, or a prompt might use — and wherever the bench can show you one running, a link straight to it.",
+      "intro": "The exact word for the thing you can picture but can't name. Every term you'd say to a designer, write in a brief, or give a coding agent — and wherever the bench can show you one running, a link straight to it.",
       "coverage": "{covered} of {total} terms demonstrated live"
     },
     "components": {
       "eyebrow": "Catalog",
       "title": "Components",
-      "intro": "Every component is live and tunable. Dial in the parameters, share the URL, copy the source.",
+      "intro": "Every component is live and tunable. Dial in the parameters, share the URL, copy the source — or the full brief for your coding agent.",
       "aboutCategory": "About {category} →"
     },
     "componentDetail": {
@@ -2621,7 +2629,7 @@
     "collections": {
       "eyebrow": "Catalog",
       "title": "Collections",
-      "intro": "Curated slices of the Motion Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists.",
+      "intro": "Curated slices of the Motion Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists. Point your agent at one when you need a family of components, not a single piece.",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "In This Collection",
       "theTerms": "The Terms",
@@ -2633,7 +2641,7 @@
     },
     "notFound": {
       "title": "Nothing in this shadow",
-      "body": "That page isn't on the bench. The catalog holds {count} components — every one live, tunable, and ready to copy.",
+      "body": "That page isn't on the bench. The catalog holds {count} components — every one live, tunable, and ready to hand to your agent.",
       "recovery": "Recovery",
       "browseAll": "Browse all components",
       "cookbook": "Motion Cook Book",

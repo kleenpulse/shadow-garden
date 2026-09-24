@@ -66,6 +66,11 @@ export function productSchema() {
 		operatingSystem: "Web",
 		softwareRequirements: "React 19, Next.js",
 		programmingLanguage: "TypeScript",
+		featureList: [
+			"Live, tunable previews for every component",
+			"One-click integration brief for coding agents: source, dependencies, props, rules",
+			"Machine-readable catalog index at /llms.txt",
+		],
 		publisher: { "@id": ORG_ID },
 		isPartOf: { "@id": SITE_ID },
 		license: SITE_REPO ? `${SITE_REPO}/blob/main/LICENSE` : undefined,

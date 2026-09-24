@@ -117,7 +117,7 @@
       "cookbookLabel": "Recetario de movimiento"
     },
     "footer": {
-      "tagline": "Una biblioteca de componentes React animados. Previsualiza cada uno en vivo, ajusta cada prop y llévate el código fuente.",
+      "tagline": "Componentes React animados, en vivo y ajustables. Cada uno incluye un brief a partir del cual tu agente de código puede construir.",
       "siteNavLabel": "Sitio",
       "nav": {
         "allComponents": "Todos los componentes",
@@ -127,12 +127,12 @@
       "componentsAccent": "{count, plural, one {# componente} other {# componentes}} · 1 acento"
     },
     "copyPrompt": {
-      "label": "Copiar prompt",
-      "ariaLabel": "Copiar el prompt de integración de IA para {name}",
-      "copiedAnnouncement": "Prompt de {name} copiado al portapapeles",
+      "label": "Copiar para agente",
+      "ariaLabel": "Copiar el brief completo para agentes de código de {name}",
+      "copiedAnnouncement": "Brief para agente de {name} copiado al portapapeles",
       "clipboardUnavailable": "Portapapeles no disponible en esta conexión",
       "copyFailed": "No se pudo copiar el prompt",
-      "lockedAria": "El prompt de IA de {name} está disponible en el nivel Pro"
+      "lockedAria": "El brief para agente de {name} está disponible en el nivel Pro"
     },
     "successOverlay": {
       "ariaLabel": "Compra completada",
@@ -207,6 +207,14 @@
     "growDialog": {
       "closeAria": "Cerrar diálogo"
     },
+    "renameAnnouncement": {
+      "eyebrow": "Nuevo nombre",
+      "title": "Shadow Garden ahora es Motion Garden",
+      "body": "Los mismos componentes, las mismas vistas previas en vivo, el mismo código. Solo cambió el nombre.",
+      "videoLabel": "Animación de presentación de Motion Garden",
+      "close": "Cerrar",
+      "cta": "Entendido"
+    },
     "codeTabs": {
       "sourceFilesAria": "Archivos fuente"
     },
@@ -231,7 +239,7 @@
     },
     "codePanel": {
       "lockedEyebrow": "Pro",
-      "lockedBody": "El código de {name} está disponible en el nivel Pro. La vista previa sigue gratis: suscríbete para ver y copiar el código.",
+      "lockedBody": "El código y el brief para agente de {name} están disponibles en el nivel Pro. La vista previa sigue gratis: suscríbete para ver el código o entregárselo a tu agente.",
       "lockedCta": "Ver el código →"
     },
     "controlsLocked": {
@@ -249,7 +257,7 @@
       "comingSoon": "Muy pronto",
       "eyebrow": "Motion Garden Pro",
       "title": "Desbloquea el código completo de cada espécimen Pro",
-      "subtitle": "Las vistas previas siguen gratis. Pro desbloquea el código completo y tipado de cada componente Pro: copia, pega, publica.",
+      "subtitle": "Las vistas previas siguen gratis. Pro desbloquea el código completo y tipado, y el brief para agente, de cada componente Pro: copia, pega, publica.",
       "close": "Cerrar",
       "bestValue": "Mejor valor",
       "finePrintFinal": "Todas las ventas son definitivas. Pro da acceso instantáneo a código copiable, así que los pagos no son reembolsables una vez procesados.",
@@ -262,7 +270,7 @@
           "tagline": "Compra una vez, tuyo para siempre.",
           "cta": "Comprar De por vida",
           "features": {
-            "0": "Código completo de cada componente Pro",
+            "0": "Código completo + brief para agente de cada componente Pro",
             "1": "Uso personal y comercial ilimitado",
             "2": "Incluye todos los futuros componentes Pro",
             "3": "Sin cuotas recurrentes"
@@ -275,7 +283,7 @@
           "tagline": "Acceso completo, facturado mensualmente.",
           "cta": "Suscribirse",
           "features": {
-            "0": "Código completo de cada componente Pro",
+            "0": "Código completo + brief para agente de cada componente Pro",
             "1": "Uso personal y comercial ilimitado",
             "2": "Componentes nuevos en cuanto salen",
             "3": "Cancela cuando quieras"
@@ -2521,10 +2529,10 @@
   },
   "landing": {
     "hero": {
-      "eyebrowTagline": "Registro de Componentes",
+      "eyebrowTagline": "Registro listo para agentes",
       "headlineCount": "{count, plural, one {# instrumento} other {# instrumentos}}.",
       "headlineBench": "Un banco.",
-      "description": "Componentes de React animados que corren en vivo en esta página. Cada prop es un control que puedes ajustar. Cada componente está en el catálogo.",
+      "description": "Componentes de React animados, en vivo en esta página, cada prop un control. Una sola copia le entrega a tu agente de código el brief completo: código fuente, dependencias, props y reglas de integración.",
       "ctaCatalog": "Entra al catálogo",
       "ctaCookbook": "el Recetario",
       "readoutCube": "Campo: RubiksCube · Giro {duration}ms · Scramble {count}",
@@ -2543,7 +2551,7 @@
       "uncalibrated": "Nada se envía sin calibrar"
     },
     "footer": {
-      "tagline": "Una biblioteca de componentes React animados. Previsualiza cada uno en vivo, ajusta cada prop y llévate el código fuente.",
+      "tagline": "Componentes React animados, en vivo y ajustables. Cada uno incluye un brief a partir del cual tu agente de código puede construir.",
       "exhibitsAriaLabel": "Exhibiciones",
       "collectionsAriaLabel": "Colecciones",
       "fullCatalog": "Catálogo completo",
@@ -2554,7 +2562,7 @@
     },
     "tuning": {
       "edgesInstruction": "{mode, select, tap {Toca los bordes} trace {Traza los bordes} other {los bordes}}",
-      "dialsDescription": "Cada componente del catálogo tiene controles como estos. Ajústalo en vivo, mira cómo se actualiza la tabla de props y copia el código.",
+      "dialsDescription": "Cada componente del catálogo tiene controles como estos. Ajústalo en vivo, mira cómo se actualiza la tabla de props y copia el código, o el brief completo para tu agente.",
       "sliders": {
         "glowRadius": "Radio del resplandor",
         "coneSpread": "Dispersión del cono"
@@ -2583,7 +2591,7 @@
         "backgrounds": "Fondos animados a pantalla completa. Se colocan detrás de tu contenido y marcan el tono.",
         "text-animations": "Texto que se mueve: titulares que se transforman, contadores y efectos de scroll.",
         "micro-interactions": "Pequeños detalles en botones y tarjetas. Se sienten más de lo que se ven.",
-        "power-user-systems": "Widgets completos con estado real: menús de comandos, árboles de archivos y docks.",
+        "power-user-systems": "Widgets completos con estado real: menús de comandos, árboles de archivos, docks e interfaces para agentes: permisos, revisión de parches y registros de actividad.",
         "hero-templates": "Secciones hero listas para usar. Una apertura fuerte en la parte superior de la página.",
         "landing-pages": "Páginas de aterrizaje completas listas para publicar. Guiadas por scroll, con colores de marca intercambiables."
       },
@@ -2596,20 +2604,20 @@
         "plate": "Placa",
         "openArchive": "Abrir archivo",
         "headline": "Nada permanece en la sombra.",
-        "body": "Cada componente se renderiza en vivo, así que puedes ajustarlo en el navegador antes de decidirte. Las piezas de abajo corren en esta página. El catálogo completo está a un clic.",
+        "body": "Cada componente se renderiza en vivo, así que puedes ajustarlo antes de que tu agente escriba una sola línea. Las piezas de abajo corren en esta página. El catálogo completo está a un clic.",
         "cta": "Explorar el código fuente"
       }
     },
     "cookbook": {
       "eyebrow": "Referencia",
       "title": "Recetario de Movimiento",
-      "intro": "La palabra exacta para eso que puedes imaginar pero no nombrar. Cada término que un diseñador, un brief o un prompt podría usar, y dondequiera que el banco pueda mostrarte uno en funcionamiento, un enlace directo hacia él.",
+      "intro": "La palabra exacta para eso que puedes imaginar pero no nombrar. Cada término que le dirías a un diseñador, escribirías en un brief o le darías a un agente de código, y dondequiera que el banco pueda mostrarte uno en funcionamiento, un enlace directo hacia él.",
       "coverage": "{covered} de {total} términos demostrados en vivo"
     },
     "components": {
       "eyebrow": "Catálogo",
       "title": "Componentes",
-      "intro": "Cada componente está en vivo y es ajustable. Configura los parámetros, comparte la URL, copia el código fuente.",
+      "intro": "Cada componente está en vivo y es ajustable. Configura los parámetros, comparte la URL, copia el código fuente, o el brief completo para tu agente de código.",
       "aboutCategory": "Sobre {category} →"
     },
     "componentDetail": {
@@ -2621,7 +2629,7 @@
     "collections": {
       "eyebrow": "Catálogo",
       "title": "Colecciones",
-      "intro": "Cortes curados del catálogo de Motion Garden: por categoría, por técnica y por librería de animación. Cada colección se calcula a partir del registro, así que nunca se desalinea de los componentes que enumera.",
+      "intro": "Cortes curados del catálogo de Motion Garden: por categoría, por técnica y por librería de animación. Cada colección se calcula a partir del registro, así que nunca se desalinea de los componentes que enumera. Dirige a tu agente a una cuando necesites una familia de componentes, no una sola pieza.",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "En esta colección",
       "theTerms": "Los términos",
@@ -2633,7 +2641,7 @@
     },
     "notFound": {
       "title": "Nada en esta sombra",
-      "body": "Esa página no está en el banco. El catálogo contiene {count} componentes, todos en vivo, ajustables y listos para copiar.",
+      "body": "Esa página no está en el banco. El catálogo contiene {count} componentes, todos en vivo, ajustables y listos para entregar a tu agente.",
       "recovery": "Recuperación",
       "browseAll": "Explorar todos los componentes",
       "cookbook": "Recetario de Movimiento",
