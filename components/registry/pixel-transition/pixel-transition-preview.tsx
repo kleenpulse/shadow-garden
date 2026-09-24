@@ -19,7 +19,7 @@ export default function PixelTransitionPreview({ values }: PreviewProps) {
         }
         secondContent={
           <div className="flex h-full w-full items-center justify-center bg-accent font-display text-sm uppercase tracking-widest text-on-accent">
-            Shadow Garden
+            Motion Garden
           </div>
         }
       />

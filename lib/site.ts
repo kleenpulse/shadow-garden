@@ -8,7 +8,7 @@ function normalize(url: string): string {
 
 export const SITE_URL = normalize(process.env.NEXT_PUBLIC_SITE_URL || FALLBACK);
 
-export const SITE_NAME = "Shadow Garden";
+export const SITE_NAME = "Motion Garden";
 
 export const SITE_TAGLINE = "Animated React components, live and tunable";
 

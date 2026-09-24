@@ -68,7 +68,7 @@
           "title": "分享想法",
           "blurb": "提出功能建议或改进方向",
           "prompt": "你的想法",
-          "placeholder": "怎样能让 Shadow Garden 变得更好？"
+          "placeholder": "怎样能让 Motion Garden 变得更好？"
         },
         "other": {
           "title": "常规反馈",
@@ -138,7 +138,7 @@
       "ariaLabel": "购买完成",
       "kicker": "欢迎来到暗影之中",
       "title": "此刻，你即是那位实力者。",
-      "body": "购买已完成。Shadow Garden 的全部武库现已听你调遣。",
+      "body": "购买已完成。Motion Garden 的全部武库现已听你调遣。",
       "cta": "步入暗影"
     },
     "favorites": {
@@ -245,9 +245,9 @@
       "cta": "查看 props →"
     },
     "pricingModal": {
-      "ariaLabel": "升级到 Shadow Garden Pro",
+      "ariaLabel": "升级到 Motion Garden Pro",
       "comingSoon": "即将推出",
-      "eyebrow": "Shadow Garden Pro",
+      "eyebrow": "Motion Garden Pro",
       "title": "解锁每个 Pro 样本的完整源码",
       "subtitle": "预览始终免费。Pro 解锁每个 Pro 组件的完整类型化源码 — 复制、粘贴、上线。",
       "close": "关闭",
@@ -2621,7 +2621,7 @@
     "collections": {
       "eyebrow": "目录",
       "title": "合集",
-      "intro": "从 Shadow Garden 目录中精选出的切片 — 按分类、按技术、按动画库划分。每个合集都由注册表实时计算生成，因此永远不会与其收录的组件产生偏差。",
+      "intro": "从 Motion Garden 目录中精选出的切片 — 按分类、按技术、按动画库划分。每个合集都由注册表实时计算生成，因此永远不会与其收录的组件产生偏差。",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "本合集包含",
       "theTerms": "相关术语",

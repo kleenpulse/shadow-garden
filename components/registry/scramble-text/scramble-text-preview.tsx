@@ -3,7 +3,7 @@
 import type { PreviewProps } from "@/lib/registry/types";
 import ScrambleText from "./scramble-text";
 
-const DEMO_TEXT = "SHADOW GARDEN";
+const DEMO_TEXT = "MOTION GARDEN";
 
 export default function ScrambleTextPreview({
 	values,

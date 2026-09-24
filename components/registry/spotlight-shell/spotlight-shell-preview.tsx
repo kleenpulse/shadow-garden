@@ -9,7 +9,7 @@ export default function SpotlightShellPreview({ values }: PreviewProps) {
       <SpotlightShell accentColor={values.accentColor as string} className="w-72">
         <div className="flex h-48 flex-col justify-end p-5">
           <span className="font-display text-sm uppercase tracking-widest text-ink">
-            Shadow Garden
+            Motion Garden
           </span>
           <span className="mt-1 font-sans text-xs text-ink-dim">
             Tilt, glow, and shimmer on hover

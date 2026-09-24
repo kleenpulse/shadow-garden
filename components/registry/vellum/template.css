@@ -3,7 +3,7 @@
  *
  * Every selector in this file is scoped to [data-template="vellum"] (SPEC §V56).
  * That is not a style preference: a template renders inside a host page — the
- * Shadow Garden bench, a Storybook, whatever you drop it into — and a stylesheet
+ * Motion Garden bench, a Storybook, whatever you drop it into — and a stylesheet
  * that declares `body` or `::selection` globally repaints that host. Scoped, it
  * can only ever touch itself.
  *

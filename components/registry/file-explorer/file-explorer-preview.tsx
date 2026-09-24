@@ -52,7 +52,7 @@ const SEED: SeedEntry[] = [
 	{
 		path: "welcome.md",
 		blob: textFile(
-			"# Shadow Garden — File Explorer\n\nDrop images or videos anywhere to upload.\nThey persist across reloads. Try the grid/list toggle, sort, search,\nnew folder, drag-onto-folder, cut/paste, and the detail preview.\n",
+			"# Motion Garden — File Explorer\n\nDrop images or videos anywhere to upload.\nThey persist across reloads. Try the grid/list toggle, sort, search,\nnew folder, drag-onto-folder, cut/paste, and the detail preview.\n",
 			"text/markdown",
 		),
 	},

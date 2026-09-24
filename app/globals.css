@@ -9,7 +9,7 @@
 @custom-variant hero-scroll (&:where(html[data-sg-hero="scroll"] *));
 
 /*
-  Shadow Garden — an instrument-bench identity.
+  Motion Garden — an instrument-bench identity.
   Graphite chrome, one Amethyst accent. The live component previews supply all
   the real color; the shell stays chromatically quiet. Dark is the native
   identity; a light "lab bench" theme slots in via the runtime tokens below.
@@ -352,8 +352,8 @@ html[data-sg-intro] {
 	overflow: hidden;
 	overflow: clip;
 }
-/* Wordmark scale: Geist bold uppercase "SHADOWGARDEN" spans ~8.8× font-size
-   (measured) → ~86vw on desktop, ~95vw on phones. */
+/* Wordmark scale: Geist bold uppercase "MOTIONGARDEN" spans ~8.5× font-size
+   (measured) → ~83vw on desktop, ~90vw on phones. */
 #sg-intro-word {
 	font-size: clamp(2.25rem, 9.8vw, 8.5rem);
 }

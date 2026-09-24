@@ -40,7 +40,7 @@ export default function MarqueeVelocityPreview({
 						SCROLL — VELOCITY DRIVES THE DRIFT
 					</span>
 					<MarqueeVelocity velocity={velocity} {...shared}>
-						<Row label="SHADOW GARDEN" />
+						<Row label="MOTION GARDEN" />
 					</MarqueeVelocity>
 					<MarqueeVelocity velocity={-velocity} {...shared}>
 						<Row label="ATOMIC" />

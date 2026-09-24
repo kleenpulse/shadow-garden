@@ -1,6 +1,6 @@
 // Shell-only display helper. Deliberately NOT in lib/utils.ts: that file ships to
 // customers as the `util` variant behind every `cn` import (§V41), and a
-// PascalCase splitter for our own catalog headers is Shadow Garden internals — it
+// PascalCase splitter for our own catalog headers is Motion Garden internals — it
 // would paste into a buyer's project as dead code they have to reason about.
 
 /** Registry names are PascalCase ("MarqueeVelocity"); uppercase display headers

@@ -14,7 +14,7 @@ export default function PasscodePreview({
     <div className="flex h-full w-full flex-col items-center justify-center gap-6 px-6">
       <p className="text-center font-sans text-[13px] text-ink-dim">
         We sent a code to{" "}
-        <span className="text-ink">operator@shadow-garden.dev</span>
+        <span className="text-ink">operator@motion-garden.dev</span>
       </p>
 
       <Passcode

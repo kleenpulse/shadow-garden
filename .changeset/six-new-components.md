@@ -1,5 +1,5 @@
 ---
-"shadow-garden": minor
+"motion-garden": minor
 ---
 
 Six new components, taking the catalog to 82.

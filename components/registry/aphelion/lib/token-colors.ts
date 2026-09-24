@@ -1,7 +1,7 @@
 // Bridge from the template's CSS tokens to shader uniforms.
 //
 // The host writes --sg-accent / --sg-bg onto the [data-template] wrapper (and
-// can rewrite them live, without a reload — the Shadow Garden bench does this
+// can rewrite them live, without a reload — the Motion Garden bench does this
 // on every color drag). CSS picks the change up for free; the WebGPU canvases
 // do not, because a uniform is not a var(). This watcher closes that gap: it
 // resolves the template's --accent and --background to linear-ish RGB floats

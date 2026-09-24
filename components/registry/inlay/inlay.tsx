@@ -181,7 +181,7 @@ void main() {
 
 const Inlay = memo(
   ({
-    text = "SHADOW GARDEN",
+    text = "MOTION GARDEN",
     material = "molten",
     flowSpeed = 0.4,
     scale = 1.6,

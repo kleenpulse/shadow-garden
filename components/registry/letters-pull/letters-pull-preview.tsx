@@ -22,7 +22,7 @@ export default function LettersPullPreview({
 		<div className="relative flex h-full w-full items-center justify-center">
 			<LettersPull
 				key={replayKey}
-				text="SHADOW GARDEN"
+				text="MOTION GARDEN"
 				className="font-display text-2xl tracking-tight text-ink md:text-5xl"
 				duration={values.duration as number}
 				delay={values.delay as number}

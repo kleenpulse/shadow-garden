@@ -68,7 +68,7 @@
           "title": "Partager une idée",
           "blurb": "Suggérer une fonctionnalité ou une amélioration",
           "prompt": "Votre idée",
-          "placeholder": "Qu’est-ce qui améliorerait Shadow Garden ?"
+          "placeholder": "Qu’est-ce qui améliorerait Motion Garden ?"
         },
         "other": {
           "title": "Retour général",
@@ -138,7 +138,7 @@
       "ariaLabel": "Achat terminé",
       "kicker": "Bienvenue dans les ombres",
       "title": "L’éminence vous appartient.",
-      "body": "Votre achat est finalisé. Tout l’arsenal du Shadow Garden répond désormais à vos ordres.",
+      "body": "Votre achat est finalisé. Tout l’arsenal du Motion Garden répond désormais à vos ordres.",
       "cta": "Entrer dans les ombres"
     },
     "favorites": {
@@ -245,9 +245,9 @@
       "cta": "Voir les props →"
     },
     "pricingModal": {
-      "ariaLabel": "Passer à Shadow Garden Pro",
+      "ariaLabel": "Passer à Motion Garden Pro",
       "comingSoon": "Bientôt disponible",
-      "eyebrow": "Shadow Garden Pro",
+      "eyebrow": "Motion Garden Pro",
       "title": "Débloquez le code complet de chaque spécimen Pro",
       "subtitle": "Les aperçus restent gratuits. Pro débloque le code complet et typé de chaque composant Pro — copiez, collez, livrez.",
       "close": "Fermer",
@@ -2621,7 +2621,7 @@
     "collections": {
       "eyebrow": "Catalogue",
       "title": "Collections",
-      "intro": "Des tranches sélectionnées du catalogue Shadow Garden — par catégorie, par technique et par bibliothèque d’animation. Chaque collection est calculée à partir du registre, si bien qu’elle ne dévie jamais des composants qu’elle liste.",
+      "intro": "Des tranches sélectionnées du catalogue Motion Garden — par catégorie, par technique et par bibliothèque d’animation. Chaque collection est calculée à partir du registre, si bien qu’elle ne dévie jamais des composants qu’elle liste.",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "Dans cette collection",
       "theTerms": "Les termes",

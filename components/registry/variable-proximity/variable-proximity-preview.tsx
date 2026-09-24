@@ -18,7 +18,7 @@ export default function VariableProximityPreview({
       className="flex h-full w-full items-center justify-center p-8"
     >
       <VariableProximity
-        label="Move your cursor near the Shadow Garden"
+        label="Move your cursor near the Motion Garden"
         fromFontVariationSettings="'wght' 100"
         toFontVariationSettings="'wght' 900"
         containerRef={containerRef}

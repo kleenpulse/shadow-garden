@@ -35,7 +35,7 @@ export function logError(
 	if (process.env.NODE_ENV === "production") {
 		sendToMonitoring(log);
 	} else {
-		console.error(`[Shadow Garden] ${message}`, {
+		console.error(`[Motion Garden] ${message}`, {
 			type: log.errorType,
 			message: log.message,
 			stack: log.stack,

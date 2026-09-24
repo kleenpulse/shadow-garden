@@ -4,7 +4,7 @@ import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 
 import { cn } from "@/lib/utils";
 
-// shadcn/ui Tooltip (Base UI variant), restyled to Shadow Garden bench tokens:
+// shadcn/ui Tooltip (Base UI variant), restyled to Motion Garden bench tokens:
 // graphite panel, a hairline border, mono readout ink. Base UI drives behavior
 // and a11y; the class strings are ours. Note the Base UI dialect — `delay` on
 // the Provider (not `delayDuration`), `data-starting-style`/`data-ending-style`

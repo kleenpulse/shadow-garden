@@ -69,7 +69,7 @@ export function renderShell(opts: ShellOptions): string {
             ${cta ? ctaButton(cta) : ""}
           </td></tr>
           <tr><td style="padding:20px 32px 26px;border-top:1px solid ${BORDER};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:${INK_DIM};">
-            Shadow Garden — a tunable gallery of animation-forward React components.${manageLine}
+            Motion Garden — a tunable gallery of animation-forward React components.${manageLine}
           </td></tr>
         </table>
       </td></tr>

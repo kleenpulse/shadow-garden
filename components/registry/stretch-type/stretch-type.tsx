@@ -63,7 +63,7 @@ export interface StretchTypeProps {
 }
 
 export default function StretchType({
-  text = "SHADOW GARDEN",
+  text = "MOTION GARDEN",
   className,
   stretch = 0.55,
   skew = 12,

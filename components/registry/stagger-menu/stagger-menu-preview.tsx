@@ -15,7 +15,7 @@ export default function StaggerMenuPreview({
 			{/* Backdrop content so the reveal visibly covers something. */}
 			<div className="flex h-full w-full flex-col items-center justify-center gap-3">
 				<span className="font-display text-2xl tracking-tight text-white/25 md:text-4xl">
-					SHADOW GARDEN
+					MOTION GARDEN
 				</span>
 				<span className="font-display text-[10px] uppercase tracking-[0.28em] text-white/20">
 					Open the menu — the circle blooms over this

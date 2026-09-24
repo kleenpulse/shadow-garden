@@ -17,7 +17,7 @@ export default function RedactPreview({ values, reducedMotion }: PreviewProps) {
         </span>
 
         <p className="mb-4 font-display text-[10px] tracking-[0.3em] text-ink-mute uppercase">
-          Memorandum · Shadow Garden · Eyes Only
+          Memorandum · Motion Garden · Eyes Only
         </p>
 
         <Redact

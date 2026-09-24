@@ -1,5 +1,5 @@
 // Adapted from React Bits (https://reactbits.dev) - MIT licensed.
-// Restyled and re-tooled for the Shadow Garden bench.
+// Restyled and re-tooled for the Motion Garden bench.
 'use client'
 
 import { useEffect, useRef } from 'react'

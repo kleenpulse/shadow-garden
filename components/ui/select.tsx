@@ -6,7 +6,7 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-// shadcn/ui Select (new-york), restyled to Shadow Garden bench tokens: graphite
+// shadcn/ui Select (new-york), restyled to Motion Garden bench tokens: graphite
 // surfaces, hairline borders, an amethyst highlight. Radix drives behavior and
 // a11y; the class strings are ours so it reads as a native bench control.
 const Select = SelectPrimitive.Root;

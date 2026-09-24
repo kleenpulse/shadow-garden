@@ -68,7 +68,7 @@
           "title": "アイデアを共有",
           "blurb": "機能や改善を提案する",
           "prompt": "あなたのアイデア",
-          "placeholder": "Shadow Garden をより良くするものは何ですか?"
+          "placeholder": "Motion Garden をより良くするものは何ですか?"
         },
         "other": {
           "title": "一般的なフィードバック",
@@ -138,7 +138,7 @@
       "ariaLabel": "購入完了",
       "kicker": "影の世界へようこそ",
       "title": "至高はあなたのものです。",
-      "body": "購入が完了しました。Shadow Garden の全兵装が今、あなたの意のままです。",
+      "body": "購入が完了しました。Motion Garden の全兵装が今、あなたの意のままです。",
       "cta": "影の中へ"
     },
     "favorites": {
@@ -245,9 +245,9 @@
       "cta": "propsを見る →"
     },
     "pricingModal": {
-      "ariaLabel": "Shadow Garden Proへアップグレード",
+      "ariaLabel": "Motion Garden Proへアップグレード",
       "comingSoon": "近日公開",
-      "eyebrow": "Shadow Garden Pro",
+      "eyebrow": "Motion Garden Pro",
       "title": "すべてのPro標本のソースを解錠",
       "subtitle": "プレビューは無料のまま。Proは全Proコンポーネントの完全な型付きソースを解錠します — コピーして、貼って、出荷。",
       "close": "閉じる",
@@ -2621,7 +2621,7 @@
     "collections": {
       "eyebrow": "カタログ",
       "title": "コレクション",
-      "intro": "Shadow Garden カタログから厳選された切り口です — カテゴリ別、テクニック別、アニメーションライブラリ別。各コレクションはレジストリから動的に生成されるため、掲載しているコンポーネントとずれることは決してありません。",
+      "intro": "Motion Garden カタログから厳選された切り口です — カテゴリ別、テクニック別、アニメーションライブラリ別。各コレクションはレジストリから動的に生成されるため、掲載しているコンポーネントとずれることは決してありません。",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "このコレクションの内容",
       "theTerms": "用語",

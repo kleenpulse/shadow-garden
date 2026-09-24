@@ -393,7 +393,7 @@ export default function LandingHero({
 					variants={rise}
 					className="font-display text-[11px] uppercase tracking-[0.34em] text-accent"
 				>
-					Shadow Garden · {t("eyebrowTagline")}
+					Motion Garden · {t("eyebrowTagline")}
 				</motion.p>
 
 				{/* Self-inverting headline. `color: white` under difference resolves to

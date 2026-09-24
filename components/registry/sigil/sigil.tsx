@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 // IntersectionObserver arms it, CSS draws it.
 export interface SigilProps {
   className?: string;
-  /** Path `d` strings, drawn in order. Defaults to the Shadow Garden crest. */
+  /** Path `d` strings, drawn in order. Defaults to the Motion Garden crest. */
   paths?: string[];
   /** viewBox of the supplied paths. */
   viewBox?: string;

@@ -12,7 +12,7 @@
  * Delivery base, including the cloud name — e.g.
  * `https://res.cloudinary.com/shadow-garden`.
  *
- * Falls back to the Shadow Garden account so a freshly-pasted template renders
+ * Falls back to the Motion Garden account so a freshly-pasted template renders
  * before the buyer has configured anything. Point it at your own cloud, re-upload
  * the assets, and nothing else in the template changes.
  */

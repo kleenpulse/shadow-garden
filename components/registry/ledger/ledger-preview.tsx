@@ -29,7 +29,7 @@ export default function LedgerPreview({ values, reducedMotion, paused }: Preview
     <div className="flex h-full w-full items-center justify-center p-6">
       <div className="flex h-full max-h-[26rem] w-full max-w-2xl flex-col gap-3">
         <p className="shrink-0 font-display text-[10px] tracking-[0.28em] text-ink-mute uppercase">
-          shadow garden · activity ledger
+          motion garden · activity ledger
         </p>
         <div className="min-h-0 flex-1">
           <Ledger

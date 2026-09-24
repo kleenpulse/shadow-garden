@@ -1,10 +1,12 @@
 @AGENTS.md
 
-# Shadow Garden
+# Motion Garden
 
 Always check if ReadMe.md needs updating before committing
 
-Animation-forward React component showcase (name from _The Eminence in the Shadow_; no longer open source). Two-pane docs shell: sidebar catalog + workspace — Preview/Code tabs, tunable Controls panel underneath, install block, props table. A paid Pro tier exists (see the entitlement bullet under Registry-driven).
+Animation-forward React component showcase (rebranded from Shadow Garden 2026-09-24; demo copy keeps its _Eminence in the Shadow_ lore; no longer open source). Two-pane docs shell: sidebar catalog + workspace — Preview/Code tabs, tunable Controls panel underneath, install block, props table. A paid Pro tier exists (see the entitlement bullet under Registry-driven).
+
+The brand is Motion Garden, but some names still say `shadow-garden` **on purpose**: the repo/dir, GitHub `kleenpulse/shadow-garden` URLs (incl. `.changeset/config.json`), the `shadow-garden-ui.vercel.app` fallback, the `res.cloudinary.com/shadow-garden` CDN, `SHADOW_GARDEN_PRO`, and the internal `sg` prefix (storage keys, cookies, `--sg-*`, ids). Renaming a URL breaks it until the external resource is renamed too, and renaming a storage key wipes visitors' favorites. Only rename them when the matching external resource moves.
 
 ## Stack — fixed, don't swap
 

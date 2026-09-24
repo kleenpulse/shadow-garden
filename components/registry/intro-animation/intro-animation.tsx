@@ -95,7 +95,7 @@ interface WordMetrics {
 
 const IntroAnimation = memo(
   ({
-    text = "SHADOWGARDEN",
+    text = "MOTIONGARDEN",
     sweepDuration = 1.9,
     grainDensity = 2500,
     windSpeed = 1,
@@ -479,7 +479,7 @@ const IntroAnimation = memo(
           <span
             className="font-sans font-bold whitespace-pre tracking-[0.02em]"
             // Scaled by character count as well as container width: a fixed
-            // cqw would fit SHADOWGARDEN and overflow anything longer.
+            // cqw would fit MOTIONGARDEN and overflow anything longer.
             style={{
               fontSize: `clamp(0.75rem, ${(FILL_CQW / Math.max(1, chars.length)).toFixed(2)}cqw, 7rem)`,
             }}

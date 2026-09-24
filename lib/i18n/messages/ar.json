@@ -68,7 +68,7 @@
           "title": "مشاركة فكرة",
           "blurb": "اقترح ميزة أو تحسينًا",
           "prompt": "فكرتك",
-          "placeholder": "ما الذي قد يجعل Shadow Garden أفضل؟"
+          "placeholder": "ما الذي قد يجعل Motion Garden أفضل؟"
         },
         "other": {
           "title": "ملاحظات عامة",
@@ -138,7 +138,7 @@
       "ariaLabel": "اكتمل الشراء",
       "kicker": "مرحبًا بك في الظلال",
       "title": "السيادة أصبحت لك الآن.",
-      "body": "اكتمل شراؤك. أصبحت الترسانة الكاملة لـ Shadow Garden تحت إمرتك.",
+      "body": "اكتمل شراؤك. أصبحت الترسانة الكاملة لـ Motion Garden تحت إمرتك.",
       "cta": "ادخل إلى الظلال"
     },
     "favorites": {
@@ -245,9 +245,9 @@
       "cta": "عرض الـ props →"
     },
     "pricingModal": {
-      "ariaLabel": "الترقية إلى Shadow Garden Pro",
+      "ariaLabel": "الترقية إلى Motion Garden Pro",
       "comingSoon": "قريبًا",
-      "eyebrow": "Shadow Garden Pro",
+      "eyebrow": "Motion Garden Pro",
       "title": "افتح الشيفرة الكاملة لكل عيّنة Pro",
       "subtitle": "تبقى المعاينات مجانية. يفتح Pro الشيفرة الكاملة المصنّفة الأنواع لكل مكوّن Pro — انسخ والصق وأطلق.",
       "close": "إغلاق",
@@ -2621,7 +2621,7 @@
     "collections": {
       "eyebrow": "الفهرس",
       "title": "المجموعات",
-      "intro": "شرائح منتقاة من فهرس Shadow Garden — حسب الفئة، حسب التقنية، وحسب مكتبة الحركة. كل مجموعة محسوبة من السجل، فلا تنحرف أبدًا عن المكوّنات التي تسردها.",
+      "intro": "شرائح منتقاة من فهرس Motion Garden — حسب الفئة، حسب التقنية، وحسب مكتبة الحركة. كل مجموعة محسوبة من السجل، فلا تنحرف أبدًا عن المكوّنات التي تسردها.",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "في هذه المجموعة",
       "theTerms": "المصطلحات",

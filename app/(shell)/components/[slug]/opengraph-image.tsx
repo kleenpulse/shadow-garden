@@ -25,7 +25,7 @@ import { displayName } from "@/lib/display-name";
 //
 // Font notes: see app/opengraph-image.tsx.
 
-export const alt = "Shadow Garden component";
+export const alt = "Motion Garden component";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -45,7 +45,7 @@ export default async function Image({
 	const { slug } = await params;
 	const entry = getEntry(slug);
 
-	const name = entry ? displayName(entry.name) : "Shadow Garden";
+	const name = entry ? displayName(entry.name) : "Motion Garden";
 	const category = entry?.category ?? "Component Registry";
 	const description = entry?.description ?? "";
 	const propCount = entry?.props.length ?? 0;
@@ -137,7 +137,7 @@ export default async function Image({
 									color: INK,
 								}}
 							>
-								Shadow Garden
+								Motion Garden
 							</div>
 							{propCount > 0 && <div style={{ display: "flex" }}>{propCount} tunable props</div>}
 							<div style={{ display: "flex", color: HAIRLINE }}>·</div>

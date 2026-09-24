@@ -44,7 +44,7 @@ export default function LandingFooter({
 			<div className="mx-auto grid w-full max-w-7xl gap-10 px-3 py-14 sm:px-6 sm:grid-cols-[1fr_auto_auto]">
 				<div>
 					<p className="font-display text-sm uppercase tracking-[0.28em] text-ink">
-						Shadow Garden
+						Motion Garden
 					</p>
 					<p className="mt-3 max-w-sm font-sans text-xs leading-relaxed text-ink-mute">
 						{t("tagline")}

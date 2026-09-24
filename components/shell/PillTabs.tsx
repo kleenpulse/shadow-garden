@@ -39,7 +39,7 @@ const SIZE_CLASSES = {
 
 /**
  * Pill-style tab toggle with an animated sliding indicator (motion `layoutId`).
- * Styled to the Shadow Garden shell voice (hairline panel, amethyst accent,
+ * Styled to the Motion Garden shell voice (hairline panel, amethyst accent,
  * uppercase display type). Arrow keys move between tabs (roving tabIndex).
  */
 export default function PillTabs<V extends string = string>({
@@ -74,7 +74,7 @@ export default function PillTabs<V extends string = string>({
 			aria-label={ariaLabel}
 			onKeyDown={onKeyDown}
 			className={cn(
-				// Shadow Garden radius (rounded-lg) + hairline panel chrome kept as-is.
+				// Motion Garden radius (rounded-lg) + hairline panel chrome kept as-is.
 				"relative inline-flex items-center gap-1 rounded-lg bg-panel",
 				sizeClasses.track,
 				fullWidth ? "w-full" : "w-fit",

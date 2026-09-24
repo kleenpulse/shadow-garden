@@ -20,7 +20,7 @@ export const SITE_OG_IMAGE = {
 	alt: `${SITE_NAME} — ${SITE_TAGLINE}`,
 };
 
-// Shell-only, same reasoning as lib/display-name.ts: this is how Shadow Garden
+// Shell-only, same reasoning as lib/display-name.ts: this is how Motion Garden
 // describes itself to a crawler, not something a buyer pastes into their project.
 // Never import it from components/registry/.
 //
@@ -45,8 +45,8 @@ export function entryPath(entry: ComponentEntry): string {
 
 /**
  * Leads with the component, qualifies it with the thing people search for. The
- * root layout appends " — Shadow Garden", so this stays short enough that the
- * whole title survives a SERP: "Waves — React Background — Shadow Garden".
+ * root layout appends " — Motion Garden", so this stays short enough that the
+ * whole title survives a SERP: "Waves — React Background — Motion Garden".
  */
 export function entryTitle(entry: ComponentEntry): string {
 	return `${displayName(entry.name)} — React ${CATEGORY_NOUN[entry.category]}`;

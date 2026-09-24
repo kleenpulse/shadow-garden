@@ -1,9 +1,9 @@
-# Shadow Garden
+# Motion Garden
 
 [![Release](https://img.shields.io/github/v/release/kleenpulse/shadow-garden?label=release&color=8b5cf6)](https://github.com/kleenpulse/shadow-garden/releases) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Support: Buy me a coffee](https://img.shields.io/badge/support-buy%20me%20a%20coffee-FFDD00)](https://buymeacoffee.com/Vxrcel)
 
-An animation-forward React component showcase — a dark, instrument-bench docs shell for browsing, tuning, and copying production-ready motion components. The name is borrowed from _The Eminence in the Shadow_.
+An animation-forward React component showcase — a dark, instrument-bench docs shell for browsing, tuning, and copying production-ready motion components. The demo copy still nods to _The Eminence in the Shadow_, where the original name came from.
 
 Every component ships with a live preview, a Controls panel that tunes each prop in real time, the source on a Code tab, an install block, a Props API table, and a one-click AI integration prompt — all generated from a single registry entry per component, so the docs never drift.
 

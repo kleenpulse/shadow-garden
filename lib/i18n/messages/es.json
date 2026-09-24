@@ -68,7 +68,7 @@
           "title": "Comparte una idea",
           "blurb": "Sugiere una función o mejora",
           "prompt": "Tu idea",
-          "placeholder": "¿Qué haría mejor a Shadow Garden?"
+          "placeholder": "¿Qué haría mejor a Motion Garden?"
         },
         "other": {
           "title": "Comentario general",
@@ -138,7 +138,7 @@
       "ariaLabel": "Compra completada",
       "kicker": "Bienvenido a las sombras",
       "title": "La eminencia es tuya.",
-      "body": "Tu compra está completa. Todo el arsenal de Shadow Garden ahora responde ante ti.",
+      "body": "Tu compra está completa. Todo el arsenal de Motion Garden ahora responde ante ti.",
       "cta": "Entra a las sombras"
     },
     "favorites": {
@@ -245,9 +245,9 @@
       "cta": "Ver las props →"
     },
     "pricingModal": {
-      "ariaLabel": "Mejora a Shadow Garden Pro",
+      "ariaLabel": "Mejora a Motion Garden Pro",
       "comingSoon": "Muy pronto",
-      "eyebrow": "Shadow Garden Pro",
+      "eyebrow": "Motion Garden Pro",
       "title": "Desbloquea el código completo de cada espécimen Pro",
       "subtitle": "Las vistas previas siguen gratis. Pro desbloquea el código completo y tipado de cada componente Pro: copia, pega, publica.",
       "close": "Cerrar",
@@ -2621,7 +2621,7 @@
     "collections": {
       "eyebrow": "Catálogo",
       "title": "Colecciones",
-      "intro": "Cortes curados del catálogo de Shadow Garden: por categoría, por técnica y por librería de animación. Cada colección se calcula a partir del registro, así que nunca se desalinea de los componentes que enumera.",
+      "intro": "Cortes curados del catálogo de Motion Garden: por categoría, por técnica y por librería de animación. Cada colección se calcula a partir del registro, así que nunca se desalinea de los componentes que enumera.",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "En esta colección",
       "theTerms": "Los términos",

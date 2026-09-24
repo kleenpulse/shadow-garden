@@ -10,7 +10,7 @@ import { SITE_OG_IMAGE } from "@/lib/seo";
 
 const TITLE = "All Components";
 const DESCRIPTION =
-	"Browse every Shadow Garden component — WebGL backgrounds, text animations, micro-interactions and power-user systems. Each one live, tunable in the browser, and ready to copy into React or Next.js.";
+	"Browse every Motion Garden component — WebGL backgrounds, text animations, micro-interactions and power-user systems. Each one live, tunable in the browser, and ready to copy into React or Next.js.";
 
 export const metadata: Metadata = {
 	title: TITLE,

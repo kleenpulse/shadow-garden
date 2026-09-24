@@ -6,7 +6,7 @@ import { SCRAMBLE } from "@/lib/scramble";
 import { cn } from "@/lib/utils";
 
 // The living wordmark. Its DEFAULT resting state is the solid two-tone
-// "ShadowGarden" (Shadow ink, Garden accent, set tight with no space).
+// "MotionGarden" (Motion ink, Garden accent, set tight with no space).
 // Occasionally — on an idle timer or on hover/focus — it fires a typewriter
 // "burst" (forward / reverse / decode / glitch) with restrained per-char
 // flourish, then eases back to the two-tone default. After a hold, a gentle
@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 // only its opacity animates — a smooth crossfade both ways. Both layers render
 // identical per-cell markup, so the gradient aligns exactly over the glyphs.
 //
-// Contract: accessible name is always a stable "Shadow Garden" (sr-only, with a
+// Contract: accessible name is always a stable "Motion Garden" (sr-only, with a
 // space); every animated glyph is aria-hidden. Under prefers-reduced-motion it
 // stays a plain static two-tone wordmark — no shimmer, no bursts, no timers.
 // Initial render is that same static two-tone, so SSR == first client paint (no
@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 // The wordmark never mirrors: it is pinned dir="ltr" so RTL locales (ar) get
 // the same logo, not a reversed one.
 
-const TEXT = "ShadowGarden";
+const TEXT = "MotionGarden";
 const SECOND = 6; // first index of "Garden"
 const GLYPHS = [...TEXT];
 
@@ -235,7 +235,7 @@ export default function Wordmark({
 		<span
 			// The wordmark is a brand name, not translated copy, and every glyph is
 			// its own inline-block cell — under an RTL document the bidi algorithm
-			// reorders those cells and paints "NEDRAGWODAHS". Pinning the embedding
+			// reorders those cells and paints "NEDRAGNOITOM". Pinning the embedding
 			// level to ltr keeps the logo identical in Arabic. Physical left/right on
 			// the cursor below is correct for the same reason.
 			dir="ltr"
@@ -247,7 +247,7 @@ export default function Wordmark({
 			onPointerEnter={() => triggerRef.current()}
 			onFocus={() => triggerRef.current()}
 		>
-			<span className="sr-only">Shadow Garden</span>
+			<span className="sr-only">Motion Garden</span>
 			<span aria-hidden className="relative inline-block">
 				{/* Layer B — gradient shimmer overlay. Same per-cell markup as layer A
 				    so the gradient text aligns exactly; only its opacity animates. */}

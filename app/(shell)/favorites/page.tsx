@@ -4,7 +4,7 @@ import FavoritesHeader from "./_components/FavoritesHeader";
 
 export const metadata: Metadata = {
 	title: "Favorites",
-	description: "Your saved Shadow Garden components.",
+	description: "Your saved Motion Garden components.",
 	// Per-visitor and localStorage-driven, so the server HTML is an empty shell.
 	// Nothing here is the same page twice and none of it is ours to rank.
 	robots: { index: false, follow: true },

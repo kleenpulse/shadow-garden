@@ -48,7 +48,9 @@ export default function ManifestoMarquee() {
 					damping={15}
 					stiffness={650}
 					velocityMapping={{ input: [0, 800], output: [0, 14] }}
-					containerClassName="w-full"
+					// Rules and scrim stay full-bleed; the creed runs on the page's
+					// max-w-7xl column, feathered where it meets the gutter.
+					containerClassName="mx-auto w-full max-w-7xl min-[80rem]:[mask-image:linear-gradient(to_right,transparent,#000_4rem,#000_calc(100%-4rem),transparent)]"
 				>
 					<Creed />
 				</MarqueeVelocity>

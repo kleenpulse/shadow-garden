@@ -54,7 +54,7 @@ if (!CHROME) {
 
 const PORT = Number(process.env.CDP_PORT ?? 9333);
 const ORIGIN = process.env.VERIFY_ORIGIN ?? "http://localhost:3000";
-const OUT = join(tmpdir(), "shadow-garden-verify-loop");
+const OUT = join(tmpdir(), "motion-garden-verify-loop");
 mkdirSync(OUT, { recursive: true });
 
 /** Below this a PNG is a flat fill — i.e. the buffer was cleared and not redrawn. */

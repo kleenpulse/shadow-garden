@@ -159,7 +159,7 @@ function buildPrompt(
 
   sections.push(
     [
-      `# Integrate \`${entry.name}\` from Shadow Garden`,
+      `# Integrate \`${entry.name}\` from Motion Garden`,
       "",
       `You are helping me add the **${entry.name}** component to an existing project.`,
       `Everything you need is below — full source, dependencies, props and the`,

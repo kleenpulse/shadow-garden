@@ -68,7 +68,7 @@
           "title": "Share an idea",
           "blurb": "Suggest a feature or improvement",
           "prompt": "Your idea",
-          "placeholder": "What would make Shadow Garden better?"
+          "placeholder": "What would make Motion Garden better?"
         },
         "other": {
           "title": "General feedback",
@@ -138,7 +138,7 @@
       "ariaLabel": "Purchase complete",
       "kicker": "Welcome to the shadows",
       "title": "The eminence is yours.",
-      "body": "Your purchase is complete. The full arsenal of the Shadow Garden now answers to you.",
+      "body": "Your purchase is complete. The full arsenal of the Motion Garden now answers to you.",
       "cta": "Enter the shadows"
     },
     "favorites": {
@@ -245,9 +245,9 @@
       "cta": "View the props →"
     },
     "pricingModal": {
-      "ariaLabel": "Upgrade to Shadow Garden Pro",
+      "ariaLabel": "Upgrade to Motion Garden Pro",
       "comingSoon": "Coming soon",
-      "eyebrow": "Shadow Garden Pro",
+      "eyebrow": "Motion Garden Pro",
       "title": "Unlock the full source of every Pro specimen",
       "subtitle": "Previews stay free. Pro unlocks the complete, typed source for every Pro component — copy, paste, ship.",
       "close": "Close",
@@ -2621,7 +2621,7 @@
     "collections": {
       "eyebrow": "Catalog",
       "title": "Collections",
-      "intro": "Curated slices of the Shadow Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists.",
+      "intro": "Curated slices of the Motion Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists.",
       "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
       "inThisCollection": "In This Collection",
       "theTerms": "The Terms",

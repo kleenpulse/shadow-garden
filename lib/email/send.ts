@@ -27,7 +27,7 @@ export function emailConfigured(): boolean {
   return has("email");
 }
 
-const FROM = process.env.EMAIL_FROM ?? process.env.NODEMAILER_EMAIL ?? "Shadow Garden";
+const FROM = process.env.EMAIL_FROM ?? process.env.NODEMAILER_EMAIL ?? "Motion Garden";
 
 export async function sendEmail(msg: EmailMessage): Promise<SendResult> {
   if (!emailConfigured()) {

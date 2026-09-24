@@ -50,7 +50,7 @@ export default function SiteFooter() {
 					<div>
 						{/* Brand name — never translated. */}
 						<p className="font-display text-sm uppercase tracking-[0.28em] text-ink">
-							Shadow Garden
+							Motion Garden
 						</p>
 						<p className="mt-3 max-w-xs font-sans text-xs leading-relaxed text-ink-mute">
 							{t("tagline")}
@@ -108,7 +108,7 @@ export default function SiteFooter() {
 				<div className="mx-auto flex min-h-11 w-full max-w-7xl flex-wrap items-center justify-between gap-x-6 gap-y-1 px-3 py-3 font-display text-[10px] uppercase tracking-[0.22em] text-ink-mute lg:px-8">
 					<span>{t("componentsAccent", { count: registry.length })}</span>
 					{/* Brand name — never translated. */}
-					<span>Shadow Garden</span>
+					<span>Motion Garden</span>
 				</div>
 			</div>
 		</footer>

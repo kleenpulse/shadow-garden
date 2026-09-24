@@ -1,4 +1,4 @@
-# shadow-garden
+# motion-garden
 
 ## 0.2.0
 

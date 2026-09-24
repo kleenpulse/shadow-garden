@@ -40,7 +40,7 @@ interface ScrambleTextProps {
 }
 
 export default function ScrambleText({
-	text = "SHADOW GARDEN",
+	text = "MOTION GARDEN",
 	mode = "decode-on-mount",
 	charset = "symbols",
 	duration = 900,

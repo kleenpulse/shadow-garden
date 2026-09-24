@@ -4,7 +4,7 @@ import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
 
 import { cn } from "@/lib/utils";
 
-// shadcn/ui Popover (Base UI variant), restyled to Shadow Garden bench tokens —
+// shadcn/ui Popover (Base UI variant), restyled to Motion Garden bench tokens —
 // same construction as components/ui/tooltip.tsx. The Base UI dialect applies
 // here too: `data-starting-style`/`data-ending-style` for enter/exit (not
 // `data-state`) and the `--transform-origin` var set by the Positioner, so the

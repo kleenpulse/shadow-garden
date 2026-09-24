@@ -20,7 +20,7 @@ function StagePage() {
       />
       <div className="relative flex items-center justify-between">
         <span className="font-display text-[10px] tracking-[0.3em] text-ink uppercase">
-          Shadow Garden
+          Motion Garden
         </span>
         <span className="font-display text-[10px] tracking-[0.3em] text-ink-mute uppercase">
           Work · Studio · Contact
@@ -66,7 +66,7 @@ export default function IntroAnimationPreview({
       <StagePage />
       <div className="absolute inset-0">
         <IntroAnimation
-          text="SHADOWGARDEN"
+          text="MOTIONGARDEN"
           sweepDuration={values.sweepDuration as number}
           grainDensity={values.grainDensity as number}
           windSpeed={values.windSpeed as number}

@@ -23,8 +23,8 @@ import { createDustGL, GRAIN_IN, sampleWord, type DustGL } from "./dust-gl";
  * session, in full.
  */
 
-const WORD = "SHADOWGARDEN";
-const SPLIT = 6; // "SHADOW" (ink) | "GARDEN" (accent)
+const WORD = "MOTIONGARDEN";
+const SPLIT = 6; // "MOTION" (ink) | "GARDEN" (accent)
 const SESSION_KEY = "sg-intro-v1"; // must match the pre-paint script in app/layout.tsx
 const BUDGET_PER_CHAR = 2500;
 // Once-per-session — let it breathe. A decisive wind front, then a plume that
@@ -278,7 +278,7 @@ export function IntroOverlay() {
 			id="sg-intro"
 			ref={rootRef}
 			role="img"
-			aria-label="Shadow Garden"
+			aria-label="Motion Garden"
 			// display comes from globals.css (html[data-sg-intro] #sg-intro) so an
 			// already-played session never paints a single frame. touch-none: iOS
 			// rubber-band scrolling ignores overflow:hidden — block gestures at the

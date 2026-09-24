@@ -34,7 +34,7 @@ export default function LensPreview({
         <div className="flex h-full w-full flex-col justify-between gap-5 overflow-hidden bg-surface p-8">
           <div className="flex flex-col gap-5">
             <p className="font-display text-[10px] tracking-[0.32em] text-accent uppercase">
-              Shadow Garden
+              Motion Garden
             </p>
             <h2 className="font-display text-4xl leading-tight text-ink">
               Those who chase the shadows

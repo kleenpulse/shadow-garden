@@ -85,7 +85,7 @@ export default function DiffReviewPreview({ values, reducedMotion }: PreviewProp
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-6">
       <p className="font-display text-[10px] tracking-[0.28em] text-ink-mute uppercase">
-        shadow garden · patch review
+        motion garden · patch review
       </p>
 
       <div className="w-full max-w-4xl">

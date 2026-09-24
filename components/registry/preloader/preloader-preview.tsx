@@ -21,7 +21,7 @@ export default function PreloaderPreview({
 			{/* Revealed content — the fade-out has to uncover something. */}
 			<div className="flex h-full w-full items-center justify-center">
 				<span className="font-display text-2xl tracking-tight text-ink md:text-4xl">
-					SHADOW GARDEN
+					MOTION GARDEN
 				</span>
 			</div>
 			<Preloader

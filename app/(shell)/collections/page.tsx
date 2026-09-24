@@ -15,7 +15,7 @@ import CollectionsIndexClient from "./_components/collections-index-client";
 
 const TITLE = "Component Collections";
 const DESCRIPTION =
-	"Curated slices of the Shadow Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists.";
+	"Curated slices of the Motion Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists.";
 
 export const metadata: Metadata = {
 	title: TITLE,

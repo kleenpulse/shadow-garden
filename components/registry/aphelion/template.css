@@ -2,7 +2,7 @@
  * Aphelion — template tokens and base styles.
  *
  * Every selector in this file is scoped to [data-template="aphelion"] (SPEC
- * §V56). A template renders inside a host page — the Shadow Garden bench, a
+ * §V56). A template renders inside a host page — the Motion Garden bench, a
  * Storybook, whatever you drop it into — and a stylesheet that declares `body`
  * or `::selection` globally repaints that host. Scoped, it can only ever touch
  * itself.

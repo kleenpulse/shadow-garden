@@ -150,18 +150,22 @@ export default function LandingHeader() {
 			// fog. Pointer events are off on the bar and back on its two controls,
 			// so the fade never swallows clicks below it.
 			className={cn(
-				"pointer-events-none fixed inset-x-0 top-0 z-99 flex items-center justify-between px-3 py-4 transition-colors duration-300 will-change-transform dark:pb-7 dark:[mask-image:linear-gradient(to_bottom,#000_calc(100%-1.75rem),transparent)] sm:px-6 sm:ps-8",
+				"pointer-events-none fixed inset-x-0 top-0 z-99 py-4 transition-colors duration-300 will-change-transform dark:pb-7 dark:[mask-image:linear-gradient(to_bottom,#000_calc(100%-1.75rem),transparent)]",
 				scrolled
 					? "bg-surface/90 dark:bg-surface/40 backdrop-blur-xl"
 					: "bg-transparent",
 			)}
 		>
-			<Link href="/components" className="pointer-events-auto inline-flex items-baseline">
-				<Wordmark size="sm" boldSecond />
-			</Link>
-			<span className="pointer-events-auto contents">
-				<ThemeToggle />
-			</span>
+			{/* The surface stays full-bleed; the controls sit on the page's
+			    max-w-7xl column so they line up with the content below. */}
+			<div className="mx-auto flex w-full max-w-7xl items-center justify-between px-3 sm:px-6">
+				<Link href="/components" className="pointer-events-auto inline-flex items-baseline">
+					<Wordmark size="sm" boldSecond />
+				</Link>
+				<span className="pointer-events-auto contents">
+					<ThemeToggle />
+				</span>
+			</div>
 		</div>
 	);
 }

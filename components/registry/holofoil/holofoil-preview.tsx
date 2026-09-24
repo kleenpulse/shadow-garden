@@ -29,7 +29,7 @@ export default function HolofoilPreview({
       >
         <article className="h-80 w-56 bg-gradient-to-b from-bench-800 to-bench-900 p-5">
           <p className="font-display text-[10px] tracking-[0.32em] text-accent uppercase">
-            Shadow Garden
+            Motion Garden
           </p>
           <h3 className="mt-4 font-display text-2xl leading-tight text-ink">
             Shadow

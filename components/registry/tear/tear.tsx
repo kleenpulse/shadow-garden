@@ -78,7 +78,7 @@ const TicketFace = ({ ink, at }: { ink: string; at: number }) => (
           ADMIT ONE
         </p>
         <p className="mt-1.5 font-mono text-[9px] tracking-[0.24em] text-[#8b87a0] uppercase">
-          Shadow Garden · Hall C
+          Motion Garden · Hall C
         </p>
       </div>
       <p className="font-mono text-[10px] tracking-[0.18em] text-[#6e6a82]">

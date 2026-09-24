@@ -1,4 +1,4 @@
-# Contributing to Shadow Garden
+# Contributing to Motion Garden
 
 Thanks for your interest in contributing. This guide covers how the project is laid out, how to add a component, and what has to pass before a PR merges. For the design tokens, guardrails, and animation footguns, see [CONVENTIONS.md](CONVENTIONS.md).
 
@@ -95,7 +95,7 @@ bunx changeset
 
 Pick the bump (`patch` for fixes, `minor` for features, `major` for breaking changes) and write a sentence aimed at the changelog reader. Pure chores (CI, internal tooling, typos) don't need one.
 
-On merge to `main`, the Release workflow gathers pending changesets into a "Version Packages" PR. Merging that PR bumps the version, updates `CHANGELOG.md`, tags `shadow-garden@x.y.z`, and cuts a GitHub Release. Maintainers merge the version PR; contributors only ever add changesets.
+On merge to `main`, the Release workflow gathers pending changesets into a "Version Packages" PR. Merging that PR bumps the version, updates `CHANGELOG.md`, tags `motion-garden@x.y.z`, and cuts a GitHub Release. Maintainers merge the version PR; contributors only ever add changesets.
 
 ## Asking for help
 
