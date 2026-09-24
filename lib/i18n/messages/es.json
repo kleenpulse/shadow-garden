@@ -588,18 +588,18 @@
       }
     },
     "cathode": {
-      "description": "Un tubo de rayos catódicos que no muestra nada digno de verse: un haz que da la vuelta en cada borde, fósforo que persiste tras su paso, y una barra de zumbido que sube por el cristal.",
+      "description": "Un tubo de rayos catódicos ralentizado hasta que puedes verlo trabajar: el haz pinta una carta de ajuste línea a línea, y el fósforo que deja atrás se desvanece hasta que llega la siguiente pasada.",
       "props": {
-        "signal": "Qué muestra el tubo. Barrido es un único haz que se invierte en cada borde en lugar de saltar hacia atrás: un haz que reapareciera de golpe se leería como un cuadro perdido, uno que da la vuelta se lee como un mecanismo. El resto son los patrones de prueba a los que recurre un televisor cuando no hay señal.",
-        "sweepSpeed": "Velocidad del haz a través de la pantalla. En cero se detiene y el fósforo se asienta, la forma más clara de ver qué dibuja realmente la persistencia.",
-        "scanlineDensity": "Píxeles por línea de barrido. Por debajo de unos dos la rejilla supera el límite de Nyquist, y en lugar de generar aliasing en un patrón que se mueve con la ventana, la modulación se desvanece: un canvas pequeño pierde sus líneas de barrido en lugar de ganar muaré.",
-        "scanlineDepth": "Con qué fuerza las líneas de barrido y la rejilla de apertura recortan la imagen. La rejilla va a un tercio de este valor: una máscara de sombra que realmente puedes resolver es una máscara de sombra que ha dejado de ser un fondo.",
-        "curvature": "Distorsión de barril de la pantalla del tubo. El borde del cristal es una atenuación suave en vez de un recorte, porque un borde duro genera aliasing en toda su longitud y el borde es justo donde la vista siempre termina yendo.",
-        "bloom": "Halación alrededor de las áreas brillantes. Cuatro muestras analíticas de la señal en vez de una pasada de desenfoque: la señal tiene forma cerrada en todos los modos, así que el brillo cuesta aritmética en lugar de un segundo render target.",
-        "persistence": "Cuánto tiempo persiste el fósforo tras el paso del haz. Se calcula como una exponencial sobre la distancia ya barrida, en vez de conservar el cuadro anterior, que es justo lo que hace la desintegración del fósforo, y evita el render target de punto flotante que es lo único que el verificador de bucles no puede atravesar.",
-        "rollSpeed": "Velocidad de la barra de zumbido que sube por el cuadro. Lleva su propia cola de desintegración, así que la persistencia sigue significando algo en una señal que nunca se mueve.",
-        "chromaOffset": "Error de convergencia entre los cañones de color. Se mantiene en píxeles y se convierte según el ancho de la pantalla, así que el franjeado se lee igual en una franja que en una página completa.",
-        "phosphorColor": "El fósforo. Toda señal lo toma prestado excepto las barras de color, que llevan su propio tono; ese es justamente el sentido de una carta de ajuste.",
+        "signal": "Lo que pinta el haz. La nieve se redibuja detrás del haz línea a línea, como la refrescaba de verdad un televisor sin señal. Las barras de color llevan su propio tono; todas las demás señales toman el del fósforo.",
+        "scanRate": "Fotogramas que el haz completa por segundo. Un televisor real funciona a cincuenta o sesenta, que es justo por lo que nadie ve el barrido. A cero el haz se detiene y la imagen sigue desvaneciéndose tras él.",
+        "persistence": "Cuánto aguanta el fósforo después de que pase el haz. Bajo deja una banda brillante tras el haz sobre una pantalla oscura; alto mantiene la imagen entera. Se calcula a partir de cuándo cruzó el haz cada píxel en lugar de guardar el fotograma anterior, así que cuesta una exponencial y ningún render target.",
+        "scanlineDensity": "Altura de una línea del barrido, que también es una pasada del haz. Por debajo de unos dos píxeles el patrón supera Nyquist, así que se desvanece en lugar de convertirse en un moiré que se mueve con la ventana.",
+        "scanlineDepth": "Cuán oscuros son los huecos entre líneas del barrido. La rejilla de apertura va a un tercio de esto: una máscara de sombra que se puede resolver ha dejado de ser un fondo.",
+        "curvature": "Distorsión de barril de la cara del tubo. El barrido se curva con ella, y el borde del cristal es una caída suave en lugar de un recorte, porque un borde duro produce aliasing en toda su longitud.",
+        "bloom": "Halo alrededor del haz y de las partes brillantes de la imagen. Cuatro muestras de la imagen analítica en lugar de una pasada de desenfoque.",
+        "rollSpeed": "Velocidad de la barra de zumbido, una tenue banda de interferencia de la red eléctrica que sube por el cristal.",
+        "chromaOffset": "Error de convergencia entre los cañones de color. Se mide en píxeles, así que el borde se ve igual en una tira que en una página completa.",
+        "phosphorColor": "El fósforo. Todas las señales se dibujan con él excepto las barras de color.",
         "backgroundColor": "El cristal inerte fuera de la imagen."
       }
     },

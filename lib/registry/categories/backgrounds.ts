@@ -1708,9 +1708,9 @@ export const backgrounds: ComponentEntry[] = [
 		category: "Backgrounds",
 		addedAt: "2026-08-06",
 		description:
-			"A cathode-ray tube showing nothing worth watching: a beam that turns around at each edge, phosphor that holds after it has passed, and a hum bar rolling up the glass.",
+			"A cathode-ray tube slowed down until you can watch it work: the beam paints a test card line by line, and the phosphor it leaves behind fades until the next pass comes round.",
 		dependencies: ["ogl"],
-		cookbook: ["Alternate (yoyo)", "Loop", "Idle animation", "Compositing"],
+		cookbook: ["Loop", "Idle animation", "Compositing"],
 		pausable: true,
 		variants: [
 			{
@@ -1730,43 +1730,52 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				name: "signal",
 				kind: "enum",
-				default: "sweep",
-				options: ["sweep", "bars", "snow", "grid"],
+				default: "testcard",
+				options: ["testcard", "bars", "grid", "snow"],
 				description:
-					"What the tube is showing. Sweep is a single beam that reverses at each edge rather than jumping back — a beam that wrapped would read as a dropped frame, one that turns around reads as a mechanism. The rest are the test patterns a set falls back to when there is nothing on the line.",
+					"What the beam is painting. Snow is redrawn behind the beam line by line, the way a set with nothing on the line actually refreshed it. Colour bars carry their own hue; every other signal borrows the phosphor's.",
 			},
 			{
-				name: "sweepSpeed",
+				name: "scanRate",
 				kind: "number",
-				default: 0.5,
+				default: 0.3,
 				min: 0,
-				max: 3,
+				max: 2,
 				step: 0.05,
-				unit: "×",
-				disabledWhen: { prop: "signal", equals: "bars" },
+				unit: "Hz",
 				description:
-					"Speed of the beam across the face. At zero it parks and the phosphor settles, which is the clearest way to see what persistence is actually drawing.",
+					"Frames the beam completes per second. A real set runs at fifty or sixty, which is exactly why nobody sees the raster. At zero the beam parks and the picture keeps fading behind it.",
 			},
 			{
-				name: "scanlineDensity",
+				name: "persistence",
 				kind: "number",
-				default: 2.2,
-				min: 0.5,
-				max: 6,
-				step: 0.1,
-				unit: "px",
-				description:
-					"Pixels per scanline. Below about two the grille is past Nyquist, and rather than aliasing into a pattern that moves when the window does, the modulation fades out — a small canvas loses its scanlines instead of gaining moiré.",
-			},
-			{
-				name: "scanlineDepth",
-				kind: "number",
-				default: 0.35,
+				default: 0.55,
 				min: 0,
 				max: 1,
 				step: 0.05,
 				description:
-					"How hard the scanlines and the aperture grille cut into the image. The grille rides at a third of this — a shadow mask you can actually resolve is a shadow mask that has stopped being a background.",
+					"How long the phosphor holds after the beam has passed. Low leaves a bright band trailing the beam over a dark face; high holds the whole picture. Computed from how long ago the beam crossed each pixel rather than by keeping the previous frame, so it costs one exponential and no render target.",
+			},
+			{
+				name: "scanlineDensity",
+				kind: "number",
+				default: 3,
+				min: 1.5,
+				max: 8,
+				step: 0.5,
+				unit: "px",
+				description:
+					"Height of one raster line, which is also one pass of the beam. Below about two pixels the line pattern is past Nyquist, so it fades out instead of aliasing into moiré that moves when the window does.",
+			},
+			{
+				name: "scanlineDepth",
+				kind: "number",
+				default: 0.4,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How dark the gaps between raster lines are. The aperture grille rides at a third of this — a shadow mask you can resolve has stopped being a background.",
 			},
 			{
 				name: "curvature",
@@ -1776,56 +1785,46 @@ export const backgrounds: ComponentEntry[] = [
 				max: 0.6,
 				step: 0.02,
 				description:
-					"Barrel distortion of the tube face. The glass edge is a soft falloff rather than a clip, because a hard rim aliases along its whole length and the rim is the one place the eye is guaranteed to go.",
+					"Barrel distortion of the tube face. The raster bends with it, and the glass edge is a soft falloff rather than a clip, because a hard rim aliases along its whole length.",
 			},
 			{
 				name: "bloom",
 				kind: "number",
-				default: 0.5,
+				default: 0.6,
 				min: 0,
 				max: 1.5,
 				step: 0.05,
 				description:
-					"Halation around bright areas. Four analytic taps of the signal rather than a blur pass — the signal has a closed form in every mode, so a glow costs arithmetic instead of a second render target.",
-			},
-			{
-				name: "persistence",
-				kind: "number",
-				default: 0.4,
-				min: 0,
-				max: 0.95,
-				step: 0.05,
-				description:
-					"How long the phosphor holds after the beam has passed. Computed as an exponential in the distance already swept rather than by keeping the previous frame — which is what phosphor decay is, and it avoids the float render target that is the one thing the loop verifier cannot see through.",
+					"Halation around the beam and the bright parts of the picture. Four taps of the analytic picture rather than a blur pass.",
 			},
 			{
 				name: "rollSpeed",
 				kind: "number",
-				default: 0.25,
+				default: 0.2,
 				min: 0,
 				max: 2,
 				step: 0.05,
 				unit: "×",
 				description:
-					"Speed of the hum bar rolling up the frame. It carries its own decay tail, so persistence still means something on a signal that never moves.",
+					"Speed of the hum bar, a faint band of mains interference rolling up the glass.",
 			},
 			{
 				name: "chromaOffset",
 				kind: "number",
-				default: 0.6,
+				default: 0.8,
 				min: 0,
 				max: 3,
 				step: 0.1,
 				unit: "px",
 				description:
-					"Convergence error between the colour guns. Held in pixels and converted through the face width, so the fringe reads the same on a strip as on a full page.",
+					"Convergence error between the colour guns. Held in pixels, so the fringe reads the same on a strip as on a full page.",
 			},
 			{
 				name: "phosphorColor",
 				kind: "color",
 				default: "#7ef0c0",
 				description:
-					"The phosphor. Every signal borrows it except the colour bars, which carry their own hue — that is the whole point of a test card.",
+					"The phosphor. Every signal is drawn in it except the colour bars.",
 			},
 			{
 				name: "backgroundColor",

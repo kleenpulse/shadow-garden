@@ -588,18 +588,18 @@
       }
     },
     "cathode": {
-      "description": "Un tube cathodique qui n’affiche rien qui vaille la peine d’être regardé : un faisceau qui fait demi-tour à chaque bord, un phosphore qui persiste après son passage, et une barre de ronflement qui remonte le long du verre.",
+      "description": "Un tube cathodique ralenti jusqu'à ce qu'on le voie travailler : le faisceau peint une mire ligne par ligne, et le phosphore qu'il laisse derrière lui s'estompe jusqu'au passage suivant.",
       "props": {
-        "signal": "Ce que le tube affiche. Le mode balayage est un faisceau unique qui repart en sens inverse à chaque bord plutôt que de sauter en arrière — un faisceau qui boucle se lirait comme une image perdue, un faisceau qui fait demi-tour se lit comme un mécanisme. Les autres modes sont les mires de test sur lesquelles un poste retombe quand il n’y a rien sur la ligne.",
-        "sweepSpeed": "Vitesse du faisceau sur l’écran. À zéro, il se fige et le phosphore se stabilise — la façon la plus claire de voir ce que la persistance dessine réellement.",
-        "scanlineDensity": "Pixels par ligne de balayage. En dessous d’environ deux, la grille dépasse la limite de Nyquist ; plutôt que de créer un aliasing qui bouge avec la fenêtre, la modulation s’estompe — un petit canvas perd ses lignes de balayage au lieu de gagner du moiré.",
-        "scanlineDepth": "Avec quelle force les lignes de balayage et la grille d’ouverture entament l’image. La grille est calée au tiers de cette valeur — un masque perforé que l’on peut réellement distinguer est un masque perforé qui a cessé d’être un simple arrière-plan.",
-        "curvature": "Distorsion en barillet de la surface du tube. Le bord du verre s’atténue en douceur plutôt que d’être coupé net, car un bord dur crée de l’aliasing sur toute sa longueur — et le bord est précisément l’endroit où l’œil est sûr de se poser.",
-        "bloom": "Halo autour des zones lumineuses. Quatre échantillonnages analytiques du signal plutôt qu’une passe de flou — le signal ayant une forme close dans chaque mode, la lueur ne coûte que de l’arithmétique et non une seconde cible de rendu.",
-        "persistence": "Durée pendant laquelle le phosphore persiste après le passage du faisceau. Calculée comme une exponentielle de la distance déjà balayée plutôt qu’en conservant l’image précédente — ce qui correspond réellement à la décroissance du phosphore, et évite la cible de rendu en virgule flottante, seul point que le vérificateur de boucle ne peut pas traverser.",
-        "rollSpeed": "Vitesse à laquelle la barre de ronflement remonte l’image. Elle porte sa propre traîne de décroissance, si bien que la persistance garde un sens même sur un signal qui ne bouge jamais.",
-        "chromaOffset": "Erreur de convergence entre les canons électroniques. Exprimée en pixels et convertie selon la largeur de l’écran, si bien que la frange se lit de la même façon sur une bande étroite que sur une page entière.",
-        "phosphorColor": "Le phosphore. Chaque signal l’emprunte, sauf la mire de barres couleur, qui porte sa propre teinte — c’est tout l’intérêt d’une mire de test.",
+        "signal": "Ce que peint le faisceau. La neige est redessinée derrière le faisceau ligne par ligne, comme un téléviseur sans signal la rafraîchissait vraiment. Les barres de couleur portent leur propre teinte ; tous les autres signaux empruntent celle du phosphore.",
+        "scanRate": "Images que le faisceau termine par seconde. Un vrai téléviseur tourne à cinquante ou soixante, et c'est précisément pour ça que personne ne voit le balayage. À zéro, le faisceau s'arrête et l'image continue de s'estomper derrière lui.",
+        "persistence": "Combien de temps le phosphore tient après le passage du faisceau. Bas, il laisse une bande lumineuse derrière le faisceau sur un écran sombre ; haut, il garde toute l'image. Calculé à partir du moment où le faisceau a croisé chaque pixel plutôt qu'en gardant l'image précédente : une exponentielle, et aucun render target.",
+        "scanlineDensity": "Hauteur d'une ligne de balayage, qui est aussi un passage du faisceau. Sous environ deux pixels, le motif dépasse Nyquist : il s'efface au lieu de dégénérer en moiré qui bouge avec la fenêtre.",
+        "scanlineDepth": "Obscurité des intervalles entre les lignes de balayage. La grille d'ouverture en prend un tiers — un masque d'ombre qu'on distingue a cessé d'être un arrière-plan.",
+        "curvature": "Distorsion en barillet de la face du tube. Le balayage se courbe avec elle, et le bord du verre est un fondu doux plutôt qu'une découpe, car un bord net crénelle sur toute sa longueur.",
+        "bloom": "Halo autour du faisceau et des parties claires de l'image. Quatre échantillons de l'image analytique plutôt qu'une passe de flou.",
+        "rollSpeed": "Vitesse de la barre de ronflement, une faible bande d'interférence secteur qui remonte le long du verre.",
+        "chromaOffset": "Erreur de convergence entre les canons de couleur. Exprimée en pixels, pour que la frange se lise pareil sur une bande que sur une page entière.",
+        "phosphorColor": "Le phosphore. Tous les signaux sont dessinés avec lui, sauf les barres de couleur.",
         "backgroundColor": "Le verre mort en dehors de l’image."
       }
     },

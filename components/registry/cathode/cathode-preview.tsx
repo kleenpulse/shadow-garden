@@ -12,12 +12,12 @@ export default function CathodePreview({
     <div className="relative h-full min-h-80 w-full">
       <Cathode
         signal={values.signal as CathodeSignal}
-        sweepSpeed={values.sweepSpeed as number}
+        scanRate={values.scanRate as number}
+        persistence={values.persistence as number}
         scanlineDensity={values.scanlineDensity as number}
         scanlineDepth={values.scanlineDepth as number}
         curvature={values.curvature as number}
         bloom={values.bloom as number}
-        persistence={values.persistence as number}
         rollSpeed={values.rollSpeed as number}
         chromaOffset={values.chromaOffset as number}
         phosphorColor={values.phosphorColor as string}
@@ -25,11 +25,6 @@ export default function CathodePreview({
         paused={paused}
         reducedMotion={reducedMotion}
       />
-      {reducedMotion ? null : (
-        <p className="pointer-events-none absolute right-3 bottom-2 font-display text-[9px] tracking-[0.28em] text-ink-mute uppercase">
-          the beam turns around
-        </p>
-      )}
     </div>
   );
 }
