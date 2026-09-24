@@ -23,9 +23,10 @@ export type Capability = "db" | "supabase" | "polar" | "polarWebhook" | "email";
  * shell shows a "coming soon" marker instead of Go Pro. Local dev is exempt so
  * the full commerce stack stays exercisable against dev env. Read at build time
  * (module-scope consumers), so flipping it means a deploy — same contract as
- * GATE_CONTROLS. Set to false to launch payments.
+ * GATE_CONTROLS. False since 2026-09-24: payments are live (Polar org verified);
+ * set back to true to pause selling without disturbing env.
  */
-export const COMMERCE_COMING_SOON = true;
+export const COMMERCE_COMING_SOON = false;
 
 /** The Supabase URL, or undefined. Public — inlines into the browser bundle. */
 export function supabaseUrl(): string | undefined {
