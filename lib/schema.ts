@@ -27,7 +27,7 @@ const organization = {
 	"@id": ORG_ID,
 	name: SITE_NAME,
 	url: SITE_URL,
-	logo: absoluteUrl("/icon.svg"),
+	logo: absoluteUrl("/icon.png"),
 	sameAs: [SITE_REPO],
 } as const;
 
