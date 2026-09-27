@@ -26,12 +26,12 @@ export default function MobileBar({ commerce = false }: { commerce?: boolean }) 
 	const isCookbook = pathname === "/cookbook";
 
 	return (
-		<div className="sticky top-0 z-20 flex items-center gap-3 bg-panel/90 px-2 py-3 backdrop-blur lg:hidden h-10">
+		<div className="sticky top-0 z-20 flex h-10 items-center gap-2 bg-panel/90 px-2 backdrop-blur lg:hidden">
 			<button
 				type="button"
 				onClick={toggleSidebar}
 				aria-label={t("openNavigation")}
-				className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim hover:text-accent"
+				className="grid size-7 shrink-0 place-items-center rounded-md bg-surface text-ink-dim hover:text-accent"
 			>
 				<span aria-hidden className="text-base leading-none">
 					≡
@@ -39,12 +39,12 @@ export default function MobileBar({ commerce = false }: { commerce?: boolean }) 
 			</button>
 			<Link
 				href={pathname === "/components" ? "/" : "/components"}
-				className="inline-flex items-baseline"
+				className="inline-flex min-w-0 shrink-0 items-baseline"
 			>
 				<Wordmark size="xs" />
 			</Link>
 
-			<div className="ms-auto flex items-center gap-2">
+			<div className="ms-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
 				<button
 					type="button"
 					onClick={() => setPaletteOpen(true)}

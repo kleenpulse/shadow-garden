@@ -103,10 +103,11 @@ export default function AuthMenu() {
 			<button
 				type="button"
 				onClick={signIn}
-				className="flex h-7 md:h-8 items-center gap-2 rounded-md bg-surface px-3 font-sans text-xs text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+				title={t("signIn")}
+				className="flex h-7 min-w-7 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-surface px-1.5 font-sans text-xs text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none sm:px-3 md:h-8"
 			>
 				<GithubIcon className="size-4" aria-hidden />
-				<span>{t("signIn")}</span>
+				<span className="sr-only sm:not-sr-only">{t("signIn")}</span>
 			</button>
 		);
 	}
@@ -138,10 +139,10 @@ export default function AuthMenu() {
 						alt={label}
 						width={32}
 						height={32}
-						className="h-8 w-8 rounded-full border border-hairline object-cover"
+						className="size-7 rounded-full border border-hairline object-cover md:size-8"
 					/>
 				) : (
-					<span className="grid h-8 w-8 place-items-center rounded-full border border-hairline bg-panel font-mono text-xs font-bold text-accent">
+					<span className="grid size-7 place-items-center rounded-full border border-hairline bg-panel font-mono text-xs font-bold text-accent md:size-8">
 						{initial}
 					</span>
 				)}

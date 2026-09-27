@@ -240,8 +240,10 @@ export default function Wordmark({
 			// the cursor below is correct for the same reason.
 			dir="ltr"
 			className={cn(
-				"relative inline-block font-display uppercase tracking-[0.2em] text-xs min-[375.5px]:text-sm",
-
+				"relative inline-block whitespace-nowrap font-display uppercase",
+				size === "xs"
+					? "text-[11px] tracking-[0.12em] sm:text-sm sm:tracking-[0.2em]"
+					: "text-xs tracking-[0.2em] min-[375.5px]:text-sm",
 				className,
 			)}
 			onPointerEnter={() => triggerRef.current()}
