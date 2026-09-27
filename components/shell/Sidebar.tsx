@@ -5,6 +5,7 @@ import {
 	useMemo,
 	useRef,
 	useState,
+	type ComponentProps,
 	type KeyboardEvent,
 } from "react";
 import { ChevronDown } from "lucide-react";
@@ -39,6 +40,9 @@ import {
 import AutoMaskVertical from "@/components/ui/auto-mask-vertical";
 import Wordmark from "@/components/Wordmark";
 import FeedbackWidget from "./FeedbackWidget";
+import SidebarHoverPreview, { sidebarPreviewHandle } from "./SidebarHoverPreview";
+import { PreviewCardTrigger } from "@/components/ui/preview-card";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function Sidebar() {
 	const t = useTranslations("chrome.sidebar");
@@ -54,6 +58,12 @@ export default function Sidebar() {
 	const sidebarWidth = useUIStore((state) => state.sidebarWidth);
 	const setSidebarWidth = useUIStore((state) => state.setSidebarWidth);
 	const { play, typeKey, hoverProps } = useInteractionSound();
+	// Hover previews are a mouse affordance: a touch tap would open the card and
+	// navigate in the same gesture. Starts false, so SSR markup stays plain links.
+	const canHoverPreview =
+		useMediaQuery(
+			"(min-width: 1024px) and (hover: hover) and (pointer: fine)",
+		) && !sidebarOpen;
 
 	// The label carries the gradient itself rather than the button: a directly
 	// applied `color: transparent` beats the track's inherited text-* utility, which
@@ -291,12 +301,15 @@ export default function Sidebar() {
 				data-added={entry.addedAt}
 				data-pro={entry.pro ? "" : undefined}
 			>
-				<Link
+				<RowLink
 					href={href}
+					slug={entry.slug}
+					preview={canHoverPreview}
 					{...hoverProps()}
 					onClick={() => {
 						if (!isActive) play("select"); // no cue re-selecting the current page
 						setSidebarOpen(false);
+						sidebarPreviewHandle.close();
 					}}
 					aria-current={isActive ? "page" : undefined}
 					className={`relative flex items-center justify-between gap-2 rounded-sm px-2.5 py-1.5 text-sm transition-colors ${
@@ -304,7 +317,7 @@ export default function Sidebar() {
 							? "font-medium text-accent"
 							: isHighlighted
 							? "bg-raised/50 text-ink"
-							: "text-ink-dim hover:bg-raised/40 hover:text-ink"
+							: "text-ink-dim hover:bg-raised/40 hover:text-ink data-[popup-open]:bg-raised/40 data-[popup-open]:text-ink"
 					}`}
 				>
 					{isActive && (
@@ -333,13 +346,14 @@ export default function Sidebar() {
 						</span>
 						<ProBadge pro={entry.pro} variant="tiny" />
 					</span>
-				</Link>
+				</RowLink>
 			</li>
 		);
 	};
 
 	return (
 		<>
+			{canHoverPreview && <SidebarHoverPreview />}
 			{sidebarOpen && (
 				<button
 					type="button"
@@ -496,5 +510,26 @@ export default function Sidebar() {
 				)}
 			</aside>
 		</>
+	);
+}
+
+// A row is a plain link, or — where hover previews apply — the same link
+// rendered through the shared preview card's trigger, carrying its slug.
+function RowLink({
+	slug,
+	preview,
+	href,
+	...props
+}: ComponentProps<typeof Link> & { slug: string; preview: boolean }) {
+	if (!preview) return <Link href={href} {...props} />;
+	return (
+		<PreviewCardTrigger
+			handle={sidebarPreviewHandle}
+			payload={slug}
+			delay={250}
+			closeDelay={150}
+			render={<Link href={href} />}
+			{...props}
+		/>
 	);
 }

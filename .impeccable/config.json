@@ -20,6 +20,21 @@
         ],
         "createdAt": "2026-09-10T18:28:17.655Z",
         "reason": "pre-existing SPEC V37 collapsed code surface: interpolate-size allow-keywords + max-height tween is the intended intrinsic-size animation; reduced-motion and non-Chromium fallbacks handled; untouched by this change"
+      },
+      {
+        "rule": "overused-font",
+        "value": "geist",
+        "createdAt": "2026-09-26T17:25:05.098Z",
+        "reason": "Project CLAUDE.md fixes Geist as the Motion Garden body face; the video composition mirrors the site's own type"
+      },
+      {
+        "rule": "ai-color-palette",
+        "value": "*",
+        "files": [
+          "brag-output-2026-09-26-180159/work/comp/index.html"
+        ],
+        "createdAt": "2026-09-26T17:25:05.344Z",
+        "reason": "Project CLAUDE.md mandates one Amethyst accent as brand identity; composition uses the site's light accent token, no purple gradient in its CSS"
       }
     ]
   }
