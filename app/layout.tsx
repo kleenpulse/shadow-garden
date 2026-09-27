@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Space_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "@/components/theme-provider";
 import { RouteProgress } from "@/components/providers/route-progress";
+import { PresenceBeacon } from "@/components/providers/presence-beacon";
 import { IntroOverlay } from "@/components/intro/IntroOverlay";
 import { DevFab } from "@/components/dev/DevFab";
 import JsonLd from "@/components/seo/JsonLd";
@@ -152,6 +153,7 @@ export default function RootLayout({
 						<RouteProgress>
 							<IntroOverlay />
 							<RenameAnnouncement />
+							<PresenceBeacon />
 							<NuqsAdapter>{children}</NuqsAdapter>
 							{/* {process.env.NODE_ENV === "development" && <DevFab />} */}
 						</RouteProgress>

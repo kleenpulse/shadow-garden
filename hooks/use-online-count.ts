@@ -1,10 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 import {
   createSupabaseBrowserClient,
   supabaseConfiguredClient,
 } from "@/lib/supabase/client";
+
+export type PresenceKind = "auth" | "anon";
 
 interface OnlineCount {
   configured: boolean;
@@ -35,9 +38,16 @@ function anonId(): string {
 // Scale note: presence syncs full channel state to every subscriber (O(N) fan-out).
 // Fine for a showcase at tens of concurrent; revisit (throttle/sample) only if this
 // ever reaches thousands.
-export function useOnlineCount(): OnlineCount {
+//
+// The payload is { kind } — the admin console (admin_shadow-garden, hooks/
+// use-presence.ts) observes this channel and splits members from guests on it.
+export function useOnlineCount(kind: PresenceKind = "anon"): OnlineCount {
   const [total, setTotal] = useState(0);
   const [ready, setReady] = useState(false);
+  // Read by the subscribe callback, which is registered once; the effect below
+  // re-tracks on sign-in/out without tearing the channel down.
+  const kindRef = useRef(kind);
+  const channelRef = useRef<RealtimeChannel | null>(null);
 
   useEffect(() => {
     if (!supabaseConfiguredClient) return;
@@ -53,13 +63,22 @@ export function useOnlineCount(): OnlineCount {
     });
 
     channel.subscribe((status) => {
-      if (status === "SUBSCRIBED") channel.track({});
+      if (status === "SUBSCRIBED") {
+        channelRef.current = channel;
+        channel.track({ kind: kindRef.current });
+      }
     });
 
     return () => {
+      channelRef.current = null;
       supabase.removeChannel(channel);
     };
   }, []);
+
+  useEffect(() => {
+    kindRef.current = kind;
+    channelRef.current?.track({ kind });
+  }, [kind]);
 
   return {
     configured: supabaseConfiguredClient,
