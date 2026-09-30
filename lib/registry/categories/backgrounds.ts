@@ -3694,7 +3694,7 @@ export const backgrounds: ComponentEntry[] = [
 			{
 				name: "curvature",
 				kind: "number",
-				default: 0.3,
+				default: 0,
 				min: 0,
 				max: 1,
 				step: 0.01,

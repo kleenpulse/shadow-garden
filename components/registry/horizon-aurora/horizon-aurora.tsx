@@ -128,7 +128,7 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
 export default function HorizonAurora({
   position = "bottom",
   horizon = 0,
-  curvature = 0.3,
+  curvature = 0,
   reach = 1,
   speed = 1,
   intensity = 1,
