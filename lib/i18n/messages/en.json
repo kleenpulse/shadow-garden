@@ -827,6 +827,21 @@
         "backgroundColor": "The field behind the cells. Its own material rather than a themed surface, for the same reason every full-bleed background here is."
       }
     },
+    "horizon-aurora": {
+      "description": "Smoky first light rising off a curved horizon. A domain-warped fbm field is sheared along a slow lean, so the noise stretches into strands of smoke, and a thin bright rim pools right on the horizon line the way light gathers at the edge of a planet. Move the pointer over it and the plume leans toward it and climbs to meet it, then drifts home when you leave. The horizon lies along the bottom edge or the top, and sits wherever you put it: right on the edge as a footer or header glow, or moved in with dark ground behind it.",
+      "props": {
+        "position": "Which edge the horizon lies along. Bottom rises off a footer; top flips the whole field so the light hangs down from a header, and the pointer pull follows it.",
+        "horizon": "How far the horizon sits from its edge, as a fraction of the height. 0 lays it on the edge itself, so a border or hairline reads as the horizon; move it in and dark ground opens up behind it.",
+        "curvature": "How far the horizon bows down toward the corners. The light follows it, so the glow tapers off at the sides.",
+        "reach": "How high the smoke climbs off the horizon.",
+        "speed": "Drift rate of the smoke. Accumulated per frame, so retuning it never jumps the field.",
+        "intensity": "Density of the smoke, and with it the brightness.",
+        "pull": "How hard the plume leans toward the pointer and climbs to meet it. 0 leaves it drifting on its own.",
+        "coreColor": "The dense heart of the smoke and the rim on the horizon.",
+        "hazeColor": "The thin smoke at the edges, where the light fades into the sky.",
+        "skyColor": "The sky behind the light. The smoke blends mostly as light, so it wants a dark sky to read."
+      }
+    },
     "morphing-text": {
       "description": "A gooey blur-morph that cross-dissolves between a list of words.",
       "props": {
@@ -1587,6 +1602,17 @@
         "gap": "Space between slats."
       }
     },
+    "focus-grid": {
+      "description": "A five-tile bento where any tile you pick takes the large slot and the rest slide back into order around it.",
+      "props": {
+        "gap": "Space between tiles.",
+        "radius": "Corner radius of each tile.",
+        "stiffness": "Spring stiffness — higher lands faster.",
+        "damping": "Spring damping — lower overshoots and settles.",
+        "captions": "Show the small label on the supporting tiles.",
+        "heroSide": "Which edge the large slot sits against."
+      }
+    },
     "intro-animation": {
       "description": "A wind front sweeps the wordmark right to left. The instant it reaches a glyph the text hands off to a baseline-aligned field of GPU grain — same pixels, same colour, no seam — which peels crown-first and drifts away as smoke through a curl field. The backdrop opens behind it to reveal the page. Mount it over your app and unmount on onDone.",
       "props": {
@@ -2088,6 +2114,26 @@
         "accent": "Selection wash, the active-row marker down the left edge, and the colour a sorted header takes."
       }
     },
+    "visualizer": {
+      "description": "A live map of a multi-agent system: the orchestrator burns at the centre with a tick ring of its own daily load, agent pools sit on the inner ring with beams sized by their share, and every agent and tool orbits its pool. Sparks ride the beams home, faster where the work is fresher. Hover for a readout, filter to a week, or pick an agent and it glides out of the constellation into a drilldown of its latest runs, blocked work and timing. All geometry is pure and deterministic: labels are placed against collision boxes rather than measured, and orbs shrink until nothing touches. The keyboard walks the ring clockwise, and below 640px it becomes a ranked list.",
+      "props": {
+        "defaultView": "What a wide stage opens on. Below 640px the list always wins, because ring 2 has nowhere to put its labels at that width and a constellation without names is decoration.",
+        "showPeriods": "Show the W1–W4 toggle. Picking a week resizes every orb and beam to that week's volume, but the layout keeps its slots, since each orb reserved room for its largest week up front, and so nothing jumps around.",
+        "maxNodes": "How many of the busiest nodes take a seat on ring 2. The pools keep their full totals, so a trimmed ring still reports true shares.",
+        "ambient": "Sparks on the beams, twinkling stars and a breathing sun. It only runs once the entrance has settled, while the widget is on screen and the tab is visible, and never inside a drilldown.",
+        "sparkSpeed": "Multiplier on how fast sparks travel. The base speed is already tied to recency, so a pool that went quiet days ago drifts while a busy one streams.",
+        "ignition": "Play the staggered entrance: the sun blooms, beams draw, then pools, agents and labels follow. It waits until the widget is first on screen and never replays on a week switch.",
+        "showLegend": "Legend and keyboard hint under the stage.",
+        "showSunLabel": "Name the sun. Its size is fitted to the sun's diameter rather than fixed, so a longer name shrinks instead of spilling across the tick ring.",
+        "sunLabelColor": "Colour of the sun's name. The sun is lightest at its centre, so a dark ink reads best.",
+        "accent": "The sun, the beams, the tick rings and the blocked chip.",
+        "filament": "The thin filament beside each beam, the dotted links, focus rings and the flag dot.",
+        "agentColor": "Orbs for agents.",
+        "toolColor": "Orbs for tools and services.",
+        "groupColorA": "Pools alternate between this and groupColorB around the inner ring.",
+        "groupColorB": "The second pool colour."
+      }
+    },
     "monolith": {
       "description": "A monumental slab floating over a reflective grid floor, rendered as a fogged 3D scene you can orbit.",
       "props": {
@@ -2455,11 +2501,11 @@
   "collections": {
     "react-micro-interactions": {
       "title": "React Micro-Interaction Components",
-      "intro": "The small responses that make an interface feel like it answered you. Thirty-nine components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen."
+      "intro": "The small responses that make an interface feel like it answered you. Forty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen."
     },
     "react-background-components": {
       "title": "React Background Components",
-      "intro": "Motion for the layer that sits behind everything else. Thirty-two backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything."
+      "intro": "Motion for the layer that sits behind everything else. Thirty-three backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything."
     },
     "react-power-user-components": {
       "title": "React Power-User Components",
@@ -2475,11 +2521,11 @@
     },
     "react-hover-effects": {
       "title": "React Hover Effects",
-      "intro": "Forty-two components whose main state change is the pointer arriving. Glows that follow the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or shift underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo, so each of these picks one property to move and commits to it instead of animating everything at once."
+      "intro": "Forty-four components whose main state change is the pointer arriving. Glows that follow the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or shift underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo, so each of these picks one property to move and commits to it instead of animating everything at once."
     },
     "react-stagger-animation": {
       "title": "React Stagger Animation",
-      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Thirty-four components here use it: letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting number is never the duration. It is the offset between items, and every one of these exposes it as a control you can drag."
+      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Thirty-five components here use it: letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting number is never the duration. It is the offset between items, and every one of these exposes it as a control you can drag."
     },
     "react-drag-animations": {
       "title": "React Drag Animations",
@@ -2491,7 +2537,7 @@
     },
     "react-spring-animation": {
       "title": "React Spring Animation",
-      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-four components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
+      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-five components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
     },
     "react-blur-effects": {
       "title": "React Blur Effects",
@@ -2507,7 +2553,7 @@
     },
     "react-layout-animation": {
       "title": "React Layout Animation",
-      "intro": "Eleven components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear."
+      "intro": "Twelve components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear."
     },
     "react-3d-tilt-effects": {
       "title": "React 3D Tilt Effects",
@@ -2515,7 +2561,7 @@
     },
     "framer-motion-components": {
       "title": "Framer Motion Components for React",
-      "intro": "Forty-nine components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn."
+      "intro": "Fifty components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn."
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL Backgrounds",
@@ -2640,8 +2686,8 @@
       "title": "Favorites"
     },
     "notFound": {
-      "title": "Nothing in this shadow",
-      "body": "That page isn't on the bench. The catalog holds {count} components — every one live, tunable, and ready to hand to your agent.",
+      "title": "Nothing in this garden",
+      "body": "That page isn't on the bench. The catalog holds {count} components: every one live, tunable, and ready to hand to your agent.",
       "recovery": "Recovery",
       "browseAll": "Browse all components",
       "cookbook": "Motion Cook Book",

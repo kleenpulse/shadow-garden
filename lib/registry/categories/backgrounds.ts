@@ -3647,4 +3647,120 @@ export const backgrounds: ComponentEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "horizon-aurora",
+		name: "HorizonAurora",
+		category: "Backgrounds",
+		addedAt: "2026-09-28",
+		pro: true,
+		pausable: true,
+		description:
+			"Smoky first light rising off a curved horizon. A domain-warped fbm field is sheared along a slow lean, so the noise stretches into strands of smoke, and a thin bright rim pools right on the horizon line the way light gathers at the edge of a planet. Move the pointer over it and the plume leans toward it and climbs to meet it, then drifts home when you leave. The horizon lies along the bottom edge or the top, and sits wherever you put it: right on the edge as a footer or header glow, or moved in with dark ground behind it.",
+		dependencies: [],
+		cookbook: ["Loop", "Idle animation", "Hover effect", "Follow-through"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/horizon-aurora/horizon-aurora.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+		],
+		props: [
+			{
+				name: "position",
+				kind: "enum",
+				default: "bottom",
+				options: ["bottom", "top"],
+				description:
+					"Which edge the horizon lies along. Bottom rises off a footer; top flips the whole field so the light hangs down from a header, and the pointer pull follows it.",
+			},
+			{
+				name: "horizon",
+				kind: "number",
+				default: 0,
+				min: 0,
+				max: 0.8,
+				step: 0.01,
+				description:
+					"How far the horizon sits from its edge, as a fraction of the height. 0 lays it on the edge itself, so a border or hairline reads as the horizon; move it in and dark ground opens up behind it.",
+			},
+			{
+				name: "curvature",
+				kind: "number",
+				default: 0.3,
+				min: 0,
+				max: 1,
+				step: 0.01,
+				description:
+					"How far the horizon bows down toward the corners. The light follows it, so the glow tapers off at the sides.",
+			},
+			{
+				name: "reach",
+				kind: "number",
+				default: 1,
+				min: 0.4,
+				max: 2,
+				step: 0.05,
+				unit: "×",
+				description: "How high the smoke climbs off the horizon.",
+			},
+			{
+				name: "speed",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Drift rate of the smoke. Accumulated per frame, so retuning it never jumps the field.",
+			},
+			{
+				name: "intensity",
+				kind: "number",
+				default: 1,
+				min: 0.2,
+				max: 2,
+				step: 0.05,
+				unit: "×",
+				description: "Density of the smoke, and with it the brightness.",
+			},
+			{
+				name: "pull",
+				kind: "number",
+				default: 1,
+				min: 0,
+				max: 1,
+				step: 0.05,
+				description:
+					"How hard the plume leans toward the pointer and climbs to meet it. 0 leaves it drifting on its own.",
+			},
+			{
+				name: "coreColor",
+				kind: "color",
+				default: "#e9d5ff",
+				description: "The dense heart of the smoke and the rim on the horizon.",
+			},
+			{
+				name: "hazeColor",
+				kind: "color",
+				default: "#a855f7",
+				description: "The thin smoke at the edges, where the light fades into the sky.",
+			},
+			{
+				name: "skyColor",
+				kind: "color",
+				default: "#07060b",
+				description:
+					"The sky behind the light. The smoke blends mostly as light, so it wants a dark sky to read.",
+			},
+		],
+	},
 ];

@@ -35,6 +35,33 @@
         ],
         "createdAt": "2026-09-26T17:25:05.344Z",
         "reason": "Project CLAUDE.md mandates one Amethyst accent as brand identity; composition uses the site's light accent token, no purple gradient in its CSS"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "brag-output/work/comp/index.html"
+        ],
+        "createdAt": "2026-09-27T17:50:26.950Z",
+        "reason": "Claude: offline render comp; every <img> src is set per frame by window.render before capture"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "components/registry/visualizer/scene.tsx"
+        ],
+        "createdAt": "2026-09-30T12:41:15.614Z",
+        "reason": "Claude triage: pre-existing SVG stroke-width transitions on beams (data-driven share width); stroke-width is paint-only on SVG paths, no layout thrash"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "brag-output-2026-09-30-173846/work/comp/index.html"
+        ],
+        "createdAt": "2026-09-30T16:42:23.540Z",
+        "reason": "Claude: video composition; render(f) sets every img src per frame before capture"
       }
     ]
   }

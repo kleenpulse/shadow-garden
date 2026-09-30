@@ -28,7 +28,11 @@ export default function EnumControl({
         {label}
       </label>
       <Select value={value} onValueChange={onChange} disabled={disabled}>
-        <SelectTrigger id={`ctl-${schema.name}`} aria-label={label}>
+        <SelectTrigger
+          id={`ctl-${schema.name}`}
+          aria-label={label}
+          className="border-0 focus-visible:ring-1 focus-visible:ring-accent"
+        >
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

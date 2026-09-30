@@ -124,6 +124,7 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "flock-field": dynamic(() => import("./flock-field/flock-field-preview"), { ssr: false }),
   caustics: dynamic(() => import("./caustics/caustics-preview"), { ssr: false }),
   "voronoi-shatter": dynamic(() => import("./voronoi-shatter/voronoi-shatter-preview"), { ssr: false }),
+  "horizon-aurora": dynamic(() => import("./horizon-aurora/horizon-aurora-preview"), { ssr: false }),
   "marquee-velocity": dynamic(() => import("./marquee-velocity/marquee-velocity-preview"), { ssr: false }),
   "word-reveal": dynamic(() => import("./word-reveal/word-reveal-preview"), { ssr: false }),
   kinetic: dynamic(() => import("./kinetic/kinetic-preview"), { ssr: false }),
@@ -133,6 +134,9 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   dismiss: dynamic(() => import("./dismiss/dismiss-preview"), { ssr: false }),
   "flip-card": dynamic(() => import("./flip-card/flip-card-preview"), { ssr: false }),
   unfold: dynamic(() => import("./unfold/unfold-preview"), { ssr: false }),
+  "focus-grid": dynamic(() => import("./focus-grid/focus-grid-preview"), {
+    ssr: false,
+  }),
   "intro-animation": dynamic(
     () => import("./intro-animation/intro-animation-preview"),
     { ssr: false },
@@ -144,6 +148,7 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   masonry: dynamic(() => import("./masonry/masonry-preview"), { ssr: false }),
   "rubiks-cube": dynamic(() => import("./rubiks-cube/rubiks-cube-preview"), { ssr: false }),
   "timeline-scrubber": dynamic(() => import("./timeline-scrubber/timeline-scrubber-preview"), { ssr: false }),
+  "visualizer": dynamic(() => import("./visualizer/visualizer-preview"), { ssr: false }),
   "data-grid": dynamic(() => import("./data-grid/data-grid-preview"), { ssr: false }),
   // Landing-page templates. The preview is an iframe of the real route, so there
   // is no WebGL context to keep off the server — but ssr:false stays for the same

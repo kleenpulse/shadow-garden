@@ -57,14 +57,14 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-micro-interactions",
     title: "React Micro-Interaction Components",
     intro:
-      "The small responses that make an interface feel like it answered you. Thirty-nine components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen.",
+      "The small responses that make an interface feel like it answered you. Forty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen.",
     filter: { kind: "category", category: "Micro-interactions" },
   },
   {
     slug: "react-background-components",
     title: "React Background Components",
     intro:
-      "Motion for the layer that sits behind everything else. Thirty-two backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything.",
+      "Motion for the layer that sits behind everything else. Thirty-three backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything.",
     filter: { kind: "category", category: "Backgrounds" },
   },
   {
@@ -102,14 +102,14 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-hover-effects",
     title: "React Hover Effects",
     intro:
-      "Forty-two components whose main state change is the pointer arriving. Glows that follow the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or shift underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo, so each of these picks one property to move and commits to it instead of animating everything at once.",
+      "Forty-four components whose main state change is the pointer arriving. Glows that follow the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or shift underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo, so each of these picks one property to move and commits to it instead of animating everything at once.",
     filter: { kind: "terms", terms: ["Hover effect"] },
   },
   {
     slug: "react-stagger-animation",
     title: "React Stagger Animation",
     intro:
-      "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Thirty-four components here use it: letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting number is never the duration. It is the offset between items, and every one of these exposes it as a control you can drag.",
+      "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Thirty-five components here use it: letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting number is never the duration. It is the offset between items, and every one of these exposes it as a control you can drag.",
     filter: { kind: "terms", terms: ["Stagger"] },
   },
   {
@@ -130,7 +130,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-spring-animation",
     title: "React Spring Animation",
     intro:
-      "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-four components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming.",
+      "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-five components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming.",
     filter: { kind: "terms", terms: ["Spring", "Bounce"] },
   },
   {
@@ -161,7 +161,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-layout-animation",
     title: "React Layout Animation",
     intro:
-      "Eleven components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear.",
+      "Twelve components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear.",
     filter: { kind: "terms", terms: ["Layout animation"] },
   },
   {
@@ -177,7 +177,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "framer-motion-components",
     title: "Framer Motion Components for React",
     intro:
-      "Forty-nine components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn.",
+      "Fifty components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn.",
     filter: { kind: "deps", packages: ["motion"] },
   },
   {

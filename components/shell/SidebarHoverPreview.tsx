@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { defaultsFromSchema, getEntry } from "@/lib/registry";
 import type { ComponentEntry, PropSchema } from "@/lib/registry/types";
@@ -72,9 +72,8 @@ function PreviewCardBody({
 }) {
 	const copy = useDataCopy();
 	const Preview = previews[entry.slug];
-	// Landing-page templates preview as an iframe of a whole page — far too heavy
-	// to boot on a pointer pass over the list.
-	const showLive = !reduced && Boolean(Preview) && entry.kind !== "template";
+	const isTemplate = entry.kind === "template";
+	const showLive = !reduced && Boolean(Preview) && !isTemplate;
 	const tint = firstColor(entry);
 
 	return (
@@ -97,6 +96,7 @@ function PreviewCardBody({
 							: undefined
 					}
 				/>
+				{isTemplate && !reduced && <TemplateThumb slug={entry.slug} />}
 				{showLive && Preview && (
 					<div className="pointer-events-none absolute inset-0">
 						<PreviewBoundary
@@ -122,6 +122,51 @@ function PreviewCardBody({
 					{copy(`pages.categories.${anchorFor(entry.category)}`, entry.category)}
 				</span>
 			</div>
+		</div>
+	);
+}
+
+// The desktop width a landing page lays out at inside the card. At the card's own
+// 352px the template would hit its phone breakpoint and preview a layout nobody
+// hovering from a desktop sidebar is shopping for.
+const TEMPLATE_WIDTH = 1280;
+
+// A landing page can't mount in the card — it wants its own document, scroller and
+// viewport units — so it previews the way the bench stage does: the real
+// /templates route in an iframe. Unlike the stage, this one IS scaled down; the
+// resample cost template-frame.tsx warns about is fine for a thumbnail that lives
+// a few seconds, and the template measures itself inside its own document, which
+// the outer transform never reaches. Held invisible until the document loads so
+// the tint shows instead of a white page mid-parse.
+function TemplateThumb({ slug }: { slug: string }) {
+	const boxRef = useRef<HTMLDivElement>(null);
+	const [scale, setScale] = useState(0);
+	const [loaded, setLoaded] = useState(false);
+
+	useLayoutEffect(() => {
+		// offsetWidth: layout size, blind to the card's own entrance transform.
+		const width = boxRef.current?.offsetWidth ?? 0;
+		setScale(width / TEMPLATE_WIDTH);
+	}, []);
+
+	return (
+		<div ref={boxRef} className="pointer-events-none absolute inset-0">
+			{scale > 0 && (
+				<iframe
+					src={`/templates/${slug}`}
+					title=""
+					aria-hidden
+					tabIndex={-1}
+					onLoad={() => setLoaded(true)}
+					className="absolute start-0 top-0 origin-top-left border-0 transition-opacity duration-300"
+					style={{
+						width: TEMPLATE_WIDTH,
+						height: TEMPLATE_WIDTH * (10 / 16),
+						transform: `scale(${scale})`,
+						opacity: loaded ? 1 : 0,
+					}}
+				/>
+			)}
 		</div>
 	);
 }

@@ -29,6 +29,25 @@ const APPROVAL_FLOW_PEERS: Variant[] = [
 	role: "peer",
 	label: name,
 }));
+const VISUALIZER_PEERS: Variant[] = [
+	"scene.tsx",
+	"drilldown.tsx",
+	"list.tsx",
+	"segmented.tsx",
+	"layout.ts",
+	"vocab.tsx",
+	"format.ts",
+	"hooks.ts",
+	"types.ts",
+	"motion.ts",
+	"rail.tsx",
+].map((name) => ({
+	lang: "ts",
+	style: "tailwind",
+	file: `components/registry/visualizer/${name}`,
+	role: "peer",
+	label: name,
+}));
 
 /** FileExplorer is assembled from its whole directory, not one file. Listed as a
  *  mapped array rather than 23 literals so the entry stays readable; the set is
@@ -3708,6 +3727,136 @@ export const powerUserSystems: ComponentEntry[] = [
 				default: "#a855f7",
 				description:
 					"Selection wash, the active-row marker down the left edge, and the colour a sorted header takes.",
+			},
+		],
+	},
+	{
+		slug: "visualizer",
+		name: "Visualizer",
+		category: "Power-User Systems",
+		addedAt: "2026-09-28",
+		pro: true,
+		pausable: true,
+		description:
+			"A live map of a multi-agent system: the orchestrator burns at the centre with a tick ring of its own daily load, agent pools sit on the inner ring with beams sized by their share, and every agent and tool orbits its pool. Sparks ride the beams home, faster where the work is fresher. Hover for a readout, filter to a week, or pick an agent and it glides out of the constellation into a drilldown of its latest runs, blocked work and timing. All geometry is pure and deterministic: labels are placed against collision boxes rather than measured, and orbs shrink until nothing touches. The keyboard walks the ring clockwise, and below 640px it becomes a ranked list.",
+		dependencies: ["lucide-react", "clsx", "tailwind-merge"],
+		cookbook: ["Orbit", "Line drawing", "Stagger", "Hover effect", "Idle animation"],
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/visualizer/visualizer.tsx",
+			},
+			...VISUALIZER_PEERS,
+			UTILS_VARIANT,
+			LOOP_HOST_VARIANT,
+		],
+		props: [
+			{
+				name: "defaultView",
+				kind: "enum",
+				default: "constellation",
+				options: ["constellation", "list"],
+				description:
+					"What a wide stage opens on. Below 640px the list always wins, because ring 2 has nowhere to put its labels at that width and a constellation without names is decoration.",
+			},
+			{
+				name: "showPeriods",
+				kind: "boolean",
+				default: true,
+				description:
+					"Show the W1–W4 toggle. Picking a week resizes every orb and beam to that week's volume, but the layout keeps its slots, since each orb reserved room for its largest week up front, and so nothing jumps around.",
+			},
+			{
+				name: "maxNodes",
+				kind: "number",
+				default: 24,
+				min: 3,
+				max: 24,
+				step: 1,
+				description:
+					"How many of the busiest nodes take a seat on ring 2. The pools keep their full totals, so a trimmed ring still reports true shares.",
+			},
+			{
+				name: "ambient",
+				kind: "boolean",
+				default: true,
+				description:
+					"Sparks on the beams, twinkling stars and a breathing sun. It only runs once the entrance has settled, while the widget is on screen and the tab is visible, and never inside a drilldown.",
+			},
+			{
+				name: "sparkSpeed",
+				kind: "number",
+				default: 1,
+				min: 0.25,
+				max: 3,
+				step: 0.05,
+				unit: "×",
+				description:
+					"Multiplier on how fast sparks travel. The base speed is already tied to recency, so a pool that went quiet days ago drifts while a busy one streams.",
+			},
+			{
+				name: "ignition",
+				kind: "boolean",
+				default: true,
+				description:
+					"Play the staggered entrance: the sun blooms, beams draw, then pools, agents and labels follow. It waits until the widget is first on screen and never replays on a week switch.",
+			},
+			{
+				name: "showLegend",
+				kind: "boolean",
+				default: true,
+				description: "Legend and keyboard hint under the stage.",
+			},
+			{
+				name: "showSunLabel",
+				kind: "boolean",
+				default: true,
+				description:
+					"Name the sun. Its size is fitted to the sun's diameter rather than fixed, so a longer name shrinks instead of spilling across the tick ring.",
+			},
+			{
+				name: "sunLabelColor",
+				kind: "color",
+				default: "#1a1408",
+				disabledWhen: { prop: "showSunLabel", equals: false },
+				description: "Colour of the sun's name. The sun is lightest at its centre, so a dark ink reads best.",
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#e6c27a",
+				description: "The sun, the beams, the tick rings and the blocked chip.",
+			},
+			{
+				name: "filament",
+				kind: "color",
+				default: "#5ee1d9",
+				description: "The thin filament beside each beam, the dotted links, focus rings and the flag dot.",
+			},
+			{
+				name: "agentColor",
+				kind: "color",
+				default: "#5fd3a6",
+				description: "Orbs for agents.",
+			},
+			{
+				name: "toolColor",
+				kind: "color",
+				default: "#e6c27a",
+				description: "Orbs for tools and services.",
+			},
+			{
+				name: "groupColorA",
+				kind: "color",
+				default: "#f08bb0",
+				description: "Pools alternate between this and groupColorB around the inner ring.",
+			},
+			{
+				name: "groupColorB",
+				kind: "color",
+				default: "#a99bff",
+				description: "The second pool colour.",
 			},
 		],
 	},
