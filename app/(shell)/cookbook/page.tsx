@@ -17,9 +17,9 @@ import { SITE_OG_IMAGE } from "@/lib/seo";
 // The site's strongest long-tail asset: ~93 definition queries on one page. The
 // title leads with what people actually type ("animation glossary"), not the
 // in-house name for it.
-const TITLE = "Web Animation Glossary — The Motion Cook Book";
+const TITLE = "Web Animation Glossary :: The Motion Cook Book";
 const DESCRIPTION =
-	"The precise name for every web animation — stagger, rubber-banding, origin-aware, spring damping, easing, scrub. Every term defined, and wherever the bench can show you one running, a link straight to a live, tunable demo.";
+	"The precise name for every web animation :: stagger, rubber-banding, origin-aware, spring damping, easing, scrub. Every term defined, and wherever the bench can show you one running, a link straight to a live, tunable demo.";
 
 export const metadata: Metadata = {
 	title: TITLE,

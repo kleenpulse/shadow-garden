@@ -46,8 +46,8 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
 	metadataBase: new URL(SITE_URL),
 	title: {
-		default: `${SITE_TAGLINE} — ${SITE_NAME}`,
-		template: `%s — ${SITE_NAME}`,
+		default: `${SITE_TAGLINE} :: ${SITE_NAME}`,
+		template: `%s :: ${SITE_NAME}`,
 	},
 	description: SITE_DESCRIPTION,
 	applicationName: SITE_NAME,
@@ -76,12 +76,12 @@ export const metadata: Metadata = {
 		siteName: SITE_NAME,
 		locale: "en_US",
 		url: SITE_URL,
-		title: `${SITE_TAGLINE} — ${SITE_NAME}`,
+		title: `${SITE_TAGLINE} :: ${SITE_NAME}`,
 		description: SITE_DESCRIPTION,
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: `${SITE_TAGLINE} — ${SITE_NAME}`,
+		title: `${SITE_TAGLINE} :: ${SITE_NAME}`,
 		description: SITE_DESCRIPTION,
 	},
 	robots: {

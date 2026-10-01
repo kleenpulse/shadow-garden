@@ -17,7 +17,7 @@ export const SITE_OG_IMAGE = {
 	url: "/opengraph-image",
 	width: 1200,
 	height: 630,
-	alt: `${SITE_NAME} — ${SITE_TAGLINE}`,
+	alt: `${SITE_NAME} :: ${SITE_TAGLINE}`,
 };
 
 // Shell-only, same reasoning as lib/display-name.ts: this is how Motion Garden
@@ -39,17 +39,26 @@ const CATEGORY_NOUN: Record<Category, string> = {
 	"Landing Pages": "Landing Page",
 };
 
+/**
+ * Metadata separator is `::`, never an em dash. Entry and collection prose is
+ * authored with em dashes for the page itself; this rewrites them only on the
+ * way into titles, descriptions and link cards.
+ */
+export function metaText(text: string): string {
+	return text.replace(/\s*—\s*/g, " :: ");
+}
+
 export function entryPath(entry: ComponentEntry): string {
 	return `/components/${entry.slug}`;
 }
 
 /**
  * Leads with the component, qualifies it with the thing people search for. The
- * root layout appends " — Motion Garden", so this stays short enough that the
- * whole title survives a SERP: "Waves — React Background — Motion Garden".
+ * root layout appends " :: Motion Garden", so this stays short enough that the
+ * whole title survives a SERP: "Waves :: React Background :: Motion Garden".
  */
 export function entryTitle(entry: ComponentEntry): string {
-	return `${displayName(entry.name)} — React ${CATEGORY_NOUN[entry.category]}`;
+	return `${displayName(entry.name)} :: React ${CATEGORY_NOUN[entry.category]}`;
 }
 
 /**
@@ -63,7 +72,7 @@ export function entryDescription(entry: ComponentEntry): string {
 		props > 0
 			? `Live preview, ${props} tunable props, source and a coding-agent brief you can copy.`
 			: "Live preview, source and a coding-agent brief you can copy.";
-	return `${entry.description} ${tail}`;
+	return metaText(`${entry.description} ${tail}`);
 }
 
 /**
@@ -76,5 +85,5 @@ export function collectionDescription(
 	entries: ComponentEntry[],
 ): string {
 	const [opening] = collection.intro.split(/(?<=\.)\s/, 1);
-	return `${opening} ${entries.length} live, tunable components.`;
+	return metaText(`${opening} ${entries.length} live, tunable components.`);
 }

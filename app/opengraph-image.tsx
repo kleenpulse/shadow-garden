@@ -14,7 +14,7 @@ import { SITE_NAME, SITE_TAGLINE } from "@/lib/site";
 // route-segment runtime export. This route is `ƒ` (on demand) for the same reason
 // the per-component card is; see the note there before trying to make it static.
 
-export const alt = `${SITE_NAME} — ${SITE_TAGLINE}`;
+export const alt = `${SITE_NAME} :: ${SITE_TAGLINE}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
