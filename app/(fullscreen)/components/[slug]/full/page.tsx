@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllSlugs, getEntry, getNeighbors } from "@/lib/registry";
+import { metaText } from "@/lib/seo";
 import FullscreenStage from "@/components/shell/FullscreenStage";
 import { isControlsLocked } from "@/lib/registry/entitlement";
 
@@ -18,8 +19,8 @@ export async function generateMetadata({
 	const entry = getEntry(slug);
 	if (!entry) return {};
 	return {
-		title: `${entry.name} — Fullscreen`,
-		description: entry.description,
+		title: `${entry.name} :: Fullscreen`,
+		description: metaText(entry.description),
 
 		robots: { index: false, follow: true },
 		alternates: { canonical: `/components/${slug}/full` },

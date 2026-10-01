@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getEntry, registry } from "@/lib/registry";
+import { metaText } from "@/lib/seo";
 import { loadTemplateRoot } from "@/components/registry/template-roots";
 import { tokensFromParams } from "@/lib/templates/tokens";
 import TokenBridge from "@/components/shell/token-bridge";
@@ -36,8 +37,8 @@ export async function generateMetadata({
 	const entry = getEntry(slug);
 	if (!entry) return {};
 	return {
-		title: `${entry.name} — Template`,
-		description: entry.description,
+		title: `${entry.name} :: Template`,
+		description: metaText(entry.description),
 		// Same reasoning as the fullscreen stage: this URL is a render surface, not
 		// a document. Indexing it would put a second, chrome-less copy of every
 		// template in the index, competing with the page that actually sells it.
