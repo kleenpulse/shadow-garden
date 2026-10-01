@@ -118,8 +118,19 @@ export function IntroOverlay() {
 			cancelAnimationFrame(rafId);
 			dust?.dispose();
 			// Backstop for the reveal window (scrollbar drag / keyboard while the
-			// halves are still sliding): the page always starts at the top.
-			if (window.scrollY !== 0) window.scrollTo({ top: 0, behavior: "instant" });
+			// halves are still sliding): the page starts at the top, or at the
+			// fragment a deep link asked for. Resetting a /cookbook#morph visit to
+			// the top throws away the landing the page already made under the
+			// overlay. Re-landing rather than leaving it: the unlock just changed the
+			// scrollbar width, and a JS-packed grid may have moved under it.
+			const target = window.location.hash
+				? document.getElementById(
+						decodeURIComponent(window.location.hash.slice(1)),
+					)
+				: null;
+			if (target) target.scrollIntoView({ block: "start", behavior: "instant" });
+			else if (window.scrollY !== 0)
+				window.scrollTo({ top: 0, behavior: "instant" });
 			setPhase("done");
 		};
 

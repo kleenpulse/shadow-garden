@@ -246,6 +246,51 @@ export default function CookbookBrowser({
 		// the deferred list caught up — a retry that no longer exists.
 	}, [pendingTick, reduced, jumpTo]);
 
+	// Deep links: /cookbook#morph from a post, or a term chip on a component
+	// page. The browser's own fragment jump measures the pre-pack CSS-columns
+	// fallback (or a card still hidden for its reveal), so it lands at the top or
+	// at a stale offset. Arrival from outside is instant:
+	// animating from the top of the page is travel nobody asked to watch.
+	const sectionOf = useMemo(() => {
+		const map = new Map<string, string>();
+		for (const section of sections) {
+			const id = termAnchor(section.title);
+			map.set(id, id);
+			for (const row of section.terms) map.set(termAnchor(row.term), id);
+		}
+		return map;
+	}, [sections]);
+
+	useEffect(() => {
+		const land = (instant: boolean) => {
+			const anchor = decodeURIComponent(window.location.hash.slice(1));
+			const sectionAnchor = sectionOf.get(anchor);
+			const el = sectionAnchor && document.getElementById(anchor);
+			if (!sectionAnchor || !el) return;
+			// Read live, not from the hook: this closure outlives the first render.
+			const still = window.matchMedia(
+				"(prefers-reduced-motion: reduce)",
+			).matches;
+			scrollToAnchor(el, instant || still);
+			jumpTo(sectionAnchor);
+			if (anchor !== sectionAnchor) setPulse(anchor);
+		};
+		// One frame late, not now. Masonry's first layout effect only flips it to
+		// `packed` and re-renders; the real pack lands in that second commit, and
+		// React flushes this passive effect before it. Measuring now reads the
+		// CSS-columns fallback, which is ~350px taller and moves when the pack does.
+		const frame = requestAnimationFrame(() => land(true));
+		const onHash = () => land(false);
+		window.addEventListener("hashchange", onHash);
+		return () => {
+			cancelAnimationFrame(frame);
+			window.removeEventListener("hashchange", onHash);
+		};
+		// Mount-only on purpose: re-running on a new `jumpTo` would
+		// yank a reader who has scrolled away back to the fragment.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	// State-held rather than a CSS keyframe: the global reduced-motion rule crushes
 	// animation-duration to 0.01ms, which would erase the confirmation entirely.
 	// A held ring still shows for its full second — it just snaps instead of fading.
