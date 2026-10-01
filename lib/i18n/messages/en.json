@@ -1660,6 +1660,18 @@
         "accent": "Highlight on the option the pointer is aimed at, and on the label echoing it back at the centre."
       }
     },
+    "live-activity": {
+      "description": "A live activity tracker in one black shape. A timer, a download, a delivery, a song and an AI agent take turns in it, and tapping it opens a full card. The text fades out before the shape moves and comes back after it stops, so it never stretches during the resize. The small pill and the big card share one clock and one state, so if you pause in the card, the pill is paused too. The agent is the main show. Three sparkles circle on a tilted orbit, the front one big and the back ones small, and they spin faster on every new step. The pill widens to show each new step's name, then shrinks back to the step count, and the card types out the command the agent is running.",
+      "props": {
+        "activity": "Which activity holds the island. Changing it morphs the shell straight to that activity's pill and switches the cycle off — a hand-picked activity that a timer replaces four seconds later was never really picked.",
+        "autoCycle": "Rotate through the activities on a timer. The rotation stands still while the island is expanded, hovered or holding focus — nothing should change under a pointer that is about to tap it. Switching it off returns the island to `activity`, so the control and the island never disagree.",
+        "cycleInterval": "How long each activity holds the island before the next takes over. Under about three seconds there is no time to read the number before it becomes a different one.",
+        "stiffness": "How hard the shell springs toward its new size. The pill-to-card swell is the largest move the island makes, so this is what decides whether it reads as a drop or a crawl.",
+        "damping": "How fast the spring settles. The default leaves one small overshoot, which is what sells the shape as liquid rather than a box being resized; under about 18 it wobbles on every activity swap.",
+        "contentBlur": "Blur the content dissolves through on its way in and out. It hides the frames where the outgoing and incoming views overlap; at 0 the swap reads as a plain crossfade.",
+        "accent": "Progress rings, the download bar, the agent's working state and the focus outline. The timer and delivery keep their own tints so you can tell the activities apart at a glance."
+      }
+    },
     "command-palette": {
       "description": "A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
       "props": {
@@ -2501,7 +2513,7 @@
   "collections": {
     "react-micro-interactions": {
       "title": "React Micro-Interaction Components",
-      "intro": "The small responses that make an interface feel like it answered you. Forty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen."
+      "intro": "The small responses that make an interface feel like it answered you. Forty-one components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen."
     },
     "react-background-components": {
       "title": "React Background Components",
@@ -2537,11 +2549,11 @@
     },
     "react-spring-animation": {
       "title": "React Spring Animation",
-      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-five components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
+      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-six components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
     },
     "react-blur-effects": {
       "title": "React Blur Effects",
-      "intro": "Fifteen components that use blur as a material, not a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen as you approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius. An unbounded full-page backdrop-filter is the fastest way to drop frames."
+      "intro": "Sixteen components that use blur as a material, not a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen as you approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius. An unbounded full-page backdrop-filter is the fastest way to drop frames."
     },
     "react-scroll-animations": {
       "title": "React Scroll Animations",
@@ -2553,7 +2565,7 @@
     },
     "react-layout-animation": {
       "title": "React Layout Animation",
-      "intro": "Twelve components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear."
+      "intro": "Thirteen components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear."
     },
     "react-3d-tilt-effects": {
       "title": "React 3D Tilt Effects",
@@ -2561,7 +2573,7 @@
     },
     "framer-motion-components": {
       "title": "Framer Motion Components for React",
-      "intro": "Fifty components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn."
+      "intro": "Fifty-one components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn."
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL Backgrounds",

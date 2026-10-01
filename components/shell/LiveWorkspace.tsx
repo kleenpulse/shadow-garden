@@ -38,7 +38,7 @@ export default function LiveWorkspace({
 	controlsLocked?: Promise<boolean>;
 }) {
 	const locked = controlsLocked ? use(controlsLocked) : false;
-	const { values, setValue, reset } = useTunedProps(entry.props);
+	const { values, setValue, syncValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
 	const t = useTranslations("chrome.liveWorkspace");
@@ -100,6 +100,7 @@ export default function LiveWorkspace({
 								values={values}
 								reducedMotion={reducedMotion}
 								paused={paused}
+								onValueChange={syncValue}
 							/>
 						</PreviewBoundary>
 						{/* Hidden until stage hover on hover-capable devices; always visible on

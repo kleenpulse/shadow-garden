@@ -241,6 +241,23 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
     ]),
   },
   {
+    rule: "sets-target",
+    ctx: context([
+      entry({
+        props: [
+          {
+            name: "mode",
+            kind: "enum",
+            default: "a",
+            options: ["a", "b"],
+            description: "writes to a prop that does not exist",
+            sets: { prop: "nosuch", value: false },
+          },
+        ],
+      }),
+    ]),
+  },
+  {
     rule: "added-at-format",
     ctx: context([entry({ addedAt: "25-07-2026" })]),
   },

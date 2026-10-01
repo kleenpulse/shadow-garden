@@ -3862,4 +3862,120 @@ export const microInteractions: ComponentEntry[] = [
 			},
 		],
 	},
+	{
+		slug: "live-activity",
+		name: "LiveActivity",
+		category: "Micro-interactions",
+		addedAt: "2026-10-01",
+		pro: true,
+		description:
+			"A live activity tracker in one black shape. A timer, a download, a delivery, a song and an AI agent take turns in it, and tapping it opens a full card. The text fades out before the shape moves and comes back after it stops, so it never stretches during the resize. The small pill and the big card share one clock and one state, so if you pause in the card, the pill is paused too. The agent is the main show. Three sparkles circle on a tilted orbit, the front one big and the back ones small, and they spin faster on every new step. The pill widens to show each new step's name, then shrinks back to the step count, and the card types out the command the agent is running.",
+		dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
+		cookbook: [
+			"Morph",
+			"Layout animation",
+			"Spring",
+			"Bounce",
+			"Crossfade",
+			"Blur",
+			"Interruptible animation",
+			"Press / Tap feedback",
+			"Tabular numbers",
+			"Number ticker",
+			"Skeleton / Shimmer",
+			"Typewriter",
+			"Reduced motion",
+		],
+		pausable: true,
+		variants: [
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/live-activity/live-activity.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "components/registry/live-activity/activities.tsx",
+				role: "peer",
+				label: "activities.tsx",
+			},
+			{
+				lang: "ts",
+				style: "tailwind",
+				file: "hooks/use-animation-loop.ts",
+				role: "hook",
+				label: "use-animation-loop.ts",
+			},
+			UTILS_VARIANT,
+		],
+		props: [
+			{
+				name: "activity",
+				kind: "enum",
+				default: "agent",
+				options: ["media", "timer", "download", "delivery", "agent"],
+				description:
+					"Which activity holds the island. Changing it morphs the shell straight to that activity's pill and switches the cycle off — a hand-picked activity that a timer replaces four seconds later was never really picked.",
+				sets: { prop: "autoCycle", value: false },
+			},
+			{
+				name: "autoCycle",
+				kind: "boolean",
+				default: true,
+				description:
+					"Rotate through the activities on a timer. The rotation stands still while the island is expanded, hovered or holding focus — nothing should change under a pointer that is about to tap it. Switching it off returns the island to `activity`, so the control and the island never disagree.",
+			},
+			{
+				name: "cycleInterval",
+				kind: "number",
+				default: 4,
+				min: 2,
+				max: 10,
+				step: 0.5,
+				unit: "s",
+				description:
+					"How long each activity holds the island before the next takes over. Under about three seconds there is no time to read the number before it becomes a different one.",
+				disabledWhen: { prop: "autoCycle", equals: false },
+			},
+			{
+				name: "stiffness",
+				kind: "number",
+				default: 420,
+				min: 100,
+				max: 900,
+				step: 10,
+				description:
+					"How hard the shell springs toward its new size. The pill-to-card swell is the largest move the island makes, so this is what decides whether it reads as a drop or a crawl.",
+			},
+			{
+				name: "damping",
+				kind: "number",
+				default: 25,
+				min: 8,
+				max: 60,
+				step: 1,
+				description:
+					"How fast the spring settles. The default leaves one small overshoot, which is what sells the shape as liquid rather than a box being resized; under about 18 it wobbles on every activity swap.",
+			},
+			{
+				name: "contentBlur",
+				kind: "number",
+				default: 6,
+				min: 0,
+				max: 16,
+				step: 1,
+				unit: "px",
+				description:
+					"Blur the content dissolves through on its way in and out. It hides the frames where the outgoing and incoming views overlap; at 0 the swap reads as a plain crossfade.",
+			},
+			{
+				name: "accent",
+				kind: "color",
+				default: "#a855f7",
+				description:
+					"Progress rings, the download bar, the agent's working state and the focus outline. The timer and delivery keep their own tints so you can tell the activities apart at a glance.",
+			},
+		],
+	},
 ];

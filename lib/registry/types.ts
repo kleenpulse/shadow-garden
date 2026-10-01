@@ -53,6 +53,11 @@ type PropBase = {
   disabledWhen?:
     | { prop: string; equals: PropValue }
     | { prop: string; notEquals: PropValue };
+  /** Changing this control also writes `value` to another control. For a
+   *  choice that only makes sense with a sibling in one state — picking an
+   *  activity by hand is meaningless while a cycle overwrites it seconds later.
+   *  Applied by the bench's setter, so it costs the component nothing. */
+  sets?: { prop: string; value: PropValue };
 };
 
 export type NumberProp = PropBase & {
@@ -173,4 +178,9 @@ export interface PreviewProps {
       Distinct from `reducedMotion` (which also gates entrance/one-shot animations);
       loopers OR the two into one "effective still" signal. */
   paused: boolean;
+  /** The preview reports a value it changed on its own (an auto-cycle moving
+      the active item), so the Controls panel shows what the stage shows.
+      Written raw: the prop's `sets` link is never applied, since the preview
+      did not pick anything. Optional — thumbnails and hover cards omit it. */
+  onValueChange?: (name: string, value: PropValue) => void;
 }

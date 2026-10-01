@@ -1660,6 +1660,18 @@
         "accent": "Highlight on the option the pointer is aimed at, and on the label echoing it back at the centre."
       }
     },
+    "live-activity": {
+      "description": "A live activity tracker in one black shape. A timer, a download, a delivery, a song and an AI agent take turns in it, and tapping it opens a full card. The text fades out before the shape moves and comes back after it stops, so it never stretches during the resize. The small pill and the big card share one clock and one state, so if you pause in the card, the pill is paused too. The agent is the main show. Three sparkles circle on a tilted orbit, the front one big and the back ones small, and they spin faster on every new step. The pill widens to show each new step's name, then shrinks back to the step count, and the card types out the command the agent is running.",
+      "props": {
+        "activity": "Which activity holds the island. Changing it morphs the shell straight to that activity's pill and switches the cycle off — a hand-picked activity that a timer replaces four seconds later was never really picked.",
+        "autoCycle": "Rotate through the activities on a timer. The rotation stands still while the island is expanded, hovered or holding focus — nothing should change under a pointer that is about to tap it. Switching it off returns the island to `activity`, so the control and the island never disagree.",
+        "cycleInterval": "How long each activity holds the island before the next takes over. Under about three seconds there is no time to read the number before it becomes a different one.",
+        "stiffness": "How hard the shell springs toward its new size. The pill-to-card swell is the largest move the island makes, so this is what decides whether it reads as a drop or a crawl.",
+        "damping": "How fast the spring settles. The default leaves one small overshoot, which is what sells the shape as liquid rather than a box being resized; under about 18 it wobbles on every activity swap.",
+        "contentBlur": "Blur the content dissolves through on its way in and out. It hides the frames where the outgoing and incoming views overlap; at 0 the swap reads as a plain crossfade.",
+        "accent": "Progress rings, the download bar, the agent's working state and the focus outline. The timer and delivery keep their own tints so you can tell the activities apart at a glance."
+      }
+    },
     "command-palette": {
       "description": "قائمة أوامر cmdk بسطح عادي أو زجاجي سائل ومفتاح اختصار للتفعيل.",
       "props": {

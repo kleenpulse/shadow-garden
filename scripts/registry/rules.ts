@@ -1,6 +1,7 @@
 import type { CheckContext, Finding, Rule } from "./check";
 import { defaultsAgree } from "./source-defaults";
 import { validateDefault } from "../../lib/registry/kinds";
+import type { PropSchema } from "../../lib/registry/types";
 import { COOKBOOK_TERMS } from "../../lib/cookbook";
 import { collectionTerms, resolveCollection } from "../../lib/collections";
 import { TEMPLATE_TOKEN_NAMES } from "../../lib/registry/template-tokens";
@@ -190,6 +191,42 @@ const disabledWhenTarget: Rule = {
             detail: "disabledWhen targets itself",
           });
         }
+      }
+    }
+    return out;
+  },
+};
+
+const setsTarget: Rule = {
+  id: "sets-target",
+  severity: "error",
+  what: "sets.prop names another prop on the same entry, and sets.value lies in its domain",
+  run(ctx) {
+    const out: Finding[] = [];
+    for (const entry of ctx.registry) {
+      for (const prop of entry.props) {
+        if (!prop.sets) continue;
+        const { prop: name, value } = prop.sets;
+        const target = entry.props.find((p) => p.name === name);
+        const finding = (detail: string) =>
+          out.push({ slug: entry.slug, prop: prop.name, detail });
+        if (!target) {
+          finding(`sets targets "${name}", which is not a prop on this entry — the write lands in the URL and nothing reads it`);
+          continue;
+        }
+        if (target === prop) {
+          finding("sets targets itself — the control could never hold the value you picked");
+          continue;
+        }
+        const expected = target.kind === "number" || target.kind === "boolean" ? target.kind : "string";
+        if (typeof value !== expected) {
+          finding(`sets writes a ${typeof value} to ${target.kind} prop "${name}"`);
+          continue;
+        }
+        // Same domain test as a default, so the bench and the check cannot
+        // disagree about what the control can hold.
+        const problem = validateDefault({ ...target, default: value } as PropSchema);
+        if (problem) finding(`sets writes outside "${name}"'s domain: ${problem}`);
       }
     }
     return out;
@@ -1131,6 +1168,7 @@ export const RULES: Rule[] = [
   propNamesUnique,
   defaultInDomain,
   disabledWhenTarget,
+  setsTarget,
   addedAtFormat,
   proCategoryConsistency,
   cookbookTermExists,

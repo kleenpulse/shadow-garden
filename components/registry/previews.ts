@@ -143,6 +143,7 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   ),
   "magnetic-dock": dynamic(() => import("./magnetic-dock/magnetic-dock-preview"), { ssr: false }),
   "radial-menu": dynamic(() => import("./radial-menu/radial-menu-preview"), { ssr: false }),
+  "live-activity": dynamic(() => import("./live-activity/live-activity-preview"), { ssr: false }),
   "file-explorer": dynamic(() => import("./file-explorer/file-explorer-preview"), { ssr: false }),
   elastic: dynamic(() => import("./elastic/elastic-preview"), { ssr: false }),
   masonry: dynamic(() => import("./masonry/masonry-preview"), { ssr: false }),

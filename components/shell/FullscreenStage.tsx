@@ -37,7 +37,7 @@ export default function FullscreenStage({
 	controlsLocked?: Promise<boolean>;
 }) {
 	const locked = controlsLocked ? use(controlsLocked) : false;
-	const { values, setValue, reset } = useTunedProps(entry.props);
+	const { values, setValue, syncValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
 	const t = useTranslations("chrome.fullscreenStage");
@@ -116,6 +116,7 @@ export default function FullscreenStage({
 					values={values}
 					reducedMotion={reducedMotion}
 					paused={paused}
+					onValueChange={syncValue}
 				/>
 			</PreviewBoundary>
 			<div

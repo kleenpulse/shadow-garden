@@ -50,7 +50,16 @@ export function useTunedProps(props: PropSchema[]) {
 
   // The schema is dynamic, so the setter is typed loosely at this one boundary.
   const setValue = (name: string, value: PropValue) => {
-    (setValues as (patch: Record<string, PropValue | null>) => void)({ [name]: value });
+    const patch: Record<string, PropValue> = { [name]: value };
+    const linked = props.find((p) => p.name === name)?.sets;
+    if (linked) patch[linked.prop] = linked.value;
+    (setValues as (patch: Record<string, PropValue | null>) => void)(patch);
+  };
+
+  // For values the preview changed itself: same write, minus the `sets`
+  // link, which models a person choosing.
+  const syncValue = (name: string, value: PropValue) => {
+    (setValues as (patch: Record<string, PropValue>) => void)({ [name]: value });
   };
 
   const reset = () => {
@@ -59,5 +68,5 @@ export function useTunedProps(props: PropSchema[]) {
     (setValues as (patch: Record<string, null>) => void)(cleared);
   };
 
-  return { values: values as TunedValues, setValue, reset };
+  return { values: values as TunedValues, setValue, syncValue, reset };
 }

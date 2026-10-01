@@ -57,7 +57,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-micro-interactions",
     title: "React Micro-Interaction Components",
     intro:
-      "The small responses that make an interface feel like it answered you. Forty components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen.",
+      "The small responses that make an interface feel like it answered you. Forty-one components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen.",
     filter: { kind: "category", category: "Micro-interactions" },
   },
   {
@@ -130,14 +130,14 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-spring-animation",
     title: "React Spring Animation",
     intro:
-      "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-five components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming.",
+      "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-six components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming.",
     filter: { kind: "terms", terms: ["Spring", "Bounce"] },
   },
   {
     slug: "react-blur-effects",
     title: "React Blur Effects",
     intro:
-      "Fifteen components that use blur as a material, not a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen as you approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius. An unbounded full-page backdrop-filter is the fastest way to drop frames.",
+      "Sixteen components that use blur as a material, not a filter. Progressive edge gradients, depth-of-field falloff, frosted panels, a city built permanently out of focus behind wet glass, motion blur on a fast-moving element, focus pulls that sharpen as you approach. Blur is expensive to composite, so each of these keeps the blurred layer off the main paint path or bounds its radius. An unbounded full-page backdrop-filter is the fastest way to drop frames.",
     filter: { kind: "terms", terms: ["Blur"] },
   },
   {
@@ -161,7 +161,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-layout-animation",
     title: "React Layout Animation",
     intro:
-      "Twelve components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear.",
+      "Thirteen components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear.",
     filter: { kind: "terms", terms: ["Layout animation"] },
   },
   {
@@ -177,7 +177,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "framer-motion-components",
     title: "Framer Motion Components for React",
     intro:
-      "Fifty components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn.",
+      "Fifty-one components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn.",
     filter: { kind: "deps", packages: ["motion"] },
   },
   {
