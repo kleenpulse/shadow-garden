@@ -39,12 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-branch_structure.json
-temp_auto_push.bat
-temp_interactive_push.bat
 
 # impeccable tool cache (config.json is checked in, the cache is local)
 .impeccable/hook.cache.json
 
 # /brag launch-video runs (renders + 300MB+ of intermediate frames)
 /brag-output*/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
