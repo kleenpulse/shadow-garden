@@ -1,9 +1,9 @@
 {
   "name": "motion-garden",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "license": "MIT",
-  "description": "Animation-forward React component showcase \u2014 a two-pane docs bench with tunable controls, live previews, copyable source, and a one-click brief for coding agents.",
+  "description": "Animation-forward React component showcase — a two-pane docs bench with tunable controls, live previews, copyable source, and a one-click brief for coding agents.",
   "homepage": "https://github.com/kleenpulse/shadow-garden#readme",
   "repository": {
     "type": "git",
