@@ -14,9 +14,9 @@
   },
   "author": "kleenpulse",
   "scripts": {
-    "dev": "node api.js && next dev",
-    "build": "node api.js && next build",
-    "start": "node api.js && next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check": "tsc --noEmit && bun scripts/check-registry.ts && bun scripts/registry/check-strip.ts && bun scripts/i18n/gen-catalog.ts --check",
