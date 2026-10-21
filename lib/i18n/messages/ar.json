@@ -842,6 +842,35 @@
         "skyColor": "The sky behind the light. The smoke blends mostly as light, so it wants a dark sky to read."
       }
     },
+    "chladni": {
+      "description": "Sand on a vibrating metal plate. Where the plate shakes, the grains jump away. Where it stays still, they settle, so the sand gathers on the still lines and draws a Chladni figure. Every few seconds the plate changes note and the sand dances into a new figure. Move the pointer over it to scatter the grains, like a violin bow.",
+      "props": {
+        "grains": "How many grains of sand sit on the plate.",
+        "complexity": "The highest note the plate plays. Higher notes draw finer figures.",
+        "dwell": "How long each figure holds before the plate changes note.",
+        "vibration": "How hard the plate shakes the sand loose.",
+        "bowRadius": "How far the pointer scatters the sand. 0 turns the bow off.",
+        "grainSize": "The size of one grain.",
+        "showNodes": "Draw faint lines where the sand is heading.",
+        "grainColor": "The sand.",
+        "plateColor": "The metal plate under the sand."
+      }
+    },
+    "marbling": {
+      "description": "Paper marbling made with the exact drop and comb math from the paper Mathematical Marbling. Each new ink drop pushes every older ring outward. The rings stretch, but they never overlap or tear. Every few drops, a comb drags through the ink and pulls it into feathers. Drag across it to pull the ink like a stylus.",
+      "props": {
+        "dropInterval": "Time between ink drops.",
+        "dropSize": "The radius of a fresh drop.",
+        "combStrength": "How far each comb pass drags the ink. 0 stops the combing.",
+        "tineSpacing": "The gap between the teeth of the comb.",
+        "sharpness": "How fast a tooth's pull fades with distance. Small values make thin, sharp feathers.",
+        "stylus": "Let a drag pull the ink. Turn it off to keep touch scrolling on phones.",
+        "inkColor1": "The first ink.",
+        "inkColor2": "The second ink.",
+        "inkColor3": "The third ink.",
+        "paperColor": "The paper under the ink. Once the ink covers it all, only the inks show."
+      }
+    },
     "morphing-text": {
       "description": "تحوّل لزج بالتمويه يتلاشى تدريجيًا بين قائمة كلمات.",
       "props": {
@@ -1143,6 +1172,35 @@
         "maxVelocity": "Scroll speed that counts as full deformation. A real ceiling, not a scale factor — the mapping clamps, so one trackpad flick cannot tear the type apart on a scroll nobody meant to be dramatic.",
         "stagger": "How much softer the last glyph's spring is than the first. At 0 the word deforms as a single block; near the top the tail lags far enough to read as a wave travelling down the line.",
         "direction": "Which axis grows under load. Vertical grows from the baseline, which is how a letterform under tension actually behaves; horizontal grows from the leading edge and reads more like smearing."
+      }
+    },
+    "annotate": {
+      "description": "Hand-drawn marker notes on a paragraph. Underlines, circles, boxes, highlights, strike-throughs and brackets draw themselves around the words you mark, one after another, when the text first comes into view. If a mark wraps onto the next line, it draws on each line. The shaky strokes come from a seed, so the same seed always draws the same marks. When the layout changes, it measures the text again, so the marks stay on their words.",
+      "props": {
+        "color": "Ink for the pen marks: underline, circle, box, strike and bracket.",
+        "highlightColor": "Marker color for highlights. It sits behind the text and lets it show through.",
+        "duration": "Time to draw one mark.",
+        "gap": "Pause between one mark ending and the next one starting.",
+        "strokeWidth": "Pen width.",
+        "roughness": "How shaky the hand is. 0 draws clean lines.",
+        "padding": "Space between the words and the mark.",
+        "seed": "Picks the hand. The same seed always draws the same marks.",
+        "trigger": "When the marks start drawing: as soon as it mounts, or the first time it scrolls into view."
+      }
+    },
+    "flipdot": {
+      "description": "A mechanical flip-dot sign. Each word is drawn on a grid of small discs. To show the next word, the discs turn over in a sweep: by column, on a diagonal, out from the center, or at random. A disc squashes as it turns and swings a little past flat before it settles. Hover to flip the discs under the pointer, or click to send a wave across the sign.",
+      "props": {
+        "rows": "Rows of dots on the sign. The columns fill the width.",
+        "cascade": "The order the discs turn in when the word changes.",
+        "stagger": "Delay between one step of the cascade and the next.",
+        "flipDuration": "Time one disc takes to turn over.",
+        "overshoot": "How far a disc swings past flat before it settles.",
+        "hold": "How long each word stays up after it lands.",
+        "ripple": "The pointer flips the discs it passes over, and a click sends a wave across the sign.",
+        "onColor": "The bright face of a disc.",
+        "offColor": "The dark face of a disc.",
+        "boardColor": "The sign behind the discs."
       }
     },
     "pixel-transition": {
@@ -1672,6 +1730,30 @@
         "accent": "Progress rings, the download bar, the agent's working state and the focus outline. The timer and delivery keep their own tints so you can tell the activities apart at a glance."
       }
     },
+    "scratch": {
+      "description": "A scratch-off card. Drag over the foil to scrape it off, and small flakes fall where you scratch. Once enough foil is gone, the rest fades away on its own. A light glints across the foil now and then. You can also focus the card and press Enter or Space to reveal it.",
+      "props": {
+        "brushSize": "Width of the scratch.",
+        "threshold": "How much foil has to come off before the rest falls away.",
+        "revealDuration": "How long the leftover foil takes to fade out.",
+        "flakes": "Foil flakes fall from where you scratch.",
+        "glint": "A light sweeps across the foil now and then.",
+        "glintColor": "The light that sweeps across the foil. The focus ring uses it too.",
+        "foilColor": "The foil. Its flakes take their color from it."
+      }
+    },
+    "swipe-actions": {
+      "description": "List rows you swipe to show actions, like in iOS Mail. Drag a row and its buttons slide in from the side. Swipe all the way and the outer action fills the row and runs. An action like Archive then folds the row away. A quick flick works too. With full swipe off, the row pushes back when you pull past the last button. With a keyboard, the arrow keys show the actions and Enter runs one.",
+      "props": {
+        "revealWidth": "Width of each action button once it is fully shown.",
+        "fullSwipe": "Swipe far enough and the outer action fires on its own.",
+        "fullSwipeThreshold": "How far across the row a full swipe has to go.",
+        "rubberBand": "How much the row resists past the last button when full swipe is off. 0 is a hard stop. iOS uses 0.55.",
+        "velocityThreshold": "A flick faster than this opens or closes the row, however short it is.",
+        "stiffness": "How hard the row springs to where it lands.",
+        "damping": "How fast that spring settles. Lower values bounce."
+      }
+    },
     "command-palette": {
       "description": "قائمة أوامر cmdk بسطح عادي أو زجاجي سائل ومفتاح اختصار للتفعيل.",
       "props": {
@@ -2146,6 +2228,33 @@
         "groupColorB": "The second pool colour."
       }
     },
+    "pathfinder": {
+      "description": "A pathfinding visualizer on a grid. Watch A*, Dijkstra, breadth-first or greedy search spread through a maze, then draw the path it found. Drag to draw or erase walls, or drag the start and the goal to move them. The path updates while you draw. Left alone, it builds a new maze, solves it and starts over.",
+      "props": {
+        "algorithm": "Which search runs.",
+        "maze": "How new walls are laid out.",
+        "diagonal": "Allow diagonal steps. A diagonal can't cut across a wall's corner.",
+        "speed": "How fast the search spreads.",
+        "cellSize": "Size of one grid cell.",
+        "autoplay": "Build a maze, solve it and start over while you are not editing.",
+        "searchColor": "Cells the search has explored.",
+        "pathColor": "The path it found.",
+        "boardColor": "The grid. Walls are drawn a shade off it."
+      }
+    },
+    "kanban": {
+      "description": "A kanban board with drag and drop. Drag a card within a column or over to another one, and the other cards slide out of the way. Work-in-progress columns have a limit. When one is full, the board warns you or keeps the card out. Columns fold down to a narrow rail. With a keyboard, press Space to pick up a card, move it with the arrow keys, and press Space again to drop it.",
+      "props": {
+        "wipLimit": "The most cards a work-in-progress column should hold. 0 means no limit.",
+        "wipMode": "What happens past the limit. Warn lets the card in and flags the column. Block keeps it out.",
+        "stiffness": "How hard cards spring into their new places.",
+        "damping": "How fast that spring settles.",
+        "lift": "How much a picked-up card grows.",
+        "tilt": "How far a carried card leans into the drag.",
+        "collapsible": "Let columns fold down to a narrow rail.",
+        "accentColor": "The focus ring, the outline on a lifted card, and the drop slot."
+      }
+    },
     "monolith": {
       "description": "A monumental slab floating over a reflective grid floor, rendered as a fogged 3D scene you can orbit.",
       "props": {
@@ -2274,6 +2383,43 @@
         "cameraDistance": "Orbit radius — how far the camera sits from the tree.",
         "parallax": "The camera sways sideways toward the pointer, easing back on leave.",
         "parallaxStrength": "How far the sway carries, degrees of orbit at the frame edge."
+      }
+    },
+    "silvergrass": {
+      "description": "A field of silver grass under the moon, beside left-aligned copy. Wind rolls across thousands of blades drawn on the GPU. The grass parts around the pointer, a click sends a ring of wind through it, and a drag turns the view.",
+      "props": {
+        "density": "How many blades, in fixed steps. Each step rebuilds the blade buffer.",
+        "tipColor": "Color of the moonlit blade tips.",
+        "bladeColor": "Color of the blades near the ground.",
+        "glowColor": "Light around the pointer and in each ring of wind.",
+        "skyColor": "Night sky, and the fog that hides the far field.",
+        "windSpeed": "How fast the wind rolls across the field.",
+        "windStrength": "How far the blades bend in the wind.",
+        "bladeHeight": "Blade height multiplier.",
+        "partRadius": "How wide the grass parts around the pointer. 0 turns it off.",
+        "gust": "A click or tap sends a ring of wind out through the field.",
+        "moon": "Show the moon. Off keeps only its light.",
+        "motes": "Small points of light drifting over the grass.",
+        "zoom": "Camera distance multiplier.",
+        "autoSpin": "Slow camera drift while nothing is held."
+      }
+    },
+    "penumbra": {
+      "description": "A cloud of dark shards hangs between a spotlight and a wall, beside left-aligned copy. From most angles its shadow looks like noise. Turn the cloud to its true angle and the shadow spells a word. Let go and it turns back.",
+      "props": {
+        "shardCount": "How many shards, in fixed steps. More shards draw a sharper word. Each step rebuilds the cloud.",
+        "lightColor": "Spotlight color, and the pool of light it throws on the wall.",
+        "rimColor": "Edge light on the shards.",
+        "shardColor": "Base color of the shards.",
+        "wallColor": "Color of the back wall.",
+        "shardSize": "Shard size. Small shards leave gaps in the letters.",
+        "scatter": "How far the shards spread along the light. More spread looks more random from the side.",
+        "softness": "How soft the shadow's edge is. 0 is a hard edge.",
+        "lightIntensity": "Spotlight strength.",
+        "haze": "Dust in the light beam. 0 hides the beam.",
+        "drift": "How far the shards float while idle. They float along the light, so the word holds.",
+        "snapBack": "Turn back to the true angle after you let go.",
+        "parallax": "The camera leans toward the pointer, easing back on leave."
       }
     },
     "vellum": {

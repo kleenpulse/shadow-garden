@@ -110,6 +110,8 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   tidal: dynamic(() => import("./tidal/tidal-preview"), { ssr: false }),
   "liquid-chrome": dynamic(() => import("./liquid-chrome/liquid-chrome-preview"), { ssr: false }),
   hanami: dynamic(() => import("./hanami/hanami-preview"), { ssr: false }),
+  silvergrass: dynamic(() => import("./silvergrass/silvergrass-preview"), { ssr: false }),
+  penumbra: dynamic(() => import("./penumbra/penumbra-preview"), { ssr: false }),
   ferrofluid: dynamic(() => import("./ferrofluid/ferrofluid-preview"), { ssr: false }),
   lissajous: dynamic(() => import("./lissajous/lissajous-preview"), { ssr: false }),
   anaglyph: dynamic(() => import("./anaglyph/anaglyph-preview"), { ssr: false }),
@@ -151,6 +153,14 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "timeline-scrubber": dynamic(() => import("./timeline-scrubber/timeline-scrubber-preview"), { ssr: false }),
   "visualizer": dynamic(() => import("./visualizer/visualizer-preview"), { ssr: false }),
   "data-grid": dynamic(() => import("./data-grid/data-grid-preview"), { ssr: false }),
+  chladni: dynamic(() => import("./chladni/chladni-preview"), { ssr: false }),
+  marbling: dynamic(() => import("./marbling/marbling-preview"), { ssr: false }),
+  annotate: dynamic(() => import("./annotate/annotate-preview"), { ssr: false }),
+  flipdot: dynamic(() => import("./flipdot/flipdot-preview"), { ssr: false }),
+  scratch: dynamic(() => import("./scratch/scratch-preview"), { ssr: false }),
+  "swipe-actions": dynamic(() => import("./swipe-actions/swipe-actions-preview"), { ssr: false }),
+  pathfinder: dynamic(() => import("./pathfinder/pathfinder-preview"), { ssr: false }),
+  kanban: dynamic(() => import("./kanban/kanban-preview"), { ssr: false }),
   // Landing-page templates. The preview is an iframe of the real route, so there
   // is no WebGL context to keep off the server — but ssr:false stays for the same
   // reason as everywhere else: the wrapper reads viewport state on mount.
