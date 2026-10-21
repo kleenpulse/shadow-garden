@@ -40,7 +40,7 @@ export default function RelatedComponentsList({
 								{displayName(item.name)}
 								<ProBadge pro={item.pro} variant="tiny" />
 							</h3>
-							<p className="font-sans text-xs leading-relaxed text-ink-dim">
+							<p className="line-clamp-5 font-sans text-xs leading-relaxed text-ink-dim">
 								{copy(`catalog.${item.slug}.description`, item.description)}
 							</p>
 						</Link>
