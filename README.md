@@ -37,6 +37,8 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+To verify the site in Google Search Console, pick the "HTML tag" method and set `GOOGLE_SITE_VERIFICATION` to the tag's `content` value, then redeploy.
+
 ## Tech stack
 
 - Next.js 16 (App Router, Cache Components / PPR on), React 19, TypeScript strict, Bun.

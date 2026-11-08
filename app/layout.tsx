@@ -14,6 +14,7 @@ import RenameAnnouncement from "@/components/shell/RenameAnnouncement";
 import { localeInitScript } from "@/lib/i18n/config";
 import { I18nProvider } from "@/lib/i18n/provider";
 import {
+	GOOGLE_SITE_VERIFICATION,
 	SITE_DESCRIPTION,
 	SITE_NAME,
 	SITE_TAGLINE,
@@ -90,6 +91,9 @@ export const metadata: Metadata = {
 		googleBot: { index: true, follow: true, "max-image-preview": "large" },
 	},
 	formatDetection: { telephone: false, address: false, email: false },
+	verification: GOOGLE_SITE_VERIFICATION
+		? { google: GOOGLE_SITE_VERIFICATION }
+		: undefined,
 };
 
 export default function RootLayout({
