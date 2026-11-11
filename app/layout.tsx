@@ -39,7 +39,7 @@ const spaceMono = Space_Mono({
 	weight: ["400", "700"],
 });
 
-// Component detail titles + the sidebar wordmark; one weight keeps the payload
+// Component + cookbook titles and the sidebar wordmark; one weight keeps the payload
 // to a single file.
 const figtree = Figtree({
 	variable: "--font-figtree",

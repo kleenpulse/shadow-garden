@@ -18,7 +18,7 @@ export default function CookbookHeader({
 			<p className="font-display text-[11px] uppercase tracking-[0.25em] text-ink-mute">
 				{t("eyebrow")}
 			</p>
-			<h1 className="mt-2 font-display text-3xl uppercase tracking-[0.08em] text-ink">
+			<h1 className="mt-2 font-title text-4xl font-black uppercase leading-none tracking-[0.02em] text-balance text-ink sm:text-5xl">
 				{t("title")}
 			</h1>
 			<p className="mt-3 max-w-xl font-sans text-xs md:text-sm text-ink-dim">
