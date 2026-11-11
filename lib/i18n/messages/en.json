@@ -871,6 +871,22 @@
         "paperColor": "The paper under the ink. Once the ink covers it all, only the inks show."
       }
     },
+    "anima": {
+      "description": "A still picture that looks alive. It is not a video and not 3D. One image runs through a shader. The marked parts sway and the glowing parts pulse. A band of light crosses the metal, the light of the whole scene rises and falls, and small glowing motes drift over it. Move the pointer and the near parts slide more than the far ones. A second, small image tells the shader what can bend, what glows and what is near.",
+      "props": {
+        "sway": "How far the marked parts bend. 0 holds the picture still.",
+        "speed": "How fast everything moves.",
+        "motes": "How many glowing motes drift over the picture.",
+        "moteSize": "The width of the biggest motes.",
+        "glint": "How bright the band of light is when it crosses the metal parts.",
+        "glow": "How strong the pulse is on the glowing parts.",
+        "breath": "How much the light of the whole scene rises and falls.",
+        "parallax": "How far the pointer slides the near parts against the far ones.",
+        "focus": "The depth that stays still when the pointer moves. Nearer parts slide one way and farther parts slide the other way.",
+        "moteColor": "The color of the motes.",
+        "lightColor": "The color of the light band and the glow."
+      }
+    },
     "morphing-text": {
       "description": "A gooey blur-morph that cross-dissolves between a list of words.",
       "props": {
@@ -2663,7 +2679,7 @@
     },
     "react-background-components": {
       "title": "React Background Components",
-      "intro": "Motion for the layer that sits behind everything else. Thirty-five backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything."
+      "intro": "Motion for the layer that sits behind everything else. Thirty-six backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything."
     },
     "react-power-user-components": {
       "title": "React Power-User Components",
@@ -2723,7 +2739,7 @@
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL Backgrounds",
-      "intro": "Forty-two components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-five use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Seven use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Forty-three components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-five use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Seven use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {

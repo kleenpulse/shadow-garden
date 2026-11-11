@@ -871,6 +871,22 @@
         "paperColor": "The paper under the ink. Once the ink covers it all, only the inks show."
       }
     },
+    "anima": {
+      "description": "A still picture that looks alive. It is not a video and not 3D. One image runs through a shader. The marked parts sway and the glowing parts pulse. A band of light crosses the metal, the light of the whole scene rises and falls, and small glowing motes drift over it. Move the pointer and the near parts slide more than the far ones. A second, small image tells the shader what can bend, what glows and what is near.",
+      "props": {
+        "sway": "How far the marked parts bend. 0 holds the picture still.",
+        "speed": "How fast everything moves.",
+        "motes": "How many glowing motes drift over the picture.",
+        "moteSize": "The width of the biggest motes.",
+        "glint": "How bright the band of light is when it crosses the metal parts.",
+        "glow": "How strong the pulse is on the glowing parts.",
+        "breath": "How much the light of the whole scene rises and falls.",
+        "parallax": "How far the pointer slides the near parts against the far ones.",
+        "focus": "The depth that stays still when the pointer moves. Nearer parts slide one way and farther parts slide the other way.",
+        "moteColor": "The color of the motes.",
+        "lightColor": "The color of the light band and the glow."
+      }
+    },
     "morphing-text": {
       "description": "Un morphing visqueux et flou qui fond en fondu-enchaîné d’un mot à l’autre dans une liste.",
       "props": {

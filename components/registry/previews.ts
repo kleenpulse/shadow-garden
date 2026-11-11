@@ -155,6 +155,7 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   "data-grid": dynamic(() => import("./data-grid/data-grid-preview"), { ssr: false }),
   chladni: dynamic(() => import("./chladni/chladni-preview"), { ssr: false }),
   marbling: dynamic(() => import("./marbling/marbling-preview"), { ssr: false }),
+  anima: dynamic(() => import("./anima/anima-preview"), { ssr: false }),
   annotate: dynamic(() => import("./annotate/annotate-preview"), { ssr: false }),
   flipdot: dynamic(() => import("./flipdot/flipdot-preview"), { ssr: false }),
   scratch: dynamic(() => import("./scratch/scratch-preview"), { ssr: false }),

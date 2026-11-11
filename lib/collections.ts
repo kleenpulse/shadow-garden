@@ -64,7 +64,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-background-components",
     title: "React Background Components",
     intro:
-      "Motion for the layer that sits behind everything else. Thirty-five backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything.",
+      "Motion for the layer that sits behind everything else. Thirty-six backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything.",
     filter: { kind: "category", category: "Backgrounds" },
   },
   {
@@ -184,7 +184,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-webgl-backgrounds",
     title: "React WebGL Backgrounds",
     intro:
-      "Forty-two components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-five use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Seven use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
+      "Forty-three components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-five use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Seven use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
     filter: { kind: "deps", packages: ["ogl", "three"] },
   },
 ];
