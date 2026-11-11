@@ -5,6 +5,7 @@ import { getSource, type SourceFile } from "./source";
 import { installCommand } from "./install";
 import { formatDefault, typeLabel } from "./kinds";
 import { ROLE_TABLE, rolesPresent } from "./roles";
+import { tokenCss, tokensUsed, usesDisplayFont, usesTokens } from "./bench-tokens";
 import type { ComponentEntry, PropSchema } from "./types";
 import { SITE_URL } from "@/lib/site";
 
@@ -44,19 +45,49 @@ function block(text: string, lang = ""): string {
   return `${bars}${lang}\n${text.replace(/\s+$/, "")}\n${bars}`;
 }
 
+/**
+ * The import that actually resolves, read off the shipped component file. The
+ * path is the file's own path and the binding is whatever the file exports — a
+ * handful of entries have no default export, and `entry.name` is a display name
+ * that can hold a space ("Shard Orbit"), which is not an identifier.
+ */
+function componentImport(
+  entry: ComponentEntry,
+  component: SourceFile,
+): { statement: string; tag: string } {
+  const from = `"@/${component.file.replace(/\.tsx?$/, "")}"`;
+  const fallback = entry.name.replace(/\s+/g, "");
+
+  const byDefault =
+    component.raw.match(/^export default (?:async )?function\s+(\w+)/m) ??
+    component.raw.match(/^export default (\w+)\s*;?\s*$/m);
+  if (byDefault) {
+    return { statement: `import ${byDefault[1]} from ${from};`, tag: byDefault[1] };
+  }
+
+  const named = [...component.raw.matchAll(/^export (?:function|const)\s+(\w+)/gm)].map(
+    (match) => match[1],
+  );
+  const tag =
+    named.find((name) => name.toLowerCase() === fallback.toLowerCase()) ??
+    named[0] ??
+    fallback;
+  return { statement: `import { ${tag} } from ${from};`, tag };
+}
+
 /** `<Waves color="#a855f7" amplitude={1.5} />` from the documented defaults. */
-function usage(entry: ComponentEntry): string {
+function usage(entry: ComponentEntry, tag: string): string {
   const attr = (prop: PropSchema): string =>
     prop.kind === "number" || prop.kind === "boolean"
       ? `${prop.name}={${String(prop.default)}}`
       : `${prop.name}="${prop.default}"`;
 
-  if (entry.props.length === 0) return `<${entry.name} />`;
+  if (entry.props.length === 0) return `<${tag} />`;
   if (entry.props.length <= 3) {
-    return `<${entry.name} ${entry.props.map(attr).join(" ")} />`;
+    return `<${tag} ${entry.props.map(attr).join(" ")} />`;
   }
   return [
-    `<${entry.name}`,
+    `<${tag}`,
     ...entry.props.map((prop) => `  ${attr(prop)}`),
     "/>",
   ].join("\n");
@@ -155,6 +186,8 @@ function buildPrompt(
   notes: string | null,
 ): string {
   const deps = installCommand("bun", entry);
+  const tokens = tokensUsed(files.map((file) => file.raw));
+  const component = componentImport(entry, files[0]);
   const sections: string[] = [];
 
   sections.push(
@@ -187,6 +220,26 @@ function buildPrompt(
 
   sections.push(["## Dependencies", "", block(deps, "bash")].join("\n"));
 
+  if (usesTokens(tokens)) {
+    sections.push(
+      [
+        "## Design tokens this source uses",
+        "",
+        "Some classes in the source are Motion Garden theme tokens, not stock Tailwind (`text-ink`, `bg-panel`, `font-display` and the like). Without them, parts of the component render unstyled. Add this to my global CSS, after the Tailwind import:",
+        "",
+        block(tokenCss(tokens), "css"),
+        "",
+        "The values are Motion Garden's own light and dark themes. If my project already has tokens for these roles, point the `--sg-*` variables at mine instead and tell me which you mapped. `.dark` assumes class-based dark mode — adapt the selector to how my project switches themes.",
+        ...(usesDisplayFont(tokens)
+          ? [
+              "",
+              "`font-display` expects Space Mono, and this CSS only names it. Load the font (with `next/font/google`, for example) or put my own display face first in the stack; until then it falls back to the system monospace.",
+            ]
+          : []),
+      ].join("\n"),
+    );
+  }
+
   sections.push(
     [
       "## Files to create",
@@ -212,14 +265,14 @@ function buildPrompt(
       "",
       block(
         [
-          `import ${entry.name} from "@/components/${entry.slug}/${entry.name}";`,
+          component.statement,
           "",
-          usage(entry),
+          usage(entry, component.tag),
         ].join("\n"),
         "tsx",
       ),
       "",
-      "Every value above is the documented default — pass only what you actually want to change.",
+      "The import path matches the file path above; change it if you move the component. Every value shown is the documented default — pass only what you actually want to change. The snippet lists the tunable props only: if the component's props type in the source requires others (content, handlers, data), pass those too.",
     ].join("\n"),
   );
 
@@ -242,10 +295,15 @@ function buildPrompt(
     [
       "## Your task",
       "",
-      "1. Tell me where in my project this should live and why.",
-      "2. Create the files above verbatim.",
-      "3. Wire the component into the place I point you at, with sensible props for that context.",
-      "4. Flag anything in my setup that conflicts with the stack assumptions above.",
+      ...[
+        "Tell me where in my project this should live and why.",
+        "Create the files above verbatim.",
+        ...(usesTokens(tokens)
+          ? ["Add the design tokens to my global CSS, or map them to tokens I already have."]
+          : []),
+        "Wire the component into the place I point you at, with sensible props for that context.",
+        "Flag anything in my setup that conflicts with the stack assumptions above.",
+      ].map((step, i) => `${i + 1}. ${step}`),
       "",
       "Do not restyle the component or alter the animation math unless I ask.",
     ].join("\n"),
