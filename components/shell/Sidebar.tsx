@@ -373,7 +373,7 @@ export default function Sidebar() {
 						className="flex items-baseline gap-0"
 						onClick={() => setSidebarOpen(false)}
 					>
-						<Wordmark size="sm" />
+						<Wordmark size="sm" face="title" />
 					</Link>
 				</div>
 

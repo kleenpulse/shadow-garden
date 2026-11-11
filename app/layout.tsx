@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Space_Mono } from "next/font/google";
+import { Figtree, Geist, Geist_Mono, Space_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ThemeProvider } from "@/components/theme-provider";
 import { RouteProgress } from "@/components/providers/route-progress";
@@ -37,6 +37,14 @@ const spaceMono = Space_Mono({
 	variable: "--font-space-mono",
 	subsets: ["latin"],
 	weight: ["400", "700"],
+});
+
+// Component detail titles + the sidebar wordmark; one weight keeps the payload
+// to a single file.
+const figtree = Figtree({
+	variable: "--font-figtree",
+	subsets: ["latin"],
+	weight: ["900"],
 });
 
 // No `alternates.canonical` here on purpose. Metadata merges shallowly, so a
@@ -108,7 +116,7 @@ export default function RootLayout({
 			data-scroll-behavior="smooth"
 			// next-themes stamps the theme class before hydration — expected mismatch.
 			suppressHydrationWarning
-			className={`${geistSans.variable} ${geistMono.variable} ${spaceMono.variable} h-full antialiased`}
+			className={`${geistSans.variable} ${geistMono.variable} ${spaceMono.variable} ${figtree.variable} h-full antialiased`}
 		>
 			<body className="min-h-full flex flex-col font-sans">
 				{/* Who the site is, on every route. Static data, so it lands in the

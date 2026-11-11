@@ -23,8 +23,9 @@ import { cn } from "@/lib/utils";
 // space); every animated glyph is aria-hidden. Under prefers-reduced-motion it
 // stays a plain static two-tone wordmark — no shimmer, no bursts, no timers.
 // Initial render is that same static two-tone, so SSR == first client paint (no
-// hydration mismatch; same rule as components/landing/Reveal.tsx). Space Mono is
-// monospace, so glyph swaps never change width — no reflow, no spacer needed.
+// hydration mismatch; same rule as components/landing/Reveal.tsx). A scrambled
+// cell keeps its real glyph as an invisible spacer and paints the stand-in on
+// top, so glyph swaps never change width even in the proportional `title` face.
 // The wordmark never mirrors: it is pinned dir="ltr" so RTL locales (ar) get
 // the same logo, not a reversed one.
 
@@ -44,10 +45,12 @@ const restCells = (): Cell[] =>
 export default function Wordmark({
 	size = "sm",
 	boldSecond = false,
+	face = "mono",
 	className,
 }: {
 	size?: "sm" | "xs";
 	boldSecond?: boolean;
+	face?: "mono" | "title";
 	className?: string;
 }) {
 	const reduce = useReducedMotion();
@@ -240,10 +243,13 @@ export default function Wordmark({
 			// the cursor below is correct for the same reason.
 			dir="ltr"
 			className={cn(
-				"relative inline-block whitespace-nowrap font-display uppercase",
+				"relative inline-block whitespace-nowrap uppercase",
+				face === "title" ? "font-title font-black" : "font-display",
 				size === "xs"
 					? "text-[11px] tracking-[0.12em] sm:text-sm sm:tracking-[0.2em]"
-					: "text-xs tracking-[0.2em] min-[375.5px]:text-sm",
+					: face === "title"
+						? "text-sm tracking-[0.06em] min-[375.5px]:text-base"
+						: "text-xs tracking-[0.2em] min-[375.5px]:text-sm",
 				className,
 			)}
 			onPointerEnter={() => triggerRef.current()}
@@ -304,7 +310,16 @@ export default function Wordmark({
 										"color .9s ease, opacity .16s ease, transform .16s ease",
 								}}
 							>
-								{c.ch}
+								{c.ch === GLYPHS[i] ? (
+									c.ch
+								) : (
+									<>
+										<span className="invisible">{GLYPHS[i]}</span>
+										<span className="absolute left-1/2 top-0 -translate-x-1/2">
+											{c.ch}
+										</span>
+									</>
+								)}
 								{cursor?.at === i && (
 									// absolutely placed → rides this cell, adds no width (no reflow)
 									<span

@@ -40,6 +40,7 @@
 	--font-display:
 		var(--font-space-mono), ui-monospace, "SFMono-Regular", monospace;
 	--font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+	--font-title: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 	--font-mono:
 		var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
 

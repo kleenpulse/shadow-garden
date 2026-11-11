@@ -28,7 +28,7 @@ export function ComponentHeader({ entry }: { entry: ComponentEntry }) {
 			<div className="mt-2 flex flex-wrap items-center gap-3">
 				<h1
 					className={cn(
-						"font-display text-2xl uppercase tracking-[0.08em]",
+						"font-title text-4xl font-black uppercase leading-none tracking-[0.02em] sm:text-5xl",
 						entry.slug === "grainient" ? "text-grainient" : "text-ink",
 					)}
 				>
