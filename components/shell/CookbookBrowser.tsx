@@ -478,7 +478,7 @@ export default function CookbookBrowser({
 											pulse === termAnchor(row.term) && "ring-1 ring-accent",
 										)}
 									>
-										<h3 className="relative z-10 font-display text-sm tracking-tight text-ink">
+										<h3 className="relative z-10 font-title text-sm font-medium text-ink">
 											{row.term}
 										</h3>
 										<p className="relative z-10 mt-1.5 font-sans text-[13px] leading-relaxed text-ink-dim">

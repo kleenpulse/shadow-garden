@@ -43,7 +43,7 @@ export default function LandingFooter({
 		>
 			<div className="mx-auto grid w-full max-w-landing gap-10 px-3 py-14 sm:px-6 sm:grid-cols-[1fr_auto_auto]">
 				<div>
-					<p className="font-display text-sm uppercase tracking-[0.28em] text-ink">
+					<p className="font-title text-base font-black uppercase tracking-[0.06em] text-ink">
 						Motion Garden
 					</p>
 					<p className="mt-3 max-w-sm font-sans text-xs leading-relaxed text-ink-mute">

@@ -112,7 +112,7 @@ export default function SpotlightList({
 							>
 								<span
 									className={cn(
-										"font-display text-xl uppercase tracking-tight transition-colors duration-200 md:text-4xl",
+										"font-title text-xl font-medium uppercase tracking-tight transition-colors duration-200 md:text-4xl",
 										isHovered ? v.textOn : v.text,
 									)}
 								>

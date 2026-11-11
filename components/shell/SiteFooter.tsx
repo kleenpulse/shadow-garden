@@ -49,7 +49,7 @@ export default function SiteFooter() {
 				<div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
 					<div>
 						{/* Brand name — never translated. */}
-						<p className="font-display text-sm uppercase tracking-[0.28em] text-ink">
+						<p className="font-title text-base font-black uppercase tracking-[0.06em] text-ink">
 							Motion Garden
 						</p>
 						<p className="mt-3 max-w-xs font-sans text-xs leading-relaxed text-ink-mute">

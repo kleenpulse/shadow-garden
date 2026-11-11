@@ -112,7 +112,7 @@ export function ExhibitSections({
 					</SweepReveal>
 					<div className="mt-8 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
 						<SweepReveal active={sweep} className="-mx-1 px-1">
-							<h2 className="font-display text-3xl uppercase tracking-[0.04em] text-ink sm:text-4xl">
+							<h2 className="font-title text-3xl font-black uppercase tracking-[0.02em] text-ink sm:text-4xl">
 								{/* normal-case: uppercase would turn α into Α (reads as Latin A) */}
 								<span className="normal-case text-accent">{exhibit.greek}</span>
 								<span aria-hidden> · </span>
@@ -169,7 +169,7 @@ export function CalibrationIntro() {
 		<>
 			<SpecimenPlate greek="ε" index="05" label={t("label")} meta={t("meta")} />
 			<div className="mt-8 flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
-				<h2 className="font-display text-3xl uppercase tracking-[0.04em] text-ink sm:text-4xl">
+				<h2 className="font-title text-3xl font-black uppercase tracking-[0.02em] text-ink sm:text-4xl">
 					<span className="normal-case text-accent">ε</span>
 					<span aria-hidden> · </span>
 					{t("label")}
@@ -201,7 +201,7 @@ export function ArchiveSection({
 				<span aria-hidden>·</span>
 				<span>{t("unitsMeta", { count: total })}</span>
 			</div>
-			<h2 className="mt-10 max-w-2xl font-display text-3xl uppercase leading-tight tracking-[0.04em] text-bench-100 sm:text-5xl">
+			<h2 className="mt-10 max-w-2xl font-title text-3xl font-black uppercase leading-tight tracking-[0.02em] text-balance text-bench-100 sm:text-5xl">
 				{t("archive.headline")}
 			</h2>
 			<p className="mt-6 max-w-xl font-sans text-sm leading-relaxed text-bench-300">

@@ -35,7 +35,7 @@ export default function HeroExhibit() {
 						<p className="font-display text-[10px] tracking-[0.32em] text-bench-500 uppercase">
 							hero templates
 						</p>
-						<h3 className="mt-2 font-display text-2xl leading-none tracking-tight text-bench-100 sm:text-4xl">
+						<h3 className="mt-2 font-title text-2xl font-black leading-none tracking-tight text-bench-100 sm:text-4xl">
 							MONO<span className="text-amethyst">·</span>LITH
 						</h3>
 					</div>

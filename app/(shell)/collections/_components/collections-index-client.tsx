@@ -46,7 +46,7 @@ export default function CollectionsIndexClient({
 				<p className="font-display text-[11px] uppercase tracking-[0.25em] text-ink-mute">
 					{t("eyebrow")}
 				</p>
-				<h1 className="mt-2 font-display text-3xl uppercase tracking-[0.08em] text-ink">
+				<h1 className="mt-2 font-title font-black uppercase leading-none tracking-[0.02em] text-balance text-4xl text-ink sm:text-5xl">
 					{t("title")}
 				</h1>
 				<p className="mt-3 max-w-2xl font-sans text-sm leading-relaxed text-ink-dim">
@@ -68,7 +68,7 @@ export default function CollectionsIndexClient({
 										className="flex h-full flex-col gap-2 rounded-lg bg-panel p-4 transition-colors hover:bg-raised"
 									>
 										<div className="flex items-baseline justify-between gap-2">
-											<h3 className="font-display text-sm uppercase tracking-[0.08em] text-ink">
+											<h3 className="font-title text-sm font-medium uppercase tracking-[0.04em] text-ink">
 												{copy(`collections.${item.slug}.title`, item.title)}
 											</h3>
 											<span className="shrink-0 font-display text-[10px] tracking-[0.18em] text-ink-mute">

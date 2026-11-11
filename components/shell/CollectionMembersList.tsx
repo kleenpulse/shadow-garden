@@ -37,7 +37,7 @@ export default function CollectionMembersList({
 						href={row.href}
 						className="flex h-full flex-col gap-2 rounded-lg bg-panel p-4 transition-colors hover:bg-raised"
 					>
-						<h3 className="flex items-center gap-1.5 font-display text-sm uppercase tracking-[0.08em] text-ink">
+						<h3 className="flex items-center gap-1.5 font-title text-sm font-medium uppercase tracking-[0.04em] text-ink">
 							{displayName(row.name)}
 							<ProBadge pro={row.pro} variant="tiny" />
 						</h3>

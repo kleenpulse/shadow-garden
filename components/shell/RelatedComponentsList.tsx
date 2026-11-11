@@ -36,7 +36,7 @@ export default function RelatedComponentsList({
 							href={`/components/${item.slug}`}
 							className="relative z-10 flex h-full flex-col gap-2 rounded-lg p-4"
 						>
-							<h3 className="flex items-center gap-1.5 font-display text-sm uppercase tracking-[0.08em] text-ink group-hover:text-accent">
+							<h3 className="flex items-center gap-1.5 font-title text-sm font-medium uppercase tracking-[0.04em] text-ink group-hover:text-accent">
 								{displayName(item.name)}
 								<ProBadge pro={item.pro} variant="tiny" />
 							</h3>

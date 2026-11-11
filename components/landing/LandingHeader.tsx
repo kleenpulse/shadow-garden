@@ -160,7 +160,7 @@ export default function LandingHeader() {
 			    max-w-landing column so they line up with the content below. */}
 			<div className="mx-auto flex w-full max-w-landing items-center justify-between px-3 sm:px-6">
 				<Link href="/components" className="pointer-events-auto inline-flex items-baseline">
-					<Wordmark size="sm" boldSecond />
+					<Wordmark size="sm" face="title" />
 				</Link>
 				<span className="pointer-events-auto contents">
 					<ThemeToggle />

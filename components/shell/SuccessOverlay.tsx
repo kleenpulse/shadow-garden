@@ -183,7 +183,7 @@ export default function SuccessOverlay({ onDismiss }: { onDismiss: () => void })
         </p>
         <h2
           data-rise
-          className="mt-4 font-display text-2xl tracking-tight text-ink"
+          className="mt-4 font-title text-2xl font-black tracking-tight text-ink"
         >
           {t("title")}
         </h2>

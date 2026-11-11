@@ -246,7 +246,9 @@ export default function Wordmark({
 				"relative inline-block whitespace-nowrap uppercase",
 				face === "title" ? "font-title font-black" : "font-display",
 				size === "xs"
-					? "text-[11px] tracking-[0.12em] sm:text-sm sm:tracking-[0.2em]"
+					? face === "title"
+						? "text-[13px] tracking-[0.04em] sm:text-base sm:tracking-[0.06em]"
+						: "text-[11px] tracking-[0.12em] sm:text-sm sm:tracking-[0.2em]"
 					: face === "title"
 						? "text-sm tracking-[0.06em] min-[375.5px]:text-base"
 						: "text-xs tracking-[0.2em] min-[375.5px]:text-sm",

@@ -190,7 +190,7 @@ export default function RenameAnnouncement() {
 						<p className="font-display text-[11px] uppercase tracking-[0.28em] text-accent">
 							{t("eyebrow")}
 						</p>
-						<h2 className="mt-2 font-display text-base tracking-tight text-ink sm:text-lg">
+						<h2 className="mt-2 font-title text-base font-black tracking-tight text-ink sm:text-lg">
 							{t("title")}
 						</h2>
 						<p id={descId} className="mt-1 font-sans text-sm text-ink-dim">

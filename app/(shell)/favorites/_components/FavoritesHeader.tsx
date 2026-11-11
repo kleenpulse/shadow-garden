@@ -13,7 +13,7 @@ export default function FavoritesHeader() {
 			<p className="font-display text-[11px] uppercase tracking-[0.25em] text-ink-mute">
 				{t("eyebrow")}
 			</p>
-			<h1 className="mt-2 font-display text-3xl uppercase tracking-[0.08em] text-ink">
+			<h1 className="mt-2 font-title font-black uppercase leading-none tracking-[0.02em] text-balance text-4xl text-ink sm:text-5xl">
 				{t("title")}
 			</h1>
 			<FavoritesSubtitle />

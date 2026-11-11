@@ -403,7 +403,7 @@ export default function LandingHero({
             the cube turns. `text-ink` would invert backwards in light theme. */}
 				<motion.h1
 					variants={rise}
-					className="mt-6 font-display text-hero uppercase leading-[0.95] tracking-[0.02em] text-white mix-blend-difference"
+					className="mt-6 font-title text-hero font-black uppercase leading-[0.95] tracking-[-0.01em] text-white mix-blend-difference"
 				>
 					{t("headlineCount", { count: stats.total })}
 					<br />

@@ -41,7 +41,7 @@ export default function MobileBar({ commerce = false }: { commerce?: boolean }) 
 				href={pathname === "/components" ? "/" : "/components"}
 				className="inline-flex min-w-0 shrink-0 items-baseline"
 			>
-				<Wordmark size="xs" />
+				<Wordmark size="xs" face="title" />
 			</Link>
 
 			<div className="ms-auto flex shrink-0 items-center gap-1.5 sm:gap-2">

@@ -40,7 +40,7 @@ export default function FavoritesGrid() {
         <span className="grid h-12 w-12 place-items-center rounded-full border border-hairline text-ink-mute">
           <Heart className="h-5 w-5" aria-hidden />
         </span>
-        <h2 className="mt-4 font-display text-sm uppercase tracking-[0.12em] text-ink">
+        <h2 className="mt-4 font-title text-sm font-medium uppercase tracking-[0.04em] text-ink">
           {t("emptyTitle")}
         </h2>
         <p className="mt-2 max-w-sm font-sans text-sm text-ink-dim">

@@ -149,7 +149,7 @@ export default function PricingModal({
 						<p className="font-display text-[11px] uppercase tracking-[0.28em] text-accent">
 							{t("eyebrow")}
 						</p>
-						<h2 className="mt-3 font-display text-xl tracking-tight text-ink sm:text-2xl">
+						<h2 className="mt-3 font-title text-xl font-black tracking-tight text-ink sm:text-2xl">
 							{t("title")}
 						</h2>
 						<p className="mt-2 font-sans text-sm text-ink-dim">

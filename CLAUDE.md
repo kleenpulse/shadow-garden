@@ -28,7 +28,7 @@ The brand is Motion Garden, but some names still say `shadow-garden` **on purpos
 
 ## Design — bench identity, keep it
 
-- Dark graphite instrument bench, one Amethyst accent. Mono display + readouts (Space Mono), Geist body. Shell stays chromatically quiet; the live previews supply the color.
+- Dark graphite instrument bench, one Amethyst accent. Figtree for headings (`font-title`: 900 for page/section titles, the landing hero and every wordmark; 500 for component/item names), Space Mono for small uppercase labels, counters and readouts (`font-display`), Geist body. Figtree and Space Mono carry no Greek glyphs, so the α–ζ exhibit letters render in the system fallback. Shell stays chromatically quiet; the live previews supply the color.
 - Tokens: semantic roles = runtime `--sg-*` vars on `:root` (light) / `.dark` (dark), re-exposed to utilities via `@theme inline`. Static graphite ramp `--color-bench-*` stays in `@theme`.
 - Style with semantic utilities: `bg-surface`/`bg-panel`/`bg-raised`, `border-hairline`, `text-ink`/`-dim`/`-mute`, `text-accent`, `text-on-accent`. **Never** hardcode `bench-950`/white/black on a themed surface — it breaks light mode.
 - Theme: next-themes `attribute="class"`, `defaultTheme="dark"`, no system (dark is the intended first impression). `ThemeToggle` runs a View-Transition clip-path reveal (`lib/theme-transition.ts` + `hooks/use-theme-transition.ts`); it skips the animation under reduced motion.

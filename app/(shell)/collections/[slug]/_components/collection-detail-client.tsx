@@ -25,7 +25,7 @@ export function CollectionHeader({
 
 	return (
 		<header className="pb-2">
-			<h1 className="font-display text-2xl uppercase tracking-[0.08em] text-ink">
+			<h1 className="font-title font-black uppercase leading-none tracking-[0.02em] text-balance text-4xl text-ink sm:text-5xl">
 				{copy(`collections.${slug}.title`, title)}
 			</h1>
 			<p className="mt-4 max-w-2xl font-sans text-sm leading-relaxed text-ink-dim">

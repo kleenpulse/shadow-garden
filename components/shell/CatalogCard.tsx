@@ -45,7 +45,7 @@ export default function CatalogCard({
 				    outline should read as the list of components it actually is. */}
 				<h3
 					className={cn(
-						"font-display text-sm uppercase tracking-[0.08em] line-clamp-1 truncate",
+						"font-title text-sm font-medium uppercase tracking-[0.04em] line-clamp-1 truncate",
 						slug === "grainient"
 							? "text-grainient"
 							: "text-ink group-hover:text-accent",

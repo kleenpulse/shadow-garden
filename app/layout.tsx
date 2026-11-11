@@ -39,12 +39,11 @@ const spaceMono = Space_Mono({
 	weight: ["400", "700"],
 });
 
-// Component + cookbook titles and the sidebar wordmark; one weight keeps the payload
-// to a single file.
+// 900: landing hero, page titles and the sidebar wordmark. 500: catalog card titles.
 const figtree = Figtree({
 	variable: "--font-figtree",
 	subsets: ["latin"],
-	weight: ["900"],
+	weight: ["500", "900"],
 });
 
 // No `alternates.canonical` here on purpose. Metadata merges shallowly, so a
