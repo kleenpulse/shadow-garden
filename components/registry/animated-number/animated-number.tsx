@@ -75,6 +75,8 @@ export function AnimatedNumber({
 					animate="animate"
 					exit="exit"
 					variants={animationVariants}
+					// @ts-expect-error variants carry a `transition` key that isn't part of the Variants type
+					transition={animationVariants.transition}
 					style={{
 						perspective: 1000,
 						transformStyle: "preserve-3d",

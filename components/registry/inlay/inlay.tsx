@@ -214,12 +214,16 @@ const Inlay = memo(
       gl: () => glRef.current,
     });
 
+    // Reduced motion never pours. The loop is halted, so time stays at 0 and a
+    // pour would hold its empty first frame: the type would never appear.
+    const pourFor = reducedMotion ? 0 : sweep;
+
     const live = useRef({
-      text, material, flowSpeed, scale, sweep, glow, grain, warp,
+      text, material, flowSpeed, scale, sweep: pourFor, glow, grain, warp,
       hoverBoost, colorA, colorB,
     });
     live.current = {
-      text, material, flowSpeed, scale, sweep, glow, grain, warp,
+      text, material, flowSpeed, scale, sweep: pourFor, glow, grain, warp,
       hoverBoost, colorA, colorB,
     };
 
@@ -276,7 +280,7 @@ const Inlay = memo(
           uTime: { value: 0 },
           uMaterial: { value: MATERIAL_ID[material] ?? 0 },
           uScale: { value: scale },
-          uSweep: { value: sweep },
+          uSweep: { value: pourFor },
           uGlow: { value: glow },
           uGrain: { value: grain },
           uWarp: { value: warp },
@@ -378,7 +382,7 @@ const Inlay = memo(
 
     useEffect(() => {
       loop.paint();
-    }, [material, flowSpeed, scale, sweep, glow, grain, warp, hoverBoost, colorA, colorB, loop]);
+    }, [material, flowSpeed, scale, pourFor, glow, grain, warp, hoverBoost, colorA, colorB, loop]);
 
     const track = (e: React.PointerEvent<HTMLSpanElement>) => {
       const r = e.currentTarget.getBoundingClientRect();

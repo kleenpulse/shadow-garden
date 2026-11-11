@@ -7,7 +7,7 @@ import {
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
-import { AnimatePresence, motion, useMotionValue, useSpring } from "motion/react";
+import { AnimatePresence, motion, useSpring } from "motion/react";
 
 /**
  * MagneticButton — a button that leans toward the cursor. A padded, invisible
