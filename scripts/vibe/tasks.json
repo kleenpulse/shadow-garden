@@ -1,0 +1,99 @@
+[
+  {
+    "id": "bg-waves",
+    "slug": "waves",
+    "shape": "WebGL background, component + peer hook, ogl",
+    "prompt": "Put the Waves background behind the hero section of the home page. Make it calmer than the default: amplitude 0.8, and turn mouse interaction off.",
+    "expect": [
+      { "prop": "amplitude", "equals": 0.8 },
+      { "prop": "enableMouseInteraction", "equals": false }
+    ]
+  },
+  {
+    "id": "bg-dot-field",
+    "slug": "dot-field",
+    "shape": "canvas background, component + peer hook, no packages",
+    "prompt": "Use DotField as the background of the pricing section on the home page. I want bigger dots, radius 3, with sparkle on.",
+    "expect": [
+      { "prop": "dotRadius", "equals": 3 },
+      { "prop": "sparkle", "equals": true }
+    ]
+  },
+  {
+    "id": "bg-barcode",
+    "slug": "barcode",
+    "shape": "single file, gsap, enum prop",
+    "prompt": "Add the Barcode strip just above the footer on the home page. Run it at double speed, in scrub mode.",
+    "expect": [
+      { "prop": "speed", "equals": 2 },
+      { "prop": "mode", "equals": "scrub" }
+    ]
+  },
+  {
+    "id": "text-animated-number",
+    "slug": "animated-number",
+    "shape": "single file, named export, motion",
+    "prompt": "Show the monthly price in the pricing section with AnimatedNumber. The value is 29 and I want the slide animation.",
+    "expect": [
+      { "prop": "value", "equals": 29 },
+      { "prop": "animationType", "equals": "slide" }
+    ]
+  },
+  {
+    "id": "text-marquee",
+    "slug": "marquee-text",
+    "shape": "component + sibling peer + lib/utils, named export",
+    "prompt": "Put a MarqueeText ticker under the hero heading that says \"Now shipping to 40 countries\". Slow it down to speed 20.",
+    "expect": [{ "prop": "speed", "equals": 20 }]
+  },
+  {
+    "id": "text-scramble",
+    "slug": "scramble-text",
+    "shape": "single file, no packages, two enum props",
+    "prompt": "Make the hero heading decode in with ScrambleText. Use the katakana charset and a 1500 ms duration.",
+    "expect": [
+      { "prop": "charset", "equals": "katakana" },
+      { "prop": "duration", "equals": 1500 }
+    ]
+  },
+  {
+    "id": "micro-magnetic-button",
+    "slug": "magnetic-button",
+    "shape": "single file, motion, takes children",
+    "prompt": "Add a \"Start free trial\" call to action in the hero using MagneticButton. Pull strength 0.7 and no ripple.",
+    "expect": [
+      { "prop": "pullStrength", "equals": 0.7 },
+      { "prop": "ripple", "equals": false }
+    ]
+  },
+  {
+    "id": "micro-dial",
+    "slug": "dial",
+    "shape": "single file, drag surface, reduced-motion rule",
+    "prompt": "Add a Dial to the pricing section so visitors can pick a seat count. Give it 10 detents and dot ticks.",
+    "expect": [
+      { "prop": "detents", "equals": 10 },
+      { "prop": "ticks", "equals": "dot" }
+    ]
+  },
+  {
+    "id": "system-command-palette",
+    "slug": "command-palette",
+    "shape": "component + components/ui peer + lib/utils, cmdk",
+    "prompt": "Add the CommandPalette to the home page. It should open with the / key and use the glass look.",
+    "expect": [
+      { "prop": "hotkey", "equals": "/" },
+      { "prop": "glass", "equals": true }
+    ]
+  },
+  {
+    "id": "system-approval-flow",
+    "slug": "approval-flow",
+    "shape": "six-file component + lib/utils",
+    "prompt": "Add the ApprovalFlow below the pricing section on the home page, in the compact density with auto advance on.",
+    "expect": [
+      { "prop": "density", "equals": "compact" },
+      { "prop": "autoAdvance", "equals": true }
+    ]
+  }
+]

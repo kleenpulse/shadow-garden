@@ -25,6 +25,8 @@
     "check:registry:selftest": "bun scripts/registry/selftest.ts",
     "check:strip": "bun scripts/registry/check-strip.ts",
     "verify:loop": "node scripts/verify-loop.mjs",
+    "vibe:setup": "bun --conditions=react-server scripts/vibe/setup.ts",
+    "vibe:score": "bun --conditions=react-server scripts/vibe/score.ts",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:tag": "changeset tag",
