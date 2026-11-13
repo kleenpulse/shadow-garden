@@ -307,12 +307,16 @@ const AsciiEngine = memo(
     };
 
     useEffect(() => {
-      if (!supportsWebGL2()) setFallback(true);
-    }, []);
-
-    useEffect(() => {
       const container = containerRef.current;
       if (fallback || !container) return;
+      // Checked here, in the same effect that builds the renderer. A separate
+      // effect that only sets the flag loses the race: both run in the mount
+      // commit, so the renderer is constructed against a null context and
+      // throws before the fallback ever renders.
+      if (!supportsWebGL2()) {
+        setFallback(true);
+        return;
+      }
 
       const renderer = new Renderer({
         webgl: 2,

@@ -317,6 +317,12 @@ export default function Strands({
 		const ctn = ctnDom.current;
 		if (!ctn) return;
 
+		// No WebGL at all: leave the container empty instead of throwing. ogl
+		// builds its renderer against a null context, and that error would take
+		// the whole tree down with it, not just this background.
+		const probe = document.createElement("canvas");
+		if (!probe.getContext("webgl2") && !probe.getContext("webgl")) return;
+
 		const renderer = new Renderer({
 			alpha: true,
 			premultipliedAlpha: true,
