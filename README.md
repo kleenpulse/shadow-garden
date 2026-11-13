@@ -12,13 +12,13 @@ Agents can start at [`/llms.txt`](https://shadow-garden-ui.vercel.app/llms.txt):
 ## What's inside
 
 <!-- catalog:start -->
-**157 components** across 6 categories:
+**162 components** across 6 categories:
 
-- **Backgrounds** (36) — WebGL/canvas ambience
-- **Text Animations** (26) — type in motion
-- **Micro-interactions** (43) — small mechanisms, felt more than seen
-- **Power-User Systems** (32) — command surfaces for operators
-- **Hero Templates** (11) — landing openers with dimension
+- **Backgrounds** (37) — WebGL/canvas ambience
+- **Text Animations** (27) — type in motion
+- **Micro-interactions** (44) — small mechanisms, felt more than seen
+- **Power-User Systems** (33) — command surfaces for operators
+- **Hero Templates** (12) — landing openers with dimension
 - **Landing Pages** (9) — whole-page scroll machines
 
 Browse the full catalog with live previews by running the dev server (see below).

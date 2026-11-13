@@ -887,6 +887,21 @@
         "lightColor": "The color of the light band and the glow."
       }
     },
+    "circuit": {
+      "description": "A circuit board that draws itself. Chips are placed first, then every pin grows a trace across a grid, with 45 degree bends and a via at the end. The gaps fill with loose traces. Pulses of light run along the copper, and a pulse that reaches a chip can leave again from another pin. Move the pointer and the copper near it lights up and sends out pulses of its own.",
+      "props": {
+        "cellSize": "Size of one grid cell. Small cells give a finer and busier board. A new size draws a new board.",
+        "density": "How much of the board is filled with chips and traces.",
+        "pulseRate": "How often a new pulse starts. 0 leaves the board dark.",
+        "speed": "How fast the pulses travel.",
+        "trail": "Length of the tail behind each pulse.",
+        "glow": "How strong the glow around the light is. 0 leaves a thin line.",
+        "interactive": "The pointer lights the copper near it and starts pulses there.",
+        "traceColor": "The copper at rest.",
+        "pulseColor": "The light that runs along the copper.",
+        "boardColor": "The board under the copper."
+      }
+    },
     "morphing-text": {
       "description": "A gooey blur-morph that cross-dissolves between a list of words.",
       "props": {
@@ -1217,6 +1232,20 @@
         "onColor": "The bright face of a disc.",
         "offColor": "The dark face of a disc.",
         "boardColor": "The sign behind the discs."
+      }
+    },
+    "reel": {
+      "description": "A sentence with one slot that keeps changing. The words sit on a drum. The next word rolls up from below while the old one rolls away over the top, as a whole word or letter by letter. The slot's width springs to fit each new word, so the rest of the sentence is pushed along and does not jump. A screen reader gets every word once, as a list.",
+      "props": {
+        "interval": "How long each word stays up.",
+        "mode": "What rolls. `drum` turns the whole word at once. `letters` turns each letter on its own.",
+        "stagger": "Delay between one letter and the next.",
+        "stiffness": "Spring tension for the roll and the width. Higher is faster.",
+        "damping": "Spring friction. Low values wobble before they settle.",
+        "direction": "Which way the drum turns.",
+        "pauseOnHover": "Hold the current word while the pointer is over it.",
+        "underline": "A thin bar under the slot. It follows the slot's width.",
+        "accentColor": "Color of the word in the slot, and of the bar."
       }
     },
     "pixel-transition": {
@@ -1770,6 +1799,20 @@
         "damping": "How fast that spring settles. Lower values bounce."
       }
     },
+    "sheet": {
+      "description": "A bottom sheet with three heights: peek, half and full. Drag the header and let go. The sheet carries the speed of your hand forward and snaps to the height it was heading for, so a short flick from the bottom can reach the top. Pull it past either end and it stretches like a rubber band. Above peek the page behind dims and steps back. A pull or a flick past the bottom closes it. Arrow keys on the handle step between heights, and Escape closes.",
+      "props": {
+        "peek": "Height of the lowest stop, as a share of the container.",
+        "half": "Height of the middle stop, as a share of the container.",
+        "stiffness": "Spring tension of the snap. Higher lands sooner.",
+        "damping": "Spring friction. Low values bounce at the stop before they settle.",
+        "rubberBand": "How far the sheet gives when you pull it past its ends. 0 is a hard stop.",
+        "backdrop": "How dark the page behind gets when the sheet is at full height.",
+        "recede": "The page behind scales back a little as the sheet rises.",
+        "dismissible": "A pull or a flick past the lowest stop closes the sheet. Off, the lowest stop is the floor.",
+        "accentColor": "The focus ring on the handle."
+      }
+    },
     "command-palette": {
       "description": "A cmdk command menu with a plain or liquid-glass surface and hotkey trigger.",
       "props": {
@@ -2271,6 +2314,21 @@
         "accentColor": "The focus ring, the outline on a lifted card, and the drop slot."
       }
     },
+    "treemap": {
+      "description": "A treemap you can walk into. Every box is a share of the whole, and a box with children is a frame with its children packed inside. Click a frame and it grows to fill the view. The cells that stay on screen slide to their new place, the new ones arrive from where they would have been, and a path at the top takes you back out. Arrow keys move between cells by where they are on screen. With live on, the values wander and the map keeps reflowing.",
+      "props": {
+        "gap": "Space between cells.",
+        "depth": "How many levels are drawn below the one you are in. At 1 each division is a single box.",
+        "live": "The values wander and the map is laid out again as they change.",
+        "speed": "How often the live values change.",
+        "labels": "Print a name and a value in every cell that has room.",
+        "colorBy": "What a cell's shade means: which branch it is in, how big it is, or how deep it sits.",
+        "duration": "How long a zoom or a reflow takes. 0 cuts.",
+        "radius": "Corner radius of a cell.",
+        "accentColor": "The strong end of the color ramp.",
+        "baseColor": "The weak end of the ramp, and the ground under the cells."
+      }
+    },
     "monolith": {
       "description": "A monumental slab floating over a reflective grid floor, rendered as a fogged 3D scene you can orbit.",
       "props": {
@@ -2435,6 +2493,23 @@
         "haze": "Dust in the light beam. 0 hides the beam.",
         "drift": "How far the shards float while idle. They float along the light, so the word holds.",
         "snapBack": "Turn back to the true angle after you let go.",
+        "parallax": "The camera leans toward the pointer, easing back on leave."
+      }
+    },
+    "sky-lanterns": {
+      "description": "A night lake with hundreds of paper lanterns rising off it, beside left-aligned copy. Each lantern is lit from inside, wavers like a flame and has a soft glow, and the water under it holds a broken reflection. Sweep the pointer through a lantern to knock it away. A hit through the middle sends it straight, a graze sends it sideways and spinning, and it swings, slows in the air and can bump the next one. Click the water to let go of a new cluster. Drag to turn the camera around the lake.",
+      "props": {
+        "count": "How many lanterns are in the air, in fixed steps. Each step rebuilds them.",
+        "lanternColor": "The paper of the lanterns.",
+        "glowColor": "The flame, and the light it throws.",
+        "skyColor": "The sky overhead. The horizon is worked out from it.",
+        "waterColor": "The lake.",
+        "rise": "How fast the lanterns climb. 0 holds them in the air.",
+        "flicker": "How much each flame wavers.",
+        "wind": "How far the wind leans the lanterns as they climb.",
+        "haze": "Mist in the air. More mist gives each lantern a bigger glow and hides the far ones.",
+        "reflection": "How strong the reflections on the water are.",
+        "autoRotate": "The camera turns slowly while nothing is held.",
         "parallax": "The camera leans toward the pointer, easing back on leave."
       }
     },
@@ -2675,11 +2750,11 @@
   "collections": {
     "react-micro-interactions": {
       "title": "React Micro-Interaction Components",
-      "intro": "The small responses that make an interface feel like it answered you. Forty-three components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen."
+      "intro": "The small responses that make an interface feel like it answered you. Forty-four components covering hover states, cursor effects, card transforms, dialogs, menus and machined controls. Nobody notices this layer until it is missing. Every one runs off a real pointer event, not a CSS transition alone, so the behaviour holds up under a fast cursor, a slow drag, and a touch screen."
     },
     "react-background-components": {
       "title": "React Background Components",
-      "intro": "Motion for the layer that sits behind everything else. Thirty-six backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything."
+      "intro": "Motion for the layer that sits behind everything else. Thirty-seven backgrounds that run at the back of a hero, a section, or a whole page: WebGL shader fields, canvas particle systems, drifting contour maps, and pure-CSS grids. Each one sizes itself to its container instead of the viewport, so it drops into a section as easily as a page. Palette and speed are props, and you can tune them in the browser before you copy anything."
     },
     "react-power-user-components": {
       "title": "React Power-User Components",
@@ -2687,7 +2762,7 @@
     },
     "react-text-animations": {
       "title": "React Text Animation Components",
-      "intro": "Type that moves for a reason. Twenty-six components for the moment a headline lands, a number counts, or a word swaps: scramble, split-flap, variable-font proximity, marquee, redaction, neon ignition, frost and shadow effects. Each one animates real text nodes, not an image or a canvas copy, so the words stay selectable, searchable, and readable to a screen reader while they move."
+      "intro": "Type that moves for a reason. Twenty-seven components for the moment a headline lands, a number counts, or a word swaps: scramble, split-flap, variable-font proximity, marquee, redaction, neon ignition, frost and shadow effects. Each one animates real text nodes, not an image or a canvas copy, so the words stay selectable, searchable, and readable to a screen reader while they move."
     },
     "react-landing-page-templates": {
       "title": "React Landing Page Templates",
@@ -2695,15 +2770,15 @@
     },
     "react-hover-effects": {
       "title": "React Hover Effects",
-      "intro": "Forty-seven components whose main state change is the pointer arriving. Glows that follow the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or shift underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo, so each of these picks one property to move and commits to it instead of animating everything at once."
+      "intro": "Fifty components whose main state change is the pointer arriving. Glows that follow the cursor, cards that tilt toward it, lists that dim every row but one, surfaces that dissolve or shift underneath it. Hover is the cheapest interaction in the browser and the easiest to overdo, so each of these picks one property to move and commits to it instead of animating everything at once."
     },
     "react-stagger-animation": {
       "title": "React Stagger Animation",
-      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Thirty-seven components here use it: letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting number is never the duration. It is the offset between items, and every one of these exposes it as a control you can drag."
+      "intro": "Stagger is the delay you put between siblings so a group arrives as a sequence instead of a block. Thirty-eight components here use it: letters peeling off a word, rows entering a list, cells lighting across a grid, neon tubes striking one at a time, particles seeded out of phase. The interesting number is never the duration. It is the offset between items, and every one of these exposes it as a control you can drag."
     },
     "react-drag-animations": {
       "title": "React Drag Animations",
-      "intro": "Thirty-eight components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events instead of mouse events and set touch-action on the drag surface. That is the difference between a gesture that works on a phone and one that scrolls the page instead."
+      "intro": "Forty components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events instead of mouse events and set touch-action on the drag surface. That is the difference between a gesture that works on a phone and one that scrolls the page instead."
     },
     "react-reveal-animations": {
       "title": "React Reveal Animations",
@@ -2711,7 +2786,7 @@
     },
     "react-spring-animation": {
       "title": "React Spring Animation",
-      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Twenty-nine components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
+      "intro": "Motion described by physics instead of a curve. A spring has stiffness, damping and mass rather than a duration, so it settles on its own when something interrupts it and overshoots the way a real object does. Thirty-one components here are spring-driven: magnetic buttons, bouncing dialogs, thrown lists, follow-through on a cursor, a scrubbing history head, a knob settling into its detent. Pull the damping toward zero on any of them and watch where the overshoot stops being charming."
     },
     "react-blur-effects": {
       "title": "React Blur Effects",
@@ -2727,19 +2802,19 @@
     },
     "react-layout-animation": {
       "title": "React Layout Animation",
-      "intro": "Fourteen components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear."
+      "intro": "Fifteen components that animate between two layouts, not between two styles. A card that expands into a dialog, a grid that reflows when an item leaves, a panel that resizes without its contents jumping. Layout animation means measuring the before and after positions and interpolating the difference. Done right it keeps the element continuous, so the user follows one object instead of watching one disappear and another appear."
     },
     "react-3d-tilt-effects": {
       "title": "React 3D Tilt Effects",
-      "intro": "Thirteen components that put an element in perspective and rotate it against the pointer. Tilting cards, holofoil surfaces, orbital layouts, depth that reacts to where you are looking. What decides whether this reads as expensive or cheap is the perspective distance, not the rotation angle. Too near and a small tilt distorts violently. Too far and the whole effect flattens into a slide."
+      "intro": "Fourteen components that put an element in perspective and rotate it against the pointer. Tilting cards, holofoil surfaces, orbital layouts, depth that reacts to where you are looking. What decides whether this reads as expensive or cheap is the perspective distance, not the rotation angle. Too near and a small tilt distorts violently. Too far and the whole effect flattens into a slide."
     },
     "framer-motion-components": {
       "title": "Framer Motion Components for React",
-      "intro": "Fifty-three components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn."
+      "intro": "Fifty-five components built on Motion, the animation library that used to be published as Framer Motion. It ships as the motion package now, and these lean on what it does best: layout animation, gesture handling, and springs that survive an interruption. Every one installs with a single dependency beyond React, and the source is plain idiomatic Motion, so it reads like code you would have written instead of a wrapper you have to learn."
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL Backgrounds",
-      "intro": "Forty-three components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-five use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Seven use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-seven use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Seven use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {

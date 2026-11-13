@@ -887,6 +887,21 @@
         "lightColor": "The color of the light band and the glow."
       }
     },
+    "circuit": {
+      "description": "A circuit board that draws itself. Chips are placed first, then every pin grows a trace across a grid, with 45 degree bends and a via at the end. The gaps fill with loose traces. Pulses of light run along the copper, and a pulse that reaches a chip can leave again from another pin. Move the pointer and the copper near it lights up and sends out pulses of its own.",
+      "props": {
+        "cellSize": "Size of one grid cell. Small cells give a finer and busier board. A new size draws a new board.",
+        "density": "How much of the board is filled with chips and traces.",
+        "pulseRate": "How often a new pulse starts. 0 leaves the board dark.",
+        "speed": "How fast the pulses travel.",
+        "trail": "Length of the tail behind each pulse.",
+        "glow": "How strong the glow around the light is. 0 leaves a thin line.",
+        "interactive": "The pointer lights the copper near it and starts pulses there.",
+        "traceColor": "The copper at rest.",
+        "pulseColor": "The light that runs along the copper.",
+        "boardColor": "The board under the copper."
+      }
+    },
     "morphing-text": {
       "description": "تحوّل لزج بالتمويه يتلاشى تدريجيًا بين قائمة كلمات.",
       "props": {
@@ -1217,6 +1232,20 @@
         "onColor": "The bright face of a disc.",
         "offColor": "The dark face of a disc.",
         "boardColor": "The sign behind the discs."
+      }
+    },
+    "reel": {
+      "description": "A sentence with one slot that keeps changing. The words sit on a drum. The next word rolls up from below while the old one rolls away over the top, as a whole word or letter by letter. The slot's width springs to fit each new word, so the rest of the sentence is pushed along and does not jump. A screen reader gets every word once, as a list.",
+      "props": {
+        "interval": "How long each word stays up.",
+        "mode": "What rolls. `drum` turns the whole word at once. `letters` turns each letter on its own.",
+        "stagger": "Delay between one letter and the next.",
+        "stiffness": "Spring tension for the roll and the width. Higher is faster.",
+        "damping": "Spring friction. Low values wobble before they settle.",
+        "direction": "Which way the drum turns.",
+        "pauseOnHover": "Hold the current word while the pointer is over it.",
+        "underline": "A thin bar under the slot. It follows the slot's width.",
+        "accentColor": "Color of the word in the slot, and of the bar."
       }
     },
     "pixel-transition": {
@@ -1770,6 +1799,20 @@
         "damping": "How fast that spring settles. Lower values bounce."
       }
     },
+    "sheet": {
+      "description": "A bottom sheet with three heights: peek, half and full. Drag the header and let go. The sheet carries the speed of your hand forward and snaps to the height it was heading for, so a short flick from the bottom can reach the top. Pull it past either end and it stretches like a rubber band. Above peek the page behind dims and steps back. A pull or a flick past the bottom closes it. Arrow keys on the handle step between heights, and Escape closes.",
+      "props": {
+        "peek": "Height of the lowest stop, as a share of the container.",
+        "half": "Height of the middle stop, as a share of the container.",
+        "stiffness": "Spring tension of the snap. Higher lands sooner.",
+        "damping": "Spring friction. Low values bounce at the stop before they settle.",
+        "rubberBand": "How far the sheet gives when you pull it past its ends. 0 is a hard stop.",
+        "backdrop": "How dark the page behind gets when the sheet is at full height.",
+        "recede": "The page behind scales back a little as the sheet rises.",
+        "dismissible": "A pull or a flick past the lowest stop closes the sheet. Off, the lowest stop is the floor.",
+        "accentColor": "The focus ring on the handle."
+      }
+    },
     "command-palette": {
       "description": "قائمة أوامر cmdk بسطح عادي أو زجاجي سائل ومفتاح اختصار للتفعيل.",
       "props": {
@@ -2271,6 +2314,21 @@
         "accentColor": "The focus ring, the outline on a lifted card, and the drop slot."
       }
     },
+    "treemap": {
+      "description": "A treemap you can walk into. Every box is a share of the whole, and a box with children is a frame with its children packed inside. Click a frame and it grows to fill the view. The cells that stay on screen slide to their new place, the new ones arrive from where they would have been, and a path at the top takes you back out. Arrow keys move between cells by where they are on screen. With live on, the values wander and the map keeps reflowing.",
+      "props": {
+        "gap": "Space between cells.",
+        "depth": "How many levels are drawn below the one you are in. At 1 each division is a single box.",
+        "live": "The values wander and the map is laid out again as they change.",
+        "speed": "How often the live values change.",
+        "labels": "Print a name and a value in every cell that has room.",
+        "colorBy": "What a cell's shade means: which branch it is in, how big it is, or how deep it sits.",
+        "duration": "How long a zoom or a reflow takes. 0 cuts.",
+        "radius": "Corner radius of a cell.",
+        "accentColor": "The strong end of the color ramp.",
+        "baseColor": "The weak end of the ramp, and the ground under the cells."
+      }
+    },
     "monolith": {
       "description": "A monumental slab floating over a reflective grid floor, rendered as a fogged 3D scene you can orbit.",
       "props": {
@@ -2435,6 +2493,23 @@
         "haze": "Dust in the light beam. 0 hides the beam.",
         "drift": "How far the shards float while idle. They float along the light, so the word holds.",
         "snapBack": "Turn back to the true angle after you let go.",
+        "parallax": "The camera leans toward the pointer, easing back on leave."
+      }
+    },
+    "sky-lanterns": {
+      "description": "A night lake with hundreds of paper lanterns rising off it, beside left-aligned copy. Each lantern is lit from inside, wavers like a flame and has a soft glow, and the water under it holds a broken reflection. Sweep the pointer through a lantern to knock it away. A hit through the middle sends it straight, a graze sends it sideways and spinning, and it swings, slows in the air and can bump the next one. Click the water to let go of a new cluster. Drag to turn the camera around the lake.",
+      "props": {
+        "count": "How many lanterns are in the air, in fixed steps. Each step rebuilds them.",
+        "lanternColor": "The paper of the lanterns.",
+        "glowColor": "The flame, and the light it throws.",
+        "skyColor": "The sky overhead. The horizon is worked out from it.",
+        "waterColor": "The lake.",
+        "rise": "How fast the lanterns climb. 0 holds them in the air.",
+        "flicker": "How much each flame wavers.",
+        "wind": "How far the wind leans the lanterns as they climb.",
+        "haze": "Mist in the air. More mist gives each lantern a bigger glow and hides the far ones.",
+        "reflection": "How strong the reflections on the water are.",
+        "autoRotate": "The camera turns slowly while nothing is held.",
         "parallax": "The camera leans toward the pointer, easing back on leave."
       }
     },

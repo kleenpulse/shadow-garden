@@ -174,4 +174,9 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   jinlong: dynamic(() => import("./jinlong/jinlong-preview"), { ssr: false }),
   noctis: dynamic(() => import("./noctis/noctis-preview"), { ssr: false }),
   "ember-oak": dynamic(() => import("./ember-oak/ember-oak-preview"), { ssr: false }),
+  circuit: dynamic(() => import("./circuit/circuit-preview"), { ssr: false }),
+  reel: dynamic(() => import("./reel/reel-preview"), { ssr: false }),
+  sheet: dynamic(() => import("./sheet/sheet-preview"), { ssr: false }),
+  treemap: dynamic(() => import("./treemap/treemap-preview"), { ssr: false }),
+  "sky-lanterns": dynamic(() => import("./sky-lanterns/sky-lanterns-preview"), { ssr: false }),
 };
