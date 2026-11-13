@@ -184,7 +184,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-webgl-backgrounds",
     title: "React WebGL Backgrounds",
     intro:
-      "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-seven use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Seven use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
+      "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Six use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
     filter: { kind: "deps", packages: ["ogl", "three"] },
   },
 ];

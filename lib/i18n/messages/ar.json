@@ -1920,17 +1920,22 @@
       }
     },
     "umbral-orrery": {
-      "description": "مجسّم فلكي من أقمار تُلقي ظلال كسوف حقيقية عبر عالم مظلَّل؛ اسحب للمدار.",
+      "description": "كوكب وأقماره وشمسها، يرسمها شيدر واحد بتتبع الأشعة. يلقي كل قمر ظل كسوف حقيقيًا على الكوكب، داكنًا في الوسط وناعمًا عند الحافة. يتحول القمر إلى أحمر كالجمر عندما يدخل في ظل الكوكب نفسه. اسحب لتحريك الكاميرا إلى الجانب الليلي، حيث يضيء الغلاف الجوي على شكل حلقة.",
       "props": {
-        "moonCount": "عدد الأقمار المدارية.",
-        "orbitSpeed": "سرعة المدار الإجمالية.",
-        "sunIntensity": "سطوع الشمس، الذي يقود تباين الظل.",
-        "tilt": "ميل المستويات المدارية.",
-        "planetSize": "نصف قطر الكوكب المظلَّل.",
-        "moonSize": "نصف قطر الأقمار.",
-        "sunColor": "لون دافئ للشمس وضوئها.",
-        "glowColor": "حافة أميثيستية جوّية على الكوكب.",
-        "cameraDistance": "نصف قطر مدار الكاميرا."
+        "moonCount": "عدد الأقمار التي تدور حول الكوكب.",
+        "orbitSpeed": "سرعة كل المدارات. الأقمار الداخلية تدور دائمًا أسرع من الخارجية.",
+        "tilt": "يدير المدارات حول الخط الواصل من الشمس إلى الكوكب. كل قمر يظل يصنع كسوفًا عند أي ميل.",
+        "moonSize": "حجم الأقمار. نصف قطر الكوكب يساوي 1.",
+        "sunSize": "حجم الشمس في السماء. شمس أكبر تعطي حواف ظل أنعم.",
+        "sunIntensity": "سطوع ضوء الشمس.",
+        "atmosphere": "قوة التوهج حول الكوكب.",
+        "trails": "سطوع خطوط المدارات. القيمة 0 تخفيها.",
+        "drift": "سرعة دوران الكاميرا من تلقاء نفسها. القيمة 0 تبقيها ثابتة.",
+        "zoom": "مدى قرب المشهد.",
+        "sunColor": "لون الشمس وضوئها.",
+        "glowColor": "لون الغلاف الجوي للكوكب.",
+        "planetColor": "اللون الأساسي لأحزمة السحب على الكوكب.",
+        "backgroundColor": "لون الفضاء خلف المشهد."
       }
     },
     "parallax-rail": {
@@ -2814,7 +2819,7 @@
     },
     "react-webgl-backgrounds": {
       "title": "خلفيات WebGL لـ React",
-      "intro": "Thirty-nine components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-four use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Five use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Six use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {

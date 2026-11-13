@@ -1920,17 +1920,22 @@
       }
     },
     "umbral-orrery": {
-      "description": "Un planétaire de lunes projetant de véritables ombres d’éclipse sur un monde assombri ; glissez pour orbiter.",
+      "description": "Une planète, ses lunes et leur soleil, dessinés par un seul shader en lancer de rayons. Chaque lune projette une vraie ombre d'éclipse sur la planète, sombre au centre et douce sur le bord. Une lune devient rouge braise quand elle passe dans l'ombre de la planète. Faites glisser pour amener la caméra du côté nuit, où l'atmosphère s'allume comme un anneau.",
       "props": {
-        "moonCount": "Nombre de lunes en orbite.",
-        "orbitSpeed": "Vitesse orbitale globale.",
-        "sunIntensity": "Luminosité du soleil, qui pilote le contraste des ombres.",
-        "tilt": "Inclinaison des plans orbitaux.",
-        "planetSize": "Rayon de la planète assombrie.",
-        "moonSize": "Rayon des lunes.",
-        "sunColor": "Couleur chaude du soleil et de sa lumière.",
-        "glowColor": "Liseré atmosphérique améthyste sur la planète.",
-        "cameraDistance": "Rayon orbital de la caméra."
+        "moonCount": "Nombre de lunes en orbite autour de la planète.",
+        "orbitSpeed": "Vitesse de toutes les orbites. Les lunes intérieures tournent toujours plus vite que les lunes extérieures.",
+        "tilt": "Fait tourner les orbites autour de la ligne qui va du soleil à la planète. Chaque lune produit toujours une éclipse, quelle que soit l'inclinaison.",
+        "moonSize": "Taille des lunes. Le rayon de la planète vaut 1.",
+        "sunSize": "Taille du soleil dans le ciel. Un soleil plus grand donne des bords d'ombre plus doux.",
+        "sunIntensity": "Luminosité de la lumière du soleil.",
+        "atmosphere": "Intensité de la lueur autour de la planète.",
+        "trails": "Luminosité des lignes d'orbite. 0 les masque.",
+        "drift": "Vitesse à laquelle la caméra tourne toute seule. 0 la laisse immobile.",
+        "zoom": "Proximité de la vue.",
+        "sunColor": "Couleur du soleil et de sa lumière.",
+        "glowColor": "Couleur de l'atmosphère de la planète.",
+        "planetColor": "Couleur principale des bandes de nuages de la planète.",
+        "backgroundColor": "Couleur de l'espace derrière la scène."
       }
     },
     "parallax-rail": {
@@ -2814,7 +2819,7 @@
     },
     "react-webgl-backgrounds": {
       "title": "Arrière-plans WebGL React",
-      "intro": "Thirty-nine components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-four use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Five use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Six use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {

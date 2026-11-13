@@ -1920,17 +1920,22 @@
       }
     },
     "umbral-orrery": {
-      "description": "一台由数颗卫星组成的太阳系仪，在一颗笼罩阴影的行星上投下真实的日食阴影；拖拽以环绕观察。",
+      "description": "一颗行星、它的卫星和它们的太阳，由一个光线追踪着色器绘制。每颗卫星都会在行星上投下真实的日食阴影，中心深，边缘柔和。当卫星进入行星自身的阴影时，会变成余烬般的红色。拖动可将相机转到夜面，在那里大气会亮成一个光环。",
       "props": {
-        "moonCount": "环绕运行的卫星数量。",
-        "orbitSpeed": "整体公转速度。",
-        "sunIntensity": "太阳亮度，决定阴影对比度。",
-        "tilt": "轨道平面的倾角。",
-        "planetSize": "被笼罩行星的半径。",
-        "moonSize": "卫星的半径。",
-        "sunColor": "太阳及其光线的暖色调。",
-        "glowColor": "行星大气边缘的紫水晶色光晕。",
-        "cameraDistance": "相机的环绕轨道半径。"
+        "moonCount": "环绕行星的卫星数量。",
+        "orbitSpeed": "所有轨道的速度。内侧卫星总是比外侧卫星转得更快。",
+        "tilt": "让轨道绕着太阳到行星的连线转动。无论倾角多少，每颗卫星仍会产生日食。",
+        "moonSize": "卫星的大小。行星的半径为 1。",
+        "sunSize": "太阳在天空中的大小。太阳越大，阴影边缘越柔和。",
+        "sunIntensity": "阳光的亮度。",
+        "atmosphere": "行星周围光晕的强度。",
+        "trails": "轨道线的亮度。0 表示隐藏。",
+        "drift": "相机自动环绕的速度。0 表示保持不动。",
+        "zoom": "视图的远近。",
+        "sunColor": "太阳及其光线的颜色。",
+        "glowColor": "行星大气的颜色。",
+        "planetColor": "行星云带的主色。",
+        "backgroundColor": "场景后方太空的颜色。"
       }
     },
     "parallax-rail": {
@@ -2814,7 +2819,7 @@
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL 背景",
-      "intro": "Thirty-nine components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-four use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Five use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Six use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {

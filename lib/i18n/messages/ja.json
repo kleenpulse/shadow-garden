@@ -1920,17 +1920,22 @@
       }
     },
     "umbral-orrery": {
-      "description": "本物の食(エクリプス)の影を、影に包まれた惑星の上に落とす、月々のオーラリー(太陽系儀)です。ドラッグして軌道視点を操作できます。",
+      "description": "惑星とその月、そして太陽を、ひとつのレイトレーシングシェーダーで描きます。それぞれの月は惑星の上に本物の食の影を落とし、影は中心が濃く、縁がやわらかくなります。月が惑星自身の影に入ると、残り火のような赤に変わります。ドラッグしてカメラを夜側まで回すと、大気が輪のように光ります。",
       "props": {
-        "moonCount": "公転する月の数。",
-        "orbitSpeed": "全体の公転速度。",
-        "sunIntensity": "太陽の明るさ — 影のコントラストを決定します。",
-        "tilt": "公転面の傾斜角。",
-        "planetSize": "影に包まれた惑星の半径。",
-        "moonSize": "月の半径。",
-        "sunColor": "太陽とその光の暖かみのある色。",
-        "glowColor": "惑星の大気の縁を彩るアメジスト色。",
-        "cameraDistance": "カメラの軌道半径。"
+        "moonCount": "惑星を回る月の数。",
+        "orbitSpeed": "すべての軌道の速さ。内側の月は常に外側の月より速く回ります。",
+        "tilt": "太陽と惑星を結ぶ線を軸に軌道を回します。どの傾きでも、すべての月が食を起こします。",
+        "moonSize": "月の大きさ。惑星の半径は 1 です。",
+        "sunSize": "空での太陽の大きさ。太陽が大きいほど影の縁がやわらかくなります。",
+        "sunIntensity": "太陽の光の明るさ。",
+        "atmosphere": "惑星のまわりの光の強さ。",
+        "trails": "軌道の線の明るさ。0 で非表示になります。",
+        "drift": "カメラが自動で回る速さ。0 で止まります。",
+        "zoom": "ビューの近さ。",
+        "sunColor": "太陽とその光の色。",
+        "glowColor": "惑星の大気の色。",
+        "planetColor": "惑星の雲の帯の主な色。",
+        "backgroundColor": "シーンの背後にある宇宙の色。"
       }
     },
     "parallax-rail": {
@@ -2814,7 +2819,7 @@
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL 背景",
-      "intro": "Thirty-nine components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-four use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Five use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Six use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {

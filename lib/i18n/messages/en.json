@@ -1920,17 +1920,22 @@
       }
     },
     "umbral-orrery": {
-      "description": "An orrery of moons casting real eclipse shadows across a shadowed world; drag to orbit.",
+      "description": "A planet, its moons and their sun, drawn by one ray-traced shader. Each moon casts a real eclipse shadow on the planet, dark in the middle and soft at the edge. A moon turns ember red when it passes into the planet's own shadow. Drag to move the camera around to the night side, where the atmosphere lights up as a ring.",
       "props": {
-        "moonCount": "Number of orbiting moons.",
-        "orbitSpeed": "Global orbit speed.",
-        "sunIntensity": "Sun brightness, which drives shadow contrast.",
-        "tilt": "Inclination of the orbital planes.",
-        "planetSize": "Radius of the shadowed planet.",
-        "moonSize": "Radius of the moons.",
-        "sunColor": "Warm color of the sun and its light.",
-        "glowColor": "Amethyst atmosphere rim on the planet.",
-        "cameraDistance": "Camera orbit radius."
+        "moonCount": "How many moons orbit the planet.",
+        "orbitSpeed": "Speed of every orbit. Inner moons always go around faster than outer ones.",
+        "tilt": "Turns the orbits around the line from the sun to the planet. Every moon still makes an eclipse at any tilt.",
+        "moonSize": "Size of the moons. The planet's radius is 1.",
+        "sunSize": "Size of the sun in the sky. A bigger sun gives softer shadow edges.",
+        "sunIntensity": "Brightness of the sunlight.",
+        "atmosphere": "Strength of the glow around the planet.",
+        "trails": "Brightness of the orbit lines. 0 hides them.",
+        "drift": "How fast the camera circles on its own. 0 keeps it still.",
+        "zoom": "How close the view is.",
+        "sunColor": "Color of the sun and its light.",
+        "glowColor": "Color of the planet's atmosphere.",
+        "planetColor": "Main color of the planet's cloud bands.",
+        "backgroundColor": "Color of space behind the scene."
       }
     },
     "parallax-rail": {
@@ -2814,7 +2819,7 @@
     },
     "react-webgl-backgrounds": {
       "title": "React WebGL Backgrounds",
-      "intro": "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-seven use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Seven use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
+      "intro": "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Six use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden."
     }
   },
   "collectionGroups": {

@@ -12,14 +12,18 @@ export default function UmbralOrreryPreview({
     <UmbralOrrery
       moonCount={values.moonCount as number}
       orbitSpeed={values.orbitSpeed as number}
-      sunIntensity={values.sunIntensity as number}
       tilt={values.tilt as number}
-      planetSize={values.planetSize as number}
       moonSize={values.moonSize as number}
+      sunSize={values.sunSize as number}
+      sunIntensity={values.sunIntensity as number}
+      atmosphere={values.atmosphere as number}
+      trails={values.trails as number}
+      drift={values.drift as number}
+      zoom={values.zoom as number}
       sunColor={values.sunColor as string}
       glowColor={values.glowColor as string}
-      cameraDistance={values.cameraDistance as number}
-      background="#05060a"
+      planetColor={values.planetColor as string}
+      backgroundColor={values.backgroundColor as string}
       paused={paused || reducedMotion}
     />
   );
