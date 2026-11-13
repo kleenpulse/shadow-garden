@@ -46,6 +46,14 @@ const figtree = Figtree({
 	weight: ["500", "900"],
 });
 
+// Keeps the Cache Components static-shell check on for every route. A page
+// that opts out of instant-navigation validation with `instant = false` also
+// drops that check when its `false` is the highest `instant` in the tree: the
+// build then accepts an uncached read outside <Suspense> and ships the route
+// fully dynamic, with no error. A `true` here outranks it. The two component
+// pages rely on this.
+export const instant = true;
+
 // No `alternates.canonical` here on purpose. Metadata merges shallowly, so a
 // canonical on the root layout is inherited by every page that doesn't set its own
 // — pointing all 74 URLs at `/` and suppressing the lot. Each page declares its

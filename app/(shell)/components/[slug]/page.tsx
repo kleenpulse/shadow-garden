@@ -26,6 +26,19 @@ import {
 	PropsHeading,
 } from "./_components/detail-client";
 
+// Navigation into this route is allowed to block. The page awaits `params`
+// at the top to pick the registry entry, which ties its shell to one URL and
+// trips the partial-prefetching check on every load in dev. The documented fix
+// is to move that read into an async child under <Suspense>, but that child
+// would be an async server layer above LiveWorkspace, and that corrupts Flight
+// decode on soft navigation here. Every slug is still prerendered by
+// generateStaticParams below.
+//
+// Paired with `instant = true` in app/layout.tsx. On its own this `false`
+// would also switch off the build's static-shell check for the route; the
+// root `true` keeps it on. Do not remove one without the other.
+export const instant = false;
+
 export function generateStaticParams() {
 	return getAllSlugs().map((slug) => ({ slug }));
 }
