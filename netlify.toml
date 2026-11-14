@@ -1,9 +1,13 @@
-# Netlify detects Next.js and applies its OpenNext runtime
-# (@netlify/plugin-nextjs) on every build. Don't pin the plugin: Netlify keeps it
-# current for each new Next.js release.
+# Next.js runs on Netlify through its OpenNext runtime (@netlify/plugin-nextjs).
+# Netlify only adds it on its own when it detects the framework while linking a
+# repo in the UI, so it is declared here to make every build use it. Don't pin
+# it in package.json: Netlify keeps it current for each new Next.js release.
 [build]
   command = "bun run build"
   publish = ".next"
 
 [build.environment]
   NODE_VERSION = "22"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
