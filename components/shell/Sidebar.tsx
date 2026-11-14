@@ -31,7 +31,6 @@ import {
 import { useResizable } from "./use-resizable";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import NewBadge from "./NewBadge";
-import ProBadge from "./ProBadge";
 import PillTabs, { type PillTabItem } from "./PillTabs";
 import {
 	CATALOG_FILTER_ATTR,
@@ -71,12 +70,11 @@ export default function Sidebar() {
 	// the fill below is black in both themes — the stock one's mid stop reads 2.9:1
 	// there. Punch-out fill: the amethyst tint every other tab uses muddies gradient
 	// glyphs.
-	// All three tabs always render; CSS hides the New tab (not the strip) while
+	// Both tabs always render; CSS hides the New tab (not the strip) while
 	// nothing is fresh, keyed off the has-new attribute — see globals.css.
 	const filterTabs: PillTabItem<CatalogFilter>[] = useMemo(
 		() => [
 			{ value: "all", label: t("filterTabs.all") },
-			{ value: "pro", label: t("filterTabs.pro") },
 			{
 				value: "new",
 				label: (
@@ -195,23 +193,13 @@ export default function Sidebar() {
 		if (mounted) document.documentElement.removeAttribute(CATALOG_FILTER_ATTR);
 	}, [mounted]);
 
-	// Free entries lead, Pro trails — stable sort, so the authored order survives
-	// within each half, and grouping later keeps the split per category.
-	const proLast = useMemo(
-		() => [...registry].sort((a, b) => Number(!!a.pro) - Number(!!b.pro)),
-		[],
-	);
-
 	const filtered = useMemo(() => {
 		if (effectiveFilter === "new") {
 			if (now === null) return [];
-			return proLast.filter((entry) => isWithinNewWindow(entry.addedAt, now));
+			return registry.filter((entry) => isWithinNewWindow(entry.addedAt, now));
 		}
-		if (effectiveFilter === "pro") {
-			return proLast.filter((entry) => entry.pro);
-		}
-		return proLast;
-	}, [effectiveFilter, now, proLast]);
+		return registry;
+	}, [effectiveFilter, now]);
 
 	const searching = search.trim().length > 0;
 
@@ -228,11 +216,8 @@ export default function Sidebar() {
 					),
 				}))
 				.filter((row) => row.score > 0)
-				// Relevance first; Pro sinks only on a tie, matching the browse order.
-				.sort(
-					(a, b) =>
-						b.score - a.score || Number(!!a.entry.pro) - Number(!!b.entry.pro),
-				)
+				// Relevance first; Array.sort is stable, so ties keep authored order.
+				.sort((a, b) => b.score - a.score)
 				.map((row) => row.entry)
 		);
 	}, [search, searching, filtered]);
@@ -299,7 +284,6 @@ export default function Sidebar() {
 				key={entry.slug}
 				data-entry
 				data-added={entry.addedAt}
-				data-pro={entry.pro ? "" : undefined}
 			>
 				<RowLink
 					href={href}
@@ -344,7 +328,6 @@ export default function Sidebar() {
 						<span className="min-w-0 flex-1 truncate font-sans">
 							{entry.name}
 						</span>
-						<ProBadge pro={entry.pro} variant="tiny" />
 					</span>
 				</RowLink>
 			</li>

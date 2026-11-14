@@ -252,29 +252,6 @@ const addedAtFormat: Rule = {
   },
 };
 
-// The two whole-page categories are all-Pro by decision (2026-09-18): a new
-// hero template or landing page added without the flag would silently ship
-// unbadged and ungated. The 24 scattered pro components are editorial picks —
-// no rule polices those; the `pro?: true` literal type polices the format.
-const proCategoryConsistency: Rule = {
-  id: "pro-category-consistency",
-  severity: "error",
-  what: 'every "Hero Templates" / "Landing Pages" entry carries pro: true',
-  run(ctx) {
-    return ctx.registry
-      .filter(
-        (entry) =>
-          (entry.category === "Hero Templates" ||
-            entry.category === "Landing Pages") &&
-          entry.pro !== true,
-      )
-      .map((entry) => ({
-        slug: entry.slug,
-        detail: `category "${entry.category}" is all-Pro but the entry has no pro: true — it would ship unbadged and ungated`,
-      }));
-  },
-};
-
 const cookbookTermExists: Rule = {
   id: "cookbook-term-exists",
   severity: "error",
@@ -1170,7 +1147,6 @@ export const RULES: Rule[] = [
   disabledWhenTarget,
   setsTarget,
   addedAtFormat,
-  proCategoryConsistency,
   cookbookTermExists,
   promptOverlaySlug,
   dependenciesDeclared,

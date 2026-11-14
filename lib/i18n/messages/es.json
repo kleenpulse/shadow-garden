@@ -85,8 +85,7 @@
       "filterLabel": "Filtrar componentes",
       "filterTabs": {
         "all": "todos",
-        "new": "nuevos",
-        "pro": "pro"
+        "new": "nuevos"
       },
       "componentsLabel": "Componentes",
       "noMatches": "Sin coincidencias.",
@@ -110,11 +109,13 @@
     },
     "topBar": {
       "searchPlaceholder": "Buscar componentes…",
-      "cookbookLabel": "Recetario de movimiento"
+      "cookbookLabel": "Recetario de movimiento",
+      "githubLabel": "Motion Garden en GitHub"
     },
     "mobileBar": {
       "openNavigation": "Abrir navegación",
-      "cookbookLabel": "Recetario de movimiento"
+      "cookbookLabel": "Recetario de movimiento",
+      "githubLabel": "Motion Garden en GitHub"
     },
     "footer": {
       "tagline": "Componentes React animados, en vivo y ajustables. Cada uno incluye un brief a partir del cual tu agente de código puede construir.",
@@ -131,15 +132,7 @@
       "ariaLabel": "Copiar el brief completo para agentes de código de {name}",
       "copiedAnnouncement": "Brief para agente de {name} copiado al portapapeles",
       "clipboardUnavailable": "Portapapeles no disponible en esta conexión",
-      "copyFailed": "No se pudo copiar el prompt",
-      "lockedAria": "El brief para agente de {name} está disponible en el nivel Pro"
-    },
-    "successOverlay": {
-      "ariaLabel": "Compra completada",
-      "kicker": "Bienvenido a las sombras",
-      "title": "La eminencia es tuya.",
-      "body": "Tu compra está completa. Todo el arsenal de Motion Garden ahora responde ante ti.",
-      "cta": "Entra a las sombras"
+      "copyFailed": "No se pudo copiar el prompt"
     },
     "favorites": {
       "emptyTitle": "Aún no tienes favoritos",
@@ -181,8 +174,7 @@
       "pkgManagerAria": "Gestor de paquetes",
       "copy": "copiar",
       "copied": "copiado",
-      "thenCopy": "Luego copia {count} archivos en tu proyecto:",
-      "locked": "Los comandos de instalación se desbloquean con el nivel Pro."
+      "thenCopy": "Luego copia {count} archivos en tu proyecto:"
     },
     "workspaceTabs": {
       "ariaLabel": "Vista previa o código fuente",
@@ -230,125 +222,7 @@
     "gotoTop": {
       "scrollToTop": "Volver arriba"
     },
-    "proBadge": {
-      "label": "Pro"
-    },
-    "goPro": {
-      "label": "Hazte Pro",
-      "comingSoon": "Pro llega pronto"
-    },
-    "codePanel": {
-      "lockedEyebrow": "Pro",
-      "lockedBody": "El código y el brief para agente de {name} están disponibles en el nivel Pro. La vista previa sigue gratis: suscríbete para ver el código o entregárselo a tu agente.",
-      "lockedCta": "Ver el código →"
-    },
-    "controlsLocked": {
-      "eyebrow": "Pro",
-      "body": "{propCount} controles en vivo para {name}: ajusta cada prop y la vista previa responde en tiempo real. Se desbloquea con el nivel Pro.",
-      "cta": "Desbloquear los controles →"
-    },
-    "propsLocked": {
-      "eyebrow": "Pro",
-      "body": "La API de {propCount} props de {name} — tipos, valores por defecto y qué hace cada una — está disponible en el nivel Pro. Ajusta la vista previa de arriba gratis.",
-      "cta": "Ver las props →"
-    },
-    "pricingModal": {
-      "ariaLabel": "Mejora a Motion Garden Pro",
-      "comingSoon": "Muy pronto",
-      "eyebrow": "Motion Garden Pro",
-      "title": "Desbloquea el código completo de cada espécimen Pro",
-      "subtitle": "Las vistas previas siguen gratis. Pro desbloquea el código completo y tipado, y el brief para agente, de cada componente Pro: copia, pega, publica.",
-      "close": "Cerrar",
-      "bestValue": "Mejor valor",
-      "finePrintFinal": "Todas las ventas son definitivas. Pro da acceso instantáneo a código copiable, así que los pagos no son reembolsables una vez procesados.",
-      "finePrintProvider": "Pago seguro vía Polar. Precios en USD.",
-      "plans": {
-        "lifetime": {
-          "name": "De por vida",
-          "price": "$99",
-          "cadence": "pago único",
-          "tagline": "Compra una vez, tuyo para siempre.",
-          "cta": "Comprar De por vida",
-          "features": {
-            "0": "Código completo + brief para agente de cada componente Pro",
-            "1": "Uso personal y comercial ilimitado",
-            "2": "Incluye todos los futuros componentes Pro",
-            "3": "Sin cuotas recurrentes"
-          }
-        },
-        "subscription": {
-          "name": "Membresía",
-          "price": "$4.99",
-          "cadence": "/mes",
-          "tagline": "Acceso completo, facturado mensualmente.",
-          "cta": "Suscribirse",
-          "features": {
-            "0": "Código completo + brief para agente de cada componente Pro",
-            "1": "Uso personal y comercial ilimitado",
-            "2": "Componentes nuevos en cuanto salen",
-            "3": "Cancela cuando quieras"
-          }
-        }
-      }
-    },
-    "authMenu": {
-      "signIn": "Inicia sesión con GitHub",
-      "ariaLabel": "Menú de cuenta",
-      "loading": "Cargando…",
-      "planLifetime": "De por vida",
-      "planLifetimeSub": "Tuyo para siempre",
-      "planMembership": "Membresía",
-      "planPro": "Pro",
-      "statusActive": "Activa",
-      "statusPastDue": "Pago vencido",
-      "statusCancels": "Se cancela el {date}",
-      "statusRenews": "Se renueva el {date}",
-      "upgradeToPro": "Mejorar a Pro",
-      "manageBilling": "Gestionar facturación",
-      "upgradeToLifetime": "Mejorar a De por vida",
-      "signOut": "Cerrar sesión"
-    },
-    "checkout": {
-      "signInAction": "Iniciar sesión",
-      "errors": {
-        "unconfigured": {
-          "title": "Pago no disponible",
-          "description": "Los pagos aún no están configurados. Inténtalo de nuevo en breve."
-        },
-        "no_product": {
-          "title": "Plan no encontrado",
-          "description": "Ese plan no está disponible ahora mismo."
-        },
-        "signin_required": {
-          "title": "Inicia sesión para continuar",
-          "description": "La compra debe estar vinculada a tu cuenta."
-        },
-        "failed": {
-          "title": "El pago no se inició",
-          "description": "Algo falló al conectar con la tienda. Inténtalo de nuevo."
-        }
-      },
-      "portalErrors": {
-        "unconfigured": {
-          "title": "Facturación no disponible",
-          "description": "Los pagos aún no están configurados."
-        },
-        "signin_required": {
-          "title": "Inicia sesión para gestionar la facturación",
-          "description": "Debes iniciar sesión para abrir el portal de facturación."
-        },
-        "failed": {
-          "title": "No se pudo abrir la facturación",
-          "description": "No pudimos conectar con el portal de facturación. Inténtalo de nuevo."
-        }
-      },
-      "authError": {
-        "title": "Error al iniciar sesión",
-        "description": "No se pudo completar el inicio de sesión con GitHub. Inténtalo de nuevo."
-      }
-    },
     "soundToggle": {
-      "proAria": "El sonido de interacción es una función Pro",
       "mute": "Silenciar sonidos de interacción",
       "enable": "Activar sonidos de interacción"
     },
@@ -2837,7 +2711,7 @@
       "ctaCookbook": "el Recetario",
       "readoutCube": "Campo: RubiksCube · Giro {duration}ms · Scramble {count}",
       "readoutWaves": "Campo: Waves · Amp {amplitude} · Dist {distance}",
-      "readoutRegistry": "{count, plural, one {Registro # unidad [live · tunable]} other {Registro # unidades [live · tunable]}}",
+      "readoutRegistry": "{count, plural, one {Registro # unidad [MIT · código abierto]} other {Registro # unidades [MIT · código abierto]}}",
       "readoutScrub": "Campo: RubiksCube · Guiado por scroll · Scramble {count}",
       "readoutTurn": "Giro {turn}/{total}",
       "modeLabel": "Modo",
@@ -2904,7 +2778,7 @@
         "plate": "Placa",
         "openArchive": "Abrir archivo",
         "headline": "Nada permanece en la sombra.",
-        "body": "Cada componente se renderiza en vivo, así que puedes ajustarlo antes de que tu agente escriba una sola línea. Las piezas de abajo corren en esta página. El catálogo completo está a un clic.",
+        "body": "Cada componente se renderiza en vivo, y su código fuente completo es gratis bajo la licencia MIT. Las piezas de abajo corren en esta página. El catálogo completo está a un clic.",
         "cta": "Explorar el código fuente"
       }
     },
@@ -2930,7 +2804,7 @@
       "eyebrow": "Catálogo",
       "title": "Colecciones",
       "intro": "Cortes curados del catálogo de Motion Garden: por categoría, por técnica y por librería de animación. Cada colección se calcula a partir del registro, así que nunca se desalinea de los componentes que enumera. Dirige a tu agente a una cuando necesites una familia de componentes, no una sola pieza.",
-      "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
+      "countMeta": "{count, plural, one {# componente} other {# componentes}} · todos gratuitos",
       "inThisCollection": "En esta colección",
       "theTerms": "Los términos",
       "relatedCollections": "Colecciones relacionadas"

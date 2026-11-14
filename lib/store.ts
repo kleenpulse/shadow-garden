@@ -5,8 +5,8 @@ import { persist } from "zustand/middleware";
 // not here — this store never holds anything worth sharing or deep-linking.
 export type WorkspaceTab = "preview" | "code";
 // "new" is a freshness slice — its tab only appears once at least one entry is
-// inside the New window (lib/registry/freshness). "pro" slices on the tier flag.
-export type CatalogFilter = "all" | "new" | "pro";
+// inside the New window (lib/registry/freshness).
+export type CatalogFilter = "all" | "new";
 
 // Desktop sidebar resize band. Default matches the historical `w-72` (288px).
 // The pre-paint script in app/layout.tsx reads the same clamps — keep in sync.
@@ -94,8 +94,9 @@ export const useUIStore = create<UIState>()(
         sidebarWidth: state.sidebarWidth,
         catalogFilter: state.catalogFilter,
       }),
-      // v1 dropped the free/pro tiers; a persisted "free"/"pro" coerces to "all".
-      version: 1,
+      // v1 dropped the free/pro tiers; v2 dropped the Pro filter again. Anything
+      // but "new" (a persisted "free"/"pro") coerces to "all".
+      version: 2,
       migrate: (persisted) => {
         const state = persisted as Partial<{
           sidebarWidth: number;

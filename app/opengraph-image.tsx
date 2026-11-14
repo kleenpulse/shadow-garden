@@ -106,7 +106,7 @@ export default function Image() {
 							>
 								{total} components
 							</div>
-							<div style={{ display: "flex" }}>Live · agent-ready</div>
+							<div style={{ display: "flex" }}>Open source · agent-ready</div>
 							<div style={{ display: "flex", color: HAIRLINE }}>·</div>
 							<div style={{ display: "flex" }}>React · Next.js</div>
 						</div>

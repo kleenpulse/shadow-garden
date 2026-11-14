@@ -85,8 +85,7 @@
       "filterLabel": "Filter components",
       "filterTabs": {
         "all": "all",
-        "new": "new",
-        "pro": "pro"
+        "new": "new"
       },
       "componentsLabel": "Components",
       "noMatches": "No matches.",
@@ -110,11 +109,13 @@
     },
     "topBar": {
       "searchPlaceholder": "Search components…",
-      "cookbookLabel": "Motion cook book"
+      "cookbookLabel": "Motion cook book",
+      "githubLabel": "Motion Garden on GitHub"
     },
     "mobileBar": {
       "openNavigation": "Open navigation",
-      "cookbookLabel": "Motion cook book"
+      "cookbookLabel": "Motion cook book",
+      "githubLabel": "Motion Garden on GitHub"
     },
     "footer": {
       "tagline": "Animated React components, live and tunable. Every one ships with a brief your coding agent can build from.",
@@ -131,15 +132,7 @@
       "ariaLabel": "Copy the full coding-agent brief for {name}",
       "copiedAnnouncement": "Agent brief for {name} copied to clipboard",
       "clipboardUnavailable": "Clipboard unavailable on this connection",
-      "copyFailed": "Couldn't copy the prompt",
-      "lockedAria": "The agent brief for {name} is available on the Pro tier"
-    },
-    "successOverlay": {
-      "ariaLabel": "Purchase complete",
-      "kicker": "Welcome to the shadows",
-      "title": "The eminence is yours.",
-      "body": "Your purchase is complete. The full arsenal of the Motion Garden now answers to you.",
-      "cta": "Enter the shadows"
+      "copyFailed": "Couldn't copy the prompt"
     },
     "favorites": {
       "emptyTitle": "No favorites yet",
@@ -181,8 +174,7 @@
       "pkgManagerAria": "Package manager",
       "copy": "copy",
       "copied": "copied",
-      "thenCopy": "Then copy {count} files into your project:",
-      "locked": "Install commands unlock with the Pro tier."
+      "thenCopy": "Then copy {count} files into your project:"
     },
     "workspaceTabs": {
       "ariaLabel": "Preview or source",
@@ -230,125 +222,7 @@
     "gotoTop": {
       "scrollToTop": "Scroll to top"
     },
-    "proBadge": {
-      "label": "Pro"
-    },
-    "goPro": {
-      "label": "Go Pro",
-      "comingSoon": "Pro coming soon"
-    },
-    "codePanel": {
-      "lockedEyebrow": "Pro",
-      "lockedBody": "The source and agent brief for {name} are available on the Pro tier. The preview stays free — subscribe to view the code or hand it to your agent.",
-      "lockedCta": "View the source →"
-    },
-    "controlsLocked": {
-      "eyebrow": "Pro",
-      "body": "{propCount} live controls for {name} — tune every prop and the preview answers in real time. Unlocks with the Pro tier.",
-      "cta": "Unlock the controls →"
-    },
-    "propsLocked": {
-      "eyebrow": "Pro",
-      "body": "The {propCount}-prop API for {name} — types, defaults and what each one does — is available on the Pro tier. Tune the live preview above for free.",
-      "cta": "View the props →"
-    },
-    "pricingModal": {
-      "ariaLabel": "Upgrade to Motion Garden Pro",
-      "comingSoon": "Coming soon",
-      "eyebrow": "Motion Garden Pro",
-      "title": "Unlock the full source of every Pro specimen",
-      "subtitle": "Previews stay free. Pro unlocks the complete, typed source and the full agent brief for every Pro component — copy, paste, ship.",
-      "close": "Close",
-      "bestValue": "Best value",
-      "finePrintFinal": "All sales are final. Pro grants instant access to copyable source, so payments are non-refundable once processed.",
-      "finePrintProvider": "Secure checkout via Polar. Prices in USD.",
-      "plans": {
-        "lifetime": {
-          "name": "Lifetime",
-          "price": "$99",
-          "cadence": "one-time",
-          "tagline": "Buy once, own it forever.",
-          "cta": "Buy Lifetime",
-          "features": {
-            "0": "Full source + agent brief for every Pro component",
-            "1": "Unlimited personal & commercial use",
-            "2": "All future Pro components included",
-            "3": "No recurring fees"
-          }
-        },
-        "subscription": {
-          "name": "Membership",
-          "price": "$4.99",
-          "cadence": "/month",
-          "tagline": "Full access, billed monthly.",
-          "cta": "Subscribe",
-          "features": {
-            "0": "Full source + agent brief for every Pro component",
-            "1": "Unlimited personal & commercial use",
-            "2": "New components the moment they ship",
-            "3": "Cancel anytime"
-          }
-        }
-      }
-    },
-    "authMenu": {
-      "signIn": "Sign in with GitHub",
-      "ariaLabel": "Account menu",
-      "loading": "Loading…",
-      "planLifetime": "Lifetime",
-      "planLifetimeSub": "Yours forever",
-      "planMembership": "Membership",
-      "planPro": "Pro",
-      "statusActive": "Active",
-      "statusPastDue": "Payment overdue",
-      "statusCancels": "Cancels {date}",
-      "statusRenews": "Renews {date}",
-      "upgradeToPro": "Upgrade to Pro",
-      "manageBilling": "Manage billing",
-      "upgradeToLifetime": "Upgrade to Lifetime",
-      "signOut": "Sign out"
-    },
-    "checkout": {
-      "signInAction": "Sign in",
-      "errors": {
-        "unconfigured": {
-          "title": "Checkout unavailable",
-          "description": "Payments aren't configured yet. Try again shortly."
-        },
-        "no_product": {
-          "title": "Plan not found",
-          "description": "That plan isn't available right now."
-        },
-        "signin_required": {
-          "title": "Sign in to continue",
-          "description": "A purchase must be tied to your account."
-        },
-        "failed": {
-          "title": "Checkout didn't start",
-          "description": "Something went wrong reaching the store. Please try again."
-        }
-      },
-      "portalErrors": {
-        "unconfigured": {
-          "title": "Billing unavailable",
-          "description": "Payments aren't configured yet."
-        },
-        "signin_required": {
-          "title": "Sign in to manage billing",
-          "description": "You need to be signed in to open the billing portal."
-        },
-        "failed": {
-          "title": "Couldn't open billing",
-          "description": "We couldn't reach the billing portal. Please try again."
-        }
-      },
-      "authError": {
-        "title": "Sign-in failed",
-        "description": "Couldn't complete GitHub sign-in. Please try again."
-      }
-    },
     "soundToggle": {
-      "proAria": "Interaction sound is a Pro feature",
       "mute": "Mute interaction sounds",
       "enable": "Enable interaction sounds"
     },
@@ -2837,7 +2711,7 @@
       "ctaCookbook": "the Cook Book",
       "readoutCube": "Field: RubiksCube · Turn {duration}ms · Scramble {count}",
       "readoutWaves": "Field: Waves · Amp {amplitude} · Dist {distance}",
-      "readoutRegistry": "{count, plural, one {Registry # unit [live · tunable]} other {Registry # units [live · tunable]}}",
+      "readoutRegistry": "{count, plural, one {Registry # unit [MIT · open source]} other {Registry # units [MIT · open source]}}",
       "readoutScrub": "Field: RubiksCube · Scroll-scrubbed · Scramble {count}",
       "readoutTurn": "Turn {turn}/{total}",
       "modeLabel": "Mode",
@@ -2904,7 +2778,7 @@
         "plate": "Plate",
         "openArchive": "Open archive",
         "headline": "Nothing stays in the shadow.",
-        "body": "Every component renders live, so you can tune it before your agent writes a line. The pieces below run on this page. The full catalog is one click away.",
+        "body": "Every component renders live, and its full source is free under the MIT license. The pieces below run on this page. The full catalog is one click away.",
         "cta": "Browse the source"
       }
     },
@@ -2930,7 +2804,7 @@
       "eyebrow": "Catalog",
       "title": "Collections",
       "intro": "Curated slices of the Motion Garden catalog — by category, by technique, and by animation library. Each collection is computed from the registry, so it never drifts from the components it lists. Point your agent at one when you need a family of components, not a single piece.",
-      "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
+      "countMeta": "{count, plural, one {# component} other {# components}} · all free",
       "inThisCollection": "In This Collection",
       "theTerms": "The Terms",
       "relatedCollections": "Related Collections"

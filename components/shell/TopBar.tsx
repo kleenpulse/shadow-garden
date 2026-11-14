@@ -12,22 +12,12 @@ import SoundControl from "./SoundControl";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
 import LanguagePicker from "./LanguagePicker";
-import GoProButton from "./GoProButton";
-import ProComingSoon from "./ProComingSoon";
-import AuthMenu from "./AuthMenu";
+import GithubIcon from "@/components/icons/github";
+import { SITE_REPO } from "@/lib/site";
 
 // Slim desktop chrome strip: palette trigger on the left, favorites + theme on
 // the right. Hidden on mobile — MobileBar carries the same affordances there.
-// `commerce` is resolved server-side in the (shell) layout: the Go Pro CTA and
-// account menu exist only on armed deployments. `comingSoon` fills the Go Pro
-// slot with a muted marker while payments are switched off.
-export default function TopBar({
-	commerce = false,
-	comingSoon = false,
-}: {
-	commerce?: boolean;
-	comingSoon?: boolean;
-}) {
+export default function TopBar() {
 	const t = useTranslations("chrome.topBar");
 	const setPaletteOpen = useUIStore((state) => state.setPaletteOpen);
 	const { play, hoverProps } = useInteractionSound();
@@ -56,7 +46,6 @@ export default function TopBar({
 			</button>
 
 			<div className="ms-auto flex items-center gap-2">
-				{commerce ? <GoProButton /> : comingSoon ? <ProComingSoon /> : null}
 				<Link
 					href="/cookbook"
 					aria-label={t("cookbookLabel")}
@@ -74,7 +63,16 @@ export default function TopBar({
 				<SoundControl />
 				<LanguagePicker />
 				<ThemeToggle />
-				{commerce && <AuthMenu />}
+				<a
+					href={SITE_REPO}
+					target="_blank"
+					rel="noreferrer"
+					aria-label={t("githubLabel")}
+					title={t("githubLabel")}
+					className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8"
+				>
+					<GithubIcon className="size-4" aria-hidden />
+				</a>
 			</div>
 		</div>
 	);

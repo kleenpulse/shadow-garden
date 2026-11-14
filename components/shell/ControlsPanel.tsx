@@ -46,7 +46,6 @@ export default function ControlsPanel({
 	onReset,
 	dense = false,
 	pausable = false,
-	locked = null,
 }: {
 	props: PropSchema[];
 	values: TunedValues;
@@ -57,10 +56,6 @@ export default function ControlsPanel({
 	dense?: boolean;
 	/** Show the pause/play toggle — set for components with a halt-able loop. */
 	pausable?: boolean;
-	/** Replaces the control grid for a locked Pro component. A node, not a boolean:
-	    the host route owns the upgrade path, and the entitlement answer is resolved
-	    server-side before it ever gets here. */
-	locked?: React.ReactNode;
 }) {
 	const paused = useUIStore((s) => s.paused);
 	const togglePaused = useUIStore((s) => s.togglePaused);
@@ -94,9 +89,8 @@ export default function ControlsPanel({
 					</button>
 				</div>
 			</header>
-			{locked}
 			{/* Full-width bench: controls flow in columns beneath the preview/code tabs. */}
-			{!locked && <div
+			<div
 				className={
 					dense
 						? "grid grid-cols-1 items-start gap-y-4 p-3"
@@ -125,7 +119,7 @@ export default function ControlsPanel({
 							/>
 						);
 				})}
-			</div>}
+			</div>
 		</section>
 	);
 }

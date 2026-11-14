@@ -128,10 +128,6 @@ export interface ComponentEntry {
   /** ISO date (YYYY-MM-DD) the component was added. Drives the transient "New"
       badge (< NEW_WINDOW_DAYS old); absent means never-new. */
   addedAt?: string;
-  /** Member of the paid tier. The Code tab, install block and AI prompt lock
-      for it only while the commerce stack is armed (lib/capabilities.ts
-      commerceArmed); the badge shows regardless. Absent means free. */
-  pro?: true;
   description: string;
   /** Drives the Controls panel and the Props API table. */
   props: PropSchema[];

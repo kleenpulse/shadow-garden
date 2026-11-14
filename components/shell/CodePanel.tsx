@@ -1,21 +1,14 @@
 import { getSource } from "@/lib/registry/source";
 import type { ComponentEntry } from "@/lib/registry/types";
 import CodeBlock from "./CodeBlock";
-import CodePanelLocked from "./CodePanelLocked";
 import CodeTabs from "./CodeTabs";
 import CodeTree from "./CodeTree";
 
 // Server component: reads the shipped source from disk (comments stripped) and
-// renders the highlighted panel. The gated read happens in getSource — for a
-// locked Pro component the raw source never crosses to the client. Pro entries
-// read cookies there and are therefore dynamic, so callers render this inside
-// <Suspense> (they already do).
+// renders the highlighted panel. Callers render this inside <Suspense> so the
+// disk read and highlighting stream in without holding up the static shell.
 export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
   const result = await getSource(entry);
-
-  if (result.status === "locked") {
-    return <CodePanelLocked name={entry.name} />;
-  }
 
   if (result.status === "pending") {
     return (

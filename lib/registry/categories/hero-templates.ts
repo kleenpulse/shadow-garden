@@ -26,7 +26,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Monolith",
 		category: "Hero Templates",
 		addedAt: ADDED,
-		pro: true,
 		pausable: true,
 		description:
 			"A monumental slab floating over a reflective grid floor, rendered as a fogged 3D scene you can orbit.",
@@ -131,7 +130,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Shard Orbit",
 		category: "Hero Templates",
 		addedAt: ADDED,
-		pro: true,
 		pausable: true,
 		description:
 			"A giant crystal monolith turning on its axis in a glitter field, or a halo or helix of instanced shards lit by the pulsing core, drag-orbited beside left-aligned copy, fully GPU-driven.",
@@ -268,7 +266,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Grid Horizon",
 		category: "Hero Templates",
 		addedAt: ADDED,
-		pro: true,
 		pausable: true,
 		description:
 			"A synthwave horizon in one fragment shader. A glowing grid floor, a banded sun, parallax ridges and a pulse rolling out of the vanishing point.",
@@ -356,7 +353,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Warp Run",
 		category: "Hero Templates",
 		addedAt: ADDED,
-		pro: true,
 		pausable: true,
 		description:
 			"A star-streak tunnel rendered as velocity-stretched lines; the pointer steers, dragging banks the ship.",
@@ -437,7 +433,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Depth Stage",
 		category: "Hero Templates",
 		addedAt: ADDED,
-		pro: true,
 		pausable: false,
 		description:
 			"A DOM hero stage where any children become parallax layers in real 3D. Pointer-tracked tilt, spring physics, a following spotlight, depth of field, staggered entrance, zero canvas.",
@@ -514,7 +509,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Eclipse Flare",
 		category: "Hero Templates",
 		addedAt: ADDED_VOL,
-		pro: true,
 		pausable: true,
 		description:
 			"A total eclipse under liquid-glass copy: a streamered corona, a diamond-ring flare on the breath, god-rays marched through drifting cirrus in one jittered pass.",
@@ -610,7 +604,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Tidal",
 		category: "Hero Templates",
 		addedAt: ADDED_VOL,
-		pro: true,
 		pausable: true,
 		description:
 			"A dusk ocean under flat, left-aligned copy: noise-warped swells with wind ripple, sunlit crests, a sun path and breaking foam, raymarched in one bounded pass.",
@@ -712,7 +705,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Liquid Chrome",
 		category: "Hero Templates",
 		addedAt: ADDED_VOL,
-		pro: true,
 		pausable: true,
 		description:
 			"A liquid-chrome form of fused spheres over a black mirror floor: rectangular studio softboxes, one mirror bounce and soft occlusion, sphere-traced in one pass beside left-aligned copy.",
@@ -802,7 +794,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Hanami",
 		category: "Hero Templates",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"A painterly 3D cherry-blossom hero: a toon-shaded tree over an unbroken meadow, wind-driven petals drifting across left-anchored copy, orbitable by drag.",
@@ -897,7 +888,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Silvergrass",
 		category: "Hero Templates",
 		addedAt: ADDED_NIGHT,
-		pro: true,
 		pausable: true,
 		description:
 			"A field of silver grass under the moon, beside left-aligned copy. Wind rolls across thousands of blades drawn on the GPU. The grass parts around the pointer, a click sends a ring of wind through it, and a drag turns the view.",
@@ -1029,7 +1019,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Penumbra",
 		category: "Hero Templates",
 		addedAt: ADDED_NIGHT,
-		pro: true,
 		pausable: true,
 		description:
 			"A cloud of dark shards hangs between a spotlight and a wall, beside left-aligned copy. From most angles its shadow looks like noise. Turn the cloud to its true angle and the shadow spells a word. Let go and it turns back.",
@@ -1159,7 +1148,6 @@ export const heroTemplates: ComponentEntry[] = [
 		name: "Sky Lanterns",
 		category: "Hero Templates",
 		addedAt: "2026-11-11",
-		pro: true,
 		pausable: true,
 		description:
 			"A night lake with hundreds of paper lanterns rising off it, beside left-aligned copy. Each lantern is lit from inside, wavers like a flame and has a soft glow, and the water under it holds a broken reflection. Sweep the pointer through a lantern to knock it away. A hit through the middle sends it straight, a graze sends it sideways and spinning, and it swings, slows in the air and can bump the next one. Click the water to let go of a new cluster. Drag to turn the camera around the lake.",

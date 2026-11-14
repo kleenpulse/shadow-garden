@@ -2251,7 +2251,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Contour",
 		category: "Backgrounds",
 		addedAt: "2026-08-14",
-		pro: true,
 		pausable: true,
 		description:
 			"A topographic map of terrain that will not hold still. The lines are not drawn, they are found. A height field is sampled onto a grid every frame and marching squares walks it once per altitude, emitting segments wherever the land crosses that height. Nothing here knows what a ridge is. Ridges are where the crossings bunch up. The pointer raises a hill the contours have to route around, and because the interval is fixed rather than the line count, that extra altitude produces extra rings instead of restretching the ones already on screen.",
@@ -2918,7 +2917,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Moire",
 		category: "Backgrounds",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"Two lattices stacked at a fraction of a degree apart, beating against each other into live interference fringes. Every layer is band-limited in the shader, so what you see is the interference and not the sampling.",
@@ -3049,7 +3047,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Dither",
 		category: "Backgrounds",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"A live field crushed to one bit through an ordered threshold matrix. The only background here that looks better the cheaper it gets, and the only one that runs the same on a decade-old laptop as on a workstation.",
@@ -3175,7 +3172,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "SakuraTree",
 		category: "Backgrounds",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"A painterly toon-shaded 3D cherry-blossom scene with wind-driven falling petals.",
@@ -3253,7 +3249,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "FlockField",
 		category: "Backgrounds",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"A murmuration of hundreds of boids wheeling as one — separation, alignment, and cohesion resolved every frame through a spatial hash for the crowd, banking toward or scattering from your cursor, smeared into long trails of amethyst and cyan as the flock folds across the dark.",
@@ -3399,7 +3394,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Caustics",
 		category: "Backgrounds",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"Light through moving water. The filaments are the zero crossings of a noise field folded back on itself, not its peaks — which is why they stay thin and hard-edged at any brightness instead of blooming into blobs. The lattice is periodic, so the flow offset wraps and the motion never coarsens over a long session.",
@@ -3527,7 +3521,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "VoronoiShatter",
 		category: "Backgrounds",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"Lit cells that fracture apart under the pointer and knit back together behind it. The seam is drawn from the gap between the two nearest seeds rather than the distance to the nearest one, so it holds an even width right through the vertices where three cells meet — and the shatter displaces the space rather than the seeds, so no cell ever swaps neighbours mid-fracture.",
@@ -3652,7 +3645,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "HorizonAurora",
 		category: "Backgrounds",
 		addedAt: "2026-09-28",
-		pro: true,
 		pausable: true,
 		description:
 			"Smoky first light rising off a curved horizon. A domain-warped fbm field is sheared along a slow lean, so the noise stretches into strands of smoke, and a thin bright rim pools right on the horizon line the way light gathers at the edge of a planet. Move the pointer over it and the plume leans toward it and climbs to meet it, then drifts home when you leave. The horizon lies along the bottom edge or the top, and sits wherever you put it: right on the edge as a footer or header glow, or moved in with dark ground behind it.",
@@ -3871,7 +3863,6 @@ export const backgrounds: ComponentEntry[] = [
 		name: "Marbling",
 		category: "Backgrounds",
 		addedAt: "2026-10-21",
-		pro: true,
 		pausable: true,
 		description:
 			"Paper marbling made with the exact drop and comb math from the paper Mathematical Marbling. Each new ink drop pushes every older ring outward. The rings stretch, but they never overlap or tear. Every few drops, a comb drags through the ink and pulls it into feathers. Drag across it to pull the ink like a stylus.",

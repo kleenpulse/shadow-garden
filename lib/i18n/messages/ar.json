@@ -85,8 +85,7 @@
       "filterLabel": "تصفية المكوّنات",
       "filterTabs": {
         "all": "الكل",
-        "new": "جديد",
-        "pro": "pro"
+        "new": "جديد"
       },
       "componentsLabel": "المكوّنات",
       "noMatches": "لا توجد نتائج مطابقة.",
@@ -110,11 +109,13 @@
     },
     "topBar": {
       "searchPlaceholder": "ابحث عن المكوّنات…",
-      "cookbookLabel": "دفتر وصفات الحركة"
+      "cookbookLabel": "دفتر وصفات الحركة",
+      "githubLabel": "Motion Garden على GitHub"
     },
     "mobileBar": {
       "openNavigation": "فتح التنقل",
-      "cookbookLabel": "دفتر وصفات الحركة"
+      "cookbookLabel": "دفتر وصفات الحركة",
+      "githubLabel": "Motion Garden على GitHub"
     },
     "footer": {
       "tagline": "مكوّنات React متحركة، حيّة وقابلة للضبط. كل واحد منها يأتي بموجز يستطيع وكيل البرمجة لديك البناء عليه.",
@@ -131,15 +132,7 @@
       "ariaLabel": "نسخ الموجز الكامل لوكيل البرمجة لـ {name}",
       "copiedAnnouncement": "تم نسخ موجز الوكيل لـ {name} إلى الحافظة",
       "clipboardUnavailable": "الحافظة غير متاحة على هذا الاتصال",
-      "copyFailed": "تعذّر نسخ الطلب",
-      "lockedAria": "موجز الوكيل لـ {name} متاح في مستوى Pro"
-    },
-    "successOverlay": {
-      "ariaLabel": "اكتمل الشراء",
-      "kicker": "مرحبًا بك في الظلال",
-      "title": "السيادة أصبحت لك الآن.",
-      "body": "اكتمل شراؤك. أصبحت الترسانة الكاملة لـ Motion Garden تحت إمرتك.",
-      "cta": "ادخل إلى الظلال"
+      "copyFailed": "تعذّر نسخ الطلب"
     },
     "favorites": {
       "emptyTitle": "لا توجد مفضّلات بعد",
@@ -181,8 +174,7 @@
       "pkgManagerAria": "مدير الحزم",
       "copy": "نسخ",
       "copied": "تم النسخ",
-      "thenCopy": "ثم انسخ {count} ملفات إلى مشروعك:",
-      "locked": "أوامر التثبيت تُفتح مع مستوى Pro."
+      "thenCopy": "ثم انسخ {count} ملفات إلى مشروعك:"
     },
     "workspaceTabs": {
       "ariaLabel": "معاينة أو كود",
@@ -230,125 +222,7 @@
     "gotoTop": {
       "scrollToTop": "التمرير إلى الأعلى"
     },
-    "proBadge": {
-      "label": "Pro"
-    },
-    "goPro": {
-      "label": "الترقية إلى Pro",
-      "comingSoon": "Pro قريبًا"
-    },
-    "codePanel": {
-      "lockedEyebrow": "Pro",
-      "lockedBody": "شيفرة {name} وموجز الوكيل متاحان في مستوى Pro. تبقى المعاينة مجانية — اشترك لعرض الشيفرة أو تسليمها لوكيلك.",
-      "lockedCta": "عرض الشيفرة →"
-    },
-    "controlsLocked": {
-      "eyebrow": "Pro",
-      "body": "{propCount} عنصر تحكم مباشر لـ {name} — اضبط كل خاصية وتستجيب المعاينة فورًا. يُفتح مع مستوى Pro.",
-      "cta": "افتح عناصر التحكم →"
-    },
-    "propsLocked": {
-      "eyebrow": "Pro",
-      "body": "واجهة props المكوّنة من {propCount} خاصية لـ {name} — الأنواع والقيم الافتراضية ودور كل منها — متاحة في مستوى Pro. اضبط المعاينة المباشرة أعلاه مجانًا.",
-      "cta": "عرض الـ props →"
-    },
-    "pricingModal": {
-      "ariaLabel": "الترقية إلى Motion Garden Pro",
-      "comingSoon": "قريبًا",
-      "eyebrow": "Motion Garden Pro",
-      "title": "افتح الشيفرة الكاملة لكل عيّنة Pro",
-      "subtitle": "تبقى المعاينات مجانية. يفتح Pro الشيفرة الكاملة المصنّفة الأنواع وموجز الوكيل الكامل لكل مكوّن Pro — انسخ والصق وأطلق.",
-      "close": "إغلاق",
-      "bestValue": "أفضل قيمة",
-      "finePrintFinal": "جميع المبيعات نهائية. يمنح Pro وصولًا فوريًا إلى شيفرة قابلة للنسخ، لذا لا تُسترد المدفوعات بعد معالجتها.",
-      "finePrintProvider": "دفع آمن عبر Polar. الأسعار بالدولار الأمريكي.",
-      "plans": {
-        "lifetime": {
-          "name": "مدى الحياة",
-          "price": "$99",
-          "cadence": "دفعة واحدة",
-          "tagline": "اشترِ مرة، وامتلكه للأبد.",
-          "cta": "شراء مدى الحياة",
-          "features": {
-            "0": "الشيفرة الكاملة + موجز الوكيل لكل مكوّن Pro",
-            "1": "استخدام شخصي وتجاري غير محدود",
-            "2": "يشمل كل مكوّنات Pro المستقبلية",
-            "3": "بلا رسوم متكررة"
-          }
-        },
-        "subscription": {
-          "name": "عضوية",
-          "price": "$4.99",
-          "cadence": "/شهريًا",
-          "tagline": "وصول كامل بفوترة شهرية.",
-          "cta": "اشترك",
-          "features": {
-            "0": "الشيفرة الكاملة + موجز الوكيل لكل مكوّن Pro",
-            "1": "استخدام شخصي وتجاري غير محدود",
-            "2": "المكوّنات الجديدة فور صدورها",
-            "3": "ألغِ في أي وقت"
-          }
-        }
-      }
-    },
-    "authMenu": {
-      "signIn": "تسجيل الدخول عبر GitHub",
-      "ariaLabel": "قائمة الحساب",
-      "loading": "جارٍ التحميل…",
-      "planLifetime": "مدى الحياة",
-      "planLifetimeSub": "ملكك للأبد",
-      "planMembership": "عضوية",
-      "planPro": "Pro",
-      "statusActive": "نشطة",
-      "statusPastDue": "دفعة متأخرة",
-      "statusCancels": "تُلغى في {date}",
-      "statusRenews": "تتجدد في {date}",
-      "upgradeToPro": "الترقية إلى Pro",
-      "manageBilling": "إدارة الفوترة",
-      "upgradeToLifetime": "الترقية إلى مدى الحياة",
-      "signOut": "تسجيل الخروج"
-    },
-    "checkout": {
-      "signInAction": "تسجيل الدخول",
-      "errors": {
-        "unconfigured": {
-          "title": "الدفع غير متاح",
-          "description": "لم تُهيأ المدفوعات بعد. حاول مجددًا قريبًا."
-        },
-        "no_product": {
-          "title": "الخطة غير موجودة",
-          "description": "هذه الخطة غير متاحة حاليًا."
-        },
-        "signin_required": {
-          "title": "سجّل الدخول للمتابعة",
-          "description": "يجب ربط الشراء بحسابك."
-        },
-        "failed": {
-          "title": "لم يبدأ الدفع",
-          "description": "تعذر الوصول إلى المتجر. حاول مرة أخرى."
-        }
-      },
-      "portalErrors": {
-        "unconfigured": {
-          "title": "الفوترة غير متاحة",
-          "description": "لم تُهيأ المدفوعات بعد."
-        },
-        "signin_required": {
-          "title": "سجّل الدخول لإدارة الفوترة",
-          "description": "يجب تسجيل الدخول لفتح بوابة الفوترة."
-        },
-        "failed": {
-          "title": "تعذر فتح الفوترة",
-          "description": "تعذر الوصول إلى بوابة الفوترة. حاول مرة أخرى."
-        }
-      },
-      "authError": {
-        "title": "فشل تسجيل الدخول",
-        "description": "تعذر إتمام تسجيل الدخول عبر GitHub. حاول مرة أخرى."
-      }
-    },
     "soundToggle": {
-      "proAria": "صوت التفاعل ميزة Pro",
       "mute": "كتم أصوات التفاعل",
       "enable": "تفعيل أصوات التفاعل"
     },
@@ -2837,7 +2711,7 @@
       "ctaCookbook": "دفتر الوصفات",
       "readoutCube": "الحقل: RubiksCube · دوران {duration} مللي ثانية · تشويش {count}",
       "readoutWaves": "الحقل: Waves · السعة {amplitude} · المسافة {distance}",
-      "readoutRegistry": "{count, plural, one {السجل # وحدة [live · tunable]} other {السجل # وحدات [live · tunable]}}",
+      "readoutRegistry": "{count, plural, one {السجل # وحدة [MIT · مفتوح المصدر]} other {السجل # وحدات [MIT · مفتوح المصدر]}}",
       "readoutScrub": "الحقل: RubiksCube · مقاد بالتمرير · تشويش {count}",
       "readoutTurn": "دوران {turn}/{total}",
       "modeLabel": "الوضع",
@@ -2904,7 +2778,7 @@
         "plate": "لوحة",
         "openArchive": "فتح الأرشيف",
         "headline": "لا شيء يبقى في الظل.",
-        "body": "كل مكوّن يُعرض مباشرة، فاضبطه قبل أن يكتب وكيلك سطرًا واحدًا. القطع أدناه تعمل على هذه الصفحة. والفهرس الكامل على بُعد نقرة واحدة.",
+        "body": "كل مكوّن يُعرض مباشرة، ومصدره الكامل مجاني بترخيص MIT. القطع أدناه تعمل على هذه الصفحة. والفهرس الكامل على بُعد نقرة واحدة.",
         "cta": "تصفّح المصدر"
       }
     },
@@ -2930,7 +2804,7 @@
       "eyebrow": "الفهرس",
       "title": "المجموعات",
       "intro": "شرائح منتقاة من فهرس Motion Garden — حسب الفئة، حسب التقنية، وحسب مكتبة الحركة. كل مجموعة محسوبة من السجل، فلا تنحرف أبدًا عن المكوّنات التي تسردها. وجّه وكيلك إلى إحداها حين تحتاج عائلة من المكوّنات لا قطعة واحدة.",
-      "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
+      "countMeta": "{count, plural, one {# مكوّن} other {# مكوّنات}} · الكل مجاني",
       "inThisCollection": "في هذه المجموعة",
       "theTerms": "المصطلحات",
       "relatedCollections": "مجموعات ذات صلة"

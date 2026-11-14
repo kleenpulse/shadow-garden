@@ -45,3 +45,6 @@ next-env.d.ts
 
 # /brag launch-video runs (renders + 300MB+ of intermediate frames)
 /brag-output*/
+
+# Local Netlify folder
+.netlify

@@ -9,13 +9,11 @@ import { useUIStore } from "@/lib/store";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
-import AuthMenu from "./AuthMenu";
+import GithubIcon from "@/components/icons/github";
+import { SITE_REPO } from "@/lib/site";
 import Wordmark from "@/components/Wordmark";
 
-// `commerce` is resolved server-side in the (shell) layout — armed deployments
-// only. The Go Pro CTA is desktop-only; mobile gets the account menu, whose
-// dropdown carries its own bottom utility row.
-export default function MobileBar({ commerce = false }: { commerce?: boolean }) {
+export default function MobileBar() {
 	const t = useTranslations("chrome.mobileBar");
 	const tc = useTranslations("common");
 	const toggleSidebar = useUIStore((state) => state.toggleSidebar);
@@ -68,7 +66,16 @@ export default function MobileBar({ commerce = false }: { commerce?: boolean }) 
 				</Link>
 				<FavoritesLink />
 				<ThemeToggle />
-				{commerce && <AuthMenu />}
+				<a
+					href={SITE_REPO}
+					target="_blank"
+					rel="noreferrer"
+					aria-label={t("githubLabel")}
+					title={t("githubLabel")}
+					className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim hover:text-accent"
+				>
+					<GithubIcon className="size-4" aria-hidden />
+				</a>
 			</div>
 		</div>
 	);

@@ -3078,7 +3078,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "FileExplorer",
 		category: "Power-User Systems",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A persistent three-pane file manager that stores real image, video, and blob uploads 100% client-side — OPFS when available, IndexedDB everywhere else — with nested folders, search, sort, drag-and-drop upload, move, and a live preview panel.",
 		dependencies: ["lucide-react", "motion", "react-resizable-panels"],
@@ -3189,7 +3188,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "Elastic",
 		category: "Power-User Systems",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"Throw the top card and the speed you released it at carries into the spring — throw it far enough and it cycles to the back of the deck instead of coming home.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -3299,7 +3297,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "Masonry",
 		category: "Power-User Systems",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A Pinterest-style grid where every item drops into the shortest column, packed by measurement rather than by a shared row baseline.",
 		dependencies: ["clsx", "tailwind-merge"],
@@ -3405,7 +3402,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "RubiksCube",
 		category: "Power-User Systems",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"A Rubik's cube that scrambles and solves itself on an endless loop while spinning like a planet. Two independent rotation layers, and every quarter-turn is quantised back to exact integers, so an hour of turns drifts by nothing at all.",
@@ -3533,7 +3529,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "TimelineScrubber",
 		category: "Power-User Systems",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"Drag the head, snap it to markers, zoom into the track and let the viewport follow playback. One derived number — pixels per second — places the ticks, the pips, the head, the drag target and the follow scroll, so nothing on screen can disagree about where a time actually is.",
@@ -3664,7 +3659,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "DataGrid",
 		category: "Power-User Systems",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A virtualised grid over thousands of rows: resizable columns, multi-key sorting, range selection and keyboard navigation. Header and body share one scroller so they can never desync, selection is keyed by row id so it survives a re-sort, and focus stays on the viewport so a recycled row can never take the arrow keys down with it. Give it a parent with a bounded height — like every windowing implementation, in an auto-height parent it quietly stops windowing and renders every row.",
 		dependencies: ["lucide-react", "clsx", "tailwind-merge"],
@@ -3793,7 +3787,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "Visualizer",
 		category: "Power-User Systems",
 		addedAt: "2026-09-28",
-		pro: true,
 		pausable: true,
 		description:
 			"A live map of a multi-agent system: the orchestrator burns at the centre with a tick ring of its own daily load, agent pools sit on the inner ring with beams sized by their share, and every agent and tool orbits its pool. Sparks ride the beams home, faster where the work is fresher. Hover for a readout, filter to a week, or pick an agent and it glides out of the constellation into a drilldown of its latest runs, blocked work and timing. All geometry is pure and deterministic: labels are placed against collision boxes rather than measured, and orbs shrink until nothing touches. The keyboard walks the ring clockwise, and below 640px it becomes a ranked list.",
@@ -4015,7 +4008,6 @@ export const powerUserSystems: ComponentEntry[] = [
 		name: "Kanban",
 		category: "Power-User Systems",
 		addedAt: "2026-10-21",
-		pro: true,
 		description:
 			"A kanban board with drag and drop. Drag a card within a column or over to another one, and the other cards slide out of the way. Work-in-progress columns have a limit. When one is full, the board warns you or keeps the card out. Columns fold down to a narrow rail. With a keyboard, press Space to pick up a card, move it with the arrow keys, and press Space again to drop it.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],

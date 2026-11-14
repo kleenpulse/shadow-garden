@@ -5,14 +5,13 @@ import { useTranslations } from "next-intl";
 import { useDataCopy } from "@/lib/i18n/data-copy";
 import { displayName } from "@/lib/display-name";
 import GlowCard from "./GlowCard";
-import ProBadge from "./ProBadge";
 
 // Client leaf for RelatedComponents: scoring stays server-side, this carries
 // the heading and resolves descriptions against the generated catalog copy.
 export default function RelatedComponentsList({
 	items,
 }: {
-	items: Array<{ slug: string; name: string; description: string; pro?: boolean }>;
+	items: Array<{ slug: string; name: string; description: string }>;
 }) {
 	const t = useTranslations("chrome.relatedComponents");
 	const copy = useDataCopy();
@@ -38,7 +37,6 @@ export default function RelatedComponentsList({
 						>
 							<h3 className="flex items-center gap-1.5 font-title text-sm font-medium uppercase tracking-[0.04em] text-ink group-hover:text-accent">
 								{displayName(item.name)}
-								<ProBadge pro={item.pro} variant="tiny" />
 							</h3>
 							<p className="line-clamp-5 font-sans text-xs leading-relaxed text-ink-dim">
 								{copy(`catalog.${item.slug}.description`, item.description)}

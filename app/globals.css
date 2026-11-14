@@ -525,36 +525,6 @@ html[data-sg-intro] {
 		border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
 	}
 
-	/* Pro's stand-in mirrors the default PillTabs indicator (solid amethyst,
-	   text-on-accent label) — keep the two in step. */
-	html[data-catalog-filter="pro"] .sg-catalog-tabs [role="tab"][data-value="pro"] {
-		color: var(--color-on-accent);
-	}
-	html[data-catalog-filter="pro"]
-		.sg-catalog-tabs
-		[role="tab"][data-value="pro"]::before {
-		content: "";
-		position: absolute;
-		inset: 0;
-		z-index: 0;
-		border-radius: 0.375rem; /* rounded-md */
-		background: var(--color-accent);
-	}
-	html.dark[data-catalog-filter="pro"]
-		.sg-catalog-tabs
-		[role="tab"][data-value="pro"]::before {
-		border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
-	}
-
-	/* Pro is a static slice — rows are stamped data-pro in markup, so its
-	   row-hiding pair lives here; the script only sets the attribute. */
-	html[data-catalog-filter="pro"] [data-entry]:not([data-pro]) {
-		display: none;
-	}
-	html[data-catalog-filter="pro"] [data-group]:not(:has([data-pro])) {
-		display: none;
-	}
-
 	/* The list's "new" row-hiding pair is injected by the script, which owns the
 	   date comparison. */
 	/* The one thing CSS can't recompute. Held invisible (space reserved) rather

@@ -9,7 +9,7 @@ import { roleOf } from "./roles";
 import type { ComponentEntry, Variant, VariantRole } from "./types";
 
 // Static base dirs so Turbopack scopes its file trace to the directories whose
-// sources must ship for runtime Pro reads, instead of the whole project. These
+// sources must ship for runtime source reads, instead of the whole project. These
 // must stay literal — a computed root defeats the trace.
 //
 // Two roots, not one: since §C1b an entry may carry a second variant pointing at
@@ -27,7 +27,7 @@ const ROOTS: ReadonlyArray<{ prefix: RegExp; dir: string }> = [
 
 // Individual files outside those roots that a component imports and the customer
 // therefore has to copy (§V40). An exact map rather than a third `lib/` root:
-// a directory root would put lib/db and lib/registry/entitlement.ts one registry
+// a directory root would put lib/db and lib/registry/source.ts one registry
 // typo away from a public Code tab, and would widen the file trace over a
 // directory whose contents are mostly server-only. Literal path.join arguments,
 // same as the roots above, so the trace stays scoped to exactly these two files.
@@ -62,7 +62,6 @@ export interface SourceFile {
 
 export type SourceResult =
   | { status: "ok"; files: SourceFile[] }
-  | { status: "locked" }
   | { status: "pending" };
 
 /** Resolve a repo-relative variant path inside one of the allowed roots. */
@@ -114,15 +113,6 @@ async function readVariant(variant: Variant): Promise<SourceFile | null> {
 }
 
 async function readSource(entry: ComponentEntry): Promise<SourceResult> {
-  // The one server-side gate on the paid artifact: raw bytes never cross to the
-  // client for a locked entry. getEntitlement() is armed-aware — an unarmed
-  // deployment (no commerce env) answers pro for everyone, so nothing locks.
-  if (entry.pro) {
-    const { getEntitlement } = await import("./entitlement");
-    const { pro } = await getEntitlement();
-    if (!pro) return { status: "locked" };
-  }
-
   const files: SourceFile[] = [];
   for (const variant of entry.variants) {
     const file = await readVariant(variant);

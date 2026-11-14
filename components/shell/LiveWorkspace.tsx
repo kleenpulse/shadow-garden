@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -14,8 +14,6 @@ import { previews } from "@/components/registry/previews";
 import PlaceholderPreview from "./PlaceholderPreview";
 import PreviewBoundary from "./PreviewBoundary";
 import ControlsPanel from "./ControlsPanel";
-import ControlsLocked from "./ControlsLocked";
-import SubscribeButton from "./SubscribeButton";
 import WorkspaceTabs from "./WorkspaceTabs";
 
 // Owns the tuned-state source (the URL, via nuqs) shared by the preview stage and
@@ -27,22 +25,15 @@ export default function LiveWorkspace({
 	entry,
 	code,
 	promptSlot,
-	controlsLocked,
 }: {
 	entry: ComponentEntry;
 	code: ReactNode;
 	promptSlot?: ReactNode;
-	/** Server-created promise (isControlsLocked), read here via use() so the
-	    dynamic access forms under this page's <Suspense> — never an async server
-	    wrapper above this component (that breaks Flight decode on soft nav). */
-	controlsLocked?: Promise<boolean>;
 }) {
-	const locked = controlsLocked ? use(controlsLocked) : false;
 	const { values, setValue, syncValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
 	const t = useTranslations("chrome.liveWorkspace");
-	const tLocked = useTranslations("chrome.controlsLocked");
 
 	// One view ping per component the user opens (fires once per slug, incl. on
 	// client-side nav between components). Fire-and-forget, anonymous.
@@ -123,15 +114,6 @@ export default function LiveWorkspace({
 				onChange={setValue}
 				onReset={reset}
 				pausable={entry.pausable}
-				locked={
-					locked ? (
-						<ControlsLocked
-							name={entry.name}
-							propCount={entry.props.length}
-							cta={<SubscribeButton label={tLocked("cta")} />}
-						/>
-					) : null
-				}
 			/>
 		</div>
 	);

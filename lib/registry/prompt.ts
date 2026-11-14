@@ -18,7 +18,6 @@ import { SITE_URL } from "@/lib/site";
 
 export type PromptResult =
   | { status: "ok"; text: string }
-  | { status: "locked" }
   | { status: "pending" };
 
 // Literal root, same reason as source.ts: a computed base defeats Turbopack's
@@ -314,8 +313,7 @@ function buildPrompt(
 
 export async function getPrompt(entry: ComponentEntry): Promise<PromptResult> {
   const source = await getSource(entry);
-  // No second gate. A locked entry never reached its bytes, and `pending` means
-  // an incomplete brief — better to render nothing than to hand out half a file.
+  // `pending` means an incomplete brief — better to render nothing than to hand out half a file.
   if (source.status !== "ok") return source;
 
   return {

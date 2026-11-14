@@ -7,7 +7,9 @@ An animation-forward React component showcase — a dark, instrument-bench docs 
 
 Every component ships with a live preview, a Controls panel that tunes each prop in real time, the source on a Code tab, an install block, a Props API table, and a one-click **agent brief** — full source, dependency closure, props and integration rules in one paste for Claude Code, Cursor or any coding agent. All of it is generated from a single registry entry per component, so the docs never drift.
 
-Agents can start at [`/llms.txt`](https://shadow-garden-ui.vercel.app/llms.txt): a registry-generated index of every component, its page and its prop count, following the [llms.txt](https://llmstxt.org) convention.
+Live at **[motion-garden.netlify.app](https://motion-garden.netlify.app)**. Free and open source under MIT: every component's source, props and agent brief are open to everyone.
+
+Agents can start at [`/llms.txt`](https://motion-garden.netlify.app/llms.txt): a registry-generated index of every component, its page and its prop count, following the [llms.txt](https://llmstxt.org) convention.
 
 ## What's inside
 
@@ -38,6 +40,24 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000).
 
 To verify the site in Google Search Console, pick the "HTML tag" method and set `GOOGLE_SITE_VERIFICATION` to the tag's `content` value, then redeploy.
+
+## Deploying
+
+The site deploys to [Netlify](https://www.netlify.com), which runs Next.js through its OpenNext runtime (no adapter to install). Build settings live in [`netlify.toml`](netlify.toml).
+
+```bash
+netlify deploy --build --prod
+```
+
+Environment variables (all optional; without them the matching feature turns off quietly):
+
+| Variable | What it enables |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URLs, sitemap and OG links. Set it to the deployed origin. |
+| `DATABASE_URL` | View counts, favorite counts and the feedback form (Postgres). |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | The live "people here now" presence count. |
+
+Env values are read at build time, so change one and redeploy.
 
 ## Tech stack
 

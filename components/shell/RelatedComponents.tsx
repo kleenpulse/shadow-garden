@@ -41,11 +41,10 @@ export default function RelatedComponents({
 	// carry prop schemas the list has no use for.
 	return (
 		<RelatedComponentsList
-			items={related.map(({ slug, name, description, pro }) => ({
+			items={related.map(({ slug, name, description }) => ({
 				slug,
 				name,
 				description,
-				pro,
 			}))}
 		/>
 	);

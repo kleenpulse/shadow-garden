@@ -3011,7 +3011,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "GrowDialog",
 		category: "Micro-interactions",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A dialog that grows out of the clicked element and shrinks back into it, entirely inside a portal — never behind page content.",
 		dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
@@ -3078,7 +3077,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "Dismiss",
 		category: "Micro-interactions",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"Throw the top card away and the stack closes up behind it. Distance commits, but so does speed — a fast flick from barely anywhere counts, and anything short of both rubber-bands home carrying the velocity you let go at.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -3209,7 +3207,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "FlipCard",
 		category: "Micro-interactions",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A grid card that flips out of its cell — GSAP Flip carries it to viewport center while it rotates to reveal its back face, then returns on close.",
 		dependencies: ["gsap", "lucide-react", "clsx", "tailwind-merge"],
@@ -3287,7 +3284,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "Unfold",
 		category: "Micro-interactions",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A row of slats that open on approach while their neighbours give up the room on a spring.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -3375,7 +3371,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "FocusGrid",
 		category: "Micro-interactions",
 		addedAt: "2026-09-27",
-		pro: true,
 		description:
 			"A five-tile bento where any tile you pick takes the large slot and the rest slide back into order around it.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -3453,7 +3448,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "IntroAnimation",
 		category: "Micro-interactions",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"A wind front sweeps the wordmark right to left. The instant it reaches a glyph the text hands off to a baseline-aligned field of GPU grain — same pixels, same colour, no seam — which peels crown-first and drifts away as smoke through a curl field. The backdrop opens behind it to reveal the page. Mount it over your app and unmount on onDone.",
@@ -3620,7 +3614,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "MagneticDock",
 		category: "Micro-interactions",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A dock whose items swell under the pointer and carry their neighbours part of the way with them. One shared value drives the whole row, so nothing re-renders while you sweep across it — and focusing an item writes the same value, which is why the keyboard gets the identical effect rather than a substitute for it.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -3735,7 +3728,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "RadialMenu",
 		category: "Micro-interactions",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"Press and hold anywhere and the options fan out from the point you pressed. Selection is resolved from the pointer's angle rather than by hit-testing the options, so every target is an infinite wedge — commit to a direction and you can throw the pointer as hard as you like and still land it.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -3867,7 +3859,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "LiveActivity",
 		category: "Micro-interactions",
 		addedAt: "2026-10-01",
-		pro: true,
 		description:
 			"A live activity tracker in one black shape. A timer, a download, a delivery, a song and an AI agent take turns in it, and tapping it opens a full card. The text fades out before the shape moves and comes back after it stops, so it never stretches during the resize. The small pill and the big card share one clock and one state, so if you pause in the card, the pill is paused too. The agent is the main show. Three sparkles circle on a tilted orbit, the front one big and the back ones small, and they spin faster on every new step. The pill widens to show each new step's name, then shrinks back to the step count, and the card types out the command the agent is running.",
 		dependencies: ["motion", "lucide-react", "clsx", "tailwind-merge"],
@@ -4064,7 +4055,6 @@ export const microInteractions: ComponentEntry[] = [
 		name: "SwipeActions",
 		category: "Micro-interactions",
 		addedAt: "2026-10-21",
-		pro: true,
 		description:
 			"List rows you swipe to show actions, like in iOS Mail. Drag a row and its buttons slide in from the side. Swipe all the way and the outer action fills the row and runs. An action like Archive then folds the row away. A quick flick works too. With full swipe off, the row pushes back when you pull past the last button. With a keyboard, the arrow keys show the actions and Enter runs one.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],

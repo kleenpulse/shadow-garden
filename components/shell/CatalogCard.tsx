@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { displayName } from "@/lib/display-name";
 import GlowCard from "./GlowCard";
 import NewBadge from "./NewBadge";
-import ProBadge from "./ProBadge";
 import FavoriteButton from "./FavoriteButton";
 
 export default function CatalogCard({
@@ -15,13 +14,11 @@ export default function CatalogCard({
 	name,
 	description,
 	addedAt,
-	pro,
 }: {
 	slug: string;
 	name: string;
 	description: string;
 	addedAt?: string;
-	pro?: boolean;
 }) {
 	const t = useTranslations("chrome.catalogCard");
 	const copy = useDataCopy();
@@ -60,7 +57,6 @@ export default function CatalogCard({
 						iconSize={15}
 						className="pointer-events-auto opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100"
 					/>
-					<ProBadge pro={pro} />
 					<NewBadge addedAt={addedAt} />
 				</div>
 			</div>

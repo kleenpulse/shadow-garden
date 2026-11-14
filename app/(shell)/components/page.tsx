@@ -68,7 +68,6 @@ export default function CatalogPage() {
 									name={entry.name}
 									description={entry.description}
 									addedAt={entry.addedAt}
-									pro={entry.pro}
 								/>
 							))}
 						</div>

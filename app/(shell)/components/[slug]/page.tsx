@@ -15,7 +15,6 @@ import DemonstratedTerms from "@/components/shell/DemonstratedTerms";
 import RelatedComponents from "@/components/shell/RelatedComponents";
 import AppearsIn from "@/components/shell/AppearsIn";
 import LiveWorkspace from "@/components/shell/LiveWorkspace";
-import { isControlsLocked } from "@/lib/registry/entitlement";
 import CodePanel from "@/components/shell/CodePanel";
 import PromptButton from "@/components/shell/PromptButton";
 import InstallSection from "@/components/shell/InstallSection";
@@ -75,7 +74,7 @@ function PanelSkeleton() {
 }
 
 // Matches the Copy Prompt button's footprint so the tab row doesn't jump when
-// the gated control streams in.
+// the control streams in.
 function PromptButtonSkeleton() {
 	return (
 		<div className="h-8 w-38 shrink-0 animate-pulse rounded-md bg-panel" />
@@ -111,14 +110,10 @@ export default async function ComponentPage({
           passed in. */}
 			{/* LiveWorkspace must stay a DIRECT child here — an async server
 			    component wrapping it corrupts Flight decode on client-side nav
-			    (chunk.reason.enqueueModel, Next 16.3.5 + Cache Components). The
-			    controls gate travels as an unawaited promise instead; use() inside
-			    the workspace suspends against this boundary. Off-flag deploys get
-			    an already-resolved false and stay static. */}
+			    (chunk.reason.enqueueModel, Next 16.3.5 + Cache Components). */}
 			<Suspense fallback={<PanelSkeleton />}>
 				<LiveWorkspace
 					entry={entry}
-					controlsLocked={isControlsLocked(entry.pro)}
 					code={
 						<Suspense fallback={<PanelSkeleton />}>
 							<CodePanel entry={entry} />
@@ -132,25 +127,18 @@ export default async function ComponentPage({
 				/>
 			</Suspense>
 
-			{/* Pro entries resolve entitlement (a cookie read) in these sections, so
-			    each sits behind its own Suspense; free entries stay static inside the
-			    same boundaries. */}
+			{/* Everything below derives from the registry entry alone — no cookie
+			    read, no URL read — so it renders into the static shell. */}
 			<section className="space-y-3">
 				<InstallHeading />
-				<Suspense fallback={<div className="min-h-20 animate-pulse rounded-lg bg-panel" />}>
-					<InstallSection entry={entry} />
-				</Suspense>
+				<InstallSection entry={entry} />
 			</section>
 
 			<section className="space-y-3">
 				<PropsHeading />
-				<Suspense fallback={<div className="min-h-40 animate-pulse rounded-lg bg-panel" />}>
-					<PropsSection entry={entry} />
-				</Suspense>
+				<PropsSection entry={entry} />
 			</section>
 
-			{/* Both derived from the registry entry — no cookie read, no URL read, so
-			    they render into the static shell instead of behind a boundary. */}
 			<DemonstratedTerms entry={entry} />
 			<RelatedComponents entry={entry} />
 			<AppearsIn entry={entry} />

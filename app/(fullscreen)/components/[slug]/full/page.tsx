@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { getAllSlugs, getEntry, getNeighbors } from "@/lib/registry";
 import { metaText } from "@/lib/seo";
 import FullscreenStage from "@/components/shell/FullscreenStage";
-import { isControlsLocked } from "@/lib/registry/entitlement";
 
 // Navigation into this route is allowed to block. The page awaits `params`
 // at the top to pick the registry entry, which ties its shell to one URL and
@@ -51,14 +50,13 @@ export default async function FullscreenPage({
 
 	const neighbors = getNeighbors(slug);
 
-	// Direct child + promise-shaped gate for the same Flight soft-nav reason as
-	// the shell page — never wrap the stage in an async server layer.
+	// Direct child for the same Flight soft-nav reason as the shell page — never
+	// wrap the stage in an async server layer.
 	return (
 		<Suspense fallback={<div className="h-dvh animate-pulse bg-panel" />}>
 			<FullscreenStage
 				entry={entry}
 				neighbors={neighbors}
-				controlsLocked={isControlsLocked(entry.pro)}
 			/>
 		</Suspense>
 	);

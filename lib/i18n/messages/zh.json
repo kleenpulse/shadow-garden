@@ -85,8 +85,7 @@
       "filterLabel": "筛选组件",
       "filterTabs": {
         "all": "全部",
-        "new": "新增",
-        "pro": "pro"
+        "new": "新增"
       },
       "componentsLabel": "组件",
       "noMatches": "无匹配结果。",
@@ -110,11 +109,13 @@
     },
     "topBar": {
       "searchPlaceholder": "搜索组件…",
-      "cookbookLabel": "动效秘籍"
+      "cookbookLabel": "动效秘籍",
+      "githubLabel": "Motion Garden GitHub"
     },
     "mobileBar": {
       "openNavigation": "打开导航",
-      "cookbookLabel": "动效秘籍"
+      "cookbookLabel": "动效秘籍",
+      "githubLabel": "Motion Garden GitHub"
     },
     "footer": {
       "tagline": "实时可调的动画 React 组件。每一个都附带一份编程智能体可直接据此构建的简报。",
@@ -131,15 +132,7 @@
       "ariaLabel": "复制 {name} 给编程智能体的完整简报",
       "copiedAnnouncement": "{name} 的智能体简报已复制到剪贴板",
       "clipboardUnavailable": "当前连接下剪贴板不可用",
-      "copyFailed": "提示词复制失败",
-      "lockedAria": "{name} 的智能体简报在 Pro 层可用"
-    },
-    "successOverlay": {
-      "ariaLabel": "购买完成",
-      "kicker": "欢迎来到暗影之中",
-      "title": "此刻，你即是那位实力者。",
-      "body": "购买已完成。Motion Garden 的全部武库现已听你调遣。",
-      "cta": "步入暗影"
+      "copyFailed": "提示词复制失败"
     },
     "favorites": {
       "emptyTitle": "暂无收藏",
@@ -181,8 +174,7 @@
       "pkgManagerAria": "包管理器",
       "copy": "复制",
       "copied": "已复制",
-      "thenCopy": "然后将这 {count} 个文件复制到你的项目中：",
-      "locked": "安装命令随 Pro 层解锁。"
+      "thenCopy": "然后将这 {count} 个文件复制到你的项目中："
     },
     "workspaceTabs": {
       "ariaLabel": "预览或源码",
@@ -230,125 +222,7 @@
     "gotoTop": {
       "scrollToTop": "回到顶部"
     },
-    "proBadge": {
-      "label": "Pro"
-    },
-    "goPro": {
-      "label": "升级 Pro",
-      "comingSoon": "Pro 即将推出"
-    },
-    "codePanel": {
-      "lockedEyebrow": "Pro",
-      "lockedBody": "{name} 的源码和智能体简报在 Pro 层可用。预览始终免费 — 订阅即可查看代码，或直接交给你的智能体。",
-      "lockedCta": "查看源码 →"
-    },
-    "controlsLocked": {
-      "eyebrow": "Pro",
-      "body": "{name} 的 {propCount} 个实时控件 — 调整每个 prop，预览即时响应。随 Pro 层解锁。",
-      "cta": "解锁控件 →"
-    },
-    "propsLocked": {
-      "eyebrow": "Pro",
-      "body": "{name} 的 {propCount} 项 props API — 类型、默认值与各自作用 — 在 Pro 层可用。上方实时预览可免费调整。",
-      "cta": "查看 props →"
-    },
-    "pricingModal": {
-      "ariaLabel": "升级到 Motion Garden Pro",
-      "comingSoon": "即将推出",
-      "eyebrow": "Motion Garden Pro",
-      "title": "解锁每个 Pro 样本的完整源码",
-      "subtitle": "预览始终免费。Pro 解锁每个 Pro 组件的完整类型化源码和完整智能体简报 — 复制、粘贴、上线。",
-      "close": "关闭",
-      "bestValue": "超值之选",
-      "finePrintFinal": "所有交易均为最终交易。Pro 即时授予可复制源码的访问权限，付款处理后不可退款。",
-      "finePrintProvider": "通过 Polar 安全结账。价格以美元计。",
-      "plans": {
-        "lifetime": {
-          "name": "终身版",
-          "price": "$99",
-          "cadence": "一次性",
-          "tagline": "买断一次，永久拥有。",
-          "cta": "购买终身版",
-          "features": {
-            "0": "每个 Pro 组件的完整源码 + 智能体简报",
-            "1": "个人与商用不受限",
-            "2": "包含所有未来的 Pro 组件",
-            "3": "无循环费用"
-          }
-        },
-        "subscription": {
-          "name": "会员",
-          "price": "$4.99",
-          "cadence": "/月",
-          "tagline": "完整访问，按月计费。",
-          "cta": "订阅",
-          "features": {
-            "0": "每个 Pro 组件的完整源码 + 智能体简报",
-            "1": "个人与商用不受限",
-            "2": "新组件上线即刻可用",
-            "3": "随时取消"
-          }
-        }
-      }
-    },
-    "authMenu": {
-      "signIn": "使用 GitHub 登录",
-      "ariaLabel": "账户菜单",
-      "loading": "加载中…",
-      "planLifetime": "终身版",
-      "planLifetimeSub": "永久拥有",
-      "planMembership": "会员",
-      "planPro": "Pro",
-      "statusActive": "已生效",
-      "statusPastDue": "付款逾期",
-      "statusCancels": "{date}取消",
-      "statusRenews": "{date}续订",
-      "upgradeToPro": "升级到 Pro",
-      "manageBilling": "管理账单",
-      "upgradeToLifetime": "升级到终身版",
-      "signOut": "退出登录"
-    },
-    "checkout": {
-      "signInAction": "登录",
-      "errors": {
-        "unconfigured": {
-          "title": "结账不可用",
-          "description": "支付尚未配置，请稍后再试。"
-        },
-        "no_product": {
-          "title": "未找到方案",
-          "description": "该方案目前不可用。"
-        },
-        "signin_required": {
-          "title": "登录后继续",
-          "description": "购买需绑定到你的账户。"
-        },
-        "failed": {
-          "title": "结账未能启动",
-          "description": "连接商店时出错，请重试。"
-        }
-      },
-      "portalErrors": {
-        "unconfigured": {
-          "title": "账单不可用",
-          "description": "支付尚未配置。"
-        },
-        "signin_required": {
-          "title": "登录以管理账单",
-          "description": "需要登录才能打开账单门户。"
-        },
-        "failed": {
-          "title": "无法打开账单",
-          "description": "无法连接账单门户，请重试。"
-        }
-      },
-      "authError": {
-        "title": "登录失败",
-        "description": "未能完成 GitHub 登录，请重试。"
-      }
-    },
     "soundToggle": {
-      "proAria": "交互音效是 Pro 功能",
       "mute": "静音交互音效",
       "enable": "启用交互音效"
     },
@@ -2837,7 +2711,7 @@
       "ctaCookbook": "动效秘籍",
       "readoutCube": "场：RubiksCube · 旋转 {duration}ms · 打乱 {count}",
       "readoutWaves": "场：Waves · 振幅 {amplitude} · 距离 {distance}",
-      "readoutRegistry": "{count, plural, one {注册表 # 单位 [live · tunable]} other {注册表 # 单位 [live · tunable]}}",
+      "readoutRegistry": "{count, plural, one {注册表 # 单位 [MIT · 开源]} other {注册表 # 单位 [MIT · 开源]}}",
       "readoutScrub": "场：RubiksCube · 滚动驱动 · 打乱 {count}",
       "readoutTurn": "旋转 {turn}/{total}",
       "modeLabel": "模式",
@@ -2904,7 +2778,7 @@
         "plate": "图版",
         "openArchive": "打开档案",
         "headline": "没有什么会永远藏在暗处。",
-        "body": "每一个组件都实时渲染，在你的智能体写下第一行代码之前就能调好。下面这些组件就运行在本页上。完整目录只需一次点击。",
+        "body": "每一个组件都实时渲染，完整源码以 MIT 许可免费提供。下面这些组件就运行在本页上。完整目录只需一次点击。",
         "cta": "浏览源码"
       }
     },
@@ -2930,7 +2804,7 @@
       "eyebrow": "目录",
       "title": "合集",
       "intro": "从 Motion Garden 目录中精选出的切片 — 按分类、按技术、按动画库划分。每个合集都由注册表实时计算生成，因此永远不会与其收录的组件产生偏差。当你需要的是一整组组件而非单个组件时，把智能体指向一个合集即可。",
-      "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
+      "countMeta": "{count, plural, one {# 个组件} other {# 个组件}} · 全部免费",
       "inThisCollection": "本合集包含",
       "theTerms": "相关术语",
       "relatedCollections": "相关合集"

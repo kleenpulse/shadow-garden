@@ -85,8 +85,7 @@
       "filterLabel": "コンポーネントを絞り込み",
       "filterTabs": {
         "all": "すべて",
-        "new": "新着",
-        "pro": "pro"
+        "new": "新着"
       },
       "componentsLabel": "コンポーネント",
       "noMatches": "一致するものがありません。",
@@ -110,11 +109,13 @@
     },
     "topBar": {
       "searchPlaceholder": "コンポーネントを検索…",
-      "cookbookLabel": "モーション・クックブック"
+      "cookbookLabel": "モーション・クックブック",
+      "githubLabel": "GitHub 上の Motion Garden"
     },
     "mobileBar": {
       "openNavigation": "ナビゲーションを開く",
-      "cookbookLabel": "モーション・クックブック"
+      "cookbookLabel": "モーション・クックブック",
+      "githubLabel": "GitHub 上の Motion Garden"
     },
     "footer": {
       "tagline": "ライブで調整できるアニメーション付き React コンポーネント。どれにも、コーディングエージェントがそのまま実装に使えるブリーフが付いています。",
@@ -131,15 +132,7 @@
       "ariaLabel": "{name} のコーディングエージェント向け完全ブリーフをコピー",
       "copiedAnnouncement": "{name} のエージェント向けブリーフをクリップボードにコピーしました",
       "clipboardUnavailable": "この接続ではクリップボードを利用できません",
-      "copyFailed": "プロンプトをコピーできませんでした",
-      "lockedAria": "{name}のエージェント向けブリーフはPro層で利用できます"
-    },
-    "successOverlay": {
-      "ariaLabel": "購入完了",
-      "kicker": "影の世界へようこそ",
-      "title": "至高はあなたのものです。",
-      "body": "購入が完了しました。Motion Garden の全兵装が今、あなたの意のままです。",
-      "cta": "影の中へ"
+      "copyFailed": "プロンプトをコピーできませんでした"
     },
     "favorites": {
       "emptyTitle": "お気に入りはまだありません",
@@ -181,8 +174,7 @@
       "pkgManagerAria": "パッケージマネージャー",
       "copy": "コピー",
       "copied": "コピー済み",
-      "thenCopy": "続いて {count} 件のファイルをプロジェクトにコピーしてください:",
-      "locked": "インストールコマンドはPro層で解錠されます。"
+      "thenCopy": "続いて {count} 件のファイルをプロジェクトにコピーしてください:"
     },
     "workspaceTabs": {
       "ariaLabel": "プレビューまたはソース",
@@ -230,125 +222,7 @@
     "gotoTop": {
       "scrollToTop": "トップへ戻る"
     },
-    "proBadge": {
-      "label": "Pro"
-    },
-    "goPro": {
-      "label": "Proにする",
-      "comingSoon": "Pro は近日公開"
-    },
-    "codePanel": {
-      "lockedEyebrow": "Pro",
-      "lockedBody": "{name}のソースとエージェント向けブリーフはPro層で利用できます。プレビューは無料のまま — 購読するとコードを表示したり、エージェントに渡したりできます。",
-      "lockedCta": "ソースを見る →"
-    },
-    "controlsLocked": {
-      "eyebrow": "Pro",
-      "body": "{name}の{propCount}個のライブコントロール — 各propを調整するとプレビューが即座に応答します。Pro層で解錠。",
-      "cta": "コントロールを解錠 →"
-    },
-    "propsLocked": {
-      "eyebrow": "Pro",
-      "body": "{name}の{propCount}個のprops API — 型、デフォルト値、各propの役割 — はPro層で利用できます。上のライブプレビューは無料で調整できます。",
-      "cta": "propsを見る →"
-    },
-    "pricingModal": {
-      "ariaLabel": "Motion Garden Proへアップグレード",
-      "comingSoon": "近日公開",
-      "eyebrow": "Motion Garden Pro",
-      "title": "すべてのPro標本のソースを解錠",
-      "subtitle": "プレビューは無料のまま。Proは全Proコンポーネントの完全な型付きソースとエージェント向けブリーフを解錠します — コピーして、貼って、出荷。",
-      "close": "閉じる",
-      "bestValue": "ベストバリュー",
-      "finePrintFinal": "すべての販売は最終確定です。Proはコピー可能なソースへの即時アクセスを付与するため、処理後の返金はできません。",
-      "finePrintProvider": "Polarによる安全な決済。価格はUSD表記です。",
-      "plans": {
-        "lifetime": {
-          "name": "ライフタイム",
-          "price": "$99",
-          "cadence": "買い切り",
-          "tagline": "一度買えば、ずっとあなたのもの。",
-          "cta": "ライフタイムを購入",
-          "features": {
-            "0": "全Proコンポーネントの完全ソース+エージェント向けブリーフ",
-            "1": "個人・商用とも無制限",
-            "2": "今後のProコンポーネントも含む",
-            "3": "継続課金なし"
-          }
-        },
-        "subscription": {
-          "name": "メンバーシップ",
-          "price": "$4.99",
-          "cadence": "/月",
-          "tagline": "フルアクセス、月額課金。",
-          "cta": "購読する",
-          "features": {
-            "0": "全Proコンポーネントの完全ソース+エージェント向けブリーフ",
-            "1": "個人・商用とも無制限",
-            "2": "新コンポーネントをリリース即日で",
-            "3": "いつでも解約可能"
-          }
-        }
-      }
-    },
-    "authMenu": {
-      "signIn": "GitHubでサインイン",
-      "ariaLabel": "アカウントメニュー",
-      "loading": "読み込み中…",
-      "planLifetime": "ライフタイム",
-      "planLifetimeSub": "ずっとあなたのもの",
-      "planMembership": "メンバーシップ",
-      "planPro": "Pro",
-      "statusActive": "有効",
-      "statusPastDue": "支払い延滞",
-      "statusCancels": "{date}に解約",
-      "statusRenews": "{date}に更新",
-      "upgradeToPro": "Proへアップグレード",
-      "manageBilling": "請求を管理",
-      "upgradeToLifetime": "ライフタイムへアップグレード",
-      "signOut": "サインアウト"
-    },
-    "checkout": {
-      "signInAction": "サインイン",
-      "errors": {
-        "unconfigured": {
-          "title": "チェックアウト利用不可",
-          "description": "決済がまだ設定されていません。しばらくして再試行してください。"
-        },
-        "no_product": {
-          "title": "プランが見つかりません",
-          "description": "そのプランは現在利用できません。"
-        },
-        "signin_required": {
-          "title": "続行するにはサインイン",
-          "description": "購入はアカウントに紐づく必要があります。"
-        },
-        "failed": {
-          "title": "チェックアウトを開始できませんでした",
-          "description": "ストアへの接続に失敗しました。もう一度お試しください。"
-        }
-      },
-      "portalErrors": {
-        "unconfigured": {
-          "title": "請求管理は利用不可",
-          "description": "決済がまだ設定されていません。"
-        },
-        "signin_required": {
-          "title": "請求管理にはサインイン",
-          "description": "請求ポータルを開くにはサインインが必要です。"
-        },
-        "failed": {
-          "title": "請求管理を開けませんでした",
-          "description": "請求ポータルに接続できませんでした。もう一度お試しください。"
-        }
-      },
-      "authError": {
-        "title": "サインイン失敗",
-        "description": "GitHubサインインを完了できませんでした。もう一度お試しください。"
-      }
-    },
     "soundToggle": {
-      "proAria": "インタラクション音はPro機能です",
       "mute": "インタラクション音をミュート",
       "enable": "インタラクション音を有効化"
     },
@@ -2837,7 +2711,7 @@
       "ctaCookbook": "クックブック",
       "readoutCube": "フィールド: RubiksCube · 回転 {duration}ms · スクランブル {count}",
       "readoutWaves": "フィールド: Waves · 振幅 {amplitude} · 距離 {distance}",
-      "readoutRegistry": "{count, plural, one {レジストリ # 件 [live · tunable]} other {レジストリ # 件 [live · tunable]}}",
+      "readoutRegistry": "{count, plural, one {レジストリ # 件 [MIT · オープンソース]} other {レジストリ # 件 [MIT · オープンソース]}}",
       "readoutScrub": "フィールド: RubiksCube · スクロール駆動 · スクランブル {count}",
       "readoutTurn": "回転 {turn}/{total}",
       "modeLabel": "モード",
@@ -2904,7 +2778,7 @@
         "plate": "プレート",
         "openArchive": "アーカイブを開く",
         "headline": "何も影に隠れたままにはしません。",
-        "body": "すべてのコンポーネントはライブでレンダリングされるので、エージェントが1行書く前に調整できます。下のピースはこのページ上で動いています。フルカタログはワンクリック先です。",
+        "body": "すべてのコンポーネントはライブでレンダリングされ、完全なソースコードはMITライセンスで無料です。下のピースはこのページ上で動いています。フルカタログはワンクリック先です。",
         "cta": "ソースを見る"
       }
     },
@@ -2930,7 +2804,7 @@
       "eyebrow": "カタログ",
       "title": "コレクション",
       "intro": "Motion Garden カタログから厳選された切り口です — カテゴリ別、テクニック別、アニメーションライブラリ別。各コレクションはレジストリから動的に生成されるため、掲載しているコンポーネントとずれることは決してありません。単体のピースではなくコンポーネント群が必要なときは、エージェントにコレクションを指し示してください。",
-      "countMeta": "{count, plural, one {# component} other {# components}} · live previews",
+      "countMeta": "{count, plural, one {# 件のコンポーネント} other {# 件のコンポーネント}} · すべて無料",
       "inThisCollection": "このコレクションの内容",
       "theTerms": "用語",
       "relatedCollections": "関連コレクション"

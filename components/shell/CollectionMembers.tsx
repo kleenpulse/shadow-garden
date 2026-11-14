@@ -32,7 +32,6 @@ export default function CollectionMembers({
 			name: entry.name,
 			description: entry.description,
 			href: entryPath(entry),
-			pro: entry.pro,
 			builtWith:
 				isDeps && reasons.length > 0 ? reasons.join(" + ") : undefined,
 			reason:

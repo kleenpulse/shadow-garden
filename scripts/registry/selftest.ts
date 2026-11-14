@@ -45,7 +45,6 @@ function template(over: Partial<ComponentEntry> = {}): ComponentEntry {
     name: "OkTemplate",
     category: "Landing Pages",
     kind: "template",
-    pro: true, // the whole-page categories are all-Pro (pro-category-consistency)
     pausable: true,
     props: TEMPLATE_TOKENS,
     variants: [
@@ -260,12 +259,6 @@ const cases: Array<{ rule: string; ctx: CheckContext }> = [
   {
     rule: "added-at-format",
     ctx: context([entry({ addedAt: "25-07-2026" })]),
-  },
-  {
-    // A hero template someone added without the pro flag — the all-Pro
-    // categories must never ship an unbadged, ungated entry.
-    rule: "pro-category-consistency",
-    ctx: context([entry({ category: "Hero Templates" })]),
   },
   {
     rule: "cookbook-term-exists",

@@ -1830,7 +1830,6 @@ export const textAnimations: ComponentEntry[] = [
 		name: "MarqueeVelocity",
 		category: "Text Animations",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A wrapping marquee whose drift speed and direction follow scroll velocity — fast scrolls whip the row along, upward scrolls reverse it.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -1898,7 +1897,6 @@ export const textAnimations: ComponentEntry[] = [
 		name: "WordReveal",
 		category: "Text Animations",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A scroll-scrubbed word reveal — each word brightens and rises as it enters the viewport, tied directly to scroll position.",
 		dependencies: ["gsap"],
@@ -1964,7 +1962,6 @@ export const textAnimations: ComponentEntry[] = [
 		name: "Kinetic",
 		category: "Text Animations",
 		addedAt: "2026-09-18",
-		pro: true,
 		pausable: true,
 		description:
 			"Type with mass: every glyph is its own spring, and the squash and stretch are read back off that spring rather than authored.",
@@ -2115,7 +2112,6 @@ export const textAnimations: ComponentEntry[] = [
 		name: "Inlay",
 		category: "Text Animations",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A live shader material poured into real letterforms — molten rock, aurora, chrome, embers, tide. The text stays a real text node at transparent, so it is still selectable, searchable and read aloud exactly once while something genuinely animated fills it.",
 		dependencies: ["ogl"],
@@ -2242,7 +2238,6 @@ export const textAnimations: ComponentEntry[] = [
 		name: "StretchType",
 		category: "Text Animations",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"Type that deforms with how fast you are scrolling rather than how far. Each glyph springs toward the same velocity signal on a softer spring than the one before it, so the wave down the word is a consequence of the physics instead of a list of delays — change the string and it re-tunes itself.",
 		dependencies: ["motion", "clsx", "tailwind-merge"],
@@ -2457,7 +2452,6 @@ export const textAnimations: ComponentEntry[] = [
 		name: "Flipdot",
 		category: "Text Animations",
 		addedAt: "2026-10-21",
-		pro: true,
 		pausable: true,
 		description:
 			"A mechanical flip-dot sign. Each word is drawn on a grid of small discs. To show the next word, the discs turn over in a sweep: by column, on a diagonal, out from the center, or at random. A disc squashes as it turns and swings a little past flat before it settles. Hover to flip the discs under the pointer, or click to send a wave across the sign.",

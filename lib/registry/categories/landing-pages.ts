@@ -148,7 +148,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A brutalist advisory-firm landing page: particle world map, scroll-velocity partner marquee, flip-card portfolio and a four-step process rail. Dark-native, light-capable, and rebranded from one constants file.",
 		props: TEMPLATE_TOKENS,
@@ -190,7 +189,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A darkroom photography-studio portfolio: WebGPU hero with film grain, chromatic fringing and pointer parallax, a gallery wall with ripple-hover prints, and editorial serif-and-mono type. Every picture keeps a real img underneath, so the page degrades to a designed static site wherever WebGPU is absent.",
 		props: TEMPLATE_TOKENS,
@@ -224,7 +222,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A dark-sky observatory retreat: raymarched WebGPU aurora, a pointer-reactive procedural starfield, rooms, experiences and a celestial calendar. Fully procedural — zero image assets — with a designed CSS night sky wherever WebGPU is absent.",
 		props: TEMPLATE_TOKENS,
@@ -258,7 +255,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A studio page built around a scroll-driven 3D model: an animated GLTF butterfly that banks with scroll velocity, an optional ASCII post-effect, a GPU attractor field and a corner-letter marquee. Dark-native, retinted from one variable.",
 		props: TEMPLATE_TOKENS,
@@ -329,7 +325,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A product page for a monitoring agent: pinned scroll-tilt dashboard, ribbon-cut section joins, a metrics rail, an integration walkthrough and an accordion FAQ, all riding one continuous blue gradient. Trades a custom cursor for a smooth one.",
 		props: TEMPLATE_TOKENS,
@@ -398,7 +393,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A network-infrastructure landing page: a masked video-plate hero, scroll-revealed capability cards, an accordion FAQ, a magnetic-hover button system and a waitlist form with a confetti confirmation. Light-native, bordered like a document.",
 		props: TEMPLATE_TOKENS,
@@ -474,7 +468,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A collection launch page in gold and vermillion: a painted parallax hero, a character carousel, a splash sequence, a custom cursor and a working soundtrack player with seek. Three sections below the fold are new — the source shipped only the hero.",
 		props: TEMPLATE_TOKENS,
@@ -547,7 +540,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A dark kinetic landing page that ships no media at all. Nine surfaces — a four-way hero switcher, a bento grid, two clipped collages — are one fragment shader at nine points on a preset dial. Scroll-sheared clip paths, pointer-tilted plates, split-word titles.",
 		props: TEMPLATE_TOKENS,
@@ -599,7 +591,6 @@ export const landingPages: ComponentEntry[] = [
 		category: "Landing Pages",
 		kind: "template",
 		addedAt: "2026-09-18",
-		pro: true,
 		description:
 			"A cocktail-bar landing page with no media at all. The 25MB scroll-scrubbed hero video is a fragment shader driven by the same ScrollTrigger; the leaves, glasses and portraits are generated SVG. Split-text reveals, a pinned pour, a dragged menu carousel.",
 		props: TEMPLATE_TOKENS,

@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "@bprogress/next/app";
@@ -23,25 +23,18 @@ import { previews } from "@/components/registry/previews";
 import PlaceholderPreview from "./PlaceholderPreview";
 import PreviewBoundary from "./PreviewBoundary";
 import ControlsPanel from "./ControlsPanel";
-import ControlsLocked from "./ControlsLocked";
 
 export default function FullscreenStage({
 	entry,
 	neighbors,
-	controlsLocked,
 }: {
 	entry: ComponentEntry;
 	neighbors?: Neighbors;
-	/** Server-created promise (isControlsLocked), read via use() — same
-	    no-async-parent rule as LiveWorkspace (Flight soft-nav decode). */
-	controlsLocked?: Promise<boolean>;
 }) {
-	const locked = controlsLocked ? use(controlsLocked) : false;
 	const { values, setValue, syncValue, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
 	const t = useTranslations("chrome.fullscreenStage");
-	const tLocked = useTranslations("chrome.controlsLocked");
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [controlsOpen, setControlsOpen] = useState(false);
@@ -176,25 +169,6 @@ export default function FullscreenStage({
 								onChange={setValue}
 								onReset={reset}
 								pausable={entry.pausable}
-								locked={
-									locked ? (
-										<ControlsLocked
-											dense
-											name={entry.name}
-											propCount={entry.props.length}
-											// This route has no PricingModal — it lives in the (shell)
-											// layout — so the CTA leaves rather than opening in place.
-											cta={
-												<Link
-													href={`${backHref}#subscribe`}
-													className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 font-sans text-sm font-medium text-on-accent transition-colors hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-												>
-													{tLocked("cta")}
-												</Link>
-											}
-										/>
-									) : null
-								}
 							/>
 						</motion.div>
 					)}

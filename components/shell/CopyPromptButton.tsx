@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { Check, Lock, Stars } from "lucide-react";
+import { Check, Stars } from "lucide-react";
 import { toast } from "sonner";
 import { useBorderGlow } from "@/components/registry/border-glow/border-glow";
 import { trackEvent } from "@/lib/stats/track";
@@ -180,27 +180,5 @@ export default function CopyPromptButton({
 				{copied ? t("copiedAnnouncement", { name }) : ""}
 			</span>
 		</>
-	);
-}
-
-/** Free visitor on a Pro component. Same footprint, routes to the paywall. */
-export function PromptLocked({ name }: { name: string }) {
-	const t = useTranslations("chrome.copyPrompt");
-	const label = t("lockedAria", { name });
-	return (
-		<PromptButtonShell>
-			<button
-				type="button"
-				aria-label={label}
-				title={label}
-				onClick={() => {
-					window.location.hash = "subscribe";
-				}}
-				className={cn(CHROME, "text-ink-mute hover:text-accent")}
-			>
-				<Lock className="h-3.5 w-3.5 shrink-0" aria-hidden />
-				<span className={LABEL}>{t("label")}</span>
-			</button>
-		</PromptButtonShell>
 	);
 }

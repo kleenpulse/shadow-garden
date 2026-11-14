@@ -85,5 +85,5 @@ export function collectionDescription(
 	entries: ComponentEntry[],
 ): string {
 	const [opening] = collection.intro.split(/(?<=\.)\s/, 1);
-	return metaText(`${opening} ${entries.length} live, tunable components.`);
+	return metaText(`${opening} ${entries.length} live, tunable components, all free.`);
 }

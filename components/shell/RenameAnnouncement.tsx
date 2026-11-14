@@ -19,7 +19,7 @@ import {
 const POLL_MS = 400;
 // Let the page land after the intro before a second overlay takes the screen.
 const SETTLE_MS = 800;
-// Above the landing header (z-99) and GotoTop (z-9999); below PricingModal.
+// Above the landing header (z-99) and GotoTop (z-9999).
 const LAYER = 10000;
 
 function alreadySeen(): boolean {
