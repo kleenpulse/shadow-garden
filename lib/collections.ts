@@ -116,7 +116,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-drag-animations",
     title: "React Drag Animations",
     intro:
-      "Forty components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events instead of mouse events and set touch-action on the drag surface. That is the difference between a gesture that works on a phone and one that scrolls the page instead.",
+      "Forty-one components you move with a finger or a cursor, and that keep moving after you let go. Drag with momentum, rubber-banding at a boundary, reorderable lists, rigid bodies you can fling, cloth you can load until it tears, a knob you can spin through its detents. All of them bind pointer events instead of mouse events and set touch-action on the drag surface. That is the difference between a gesture that works on a phone and one that scrolls the page instead.",
     filter: { kind: "terms", terms: ["Drag", "Momentum", "Rubber-banding"] },
   },
   {
@@ -184,7 +184,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "react-webgl-backgrounds",
     title: "React WebGL Backgrounds",
     intro:
-      "Forty-four components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-eight use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Six use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
+      "Forty-five components that render on the GPU through a WebGL context: fragment-shader gradients, particle fields, fluid simulations, an agent-based slime mould, rain running down a pane of glass, a raymarched black hole. Thirty-nine use ogl, a wrapper small enough that the whole bundle costs less than one hero image. Six use Three.js, where the scene really does need a scene graph. All of them size to their container and halt the render loop when the tab is hidden.",
     filter: { kind: "deps", packages: ["ogl", "three"] },
   },
 ];

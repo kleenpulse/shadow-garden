@@ -14,13 +14,13 @@ Agents can start at [`/llms.txt`](https://motion-garden.netlify.app/llms.txt): a
 ## What's inside
 
 <!-- catalog:start -->
-**162 components** across 6 categories:
+**163 components** across 6 categories:
 
 - **Backgrounds** (37) — WebGL/canvas ambience
 - **Text Animations** (27) — type in motion
 - **Micro-interactions** (44) — small mechanisms, felt more than seen
 - **Power-User Systems** (33) — command surfaces for operators
-- **Hero Templates** (12) — landing openers with dimension
+- **Hero Templates** (13) — landing openers with dimension
 - **Landing Pages** (9) — whole-page scroll machines
 
 Browse the full catalog with live previews by running the dev server (see below).

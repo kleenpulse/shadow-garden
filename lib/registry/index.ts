@@ -24,8 +24,8 @@ import { IS_LOCAL_DEV } from "../env";
 // Landing Pages is TEMPORARILY hidden from production builds (pre-launch): the
 // conditional spread is the single seam every consumer inherits — sitemap,
 // counts, palette, generateStaticParams, collections. Checks run under plain
-// bun with NODE_ENV unset, so check:registry keeps validating all 162 entries;
-// `next build` sets production and ships 153. Delete the ternary to launch.
+// bun with NODE_ENV unset, so check:registry keeps validating all 163 entries;
+// `next build` sets production and ships 154. Delete the ternary to launch.
 export const registry: ComponentEntry[] = [
 	...backgrounds,
 	...textAnimations,

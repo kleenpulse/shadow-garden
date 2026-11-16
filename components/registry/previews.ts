@@ -179,4 +179,5 @@ export const previews: Record<string, ComponentType<PreviewProps>> = {
   sheet: dynamic(() => import("./sheet/sheet-preview"), { ssr: false }),
   treemap: dynamic(() => import("./treemap/treemap-preview"), { ssr: false }),
   "sky-lanterns": dynamic(() => import("./sky-lanterns/sky-lanterns-preview"), { ssr: false }),
+  kusanagi: dynamic(() => import("./kusanagi/kusanagi-preview"), { ssr: false }),
 };
