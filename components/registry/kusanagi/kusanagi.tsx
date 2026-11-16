@@ -40,6 +40,11 @@ import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 // The call-to-action draws the sword: it slides up out of the ground along its
 // own axis, a band of light runs down the steel, the four cut slots fire as one
 // ring so the whole field is mown at once, and then the sword drops back in.
+//
+// The intro plays once on mount: the camera starts far back, high and off to
+// one side in thick fog over short grass, then glides in as the fog lifts and
+// the grass rises, and a band of light runs down the steel as it settles. The
+// frame's rules draw in and the copy rises out of a blur on the same clock.
 export interface KusanagiProps {
 	/** Headline, set in wide capitals in the system serif. An empty string removes it. */
 	title?: string;
@@ -77,6 +82,8 @@ export interface KusanagiProps {
 	autoRotate?: boolean;
 	/** The camera leans toward the pointer, easing back on leave. */
 	parallax?: boolean;
+	/** Play the opening on load: the fog lifts and the camera glides in. */
+	intro?: boolean;
 	/** Halt the loop. The field freezes mid-gust. */
 	paused?: boolean;
 	/** Settles the field into a still pose: no wind, no drift. */
@@ -163,6 +170,11 @@ const DRAW_DROP_AT = 1.5;
 const DRAW_DROP = 0.3;
 const DRAW_END = DRAW_DROP_AT + DRAW_DROP + 0.5;
 const DRAW_REACH = 10;
+
+// The intro, in seconds from mount. The glint starts as the camera settles.
+const INTRO_END = 3.4;
+const INTRO_GLINT_AT = 2.1;
+const INTRO_GLINT = 0.9;
 
 const BLADE_LEVELS = [0, 0.2, 0.4, 0.57, 0.72, 0.86, 1];
 
@@ -993,6 +1005,7 @@ const Kusanagi = memo(
 		cut = true,
 		autoRotate = true,
 		parallax = true,
+		intro = true,
 		paused = false,
 		reducedMotion = false,
 		className,
@@ -1030,13 +1043,22 @@ const Kusanagi = memo(
 		});
 		// Set by the call-to-action, taken by the loop on its next frame.
 		const drawRequest = useRef(false);
+		const introRequest = useRef(false);
 		const ctaRingRef = useRef<HTMLSpanElement>(null);
 		const [fallback, setFallback] = useState(false);
 		const [entered, setEntered] = useState(false);
 		const pausedRef = useRef(paused);
 		pausedRef.current = paused;
 
-		useEffect(() => setEntered(true), []);
+		// The copy and the frame start hidden with no transition, then enter a
+		// moment later so the hidden state has been painted first. Turning the
+		// intro back on plays it again.
+		useEffect(() => {
+			if (!intro) return;
+			setEntered(false);
+			const id = setTimeout(() => setEntered(true), 40);
+			return () => clearTimeout(id);
+		}, [intro]);
 
 		const loop = useAnimationLoop({
 			target: containerRef,
@@ -1049,11 +1071,11 @@ const Kusanagi = memo(
 
 		const live = useRef({
 			grassColor, tipColor, fogColor, steelColor, wind, fog, grassHeight,
-			distance, cut, autoRotate, parallax, reducedMotion,
+			distance, cut, autoRotate, parallax, intro, reducedMotion,
 		});
 		live.current = {
 			grassColor, tipColor, fogColor, steelColor, wind, fog, grassHeight,
-			distance, cut, autoRotate, parallax, reducedMotion,
+			distance, cut, autoRotate, parallax, intro, reducedMotion,
 		};
 
 		useEffect(() => {
@@ -1248,6 +1270,9 @@ const Kusanagi = memo(
 			let drawT = -1;
 			let drawCut = false;
 			let drawLanded = false;
+			// The intro's clock. It starts finished when there is no intro, so
+			// the first paint is already the resting pose.
+			let introT = live.current.intro && !live.current.reducedMotion ? 0 : INTRO_END;
 
 			// Projection state, written by measure and shared with the ray caster.
 			let aspect = 1;
@@ -1378,6 +1403,24 @@ const Kusanagi = memo(
 					}
 					if (drawT >= DRAW_END) drawT = -1;
 				}
+				// The intro: 1 at the first frame, 0 once settled. The camera
+				// comes in fast and lands slowly; the fog and the grass follow
+				// a gentler curve, so the field is still waking as it arrives.
+				if (introRequest.current) {
+					introRequest.current = false;
+					introT = 0;
+				}
+				if (l.reducedMotion || !l.intro) introT = INTRO_END;
+				else if (introT < INTRO_END) introT = Math.min(introT + ease, INTRO_END);
+				const introP = introT / INTRO_END;
+				const away = Math.pow(1 - introP, 4);
+				const veil = 1 - introP * introP * (3 - 2 * introP);
+				if (drawT < 0 && introT < INTRO_END) {
+					const run = clamp((introT - INTRO_GLINT_AT) / INTRO_GLINT, 0, 1);
+					glintAt = SWORD_BLADE * (1 - run) - 0.1;
+					glintAmt = 1.2 * Math.sin(Math.PI * run);
+				}
+
 				if (ring && l.cut) {
 					for (let i = 0; i < CUTS; i++) {
 						const a = (i / CUTS) * TAU + 0.4;
@@ -1393,7 +1436,7 @@ const Kusanagi = memo(
 				// lands at once when nothing is allowed to move.
 				const wantDist = clamp(l.distance, DIST_MIN, DIST_MAX);
 				dist = still ? wantDist : dist + (wantDist - dist) * (1 - Math.exp(-step * 7));
-				const reach = dist * (1 + 0.46 * push);
+				const reach = dist * (1 + 0.46 * push) * (1 + 0.55 * away);
 
 				// The band: the lowest eye clears the tallest seed heads, the
 				// highest looks down at about 30 degrees.
@@ -1412,8 +1455,8 @@ const Kusanagi = memo(
 				const leanEase = 1 - Math.exp(-ease * 3.5);
 				hv.px += (wantX - hv.px) * leanEase;
 				hv.py += (wantY - hv.py) * leanEase;
-				const yaw = o.yaw + hv.px * 0.07;
-				const elev = clamp(o.elev - hv.py * 0.035, elevMin, ELEV_MAX);
+				const yaw = o.yaw + hv.px * 0.07 - 0.6 * away;
+				const elev = clamp(o.elev - hv.py * 0.035 + 0.2 * away, elevMin, ELEV_MAX);
 
 				const ce = Math.cos(elev);
 				const sinYaw = Math.sin(yaw);
@@ -1489,7 +1532,7 @@ const Kusanagi = memo(
 				const horizon = mixRgb(fogC, [1, 1, 1], 0.22);
 				const zenith = mixRgb(fogC, [0, 0, 0], 0.3);
 				const sunCol = mixRgb(horizon, [1, 1, 1], 0.6);
-				const fogK = 0.05 + 0.07 * clamp(l.fog, 0, 1);
+				const fogK = (0.05 + 0.07 * clamp(l.fog, 0, 1)) * (1 + 2.6 * veil);
 				const fogLow = 0.8 * clamp(l.fog, 0, 1);
 
 				for (const u of [su, bu, ku]) {
@@ -1502,7 +1545,7 @@ const Kusanagi = memo(
 					num(u, "uFogLow", fogLow);
 					// The clear stretch scales with the camera distance, so the
 					// sword stays out of the fog however far back the eye stands.
-					num(u, "uFogStart", (FOG_START * dist) / BASE_DIST);
+					num(u, "uFogStart", ((FOG_START * dist) / BASE_DIST) * (1 - 0.7 * veil));
 				}
 				vec(su, "uTipC").set(tipC);
 				vec(bu, "uTipC").set(tipC);
@@ -1522,7 +1565,7 @@ const Kusanagi = memo(
 				num(bu, "uWindAmt", l.wind <= 1 ? l.wind : 1 + (l.wind - 1) * 0.5);
 				num(bu, "uBand", band);
 				num(bu, "uFlutter", flutter);
-				num(bu, "uHeight", l.grassHeight);
+				num(bu, "uHeight", l.grassHeight * (1 - 0.45 * veil));
 				num(bu, "uFocal", focal);
 
 				vec(ku, "uSteel").set(hexToRgb01(l.steelColor));
@@ -1606,8 +1649,16 @@ const Kusanagi = memo(
 			loop.paint();
 		}, [
 			grassColor, tipColor, fogColor, steelColor, wind, fog, grassHeight,
-			distance, cut, autoRotate, parallax, loop,
+			distance, cut, autoRotate, parallax, intro, loop,
 		]);
+
+		// The scene's half of the intro, on mount and whenever it is turned
+		// back on. A halted loop keeps the request and plays it on resume.
+		useEffect(() => {
+			if (!intro) return;
+			introRequest.current = true;
+			loop.start();
+		}, [intro, loop]);
 
 		// Reduced motion halts itself once settled; turning it off restarts.
 		useEffect(() => {
@@ -1738,16 +1789,42 @@ const Kusanagi = memo(
 			onCtaClick?.();
 		};
 
-		// Copy rises in with a stagger; reduced motion renders the final state
-		// immediately. Inline styles keep the entrance inside the pasted file.
-		const rise = (i: number): React.CSSProperties =>
-			reducedMotion
-				? {}
-				: {
-						opacity: entered ? 1 : 0,
-						transform: entered ? "none" : "translateY(14px)",
-						transition: `opacity 800ms cubic-bezier(0.22,1,0.36,1) ${i * 120}ms, transform 800ms cubic-bezier(0.22,1,0.36,1) ${i * 120}ms`,
-					};
+		// The entrance: copy rises out of a blur with a stagger, the frame fades
+		// in and its rules draw from their anchored end. All of it waits for the
+		// camera to be most of the way in. Reduced motion and intro off render
+		// the final state immediately. The hidden state carries no transition,
+		// so a replay snaps back instead of fading out. Inline styles keep the
+		// entrance inside the pasted file.
+		const animated = intro && !reducedMotion;
+		const EASE = "cubic-bezier(0.22,1,0.36,1)";
+		const rise = (i: number): React.CSSProperties => {
+			if (!animated) return {};
+			const at = 1100 + i * 160;
+			return {
+				opacity: entered ? 1 : 0,
+				transform: entered ? "none" : "translateY(14px)",
+				filter: entered ? "blur(0px)" : "blur(8px)",
+				transition: entered
+					? `opacity 1000ms ${EASE} ${at}ms, transform 1000ms ${EASE} ${at}ms, filter 1000ms ${EASE} ${at}ms`
+					: "none",
+			};
+		};
+		const appear: React.CSSProperties = animated
+			? {
+					opacity: entered ? 1 : 0,
+					transition: entered ? "opacity 900ms ease-out 700ms" : "none",
+				}
+			: {};
+		const rule = (i: number, origin: "left" | "right"): React.CSSProperties =>
+			animated
+				? {
+						transform: entered ? "none" : "scaleX(0)",
+						transformOrigin: origin,
+						transition: entered
+							? `transform 1300ms ${EASE} ${700 + i * 180}ms`
+							: "none",
+					}
+				: {};
 
 		const grainAmount = clamp(grain, 0, 1);
 		const inset = "max(14px,3.2cqi)";
@@ -1784,12 +1861,16 @@ const Kusanagi = memo(
 				) : null}
 
 				{frame ? (
-					<div aria-hidden className="pointer-events-none absolute inset-0 z-10 text-white/60">
+					<div
+						aria-hidden
+						className="pointer-events-none absolute inset-0 z-10 text-white/60"
+						style={appear}
+					>
 						<div
 							className="absolute flex items-center gap-[max(6px,0.9cqi)]"
 							style={{ left: inset, top: inset }}
 						>
-							<span className="block h-px w-[max(56px,15cqi)] bg-current" />
+							<span className="block h-px w-[max(56px,15cqi)] bg-current" style={rule(0, "left")} />
 							<span
 								className="block h-[max(3px,0.42cqi)] w-[max(24px,4.4cqi)]"
 								style={{
@@ -1806,11 +1887,12 @@ const Kusanagi = memo(
 								top: "23%",
 								backgroundImage:
 									"repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 5px)",
+								...rule(1, "left"),
 							}}
 						/>
 						<div
 							className="absolute top-[46%] hidden w-[max(140px,33cqi)] [@container(orientation:landscape)]:block"
-							style={{ right: inset }}
+							style={{ right: inset, ...rule(2, "right") }}
 						>
 							<span className="block h-px w-full bg-current opacity-70" />
 							<span
@@ -1836,7 +1918,7 @@ const Kusanagi = memo(
 						</span>
 						<span
 							className="absolute block h-px w-[max(48px,13cqi)] bg-current"
-							style={{ left: inset, bottom: inset }}
+							style={{ left: inset, bottom: inset, ...rule(3, "left") }}
 						/>
 					</div>
 				) : null}

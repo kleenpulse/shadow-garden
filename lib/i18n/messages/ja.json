@@ -2408,7 +2408,8 @@
         "frame": "Show the thin rules, the ruler and the crosshairs over the scene.",
         "cut": "A click or tap sends a cut out from the sword. The grass grows back.",
         "autoRotate": "The camera turns slowly while nothing is held.",
-        "parallax": "The camera leans toward the pointer, easing back on leave."
+        "parallax": "The camera leans toward the pointer, easing back on leave.",
+        "intro": "Play the opening on load: the fog lifts and the camera glides in. Turn it off and on to play it again."
       }
     },
     "vellum": {

@@ -48,6 +48,7 @@ export default function KusanagiPreview({
 				cut={values.cut as boolean}
 				autoRotate={values.autoRotate as boolean}
 				parallax={values.parallax as boolean}
+				intro={values.intro as boolean}
 				paused={paused}
 				reducedMotion={reducedMotion}
 			/>
@@ -60,7 +61,7 @@ export default function KusanagiPreview({
 					className="font-serif text-[max(18px,3.4cqi)] leading-none italic"
 					style={{ color: INK }}
 				>
-					Shadow Garden
+					Motion Garden
 				</span>
 				<span
 					className="mt-[max(5px,0.8cqi)] font-display text-[max(7px,0.82cqi)] tracking-[0.3em] uppercase"
