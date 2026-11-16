@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
 	// The Pro source read is the one dynamic hole streamed into an otherwise-static shell.
 	cacheComponents: true,
 	partialPrefetching: true,
+	devIndicators: false,
 	// Let .mdx files act as pages/imports alongside the TS app.
 	pageExtensions: ["ts", "tsx", "mdx"],
 	// lib/registry/source.ts joins its two roots (components/registry, hooks) with a

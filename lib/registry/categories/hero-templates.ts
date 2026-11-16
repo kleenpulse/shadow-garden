@@ -1272,7 +1272,7 @@ export const heroTemplates: ComponentEntry[] = [
 		addedAt: "2026-11-16",
 		pausable: true,
 		description:
-			"A long sword planted in a foggy field of tall grass, with a wide serif title under it and a thin editorial frame on top. Wind rolls through thousands of blades of grass drawn on the GPU, and the fog gets thicker toward the horizon. On load the fog lifts and the camera glides in to the sword. Click or tap to send a cut out from the sword. The grass in its path is cut short, then grows back. The button draws the sword out of the ground and cuts the whole field in a ring. Drag to turn the camera around the sword.",
+			"A long sword planted in a foggy field of tall grass, with a wide, heavy title under it and a thin editorial frame on top. Wind rolls through thousands of blades of grass drawn on the GPU, and the fog gets thicker toward the horizon. On load the fog lifts and the camera glides in to the sword. Click or tap to send a cut out from the sword. The grass in its path is cut short, then grows back. The button draws the sword out of the ground and cuts the whole field in a ring. Drag to turn the camera around the sword.",
 		dependencies: ["ogl"],
 		cookbook: [
 			"Loop",

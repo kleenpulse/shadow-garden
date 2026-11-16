@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import type { PreviewProps } from "@/lib/registry/types";
 import Kusanagi, { type KusanagiDensity } from "./kusanagi";
 
@@ -28,6 +29,21 @@ export default function KusanagiPreview({
 	paused,
 }: PreviewProps) {
 	const wind = values.wind as number;
+
+	// The wind readout grows while the wind control is being moved, then eases
+	// back to its own size a moment after the last change.
+	const [tuning, setTuning] = useState(false);
+	const firstWind = useRef(true);
+	useEffect(() => {
+		if (firstWind.current) {
+			firstWind.current = false;
+			return;
+		}
+		setTuning(true);
+		const id = setTimeout(() => setTuning(false), 650);
+		return () => clearTimeout(id);
+	}, [wind]);
+	const grown = tuning && !reducedMotion;
 	return (
 		<div className="relative h-full min-h-80 w-full @container-size">
 			<Kusanagi
@@ -103,8 +119,14 @@ export default function KusanagiPreview({
 			</span>
 
 			<div
-				className="pointer-events-none absolute bottom-[max(22px,4.6cqi)] z-10 hidden flex-col [@container(orientation:landscape)]:@xl:flex"
-				style={{ left: INSET }}
+				className="pointer-events-none absolute bottom-[max(22px,4.6cqi)] z-10 hidden origin-bottom-left flex-col [@container(orientation:landscape)]:@xl:flex"
+				style={{
+					left: INSET,
+					transform: grown ? "scale(1.4)" : "none",
+					transition: grown
+						? "transform 260ms cubic-bezier(0.22,1,0.36,1)"
+						: "transform 700ms cubic-bezier(0.22,1,0.36,1)",
+				}}
 			>
 				<span
 					className="font-display text-[max(7px,0.82cqi)] tracking-[0.26em] uppercase"

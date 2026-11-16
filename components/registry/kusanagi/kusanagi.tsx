@@ -5,7 +5,7 @@ import { Camera, Geometry, Mesh, Program, Renderer, Transform, Triangle } from "
 import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 
 // A long sword planted in a field of tall grass on an overcast, foggy day, with
-// an editorial frame and a wide serif title laid over it. Three draw calls: one
+// an editorial frame and a wide, heavy title laid over it. Three draw calls: one
 // fullscreen pass for the sky and the analytic ground, one instanced mesh for
 // every blade of grass, one small mesh for the sword.
 //
@@ -46,7 +46,7 @@ import { useAnimationLoop, type Metrics } from "@/hooks/use-animation-loop";
 // the grass rises, and a band of light runs down the steel as it settles. The
 // frame's rules draw in and the copy rises out of a blur on the same clock.
 export interface KusanagiProps {
-	/** Headline, set in wide capitals in the system serif. An empty string removes it. */
+	/** Headline, set in wide, heavy capitals. It uses the font in the `--font-title` CSS variable, or the system sans without one. An empty string removes it. */
 	title?: string;
 	/** Supporting line under the headline. An empty string removes it. */
 	subtitle?: string;
@@ -1926,7 +1926,7 @@ const Kusanagi = memo(
 				<div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-end bg-[linear-gradient(0deg,rgba(6,10,10,0.5),rgba(6,10,10,0)_44%)] px-[max(20px,5cqi)] pb-[max(20px,4.2cqi)] text-center">
 					{title ? (
 						<h1
-							className="font-serif text-[max(22px,4.1cqi)] leading-none font-normal tracking-[0.5em] text-white/90 uppercase indent-[0.5em]"
+							className="font-[family-name:var(--font-title,ui-sans-serif,system-ui,sans-serif)] text-[max(22px,4.1cqi)] leading-none font-black tracking-[0.5em] text-white/90 uppercase indent-[0.5em] xl:text-[max(22px,5.4cqi)]"
 							style={rise(0)}
 						>
 							{title}

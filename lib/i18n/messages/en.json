@@ -2393,7 +2393,7 @@
       }
     },
     "kusanagi": {
-      "description": "A long sword planted in a foggy field of tall grass, with a wide serif title under it and a thin editorial frame on top. Wind rolls through thousands of blades of grass drawn on the GPU, and the fog gets thicker toward the horizon. On load the fog lifts and the camera glides in to the sword. Click or tap to send a cut out from the sword. The grass in its path is cut short, then grows back. The button draws the sword out of the ground and cuts the whole field in a ring. Drag to turn the camera around the sword.",
+      "description": "A long sword planted in a foggy field of tall grass, with a wide, heavy title under it and a thin editorial frame on top. Wind rolls through thousands of blades of grass drawn on the GPU, and the fog gets thicker toward the horizon. On load the fog lifts and the camera glides in to the sword. Click or tap to send a cut out from the sword. The grass in its path is cut short, then grows back. The button draws the sword out of the ground and cuts the whole field in a ring. Drag to turn the camera around the sword.",
       "props": {
         "distance": "How far the camera stands from the sword. Lower is closer.",
         "density": "How many blades of grass, in fixed steps. Each step rebuilds the blade buffer.",
