@@ -139,7 +139,8 @@ const FOG_START = 4;
 // hold the middle of a wide frame from five metres away.
 const SWORD_BLADE = 1.9;
 const SWORD_GRIP = 0.7;
-const SWORD_BURY = 0.32;
+// How much of the point sits under the ground: a few inches.
+const SWORD_BURY = 0.14;
 const SWORD_SORI = 0.085;
 const SWORD_WIDTH = 0.12;
 const SWORD_THICK = 0.03;
@@ -155,7 +156,7 @@ const SWORD_AXIS: [number, number, number] = [
 ];
 
 // The draw, in seconds from the click: the sword rises, hangs, drops back.
-const DRAW_LIFT = 0.65;
+const DRAW_LIFT = 0.5;
 const DRAW_RISE = 0.5;
 const DRAW_CUT_AT = 0.16;
 const DRAW_DROP_AT = 1.5;
@@ -920,6 +921,9 @@ vec3 envAt(vec3 d) {
 }
 
 void main() {
+  // The ground is drawn by the sky pass and writes no depth, so the buried
+  // point is cut away here. It comes back as the draw lifts the sword.
+  if (vWorld.y < 0.0) discard;
   vec3 V = normalize(cameraPosition - vWorld);
   vec3 n = normalize(vNormal);
   if (dot(n, V) < 0.0) n = -n;
@@ -1243,6 +1247,7 @@ const Kusanagi = memo(
 			let dist = clamp(live.current.distance, DIST_MIN, DIST_MAX);
 			let drawT = -1;
 			let drawCut = false;
+			let drawLanded = false;
 
 			// Projection state, written by measure and shared with the ray caster.
 			let aspect = 1;
@@ -1341,6 +1346,7 @@ const Kusanagi = memo(
 					else if (drawT < 0) {
 						drawT = 0;
 						drawCut = false;
+						drawLanded = false;
 					}
 				}
 				let lift = 0;
@@ -1365,9 +1371,9 @@ const Kusanagi = memo(
 					// The camera steps back with the sword, so the hilt stays in
 					// frame at the top of the draw.
 					push = lift / DRAW_LIFT;
-					if (drawT >= DRAW_DROP_AT + DRAW_DROP && drawCut) {
+					if (drawT >= DRAW_DROP_AT + DRAW_DROP && !drawLanded) {
 						// It lands: one more, smaller flash.
-						drawCut = false;
+						drawLanded = true;
 						flash = Math.max(flash, 0.5);
 					}
 					if (drawT >= DRAW_END) drawT = -1;
@@ -1387,7 +1393,7 @@ const Kusanagi = memo(
 				// lands at once when nothing is allowed to move.
 				const wantDist = clamp(l.distance, DIST_MIN, DIST_MAX);
 				dist = still ? wantDist : dist + (wantDist - dist) * (1 - Math.exp(-step * 7));
-				const reach = dist * (1 + 0.2 * push);
+				const reach = dist * (1 + 0.46 * push);
 
 				// The band: the lowest eye clears the tallest seed heads, the
 				// highest looks down at about 30 degrees.
