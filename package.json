@@ -1,6 +1,6 @@
 {
   "name": "motion-garden",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "license": "MIT",
   "description": "Animation-forward React component showcase — a two-pane docs bench with tunable controls, live previews, copyable source, and a one-click brief for coding agents.",

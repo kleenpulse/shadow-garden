@@ -1,5 +1,38 @@
 # motion-garden
 
+## 0.4.0
+
+### Minor Changes
+
+- [`42dda33`](https://github.com/kleenpulse/shadow-garden/commit/42dda33c3b754748087526e43cadbf1aec404eb6) Thanks [@kleenpulse](https://github.com/kleenpulse)! - One new component, taking the catalog to 157 (148 in production while Landing Pages stays hidden).
+
+  - **Anima** (Backgrounds): a still illustration that looks alive. One image runs through a shader. The marked parts sway, the glowing parts pulse, a band of light crosses the metal, the light of the scene rises and falls, and glowing motes drift over it. The pointer slides the near parts more than the far ones. A second, small image (sway in red, glow in green, depth in blue) tells the shader what can move.
+
+- [`3aa8c0a`](https://github.com/kleenpulse/shadow-garden/commit/3aa8c0ad9c8bbac6e96776e5c8b781317ab04857) Thanks [@kleenpulse](https://github.com/kleenpulse)! - Five new components, one in each component category, taking the catalog to 162 (153 in production while Landing Pages stays hidden).
+
+  - **Circuit** (Backgrounds): a circuit board that draws itself. Chips are placed first, every pin grows a trace across a grid with 45 degree bends, and the gaps fill with loose traces and vias. Pulses of light run along the copper and can pass through a chip and out of another pin. The pointer lights the copper near it and starts pulses there.
+  - **Reel** (Text Animations): a sentence with one slot that keeps changing. The next word rolls up from below as a whole or letter by letter, and the slot's width springs to fit it, so the rest of the sentence is pushed along instead of jumping.
+  - **Sheet** (Micro-interactions): a bottom sheet with three heights. A release carries the speed of the hand forward to pick the height, a pull past either end stretches like a rubber band, the page behind dims and steps back, and a pull past the bottom closes it. Arrow keys on the handle step between heights.
+  - **Treemap** (Power-User Systems): a squarified treemap you can walk into. Click a frame and it grows to fill the view, with a path back out. Cells keep their place inside their frame for the whole zoom. Arrow keys move between cells by where they are on screen, and a live mode lets the values wander.
+  - **Sky Lanterns** (Hero Templates, Pro): a night lake with hundreds of paper lanterns rising off it, each lit from inside, with a soft glow and a broken reflection on the water. Sweep the pointer through a lantern to knock it away with real collision physics, a click lets go of a new cluster, and a drag turns the camera around the lake.
+
+- [`28efccb`](https://github.com/kleenpulse/shadow-garden/commit/28efccbd25b7ff324e27b4aefa7d93e89a007fbc) Thanks [@kleenpulse](https://github.com/kleenpulse)! - A new hero template, taking the catalog to 163 (154 in production while Landing Pages stays hidden).
+
+  - **Kusanagi** (Hero Templates): a long sword planted in a foggy field of tall grass, under a wide, heavy title and a thin editorial frame with film grain. Wind rolls through thousands of blades of grass and the fog gets thicker toward the horizon. On load the fog lifts, the grass rises and the camera glides in to the sword (the `intro` control turns this off). A click or tap sends a cut out from the sword: the grass in its path is cut short, then grows back. The button draws the sword out of the ground and cuts the whole field in a ring. A drag turns the camera around the sword, and a `distance` control sets how close the camera stands.
+
+- [`7764ba6`](https://github.com/kleenpulse/shadow-garden/commit/7764ba641d25ca086f835a33a12a62c48d62f876) Thanks [@kleenpulse](https://github.com/kleenpulse)! - Ten new components, taking the catalog to 156 (147 in production while Landing Pages stays hidden).
+
+  - **Chladni** (Backgrounds): sand on a vibrating plate. The grains jump off the parts that shake and settle on the still lines, drawing a Chladni figure that changes every few seconds. The pointer scatters them like a violin bow.
+  - **Marbling** (Backgrounds, Pro): paper marbling built on the drop and comb math from _Mathematical Marbling_. New drops push the old rings outward without tearing them, a comb pulls the ink into feathers, and a drag pulls it like a stylus.
+  - **Annotate** (Text Animations): hand-drawn marker notes (underlines, circles, boxes, highlights, strike-throughs, brackets) that draw themselves around marked words, line by line, and re-measure when the layout changes.
+  - **Flipdot** (Text Animations, Pro): a mechanical flip-dot sign. Discs turn over in a sweep to show the next word, squash as they turn and swing past flat before they settle. Hover flips the discs under the pointer; a click sends a wave.
+  - **Scratch** (Micro-interactions): a scratch-off card. Drag to scrape the foil, flakes fall where you scratch, and the rest fades once enough is gone. Enter or Space reveals it from the keyboard.
+  - **SwipeActions** (Micro-interactions, Pro): list rows you swipe to show actions, like iOS Mail. A full swipe runs the outer action and folds the row away. Arrow keys and Enter work too.
+  - **Kanban** (Power-User Systems, Pro): a drag-and-drop board with work-in-progress limits and columns that fold to a rail. Space picks up a card and the arrow keys move it.
+  - **Pathfinder** (Power-User Systems): A\*, Dijkstra, breadth-first and greedy search spreading through a maze. Draw walls or move the start and goal while it runs, and the path updates live.
+  - **Silvergrass** (Hero Templates, Pro): a moonlit field of GPU-drawn grass beside left-aligned copy. The blades part around the pointer, a click sends a ring of wind through them, and a drag turns the view.
+  - **Penumbra** (Hero Templates, Pro): a cloud of dark shards between a spotlight and a wall. From most angles its shadow is noise; at the true angle it spells a word. Drag it and the word breaks; let go and it comes back.
+
 ## 0.3.0
 
 ### Minor Changes
