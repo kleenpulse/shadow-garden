@@ -110,12 +110,14 @@
     "topBar": {
       "searchPlaceholder": "コンポーネントを検索…",
       "cookbookLabel": "モーション・クックブック",
-      "githubLabel": "GitHub 上の Motion Garden"
+      "githubLabel": "GitHub 上の Motion Garden",
+      "supportLabel": "コーヒーをおごる"
     },
     "mobileBar": {
       "openNavigation": "ナビゲーションを開く",
       "cookbookLabel": "モーション・クックブック",
-      "githubLabel": "GitHub 上の Motion Garden"
+      "githubLabel": "GitHub 上の Motion Garden",
+      "supportLabel": "コーヒーをおごる"
     },
     "footer": {
       "tagline": "ライブで調整できるアニメーション付き React コンポーネント。どれにも、コーディングエージェントがそのまま実装に使えるブリーフが付いています。",

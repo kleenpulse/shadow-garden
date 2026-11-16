@@ -110,12 +110,14 @@
     "topBar": {
       "searchPlaceholder": "Buscar componentes…",
       "cookbookLabel": "Recetario de movimiento",
-      "githubLabel": "Motion Garden en GitHub"
+      "githubLabel": "Motion Garden en GitHub",
+      "supportLabel": "Invítame a un café"
     },
     "mobileBar": {
       "openNavigation": "Abrir navegación",
       "cookbookLabel": "Recetario de movimiento",
-      "githubLabel": "Motion Garden en GitHub"
+      "githubLabel": "Motion Garden en GitHub",
+      "supportLabel": "Invítame a un café"
     },
     "footer": {
       "tagline": "Componentes React animados, en vivo y ajustables. Cada uno incluye un brief a partir del cual tu agente de código puede construir.",

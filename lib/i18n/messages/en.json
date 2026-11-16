@@ -110,12 +110,14 @@
     "topBar": {
       "searchPlaceholder": "Search components…",
       "cookbookLabel": "Motion cook book",
-      "githubLabel": "Motion Garden on GitHub"
+      "githubLabel": "Motion Garden on GitHub",
+      "supportLabel": "Buy me a coffee"
     },
     "mobileBar": {
       "openNavigation": "Open navigation",
       "cookbookLabel": "Motion cook book",
-      "githubLabel": "Motion Garden on GitHub"
+      "githubLabel": "Motion Garden on GitHub",
+      "supportLabel": "Buy me a coffee"
     },
     "footer": {
       "tagline": "Animated React components, live and tunable. Every one ships with a brief your coding agent can build from.",

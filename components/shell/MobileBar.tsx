@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search } from "lucide-react";
+import { Coffee, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import CookBookIcon from "@/components/icons/cook-book";
 import { useUIStore } from "@/lib/store";
@@ -10,7 +10,7 @@ import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
 import GithubIcon from "@/components/icons/github";
-import { SITE_REPO } from "@/lib/site";
+import { SITE_REPO, SITE_SUPPORT } from "@/lib/site";
 import Wordmark from "@/components/Wordmark";
 
 export default function MobileBar() {
@@ -66,6 +66,17 @@ export default function MobileBar() {
 				</Link>
 				<FavoritesLink />
 				<ThemeToggle />
+				{/* The bar is already full at 320px, so this one waits for room. */}
+				<a
+					href={SITE_SUPPORT}
+					target="_blank"
+					rel="noreferrer"
+					aria-label={t("supportLabel")}
+					title={t("supportLabel")}
+					className="hidden size-7 place-items-center rounded-md bg-surface text-ink-dim hover:text-accent min-[400px]:grid"
+				>
+					<Coffee className="size-4" aria-hidden />
+				</a>
 				<a
 					href={SITE_REPO}
 					target="_blank"

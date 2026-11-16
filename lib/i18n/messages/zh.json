@@ -110,12 +110,14 @@
     "topBar": {
       "searchPlaceholder": "搜索组件…",
       "cookbookLabel": "动效秘籍",
-      "githubLabel": "Motion Garden GitHub"
+      "githubLabel": "Motion Garden GitHub",
+      "supportLabel": "请我喝杯咖啡"
     },
     "mobileBar": {
       "openNavigation": "打开导航",
       "cookbookLabel": "动效秘籍",
-      "githubLabel": "Motion Garden GitHub"
+      "githubLabel": "Motion Garden GitHub",
+      "supportLabel": "请我喝杯咖啡"
     },
     "footer": {
       "tagline": "实时可调的动画 React 组件。每一个都附带一份编程智能体可直接据此构建的简报。",

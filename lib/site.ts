@@ -22,6 +22,9 @@ export const GOOGLE_SITE_VERIFICATION =
 
 export const SITE_REPO ="https://github.com/kleenpulse/shadow-garden";
 
+// Same handle as .github/FUNDING.yml.
+export const SITE_SUPPORT = "https://buymeacoffee.com/Vxrcel";
+
 /** Absolute URL for a site-relative path. Leading slash optional. */
 export function absoluteUrl(path = "/"): string {
 	return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;

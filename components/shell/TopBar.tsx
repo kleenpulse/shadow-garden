@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search } from "lucide-react";
+import { Coffee, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import CookBookIcon from "@/components/icons/cook-book";
 import { useUIStore } from "@/lib/store";
@@ -13,7 +13,7 @@ import ThemeToggle from "./ThemeToggle";
 import FavoritesLink from "./FavoritesLink";
 import LanguagePicker from "./LanguagePicker";
 import GithubIcon from "@/components/icons/github";
-import { SITE_REPO } from "@/lib/site";
+import { SITE_REPO, SITE_SUPPORT } from "@/lib/site";
 
 // Slim desktop chrome strip: palette trigger on the left, favorites + theme on
 // the right. Hidden on mobile — MobileBar carries the same affordances there.
@@ -63,6 +63,16 @@ export default function TopBar() {
 				<SoundControl />
 				<LanguagePicker />
 				<ThemeToggle />
+				<a
+					href={SITE_SUPPORT}
+					target="_blank"
+					rel="noreferrer"
+					aria-label={t("supportLabel")}
+					title={t("supportLabel")}
+					className="grid size-7 place-items-center rounded-md bg-surface text-ink-dim transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none md:size-8"
+				>
+					<Coffee className="size-4" aria-hidden />
+				</a>
 				<a
 					href={SITE_REPO}
 					target="_blank"

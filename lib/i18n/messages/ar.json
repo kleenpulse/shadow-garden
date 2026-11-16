@@ -110,12 +110,14 @@
     "topBar": {
       "searchPlaceholder": "ابحث عن المكوّنات…",
       "cookbookLabel": "دفتر وصفات الحركة",
-      "githubLabel": "Motion Garden على GitHub"
+      "githubLabel": "Motion Garden على GitHub",
+      "supportLabel": "ادعمني بكوب قهوة"
     },
     "mobileBar": {
       "openNavigation": "فتح التنقل",
       "cookbookLabel": "دفتر وصفات الحركة",
-      "githubLabel": "Motion Garden على GitHub"
+      "githubLabel": "Motion Garden على GitHub",
+      "supportLabel": "ادعمني بكوب قهوة"
     },
     "footer": {
       "tagline": "مكوّنات React متحركة، حيّة وقابلة للضبط. كل واحد منها يأتي بموجز يستطيع وكيل البرمجة لديك البناء عليه.",
