@@ -571,6 +571,21 @@ check("the site root answers the runtime's router check with a file, not the app
 	assert.ok(engine.includes("`${url.origin}/agent-manifest.json`"), "the runtime still asks the origin's root");
 });
 
+check("the component page reads its files through cached readers, so it is built once", () => {
+	// An uncached disk read in a server component leaves a part of the page that
+	// a function fills on every view. `bun run check:static` proves it on a build;
+	// this catches the known cause without one.
+	const shell = fileURLToPath(new URL("../../components/shell/", import.meta.url));
+	for (const [name, reader] of [["CodePanel.tsx", "cachedSource"], ["PromptButton.tsx", "cachedPrompt"]] as const) {
+		const source = stripComments(readFileSync(path.join(shell, name), "utf8"));
+		assert.ok(source.includes(`await ${reader}(entry.slug)`), `${name} reads through ${reader}`);
+		assert.doesNotMatch(source, /get(Source|Prompt)/, `${name} makes no uncached read`);
+	}
+	const cached = readFileSync(fileURLToPath(new URL("../../lib/registry/cached.ts", import.meta.url)), "utf8");
+	assert.equal(cached.match(/^	"use cache";$/gm)?.length, 2);
+	assert.equal(cached.match(/^	cacheLife\("max"\);$/gm)?.length, 2);
+});
+
 check("the panel lowers its own count after an answered question", () => {
 	assert.equal(AssistantMount.leftAfter(2, true), 1);
 	assert.equal(AssistantMount.leftAfter(1, true), 0);

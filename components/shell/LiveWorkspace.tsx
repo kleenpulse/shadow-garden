@@ -16,6 +16,7 @@ import PlaceholderPreview from "./PlaceholderPreview";
 import PreviewBoundary from "./PreviewBoundary";
 import ControlsPanel from "./ControlsPanel";
 import WorkspaceTabs from "./WorkspaceTabs";
+import { STAGE_SIZE } from "./workspace-layout";
 
 // Owns the tuned-state source (the URL, via nuqs) shared by the preview stage and
 // the controls. The Preview/Code tabs sit on top; the controls run full-width
@@ -93,13 +94,10 @@ export default function LiveWorkspace({
 						// Previews are the shipped product — they render as authored (LTR)
 						// regardless of the page's direction.
 						dir="ltr"
-						// A template is a page, not an effect. A 360px stage shows the hero
-						// and nothing after it — the half of a landing page nobody needs
-						// convincing about.
+						// The size lives in workspace-layout.ts: the skeleton that stands in
+						// for this stage has to match it.
 						className={`group relative grid ${
-							isTemplate
-								? "min-h-140 md:min-h-160 xl:min-h-[78vh]"
-								: "min-h-90 md:min-h-120 xl:min-h-150"
+							isTemplate ? STAGE_SIZE.template : STAGE_SIZE.component
 						} overflow-hidden rounded-lg bg-panel`}
 					>
 						<PreviewBoundary

@@ -26,6 +26,7 @@
     "check:registry": "bun scripts/check-registry.ts",
     "check:registry:selftest": "bun scripts/registry/selftest.ts",
     "check:strip": "bun scripts/registry/check-strip.ts",
+    "check:static": "bun scripts/check-static-pages.ts",
     "verify:loop": "node scripts/verify-loop.mjs",
     "vibe:setup": "bun --conditions=react-server scripts/vibe/setup.ts",
     "vibe:score": "bun --conditions=react-server scripts/vibe/score.ts",

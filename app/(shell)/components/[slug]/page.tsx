@@ -17,6 +17,7 @@ import AppearsIn from "@/components/shell/AppearsIn";
 import LiveWorkspace from "@/components/shell/LiveWorkspace";
 import CodePanel from "@/components/shell/CodePanel";
 import PromptButton from "@/components/shell/PromptButton";
+import WorkspaceSkeleton from "@/components/shell/WorkspaceSkeleton";
 import InstallSection from "@/components/shell/InstallSection";
 import PropsSection from "@/components/shell/PropsSection";
 import {
@@ -106,14 +107,17 @@ export default async function ComponentPage({
 			<Breadcrumbs trail={trail} />
 			<ComponentHeader entry={entry} />
 
-			{/* The workspace reads tuned values from the URL (nuqs) — dynamic under
-          Cache Components, so it streams as a hole in the static shell. The Code
-          tab's source and the Copy Prompt control are rendered server-side and
-          passed in. */}
+			{/* The workspace reads tuned values from the URL (nuqs), which is not
+			    known at build time, so it renders in the browser and the skeleton
+			    stands in until then. The skeleton is sized like the workspace, so
+			    the swap moves nothing. That does not make the page dynamic. The Code
+			    tab's source and the Copy for Agent control are rendered server-side
+			    through cached reads (lib/registry/cached.ts) and passed in, so the
+			    whole page is built once and served as a file. */}
 			{/* LiveWorkspace must stay a DIRECT child here — an async server
 			    component wrapping it corrupts Flight decode on client-side nav
 			    (chunk.reason.enqueueModel, Next 16.3.5 + Cache Components). */}
-			<Suspense fallback={<PanelSkeleton />}>
+			<Suspense fallback={<WorkspaceSkeleton entry={entry} />}>
 				<LiveWorkspace
 					entry={entry}
 					code={

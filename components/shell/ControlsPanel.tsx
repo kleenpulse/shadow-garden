@@ -8,6 +8,7 @@ import NumberControl from "./controls/NumberControl";
 import EnumControl from "./controls/EnumControl";
 import BooleanControl from "./controls/BooleanControl";
 import ColorControl from "./controls/ColorControl";
+import { CONTROLS_GRID, CONTROLS_HEADER } from "./workspace-layout";
 
 // One control per kind, keyed by the kind. React can't live in
 // lib/registry/kinds.ts (the headless check imports that module), so the mapping
@@ -65,7 +66,7 @@ export default function ControlsPanel({
 
 	return (
 		<section className="overflow-hidden rounded-lg bg-panel">
-			<header className="flex items-center justify-between bg-raised/30 px-4 py-2.5">
+			<header className={CONTROLS_HEADER}>
 				<h2 className="font-display text-[11px] uppercase tracking-[0.2em] text-ink-dim">
 					{t("heading")}
 				</h2>
@@ -94,7 +95,7 @@ export default function ControlsPanel({
 				className={
 					dense
 						? "grid grid-cols-1 items-start gap-y-4 p-3"
-						: "grid grid-cols-1 items-start gap-x-8 gap-y-5 p-4 sm:grid-cols-2 lg:grid-cols-3"
+						: CONTROLS_GRID
 				}
 			>
 				{props.map((schema) => {

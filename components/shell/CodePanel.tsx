@@ -1,14 +1,15 @@
-import { getSource } from "@/lib/registry/source";
+import { cachedSource } from "@/lib/registry/cached";
 import type { ComponentEntry } from "@/lib/registry/types";
 import CodeBlock from "./CodeBlock";
 import CodeTabs from "./CodeTabs";
 import CodeTree from "./CodeTree";
 
 // Server component: reads the shipped source from disk (comments stripped) and
-// renders the highlighted panel. Callers render this inside <Suspense> so the
-// disk read and highlighting stream in without holding up the static shell.
+// renders the highlighted panel. The read goes through cachedSource so it runs
+// once at build time. A plain getSource here would leave a hole that a function
+// fills on every page view (see lib/registry/cached.ts).
 export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
-  const result = await getSource(entry);
+  const result = await cachedSource(entry.slug);
 
   if (result.status === "pending") {
     return (
@@ -22,8 +23,7 @@ export default async function CodePanel({ entry }: { entry: ComponentEntry }) {
   }
 
   // One file stays a bare block; a peer hook adds a tab strip. Both are already
-  // highlighted server-side, so this stays inside the existing <Suspense> and
-  // nothing new becomes dynamic.
+  // highlighted server-side.
   if (result.files.length === 1) {
     const only = result.files[0]!;
     return (

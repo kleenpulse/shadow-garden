@@ -1,4 +1,5 @@
 import { cacheLife } from "next/cache";
+import { IS_LOCAL_DEV } from "@/lib/env";
 import { getEntry } from "@/lib/registry";
 import { getPrompt } from "@/lib/registry/prompt";
 import { inShadcnRegistry, shadcnItem } from "@/lib/registry/shadcn";
@@ -24,14 +25,15 @@ import { splitParts } from "./files";
 // Each function takes a slug and answers null when the catalog has no such
 // entry or its files cannot be read: arguments and results of a cached function
 // must be plain data.
+//
+// Dev skips the cache (see the exports at the end): there it outlives an edit to
+// a component file and would keep serving the old source.
 
 /**
  * The "Copy for Agent" brief with what an answer about the code needs around
  * it: the install commands, the Markdown link and each file's size.
  */
-export async function briefDoc(slug: string) {
-	"use cache";
-	cacheLife("max");
+async function buildBrief(slug: string) {
 	const entry = getEntry(slug);
 	if (!entry) return null;
 	const [prompt, source] = await Promise.all([getPrompt(entry), getSource(entry)]);
@@ -61,9 +63,7 @@ export async function briefDoc(slug: string) {
  * Every shipped file, comments stripped, already cut into the parts a chat tool
  * result can carry (lib/agent/files.ts).
  */
-export async function sourceDoc(slug: string) {
-	"use cache";
-	cacheLife("max");
+async function buildSource(slug: string) {
 	const entry = getEntry(slug);
 	if (!entry) return null;
 	const source = await getSource(entry);
@@ -84,12 +84,32 @@ export async function sourceDoc(slug: string) {
 }
 
 /** One component as a shadcn registry item (lib/registry/shadcn.ts). */
-export async function shadcnDoc(slug: string) {
-	"use cache";
-	cacheLife("max");
+async function buildShadcn(slug: string) {
 	const entry = getEntry(slug);
 	if (!entry || !inShadcnRegistry(entry)) return null;
 	const source = await getSource(entry);
 	if (source.status !== "ok") return null;
 	return shadcnItem(entry, source.files, absoluteUrl);
 }
+
+async function storedBrief(slug: string) {
+	"use cache";
+	cacheLife("max");
+	return buildBrief(slug);
+}
+
+async function storedSource(slug: string) {
+	"use cache";
+	cacheLife("max");
+	return buildSource(slug);
+}
+
+async function storedShadcn(slug: string) {
+	"use cache";
+	cacheLife("max");
+	return buildShadcn(slug);
+}
+
+export const briefDoc = IS_LOCAL_DEV ? buildBrief : storedBrief;
+export const sourceDoc = IS_LOCAL_DEV ? buildSource : storedSource;
+export const shadcnDoc = IS_LOCAL_DEV ? buildShadcn : storedShadcn;
