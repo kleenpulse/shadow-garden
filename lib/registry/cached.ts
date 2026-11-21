@@ -1,5 +1,6 @@
 import "server-only";
 import { cacheLife } from "next/cache";
+import { UNTIL_NEXT_DEPLOY } from "../cache-life";
 import { IS_LOCAL_DEV } from "../env";
 import { getEntry } from "./index";
 import { getPrompt, type PromptResult } from "./prompt";
@@ -20,12 +21,7 @@ import { getSource, type SourceResult } from "./source";
 // reads the disk every time, as it did before these were cached.
 
 // The sources cannot change inside one deploy, so an entry is never rebuilt by
-// time. Not `cacheLife("max")`: its 30 day revalidate gives the page a finite
-// lifetime, and Netlify's runtime then treats the page's prefetch data as stale
-// and will not store it, so every prefetch of a component page ran a function
-// (measured: lifetime of minus 30 days, `fwd=bypass`). Pages that never
-// revalidate, like every other page here, have their prefetch data stored.
-const UNTIL_NEXT_DEPLOY = { revalidate: Infinity, expire: Infinity } as const;
+// time (lib/cache-life.ts says why not `cacheLife("max")`).
 
 async function readSource(slug: string): Promise<SourceResult> {
 	const entry = getEntry(slug);

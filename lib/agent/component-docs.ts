@@ -1,4 +1,5 @@
 import { cacheLife } from "next/cache";
+import { UNTIL_NEXT_DEPLOY } from "@/lib/cache-life";
 import { IS_LOCAL_DEV } from "@/lib/env";
 import { getEntry } from "@/lib/registry";
 import { getPrompt } from "@/lib/registry/prompt";
@@ -20,7 +21,7 @@ import { splitParts } from "./files";
 // does that is only built ahead of time when the read sits in a "use cache"
 // function; without it Next runs the route on every request (it showed as ƒ in
 // `next build`). The sources cannot change inside one deploy, so the entries
-// take the longest lifetime there is.
+// are never rebuilt by time (lib/cache-life.ts).
 //
 // Each function takes a slug and answers null when the catalog has no such
 // entry or its files cannot be read: arguments and results of a cached function
@@ -94,19 +95,19 @@ async function buildShadcn(slug: string) {
 
 async function storedBrief(slug: string) {
 	"use cache";
-	cacheLife("max");
+	cacheLife(UNTIL_NEXT_DEPLOY);
 	return buildBrief(slug);
 }
 
 async function storedSource(slug: string) {
 	"use cache";
-	cacheLife("max");
+	cacheLife(UNTIL_NEXT_DEPLOY);
 	return buildSource(slug);
 }
 
 async function storedShadcn(slug: string) {
 	"use cache";
-	cacheLife("max");
+	cacheLife(UNTIL_NEXT_DEPLOY);
 	return buildShadcn(slug);
 }
 

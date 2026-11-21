@@ -93,6 +93,12 @@ of one file (`fileAnswer`). A handler for one of these routes must not read the 
 (query, headers, cookies); `bun run check:agent` fails if one does, and `next build`
 must list each with `●`, not `ƒ`.
 
+The documents that read component files are cached with a life that never revalidates
+(`UNTIL_NEXT_DEPLOY` in `lib/cache-life.ts`), since only a deploy can change them. With
+Next's 30 day `"max"` life each one came out of a deploy already stale, and Netlify ran
+two function calls for it before it kept the answer. `bun run check:static` fails when a
+prebuilt route handler revalidates by time.
+
 ## Loading
 
 None of this is in a page's own JavaScript. `lib/agent/assistant-host.ts` loads

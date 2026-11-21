@@ -12,7 +12,8 @@
 // To fix a failure, move the read into a "use cache" function, as
 // lib/registry/cached.ts does for the component page.
 //
-// It also fails when a prebuilt page revalidates by time (see the end).
+// It also fails when a prebuilt page or route handler revalidates by time (see
+// the end).
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -52,17 +53,24 @@ if (open.length > 0) {
 	process.exit(1);
 }
 
-// A page that revalidates by time is still a file, but Netlify's runtime treats
-// its prefetch data as stale and will not store it: every prefetch of the page
-// runs a function (measured with `cacheLife("max")` on the component pages). A
-// cached read that cannot change inside a deploy should never revalidate:
-// `cacheLife({ revalidate: Infinity, expire: Infinity })`.
-const timed = pages.filter(([, route]) => typeof route.initialRevalidateSeconds === "number").map(([name]) => name);
+// A page or route handler that revalidates by time is still a file, but
+// Netlify's runtime handles it badly (measured with `cacheLife("max")`, 30 days).
+// A page's prefetch data is treated as stale and never stored, so every prefetch
+// of the page runs a function. A route handler's answer arrives already stale
+// after a deploy and takes two function calls before it is stored. A cached
+// read that cannot change inside a deploy should never revalidate:
+// `cacheLife(UNTIL_NEXT_DEPLOY)` from lib/cache-life.ts.
+const handlers = routes.filter(([, route]) => route.routeType === "route");
+const timed = [...pages, ...handlers]
+	.filter(([, route]) => typeof route.initialRevalidateSeconds === "number")
+	.map(([name]) => name);
 if (timed.length > 0) {
 	console.error(
-		`check:static: ${timed.length} of ${pages.length} prebuilt pages revalidate by time, so their prefetch data is not stored (first: ${timed[0]}).`,
+		`check:static: ${timed.length} of ${pages.length + handlers.length} prebuilt pages and route handlers revalidate by time, so the CDN does not keep them as built (first: ${timed[0]}).`,
 	);
 	process.exit(1);
 }
 
-console.log(`check:static: ${pages.length} prebuilt pages, all served as files that never revalidate`);
+console.log(
+	`check:static: ${pages.length} prebuilt pages and ${handlers.length} prebuilt route handlers, all served as files that never revalidate`,
+);

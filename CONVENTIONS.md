@@ -107,7 +107,7 @@ Time-driven shaders decay over their lifetime if unbounded:
 ## Build & install
 
 - `bun run build` must stay PPR-clean (◐ Partial Prerender, no Cache Components violations).
-- Every prebuilt page must be served as a file. A server component that reads the disk or fetches outside a `"use cache"` function leaves a part that a function fills on every view, and the host then bills one function call per page view. The build prints no warning. Read files through a cached function (see `lib/registry/cached.ts`), and run `bun run check:static` after a build.
+- Every prebuilt page must be served as a file. A server component that reads the disk or fetches outside a `"use cache"` function leaves a part that a function fills on every view, and the host then bills one function call per page view. The build prints no warning. Read files through a cached function (see `lib/registry/cached.ts`) with the cache life `UNTIL_NEXT_DEPLOY` from `lib/cache-life.ts`, never `cacheLife("max")`, and run `bun run check:static` after a build.
 - A dev server usually runs on `:3000`. Don't run `bun run build` while it runs — they fight over `.next`. Stop the dev server first.
 - Don't run `bun install` / `bun add` while the dev server runs — the bundler compiles half-written `node_modules` mid-install, producing phantom parse errors in Next internals and Fast Refresh loops. Stop dev, install, restart; if it happened anyway, delete `.next` before restarting.
 - Editing a shader string won't show on the dev server until a **hard** reload — Fast Refresh keeps the cached GPU program.
@@ -117,7 +117,7 @@ Time-driven shaders decay over their lifetime if unbounded:
 ```bash
 bun run check        # tsc --noEmit + check:registry + check:strip
 bun run verify:loop <slug>   # animation components; needs the dev server
-bun run check:static # after `bun run build`: every prebuilt page is served as a file
+bun run check:static # after `bun run build`: every prebuilt page is a file, and nothing prebuilt revalidates by time
 ```
 
 `check:registry` gates the registry invariants `tsc` can't reach. If you add a rule in `scripts/registry/rules.ts`, add a matching case in `scripts/registry/selftest.ts` — an uncovered rule fails the selftest.

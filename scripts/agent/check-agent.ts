@@ -594,7 +594,18 @@ check("the component page reads its files through cached readers, so it is built
 	// Never rebuilt by time: a finite lifetime makes Netlify refuse to store the
 	// page's prefetch data, which is a function call per prefetch.
 	assert.equal(cached.match(/^	cacheLife\(UNTIL_NEXT_DEPLOY\);$/gm)?.length, 2);
-	assert.ok(cached.includes("const UNTIL_NEXT_DEPLOY = { revalidate: Infinity, expire: Infinity } as const;"));
+	const life = readFileSync(fileURLToPath(new URL("../../lib/cache-life.ts", import.meta.url)), "utf8");
+	assert.ok(life.includes("export const UNTIL_NEXT_DEPLOY = { revalidate: Infinity, expire: Infinity } as const;"));
+});
+
+check("the agent's documents are never rebuilt by time, so the CDN keeps the first answer", () => {
+	// With a 30 day lifetime each document arrived stale after a deploy and took
+	// two function calls before it was stored. `bun run check:static` proves it
+	// on a build; this catches the known cause without one.
+	const docs = readFileSync(fileURLToPath(new URL("../../lib/agent/component-docs.ts", import.meta.url)), "utf8");
+	assert.equal(docs.match(/^	"use cache";$/gm)?.length, 3);
+	assert.equal(docs.match(/^	cacheLife\(UNTIL_NEXT_DEPLOY\);$/gm)?.length, 3);
+	assert.equal(stripComments(docs).match(/cacheLife\(/g)?.length, 3, "no other cache life in the file");
 });
 
 await checkAsync("a component's view is reported once per browser, and again only if the report failed", async () => {
