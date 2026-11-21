@@ -1,7 +1,7 @@
 /* Motion Garden agent drawer (components/agent/AgentPanel.tsx). Adapted from the
    agentify-website skill's templates/assistant.css: the runtime's --ns-* colors map
    onto the bench's own --sg-* tokens, so the chat follows light and dark themes.
-   Loaded by the drawer on first open, after the app's own CSS. */
+   Loaded with the assistant (lib/agent/assistant-host.ts), after the app's own CSS. */
 
 /* The runtime reads these variables for its chat, settings and agent panels.
    The chat background below also uses --ns-bg. White text sits on --ns-primary (the

@@ -1,5 +1,6 @@
 // Mounts the assistant in Motion Garden's agent drawer (components/agent/AgentPanel.tsx).
-// The drawer renders the mount markup, then loads this module once, on first open.
+// The drawer renders the mount markup, then loads this module once: in the
+// background after the page is idle, or on first open (lib/agent/assistant-host.ts).
 // Adapted from the agentify-website skill's templates/site.js. Motion Garden has no
 // irreversible actions, so DIALOGS is empty and every action is a read or an
 // undoable bench change; the review and consent methods stay so a partner site's
@@ -36,24 +37,26 @@ export class AssistantMount {
     try {
       // Load the runtime here, so a missing or broken runtime is reported too.
       const { boot } = await import("./runtime/index.js");
-      // A visitor with no key of their own, and free questions left today, chats on
-      // the site's key: the runtime gets this site's own endpoint as its router. The
-      // key it is handed unlocks nothing; the server ignores it.
-      const free = await AssistantMount.freeTier();
-      const onFreeTier = !!free && free.left > 0;
+      // A visitor with no key of their own chats on the site's key while the day's
+      // free questions last: the runtime gets this site's own endpoint as its
+      // router. The key it is handed unlocks nothing; the server ignores it. The
+      // terms come from the page, so booting asks the server nothing.
+      const plan = await AssistantMount.freePlan();
+      const onFreeTier = !!plan && !plan.spent;
       const booted = await boot("#agent-app", {
         originUrl: siteBase,
         sandboxWorkerUrl: new URL("runtime/sandbox-worker.js", siteBase).href,
         ...(onFreeTier
-          ? { byokKey: AssistantMount.FREE_KEY, router: AssistantMount.FREE_ROUTER, model: free.model }
+          ? { byokKey: AssistantMount.FREE_KEY, router: AssistantMount.FREE_ROUTER, model: plan.model }
           : {}),
       });
-      AssistantMount.setFree(free);
       AssistantMount.onFreeTier = onFreeTier;
+      AssistantMount.setFree(plan ? { perDay: plan.perDay, left: plan.spent ? 0 : null } : null);
       if (onFreeTier) {
-        // Every finished question changes how many are left. Ask again, so the
-        // count the visitor sees is the server's, not a guess.
         booted.trace.addEventListener("event", AssistantMount.afterTurn);
+        // How many questions are left is the server's to say, and asking is a
+        // function call. Ask once, when the visitor can see the chat.
+        AssistantMount.whenShown(AssistantMount.readCount);
       }
       AssistantMount.watchErrors();
       AssistantMount.engine = booted.engine;
@@ -99,26 +102,42 @@ export class AssistantMount {
   /** The site's own chat endpoint (app/api/agent/llm), as the runtime's router. */
   static FREE_ROUTER = new URL("/api/agent/llm", import.meta.url).href;
 
+  /** Where this browser notes the UTC day its free questions ran out. */
+  static SPENT_KEY = "mg-free-spent";
+
+  /** The free tier as the page last knew it: {perDay, left}, or null. */
+  static free = null;
+
+  /** True while the chat runs on the site's free tier. */
+  static onFreeTier = false;
+
+  /** The UTC day, as the server counts it (lib/agent/free-tier-server.ts). */
+  static today() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
   /**
-   * Ask the site whether the free tier is on and how many questions this visitor has
-   * left today. A visitor who saved their own key never uses it, so nothing is asked.
+   * The free tier's terms for this visitor, with no request to the server. The page
+   * states them on the mount (lib/agent/assistant-host.ts, setFreePlan). A visitor
+   * who saved their own key never uses the free tier.
    *
-   * :return: {perDay, left, model}, or null when the visitor has a key or the site
-   *   offers no free tier.
+   * :return: {perDay, model, spent}, or null when the visitor has a key or the site
+   *   offers no free tier. spent is true when this browser already used up today's
+   *   questions.
    */
-  static async freeTier() {
+  static async freePlan() {
     try {
       const { getSelectedByokProfile, loadTabByokSetup } = await import("./runtime/byok.js");
       const own = loadTabByokSetup(getSelectedByokProfile()).key;
       if (own && own !== "demo" && own !== AssistantMount.FREE_KEY) {
         return null;
       }
-      const response = await fetch(AssistantMount.FREE_ROUTER, {
-        headers: { Accept: "application/json" },
-        cache: "no-store",
-      });
-      const tier = await response.json();
-      return tier && tier.available === true ? tier : null;
+      const root = document.querySelector("#agent-app");
+      const plan = JSON.parse((root && root.dataset.mgFreePlan) || "null");
+      if (!plan || !(plan.perDay > 0) || typeof plan.model !== "string") {
+        return null;
+      }
+      return { perDay: plan.perDay, model: plan.model, spent: AssistantMount.spentToday() };
     } catch {
       // The assistant then works as it does without a free tier.
       return null;
@@ -126,42 +145,153 @@ export class AssistantMount {
   }
 
   /**
-   * Tell the page about the free tier, so it can say what the visitor is using:
-   * "active" while questions are left, "spent" once today's are used.
+   * Whether this browser noted that today's free questions are used. The note saves
+   * a spent visitor the request, and shows them the setup view at once.
+   */
+  static spentToday() {
+    try {
+      return localStorage.getItem(AssistantMount.SPENT_KEY) === AssistantMount.today();
+    } catch {
+      return false;
+    }
+  }
+
+  /** Note that today's free questions are used. */
+  static markSpent() {
+    try {
+      localStorage.setItem(AssistantMount.SPENT_KEY, AssistantMount.today());
+    } catch {
+      // Without storage the server is asked again on the next visit.
+    }
+  }
+
+  /**
+   * Run a task once the visitor can see the chat: now, when the drawer is already
+   * open or the /ask page is showing, or the first time it opens.
    *
-   * :param free: The answer from freeTier(), or null.
+   * :param task: What to run.
+   */
+  static whenShown(task) {
+    const root = document.querySelector("#agent-app");
+    if (root && root.dataset.mgShown === "1") {
+      task();
+    } else {
+      window.addEventListener("mg-assistant-shown", () => task(), { once: true });
+    }
+  }
+
+  /**
+   * Ask the server how many free questions this visitor has left today, and show
+   * the answer. A failed request changes nothing: the chat works, and a question
+   * past the limit is refused with a plain sentence.
+   */
+  static async readCount() {
+    let tier = null;
+    try {
+      const response = await fetch(AssistantMount.FREE_ROUTER, {
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      });
+      tier = await response.json();
+    } catch {
+      return;
+    }
+    if (!tier || tier.available !== true) {
+      // The site turned out to have no free tier (no table, a fork): ask for a key.
+      AssistantMount.setFree(null);
+      AssistantMount.showSetup();
+      return;
+    }
+    AssistantMount.setFree({ perDay: tier.perDay, left: tier.left });
+    if (tier.left === 0) {
+      AssistantMount.markSpent();
+      AssistantMount.showSetup();
+    }
+  }
+
+  /**
+   * The count after a question ends, without asking the server. An answered
+   * question takes one; a failed one was not counted or was taken back.
+   *
+   * :param left: Questions left before, or null when not known.
+   * :param answered: Whether the question was answered.
+   * :return: Questions left now, or null.
+   */
+  static leftAfter(left, answered) {
+    if (left === null || !answered) {
+      return left;
+    }
+    return Math.max(0, left - 1);
+  }
+
+  /**
+   * After a question ends, lower the count the visitor sees.
+   *
+   * :param event: A trace event from the runtime.
+   */
+  static afterTurn(event) {
+    const detail = event.detail;
+    if (!detail || detail.kind !== "run" || detail.phase !== "end" || !AssistantMount.free) {
+      return;
+    }
+    const left = AssistantMount.leftAfter(AssistantMount.free.left, detail.status !== "error");
+    if (left !== AssistantMount.free.left) {
+      AssistantMount.setFree({ perDay: AssistantMount.free.perDay, left: left });
+      if (left === 0) {
+        AssistantMount.markSpent();
+      }
+    }
+  }
+
+  /**
+   * Show the "connect your own AI model" view when the free tier cannot answer:
+   * today's questions are used, or the site has none after all. The runtime was
+   * booted on the free tier, so its settings are folded; open them as the view.
+   * A chat already under way stays on screen with the spent line above it.
+   */
+  static showSetup() {
+    const root = document.querySelector("#agent-app");
+    if (!root || root.querySelector("#ns-msgs .ns-msg.user")) {
+      return;
+    }
+    const settings = root.querySelector(".ns-settings");
+    if (settings) {
+      settings.open = true;
+    }
+    const help = root.querySelector(".ns-key-help");
+    if (help) {
+      help.hidden = false;
+    }
+    const key = root.querySelector("#ns-key");
+    if (key && key.value === AssistantMount.FREE_KEY) {
+      key.value = "";
+    }
+    const status = document.querySelector("#assistant-status");
+    if (status) {
+      status.textContent = "Assistant needs your AI provider key. Add it in AI model settings below.";
+    }
+    AssistantMount.setState("setup");
+  }
+
+  /**
+   * Tell the page about the free tier, so it can say what the visitor is using:
+   * "active" while questions are left or not yet counted, "spent" once today's are
+   * used.
+   *
+   * :param free: {perDay, left} with left null while not yet known, or null.
    */
   static setFree(free) {
     const root = document.querySelector("#agent-app");
     const detail = free ? { perDay: free.perDay, left: free.left } : null;
+    AssistantMount.free = detail;
     if (root) {
       if (detail) {
-        root.dataset.mgFree = detail.left > 0 ? "active" : "spent";
+        root.dataset.mgFree = detail.left === 0 ? "spent" : "active";
       } else {
         delete root.dataset.mgFree;
       }
     }
     window.dispatchEvent(new CustomEvent("mg-assistant-free", { detail }));
-  }
-
-  /** True while the chat runs on the site's free tier. */
-  static onFreeTier = false;
-
-  /**
-   * After a question ends, answered or refused, read the free tier's count again.
-   * A failed read keeps the last count.
-   *
-   * :param event: A trace event from the runtime.
-   */
-  static async afterTurn(event) {
-    const detail = event.detail;
-    if (!detail || detail.kind !== "run" || detail.phase !== "end") {
-      return;
-    }
-    const free = await AssistantMount.freeTier();
-    if (free) {
-      AssistantMount.setFree(free);
-    }
   }
 
   /**
@@ -241,6 +371,11 @@ export class AssistantMount {
       list.scrollTop = list.scrollHeight;
     }
     if (content.limit) {
+      // A limit was reached, so the count on screen was wrong (someone else on this
+      // address asked, or the count was never read). One request sets it right.
+      if (!AssistantMount.free || AssistantMount.free.left !== 0) {
+        AssistantMount.readCount();
+      }
       // The runtime's badge now says "LLM error, not verified". The model is fine;
       // the day's free questions are used.
       const badge = document.querySelector("#agent-app .ns-llmbadge");

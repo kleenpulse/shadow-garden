@@ -73,6 +73,22 @@ The same reads are plain HTTP, open to any origin and listed in `/llms.txt`:
 | `runtime/` | The patched nsdeploy browser runtime (Apache 2.0), copied unchanged from the skill |
 | `package.json` | Marks this folder's `.js` files as ES modules for Node |
 
+## Loading
+
+None of this is in a page's own JavaScript. `lib/agent/assistant-host.ts` loads
+`site.js` by URL, and the runtime boots in the background once the page has loaded and
+the browser is idle, so the chat is ready when the drawer opens. A cold start is about
+35 small requests in a chain (roughly 130 KB over the wire), which took around seven
+seconds after the click on a slow connection when it started on first open.
+
+The background start is skipped when the visitor asked to save data or is on a 2G
+connection; there the assistant loads on first open.
+
+A page view makes no function call. Everything the background start fetches is a static
+file, and the free tier's terms (questions a day, the model's name) are stated by the
+page itself when it is rendered (`lib/agent/free-plan.ts`). The one request that needs a
+function, the visitor's count, waits until they open the chat; see below.
+
 ## Free tier
 
 A visitor who has not connected an AI model gets two free questions a day, paid for by
@@ -80,10 +96,26 @@ the site's own OpenRouter key. It is on only when `OPENROUTER_API_KEY` is set an
 `agent_usage` table exists; otherwise the assistant asks for the visitor's own key, as it
 does on a fork.
 
-`site.js` asks `GET /api/agent/llm` before it boots. With questions left, it hands the
-runtime that endpoint as its router, so the runtime calls
+When the site offers the free tier and the visitor has no key of their own, `site.js`
+hands the runtime `/api/agent/llm` as its router, so the runtime calls
 `POST /api/agent/llm/chat/completions` like any provider. The vendored runtime is not
 changed: `boot()` already takes a key, a router and a model from the page.
+
+Function calls are kept to what a visitor actually uses:
+
+| When | Function calls |
+| --- | --- |
+| A page view, drawer never opened | none |
+| The chat is first shown (drawer opened, or `/ask`) | one `GET /api/agent/llm`, for the count |
+| A question | the model calls only (a tool round trip makes it several) |
+| A question refused at a limit | one more `GET`, to correct the count on screen |
+| A visitor with their own key, or one whose questions are used today | none |
+
+After an answered question the panel lowers its own count; it does not ask again. A
+browser whose questions ran out notes the UTC day in `localStorage` (`mg-free-spent`), so
+its next page loads start on the "connect your own model" view without a request. When
+the count read on open says none are left, or that the site has no free tier after all
+(no `agent_usage` table), `site.js` switches the booted chat to that same view.
 
 The key sits behind a public URL, so the endpoint narrows every request before it pays
 for one (`lib/agent/free-tier.ts`, checked by `bun run check:agent`):
@@ -124,9 +156,9 @@ No address is stored, and a hash cannot be linked from one day to the next. Rows
 than a week are deleted. People behind one address (an office, a home network) share one
 count.
 
-The panel shows the count, "Free questions left today: 1 of 2", and `site.js` reads it
-again from the server after every question, so it stays true when someone else on the
-same address has asked one. When a limit is reached the endpoint answers 429 with one
+The panel shows the count, "Free questions left today: 1 of 2". When someone else on
+the same address has asked a question since it was read, the count on screen is one too
+high until the limit is met. When a limit is reached the endpoint answers 429 with one
 plain sentence. The runtime shows that as "⚠️ LLM HTTP 429: …" and sets its badge to
 "LLM error"; `site.js` (`dressError`) turns the bubble into an error card labelled "Free
 limit reached" and gives the badge the same words, since the model did not fail. A

@@ -22,7 +22,14 @@ export interface AssistantParts {
 /** The free tier (app/api/agent/llm), when the site offers it to this visitor. */
 export interface FreeTier {
 	perDay: number;
-	left: number;
+	/** Questions left today. Null until the server has been asked (on first open). */
+	left: number | null;
+}
+
+/** The free tier's terms as the server rendered them (lib/agent/free-plan.ts). */
+export interface FreePlan {
+	perDay: number;
+	model: string;
 }
 
 export interface AssistantSnapshot {
@@ -140,11 +147,40 @@ export function hasConversation() {
 	return Boolean(snapshot.parts?.root.querySelector("#ns-msgs .ns-msg.user"));
 }
 
+// Modules the boot reaches late, at the end of a chain of requests: the runtime's
+// entry (imported by site.js) and the site's actions (imported by the runtime
+// once it has read the manifest). Asking for them at the start lets them arrive
+// while the rest loads.
+const EARLY_MODULES = ["/agent/runtime/index.js", "/agent/site-actions.js", "/agent/garden-data.js"];
+
+/**
+ * Hand site.js the free tier's terms, on the mount. site.js boots on them without
+ * asking the server, so this must run before the assistant starts.
+ */
+export function setFreePlan(plan: FreePlan | null) {
+	const { root } = ensureParts();
+	if (plan) root.dataset.mgFreePlan = JSON.stringify(plan);
+	else delete root.dataset.mgFreePlan;
+}
+
+/**
+ * The visitor can see the chat now: the drawer opened, or the /ask page mounted.
+ * site.js waits for this before it asks the server how many free questions are
+ * left, so that request is made for people who open the assistant, not for every
+ * page view. The flag covers a chat shown before site.js has loaded.
+ */
+export function markAssistantShown() {
+	const { root } = ensureParts();
+	if (root.dataset.mgShown === "1") return;
+	root.dataset.mgShown = "1";
+	window.dispatchEvent(new Event("mg-assistant-shown"));
+}
+
 /**
  * Load the runtime's stylesheet and public/agent/site.js, once. The bundle is
- * served from /public outside the Next build, so it loads by URL and never ships to
- * visitors who don't ask. The mount must already be in the document: site.js boots
- * the runtime on "#agent-app".
+ * served from /public outside the Next build, so it loads by URL and is no part
+ * of any page's own JavaScript. The mount must already be in the document:
+ * site.js boots the runtime on "#agent-app".
  */
 export function startAssistant() {
 	if (snapshot.started) return;
@@ -153,11 +189,58 @@ export function startAssistant() {
 	css.rel = "stylesheet";
 	css.href = "/agent/assistant.css";
 	document.head.append(css);
+	for (const href of EARLY_MODULES) {
+		const hint = document.createElement("link");
+		hint.rel = "modulepreload";
+		hint.href = href;
+		document.head.append(hint);
+	}
 	const script = document.createElement("script");
 	script.type = "module";
 	script.src = "/agent/site.js";
 	document.body.append(script);
 	update({ started: true });
+}
+
+/**
+ * Start the assistant in the background, so the chat is ready when the drawer
+ * opens. A cold start is a chain of about 35 small requests, each waiting on the
+ * one before; on a slow connection that was several seconds of "Loading the
+ * assistant" after the click. This runs it once the page has loaded and the
+ * browser is idle, so it never competes with the page itself.
+ *
+ * It makes no function call: the files are static, and the free tier's count is
+ * asked for only when the chat is shown (markAssistantShown). It is skipped when
+ * the visitor asked to save data or is on a 2G connection. There the assistant
+ * loads on first open.
+ *
+ * Returns the cancel function for the effect's cleanup.
+ */
+export function preloadAssistant(): () => void {
+	if (snapshot.started) return () => {};
+	const connection = (
+		navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }
+	).connection;
+	if (connection?.saveData || /2g$/.test(connection?.effectiveType ?? "")) return () => {};
+
+	let idle = 0;
+	let timer = 0;
+	const begin = () => {
+		if (typeof window.requestIdleCallback === "function") {
+			idle = window.requestIdleCallback(() => startAssistant(), { timeout: 3000 });
+		} else {
+			// Safari has no requestIdleCallback. A short wait after load does the job.
+			timer = window.setTimeout(startAssistant, 1200);
+		}
+	};
+	if (document.readyState === "complete") begin();
+	else window.addEventListener("load", begin, { once: true });
+
+	return () => {
+		window.removeEventListener("load", begin);
+		if (idle) window.cancelIdleCallback(idle);
+		if (timer) window.clearTimeout(timer);
+	};
 }
 
 /**

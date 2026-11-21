@@ -429,8 +429,29 @@ check("the page hands the runtime the same free-tier key the server knows", () =
 const { AssistantMount } = (await import(pathToFileURL(path.join(agentDir, "site.js")).href)) as {
 	AssistantMount: {
 		errorContent(text: string, onFreeTier: boolean): { label: string; text: string; limit: boolean } | null;
+		leftAfter(left: number | null, answered: boolean): number | null;
 	};
 };
+
+check("a page view costs no function call: the count is asked for only when the chat is shown", () => {
+	const site = readFileSync(path.join(agentDir, "site.js"), "utf8");
+	// One place fetches the count, and boot reaches it only through whenShown.
+	assert.equal(site.match(/fetch\(AssistantMount\.FREE_ROUTER/g)?.length, 1);
+	assert.ok(site.includes("AssistantMount.whenShown(AssistantMount.readCount)"));
+	const start = site.slice(site.indexOf("static async start()"), site.indexOf("static FREE_KEY"));
+	assert.ok(!/\bfetch\(/.test(start), "boot makes no request of its own");
+	assert.ok(!/await AssistantMount\.readCount\(/.test(start), "boot does not wait on the count");
+});
+
+check("the panel lowers its own count after an answered question", () => {
+	assert.equal(AssistantMount.leftAfter(2, true), 1);
+	assert.equal(AssistantMount.leftAfter(1, true), 0);
+	assert.equal(AssistantMount.leftAfter(0, true), 0);
+	// A failed question was not counted, or was taken back.
+	assert.equal(AssistantMount.leftAfter(2, false), 2);
+	// Not read yet: stays unknown until the server says.
+	assert.equal(AssistantMount.leftAfter(null, true), null);
+});
 
 check("a failed turn's bubble splits into a label and the sentence", () => {
 	const limit = "You have used today's 2 free questions. To keep going, open AI model settings below and connect your own AI model.";

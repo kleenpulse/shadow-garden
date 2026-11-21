@@ -13,7 +13,11 @@ import {
 	attachHost,
 	getServerSnapshot,
 	getSnapshot,
+	markAssistantShown,
 	onHandoff,
+	preloadAssistant,
+	setFreePlan,
+	type FreePlan,
 	fillRequest,
 	startAssistant,
 	subscribe,
@@ -71,7 +75,7 @@ function useIntroSweep(hidden: boolean): boolean {
 	return ready;
 }
 
-export default function AgentPanel() {
+export default function AgentPanel({ freePlan }: { freePlan: FreePlan | null }) {
 	const t = useTranslations("chrome.agentPanel");
 	const router = useRouter();
 	const pathname = usePathname();
@@ -129,6 +133,24 @@ export default function AgentPanel() {
 			else if (!pageActive) sessionStorage.removeItem(OPEN_KEY);
 		} catch {}
 	}, [open, pageActive]);
+
+	// Boot the assistant in the background once the page is idle, so opening the
+	// drawer shows the chat, not a loading line. Declared after the effect that
+	// attaches the mount: the runtime boots on "#agent-app", which must be in the
+	// document first. The free tier's terms go on the mount before that, so the
+	// boot needs no request to the server.
+	const perDay = freePlan?.perDay ?? null;
+	const freeModelName = freePlan?.model ?? null;
+	useEffect(() => {
+		setFreePlan(perDay !== null && freeModelName !== null ? { perDay, model: freeModelName } : null);
+		return preloadAssistant();
+	}, [perDay, freeModelName]);
+
+	// The server is asked how many free questions are left only once someone can
+	// see the chat (public/agent/site.js).
+	useEffect(() => {
+		if (open) markAssistantShown();
+	}, [open]);
 
 	// globals.css reads this to push the shell column aside on wide screens.
 	useEffect(() => {
@@ -264,15 +286,21 @@ export default function AgentPanel() {
 						)}
 						{/* On the free tier the visitor never saw the setup copy, so say here whose
 						    key answers and where their messages go. The count stays in view for
-						    the whole chat (site.js refreshes it after every question); the note
+						    the whole chat (site.js lowers it after every answered question); the note
 						    under it folds away once the first message is sent (assistant.css). */}
-						{state === "ready" && free && free.left > 0 && (
+						{state === "ready" && free && free.left !== 0 && (
 							<div className="space-y-1 pt-2">
+								{/* The count arrives a moment after the drawer first opens. Its line
+								    keeps its place meanwhile, so nothing below it moves. */}
 								<p
 									role="status"
-									className="font-display text-[10px] tracking-[0.14em] text-ink-dim uppercase"
+									aria-hidden={free.left === null || undefined}
+									className={cn(
+										"font-display text-[10px] tracking-[0.14em] text-ink-dim uppercase",
+										free.left === null && "invisible",
+									)}
 								>
-									{t("freeLeft", { left: free.left, count: free.perDay })}
+									{t("freeLeft", { left: free.left ?? free.perDay, count: free.perDay })}
 								</p>
 								<p className="mg-free-detail text-xs leading-relaxed text-ink-mute">
 									{t("freeNote", { count: free.perDay })}

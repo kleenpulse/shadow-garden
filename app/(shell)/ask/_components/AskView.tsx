@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Check, Copy } from "lucide-react";
-import { attachHost, startAssistant } from "@/lib/agent/assistant-host";
+import { attachHost, markAssistantShown, startAssistant } from "@/lib/agent/assistant-host";
 import { absoluteUrl } from "@/lib/site";
 
 // /ask: the assistant at full size. The mount moves here from the drawer
@@ -48,6 +48,8 @@ export default function AskView() {
 	useEffect(() => {
 		const detach = attachHost(hostRef.current as HTMLDivElement, "page");
 		startAssistant();
+		// This page is the chat, so the visitor sees it at once.
+		markAssistantShown();
 		return detach;
 	}, []);
 

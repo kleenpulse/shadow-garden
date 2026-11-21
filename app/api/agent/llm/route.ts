@@ -9,8 +9,8 @@ import {
 } from "@/lib/agent/free-tier-server";
 
 // Whether the assistant's free tier is on, and how many questions this visitor
-// has left today. public/agent/site.js asks before it boots: with questions
-// left it points the runtime at ./chat/completions, otherwise the visitor gets
+// has left today. public/agent/site.js asks once, when the visitor first sees
+// the chat, never on a plain page view: with none left it switches the chat to
 // the usual "connect your own model" setup. A deploy without OPENROUTER_API_KEY
 // or without the agent_usage table (a fork, a local checkout) answers
 // available false, and the assistant works as it did before the free tier.

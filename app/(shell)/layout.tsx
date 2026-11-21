@@ -6,6 +6,7 @@ import CommandMenu from "@/components/shell/CommandMenu";
 import ToasterBench from "@/components/shell/ToasterBench";
 import SiteFooter from "@/components/shell/SiteFooter";
 import AgentPanel from "@/components/agent/AgentPanel";
+import { freePlan } from "@/lib/agent/free-plan";
 
 // The docs shell: sidebar catalog + a slim top bar, wrapping both /components
 // and /favorites. The global command palette, toaster and the open agentic web
@@ -30,7 +31,9 @@ export default function ShellLayout({ children }: { children: ReactNode }) {
 			</div>
 			<CommandMenu />
 			<ToasterBench />
-			<AgentPanel />
+			{/* The free tier's terms are stated here, at render time, so the assistant
+			    can boot in the background without a request per page view. */}
+			<AgentPanel freePlan={freePlan()} />
 		</div>
 	);
 }
