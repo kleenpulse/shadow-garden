@@ -2,6 +2,12 @@
 // that other agent sites call (bridge/bridge-actions.js). Both run on Motion
 // Garden's own origin, so the API answers same-origin. The ranking, schemas and
 // briefs live in the Next app (app/api/agent/*), never copied here.
+//
+// Each component's documents (describe, brief, source) are static files, built
+// once per deploy, so reading one costs the site no function call. A static file
+// cannot answer to a query, so the two choices a chat needs are made here: leave
+// out a brief that is too long (briefAnswer), and take one part of one file
+// (fileAnswer). Only search runs on the server.
 
 /** The catalog's categories, as the search endpoint accepts them. */
 export const CATEGORIES = [
@@ -15,8 +21,8 @@ export const CATEGORIES = [
 const SLUG_MAX = 80;
 
 // A tool result is capped at 64 KB by the runtime, and the visitor's model pays
-// for every byte. The endpoint leaves a longer brief out and lists its files.
-const BRIEF_MAX = 30_000;
+// for every byte. A longer brief is left out and its files are listed instead.
+export const BRIEF_MAX = 30_000;
 
 /**
  * Read one endpoint. A refusal from the site (a JSON body with ok false) comes
@@ -41,7 +47,105 @@ async function readJson(path, params) {
   return body;
 }
 
+// A component's documents do not change while the page is open, and a long file
+// is read part by part from the same source document. Each is fetched once.
+const documents = new Map();
+
+/**
+ * Read one of a component's static documents, once per page. A refusal or a
+ * failure is not kept, so the next call asks again.
+ */
+function readDocument(path) {
+  if (!documents.has(path)) {
+    const reading = readJson(path).then(
+      (body) => {
+        if (!body || body.ok !== true) documents.delete(path);
+        return body;
+      },
+      (error) => {
+        documents.delete(path);
+        throw error;
+      },
+    );
+    documents.set(path, reading);
+  }
+  return documents.get(path);
+}
+
 export class GardenData {
+  /**
+   * What get_component_code answers from a component's brief document
+   * (/api/agent/component/<slug>/brief). A brief over the limit is left out, and
+   * the answer lists the files, the install commands and the Markdown link.
+   *
+   * :param doc: The brief document, or the site's refusal (ok false).
+   * :param max: The longest brief, in characters, a chat tool result may carry.
+   * :return: The tool result.
+   */
+  static briefAnswer(doc, max) {
+    if (!doc || doc.ok !== true) {
+      return doc;
+    }
+    const shadcn = doc.shadcn ? { shadcn: doc.shadcn } : {};
+    const head = { ok: true, slug: doc.slug, name: doc.name, page: doc.page, markdown: doc.markdown };
+    if (doc.brief.length > max) {
+      const size = doc.brief.length.toLocaleString("en-US");
+      return {
+        ...head,
+        install: doc.install,
+        ...shadcn,
+        files: doc.files,
+        briefIncluded: false,
+        reason: `The integration brief is ${size} characters, over the ${max.toLocaleString("en-US")} a chat can carry. The whole brief is at the markdown link, and the page's "Copy for Agent" button copies the same text. Each file can also be read on its own.`,
+      };
+    }
+    return { ...head, ...shadcn, briefIncluded: true, brief: doc.brief };
+  }
+
+  /**
+   * What get_component_file answers from a component's source document
+   * (/api/agent/component/<slug>/source): one part of one file, or a refusal
+   * that names the files or the parts there are.
+   *
+   * :param doc: The source document, or the site's refusal (ok false).
+   * :param file: The file's path, as the files list gives it.
+   * :param part: Which part of the file, from 1. Missing means 1.
+   * :return: The tool result.
+   */
+  static fileAnswer(doc, file, part) {
+    if (!doc || doc.ok !== true) {
+      return doc;
+    }
+    const found = doc.files.find((candidate) => candidate.file === file);
+    if (!found) {
+      return {
+        ok: false,
+        reason: `"${file}" is not one of this component's files. Its files are: ${doc.files.map((f) => f.file).join(", ")}.`,
+        field: "file",
+      };
+    }
+    const wanted = part === undefined || part === null ? 1 : Number(part);
+    const parts = found.parts.length;
+    if (!Number.isInteger(wanted) || wanted < 1 || wanted > parts) {
+      return {
+        ok: false,
+        reason: parts === 1 ? "This file has 1 part." : `This file has ${parts} parts: send a part from 1 to ${parts}.`,
+        field: "part",
+      };
+    }
+    return {
+      ok: true,
+      slug: doc.slug,
+      file: found.file,
+      role: found.role,
+      lang: found.lang,
+      chars: found.chars,
+      part: wanted,
+      parts: parts,
+      code: found.parts[wanted - 1],
+    };
+  }
+
   static searchAction(extra) {
     return {
       name: "search_components",
@@ -77,7 +181,7 @@ export class GardenData {
           slug: { type: "string", minLength: 1, maxLength: SLUG_MAX, description: "A slug from website_search_components." },
         },
       },
-      execute: (args) => readJson(`/api/agent/component/${encodeURIComponent(args.slug)}`),
+      execute: (args) => readDocument(`/api/agent/component/${encodeURIComponent(args.slug)}`),
       ...extra,
     };
   }
@@ -96,7 +200,8 @@ export class GardenData {
           slug: { type: "string", minLength: 1, maxLength: SLUG_MAX, description: "A slug from website_search_components." },
         },
       },
-      execute: (args) => readJson(`/api/agent/component/${encodeURIComponent(args.slug)}`, { brief: 1, max: BRIEF_MAX }),
+      execute: async (args) =>
+        GardenData.briefAnswer(await readDocument(`/api/agent/component/${encodeURIComponent(args.slug)}/brief`), BRIEF_MAX),
       ...extra,
     };
   }
@@ -117,7 +222,12 @@ export class GardenData {
           part: { type: "integer", minimum: 1, maximum: 20, description: "Which part of a long file, default 1." },
         },
       },
-      execute: (args) => readJson(`/api/agent/component/${encodeURIComponent(args.slug)}`, { file: args.file, part: args.part }),
+      execute: async (args) =>
+        GardenData.fileAnswer(
+          await readDocument(`/api/agent/component/${encodeURIComponent(args.slug)}/source`),
+          args.file,
+          args.part,
+        ),
       ...extra,
     };
   }

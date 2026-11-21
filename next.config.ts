@@ -33,6 +33,8 @@ const nextConfig: NextConfig = {
 		// through getPrompt: the JSON route, and the Markdown brief one segment down.
 		"/api/agent/component/*": AGENT_SOURCE_TRACE,
 		"/api/agent/component/*/md": AGENT_SOURCE_TRACE,
+		"/api/agent/component/*/brief": AGENT_SOURCE_TRACE,
+		"/api/agent/component/*/source": AGENT_SOURCE_TRACE,
 		// The shadcn registry items (app/r/[name]) ship the same sources.
 		"/r/*": AGENT_SOURCE_TRACE,
 	},

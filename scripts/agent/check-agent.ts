@@ -257,9 +257,123 @@ check("every shipped file fits the file action's part range", () => {
 	}
 });
 
-// --- free tier -------------------------------------------------------------
+// --- static documents ------------------------------------------------------
 
 const agentDir = fileURLToPath(new URL("../../public/agent/", import.meta.url));
+
+// garden-data.js is served as is from /public, so it is loaded by URL.
+const { GardenData, BRIEF_MAX } = (await import(pathToFileURL(path.join(agentDir, "garden-data.js")).href)) as {
+	BRIEF_MAX: number;
+	GardenData: {
+		briefAnswer(doc: unknown, max: number): Record<string, unknown>;
+		fileAnswer(doc: unknown, file: string, part?: number): Record<string, unknown>;
+	};
+};
+
+/** An entry's source document, built as lib/agent/component-docs.ts builds it. */
+function sourceDocOf(entry: ComponentEntry) {
+	const repo = fileURLToPath(new URL("../../", import.meta.url));
+	return {
+		ok: true,
+		slug: entry.slug,
+		name: entry.name,
+		page: `https://example.test/components/${entry.slug}`,
+		files: entry.variants.map((variant) => {
+			const raw = stripComments(readFileSync(path.join(repo, variant.file), "utf8"));
+			return {
+				file: variant.file,
+				role: variant.role ?? "component",
+				lang: variant.lang ?? "tsx",
+				chars: raw.length,
+				parts: splitParts(raw),
+			};
+		}),
+	};
+}
+
+check("the per-component routes are static: built per slug, never reading the request", () => {
+	const app = fileURLToPath(new URL("../../app/", import.meta.url));
+	const routes = [
+		"api/agent/component/[slug]/route.ts",
+		"api/agent/component/[slug]/brief/route.ts",
+		"api/agent/component/[slug]/source/route.ts",
+		"api/agent/component/[slug]/md/route.ts",
+		"r/[name]/route.ts",
+	];
+	for (const route of routes) {
+		const source = stripComments(readFileSync(path.join(app, route), "utf8"));
+		assert.match(source, /export (const|function) generateStaticParams\b/, `${route} lists its params`);
+		// A handler that touches the request runs on every request: a function call.
+		assert.match(source, /GET\(\s*_request: Request,/, `${route} ignores the request`);
+		assert.doesNotMatch(source, /searchParams|nextUrl|headers\(|cookies\(|connection\(|_request\./, route);
+	}
+});
+
+check("a brief that fits a chat is passed on; a longer one is left out with its files listed", () => {
+	const doc = {
+		ok: true,
+		slug: "waves",
+		name: "Waves",
+		page: "https://example.test/components/waves",
+		markdown: "https://example.test/components/waves.md",
+		install: { bun: "bun add ogl" },
+		shadcn: { bun: "bunx shadcn@latest add https://example.test/r/waves.json" },
+		files: [{ file: "components/registry/waves/waves.tsx", role: "component", chars: 900, parts: 1 }],
+		chars: 1200,
+		brief: "x".repeat(1200),
+	};
+	const whole = GardenData.briefAnswer(doc, 2000);
+	assert.equal(whole.briefIncluded, true);
+	assert.equal(whole.brief, doc.brief);
+	assert.deepEqual(whole.shadcn, doc.shadcn);
+	const cut = GardenData.briefAnswer(doc, 1000);
+	assert.equal(cut.briefIncluded, false);
+	assert.equal("brief" in cut, false);
+	assert.deepEqual(cut.files, doc.files);
+	assert.deepEqual(cut.install, doc.install);
+	assert.equal(cut.markdown, doc.markdown);
+	assert.match(String(cut.reason), /1,200 characters, over the 1,000/);
+	// The site's own refusal (an unknown slug) reaches the model as it is.
+	const refusal = { ok: false, reason: "No component with the slug \"nope\"." };
+	assert.equal(GardenData.briefAnswer(refusal, 1000), refusal);
+	// The limit leaves room under the runtime's 65,536 character tool result.
+	assert.ok(BRIEF_MAX > 0 && BRIEF_MAX < 60_000);
+});
+
+check("one part of one file is picked from the source document, for every shipped file", () => {
+	for (const entry of registry) {
+		const doc = sourceDocOf(entry);
+		for (const file of doc.files) {
+			const got: string[] = [];
+			for (let part = 1; part <= file.parts.length; part++) {
+				const answer = GardenData.fileAnswer(doc, file.file, part);
+				assert.equal(answer.ok, true, `${file.file} part ${part}`);
+				assert.equal(answer.parts, file.parts.length);
+				assert.equal(answer.chars, file.chars);
+				got.push(String(answer.code));
+				// A tool result is capped at 65,536 characters by the runtime.
+				assert.ok(JSON.stringify(answer).length < 65_536, `${file.file} part ${part} fits a tool result`);
+			}
+			assert.equal(got.join("").length, file.chars, `${file.file}: the parts are the whole file`);
+		}
+	}
+	const doc = sourceDocOf(registry[0]);
+	const first = doc.files[0];
+	assert.equal(GardenData.fileAnswer(doc, first.file).part, 1, "no part means the first");
+	const missing = GardenData.fileAnswer(doc, "lib/not-shipped.ts");
+	assert.equal(missing.ok, false);
+	assert.equal(missing.field, "file");
+	assert.ok(String(missing.reason).includes(first.file), "the refusal names the real files");
+	for (const bad of [0, first.parts.length + 1, 1.5]) {
+		const answer = GardenData.fileAnswer(doc, first.file, bad);
+		assert.equal(answer.ok, false);
+		assert.equal(answer.field, "part");
+	}
+	const refusal = { ok: false, reason: "The source for this entry is not available right now." };
+	assert.equal(GardenData.fileAnswer(refusal, first.file), refusal);
+});
+
+// --- free tier -------------------------------------------------------------
 const publishedNetwork = JSON.parse(readFileSync(path.join(agentDir, "motion_garden.network.json"), "utf8"));
 const publishedManifest = JSON.parse(readFileSync(path.join(agentDir, "agent-manifest.json"), "utf8"));
 const runtimeContext = JSON.parse(

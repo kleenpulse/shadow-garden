@@ -1,5 +1,6 @@
 import { getEntry } from "@/lib/registry";
-import { getPrompt } from "@/lib/registry/prompt";
+import { briefDoc } from "@/lib/agent/component-docs";
+import { CORS, everySlug } from "@/lib/agent/static-route";
 import { absoluteUrl } from "@/lib/site";
 
 // The "Copy for Agent" brief as text/markdown, whatever its size. Its public
@@ -7,9 +8,9 @@ import { absoluteUrl } from "@/lib/site";
 // Markdown twin under the llms.txt convention; the page names it in a
 // <link rel="alternate">. It has its own route, not a query flag on the JSON
 // endpoint beside it, because a rewrite's destination query does not reach the
-// handler's request URL.
+// handler's request URL. Static, one per slug (lib/agent/static-route.ts).
 
-const CORS = { "Access-Control-Allow-Origin": "*" };
+export const generateStaticParams = everySlug;
 
 function plain(body: string, status: number): Response {
 	return new Response(body, {
@@ -31,11 +32,11 @@ export async function GET(
 		);
 	}
 	const page = absoluteUrl(`/components/${entry.slug}`);
-	const prompt = await getPrompt(entry);
-	if (prompt.status !== "ok") {
+	const doc = await briefDoc(slug);
+	if (!doc) {
 		return plain(`The source for this entry is not available right now.\n\n${page}\n`, 503);
 	}
-	return new Response(prompt.text, {
+	return new Response(doc.brief, {
 		headers: {
 			...CORS,
 			"Content-Type": "text/markdown; charset=utf-8",
