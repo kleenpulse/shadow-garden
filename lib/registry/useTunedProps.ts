@@ -62,11 +62,18 @@ export function useTunedProps(props: PropSchema[]) {
     (setValues as (patch: Record<string, PropValue>) => void)({ [name]: value });
   };
 
+  // Several controls in one write, for the browser agent (lib/agent). The
+  // caller has already validated the patch and added any `sets` links, so this
+  // is one URL update instead of one per control racing the throttle.
+  const setMany = (patch: TunedValues) => {
+    (setValues as (patch: Record<string, PropValue>) => void)(patch);
+  };
+
   const reset = () => {
     const cleared: Record<string, null> = {};
     for (const prop of props) cleared[prop.name] = null;
     (setValues as (patch: Record<string, null>) => void)(cleared);
   };
 
-  return { values: values as TunedValues, setValue, syncValue, reset };
+  return { values: values as TunedValues, setValue, syncValue, setMany, reset };
 }

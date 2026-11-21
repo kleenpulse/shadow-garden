@@ -125,7 +125,8 @@
       "nav": {
         "allComponents": "All components",
         "collections": "Collections",
-        "cookbook": "Motion Cook Book"
+        "cookbook": "Motion Cook Book",
+        "ask": "Ask the Garden"
       },
       "componentsAccent": "{count, plural, one {# component} other {# components}} · 1 accent"
     },
@@ -231,6 +232,26 @@
     "volumeControl": {
       "ariaLabel": "Volume",
       "title": "Adjust volume"
+    },
+    "agentPanel": {
+      "open": "Ask the Garden",
+      "openAria": "Open the Motion Garden assistant",
+      "close": "Close the assistant",
+      "kicker": "Open agentic web · runs in your browser",
+      "title": "Garden Guide",
+      "expand": "Open full page",
+      "loading": "Loading the assistant…",
+      "failed": "The assistant could not load. You can still use the page directly.",
+      "setupTitle": "Connect an AI model to start",
+      "setupBody": "The Garden Guide runs in your browser, on an AI provider you choose. Connecting OpenRouter is the quickest way: sign in, approve, and chat on a free model. Or paste a key from another provider.",
+      "privacy": "Your key stays in this browser and goes only to that provider. Your messages, and what this page shows, go to it too. The assistant only changes the bench, which you can undo.",
+      "startersLabel": "Try asking",
+      "starters": {
+        "find": "Find an animated background for a dark hero",
+        "tune": "Make this one slower and calmer",
+        "text": "Show me text animations for a headline",
+        "code": "How do I add Waves to a Next.js app?"
+      }
     }
   },
   "catalog": {
@@ -2842,6 +2863,37 @@
       "browseAll": "Browse all components",
       "cookbook": "Motion Cook Book",
       "home": "Home"
+    },
+    "ask": {
+      "eyebrow": "Open agentic web",
+      "title": "Ask the Garden",
+      "lede": "Describe what you are building. The Garden Guide finds components for it, tunes them live and hands you the code. It runs in your browser, on your own AI key.",
+      "abilitiesTitle": "What it can do",
+      "abilities": {
+        "find": {
+          "title": "Find",
+          "body": "components by look, feel or use, across the whole catalog."
+        },
+        "explain": {
+          "title": "Explain",
+          "body": "each control, with its range and default."
+        },
+        "tune": {
+          "title": "Tune",
+          "body": "a component live on its page. Every change can be undone."
+        },
+        "code": {
+          "title": "Hand over",
+          "body": "the install command, files and steps for your stack."
+        }
+      },
+      "peerTitle": "Call it from your site",
+      "peerBody": "Motion Garden is an open agentic website. Another site's agent can list this network as a tool and ask it for components once its visitor agrees. It runs in that visitor's browser, on their key.",
+      "networkLabel": "Network URL",
+      "manifestLabel": "Manifest",
+      "copy": "Copy {label}",
+      "privacyTitle": "Privacy",
+      "privacyBody": "Motion Garden runs no server for the chat. Your messages go from this browser straight to the AI provider you pick, and your key is sent nowhere else."
     }
   },
   "commands": {

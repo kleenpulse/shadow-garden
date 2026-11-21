@@ -125,7 +125,8 @@
       "nav": {
         "allComponents": "全部组件",
         "collections": "合集",
-        "cookbook": "动效秘籍"
+        "cookbook": "动效秘籍",
+        "ask": "问问花园"
       },
       "componentsAccent": "{count, plural, one {# 个组件} other {# 个组件}} · 1 种强调色"
     },
@@ -231,6 +232,26 @@
     "volumeControl": {
       "ariaLabel": "音量",
       "title": "调节音量"
+    },
+    "agentPanel": {
+      "open": "问问花园",
+      "openAria": "打开 Motion Garden 助手",
+      "close": "关闭助手",
+      "kicker": "开放智能体网络 · 在你的浏览器中运行",
+      "title": "花园向导",
+      "expand": "整页打开",
+      "loading": "正在加载助手…",
+      "failed": "助手未能加载。你仍可直接使用本页。",
+      "setupTitle": "连接一个 AI 模型即可开始",
+      "setupBody": "花园向导在你的浏览器中运行，使用你选择的 AI 服务商。最快的方式是连接 OpenRouter：登录并批准后，即可用免费模型聊天。你也可以粘贴其他服务商的密钥。",
+      "privacy": "你的密钥保存在此浏览器中，只会发送给该服务商。你的消息以及本页显示的内容也会发送给它。助手只会改动调试台，且可以撤销。",
+      "startersLabel": "试着问问",
+      "starters": {
+        "find": "为深色首屏找一个动画背景",
+        "tune": "让这个更慢、更平静",
+        "text": "给我看适合标题的文字动画",
+        "code": "如何把 Waves 加到 Next.js 应用里？"
+      }
     }
   },
   "catalog": {
@@ -2842,6 +2863,37 @@
       "browseAll": "浏览全部组件",
       "cookbook": "动效秘籍",
       "home": "首页"
+    },
+    "ask": {
+      "eyebrow": "开放智能体网络",
+      "title": "问问花园",
+      "lede": "描述你正在构建的东西。花园向导会为它找到组件、实时调整，并把代码交给你。它在你的浏览器中运行，使用你自己的 AI 密钥。",
+      "abilitiesTitle": "它能做什么",
+      "abilities": {
+        "find": {
+          "title": "查找",
+          "body": "按外观、感觉或用途，在整个目录中找组件。"
+        },
+        "explain": {
+          "title": "解释",
+          "body": "每个控件的范围和默认值。"
+        },
+        "tune": {
+          "title": "调整",
+          "body": "在组件页面上实时调整，每次改动都能撤销。"
+        },
+        "code": {
+          "title": "交付",
+          "body": "安装命令、文件以及适合你技术栈的步骤。"
+        }
+      },
+      "peerTitle": "从你的网站调用",
+      "peerBody": "Motion Garden 是一个开放的智能体网站。其他网站的智能体可以把这个网络列为工具，在其访客同意后向它查询组件。它在该访客的浏览器中运行，使用访客自己的密钥。",
+      "networkLabel": "网络 URL",
+      "manifestLabel": "清单",
+      "copy": "复制{label}",
+      "privacyTitle": "隐私",
+      "privacyBody": "Motion Garden 没有为聊天运行任何服务器。你的消息从此浏览器直接发送给你选择的 AI 服务商，你的密钥不会发送到其他任何地方。"
     }
   },
   "commands": {

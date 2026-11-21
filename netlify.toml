@@ -11,3 +11,35 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Open agentic web bundle (public/agent). Mirrors headers() in next.config.ts:
+# the CDN serves public/ files directly, so Next's headers may not reach them.
+[[headers]]
+  for = "/agent/agent-manifest.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/agent/motion_garden.network.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/agent/links.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/agent/agent-mcp.json"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/agent/.well-known/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/agent/runtime/sandbox-worker.js"
+  [headers.values]
+    Content-Security-Policy = "default-src 'none'; script-src blob:; connect-src 'none'; worker-src 'none'"

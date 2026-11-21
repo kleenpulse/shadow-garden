@@ -22,6 +22,37 @@ const nextConfig: NextConfig = {
 	outputFileTracingIncludes: {
 		"/components/*": ["./components/registry/**/*", "./hooks/**/*"],
 		"/templates/*": ["./components/registry/**/*", "./hooks/**/*"],
+		// The browser agent's brief endpoint reads the same sources (plus the
+		// prompts/ overlays) through getPrompt.
+		"/api/agent/component/*": [
+			"./components/registry/**/*",
+			"./hooks/**/*",
+			"./lib/utils.ts",
+			"./prompts/**/*",
+		],
+	},
+	// Open agentic web bundle (public/agent, see public/agent/README.md). Other
+	// agent sites fetch these public files cross-origin, and the coded-tool
+	// sandbox worker must run under a CSP that gives it no network. netlify.toml
+	// repeats these for the CDN, which serves public/ without running Next.
+	async headers() {
+		const cors = [{ key: "Access-Control-Allow-Origin", value: "*" }];
+		return [
+			{ source: "/agent/agent-manifest.json", headers: cors },
+			{ source: "/agent/motion_garden.network.json", headers: cors },
+			{ source: "/agent/links.json", headers: cors },
+			{ source: "/agent/agent-mcp.json", headers: cors },
+			{ source: "/agent/.well-known/:file*", headers: cors },
+			{
+				source: "/agent/runtime/sandbox-worker.js",
+				headers: [
+					{
+						key: "Content-Security-Policy",
+						value: "default-src 'none'; script-src blob:; connect-src 'none'; worker-src 'none'",
+					},
+				],
+			},
+		];
 	},
 	// Every template asset is delivered by Cloudinary. Without this, next/image
 	// refuses the host and nothing in the section renders.

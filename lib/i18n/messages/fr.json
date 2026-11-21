@@ -125,7 +125,8 @@
       "nav": {
         "allComponents": "Tous les composants",
         "collections": "Collections",
-        "cookbook": "Livre de recettes du mouvement"
+        "cookbook": "Livre de recettes du mouvement",
+        "ask": "Demander au Jardin"
       },
       "componentsAccent": "{count, plural, one {# composant} other {# composants}} · 1 accent"
     },
@@ -231,6 +232,26 @@
     "volumeControl": {
       "ariaLabel": "Volume",
       "title": "Régler le volume"
+    },
+    "agentPanel": {
+      "open": "Demander au Jardin",
+      "openAria": "Ouvrir l’assistant Motion Garden",
+      "close": "Fermer l’assistant",
+      "kicker": "Web agentique ouvert · tourne dans votre navigateur",
+      "title": "Guide du Jardin",
+      "expand": "Ouvrir en pleine page",
+      "loading": "Chargement de l’assistant…",
+      "failed": "L’assistant n’a pas pu se charger. Vous pouvez toujours utiliser la page directement.",
+      "setupTitle": "Connectez un modèle d’IA pour commencer",
+      "setupBody": "Le Guide du Jardin tourne dans votre navigateur, avec le fournisseur d’IA de votre choix. Le plus rapide est de connecter OpenRouter : connectez-vous, approuvez, et discutez avec un modèle gratuit. Ou collez une clé d’un autre fournisseur.",
+      "privacy": "Votre clé reste dans ce navigateur et n’est envoyée qu’à ce fournisseur. Vos messages, et ce qu’affiche cette page, lui sont aussi envoyés. L’assistant ne modifie que le banc d’essai, et vous pouvez annuler.",
+      "startersLabel": "Essayez de demander",
+      "starters": {
+        "find": "Trouve un fond animé pour un hero sombre",
+        "tune": "Rends celui-ci plus lent et plus calme",
+        "text": "Montre-moi des animations de texte pour un titre",
+        "code": "Comment ajouter Waves à une app Next.js ?"
+      }
     }
   },
   "catalog": {
@@ -2842,6 +2863,37 @@
       "browseAll": "Parcourir tous les composants",
       "cookbook": "Livre de recettes du mouvement",
       "home": "Accueil"
+    },
+    "ask": {
+      "eyebrow": "Web agentique ouvert",
+      "title": "Demander au Jardin",
+      "lede": "Décrivez ce que vous construisez. Le Guide du Jardin trouve des composants adaptés, les règle en direct et vous donne le code. Il tourne dans votre navigateur, avec votre propre clé d’IA.",
+      "abilitiesTitle": "Ce qu’il sait faire",
+      "abilities": {
+        "find": {
+          "title": "Trouver",
+          "body": "des composants par aspect, ressenti ou usage, dans tout le catalogue."
+        },
+        "explain": {
+          "title": "Expliquer",
+          "body": "chaque réglage, avec sa plage et sa valeur par défaut."
+        },
+        "tune": {
+          "title": "Régler",
+          "body": "un composant en direct sur sa page. Chaque changement peut être annulé."
+        },
+        "code": {
+          "title": "Livrer",
+          "body": "la commande d’installation, les fichiers et les étapes pour votre stack."
+        }
+      },
+      "peerTitle": "Appelez-le depuis votre site",
+      "peerBody": "Motion Garden est un site web agentique ouvert. L’agent d’un autre site peut ajouter ce réseau comme outil et lui demander des composants une fois que son visiteur accepte. Il tourne dans le navigateur de ce visiteur, avec sa clé.",
+      "networkLabel": "URL du réseau",
+      "manifestLabel": "Manifeste",
+      "copy": "Copier {label}",
+      "privacyTitle": "Confidentialité",
+      "privacyBody": "Motion Garden n’utilise aucun serveur pour la discussion. Vos messages vont directement de ce navigateur au fournisseur d’IA choisi, et votre clé n’est envoyée nulle part ailleurs."
     }
   },
   "commands": {

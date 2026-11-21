@@ -1,0 +1,86 @@
+{
+  "brand": "Motion Garden Guide",
+  "networks": [
+    {
+      "name": "motion_garden",
+      "front_man": "garden_guide",
+      "hocon": "./motion_garden.network.json",
+      "description": "I can find animated React components in the Motion Garden catalog, tune them live on this page and hand you their MIT source.",
+      "tags": [
+        "agentified-website",
+        "react",
+        "animation",
+        "design-system",
+        "component-registry"
+      ],
+      "sample_queries": [
+        "Find me a calm animated background with waves",
+        "Open the magnetic button and make it pull harder",
+        "What do I need to install to use the stagger menu?",
+        "Give me the code for the scramble text effect",
+        "Publish a new component to the catalog for me"
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "https://api.otari.ai/api/v1",
+    "mock": false,
+    "byok_router": "https://api.otari.ai/api/v1"
+  },
+  "allowed_peers": [],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "Local agents and page-local actions only. Other agent sites may run this network and use the catalog reads its bridge shares."
+  },
+  "agent_mcp": {
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "network": "motion_garden",
+    "front_man": "garden_guide",
+    "available": false,
+    "reason": "This is a static bundle; a public MCP facade requires an application host."
+  },
+  "theme": {
+    "primary": "#7e22ce"
+  },
+  "linking": {
+    "protocol": "nsdeploy-link/v1",
+    "exports": [
+      {
+        "network": "motion_garden",
+        "front_man": "garden_guide",
+        "aliases": [
+          "motion_garden",
+          "garden_guide"
+        ],
+        "url": "motion_garden"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    }
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": true,
+    "browser_mock": false,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "public_mcp_facade": false
+  },
+  "actions": {
+    "version": 1,
+    "module": "./site-actions.js",
+    "bridge": "./bridge/action-bridge.html",
+    "agentTools": [
+      "get_bench_state",
+      "search_components",
+      "describe_component",
+      "get_component_code",
+      "open_component",
+      "set_controls",
+      "reset_controls"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "networks": [
+    {
+      "name": "motion_garden"
+    }
+  ],
+  "actions": {
+    "version": 1,
+    "module": "./bridge-actions.js"
+  }
+}
