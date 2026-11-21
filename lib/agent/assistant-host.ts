@@ -19,14 +19,28 @@ export interface AssistantParts {
 	starters: HTMLElement;
 }
 
+/** The free tier (app/api/agent/llm), when the site offers it to this visitor. */
+export interface FreeTier {
+	perDay: number;
+	left: number;
+}
+
 export interface AssistantSnapshot {
 	parts: AssistantParts | null;
 	started: boolean;
 	pageActive: boolean;
 	state: AssistantState;
+	/** Null when the visitor has their own key or the site has no free tier. */
+	free: FreeTier | null;
 }
 
-const SERVER: AssistantSnapshot = { parts: null, started: false, pageActive: false, state: "loading" };
+const SERVER: AssistantSnapshot = {
+	parts: null,
+	started: false,
+	pageActive: false,
+	state: "loading",
+	free: null,
+};
 
 let snapshot: AssistantSnapshot = SERVER;
 const listeners = new Set<() => void>();
@@ -86,6 +100,10 @@ function create(): AssistantParts {
 	window.addEventListener("mg-assistant-state", (event) => {
 		const state = (event as CustomEvent<AssistantState>).detail;
 		update({ state });
+	});
+	// site.js reports the free tier once, right after the runtime boots.
+	window.addEventListener("mg-assistant-free", (event) => {
+		update({ free: (event as CustomEvent<FreeTier | null>).detail });
 	});
 	return { root, lead, starters };
 }

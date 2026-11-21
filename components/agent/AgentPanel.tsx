@@ -33,7 +33,7 @@ export default function AgentPanel() {
 	const t = useTranslations("chrome.agentPanel");
 	const router = useRouter();
 	const pathname = usePathname();
-	const { parts, started, pageActive, state } = useSyncExternalStore(
+	const { parts, started, pageActive, state, free } = useSyncExternalStore(
 		subscribe,
 		getSnapshot,
 		getServerSnapshot,
@@ -196,7 +196,19 @@ export default function AgentPanel() {
 								<h2 className="font-title text-lg font-medium text-ink">{t("setupTitle")}</h2>
 								<p className="text-[13px] leading-relaxed text-ink-dim">{t("setupBody")}</p>
 								<p className="text-xs leading-relaxed text-ink-mute">{t("privacy")}</p>
+								{free && free.left === 0 && (
+									<p className="text-xs leading-relaxed text-ink-dim">
+										{t("freeSpent", { count: free.perDay })}
+									</p>
+								)}
 							</div>
+						)}
+						{/* On the free tier the visitor never saw the setup copy, so say here whose
+						    key answers and where their messages go. */}
+						{state === "ready" && free && free.left > 0 && (
+							<p className="pt-2 text-xs leading-relaxed text-ink-mute">
+								{t("freeNote", { count: free.perDay })}
+							</p>
 						)}
 					</div>,
 					parts.lead,

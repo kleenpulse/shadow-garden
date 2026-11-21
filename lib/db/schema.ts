@@ -1,5 +1,6 @@
 import {
 	boolean,
+	date,
 	index,
 	integer,
 	jsonb,
@@ -141,6 +142,24 @@ export const componentViews = pgTable(
 			.notNull(),
 	},
 	(t) => [primaryKey({ columns: [t.slug, t.visitorId] })],
+).enableRLS();
+
+// Daily counters for the assistant's free tier (app/api/agent/llm), where the
+// site's own OpenRouter key answers a visitor who has not connected a model.
+// One row per (UTC day, visitor), plus one row per day whose visitor is "*" for
+// the site-wide cap. `visitor` is a SHA-256 of the day, the client IP and a
+// server secret (lib/agent/free-tier-server.ts): no IP is stored, and a hash
+// cannot be linked from one day to the next. `questions` counts chat messages
+// the visitor sent; `calls` counts model calls, several per question.
+export const agentUsage = pgTable(
+	"agent_usage",
+	{
+		day: date("day").notNull(),
+		visitor: text("visitor").notNull(),
+		questions: integer("questions").notNull().default(0),
+		calls: integer("calls").notNull().default(0),
+	},
+	(t) => [primaryKey({ columns: [t.day, t.visitor] })],
 ).enableRLS();
 
 // User-submitted feedback + bug reports. Fully anonymous: `visitor_id` (the

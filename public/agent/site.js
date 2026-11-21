@@ -36,10 +36,19 @@ export class AssistantMount {
     try {
       // Load the runtime here, so a missing or broken runtime is reported too.
       const { boot } = await import("./runtime/index.js");
+      // A visitor with no key of their own, and free questions left today, chats on
+      // the site's key: the runtime gets this site's own endpoint as its router. The
+      // key it is handed unlocks nothing; the server ignores it.
+      const free = await AssistantMount.freeTier();
+      const onFreeTier = !!free && free.left > 0;
       const booted = await boot("#agent-app", {
         originUrl: siteBase,
         sandboxWorkerUrl: new URL("runtime/sandbox-worker.js", siteBase).href,
+        ...(onFreeTier
+          ? { byokKey: AssistantMount.FREE_KEY, router: AssistantMount.FREE_ROUTER, model: free.model }
+          : {}),
       });
+      AssistantMount.setFree(free);
       AssistantMount.engine = booted.engine;
       AssistantMount.defaultReview = booted.engine.onActionConfirm;
       booted.engine.onActionConfirm = AssistantMount.review;
@@ -71,6 +80,61 @@ export class AssistantMount {
       AssistantMount.setState("failed");
       return null;
     }
+  }
+
+  /**
+   * The key handed to the runtime on the free tier. It is not a secret and unlocks
+   * nothing: the site's endpoint ignores it and uses its own key on the server.
+   * Keep it equal to FREE_TIER_KEY in lib/agent/free-tier.ts.
+   */
+  static FREE_KEY = "motion-garden-free-tier";
+
+  /** The site's own chat endpoint (app/api/agent/llm), as the runtime's router. */
+  static FREE_ROUTER = new URL("/api/agent/llm", import.meta.url).href;
+
+  /**
+   * Ask the site whether the free tier is on and how many questions this visitor has
+   * left today. A visitor who saved their own key never uses it, so nothing is asked.
+   *
+   * :return: {perDay, left, model}, or null when the visitor has a key or the site
+   *   offers no free tier.
+   */
+  static async freeTier() {
+    try {
+      const { getSelectedByokProfile, loadTabByokSetup } = await import("./runtime/byok.js");
+      const own = loadTabByokSetup(getSelectedByokProfile()).key;
+      if (own && own !== "demo" && own !== AssistantMount.FREE_KEY) {
+        return null;
+      }
+      const response = await fetch(AssistantMount.FREE_ROUTER, {
+        headers: { Accept: "application/json" },
+        cache: "no-store",
+      });
+      const tier = await response.json();
+      return tier && tier.available === true ? tier : null;
+    } catch {
+      // The assistant then works as it does without a free tier.
+      return null;
+    }
+  }
+
+  /**
+   * Tell the page about the free tier, so it can say what the visitor is using:
+   * "active" while questions are left, "spent" once today's are used.
+   *
+   * :param free: The answer from freeTier(), or null.
+   */
+  static setFree(free) {
+    const root = document.querySelector("#agent-app");
+    const detail = free ? { perDay: free.perDay, left: free.left } : null;
+    if (root) {
+      if (detail) {
+        root.dataset.mgFree = detail.left > 0 ? "active" : "spent";
+      } else {
+        delete root.dataset.mgFree;
+      }
+    }
+    window.dispatchEvent(new CustomEvent("mg-assistant-free", { detail }));
   }
 
   /**

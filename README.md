@@ -35,7 +35,7 @@ The CLI puts each file under your own aliases, adds the npm packages, and adds t
 
 Motion Garden is also an [open agentic website](https://github.com/cognizant-ai-labs/agentic-web). Open **Ask the Garden** on any catalog page and a two-agent network, running in your browser on the AI provider and key you choose, finds components, tunes the live preview's controls for you and hands over the MIT source. Other agentic websites can call the same network at `https://motion-garden.netlify.app/agent/motion_garden` to search the catalog and fetch component code from their own chat.
 
-The assistant sends your messages, and the page data it reads, to the AI provider you pick. It only changes the bench (control values and which component is open), all of which you can undo. Details, files and checks: [`public/agent/README.md`](public/agent/README.md).
+Without a key you get two free questions a day, paid for by Motion Garden: your messages then go through our server to a free AI model on OpenRouter, and we do not keep them. With your own key, the assistant sends your messages, and the page data it reads, straight to the AI provider you pick. It only changes the bench (control values and which component is open), all of which you can undo. Details, files and checks: [`public/agent/README.md`](public/agent/README.md).
 
 ## What's inside
 

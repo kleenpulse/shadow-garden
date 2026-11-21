@@ -245,6 +245,8 @@
       "setupTitle": "Connect an AI model to start",
       "setupBody": "The Garden Guide runs in your browser, on an AI provider you choose. Connecting OpenRouter is the quickest way: sign in, approve, and chat on a free model. Or paste a key from another provider.",
       "privacy": "Your key stays in this browser and goes only to that provider. Your messages, and what this page shows, go to it too. The assistant only changes the bench, which you can undo.",
+      "freeNote": "You get {count, plural, one {# free question} other {# free questions}} a day, paid for by Motion Garden. On the free plan your messages go through our server to a free AI model on OpenRouter. We do not keep them. For more, connect your own AI model in the settings below.",
+      "freeSpent": "You have used today’s {count, plural, one {free question} other {# free questions}}. Connect your own AI model to keep going.",
       "startersLabel": "Try asking",
       "starters": {
         "find": "Find an animated background for a dark hero",

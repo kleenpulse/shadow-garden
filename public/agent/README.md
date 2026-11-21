@@ -73,12 +73,53 @@ The same reads are plain HTTP, open to any origin and listed in `/llms.txt`:
 | `runtime/` | The patched nsdeploy browser runtime (Apache 2.0), copied unchanged from the skill |
 | `package.json` | Marks this folder's `.js` files as ES modules for Node |
 
+## Free tier
+
+A visitor who has not connected an AI model gets two free questions a day, paid for by
+the site's own OpenRouter key. It is on only when `OPENROUTER_API_KEY` is set and the
+`agent_usage` table exists; otherwise the assistant asks for the visitor's own key, as it
+does on a fork.
+
+`site.js` asks `GET /api/agent/llm` before it boots. With questions left, it hands the
+runtime that endpoint as its router, so the runtime calls
+`POST /api/agent/llm/chat/completions` like any provider. The vendored runtime is not
+changed: `boot()` already takes a key, a router and a model from the page.
+
+The key sits behind a public URL, so the endpoint narrows every request before it pays
+for one (`lib/agent/free-tier.ts`, checked by `bun run check:agent`):
+
+- It answers only this site's own pages (the request's Origin must be the host it reached).
+- The system prompt must be one of this network's own agents, read from
+  `motion_garden.network.json`. Any other prompt is refused, so the endpoint is no use as
+  a general model proxy.
+- The server picks the model (`AGENT_FREE_MODEL`, default `openrouter/free`) and caps the
+  output. The caller's model and options are dropped.
+- It counts per visitor and site-wide, per UTC day: 2 questions and 40 model calls a
+  visitor, 300 questions and 4,000 calls across the site. One question takes several model
+  calls. A call that the model never answers is not counted.
+
+The count is kept in Postgres (`agent_usage`, `lib/agent/free-tier-server.ts`) under a
+SHA-256 of the day, the visitor's IP address (IPv6 cut to its /64) and a server secret.
+No address is stored, and a hash cannot be linked from one day to the next. Rows older
+than a week are deleted.
+
+This is the "site absorbs the inference cost" case of the spec, not a BYOK proxy: a
+visitor who brings a key never reaches this endpoint. Their browser calls their provider
+directly.
+
 ## Privacy
 
-The assistant sends the visitor's messages, and the page data it reads, to the AI
-provider the visitor picks in **AI model settings**. The key stays in this origin's
-browser storage. It is sent only to that provider, never to Motion Garden or to another
-site. Everything in the network file, including the instructions, is public by design.
+With their own key, the assistant sends the visitor's messages, and the page data it
+reads, to the AI provider the visitor picks in **AI model settings**. The key stays in
+this origin's browser storage. It is sent only to that provider, never to Motion Garden
+or to another site.
+
+On the free tier the visitor has no key. Their messages, and the page data the assistant
+reads, go through Motion Garden's server to a free AI model on OpenRouter. The server
+does not log or store them; the model's provider has its own terms. The drawer says this
+before the first message.
+
+Everything in the network file, including the instructions, is public by design.
 
 ## Build and check
 
