@@ -10,6 +10,7 @@ import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { useInteractionSound } from "@/hooks/use-interaction-sound";
 import { useUIStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { CHROME_GLOW } from "./chrome-glow";
 import SparkleBurst, { useSparkleBurst } from "./SparkleBurst";
 
 // The Copy Prompt control.
@@ -31,17 +32,9 @@ const LABEL = "min-w-[5.75rem] text-start";
 
 const RESET_MS = 1400;
 
-// Amethyst, tuned down for chrome duty exactly as CatalogCard does — this is a
-// control, not a demo. Pointer handlers are deliberately NOT attached: the button
-// already has its own hover state, so the glow belongs to the sweep alone.
-const GLOW = {
-	glowColor: "271 91 65", // #a855f7 as the "H S L" triplet BorderGlow expects
-	backgroundColor: "var(--color-panel)",
-	colors: ["#a855f7", "#6d28d9", "#22d3ee"],
-	glowRadius: 10,
-	glowIntensity: 0.55,
-	fillOpacity: 0.25,
-};
+// Pointer handlers are deliberately NOT attached: the button already has its own
+// hover state, so the glow belongs to the sweep alone.
+const GLOW = CHROME_GLOW;
 
 // BorderGlow's autoplay turns the cone at 2200ms per revolution, so this is how
 // far around the perimeter the sweep travels before it lets go: ~230°. Its own

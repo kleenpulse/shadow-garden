@@ -6,6 +6,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Maximize2, Sparkles, X } from "lucide-react";
+import { useBorderGlow } from "@/components/registry/border-glow/border-glow";
+import { CHROME_GLOW } from "@/components/shell/chrome-glow";
 import { installBench } from "@/lib/agent/bench-bridge";
 import {
 	attachHost,
@@ -29,6 +31,46 @@ import RuntimeSelects from "./RuntimeSelects";
 // open drawer for the tab brings the visitor straight back to the chat.
 const OPEN_KEY = "mg-assistant-open";
 
+// The trigger's intro sweep waits until someone can see it: the first visit's intro
+// overlay (components/intro/IntroOverlay.tsx) covers the whole page, and a tab in
+// the background plays to nobody.
+const SWEEP_POLL_MS = 300;
+const SWEEP_SETTLE_MS = 500;
+
+/**
+ * True once per page load, the first time the trigger is on screen and the page
+ * has been in view for a moment. `hidden` is the trigger's own state: the drawer
+ * is open, or the /ask page holds the chat.
+ */
+function useIntroSweep(hidden: boolean): boolean {
+	const [ready, setReady] = useState(false);
+
+	useEffect(() => {
+		if (ready || hidden) return;
+		let inViewSince = 0;
+		const timer = window.setInterval(() => {
+			const root = document.documentElement;
+			// The intro drops its attribute mid-sequence to give scroll back; the overlay
+			// itself only unmounts once it has truly finished.
+			const covered =
+				root.hasAttribute("data-sg-intro") ||
+				document.getElementById("sg-intro") !== null ||
+				document.hidden;
+			if (covered) {
+				inViewSince = 0;
+				return;
+			}
+			if (!inViewSince) inViewSince = performance.now();
+			if (performance.now() - inViewSince < SWEEP_SETTLE_MS) return;
+			window.clearInterval(timer);
+			setReady(true);
+		}, SWEEP_POLL_MS);
+		return () => window.clearInterval(timer);
+	}, [ready, hidden]);
+
+	return ready;
+}
+
 export default function AgentPanel() {
 	const t = useTranslations("chrome.agentPanel");
 	const router = useRouter();
@@ -40,6 +82,14 @@ export default function AgentPanel() {
 	);
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const open = drawerOpen && !pageActive;
+	const triggerHidden = open || pageActive;
+	// The same border sweep as Copy for Agent, played once when the page loads.
+	// BorderGlow skips it under reduced motion. No pointer handlers: the button has
+	// its own hover state, so the glow belongs to the sweep alone.
+	const { cardRef: triggerShellRef, overlays: triggerGlow } = useBorderGlow({
+		...CHROME_GLOW,
+		animated: useIntroSweep(triggerHidden),
+	});
 	const hostRef = useRef<HTMLDivElement>(null);
 	const closeRef = useRef<HTMLButtonElement>(null);
 	const triggerRef = useRef<HTMLButtonElement>(null);
@@ -129,22 +179,31 @@ export default function AgentPanel() {
 
 	return (
 		<>
-			<button
-				ref={triggerRef}
-				type="button"
-				onClick={show}
-				aria-expanded={open}
-				aria-controls="agent-drawer"
-				aria-label={t("openAria")}
+			{/* The border, background and radius live on this shell, not the button: the
+			    glow layers paint above the shell's own background and below its children,
+			    the only stacking order where the ring shows (see CopyPromptButton). */}
+			<div
+				ref={triggerShellRef}
 				className={cn(
-					"fixed end-4 bottom-4 z-40 inline-flex items-center gap-2 rounded-full bg-panel/90 px-4 py-2.5 font-display text-[11px] tracking-[0.14em] text-ink uppercase shadow-lg backdrop-blur transition-[color,opacity] hover:text-accent focus-visible:text-accent focus-visible:outline-none",
-					(open || pageActive) && "pointer-events-none opacity-0",
+					"fixed end-4 bottom-4 isolate z-40 inline-flex rounded-full border border-transparent bg-panel/90 shadow-lg backdrop-blur transition-opacity",
+					triggerHidden && "pointer-events-none opacity-0",
 				)}
-				tabIndex={pageActive ? -1 : undefined}
 			>
-				<Sparkles className="h-4 w-4 text-accent" aria-hidden />
-				{t("open")}
-			</button>
+				{triggerGlow}
+				<button
+					ref={triggerRef}
+					type="button"
+					onClick={show}
+					aria-expanded={open}
+					aria-controls="agent-drawer"
+					aria-label={t("openAria")}
+					className="relative z-10 inline-flex items-center gap-2 rounded-full px-4 py-2.5 font-display text-[11px] tracking-[0.14em] text-ink uppercase transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+					tabIndex={pageActive ? -1 : undefined}
+				>
+					<Sparkles className="h-4 w-4 text-accent" aria-hidden />
+					{t("open")}
+				</button>
+			</div>
 			<aside
 				id="agent-drawer"
 				aria-label={t("title")}
