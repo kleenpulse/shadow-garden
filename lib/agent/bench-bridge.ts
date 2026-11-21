@@ -98,24 +98,25 @@ function waitForWorkspace(slug: string, timeoutMs: number): Promise<boolean> {
 }
 
 async function openComponent(args: { slug: string; changes?: ControlChange[] }) {
-	const entry = getEntry(String(args.slug ?? ""));
+	const entry = getEntry(String(args?.slug ?? ""));
 	if (!entry) {
 		return {
 			ok: false,
-			reason: `No component with the slug "${args.slug}". Search the catalog for the right slug.`,
+			reason: `No component with the slug "${args?.slug}". Search the catalog for the right slug.`,
 			field: "slug",
 		} satisfies Refusal;
 	}
 	const changes = args.changes ?? [];
 	let patch: TunedValues = {};
-	if (changes.length > 0) {
+	// Anything but a list goes to applyChanges too, which refuses it with a reason.
+	if (!Array.isArray(changes) || changes.length > 0) {
 		const result = applyChanges(entry.props, {}, changes);
 		if (!result.ok) return result;
 		patch = result.patch;
 	}
 	const workspace = mounted();
 	if (workspace?.slug === entry.slug) {
-		if (changes.length > 0) workspace.setMany(patch);
+		if (Object.keys(patch).length > 0) workspace.setMany(patch);
 		return { ...readState(patch), opened: entry.slug };
 	}
 	navigate?.(`/components/${entry.slug}${queryFor(entry.props, patch)}`);
@@ -139,7 +140,7 @@ function setControls(args: { changes: ControlChange[] }) {
 			field: "changes",
 		} satisfies Refusal;
 	}
-	const result = applyChanges(workspace.props, workspace.getValues(), args.changes ?? []);
+	const result = applyChanges(workspace.props, workspace.getValues(), args?.changes ?? []);
 	if (!result.ok) return result;
 	workspace.setMany(result.patch);
 	return {

@@ -114,6 +114,16 @@ check("duplicate and empty batches are refused", () => {
 	assert.equal(twice.ok, false);
 });
 
+check("a batch that is not a list of name and value is refused, never thrown", () => {
+	const { entry, prop } = entryWith("number");
+	const bad = (changes: unknown) => applyChanges(entry.props, {}, changes as never);
+	for (const changes of [{ [prop.name]: "1" }, "speed=1", 7, [null], [{ name: prop.name }], [{ value: "1" }]]) {
+		const result = bad(changes);
+		assert.equal(result.ok, false, JSON.stringify(changes));
+		if (!result.ok) assert.equal(result.field, "changes");
+	}
+});
+
 check("a `sets` link is applied like the bench setter, unless set explicitly", () => {
 	const linked = registry.flatMap((entry) => entry.props.filter((p) => p.sets).map((prop) => ({ entry, prop })))[0];
 	if (!linked) return; // no entry uses `sets` today

@@ -87,8 +87,18 @@ export function applyChanges(
 	current: TunedValues,
 	changes: ControlChange[],
 ): ChangeResult {
+	// The runtime validates a tool call's arguments, but window.__motionGarden is
+	// also callable directly, and a throw here reads as "unknown outcome".
+	if (!Array.isArray(changes)) {
+		return { ok: false, reason: "changes must be a list of controls, each with a name and a value.", field: "changes" };
+	}
 	if (changes.length === 0) {
 		return { ok: false, reason: "No controls were named.", field: "changes" };
+	}
+	for (const change of changes) {
+		if (!change || typeof change.name !== "string" || change.value === undefined || change.value === null) {
+			return { ok: false, reason: "Each change needs a name and a value.", field: "changes" };
+		}
 	}
 	const patch: TunedValues = {};
 	const seen = new Set<string>();
