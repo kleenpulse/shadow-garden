@@ -93,7 +93,7 @@ export default function InstallBlock({ entry }: { entry: ComponentEntry }) {
         <button
           type="button"
           onClick={copy}
-          className="px-2 font-mono text-[11px] text-ink-dim transition-colors hover:text-accent"
+          className="rounded px-2 py-1 font-mono text-[11px] text-ink-dim transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent"
         >
           {copied ? t("copied") : t("copy")}
         </button>
