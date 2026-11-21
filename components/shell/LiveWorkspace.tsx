@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Maximize2 } from "lucide-react";
 import type { ComponentEntry } from "@/lib/registry/types";
-import { trackEvent } from "@/lib/stats/track";
+import { trackView } from "@/lib/stats/track";
 import { useTunedProps } from "@/lib/registry/useTunedProps";
 import { registerWorkspace } from "@/lib/agent/bench-bridge";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
@@ -37,10 +37,11 @@ export default function LiveWorkspace({
 	const paused = usePauseState(entry.slug);
 	const t = useTranslations("chrome.liveWorkspace");
 
-	// One view ping per component the user opens (fires once per slug, incl. on
-	// client-side nav between components). Fire-and-forget, anonymous.
+	// One view ping per component, the first time this browser opens it (incl.
+	// on client-side nav between components). Later views send nothing: the
+	// server would not count them again. Fire-and-forget, anonymous.
 	useEffect(() => {
-		trackEvent(entry.slug, "view");
+		trackView(entry.slug);
 	}, [entry.slug]);
 
 	// Hand the browser agent (public/agent, via lib/agent/bench-bridge) the same

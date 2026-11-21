@@ -38,6 +38,14 @@ function check(name: string, fn: () => void) {
 		throw error;
 	}
 }
+async function checkAsync(name: string, fn: () => Promise<void>) {
+	try {
+		await fn();
+		passed++;
+	} catch (error) {
+		console.error(`✗ ${name}`);
+		throw error;
+	}
 }
 
 function entryWith(kind: PropSchema["kind"]): { entry: ComponentEntry; prop: PropSchema } {
@@ -584,6 +592,63 @@ check("the component page reads its files through cached readers, so it is built
 	const cached = readFileSync(fileURLToPath(new URL("../../lib/registry/cached.ts", import.meta.url)), "utf8");
 	assert.equal(cached.match(/^	"use cache";$/gm)?.length, 2);
 	assert.equal(cached.match(/^	cacheLife\("max"\);$/gm)?.length, 2);
+});
+
+await checkAsync("a component's view is reported once per browser, and again only if the report failed", async () => {
+	const stored = new Map<string, string>();
+	const realFetch = globalThis.fetch;
+	const sent: string[] = [];
+	let status = 204;
+	Object.assign(globalThis, {
+		localStorage: {
+			getItem: (key: string) => stored.get(key) ?? null,
+			setItem: (key: string, value: string) => void stored.set(key, value),
+		},
+		fetch: async (_url: string, init: { body: string }) => {
+			sent.push(JSON.parse(init.body).slug);
+			return new Response(null, { status });
+		},
+	});
+	try {
+		const { VIEWED_KEY, trackView } = await import("../../lib/stats/track");
+		const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+		// Remembered from an earlier visit: nothing is sent.
+		stored.set(VIEWED_KEY, JSON.stringify(["orb"]));
+		trackView("orb");
+		assert.deepEqual(sent, []);
+
+		// A first view is sent once, however often the effect runs, then remembered.
+		trackView("waves");
+		trackView("waves");
+		await settle();
+		trackView("waves");
+		assert.deepEqual(sent, ["waves"]);
+		assert.deepEqual(JSON.parse(stored.get(VIEWED_KEY)!), ["orb", "waves"]);
+
+		// A report the server did not take is not remembered, and is sent again.
+		status = 500;
+		trackView("swarm");
+		await settle();
+		assert.deepEqual(JSON.parse(stored.get(VIEWED_KEY)!), ["orb", "waves"]);
+		status = 204;
+		trackView("swarm");
+		await settle();
+		assert.deepEqual(sent, ["waves", "swarm", "swarm"]);
+		assert.deepEqual(JSON.parse(stored.get(VIEWED_KEY)!), ["orb", "waves", "swarm"]);
+
+		// Storage that holds something else is read as empty, never thrown on.
+		stored.set(VIEWED_KEY, "{not json");
+		trackView("anima");
+		await settle();
+		assert.deepEqual(JSON.parse(stored.get(VIEWED_KEY)!), ["anima"]);
+
+		const workspace = readFileSync(fileURLToPath(new URL("../../components/shell/LiveWorkspace.tsx", import.meta.url)), "utf8");
+		assert.ok(workspace.includes("trackView(entry.slug)"), "the workspace reports views through trackView");
+		assert.doesNotMatch(workspace, /trackEvent\(/, "the workspace sends no unremembered ping");
+	} finally {
+		Object.assign(globalThis, { fetch: realFetch });
+	}
 });
 
 check("the panel lowers its own count after an answered question", () => {
