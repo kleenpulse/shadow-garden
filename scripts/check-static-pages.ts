@@ -61,6 +61,19 @@ if (open.length > 0) {
 // read that cannot change inside a deploy should never revalidate:
 // `cacheLife(UNTIL_NEXT_DEPLOY)` from lib/cache-life.ts.
 const handlers = routes.filter(([, route]) => route.routeType === "route");
+
+// An entry of a kind this script does not know cannot be judged. Without this,
+// a Next.js upgrade that renames the route type would leave `handlers` empty
+// and the time check below would pass without looking at one of them. Not
+// `handlers.length === 0`: a build may truly have no prebuilt route handler.
+const unknown = routes.filter(([, route]) => route.routeType !== "page" && route.routeType !== "route");
+if (unknown.length > 0) {
+	console.error(
+		`check:static: ${unknown.length} of ${routes.length} prebuilt entries are neither a page nor a route handler (first: ${unknown[0][0]}, routeType ${JSON.stringify(unknown[0][1].routeType)}). The build record's shape has changed; update scripts/check-static-pages.ts.`,
+	);
+	process.exit(1);
+}
+
 const timed = [...pages, ...handlers]
 	.filter(([, route]) => typeof route.initialRevalidateSeconds === "number")
 	.map(([name]) => name);
