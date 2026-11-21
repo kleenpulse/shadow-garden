@@ -36,6 +36,7 @@ export default function SiteFooter() {
 		{ href: "/components", label: t("nav.allComponents") },
 		{ href: "/collections", label: t("nav.collections") },
 		{ href: "/cookbook", label: t("nav.cookbook") },
+		{ href: "/ask", label: t("nav.ask") },
 	];
 
 	const groups = COLLECTION_GROUPS.map((group) => ({

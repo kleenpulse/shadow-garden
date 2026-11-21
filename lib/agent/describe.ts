@@ -1,0 +1,36 @@
+// What the agent learns about one entry. Built from the registry only, so it is
+// the same facts the component page shows: controls, dependencies, install
+// commands and the files that ship. Client-safe (no fs, no server-only).
+
+import { installCommand, PKG_MANAGERS } from "../registry/install";
+import { inShadcnRegistry, shadcnAddCommands } from "../registry/shadcn";
+import type { ComponentEntry } from "../registry/types";
+import { controlViews } from "./controls";
+import { summarize } from "./search";
+
+export function describeEntry(entry: ComponentEntry, absolute: (path: string) => string) {
+	const path = `/components/${entry.slug}`;
+	return {
+		slug: entry.slug,
+		name: entry.name,
+		category: entry.category,
+		kind: entry.kind ?? "component",
+		summary: summarize(entry.description),
+		description: entry.description,
+		page: absolute(path),
+		path,
+		// The whole integration brief as Markdown, for a coding agent to fetch.
+		markdown: absolute(`${path}.md`),
+		controls: controlViews(entry.props),
+		dependencies: entry.dependencies ?? [],
+		install: Object.fromEntries(PKG_MANAGERS.map((pm) => [pm, installCommand(pm, entry)])),
+		// The one-line install through the shadcn CLI (app/r). Templates have none.
+		...(inShadcnRegistry(entry) ? { shadcn: shadcnAddCommands(entry, absolute) } : {}),
+		files: entry.variants.map((variant) => ({
+			file: variant.file,
+			role: variant.role ?? "component",
+		})),
+		license: "MIT",
+		...(entry.attribution ? { attribution: entry.attribution } : {}),
+	};
+}

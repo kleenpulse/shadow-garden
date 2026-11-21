@@ -369,6 +369,27 @@ html[data-sg-intro] {
 	}
 }
 
+/* The assistant drawer docks on wide screens (components/agent/AgentPanel.tsx sets
+   data-agent-drawer on <html>). Below 1500px it overlays the page; from 1500px the
+   shell column makes room for it, so the bench stays in view while the agent tunes
+   it. The margin and the drawer's slide share one duration and curve, so the two
+   edges move together. Reduced motion: the backstop below makes both instant. */
+#agent-drawer {
+	/* Tailwind v4's translate-x-* sets the translate property, not transform. */
+	transition: translate var(--agent-drawer-motion);
+}
+:root {
+	--agent-drawer-motion: 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (min-width: 1500px) {
+	[data-shell-content] {
+		transition: margin-inline-end var(--agent-drawer-motion);
+	}
+	html[data-agent-drawer="open"] [data-shell-content] {
+		margin-inline-end: 460px;
+	}
+}
+
 /* Honor prefers-reduced-motion globally as a backstop; components also gate individually. */
 @media (prefers-reduced-motion: reduce) {
 	*,

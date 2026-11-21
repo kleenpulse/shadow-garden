@@ -46,6 +46,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			changeFrequency: "weekly",
 			priority: 0.8,
 		},
+		{
+			url: absoluteUrl("/ask"),
+			lastModified: latest,
+			changeFrequency: "monthly",
+			priority: 0.6,
+		},
 	];
 
 	// Membership is computed from the registry, so a collection is exactly as

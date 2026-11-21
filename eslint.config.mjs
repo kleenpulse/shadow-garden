@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored nsdeploy browser runtime (Apache 2.0), copied unchanged from the
+    // agentic-web agentify-website skill, plus the files its build generates.
+    "public/agent/runtime/**",
+    "public/agent/bridge/action-bridge.html",
   ]),
 ]);
 

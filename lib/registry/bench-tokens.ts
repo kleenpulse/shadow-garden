@@ -58,17 +58,31 @@ const STATIC_TOKENS: Readonly<Record<string, { value: string; use: RegExp }>> = 
  * customer's project in exactly the same way: there is no scrollbar plugin, so
  * without these blocks the class is a silent no-op.
  */
-const CUSTOM_UTILITIES: Readonly<Record<string, string>> = {
-  "scrollbar-thin": ["@utility scrollbar-thin {", "  scrollbar-width: thin;", "}"].join("\n"),
-  "scrollbar-none": [
-    "@utility scrollbar-none {",
-    "  scrollbar-width: none;",
-    "  &::-webkit-scrollbar {",
-    "    display: none;",
-    "  }",
-    "}",
-  ].join("\n"),
+const CUSTOM_UTILITIES: Readonly<Record<string, CssRule>> = {
+  "scrollbar-thin": { "scrollbar-width": "thin" },
+  "scrollbar-none": {
+    "scrollbar-width": "none",
+    "&::-webkit-scrollbar": { display: "none" },
+  },
 };
+
+/** A CSS block as data: a declaration is a string, a nested rule is an object. */
+export interface CssRule {
+  [key: string]: string | CssRule;
+}
+
+/** One rule as pasteable CSS. The brief prints it; the shadcn item ships the data. */
+function cssBlock(selector: string, rule: CssRule, indent = ""): string[] {
+  return [
+    `${indent}${selector} {`,
+    ...Object.entries(rule).flatMap(([key, value]) =>
+      typeof value === "string"
+        ? [`${indent}  ${key}: ${value};`]
+        : cssBlock(key, value, `${indent}  `),
+    ),
+    `${indent}}`,
+  ];
+}
 
 // Longest name first, so `ink-mute` is not read as `ink`.
 const UTILITY_NAMES = ROLE_TOKENS.filter((token) => token.utility)
@@ -161,6 +175,38 @@ export function tokenCss(use: TokenUse): string {
       [".dark {", ...use.roles.map((name) => `  --sg-${name}: ${role(name).dark};`), "}"].join("\n"),
     );
   }
-  blocks.push(...use.custom.map((name) => CUSTOM_UTILITIES[name]));
+  blocks.push(
+    ...use.custom.map((name) =>
+      cssBlock(`@utility ${name}`, CUSTOM_UTILITIES[name]).join("\n"),
+    ),
+  );
   return blocks.join("\n\n");
+}
+
+/** The same tokens as tokenCss(), as data keyed the way a shadcn registry item wants. */
+export interface TokenVars {
+  /** `@theme` keys without the leading `--`: `color-ink`, `font-display`. */
+  theme: Record<string, string>;
+  /** `:root` variables without the leading `--`: `sg-ink`. */
+  light: Record<string, string>;
+  /** `.dark` variables, same keys as `light`. */
+  dark: Record<string, string>;
+  /** Custom `@utility` blocks, keyed by their full at-rule. */
+  css: Record<string, CssRule>;
+}
+
+export function tokenVars(use: TokenUse): TokenVars {
+  const role = (name: string) => ROLE_TOKENS.find((token) => token.name === name)!;
+  const bare = (key: string) => key.replace(/^--/, "");
+  return {
+    theme: Object.fromEntries([
+      ...use.statics.map((key) => [bare(key), STATIC_TOKENS[key].value]),
+      ...use.utilities.map((name) => [`color-${name}`, `var(--sg-${name})`]),
+    ]),
+    light: Object.fromEntries(use.roles.map((name) => [`sg-${name}`, role(name).light])),
+    dark: Object.fromEntries(use.roles.map((name) => [`sg-${name}`, role(name).dark])),
+    css: Object.fromEntries(
+      use.custom.map((name) => [`@utility ${name}`, CUSTOM_UTILITIES[name]]),
+    ),
+  };
 }

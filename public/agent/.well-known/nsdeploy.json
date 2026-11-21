@@ -1,0 +1,18 @@
+{
+  "protocol": "nsdeploy-link/v1",
+  "exports": [
+    {
+      "network": "motion_garden",
+      "front_man": "garden_guide",
+      "aliases": [
+        "motion_garden",
+        "garden_guide"
+      ],
+      "url": "motion_garden"
+    }
+  ],
+  "imports": [],
+  "link_updates": {
+    "mode": "browser-local"
+  }
+}

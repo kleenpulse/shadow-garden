@@ -1,0 +1,18 @@
+<!doctype html>
+<!--
+  Action bridge, copied here by build_network.mjs. Do not edit it.
+  Other agent sites load this page in a hidden frame before they run this site's network.
+  It reads agent-manifest.json in this folder. That manifest names bridge-actions.js when
+  this folder has it, and the page then shares the actions it registers with the callers
+  they list. Otherwise it shares no actions and loads none of the site's own code.
+  Do not block framing for this folder.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <title>Action bridge</title>
+    <script type="module" src="../runtime/action-bridge.js"></script>
+  </head>
+  <body></body>
+</html>

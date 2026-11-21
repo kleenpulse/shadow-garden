@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -8,6 +8,7 @@ import { Maximize2 } from "lucide-react";
 import type { ComponentEntry } from "@/lib/registry/types";
 import { trackEvent } from "@/lib/stats/track";
 import { useTunedProps } from "@/lib/registry/useTunedProps";
+import { registerWorkspace } from "@/lib/agent/bench-bridge";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { usePauseState } from "@/hooks/use-pause-state";
 import { previews } from "@/components/registry/previews";
@@ -30,7 +31,7 @@ export default function LiveWorkspace({
 	code: ReactNode;
 	promptSlot?: ReactNode;
 }) {
-	const { values, setValue, syncValue, reset } = useTunedProps(entry.props);
+	const { values, setValue, syncValue, setMany, reset } = useTunedProps(entry.props);
 	const reducedMotion = usePrefersReducedMotion();
 	const paused = usePauseState(entry.slug);
 	const t = useTranslations("chrome.liveWorkspace");
@@ -40,6 +41,25 @@ export default function LiveWorkspace({
 	useEffect(() => {
 		trackEvent(entry.slug, "view");
 	}, [entry.slug]);
+
+	// Hand the browser agent (public/agent, via lib/agent/bench-bridge) the same
+	// setters the Controls panel uses. The ref keeps the registration stable
+	// across renders while always reading the latest values.
+	const live = useRef({ values, setMany, reset });
+	useEffect(() => {
+		live.current = { values, setMany, reset };
+	});
+	useEffect(
+		() =>
+			registerWorkspace({
+				slug: entry.slug,
+				props: entry.props,
+				getValues: () => live.current.values,
+				setMany: (patch) => live.current.setMany(patch),
+				reset: () => live.current.reset(),
+			}),
+		[entry.slug, entry.props],
+	);
 	const searchParams = useSearchParams();
 	const Preview = previews[entry.slug] ?? PlaceholderPreview;
 	// Stable key for resetKeys: re-running the boundary when the tuned values

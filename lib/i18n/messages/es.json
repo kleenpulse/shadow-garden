@@ -125,7 +125,8 @@
       "nav": {
         "allComponents": "Todos los componentes",
         "collections": "Colecciones",
-        "cookbook": "Recetario de Movimiento"
+        "cookbook": "Recetario de Movimiento",
+        "ask": "Pregunta al Jardín"
       },
       "componentsAccent": "{count, plural, one {# componente} other {# componentes}} · 1 acento"
     },
@@ -231,6 +232,28 @@
     "volumeControl": {
       "ariaLabel": "Volumen",
       "title": "Ajustar volumen"
+    },
+    "agentPanel": {
+      "open": "Pregunta al Jardín",
+      "openAria": "Abrir el asistente de Motion Garden",
+      "close": "Cerrar el asistente",
+      "kicker": "Web agéntica abierta · se ejecuta en tu navegador",
+      "title": "Guía del Jardín",
+      "expand": "Abrir a página completa",
+      "loading": "Cargando el asistente…",
+      "failed": "No se pudo cargar el asistente. Puedes seguir usando la página directamente.",
+      "setupTitle": "Conecta un modelo de IA para empezar",
+      "setupBody": "La Guía del Jardín se ejecuta en tu navegador, con el proveedor de IA que elijas. Lo más rápido es conectar OpenRouter: inicia sesión, aprueba y chatea con un modelo gratuito. O pega una clave de otro proveedor.",
+      "privacy": "Tu clave se queda en este navegador y solo va a ese proveedor. Tus mensajes, y lo que muestra esta página, también van a él. El asistente solo cambia el banco de pruebas, y puedes deshacerlo.",
+      "freeNote": "Tienes {count, plural, one {# pregunta gratis} other {# preguntas gratis}} al día, pagadas por Motion Garden. En el plan gratis tus mensajes pasan por nuestro servidor hasta un modelo de IA gratuito en OpenRouter. No los guardamos. Para hacer más, conecta tu propio modelo de IA en los ajustes de abajo.",
+      "freeSpent": "Ya usaste {count, plural, one {tu pregunta gratis} other {tus # preguntas gratis}} de hoy. Conecta tu propio modelo de IA para seguir.",
+      "startersLabel": "Prueba a preguntar",
+      "starters": {
+        "find": "Busca un fondo animado para un hero oscuro",
+        "tune": "Haz este más lento y tranquilo",
+        "text": "Muéstrame animaciones de texto para un titular",
+        "code": "¿Cómo añado Waves a una app de Next.js?"
+      }
     }
   },
   "catalog": {
@@ -2842,6 +2865,37 @@
       "browseAll": "Explorar todos los componentes",
       "cookbook": "Recetario de Movimiento",
       "home": "Inicio"
+    },
+    "ask": {
+      "eyebrow": "Web agéntica abierta",
+      "title": "Pregunta al Jardín",
+      "lede": "Describe lo que estás construyendo. La Guía del Jardín encuentra componentes para ello, los ajusta en vivo y te da el código. Se ejecuta en tu navegador, con tu propia clave de IA.",
+      "abilitiesTitle": "Qué puede hacer",
+      "abilities": {
+        "find": {
+          "title": "Encontrar",
+          "body": "componentes por aspecto, sensación o uso, en todo el catálogo."
+        },
+        "explain": {
+          "title": "Explicar",
+          "body": "cada control, con su rango y su valor por defecto."
+        },
+        "tune": {
+          "title": "Ajustar",
+          "body": "un componente en vivo en su página. Cada cambio se puede deshacer."
+        },
+        "code": {
+          "title": "Entregar",
+          "body": "el comando de instalación, los archivos y los pasos para tu stack."
+        }
+      },
+      "peerTitle": "Llámalo desde tu sitio",
+      "peerBody": "Motion Garden es un sitio web agéntico abierto. El agente de otro sitio puede añadir esta red como herramienta y pedirle componentes cuando su visitante lo acepte. Se ejecuta en el navegador de ese visitante, con su clave.",
+      "networkLabel": "URL de la red",
+      "manifestLabel": "Manifiesto",
+      "copy": "Copiar {label}",
+      "privacyTitle": "Privacidad",
+      "privacyBody": "Motion Garden no usa ningún servidor para el chat. Tus mensajes van desde este navegador directamente al proveedor de IA que elijas, y tu clave no se envía a ningún otro sitio."
     }
   },
   "commands": {
