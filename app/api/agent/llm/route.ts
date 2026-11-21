@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { FREE_TIER, questionsLeft } from "@/lib/agent/free-tier";
 import {
 	FREE_MODEL,
@@ -19,6 +20,11 @@ function answer(body: unknown): Response {
 }
 
 export async function GET(request: Request): Promise<Response> {
+	// The answer is per visitor and per moment. Without this, a build that has no
+	// key returns before it reads the request, Cache Components sees a route with
+	// nothing dynamic in it, and prerenders one answer for everyone (it showed as
+	// a static route in `next build`).
+	await connection();
 	const key = freeTierKey();
 	if (!key) return answer({ available: false });
 	const day = today();
