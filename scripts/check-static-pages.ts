@@ -11,11 +11,13 @@
 //
 // To fix a failure, move the read into a "use cache" function, as
 // lib/registry/cached.ts does for the component page.
+//
+// It also fails when a prebuilt page revalidates by time (see the end).
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-type Route = { routeType?: string; compute?: string };
+type Route = { routeType?: string; compute?: string; initialRevalidateSeconds?: number | false };
 
 const file = path.join(process.cwd(), ".next", "prerender-manifest.json");
 if (!existsSync(file)) {
@@ -50,4 +52,17 @@ if (open.length > 0) {
 	process.exit(1);
 }
 
-console.log(`check:static: ${pages.length} prebuilt pages, all served as files`);
+// A page that revalidates by time is still a file, but Netlify's runtime treats
+// its prefetch data as stale and will not store it: every prefetch of the page
+// runs a function (measured with `cacheLife("max")` on the component pages). A
+// cached read that cannot change inside a deploy should never revalidate:
+// `cacheLife({ revalidate: Infinity, expire: Infinity })`.
+const timed = pages.filter(([, route]) => typeof route.initialRevalidateSeconds === "number").map(([name]) => name);
+if (timed.length > 0) {
+	console.error(
+		`check:static: ${timed.length} of ${pages.length} prebuilt pages revalidate by time, so their prefetch data is not stored (first: ${timed[0]}).`,
+	);
+	process.exit(1);
+}
+
+console.log(`check:static: ${pages.length} prebuilt pages, all served as files that never revalidate`);

@@ -591,7 +591,10 @@ check("the component page reads its files through cached readers, so it is built
 	}
 	const cached = readFileSync(fileURLToPath(new URL("../../lib/registry/cached.ts", import.meta.url)), "utf8");
 	assert.equal(cached.match(/^	"use cache";$/gm)?.length, 2);
-	assert.equal(cached.match(/^	cacheLife\("max"\);$/gm)?.length, 2);
+	// Never rebuilt by time: a finite lifetime makes Netlify refuse to store the
+	// page's prefetch data, which is a function call per prefetch.
+	assert.equal(cached.match(/^	cacheLife\(UNTIL_NEXT_DEPLOY\);$/gm)?.length, 2);
+	assert.ok(cached.includes("const UNTIL_NEXT_DEPLOY = { revalidate: Infinity, expire: Infinity } as const;"));
 });
 
 await checkAsync("a component's view is reported once per browser, and again only if the report failed", async () => {
