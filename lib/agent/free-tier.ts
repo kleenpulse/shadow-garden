@@ -116,16 +116,6 @@ export function agentPrompts(
 
 type Message = { role?: unknown; content?: unknown; [key: string]: unknown };
 
-function textOf(content: unknown): string {
-	if (typeof content === "string") return content;
-	if (Array.isArray(content)) {
-		return content
-			.map((part) => (part && typeof part === "object" && typeof (part as { text?: unknown }).text === "string" ? (part as { text: string }).text : ""))
-			.join("\n");
-	}
-	return "";
-}
-
 function toolName(tool: unknown): string | null {
 	if (!tool || typeof tool !== "object") return null;
 	const { type, function: fn } = tool as { type?: unknown; function?: { name?: unknown } };
@@ -170,7 +160,11 @@ export function checkFreeRequest(body: unknown, prompts: AgentPrompts): FreeRequ
 
 	// The system message must be one of this site's agents, whole and alone: text
 	// added before or after it, or a second system message, is someone else's prompt.
-	const system = list[0].role === "system" ? normalize(textOf(list[0].content)) : "";
+	// It must also be a plain string, as the runtime sends it. The message is
+	// forwarded as given, so a list of content parts could carry an extra part
+	// (an image, an unknown type) past a check that only read the text parts.
+	const first = list[0];
+	const system = first.role === "system" && typeof first.content === "string" ? normalize(first.content) : "";
 	const agent = prompts.all.find((prompt) => prompt.length > 0 && system === prompt);
 	if (!agent || list.slice(1).some((message) => message.role === "system")) return NOT_OURS;
 	for (const tool of Array.isArray(tools) ? tools : []) {
