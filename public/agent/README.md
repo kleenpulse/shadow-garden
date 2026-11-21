@@ -89,16 +89,34 @@ The key sits behind a public URL, so the endpoint narrows every request before i
 for one (`lib/agent/free-tier.ts`, checked by `bun run check:agent`):
 
 - It answers only this site's own pages (the request's Origin must be the host it reached).
-- The system prompt must be one of this network's own agents, read from
-  `motion_garden.network.json`. Any other prompt is refused, so the endpoint is no use as
-  a general model proxy.
+- The system message must be exactly what the runtime sends for one of this network's
+  two agents: the instructions from `motion_garden.network.json`, then the runtime's own
+  context. Text added before or after it, or a second system message, is refused.
+- It carries only this site's own tools: the network's agents, the `website_*` actions
+  in the manifest and the runtime's `render_cruse`.
+- It ends in the visitor's message or a tool result, as the runtime's requests do.
 - The server picks the model and caps the output. The caller's model and options are
   dropped. It runs free models only: `openrouter/free` by default, or the id in
   `AGENT_FREE_MODEL` when that ends in `:free`. A paid id there is ignored, so the key can
   never be billed through this endpoint.
-- It counts per visitor and site-wide, per UTC day: 2 questions and 40 model calls a
-  visitor, 300 questions and 4,000 calls across the site. One question takes several model
-  calls. A call that the model never answers is not counted.
+- It counts per visitor and site-wide, per UTC day: 2 questions a visitor, 300 across
+  the site, and 4,000 model calls site-wide. One question takes several model calls (a
+  tool round trip, the helper agent), so each counted question allows up to 16. A call
+  that is not itself a question runs only against a question already counted, so nothing
+  runs before a question is spent or after the day's questions are used up. A call that
+  the model never answers is taken back off the count.
+
+The runtime's context is not retyped: `bun run gen:agent` reads it from
+`public/agent/runtime` into `lib/agent/runtime-context.json`, and `bun run check:agent`
+fails when that file is out of step. After updating the vendored runtime, run
+`bun run gen:agent`; until then the endpoint would refuse every request.
+
+What this does not stop: a caller can type anything in the user message, as a visitor can
+in the chat, and a model may follow it. The system message bounds what the model is told
+to be; the daily limits bound how much anyone gets; free models only means the key is
+never billed. Off Netlify the first `X-Forwarded-For` entry is the client's own word, so
+there the per-visitor limits can be dodged and only the site-wide ones hold. On Netlify
+the address comes from `x-nf-client-connection-ip`, which Netlify sets itself.
 
 The count is kept in Postgres (`agent_usage`, `lib/agent/free-tier-server.ts`) under a
 SHA-256 of the day, the visitor's IP address (IPv6 cut to its /64) and a server secret.

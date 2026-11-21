@@ -16,17 +16,23 @@ import {
 // <router>/chat/completions like any provider.
 //
 // The key sits behind a public URL, so every request is narrowed before it is
-// paid for (lib/agent/free-tier.ts): this site's own pages only, this site's
-// own agents only, the server's model and output cap, and a daily count per
-// visitor and site-wide. A visitor who brings a key never comes through here:
-// their browser calls their provider directly.
+// paid for (lib/agent/free-tier.ts): this site's own pages only, the exact
+// system message and tools of this site's own agents, a free model and an
+// output cap chosen here, and a daily count per visitor and site-wide in which
+// no model call runs before a question is counted. A visitor who brings a key
+// never comes through here: their browser calls their provider directly.
 //
 // The runtime shows the first 300 characters of an error body after
 // "LLM HTTP <status>:", so every refusal is one plain sentence.
 
 const UNAVAILABLE = "The free assistant is not available right now. Open AI model settings below and connect your own AI model.";
 const BUSY = "The free assistant could not answer just now. Try again in a moment, or open AI model settings below and connect your own AI model.";
-const LIMIT = `You have used today's ${FREE_TIER.questionsPerVisitor} free questions. To keep going, open AI model settings below and connect your own AI model.`;
+const OWN_MODEL = "open AI model settings below and connect your own AI model.";
+const LIMITS = {
+	visitor: `You have used today's ${FREE_TIER.questionsPerVisitor} free questions. To keep going, ${OWN_MODEL}`,
+	site: `Today's free questions for all visitors are used up. To keep going, ${OWN_MODEL}`,
+	steps: `This question took more steps than the free assistant allows. To go further, ${OWN_MODEL}`,
+};
 
 function plain(status: number, text: string): Response {
 	return new Response(text, {
@@ -42,6 +48,10 @@ export async function POST(request: Request): Promise<Response> {
 		return plain(403, "The free assistant answers only on the Motion Garden site.");
 	}
 
+	// A declared size over the limit is refused before the body is read at all.
+	if (Number(request.headers.get("content-length")) > FREE_TIER.maxBodyChars * 4) {
+		return plain(413, "This chat is too long for the free assistant. Start a new chat.");
+	}
 	const raw = await request.text();
 	if (raw.length > FREE_TIER.maxBodyChars) {
 		return plain(413, "This chat is too long for the free assistant. Start a new chat.");
@@ -59,7 +69,7 @@ export async function POST(request: Request): Promise<Response> {
 	const visitor = visitorId(request.headers, day, key);
 	const counted = await countCall(visitor, day, checked.question);
 	if (counted === "unavailable") return plain(503, UNAVAILABLE);
-	if (counted === "limit") return plain(429, LIMIT);
+	if (counted !== "ok") return plain(429, LIMITS[counted]);
 
 	let upstream: Response;
 	try {

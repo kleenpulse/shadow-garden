@@ -5,11 +5,13 @@ import { getDb } from "@/lib/db";
 import { agentUsage } from "@/lib/db/schema";
 import manifest from "@/public/agent/agent-manifest.json";
 import network from "@/public/agent/motion_garden.network.json";
+import runtimeContext from "./runtime-context.json";
 import {
 	addressKey,
 	agentPrompts,
 	freeModel,
-	withinLimits,
+	limitHit,
+	type LimitHit,
 	type UsageRow,
 } from "./free-tier";
 
@@ -23,8 +25,17 @@ import {
  */
 export const FREE_MODEL = freeModel(process.env.AGENT_FREE_MODEL);
 
-/** The site's own agents, as the published network file states them. */
-export const PROMPTS = agentPrompts(network, manifest.networks[0].front_man);
+/**
+ * The site's own agents, exactly as the browser runtime sends them: the published
+ * network file, the runtime's context (scripts/agent/gen-runtime-context.ts) and
+ * the site actions the manifest offers as tools.
+ */
+export const PROMPTS = agentPrompts(
+	network,
+	manifest.networks[0].front_man,
+	runtimeContext,
+	manifest.actions.agentTools,
+);
 
 /** The site's OpenRouter key, or null when the free tier is not set up. */
 export function freeTierKey(): string | null {
@@ -103,7 +114,7 @@ export async function countCall(
 	visitor: string,
 	day: string,
 	question: boolean,
-): Promise<"ok" | "limit" | "unavailable"> {
+): Promise<"ok" | "unavailable" | LimitHit> {
 	const db = getDb();
 	if (!db) return "unavailable";
 	const questions = question ? 1 : 0;
@@ -129,9 +140,10 @@ export async function countCall(
 			const cutoff = new Date(Date.now() - 7 * 86_400_000).toISOString().slice(0, 10);
 			await db.delete(agentUsage).where(lt(agentUsage.day, cutoff));
 		}
-		if (withinLimits(mine, site)) return "ok";
+		const hit = limitHit(mine, site);
+		if (!hit) return "ok";
 		await refundCall(visitor, day, question);
-		return "limit";
+		return hit;
 	} catch {
 		return "unavailable";
 	}
