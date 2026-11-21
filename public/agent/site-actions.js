@@ -45,6 +45,7 @@ class SiteActions {
     actions.register(GardenData.searchAction());
     actions.register(GardenData.describeAction());
     actions.register(GardenData.codeAction());
+    actions.register(GardenData.fileAction());
     actions.register(SiteActions.openAction());
     actions.register(SiteActions.setAction());
     actions.register(SiteActions.resetAction());

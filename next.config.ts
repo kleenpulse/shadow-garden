@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
+const AGENT_SOURCE_TRACE = [
+	"./components/registry/**/*",
+	"./hooks/**/*",
+	"./lib/utils.ts",
+	"./prompts/**/*",
+];
+
 const nextConfig: NextConfig = {
 	// Cache Components: dynamic-by-default + `use cache`, PPR is the default render.
 	// The Pro source read is the one dynamic hole streamed into an otherwise-static shell.
@@ -22,14 +29,22 @@ const nextConfig: NextConfig = {
 	outputFileTracingIncludes: {
 		"/components/*": ["./components/registry/**/*", "./hooks/**/*"],
 		"/templates/*": ["./components/registry/**/*", "./hooks/**/*"],
-		// The browser agent's brief endpoint reads the same sources (plus the
-		// prompts/ overlays) through getPrompt.
-		"/api/agent/component/*": [
-			"./components/registry/**/*",
-			"./hooks/**/*",
-			"./lib/utils.ts",
-			"./prompts/**/*",
-		],
+		// The agent endpoints read the same sources (plus the prompts/ overlays)
+		// through getPrompt: the JSON route, and the Markdown brief one segment down.
+		"/api/agent/component/*": AGENT_SOURCE_TRACE,
+		"/api/agent/component/*/md": AGENT_SOURCE_TRACE,
+	},
+	// /components/<slug>.md is the page's integration brief as Markdown, the URL
+	// shape the llms.txt convention gives a page's Markdown twin. Coding agents
+	// fetch it; the page names it in a <link rel="alternate">. The handler is
+	// app/api/agent/component/[slug]/md/route.ts.
+	async rewrites() {
+		return [
+			{
+				source: "/components/:slug([a-z0-9-]+)\\.md",
+				destination: "/api/agent/component/:slug/md",
+			},
+		];
 	},
 	// Open agentic web bundle (public/agent, see public/agent/README.md). Other
 	// agent sites fetch these public files cross-origin, and the coded-tool

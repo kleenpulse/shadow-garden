@@ -61,7 +61,9 @@ export async function generateMetadata({
 		// The workspace writes tuned prop values into the URL via nuqs, so every
 		// shared "here's how I set it" link is a distinct crawlable URL. This is what
 		// collapses them back onto one page.
-		alternates: { canonical: url },
+		// The Markdown twin is the agent brief (next.config.ts rewrites it to
+		// app/api/agent/component/[slug]), so an agent on this page can find it.
+		alternates: { canonical: url, types: { "text/markdown": `${url}.md` } },
 		openGraph: { title, description, url, type: "article" },
 		twitter: { card: "summary_large_image", title, description },
 	};

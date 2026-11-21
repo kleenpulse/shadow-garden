@@ -19,14 +19,15 @@ The network has two agents:
 | `garden_guide` (front) | Finds components, explains their controls, opens them and tunes the live preview. |
 | `integration_helper` | Reads one component's full integration brief and returns the install command, files, code and the steps for the visitor's stack. It exists so the long brief stays out of the guide's context on every other turn. |
 
-They act through seven site actions. The model sees each as `website_<name>`:
+They act through eight site actions. The model sees each as `website_<name>`:
 
 | Action | Effect | What it wraps |
 | --- | --- | --- |
 | `get_bench_state` | read | The open component and each control's live value, default and range (`lib/agent/bench-bridge.ts`) |
 | `search_components` | read | `GET /api/agent/search` (`lib/agent/search.ts`) |
 | `describe_component` | read | `GET /api/agent/component/[slug]` (`lib/agent/describe.ts`) |
-| `get_component_code` | read | `GET /api/agent/component/[slug]?brief=1`, the same brief as the page's **Copy for Agent** button (`lib/registry/prompt.ts`) |
+| `get_component_code` | read | `GET /api/agent/component/[slug]?brief=1&max=30000`, the same brief as the page's **Copy for Agent** button (`lib/registry/prompt.ts`). A longer brief is left out, and the answer lists the files and the Markdown link instead |
+| `get_component_file` | read | `GET /api/agent/component/[slug]?file=<path>`, one shipped file with comments stripped, in parts of up to 28,000 characters (`lib/agent/files.ts`) |
 | `open_component` | write | Client-side navigation to `/components/<slug>`, with optional starting values |
 | `set_controls` | write | The bench's own nuqs setter (`useTunedProps().setMany`), after checking every value against the component's `PropSchema` |
 | `reset_controls` | write | The bench's own reset |
@@ -41,10 +42,20 @@ project.
 A site that lists the network URL in an agent's `tools`, and `https://motion-garden.netlify.app`
 in its `allowed_peers`, can ask Motion Garden after its visitor agrees on a consent card.
 The network then runs in that visitor's browser, on their key. Through
-`bridge/bridge-actions.js` it shares three reads with every origin (`"*"`), because they
+`bridge/bridge-actions.js` it shares four reads with every origin (`"*"`), because they
 return only public, MIT-licensed catalog facts: `search_components`,
-`describe_component` and `get_component_code`. The bench actions stay on Motion Garden's
-own page.
+`describe_component`, `get_component_code` and `get_component_file`. The bench actions
+stay on Motion Garden's own page.
+
+## What any agent gets, without the network
+
+The same reads are plain HTTP, open to any origin and listed in `/llms.txt`:
+
+- `/components/<slug>.md` is the whole integration brief as `text/markdown`, whatever its
+  size (`app/api/agent/component/[slug]/md/route.ts`, through a rewrite in
+  `next.config.ts`). Each component page names it in a `<link rel="alternate">`.
+- `/api/agent/search` and `/api/agent/component/<slug>` answer in JSON. `robots.ts`
+  allows `/api/agent/` and keeps the rest of `/api/` closed.
 
 ## Files
 
@@ -101,5 +112,11 @@ send `X-Frame-Options` or `frame-ancestors`, since callers load it in a hidden f
 - Every agent can see every `website_*` tool. Instructions scope them.
 - The LLM provider must allow browser (CORS) requests. Hosted Otari, OpenRouter, OpenAI
   and Anthropic do.
-- Briefs over 30,000 characters (most landing-page templates) are not sent through
-  the chat. The assistant points to the page's **Copy for Agent** button instead.
+- Briefs over 30,000 characters (40 of 163 entries on 2026-11-21, 31 of them not
+  templates) are not sent through the chat whole. The assistant gives the install command, the file list and the
+  `/components/<slug>.md` link for the visitor's coding agent, and reads single files with
+  `get_component_file`.
+- `motion_garden.hocon` still tells `integration_helper` to "return its reason and the
+  page link" when a brief is not included. The tool descriptions and the endpoint's
+  reason now carry the fuller guidance; update that line the next time the network is
+  rebuilt.

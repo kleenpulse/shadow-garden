@@ -18,6 +18,8 @@ export function describeEntry(entry: ComponentEntry, absolute: (path: string) =>
 		description: entry.description,
 		page: absolute(path),
 		path,
+		// The whole integration brief as Markdown, for a coding agent to fetch.
+		markdown: absolute(`${path}.md`),
 		controls: controlViews(entry.props),
 		dependencies: entry.dependencies ?? [],
 		install: Object.fromEntries(PKG_MANAGERS.map((pm) => [pm, installCommand(pm, entry)])),

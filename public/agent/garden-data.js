@@ -14,6 +14,10 @@ export const CATEGORIES = [
 
 const SLUG_MAX = 80;
 
+// A tool result is capped at 64 KB by the runtime, and the visitor's model pays
+// for every byte. The endpoint leaves a longer brief out and lists its files.
+const BRIEF_MAX = 30_000;
+
 /**
  * Read one endpoint. A refusal from the site (a JSON body with ok false) comes
  * back as data, so the agent gets the site's reason. Anything else that fails
@@ -82,7 +86,7 @@ export class GardenData {
     return {
       name: "get_component_code",
       description:
-        "Get a component's full integration brief: every source file with comments stripped, the install command, the props table, usage and integration rules. It is the same text as the page's Copy for Agent button, and it is long, so call it only when the visitor asks for the code or how to add the component to their project. When briefIncluded is false, give the reason and the page link instead.",
+        "Get a component's full integration brief: every source file with comments stripped, the install command, the props table, usage and integration rules. It is the same text as the page's Copy for Agent button, and it is long, so call it only when the visitor asks for the code or how to add the component to their project. When briefIncluded is false the brief is too large for a chat: give the install command, the list of files and the markdown link, which the visitor's coding agent can read the whole brief from, and offer to show any one file with website_get_component_file.",
       effect: "read",
       inputSchema: {
         type: "object",
@@ -92,7 +96,28 @@ export class GardenData {
           slug: { type: "string", minLength: 1, maxLength: SLUG_MAX, description: "A slug from website_search_components." },
         },
       },
-      execute: (args) => readJson(`/api/agent/component/${encodeURIComponent(args.slug)}`, { brief: 1 }),
+      execute: (args) => readJson(`/api/agent/component/${encodeURIComponent(args.slug)}`, { brief: 1, max: BRIEF_MAX }),
+      ...extra,
+    };
+  }
+
+  static fileAction(extra) {
+    return {
+      name: "get_component_file",
+      description:
+        "Read one source file of a component, comments stripped, exactly as its page's Code tab shows it. Changes nothing. Call it when the visitor asks to see or asks about one file, or after website_get_component_code answers briefIncluded false. Take the path from the files list of website_describe_component or website_get_component_code, and never guess one. A long file comes in parts: the result gives part and parts, so call again with the next part number for the rest.",
+      effect: "read",
+      inputSchema: {
+        type: "object",
+        additionalProperties: false,
+        required: ["slug", "file"],
+        properties: {
+          slug: { type: "string", minLength: 1, maxLength: SLUG_MAX, description: "A slug from website_search_components." },
+          file: { type: "string", minLength: 1, maxLength: 200, description: "The file's path, exactly as the files list gives it." },
+          part: { type: "integer", minimum: 1, maximum: 20, description: "Which part of a long file, default 1." },
+        },
+      },
+      execute: (args) => readJson(`/api/agent/component/${encodeURIComponent(args.slug)}`, { file: args.file, part: args.part }),
       ...extra,
     };
   }

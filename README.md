@@ -9,7 +9,7 @@ Every component ships with a live preview, a Controls panel that tunes each prop
 
 Live at **[motion-garden.netlify.app](https://motion-garden.netlify.app)**. Free and open source under MIT: every component's source, props and agent brief are open to everyone.
 
-Agents can start at [`/llms.txt`](https://motion-garden.netlify.app/llms.txt): a registry-generated index of every component, its page and its prop count, following the [llms.txt](https://llmstxt.org) convention.
+Agents can start at [`/llms.txt`](https://motion-garden.netlify.app/llms.txt): a registry-generated index of every component, its page and its prop count, following the [llms.txt](https://llmstxt.org) convention. It also lists the JSON endpoints under `/api/agent/` that search the catalog, describe a component and return its integration brief. Add `.md` to any component URL (for example [`/components/waves.md`](https://motion-garden.netlify.app/components/waves.md)) to get that brief as Markdown.
 
 ## Open agentic website
 

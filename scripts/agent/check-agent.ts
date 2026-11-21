@@ -11,6 +11,7 @@ import type { ComponentEntry, PropSchema } from "../../lib/registry/types";
 import { applyChanges, controlViews, queryFor } from "../../lib/agent/controls";
 import { searchEntries } from "../../lib/agent/search";
 import { describeEntry } from "../../lib/agent/describe";
+import { PART_LIMIT, splitParts } from "../../lib/agent/files";
 
 let passed = 0;
 function check(name: string, fn: () => void) {
@@ -169,6 +170,46 @@ check("describeEntry exposes controls, deps, install and files from the registry
 	assert.equal(Object.keys(described.install).length, 4);
 });
 
+check("describeEntry links the brief's Markdown twin", () => {
+	const entry = getEntry("magnetic-button")!;
+	const described = describeEntry(entry, (p) => `https://example.test${p}`);
+	assert.equal(described.markdown, "https://example.test/components/magnetic-button.md");
+});
+
+// --- files -----------------------------------------------------------------
+
+check("splitParts cuts on line ends, keeps every byte and respects the limit", () => {
+	assert.deepEqual(splitParts("short\n", 100), ["short\n"]);
+	const text = Array.from({ length: 40 }, (_, i) => `line ${i} ${"x".repeat(20)}\n`).join("");
+	const parts = splitParts(text, 200);
+	assert.ok(parts.length > 1);
+	assert.equal(parts.join(""), text);
+	for (const part of parts) {
+		assert.ok(part.length <= 200, `part of ${part.length}`);
+		assert.ok(part.endsWith("\n"), "a part ends where a line ends");
+	}
+});
+
+check("splitParts cuts a line longer than the limit, losing nothing", () => {
+	const text = `head\n${"y".repeat(950)}\ntail\n`;
+	const parts = splitParts(text, 300);
+	assert.equal(parts.join(""), text);
+	assert.ok(parts.every((part) => part.length <= 300));
+});
+
+check("every shipped file fits the file action's part range", () => {
+	// site-actions' get_component_file accepts part 1 to 20. The file on disk still
+	// has its comments, so it is never shorter than what the endpoint serves.
+	const repo = fileURLToPath(new URL("../../", import.meta.url));
+	for (const entry of registry) {
+		for (const variant of entry.variants) {
+			const parts = splitParts(readFileSync(path.join(repo, variant.file), "utf8"));
+			assert.ok(parts.length <= 20, `${variant.file}: ${parts.length} parts`);
+			assert.ok(parts.every((part) => part.length <= PART_LIMIT));
+		}
+	}
+});
+
 check("manifest, network and sample queries agree", () => {
 	const root = fileURLToPath(new URL("../../public/agent/", import.meta.url));
 	const manifest = JSON.parse(readFileSync(path.join(root, "agent-manifest.json"), "utf8"));
@@ -178,6 +219,17 @@ check("manifest, network and sample queries agree", () => {
 	for (const query of network.sample_queries) assert.ok(hocon.includes(JSON.stringify(query)), query);
 	const actions = readFileSync(path.join(root, "site-actions.js"), "utf8") + readFileSync(path.join(root, "garden-data.js"), "utf8");
 	for (const tool of manifest.actions.agentTools) assert.ok(actions.includes(`name: "${tool}"`), tool);
+	// Every catalog read in garden-data.js is registered on the page and shared
+	// through the bridge; a read left out of either is a tool that silently fails.
+	const data = readFileSync(path.join(root, "garden-data.js"), "utf8");
+	const page = readFileSync(path.join(root, "site-actions.js"), "utf8");
+	const bridge = readFileSync(path.join(root, "bridge", "bridge-actions.js"), "utf8");
+	const reads = [...data.matchAll(/static (\w+Action)\(/g)].map((match) => match[1]);
+	assert.ok(reads.length >= 4, "garden-data.js declares its reads");
+	for (const read of reads) {
+		assert.ok(page.includes(`GardenData.${read}(`), `site-actions.js registers ${read}`);
+		assert.ok(bridge.includes(`GardenData.${read}(`), `bridge-actions.js shares ${read}`);
+	}
 });
 
 console.log(`check:agent: ${passed} checks passed`);

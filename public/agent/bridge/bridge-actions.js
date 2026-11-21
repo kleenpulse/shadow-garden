@@ -4,7 +4,7 @@
 // frame on Motion Garden's origin, which has no page. Only the names in the
 // manifest's "actions.agentTools" reach a partner's agents.
 //
-// All three are reads of public catalog facts (MIT source, the same text every
+// All four are reads of public catalog facts (MIT source, the same text every
 // component page shows), so they are shared with every origin. Nothing here reads
 // or changes a visitor's bench: those actions stay on Motion Garden's own page.
 import { GardenData } from "../garden-data.js";
@@ -16,6 +16,7 @@ class BridgeActions {
     actions.register(GardenData.searchAction(SHARED));
     actions.register(GardenData.describeAction(SHARED));
     actions.register(GardenData.codeAction(SHARED));
+    actions.register(GardenData.fileAction(SHARED));
   }
 }
 

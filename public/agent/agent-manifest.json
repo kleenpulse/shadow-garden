@@ -78,6 +78,7 @@
       "search_components",
       "describe_component",
       "get_component_code",
+      "get_component_file",
       "open_component",
       "set_controls",
       "reset_controls"
