@@ -178,6 +178,28 @@ check("describeEntry links the brief's Markdown twin", () => {
 	assert.equal(described.markdown, "https://example.test/components/magnetic-button.md");
 });
 
+check("describeEntry gives the shadcn install to components, not to templates", () => {
+	const absolute = (p: string) => `https://example.test${p}`;
+	const component = describeEntry(getEntry("magnetic-button")!, absolute);
+	assert.equal(component.shadcn?.bun, "bunx shadcn@latest add https://example.test/r/magnetic-button.json");
+	assert.equal(Object.keys(component.shadcn ?? {}).length, 4);
+	const template = registry.find((entry) => entry.kind === "template");
+	if (template) assert.equal("shadcn" in describeEntry(template, absolute), false);
+});
+
+check("the network's rules match what the site can do", () => {
+	// The assistant only states what a tool result gives it, so a rule that says
+	// "no CLI install" would hide the shadcn command the endpoints now return.
+	const root = fileURLToPath(new URL("../../public/agent/", import.meta.url));
+	const hocon = readFileSync(path.join(root, "motion_garden.hocon"), "utf8");
+	const network = readFileSync(path.join(root, "motion_garden.network.json"), "utf8");
+	for (const text of [hocon, network]) {
+		assert.ok(!text.includes("install components through a CLI"), "stale no-CLI rule");
+		assert.ok(text.includes("shadcn command"), "names the shadcn command");
+		assert.ok(text.includes("website_get_component_file"), "names the file action");
+	}
+});
+
 // --- files -----------------------------------------------------------------
 
 check("splitParts cuts on line ends, keeps every byte and respects the limit", () => {

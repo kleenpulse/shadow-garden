@@ -92,6 +92,8 @@ export async function GET(
 
 	const prompt = await getPrompt(entry);
 	if (prompt.status !== "ok") return json(unavailable, 503);
+	// The one-line shadcn install, so an answer about the code can lead with it.
+	const shadcn = described.shadcn ? { shadcn: described.shadcn } : {};
 	const max = Number(params.get("max"));
 	if (Number.isFinite(max) && max > 0 && prompt.text.length > max) {
 		const source = await getSource(entry);
@@ -112,6 +114,7 @@ export async function GET(
 			page: described.page,
 			markdown: described.markdown,
 			install: described.install,
+			...shadcn,
 			files,
 			briefIncluded: false,
 			reason: `The integration brief is ${size} characters, over the ${max.toLocaleString("en-US")} asked for. The whole brief is at the markdown link, and the page's "Copy for Agent" button copies the same text. Each file can also be read on its own.`,
@@ -123,6 +126,7 @@ export async function GET(
 		name: entry.name,
 		page: described.page,
 		markdown: described.markdown,
+		...shadcn,
 		briefIncluded: true,
 		brief: prompt.text,
 	});

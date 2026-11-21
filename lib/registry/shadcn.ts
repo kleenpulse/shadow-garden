@@ -22,6 +22,7 @@ import {
 	usesTokens,
 	type CssRule,
 } from "./bench-tokens";
+import { PKG_MANAGERS, type PkgManager } from "./install";
 import type { ComponentEntry } from "./types";
 
 /** The namespace a project gives this registry in its components.json. */
@@ -89,6 +90,24 @@ export function shadcnFile(file: string): ShadcnFile | null {
 		};
 	}
 	throw new Error(`shadcn registry: no target rule for "${file}"`);
+}
+
+const RUNNER: Record<PkgManager, string> = {
+	bun: "bunx",
+	npm: "npx",
+	pnpm: "pnpm dlx",
+	yarn: "yarn dlx",
+};
+
+/** The one-line install for each package manager, pointing at the entry's item URL. */
+export function shadcnAddCommands(
+	entry: ComponentEntry,
+	absolute: (path: string) => string,
+): Record<PkgManager, string> {
+	const url = absolute(`/r/${entry.slug}.json`);
+	return Object.fromEntries(
+		PKG_MANAGERS.map((pm) => [pm, `${RUNNER[pm]} shadcn@latest add ${url}`]),
+	) as Record<PkgManager, string>;
 }
 
 function categorySlug(category: string): string {

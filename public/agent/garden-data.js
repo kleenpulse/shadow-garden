@@ -67,7 +67,7 @@ export class GardenData {
     return {
       name: "describe_component",
       description:
-        "Read one component's controls (name, kind, default, range or options), npm dependencies, install commands, shipped files and page link. Changes nothing. Call it with a slug from website_search_components before saying how a component is tuned or installed.",
+        "Read one component's controls (name, kind, default, range or options), npm dependencies, install commands, the one-line shadcn install, shipped files and page link. Changes nothing. Call it with a slug from website_search_components before saying how a component is tuned or installed.",
       effect: "read",
       inputSchema: {
         type: "object",

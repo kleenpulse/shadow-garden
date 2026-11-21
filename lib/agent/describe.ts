@@ -3,6 +3,7 @@
 // commands and the files that ship. Client-safe (no fs, no server-only).
 
 import { installCommand, PKG_MANAGERS } from "../registry/install";
+import { inShadcnRegistry, shadcnAddCommands } from "../registry/shadcn";
 import type { ComponentEntry } from "../registry/types";
 import { controlViews } from "./controls";
 import { summarize } from "./search";
@@ -23,6 +24,8 @@ export function describeEntry(entry: ComponentEntry, absolute: (path: string) =>
 		controls: controlViews(entry.props),
 		dependencies: entry.dependencies ?? [],
 		install: Object.fromEntries(PKG_MANAGERS.map((pm) => [pm, installCommand(pm, entry)])),
+		// The one-line install through the shadcn CLI (app/r). Templates have none.
+		...(inShadcnRegistry(entry) ? { shadcn: shadcnAddCommands(entry, absolute) } : {}),
 		files: entry.variants.map((variant) => ({
 			file: variant.file,
 			role: variant.role ?? "component",

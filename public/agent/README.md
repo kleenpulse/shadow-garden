@@ -116,11 +116,6 @@ send `X-Frame-Options` or `frame-ancestors`, since callers load it in a hidden f
   templates) are not sent through the chat whole. The assistant gives the install command, the file list and the
   `/components/<slug>.md` link for the visitor's coding agent, and reads single files with
   `get_component_file`.
-- `motion_garden.hocon` still tells `integration_helper` to "return its reason and the
-  page link" when a brief is not included. The tool descriptions and the endpoint's
-  reason now carry the fuller guidance; update that line the next time the network is
-  rebuilt.
-- `motion_garden.hocon` also still says the site cannot install components through a
-  CLI. Since the shadcn registry (`/r/<slug>.json`, `lib/registry/shadcn.ts`) it can:
-  `shadcn add` installs any component. The assistant does not offer it until that line
-  is changed and the network rebuilt.
+- The assistant offers `shadcn add` only for what a tool result gives it: the `shadcn`
+  commands in `describe_component` and `get_component_code` (`lib/registry/shadcn.ts`).
+  Templates have none.
