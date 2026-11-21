@@ -1,0 +1,4 @@
+{
+  "note": "Motion Garden's agent manifest is at /agent/agent-manifest.json. This file is only a pointer.",
+  "manifest": "/agent/agent-manifest.json"
+}

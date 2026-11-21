@@ -109,6 +109,13 @@ file, and the free tier's terms (questions a day, the model's name) are stated b
 page itself when it is rendered (`lib/agent/free-plan.ts`). The one request that needs a
 function, the visitor's count, waits until they open the chat; see below.
 
+`public/agent-manifest.json`, at the site root, is part of that. On the free tier the
+runtime is handed this site's own endpoint as its router, and before it trusts a router
+it asks that router's origin for `/agent-manifest.json`, to rule out another site's mock
+endpoint. With no file there, the request fell through to the app's 404 page, which is a
+function call on every background start. The file is a pointer to the real manifest in
+this folder and declares no router, so the runtime's check passes as it did on the 404.
+
 ## Free tier
 
 A visitor who has not connected an AI model gets two free questions a day, paid for by

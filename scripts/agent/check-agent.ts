@@ -38,6 +38,7 @@ function check(name: string, fn: () => void) {
 		throw error;
 	}
 }
+}
 
 function entryWith(kind: PropSchema["kind"]): { entry: ComponentEntry; prop: PropSchema } {
 	for (const entry of registry) {
@@ -555,6 +556,19 @@ check("a page view costs no function call: the count is asked for only when the 
 	const start = site.slice(site.indexOf("static async start()"), site.indexOf("static FREE_KEY"));
 	assert.ok(!/\bfetch\(/.test(start), "boot makes no request of its own");
 	assert.ok(!/await AssistantMount\.readCount\(/.test(start), "boot does not wait on the count");
+});
+
+check("the site root answers the runtime's router check with a file, not the app's 404", () => {
+	// runtime/engine.js asks <router origin>/agent-manifest.json before it trusts a
+	// router, and the free tier's router is this site. Without the file that is one
+	// function call per background start.
+	const root = fileURLToPath(new URL("../../public/agent-manifest.json", import.meta.url));
+	const pointer = JSON.parse(readFileSync(root, "utf8"));
+	// It must not read as a published mock router, or the runtime drops the free tier.
+	assert.equal(pointer.llm_router, undefined);
+	assert.equal(pointer.manifest, "/agent/agent-manifest.json");
+	const engine = readFileSync(path.join(agentDir, "runtime", "engine.js"), "utf8");
+	assert.ok(engine.includes("`${url.origin}/agent-manifest.json`"), "the runtime still asks the origin's root");
 });
 
 check("the panel lowers its own count after an answered question", () => {
