@@ -11,8 +11,7 @@ const ADD: Record<PkgManager, string> = {
   yarn: "yarn add",
 };
 
-/** Build the dependency-install command for a package manager. Pure + client-safe;
- *  gating of whether Pro install blocks are shown happens at the render layer. */
+/** Build the dependency-install command for a package manager. Pure + client-safe. */
 export function installCommand(pm: PkgManager, entry: ComponentEntry): string {
   const deps = entry.dependencies ?? [];
   // "no npm packages", not "no extra dependencies": an entry with zero packages

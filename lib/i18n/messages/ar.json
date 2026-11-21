@@ -175,6 +175,9 @@
     },
     "install": {
       "pkgManagerAria": "مدير الحزم",
+      "methodAria": "طريقة التثبيت",
+      "manual": "يدوي",
+      "shadcnNote": "يحتاج إلى مشروع shadcn فيه ملف components.json. الطريقة اليدوية تعمل في أي مكان.",
       "copy": "نسخ",
       "copied": "تم النسخ",
       "thenCopy": "ثم انسخ {count} ملفات إلى مشروعك:"

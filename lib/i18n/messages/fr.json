@@ -175,6 +175,9 @@
     },
     "install": {
       "pkgManagerAria": "Gestionnaire de paquets",
+      "methodAria": "Méthode d'installation",
+      "manual": "manuel",
+      "shadcnNote": "Nécessite un projet shadcn avec un components.json. Manuel fonctionne partout.",
       "copy": "copier",
       "copied": "copié",
       "thenCopy": "Copiez ensuite {count} fichiers dans votre projet :"

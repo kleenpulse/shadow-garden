@@ -175,6 +175,9 @@
     },
     "install": {
       "pkgManagerAria": "包管理器",
+      "methodAria": "安装方式",
+      "manual": "手动",
+      "shadcnNote": "需要带有 components.json 的 shadcn 项目。手动方式适用于任何项目。",
       "copy": "复制",
       "copied": "已复制",
       "thenCopy": "然后将这 {count} 个文件复制到你的项目中："

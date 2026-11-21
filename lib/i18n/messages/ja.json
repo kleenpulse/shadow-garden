@@ -175,6 +175,9 @@
     },
     "install": {
       "pkgManagerAria": "パッケージマネージャー",
+      "methodAria": "インストール方法",
+      "manual": "手動",
+      "shadcnNote": "components.json がある shadcn プロジェクトが必要です。手動ならどこでも使えます。",
       "copy": "コピー",
       "copied": "コピー済み",
       "thenCopy": "続いて {count} 件のファイルをプロジェクトにコピーしてください:"
