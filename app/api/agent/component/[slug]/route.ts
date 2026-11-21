@@ -27,7 +27,7 @@ const json = (body: unknown, status = 200) => Response.json(body, { status, head
 
 export async function GET(
 	request: NextRequest,
-	ctx: RouteContext<"/api/agent/component/[slug]">,
+	ctx: { params: Promise<{ slug: string }> },
 ): Promise<Response> {
 	const { slug } = await ctx.params;
 	const params = request.nextUrl.searchParams;

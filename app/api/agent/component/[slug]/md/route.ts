@@ -20,7 +20,7 @@ function plain(body: string, status: number): Response {
 
 export async function GET(
 	_request: Request,
-	ctx: RouteContext<"/api/agent/component/[slug]/md">,
+	ctx: { params: Promise<{ slug: string }> },
 ): Promise<Response> {
 	const { slug } = await ctx.params;
 	const entry = getEntry(slug);

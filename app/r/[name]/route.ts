@@ -14,7 +14,7 @@ const CORS = { "Access-Control-Allow-Origin": "*" };
 
 export async function GET(
 	_request: Request,
-	ctx: RouteContext<"/r/[name]">,
+	ctx: { params: Promise<{ name: string }> },
 ): Promise<Response> {
 	const { name } = await ctx.params;
 	const entry = name.endsWith(".json") ? getEntry(name.slice(0, -".json".length)) : undefined;
