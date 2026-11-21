@@ -21,3 +21,9 @@ jobs:
         run: bun run check:registry
       - name: Comment-strip parity
         run: bun run check:strip
+      # The agent surface: the assistant's actions, the shadcn registry and the
+      # free tier's rules. Its first step fails when lib/agent/runtime-context.json
+      # is out of step with the vendored runtime in public/agent/runtime; if that
+      # shipped, the free tier would refuse every request.
+      - name: Agent surface
+        run: bun run check:agent
