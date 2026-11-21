@@ -49,6 +49,13 @@ export class AssistantMount {
           : {}),
       });
       AssistantMount.setFree(free);
+      AssistantMount.onFreeTier = onFreeTier;
+      if (onFreeTier) {
+        // Every finished question changes how many are left. Ask again, so the
+        // count the visitor sees is the server's, not a guess.
+        booted.trace.addEventListener("event", AssistantMount.afterTurn);
+      }
+      AssistantMount.watchErrors();
       AssistantMount.engine = booted.engine;
       AssistantMount.defaultReview = booted.engine.onActionConfirm;
       booted.engine.onActionConfirm = AssistantMount.review;
@@ -135,6 +142,114 @@ export class AssistantMount {
       }
     }
     window.dispatchEvent(new CustomEvent("mg-assistant-free", { detail }));
+  }
+
+  /** True while the chat runs on the site's free tier. */
+  static onFreeTier = false;
+
+  /**
+   * After a question ends, answered or refused, read the free tier's count again.
+   * A failed read keeps the last count.
+   *
+   * :param event: A trace event from the runtime.
+   */
+  static async afterTurn(event) {
+    const detail = event.detail;
+    if (!detail || detail.kind !== "run" || detail.phase !== "end") {
+      return;
+    }
+    const free = await AssistantMount.freeTier();
+    if (free) {
+      AssistantMount.setFree(free);
+    }
+  }
+
+  /**
+   * Work out how a failed turn's message reads in the chat. The runtime shows a
+   * failure as one plain bubble, "⚠️ " and the error's text, which for a model call
+   * is "LLM HTTP <status>: <the provider's words>". This splits it into a short
+   * label and the sentence. It is plain data, so tests can check it.
+   *
+   * :param text: The bubble's text.
+   * :param onFreeTier: Whether the chat runs on the site's free tier.
+   * :return: {label, text, limit}, or null when the text is not a failure. limit
+   *   is true when the free tier refused the question because a limit was reached.
+   */
+  static errorContent(text, onFreeTier) {
+    const marked = /^⚠️?\s*/u.exec(text || "");
+    if (!marked || !marked[0]) {
+      return null;
+    }
+    const message = text.slice(marked[0].length).trim();
+    const http = /^LLM HTTP (\d{3}):?\s*([\s\S]*)$/.exec(message);
+    if (!http) {
+      return { label: "Error", text: message, limit: false };
+    }
+    const limit = onFreeTier && http[1] === "429";
+    return {
+      label: limit ? "Free limit reached" : `LLM error · HTTP ${http[1]}`,
+      text: http[2] || "The AI model did not answer.",
+      limit: limit,
+    };
+  }
+
+  /**
+   * Give each failure bubble the look of the header's error badge: a tinted card
+   * with a label and the sentence under it. The runtime adds the bubble; this
+   * only dresses it.
+   */
+  static watchErrors() {
+    const list = document.querySelector("#ns-msgs");
+    if (!list) {
+      return;
+    }
+    const observer = new MutationObserver((records) => {
+      for (const record of records) {
+        for (const node of record.addedNodes) {
+          AssistantMount.dressError(node);
+        }
+      }
+    });
+    observer.observe(list, { childList: true });
+  }
+
+  /**
+   * Dress one new chat bubble when it reports a failure.
+   *
+   * :param node: A node the runtime added to the message list.
+   */
+  static dressError(node) {
+    if (node.nodeType !== 1 || !node.matches(".ns-msg.bot") || node.childElementCount) {
+      return;
+    }
+    const content = AssistantMount.errorContent(node.textContent, AssistantMount.onFreeTier);
+    if (!content) {
+      return;
+    }
+    const label = document.createElement("span");
+    label.className = "mg-error-label";
+    label.textContent = content.label;
+    const sentence = document.createElement("span");
+    sentence.className = "mg-error-text";
+    sentence.textContent = content.text;
+    node.classList.add("mg-error");
+    node.setAttribute("role", "alert");
+    node.replaceChildren(label, sentence);
+    // The card is one line taller than the bubble the runtime scrolled to.
+    const list = node.parentElement;
+    if (list) {
+      list.scrollTop = list.scrollHeight;
+    }
+    if (content.limit) {
+      // The runtime's badge now says "LLM error, not verified". The model is fine;
+      // the day's free questions are used.
+      const badge = document.querySelector("#agent-app .ns-llmbadge");
+      if (badge) {
+        badge.className = "ns-llmbadge error";
+        badge.textContent = content.label;
+        badge.title = content.text;
+      }
+    }
   }
 
   /**

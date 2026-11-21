@@ -247,6 +247,7 @@
       "privacy": "Votre clé reste dans ce navigateur et n’est envoyée qu’à ce fournisseur. Vos messages, et ce qu’affiche cette page, lui sont aussi envoyés. L’assistant ne modifie que le banc d’essai, et vous pouvez annuler.",
       "freeNote": "Vous avez {count, plural, one {# question gratuite} other {# questions gratuites}} par jour, payées par Motion Garden. Avec l’offre gratuite, vos messages passent par notre serveur vers un modèle d’IA gratuit sur OpenRouter. Nous ne les conservons pas. Pour en poser plus, connectez votre propre modèle d’IA dans les réglages ci-dessous.",
       "freeSpent": "Vous avez utilisé {count, plural, one {votre question gratuite} other {vos # questions gratuites}} du jour. Connectez votre propre modèle d’IA pour continuer.",
+      "freeLeft": "Questions gratuites restantes aujourd’hui : {left} sur {count}",
       "startersLabel": "Essayez de demander",
       "starters": {
         "find": "Trouve un fond animé pour un hero sombre",

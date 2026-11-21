@@ -204,10 +204,27 @@ export default function AgentPanel() {
 							</div>
 						)}
 						{/* On the free tier the visitor never saw the setup copy, so say here whose
-						    key answers and where their messages go. */}
+						    key answers and where their messages go. The count stays in view for
+						    the whole chat (site.js refreshes it after every question); the note
+						    under it folds away once the first message is sent (assistant.css). */}
 						{state === "ready" && free && free.left > 0 && (
-							<p className="pt-2 text-xs leading-relaxed text-ink-mute">
-								{t("freeNote", { count: free.perDay })}
+							<div className="space-y-1 pt-2">
+								<p
+									role="status"
+									className="font-display text-[10px] tracking-[0.14em] text-ink-dim uppercase"
+								>
+									{t("freeLeft", { left: free.left, count: free.perDay })}
+								</p>
+								<p className="mg-free-detail text-xs leading-relaxed text-ink-mute">
+									{t("freeNote", { count: free.perDay })}
+								</p>
+							</div>
+						)}
+						{/* The last free question was asked in this chat. The conversation stays
+						    readable; a reload shows the setup view. */}
+						{state === "ready" && free && free.left === 0 && (
+							<p role="status" className="pt-2 text-xs leading-relaxed text-ink-dim">
+								{t("freeSpent", { count: free.perDay })}
 							</p>
 						)}
 					</div>,

@@ -247,6 +247,7 @@
       "privacy": "Tu clave se queda en este navegador y solo va a ese proveedor. Tus mensajes, y lo que muestra esta página, también van a él. El asistente solo cambia el banco de pruebas, y puedes deshacerlo.",
       "freeNote": "Tienes {count, plural, one {# pregunta gratis} other {# preguntas gratis}} al día, pagadas por Motion Garden. En el plan gratis tus mensajes pasan por nuestro servidor hasta un modelo de IA gratuito en OpenRouter. No los guardamos. Para hacer más, conecta tu propio modelo de IA en los ajustes de abajo.",
       "freeSpent": "Ya usaste {count, plural, one {tu pregunta gratis} other {tus # preguntas gratis}} de hoy. Conecta tu propio modelo de IA para seguir.",
+      "freeLeft": "Preguntas gratis que te quedan hoy: {left} de {count}",
       "startersLabel": "Prueba a preguntar",
       "starters": {
         "find": "Busca un fondo animado para un hero oscuro",

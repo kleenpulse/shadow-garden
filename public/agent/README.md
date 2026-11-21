@@ -121,7 +121,16 @@ the address comes from `x-nf-client-connection-ip`, which Netlify sets itself.
 The count is kept in Postgres (`agent_usage`, `lib/agent/free-tier-server.ts`) under a
 SHA-256 of the day, the visitor's IP address (IPv6 cut to its /64) and a server secret.
 No address is stored, and a hash cannot be linked from one day to the next. Rows older
-than a week are deleted.
+than a week are deleted. People behind one address (an office, a home network) share one
+count.
+
+The panel shows the count, "Free questions left today: 1 of 2", and `site.js` reads it
+again from the server after every question, so it stays true when someone else on the
+same address has asked one. When a limit is reached the endpoint answers 429 with one
+plain sentence. The runtime shows that as "⚠️ LLM HTTP 429: …" and sets its badge to
+"LLM error"; `site.js` (`dressError`) turns the bubble into an error card labelled "Free
+limit reached" and gives the badge the same words, since the model did not fail. A
+visitor's own provider error keeps its status in the label ("LLM error · HTTP 401").
 
 This is the "site absorbs the inference cost" case of the spec, not a BYOK proxy: a
 visitor who brings a key never reaches this endpoint. Their browser calls their provider

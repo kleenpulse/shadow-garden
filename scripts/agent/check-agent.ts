@@ -5,7 +5,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { registry, getEntry } from "../../lib/registry";
 import type { ComponentEntry, PropSchema } from "../../lib/registry/types";
 import { applyChanges, controlViews, queryFor } from "../../lib/agent/controls";
@@ -422,6 +422,37 @@ check("a visitor is counted by IPv4 address or IPv6 /64", () => {
 check("the page hands the runtime the same free-tier key the server knows", () => {
 	const site = readFileSync(path.join(agentDir, "site.js"), "utf8");
 	assert.ok(site.includes(`static FREE_KEY = "${FREE_TIER_KEY}";`));
+});
+
+// site.js is served as is from /public, outside the TypeScript build, so it is
+// loaded by URL. It boots only in a browser.
+const { AssistantMount } = (await import(pathToFileURL(path.join(agentDir, "site.js")).href)) as {
+	AssistantMount: {
+		errorContent(text: string, onFreeTier: boolean): { label: string; text: string; limit: boolean } | null;
+	};
+};
+
+check("a failed turn's bubble splits into a label and the sentence", () => {
+	const limit = "You have used today's 2 free questions. To keep going, open AI model settings below and connect your own AI model.";
+	// What the runtime shows when the free tier refuses a question (runtime/ui.js).
+	assert.deepEqual(AssistantMount.errorContent(`⚠️ LLM HTTP 429: ${limit}`, true), {
+		label: "Free limit reached",
+		text: limit,
+		limit: true,
+	});
+	// A visitor's own provider can answer 429 too. That is not the site's limit.
+	const own = AssistantMount.errorContent("⚠️ LLM HTTP 429: Rate limit exceeded", false);
+	assert.deepEqual(own, { label: "LLM error · HTTP 429", text: "Rate limit exceeded", limit: false });
+	assert.equal(AssistantMount.errorContent("⚠️ LLM HTTP 401: No auth", true)?.limit, false);
+	assert.deepEqual(AssistantMount.errorContent("⚠️ The agent turn ended without a result.", true), {
+		label: "Error",
+		text: "The agent turn ended without a result.",
+		limit: false,
+	});
+	// An ordinary reply is left alone, also one that only mentions a status.
+	assert.equal(AssistantMount.errorContent("Here are three backgrounds.", true), null);
+	assert.equal(AssistantMount.errorContent("LLM HTTP 429: quoted in an answer", true), null);
+	assert.equal(AssistantMount.errorContent("", true), null);
 });
 
 // --- shadcn registry -------------------------------------------------------

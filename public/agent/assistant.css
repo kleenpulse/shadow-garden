@@ -58,7 +58,18 @@
    shows, with the trace, only in the runtime's Developer view. So do the host name
    and the list of connected actions. */
 #agent-app [data-ns-slot="agents"] { display: none; }
-#agent-app[data-dev="true"] [data-ns-slot="agents"] { display: block; max-height: 45%; overflow-y: auto; }
+/* Developer view: the chat keeps the larger share, the graph sits at its own
+   height, and the log takes the rest. Only the log scrolls; the runtime scrolls
+   #ns-log to the newest event, so that element must stay the scrolling one. */
+#agent-app[data-dev="true"] [data-ns-slot="agents"] {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 48%;
+  min-height: 150px;
+  overflow: hidden;
+}
+#agent-app.ns-composed-app[data-dev="true"] [data-ns-slot="chat"] { min-height: 200px; }
+#agent-app[data-dev="true"] .ns-dev { flex: 1 1 auto; height: auto; min-height: 0; gap: 8px; overflow: hidden; }
 #agent-app:not([data-dev="true"]) .ns-breadcrumb,
 #agent-app:not([data-dev="true"]) .ns-action-status { display: none; }
 
@@ -375,7 +386,117 @@ body > dialog button { margin-right: 8px; }
 #agent-app .ns-hint.warn { border: 0; background: color-mix(in oklab, #f59e0b 10%, transparent); color: var(--sg-ink-dim); border-radius: 8px; }
 #agent-app .ns-settings-advanced { border: 0; }
 
-/* Developer trace and the runtime's modal: off-white cards in the runtime. */
+/* A failed turn. site.js (dressError) splits the runtime's "⚠️ LLM HTTP 429: …"
+   bubble into a label and a sentence; the card takes the header's error badge
+   look, so the two read as one message. */
+#agent-app .ns-msg.mg-error {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: color-mix(in oklab, var(--sg-danger) 14%, transparent);
+  color: var(--sg-ink);
+}
+#agent-app .mg-error-label {
+  font: var(--mg-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-danger);
+}
+
+/* The free tier's note folds away once the chat has started. The count above it
+   stays (components/agent/AgentPanel.tsx). */
+#agent-app:has(#ns-msgs .ns-msg.user) .mg-free-detail { display: none; }
+
+/* A wheel that reaches the end of the chat or the log must not scroll the page
+   behind the drawer. */
+#agent-app .ns-msgs,
+#agent-app .ns-log,
+#agent-app .ns-graph { overscroll-behavior: contain; }
+
+/* Developer view: the agent graph and the execution log. The runtime draws both
+   for a white page, with off-white cards, grey borders and one hue per event
+   kind. On the bench they are two tonal panels. Each event is a raised row with a
+   mono tag, a question's row starts a group and carries the accent, and the rows
+   under it are indented. Red marks a failure and nothing else. */
+#agent-app .ns-graph,
+#agent-app .ns-log { border: 0; border-radius: 12px; background: var(--sg-panel); }
+#agent-app .ns-graph { flex: none; max-height: 42%; overflow-y: auto; padding: 10px 12px; }
+#agent-app .ns-log { padding: 0 12px 10px; }
+#agent-app .ns-graph h3,
+#agent-app .ns-log h3 {
+  font: var(--mg-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-ink-mute);
+}
+#agent-app .ns-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 10px 0 8px;
+  background: var(--sg-panel);
+}
+#agent-app .ns-pill {
+  margin: 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--sg-raised);
+  color: var(--sg-ink-dim);
+  font: var(--mg-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+#agent-app #ns-export { padding: 5px 9px; background: var(--sg-raised); color: var(--sg-ink-dim); }
+#agent-app #ns-export:hover { color: var(--sg-accent); }
+#agent-app .ns-row {
+  margin: 2px 0 2px 12px;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--sg-raised);
+  color: var(--sg-ink-dim);
+  font: 11px/1.5 var(--font-mono, ui-monospace), monospace;
+  overflow-wrap: anywhere;
+  transition: background-color 150ms;
+}
+#agent-app .ns-row:hover { background: color-mix(in oklab, var(--sg-accent) 8%, var(--sg-raised)); }
+#agent-app .ns-row.k-run { margin: 10px 0 2px; color: var(--sg-ink); }
+#agent-app .ns-row.k-run:first-child { margin-top: 0; }
+#agent-app .ns-row .ns-tag {
+  display: inline-block;
+  min-width: 44px;
+  margin-right: 6px;
+  font: var(--mg-label);
+  letter-spacing: 0.12em;
+  color: var(--sg-ink-mute);
+}
+#agent-app .ns-row.k-run .ns-tag { color: var(--sg-accent); }
+#agent-app .ns-row .ns-meta { color: var(--sg-ink-mute); }
+#agent-app .ns-row.k-error,
+#agent-app .ns-row.status-error,
+#agent-app .ns-row.status-error:hover { background: color-mix(in oklab, var(--sg-danger) 12%, var(--sg-raised)); }
+#agent-app .ns-row.k-error .ns-tag,
+#agent-app .ns-row.status-error .ns-tag { color: var(--sg-danger); }
+/* The runtime colors a row's error text with an inline style. */
+#agent-app .ns-row .ns-meta[style] { color: var(--sg-danger) !important; }
+#agent-app .ns-row pre {
+  margin: 6px 0 2px;
+  padding: 8px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--sg-panel);
+  color: var(--sg-ink-dim);
+  font: inherit;
+  max-height: 220px;
+}
+
+/* The agent graph's boxes and connectors, and the runtime's modal. */
+#agent-app .ns-tchildren { border-left-color: var(--sg-hairline); }
+#agent-app .ns-tchildren > li::before { background: var(--sg-hairline); }
+#agent-app .ns-tchildren > li:last-child::after { background: var(--sg-panel); }
+#agent-app .ns-tbox .ns-tdot { background: var(--sg-ink-mute); }
+#agent-app .ns-tbox.active .ns-tdot { background: var(--sg-accent); }
 #agent-app .ns-tbox,
 [data-nsdeploy-ui] .ns-tbox { border: 0; background: var(--sg-raised); color: var(--sg-ink); }
 #agent-app .ns-tbox.active,
