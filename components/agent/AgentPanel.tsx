@@ -12,7 +12,7 @@ import {
 	getServerSnapshot,
 	getSnapshot,
 	onHandoff,
-	sendRequest,
+	fillRequest,
 	startAssistant,
 	subscribe,
 } from "@/lib/agent/assistant-host";
@@ -221,7 +221,7 @@ export default function AgentPanel() {
 							<button
 								key={text}
 								type="button"
-								onClick={() => sendRequest(text)}
+								onClick={() => fillRequest(text)}
 								className="mg-starter"
 							>
 								{text}

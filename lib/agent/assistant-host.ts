@@ -160,14 +160,15 @@ export function startAssistant() {
 	update({ started: true });
 }
 
-/** Type a request into the runtime's own input and send it, as the visitor would. */
-export function sendRequest(text: string) {
-	const root = snapshot.parts?.root;
-	const input = root?.querySelector<HTMLInputElement>("#ns-input");
-	const send = root?.querySelector<HTMLButtonElement>("#ns-send");
-	if (!input || !send || send.disabled) return;
+/**
+ * Put a request in the runtime's own input and stop there. Sending stays the
+ * visitor's choice: they can edit the text first, and on the free tier a sent
+ * message spends one of their questions.
+ */
+export function fillRequest(text: string) {
+	const input = snapshot.parts?.root.querySelector<HTMLInputElement>("#ns-input");
+	if (!input || input.disabled) return;
 	input.value = text;
-	input.dispatchEvent(new Event("input", { bubbles: true }));
-	send.click();
 	input.focus();
+	input.setSelectionRange(text.length, text.length);
 }
