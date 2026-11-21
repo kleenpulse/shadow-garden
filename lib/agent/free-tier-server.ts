@@ -8,6 +8,7 @@ import network from "@/public/agent/motion_garden.network.json";
 import {
 	addressKey,
 	agentPrompts,
+	freeModel,
 	withinLimits,
 	type UsageRow,
 } from "./free-tier";
@@ -16,8 +17,11 @@ import {
 // who the visitor is for counting, the daily counters in Postgres, and the
 // settings that must never reach the browser.
 
-/** The model every free call runs on. Chosen here, never by the caller. */
-export const FREE_MODEL = process.env.AGENT_FREE_MODEL || "openrouter/free";
+/**
+ * The model every free call runs on. Chosen here, never by the caller, and
+ * always a free one: a paid id in AGENT_FREE_MODEL is ignored (freeModel).
+ */
+export const FREE_MODEL = freeModel(process.env.AGENT_FREE_MODEL);
 
 /** The site's own agents, as the published network file states them. */
 export const PROMPTS = agentPrompts(network, manifest.networks[0].front_man);

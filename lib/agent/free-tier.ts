@@ -27,6 +27,24 @@ export const FREE_TIER = {
 	maxOutputTokens: 4000,
 } as const;
 
+/** The model the free tier runs on when none is set, or the one set is not free. */
+export const DEFAULT_FREE_MODEL = "openrouter/free";
+
+/**
+ * True for a model OpenRouter serves at no charge: its free router, or a model id
+ * with the `:free` suffix. The free tier runs nothing else, so the site's key can
+ * never be billed through it, whatever the environment says.
+ */
+export function isFreeModel(model: string): boolean {
+	return model === DEFAULT_FREE_MODEL || /^[\w.-]+\/[\w.-]+:free$/.test(model);
+}
+
+/** The model to run: the configured one when it is free, otherwise the default. */
+export function freeModel(configured: string | undefined): string {
+	const wanted = (configured ?? "").trim();
+	return isFreeModel(wanted) ? wanted : DEFAULT_FREE_MODEL;
+}
+
 /** The key the page hands the runtime. It unlocks nothing: the server ignores it. */
 export const FREE_TIER_KEY = "motion-garden-free-tier";
 

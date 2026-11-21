@@ -13,11 +13,14 @@ import { searchEntries } from "../../lib/agent/search";
 import { describeEntry } from "../../lib/agent/describe";
 import { PART_LIMIT, splitParts } from "../../lib/agent/files";
 import {
+	DEFAULT_FREE_MODEL,
 	FREE_TIER,
 	FREE_TIER_KEY,
 	addressKey,
 	agentPrompts,
 	checkFreeRequest,
+	freeModel,
+	isFreeModel,
 	questionsLeft,
 	withinLimits,
 } from "../../lib/agent/free-tier";
@@ -327,6 +330,18 @@ check("free tier limits: two questions a visitor, a site-wide cap, a call cap", 
 	assert.equal(questionsLeft({ questions: 2, calls: 9 }, fresh), 0);
 	assert.equal(questionsLeft({ questions: 0, calls: 0 }, { questions: FREE_TIER.questionsSiteWide - 1, calls: 0 }), 1);
 	assert.equal(questionsLeft({ questions: 0, calls: FREE_TIER.callsPerVisitor }, fresh), 0);
+});
+
+check("the free tier runs free models only, whatever is configured", () => {
+	assert.equal(freeModel(undefined), DEFAULT_FREE_MODEL);
+	assert.equal(freeModel(""), DEFAULT_FREE_MODEL);
+	assert.equal(freeModel("openrouter/free"), "openrouter/free");
+	assert.equal(freeModel(" google/gemma-4-31b-it:free "), "google/gemma-4-31b-it:free");
+	// A paid id, a paid id dressed up, and anything that is not a model id.
+	for (const paid of ["qwen/qwen3.8-flash", "anthropic/claude-opus", "openrouter/auto", "qwen/qwen3.8-flash:nitro", ":free", "free", "a/b:free:extended", "x/y:free z"]) {
+		assert.equal(isFreeModel(paid), false, paid);
+		assert.equal(freeModel(paid), DEFAULT_FREE_MODEL, paid);
+	}
 });
 
 check("a visitor is counted by IPv4 address or IPv6 /64", () => {

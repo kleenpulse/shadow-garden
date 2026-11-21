@@ -92,8 +92,10 @@ for one (`lib/agent/free-tier.ts`, checked by `bun run check:agent`):
 - The system prompt must be one of this network's own agents, read from
   `motion_garden.network.json`. Any other prompt is refused, so the endpoint is no use as
   a general model proxy.
-- The server picks the model (`AGENT_FREE_MODEL`, default `openrouter/free`) and caps the
-  output. The caller's model and options are dropped.
+- The server picks the model and caps the output. The caller's model and options are
+  dropped. It runs free models only: `openrouter/free` by default, or the id in
+  `AGENT_FREE_MODEL` when that ends in `:free`. A paid id there is ignored, so the key can
+  never be billed through this endpoint.
 - It counts per visitor and site-wide, per UTC day: 2 questions and 40 model calls a
   visitor, 300 questions and 4,000 calls across the site. One question takes several model
   calls. A call that the model never answers is not counted.
