@@ -27,3 +27,31 @@ jobs:
       # shipped, the free tier would refuse every request.
       - name: Agent surface
         run: bun run check:agent
+
+  # Production deploys start here: once per push to main, and only after the
+  # checks above pass. The step calls a Netlify build hook, which builds main.
+  #
+  # It replaces a repository webhook that called the same hook on a push to ANY
+  # branch. That built production again for every feature branch push, and
+  # twice for each push to main (the release workflow pushes its own branch
+  # right after). Each extra build spent build minutes and emptied the CDN
+  # cache again.
+  #
+  # NETLIFY_BUILD_HOOK is the hook's address (Netlify: Project configuration,
+  # Build & deploy, Build hooks). Anyone who has it can start a build, so it
+  # lives in the repository's secrets and is never printed.
+  deploy:
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start the Netlify build
+        env:
+          NETLIFY_BUILD_HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -z "$NETLIFY_BUILD_HOOK" ]; then
+            echo "::error::The NETLIFY_BUILD_HOOK secret is not set, so nothing was deployed."
+            exit 1
+          fi
+          curl --fail --silent --show-error --output /dev/null -X POST -d '{}' "${NETLIFY_BUILD_HOOK}?trigger_title=CI+passed+on+${GITHUB_SHA::7}"
+          echo "Netlify build started for ${GITHUB_SHA::7}."

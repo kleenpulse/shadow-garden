@@ -75,6 +75,10 @@ The site deploys to [Netlify](https://www.netlify.com), which runs Next.js throu
 netlify deploy --build --prod
 ```
 
+A push to `main` deploys on its own, once the CI checks pass: the last job in [`ci.yml`](.github/workflows/ci.yml) calls a Netlify build hook, whose address is kept in the `NETLIFY_BUILD_HOOK` repository secret. Pushes to other branches do not deploy.
+
+The build ends with `bun run check:static`, which stops the deploy if a prebuilt page would need a function on every view. The last good deploy stays live.
+
 Environment variables (all optional; without them the matching feature turns off quietly):
 
 | Variable | What it enables |

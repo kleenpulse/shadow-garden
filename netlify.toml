@@ -2,8 +2,13 @@
 # Netlify only adds it on its own when it detects the framework while linking a
 # repo in the UI, so it is declared here to make every build use it. Don't pin
 # it in package.json: Netlify keeps it current for each new Next.js release.
+#
+# check:static runs after the build and fails the deploy if a prebuilt page would
+# need a function on every view, or revalidates by time (scripts/check-static-pages.ts).
+# Next gives no warning for either, and function calls are the metered cost here.
+# A failed deploy leaves the last good one live.
 [build]
-  command = "bun run build"
+  command = "bun run build && bun run check:static"
   publish = ".next"
 
 [build.environment]
