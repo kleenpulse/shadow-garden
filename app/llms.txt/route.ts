@@ -43,6 +43,7 @@ function body(): string {
 		`- Describe: \`GET ${absoluteUrl("/api/agent/component")}/<slug>\` returns the controls (name, kind, default, range or options), the npm dependencies, the install commands and the files that ship.`,
 		`- Brief: \`GET ${absoluteUrl("/api/agent/component")}/<slug>?brief=1\` returns the same brief in the \`brief\` field. Add \`max=<characters>\` to cap it: a longer brief is left out, \`briefIncluded\` is false, and the answer lists the files and their sizes instead.`,
 		`- One file: \`GET ${absoluteUrl("/api/agent/component")}/<slug>?file=<path>\` returns one shipped file in the \`code\` field, with the path taken from the files list. A long file comes in parts: read \`parts\`, then add \`part=<n>\`.`,
+		`- shadcn registry: \`bunx shadcn@latest add ${absoluteUrl("/r")}/<slug>.json\` installs a component with the shadcn CLI: its files, its npm packages and the theme tokens it needs. The catalog is ${absoluteUrl("/r/registry.json")}. Whole-page templates are not in it.`,
 		`- Tuned preview: each control is a query parameter, so \`${absoluteUrl("/components")}/<slug>?<control>=<value>\` opens the page with those values set.`,
 		`- Agent network: ${absoluteUrl("/agent/agent-manifest.json")} describes the site's [open agentic web](https://github.com/cognizant-ai-labs/agentic-web) network. Other agentic websites can call it to search the catalog and fetch component code.`,
 		"",

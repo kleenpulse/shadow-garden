@@ -12,6 +12,8 @@ import { applyChanges, controlViews, queryFor } from "../../lib/agent/controls";
 import { searchEntries } from "../../lib/agent/search";
 import { describeEntry } from "../../lib/agent/describe";
 import { PART_LIMIT, splitParts } from "../../lib/agent/files";
+import { inShadcnRegistry, shadcnIndexItem, shadcnItem } from "../../lib/registry/shadcn";
+import { stripComments } from "../../lib/registry/strip-comments";
 
 let passed = 0;
 function check(name: string, fn: () => void) {
@@ -208,6 +210,77 @@ check("every shipped file fits the file action's part range", () => {
 			assert.ok(parts.every((part) => part.length <= PART_LIMIT));
 		}
 	}
+});
+
+// --- shadcn registry -------------------------------------------------------
+
+check("every component maps to a shadcn item; templates stay out", () => {
+	const listed = registry.filter(inShadcnRegistry);
+	assert.ok(listed.length > 0 && listed.every((entry) => entry.kind !== "template"));
+	for (const entry of listed) {
+		const item = shadcnIndexItem(entry); // throws on a path with no target rule
+		assert.equal(item.name, entry.slug);
+		assert.equal(item.files[0].target, `@components/registry/${entry.slug}/${entry.variants[0].file.split("/").pop()}`);
+		for (const file of item.files) {
+			assert.match(file.target, /^@(components|hooks|ui)\/.+\.tsx?$/, `${entry.slug}: ${file.target}`);
+			assert.equal("content" in file, false, "the catalog carries no file contents");
+			assert.notEqual(file.path, "lib/utils.ts");
+		}
+	}
+});
+
+check("shadcn items ship every file with content, tokens in step and no stray packages", () => {
+	const repo = fileURLToPath(new URL("../../", import.meta.url));
+	const absolute = (p: string) => `https://example.test${p}`;
+	for (const entry of registry.filter(inShadcnRegistry)) {
+		const sources = entry.variants.map((variant) => ({
+			file: variant.file,
+			raw: stripComments(readFileSync(path.join(repo, variant.file), "utf8")),
+		}));
+		const item = shadcnItem(entry, sources, absolute);
+		const shipped = sources.filter((source) => source.file !== "lib/utils.ts");
+		assert.equal(item.files.length, shipped.length, entry.slug);
+		assert.ok(item.files.every((file) => file.content && file.content.length > 0), entry.slug);
+		for (const pkg of item.dependencies ?? []) {
+			assert.ok((entry.dependencies ?? []).includes(pkg), `${entry.slug}: ${pkg}`);
+		}
+		// A project that keeps its own lib/utils.ts needs clsx and tailwind-merge
+		// only when a shipped file imports them itself.
+		const text = shipped.map((source) => source.raw).join("\n");
+		for (const pkg of ["clsx", "tailwind-merge"]) {
+			const imported = new RegExp(`from\\s*["']${pkg}["']`).test(text);
+			const hasUtils = sources.length !== shipped.length;
+			if (hasUtils && !imported) assert.ok(!(item.dependencies ?? []).includes(pkg), `${entry.slug}: ${pkg}`);
+		}
+		const { theme = {}, light = {}, dark = {} } = item.cssVars ?? {};
+		assert.deepEqual(Object.keys(light), Object.keys(dark), `${entry.slug}: light and dark keys`);
+		for (const [key, value] of Object.entries(theme)) {
+			const ref = /^var\(--(sg-[a-z-]+)\)$/.exec(value)?.[1];
+			if (ref) assert.ok(ref in light, `${entry.slug}: ${key} points at --${ref}, which the item does not set`);
+		}
+		assert.equal(item.meta?.brief, `https://example.test/components/${entry.slug}.md`);
+	}
+});
+
+check("shadcn item for a token user carries its theme, and one without tokens carries none", () => {
+	const repo = fileURLToPath(new URL("../../", import.meta.url));
+	const build = (entry: ComponentEntry) =>
+		shadcnItem(
+			entry,
+			entry.variants.map((variant) => ({
+				file: variant.file,
+				raw: stripComments(readFileSync(path.join(repo, variant.file), "utf8")),
+			})),
+			(p) => `https://example.test${p}`,
+		);
+	const items = registry.filter(inShadcnRegistry).map(build);
+	const themed = items.find((item) => item.cssVars?.theme?.["color-ink"]);
+	assert.ok(themed, "some component uses text-ink");
+	assert.equal(themed.cssVars?.theme?.["color-ink"], "var(--sg-ink)");
+	assert.match(themed.cssVars?.light?.["sg-ink"] ?? "", /^#[0-9a-f]{6}$/);
+	assert.ok(items.some((item) => !item.cssVars && !item.css), "some component needs no tokens");
+	const utility = items.find((item) => item.css);
+	assert.ok(utility && Object.keys(utility.css!).every((key) => key.startsWith("@utility ")));
 });
 
 check("manifest, network and sample queries agree", () => {

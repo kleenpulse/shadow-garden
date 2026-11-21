@@ -11,6 +11,26 @@ Live at **[motion-garden.netlify.app](https://motion-garden.netlify.app)**. Free
 
 Agents can start at [`/llms.txt`](https://motion-garden.netlify.app/llms.txt): a registry-generated index of every component, its page and its prop count, following the [llms.txt](https://llmstxt.org) convention. It also lists the JSON endpoints under `/api/agent/` that search the catalog, describe a component and return its integration brief. Add `.md` to any component URL (for example [`/components/waves.md`](https://motion-garden.netlify.app/components/waves.md)) to get that brief as Markdown.
 
+## Install with shadcn
+
+Every component is also a [shadcn registry](https://ui.shadcn.com/docs/registry) item, so the shadcn CLI can install it:
+
+```bash
+bunx shadcn@latest add https://motion-garden.netlify.app/r/waves.json
+```
+
+Or name the registry once in your `components.json`, then install by name:
+
+```json
+{ "registries": { "@motion-garden": "https://motion-garden.netlify.app/r/{name}.json" } }
+```
+
+```bash
+bunx shadcn@latest add @motion-garden/waves
+```
+
+The CLI puts each file under your own aliases, adds the npm packages, and adds the theme tokens the component needs without replacing ones you already have. It keeps your `lib/utils.ts`. The catalog is at [`/r/registry.json`](https://motion-garden.netlify.app/r/registry.json); the shadcn MCP server reads the same one. Items are built on request from the registry (`lib/registry/shadcn.ts`), so there is nothing to generate.
+
 ## Open agentic website
 
 Motion Garden is also an [open agentic website](https://github.com/cognizant-ai-labs/agentic-web). Open **Ask the Garden** on any catalog page and a two-agent network, running in your browser on the AI provider and key you choose, finds components, tunes the live preview's controls for you and hands over the MIT source. Other agentic websites can call the same network at `https://motion-garden.netlify.app/agent/motion_garden` to search the catalog and fetch component code from their own chat.

@@ -33,6 +33,8 @@ const nextConfig: NextConfig = {
 		// through getPrompt: the JSON route, and the Markdown brief one segment down.
 		"/api/agent/component/*": AGENT_SOURCE_TRACE,
 		"/api/agent/component/*/md": AGENT_SOURCE_TRACE,
+		// The shadcn registry items (app/r/[name]) ship the same sources.
+		"/r/*": AGENT_SOURCE_TRACE,
 	},
 	// /components/<slug>.md is the page's integration brief as Markdown, the URL
 	// shape the llms.txt convention gives a page's Markdown twin. Coding agents
