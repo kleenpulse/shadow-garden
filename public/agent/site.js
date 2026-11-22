@@ -74,6 +74,9 @@ export class AssistantMount {
       if (!needsKey) {
         AssistantMount.greet();
       }
+      // Put the last chat back and keep each new turn (chat-log.js). A visitor who
+      // still needs a key sees it too, as a chat under way.
+      await AssistantMount.keepHistory(booted);
       // The drawer's starter prompts (lib/agent/assistant-host.ts) sit just above the
       // chat input, which only exists now.
       const starters = document.querySelector("#agent-app .mg-starters");
@@ -104,6 +107,30 @@ export class AssistantMount {
 
   /** Where this browser notes the UTC day its free questions ran out. */
   static SPENT_KEY = "mg-free-spent";
+
+  /** This tab's chat history (chat-log.js), or null before boot. */
+  static history = null;
+
+  /**
+   * Keep the chat in this browser, so a reload or a new visit finds it again.
+   *
+   * :param booted: What the runtime's boot returned.
+   */
+  static async keepHistory(booted) {
+    const root = document.querySelector("#agent-app");
+    if (!root) {
+      return;
+    }
+    try {
+      const { ChatLog, IdbChatStore, MemoryChatStore } = await import("./chat-log.js");
+      // Without IndexedDB (some private windows) the chats last only this visit.
+      const store = (await IdbChatStore.open()) || new MemoryChatStore();
+      AssistantMount.history = new ChatLog(booted.engine, store);
+      await AssistantMount.history.attach(booted.trace, root);
+    } catch (error) {
+      console.error("Chat history is off", error);
+    }
+  }
 
   /** The free tier as the page last knew it: {perDay, left}, or null. */
   static free = null;

@@ -1,10 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
-import { Check, Copy } from "lucide-react";
-import { attachHost, markAssistantShown, startAssistant } from "@/lib/agent/assistant-host";
+import { Check, Copy, X } from "lucide-react";
+import {
+	attachHost,
+	deleteChat,
+	getServerSnapshot,
+	getSnapshot,
+	markAssistantShown,
+	openChat,
+	startAssistant,
+	subscribe,
+} from "@/lib/agent/assistant-host";
+import { useLocale } from "@/lib/i18n/provider";
 import { absoluteUrl } from "@/lib/site";
+import { cn } from "@/lib/utils";
 
 // /ask: the assistant at full size. The mount moves here from the drawer
 // (lib/agent/assistant-host.ts) and back when the visitor leaves, so a chat started
@@ -41,6 +52,86 @@ function CopyLine({ label, value }: { label: string; value: string }) {
 	);
 }
 
+// A clock for the chat list that ticks each minute, so "2 minutes ago" stays true.
+// It reads the time only in the browser: Cache Components refuses Date.now() in a
+// client component's prerender, and the list never renders on the server anyway.
+function subscribeMinute(onTick: () => void) {
+	const timer = window.setInterval(onTick, 60_000);
+	return () => window.clearInterval(timer);
+}
+const readMinute = () => Math.floor(Date.now() / 60_000) * 60_000;
+const readMinuteOnServer = () => 0;
+
+/** "5 minutes ago", "yesterday": how long ago a chat was last written to. */
+function ago(at: number, now: number, locale: string) {
+	const format = new Intl.RelativeTimeFormat(locale, { numeric: "auto" });
+	// A chat saved since the clock last ticked is "this minute", never "in 1 minute".
+	const minutes = Math.min(0, Math.round((at - now) / 60_000));
+	if (Math.abs(minutes) < 60) return format.format(minutes, "minute");
+	const hours = Math.round(minutes / 60);
+	if (Math.abs(hours) < 24) return format.format(hours, "hour");
+	return format.format(Math.round(hours / 24), "day");
+}
+
+/**
+ * The chats this browser saved (public/agent/chat-log.js). Opening one swaps it in
+ * for the chat on screen, which stays saved. Both wait while a turn runs.
+ */
+function ChatList() {
+	const t = useTranslations("pages.ask");
+	const locale = useLocale();
+	const { chats } = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+	const now = useSyncExternalStore(subscribeMinute, readMinute, readMinuteOnServer);
+	if (!chats || !chats.threads.length) return null;
+	return (
+		<section className="space-y-3">
+			<h2 className="font-display text-[10px] tracking-[0.16em] text-ink-mute uppercase">
+				{t("chatsTitle")}
+			</h2>
+			<ul className="-mx-2 max-h-72 space-y-0.5 overflow-y-auto">
+				{chats.threads.map((thread) => {
+					const current = thread.id === chats.current;
+					const title = thread.title || t("untitledChat");
+					return (
+						<li
+							key={thread.id}
+							className={cn(
+								"flex items-center gap-1 rounded-md pe-1 transition-colors",
+								current ? "bg-raised" : "hover:bg-raised/60",
+							)}
+						>
+							<button
+								type="button"
+								onClick={() => openChat(thread.id)}
+								disabled={chats.busy && !current}
+								aria-current={current ? "true" : undefined}
+								className="min-w-0 flex-1 rounded-md px-2 py-1.5 text-start focus-visible:ring-1 focus-visible:ring-accent focus-visible:outline-none disabled:opacity-50"
+							>
+								<span className={cn("block truncate text-[13px]", current ? "text-ink" : "text-ink-dim")}>
+									{title}
+								</span>
+								<span className="font-display text-[10px] tracking-[0.08em] text-ink-mute uppercase">
+									{ago(thread.updatedAt, now, locale)}
+								</span>
+							</button>
+							<button
+								type="button"
+								onClick={() => deleteChat(thread.id)}
+								disabled={chats.busy && current}
+								aria-label={t("deleteChat", { title })}
+								title={t("deleteChat", { title })}
+								className="grid h-7 w-7 shrink-0 place-items-center rounded text-ink-mute transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none disabled:opacity-50"
+							>
+								<X className="h-3.5 w-3.5" aria-hidden />
+							</button>
+						</li>
+					);
+				})}
+			</ul>
+		</section>
+	);
+}
+
 export default function AskView() {
 	const t = useTranslations("pages.ask");
 	const hostRef = useRef<HTMLDivElement>(null);
@@ -73,6 +164,7 @@ export default function AskView() {
 					className="flex h-[calc(100dvh-10rem)] min-h-[480px] flex-col lg:h-[calc(100dvh-18.5rem)]"
 				/>
 				<aside className="space-y-8">
+					<ChatList />
 					<section className="space-y-3">
 						<h2 className="font-display text-[10px] tracking-[0.16em] text-ink-mute uppercase">
 							{t("abilitiesTitle")}

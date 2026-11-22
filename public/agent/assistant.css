@@ -124,6 +124,17 @@
 #agent-app[data-mg-state="ready"] .ns-settings { padding: 8px 12px; margin-top: 10px; }
 #agent-app[data-mg-state="ready"] .ns-settings[open] { padding: 12px 14px; }
 
+/* Above a chat put back from this browser's history (chat-log.js). Its forms are
+   locked, and the label says why the chat is already there. */
+#agent-app .mg-history-label {
+  align-self: center;
+  margin: 6px 0 2px;
+  font: var(--mg-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sg-ink-mute);
+}
+
 /* Starter prompts, above the input until the visitor sends a first message.
    "New chat" removes the messages, so they come back with it. */
 #agent-app .mg-starters { padding: 0 10px 2px; }

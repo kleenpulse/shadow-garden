@@ -698,6 +698,196 @@ check("a failed turn's bubble splits into a label and the sentence", () => {
 	assert.equal(AssistantMount.errorContent("", true), null);
 });
 
+// --- chat history ----------------------------------------------------------
+
+type Entry = { role: string; content: string; at?: number };
+type Conversation = { id: string; rev: number; updatedAt: number; entries: Entry[] };
+type ChatStore = {
+	all(): Promise<Conversation[]>;
+	commit(record: Conversation, baseRev: number): Promise<boolean>;
+	remove(id: string): Promise<void>;
+};
+type Log = {
+	id: string;
+	entries: Entry[];
+	threads: Conversation[];
+	busy: boolean;
+	load(): Promise<Conversation | null>;
+	sync(): Promise<void>;
+	newChat(): Promise<void>;
+	open(id: string): Promise<void>;
+	remove(id: string): Promise<void>;
+	threadsView(): { threads: { id: string; title: string; updatedAt: number }[]; current: string; busy: boolean };
+};
+const { ChatLog, MemoryChatStore } = (await import(pathToFileURL(path.join(agentDir, "chat-log.js")).href)) as {
+	ChatLog: {
+		new (engine: { history: object[] }, store: ChatStore): Log;
+		MAX_CONVERSATIONS: number;
+		MAX_ENTRIES: number;
+		CONTEXT_ENTRIES: number;
+		MAX_AGE_MS: number;
+		TITLE_CHARS: number;
+		RECEIPTS: string;
+		clean(records: unknown, now: number): { conversations: Conversation[]; stale: string[] };
+		context(entries: Entry[]): Entry[];
+		title(entries: Entry[]): string;
+		view(entry: Entry): { kind: string; text: string; presentation?: unknown; turnId?: string };
+	};
+	MemoryChatStore: new () => ChatStore;
+};
+
+check("chat history gives the model the same bound the runtime keeps", () => {
+	const engine = readFileSync(path.join(agentDir, "runtime", "engine.js"), "utf8");
+	const bound = /this\.history\.length > (\d+)\) this\.history = this\.history\.slice\(-(\d+)\)/.exec(engine);
+	assert.ok(bound, "engine.js still bounds its history");
+	assert.equal(Number(bound[1]), ChatLog.CONTEXT_ENTRIES);
+	assert.equal(Number(bound[2]), ChatLog.CONTEXT_ENTRIES);
+	const entries = Array.from({ length: 40 }, (_, i) => ({ role: i % 2 ? "assistant" : "user", content: `m${i}`, at: i }));
+	const context = ChatLog.context(entries);
+	assert.equal(context.length, ChatLog.CONTEXT_ENTRIES);
+	assert.equal(context[0].content, "m16");
+	assert.ok(context.every((entry) => Object.keys(entry).join() === "role,content"), "no stored time reaches the model");
+});
+
+check("chat history keeps only what it can show, and marks the rest for deletion", () => {
+	const now = Date.UTC(2026, 10, 22);
+	assert.deepEqual(ChatLog.clean(null, now), { conversations: [], stale: [] });
+	const { conversations, stale } = ChatLog.clean(
+		[
+			{ id: "old", rev: 1, updatedAt: now - ChatLog.MAX_AGE_MS - 1, entries: [{ role: "user", content: "a" }] },
+			{ id: "a", rev: 1, updatedAt: now - 10, entries: [{ role: "user", content: "a" }, { role: "tool", content: "x" }, null] },
+			{ id: "b", rev: 2, updatedAt: now - 5, entries: [{ role: "assistant", content: "b" }] },
+			{ id: "none", rev: 1, updatedAt: now, entries: [{ role: "system", content: "s" }] },
+			{ id: "broken", updatedAt: "yesterday", entries: [] },
+			null,
+		],
+		now,
+	);
+	assert.deepEqual(conversations.map((item) => item.id), ["b", "a"], "newest first");
+	assert.deepEqual(conversations[1].entries, [{ role: "user", content: "a", at: 0 }]);
+	assert.deepEqual(stale.sort(), ["broken", "none", "old"]);
+	const many = Array.from({ length: ChatLog.MAX_CONVERSATIONS + 2 }, (_, i) => ({
+		id: `c${i}`,
+		rev: 1,
+		updatedAt: now - i,
+		entries: [{ role: "user", content: "x" }],
+	}));
+	const capped = ChatLog.clean(many, now);
+	assert.equal(capped.conversations.length, ChatLog.MAX_CONVERSATIONS);
+	assert.deepEqual(capped.stale, [`c${ChatLog.MAX_CONVERSATIONS}`, `c${ChatLog.MAX_CONVERSATIONS + 1}`], "the oldest go");
+});
+
+check("a saved chat shows what the visitor saw, not what the model read", () => {
+	assert.deepEqual(ChatLog.view({ role: "user", content: 'Pick one\n\nCRUSE interaction: {"id":"f"}' }), { kind: "user", text: "Pick one" });
+	const receipts = ChatLog.view({ role: "user", content: `${ChatLog.RECEIPTS}${JSON.stringify([{ action: "set_controls", status: "ok" }])}` });
+	assert.deepEqual(receipts, { kind: "receipt", text: "set_controls: ok" });
+	const presentation = { components: [{ id: "c1", kind: "info", text: "card" }] };
+	const answer = ChatLog.view({
+		role: "assistant",
+		content: `Here it is.\n\nCRUSE presentation turn: s42\n\`\`\`cruse-ui\n${JSON.stringify(presentation)}\n\`\`\``,
+	});
+	assert.equal(answer.text, "Here it is.");
+	assert.equal(answer.turnId, "s42");
+	assert.deepEqual(answer.presentation, presentation);
+	const envelope = ChatLog.view({ role: "assistant", content: '<tool_response>{"Name":"guide","Mode":"Fulfill","Response":"Done."}</tool_response>' });
+	assert.equal(envelope.text, "Done.");
+	assert.equal(ChatLog.view({ role: "assistant", content: "Plain **answer**." }).text, "Plain **answer**.");
+});
+
+check("a chat is named after the first thing the visitor asked", () => {
+	assert.equal(ChatLog.title([]), "");
+	assert.equal(
+		ChatLog.title([
+			{ role: "assistant", content: "Hello." },
+			{ role: "user", content: `${ChatLog.RECEIPTS}[]` },
+			{ role: "user", content: '  A dark\n  hero\n\nCRUSE interaction: {"id":"f"}' },
+		]),
+		"A dark hero",
+		"receipts and form values are not names",
+	);
+	const long = ChatLog.title([{ role: "user", content: "x".repeat(200) }]);
+	assert.equal(long.length, ChatLog.TITLE_CHARS);
+	assert.ok(long.endsWith("…"));
+});
+
+await checkAsync("a reload puts the chat and its context back, and New chat keeps the old one", async () => {
+	const store = new MemoryChatStore();
+	const engine = { history: [] as object[] };
+	const log = new ChatLog(engine, store);
+	assert.equal(await log.load(), null, "nothing saved yet");
+	engine.history.push({ role: "user", content: "hi" }, { role: "assistant", content: "hello" });
+	await log.sync();
+	await log.sync();
+	const first = await store.all();
+	assert.equal(first.length, 1);
+	assert.equal(first[0].entries.length, 2, "a second sync adds nothing");
+
+	const reloaded = { history: [] as object[] };
+	const again = new ChatLog(reloaded, store);
+	const conversation = await again.load();
+	assert.equal(conversation?.id, log.id);
+	assert.deepEqual(reloaded.history, [{ role: "user", content: "hi" }, { role: "assistant", content: "hello" }]);
+	reloaded.history.push({ role: "user", content: "more" });
+	await again.sync();
+	assert.deepEqual((await store.all())[0].entries.map((entry) => entry.content), ["hi", "hello", "more"]);
+
+	const kept = again.id;
+	// The runtime's New chat empties the engine's history, then this runs.
+	reloaded.history = [];
+	await again.newChat();
+	assert.notEqual(again.id, kept);
+	reloaded.history.push({ role: "user", content: "second" });
+	await again.sync();
+	const view = again.threadsView();
+	assert.deepEqual(view.threads.map((thread) => thread.title), ["second", "hi"], "both chats listed, newest first");
+	assert.equal(view.current, again.id);
+	assert.equal((await store.all()).length, 2, "New chat deleted nothing");
+});
+
+await checkAsync("a chat can be deleted, and a save never lands on the chat switched to", async () => {
+	const store = new MemoryChatStore();
+	const engine = { history: [] as object[] };
+	const log = new ChatLog(engine, store);
+	await log.load();
+	engine.history.push({ role: "user", content: "one" });
+	const saving = log.sync();
+	// New chat while the save is still writing: the save keeps its own chat.
+	const first = log.id;
+	const cleared = log.newChat();
+	await Promise.all([saving, cleared]);
+	assert.notEqual(log.id, first);
+	assert.deepEqual((await store.all()).map((item) => item.id), [first]);
+	engine.history = [{ role: "user", content: "two" }];
+	await log.sync();
+	assert.equal((await store.all()).length, 2);
+	await log.remove(first);
+	assert.deepEqual((await store.all()).map((item) => item.entries[0].content), ["two"]);
+	assert.deepEqual(log.threadsView().threads.map((thread) => thread.title), ["two"]);
+	// No screen to clear (no mount), so the chat on screen is not deleted.
+	await log.remove(log.id);
+	assert.equal((await store.all()).length, 1, "the chat on screen stays until the screen can be cleared");
+});
+
+await checkAsync("two tabs on one saved chat never overwrite each other's turns", async () => {
+	const store = new MemoryChatStore();
+	const seed = { history: [{ role: "user", content: "start" }] as object[] };
+	await new ChatLog(seed, store).sync();
+	const tabA = { history: [] as object[] };
+	const tabB = { history: [] as object[] };
+	const a = new ChatLog(tabA, store);
+	const b = new ChatLog(tabB, store);
+	await a.load();
+	await b.load();
+	tabA.history.push({ role: "user", content: "from A" });
+	await a.sync();
+	tabB.history.push({ role: "user", content: "from B" });
+	await b.sync();
+	const saved = await store.all();
+	assert.equal(saved.length, 2, "B carried on under a new id");
+	const texts = saved.map((item) => item.entries.map((entry) => entry.content).join("|")).sort();
+	assert.deepEqual(texts, ["start|from A", "start|from B"]);
+});
+
 // --- shadcn registry -------------------------------------------------------
 
 check("every component maps to a shadcn item; templates stay out", () => {

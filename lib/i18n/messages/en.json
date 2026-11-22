@@ -247,8 +247,8 @@
       "failed": "The assistant could not load. You can still use the page directly.",
       "setupTitle": "Connect an AI model to start",
       "setupBody": "The Garden Guide runs in your browser, on an AI provider you choose. Connecting OpenRouter is the quickest way: sign in, approve, and chat on a free model. Or paste a key from another provider.",
-      "privacy": "Your key stays in this browser and goes only to that provider. Your messages, and what this page shows, go to it too. The assistant only changes the bench, which you can undo.",
-      "freeNote": "You get {count, plural, one {# free question} other {# free questions}} a day, paid for by Motion Garden. On the free plan your messages go through our server to a free AI model on OpenRouter. We do not keep them. For more, connect your own AI model in the settings below.",
+      "privacy": "Your key stays in this browser and goes only to that provider. Your messages, and what this page shows, go to it too. The assistant only changes the bench, which you can undo. This browser keeps your recent chats. You can open or delete them on the Ask the Garden page.",
+      "freeNote": "You get {count, plural, one {# free question} other {# free questions}} a day, paid for by Motion Garden. On the free plan your messages go through our server to a free AI model on OpenRouter. We do not keep them. This browser keeps your recent chats. You can open or delete them on the Ask the Garden page. For more, connect your own AI model in the settings below.",
       "freeSpent": "You have used today’s {count, plural, one {free question} other {# free questions}}. Connect your own AI model to keep going.",
       "freeLeft": "Free questions left today: {left} of {count}",
       "startersLabel": "Try asking",
@@ -2898,8 +2898,11 @@
       "networkLabel": "Network URL",
       "manifestLabel": "Manifest",
       "copy": "Copy {label}",
+      "chatsTitle": "Your chats",
+      "untitledChat": "Chat",
+      "deleteChat": "Delete chat: {title}",
       "privacyTitle": "Privacy",
-      "privacyBody": "Motion Garden runs no server for the chat. Your messages go from this browser straight to the AI provider you pick, and your key is sent nowhere else."
+      "privacyBody": "Motion Garden runs no server for the chat. Your messages go from this browser straight to the AI provider you pick, and your key is sent nowhere else. This browser keeps your recent chats. You can open or delete them under Your chats."
     }
   },
   "commands": {

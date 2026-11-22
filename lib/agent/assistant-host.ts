@@ -32,6 +32,23 @@ export interface FreePlan {
 	model: string;
 }
 
+/** One saved chat, as public/agent/chat-log.js lists it. */
+export interface ChatThread {
+	id: string;
+	/** The start of the first question, or "" when there is none. */
+	title: string;
+	updatedAt: number;
+}
+
+/** The saved chats in this browser (public/agent/chat-log.js, threadsView). */
+export interface ChatThreads {
+	threads: ChatThread[];
+	/** The chat on screen. It is in threads once it has a saved turn. */
+	current: string;
+	/** True while a turn runs. A chat cannot be opened then. */
+	busy: boolean;
+}
+
 export interface AssistantSnapshot {
 	parts: AssistantParts | null;
 	started: boolean;
@@ -39,6 +56,8 @@ export interface AssistantSnapshot {
 	state: AssistantState;
 	/** Null when the visitor has their own key or the site has no free tier. */
 	free: FreeTier | null;
+	/** Null until the chat history has loaded. */
+	chats: ChatThreads | null;
 }
 
 const SERVER: AssistantSnapshot = {
@@ -47,6 +66,7 @@ const SERVER: AssistantSnapshot = {
 	pageActive: false,
 	state: "loading",
 	free: null,
+	chats: null,
 };
 
 let snapshot: AssistantSnapshot = SERVER;
@@ -111,6 +131,10 @@ function create(): AssistantParts {
 	// site.js reports the free tier once, right after the runtime boots.
 	window.addEventListener("mg-assistant-free", (event) => {
 		update({ free: (event as CustomEvent<FreeTier | null>).detail });
+	});
+	// chat-log.js reports the saved chats after each change.
+	window.addEventListener("mg-chat-threads", (event) => {
+		update({ chats: (event as CustomEvent<ChatThreads>).detail });
 	});
 	return { root, lead, starters };
 }
@@ -254,4 +278,14 @@ export function fillRequest(text: string) {
 	input.value = text;
 	input.focus();
 	input.setSelectionRange(text.length, text.length);
+}
+
+/** Show a saved chat in place of the one on screen (public/agent/chat-log.js). */
+export function openChat(id: string) {
+	window.dispatchEvent(new CustomEvent("mg-chat-open", { detail: id }));
+}
+
+/** Delete a saved chat from this browser (public/agent/chat-log.js). */
+export function deleteChat(id: string) {
+	window.dispatchEvent(new CustomEvent("mg-chat-delete", { detail: id }));
 }
