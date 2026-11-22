@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
-import { Check, Copy, X } from "lucide-react";
+import { Check, Copy, Link as LinkIcon, X } from "lucide-react";
 import {
 	attachHost,
 	deleteChat,
@@ -10,6 +10,7 @@ import {
 	getSnapshot,
 	markAssistantShown,
 	openChat,
+	shareChat,
 	startAssistant,
 	subscribe,
 } from "@/lib/agent/assistant-host";
@@ -73,6 +74,38 @@ function ago(at: number, now: number, locale: string) {
 	return format.format(Math.round(hours / 24), "day");
 }
 
+type ShareStatus = "copied" | "tooLong" | "failed";
+
+/**
+ * Copy a link that is still being made. Safari lets a page write to the clipboard
+ * only during the click, so the pending link goes in as a ClipboardItem promise;
+ * a browser that refuses that gets the plain write once the link is ready.
+ */
+async function copyLink(link: Promise<string | null>): Promise<ShareStatus> {
+	const clipboard = typeof navigator === "undefined" ? undefined : navigator.clipboard;
+	if (!clipboard) return "failed";
+	if (typeof ClipboardItem !== "undefined" && typeof clipboard.write === "function") {
+		try {
+			const blob = link.then((value) => {
+				if (!value) throw new Error("nothing to share");
+				return new Blob([value], { type: "text/plain" });
+			});
+			await clipboard.write([new ClipboardItem({ "text/plain": blob })]);
+			return "copied";
+		} catch {
+			// Either there is no link, or this browser wants the plain write.
+		}
+	}
+	const value = await link;
+	if (!value) return "tooLong";
+	try {
+		await clipboard.writeText(value);
+		return "copied";
+	} catch {
+		return "failed";
+	}
+}
+
 /**
  * The chats this browser saved (public/agent/chat-log.js). Opening one swaps it in
  * for the chat on screen, which stays saved. Both wait while a turn runs.
@@ -82,6 +115,16 @@ function ChatList() {
 	const locale = useLocale();
 	const { chats } = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 	const now = useSyncExternalStore(subscribeMinute, readMinute, readMinuteOnServer);
+	const [shared, setShared] = useState<{ id: string; status: ShareStatus } | null>(null);
+	const timer = useRef(0);
+	useEffect(() => () => window.clearTimeout(timer.current), []);
+	const share = (id: string) => {
+		void copyLink(shareChat(id)).then((status) => {
+			setShared({ id, status });
+			window.clearTimeout(timer.current);
+			timer.current = window.setTimeout(() => setShared(null), 5000);
+		});
+	};
 	if (!chats || !chats.threads.length) return null;
 	return (
 		<section className="space-y-3">
@@ -111,8 +154,22 @@ function ChatList() {
 									{title}
 								</span>
 								<span className="font-display text-[10px] tracking-[0.08em] text-ink-mute uppercase">
+									{thread.shared ? `${t("sharedChat")} · ` : ""}
 									{ago(thread.updatedAt, now, locale)}
 								</span>
+							</button>
+							<button
+								type="button"
+								onClick={() => share(thread.id)}
+								aria-label={t("shareChat", { title })}
+								title={t("shareChat", { title })}
+								className="grid h-7 w-7 shrink-0 place-items-center rounded text-ink-mute transition-colors hover:text-accent focus-visible:text-accent focus-visible:outline-none"
+							>
+								{shared?.id === thread.id && shared.status === "copied" ? (
+									<Check className="h-3.5 w-3.5 text-accent" aria-hidden />
+								) : (
+									<LinkIcon className="h-3.5 w-3.5" aria-hidden />
+								)}
 							</button>
 							<button
 								type="button"
@@ -128,6 +185,9 @@ function ChatList() {
 					);
 				})}
 			</ul>
+			<p aria-live="polite" className="min-h-4 text-xs leading-relaxed text-ink-mute">
+				{shared ? t(`share.${shared.status}`) : ""}
+			</p>
 		</section>
 	);
 }

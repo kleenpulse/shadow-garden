@@ -247,8 +247,8 @@
       "failed": "L’assistant n’a pas pu se charger. Vous pouvez toujours utiliser la page directement.",
       "setupTitle": "Connectez un modèle d’IA pour commencer",
       "setupBody": "Le Guide du Jardin tourne dans votre navigateur, avec le fournisseur d’IA de votre choix. Le plus rapide est de connecter OpenRouter : connectez-vous, approuvez, et discutez avec un modèle gratuit. Ou collez une clé d’un autre fournisseur.",
-      "privacy": "Votre clé reste dans ce navigateur et n’est envoyée qu’à ce fournisseur. Vos messages, et ce qu’affiche cette page, lui sont aussi envoyés. L’assistant ne modifie que le banc d’essai, et vous pouvez annuler. Ce navigateur garde vos discussions récentes. Vous pouvez les ouvrir ou les supprimer sur la page Demander au Jardin.",
-      "freeNote": "Vous avez {count, plural, one {# question gratuite} other {# questions gratuites}} par jour, payées par Motion Garden. Avec l’offre gratuite, vos messages passent par notre serveur vers un modèle d’IA gratuit sur OpenRouter. Nous ne les conservons pas. Ce navigateur garde vos discussions récentes. Vous pouvez les ouvrir ou les supprimer sur la page Demander au Jardin. Pour en poser plus, connectez votre propre modèle d’IA dans les réglages ci-dessous.",
+      "privacy": "Votre clé reste dans ce navigateur et n’est envoyée qu’à ce fournisseur. Vos messages, et ce qu’affiche cette page, lui sont aussi envoyés. L’assistant ne modifie que le banc d’essai, et vous pouvez annuler. Ce navigateur garde vos discussions récentes. Vous pouvez les ouvrir, les partager ou les supprimer sur la page Demander au Jardin.",
+      "freeNote": "Vous avez {count, plural, one {# question gratuite} other {# questions gratuites}} par jour, payées par Motion Garden. Avec l’offre gratuite, vos messages passent par notre serveur vers un modèle d’IA gratuit sur OpenRouter. Nous ne les conservons pas. Ce navigateur garde vos discussions récentes. Vous pouvez les ouvrir, les partager ou les supprimer sur la page Demander au Jardin. Pour en poser plus, connectez votre propre modèle d’IA dans les réglages ci-dessous.",
       "freeSpent": "Vous avez utilisé {count, plural, one {votre question gratuite} other {vos # questions gratuites}} du jour. Connectez votre propre modèle d’IA pour continuer.",
       "freeLeft": "Questions gratuites restantes aujourd’hui : {left} sur {count}",
       "startersLabel": "Essayez de demander",
@@ -2901,8 +2901,15 @@
       "chatsTitle": "Vos discussions",
       "untitledChat": "Discussion",
       "deleteChat": "Supprimer la discussion : {title}",
+      "shareChat": "Copier le lien de partage : {title}",
+      "sharedChat": "Partagée",
+      "share": {
+        "copied": "Lien copié. Toute personne qui a le lien peut lire cette discussion.",
+        "tooLong": "Cette discussion est trop longue pour être partagée.",
+        "failed": "Le lien n’a pas pu être copié."
+      },
       "privacyTitle": "Confidentialité",
-      "privacyBody": "Motion Garden n’utilise aucun serveur pour la discussion. Vos messages vont directement de ce navigateur au fournisseur d’IA choisi, et votre clé n’est envoyée nulle part ailleurs. Ce navigateur garde vos discussions récentes. Vous pouvez les ouvrir ou les supprimer dans Vos discussions."
+      "privacyBody": "Motion Garden n’utilise aucun serveur pour la discussion. Vos messages vont directement de ce navigateur au fournisseur d’IA choisi, et votre clé n’est envoyée nulle part ailleurs. Ce navigateur garde vos discussions récentes. Vous pouvez les ouvrir, les partager ou les supprimer dans Vos discussions. Un lien de partage contient la discussion elle-même. Notre serveur ne la voit jamais."
     }
   },
   "commands": {

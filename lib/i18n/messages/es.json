@@ -247,8 +247,8 @@
       "failed": "No se pudo cargar el asistente. Puedes seguir usando la página directamente.",
       "setupTitle": "Conecta un modelo de IA para empezar",
       "setupBody": "La Guía del Jardín se ejecuta en tu navegador, con el proveedor de IA que elijas. Lo más rápido es conectar OpenRouter: inicia sesión, aprueba y chatea con un modelo gratuito. O pega una clave de otro proveedor.",
-      "privacy": "Tu clave se queda en este navegador y solo va a ese proveedor. Tus mensajes, y lo que muestra esta página, también van a él. El asistente solo cambia el banco de pruebas, y puedes deshacerlo. Este navegador guarda tus chats recientes. Puedes abrirlos o borrarlos en la página Pregunta al Jardín.",
-      "freeNote": "Tienes {count, plural, one {# pregunta gratis} other {# preguntas gratis}} al día, pagadas por Motion Garden. En el plan gratis tus mensajes pasan por nuestro servidor hasta un modelo de IA gratuito en OpenRouter. No los guardamos. Este navegador guarda tus chats recientes. Puedes abrirlos o borrarlos en la página Pregunta al Jardín. Para hacer más, conecta tu propio modelo de IA en los ajustes de abajo.",
+      "privacy": "Tu clave se queda en este navegador y solo va a ese proveedor. Tus mensajes, y lo que muestra esta página, también van a él. El asistente solo cambia el banco de pruebas, y puedes deshacerlo. Este navegador guarda tus chats recientes. Puedes abrirlos, compartirlos o borrarlos en la página Pregunta al Jardín.",
+      "freeNote": "Tienes {count, plural, one {# pregunta gratis} other {# preguntas gratis}} al día, pagadas por Motion Garden. En el plan gratis tus mensajes pasan por nuestro servidor hasta un modelo de IA gratuito en OpenRouter. No los guardamos. Este navegador guarda tus chats recientes. Puedes abrirlos, compartirlos o borrarlos en la página Pregunta al Jardín. Para hacer más, conecta tu propio modelo de IA en los ajustes de abajo.",
       "freeSpent": "Ya usaste {count, plural, one {tu pregunta gratis} other {tus # preguntas gratis}} de hoy. Conecta tu propio modelo de IA para seguir.",
       "freeLeft": "Preguntas gratis que te quedan hoy: {left} de {count}",
       "startersLabel": "Prueba a preguntar",
@@ -2901,8 +2901,15 @@
       "chatsTitle": "Tus chats",
       "untitledChat": "Chat",
       "deleteChat": "Borrar chat: {title}",
+      "shareChat": "Copiar enlace para compartir: {title}",
+      "sharedChat": "Compartido",
+      "share": {
+        "copied": "Enlace copiado. Cualquiera con el enlace puede leer este chat.",
+        "tooLong": "Este chat es demasiado largo para compartirlo.",
+        "failed": "No se pudo copiar el enlace."
+      },
       "privacyTitle": "Privacidad",
-      "privacyBody": "Motion Garden no usa ningún servidor para el chat. Tus mensajes van desde este navegador directamente al proveedor de IA que elijas, y tu clave no se envía a ningún otro sitio. Este navegador guarda tus chats recientes. Puedes abrirlos o borrarlos en Tus chats."
+      "privacyBody": "Motion Garden no usa ningún servidor para el chat. Tus mensajes van desde este navegador directamente al proveedor de IA que elijas, y tu clave no se envía a ningún otro sitio. Este navegador guarda tus chats recientes. Puedes abrirlos, compartirlos o borrarlos en Tus chats. Un enlace para compartir lleva el chat dentro. Nuestro servidor nunca lo ve."
     }
   },
   "commands": {

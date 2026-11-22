@@ -38,6 +38,8 @@ export interface ChatThread {
 	/** The start of the first question, or "" when there is none. */
 	title: string;
 	updatedAt: number;
+	/** True for a chat opened from a share link: someone else wrote its start. */
+	shared: boolean;
 }
 
 /** The saved chats in this browser (public/agent/chat-log.js, threadsView). */
@@ -288,4 +290,15 @@ export function openChat(id: string) {
 /** Delete a saved chat from this browser (public/agent/chat-log.js). */
 export function deleteChat(id: string) {
 	window.dispatchEvent(new CustomEvent("mg-chat-delete", { detail: id }));
+}
+
+/**
+ * A link that opens a saved chat in any browser. The chat travels inside the link,
+ * after the #, so it never reaches the server. Resolves to null when the chat is
+ * not saved, or the assistant has not started yet.
+ */
+export function shareChat(id: string): Promise<string | null> {
+	const detail: { id: string; result: Promise<string | null> | null } = { id, result: null };
+	window.dispatchEvent(new CustomEvent("mg-chat-share", { detail }));
+	return detail.result ?? Promise.resolve(null);
 }

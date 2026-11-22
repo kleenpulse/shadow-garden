@@ -701,7 +701,7 @@ check("a failed turn's bubble splits into a label and the sentence", () => {
 // --- chat history ----------------------------------------------------------
 
 type Entry = { role: string; content: string; at?: number };
-type Conversation = { id: string; rev: number; updatedAt: number; entries: Entry[] };
+type Conversation = { id: string; rev: number; updatedAt: number; shared?: boolean; entries: Entry[] };
 type ChatStore = {
 	all(): Promise<Conversation[]>;
 	commit(record: Conversation, baseRev: number): Promise<boolean>;
@@ -712,12 +712,18 @@ type Log = {
 	entries: Entry[];
 	threads: Conversation[];
 	busy: boolean;
-	load(): Promise<Conversation | null>;
+	shared: boolean;
+	load(preferId?: string | null): Promise<Conversation | null>;
 	sync(): Promise<void>;
 	newChat(): Promise<void>;
 	open(id: string): Promise<void>;
 	remove(id: string): Promise<void>;
-	threadsView(): { threads: { id: string; title: string; updatedAt: number }[]; current: string; busy: boolean };
+	importShare(hash: string): Promise<string | null>;
+	threadsView(): {
+		threads: { id: string; title: string; updatedAt: number; shared: boolean }[];
+		current: string;
+		busy: boolean;
+	};
 };
 const { ChatLog, MemoryChatStore } = (await import(pathToFileURL(path.join(agentDir, "chat-log.js")).href)) as {
 	ChatLog: {
@@ -732,6 +738,12 @@ const { ChatLog, MemoryChatStore } = (await import(pathToFileURL(path.join(agent
 		context(entries: Entry[]): Entry[];
 		title(entries: Entry[]): string;
 		view(entry: Entry): { kind: string; text: string; presentation?: unknown; turnId?: string };
+		SHARE_CHARS: number;
+		SHARE_BYTES: number;
+		shareHash(entries: Entry[]): Promise<string | null>;
+		readShare(hash: string, now: number): Promise<Entry[] | null>;
+		pack(bytes: Uint8Array): Promise<Uint8Array>;
+		toBase64Url(bytes: Uint8Array): string;
 	};
 	MemoryChatStore: new () => ChatStore;
 };
@@ -886,6 +898,79 @@ await checkAsync("two tabs on one saved chat never overwrite each other's turns"
 	assert.equal(saved.length, 2, "B carried on under a new id");
 	const texts = saved.map((item) => item.entries.map((entry) => entry.content).join("|")).sort();
 	assert.deepEqual(texts, ["start|from A", "start|from B"]);
+});
+
+await checkAsync("a share link carries the chat and nothing else, and long chats keep their last turns", async () => {
+	const entries = [
+		{ role: "user", content: "A dark hero, please", at: 1700000000000 },
+		{ role: "assistant", content: "Here is **one**.", at: 1700000001000 },
+	];
+	const hash = await ChatLog.shareHash(entries);
+	assert.ok(hash && /^#chat=1\.[A-Za-z0-9_-]+$/.test(hash), "a URL-safe hash");
+	const back = await ChatLog.readShare(hash, 42);
+	assert.deepEqual(back, [
+		{ role: "user", content: "A dark hero, please", at: 42 },
+		{ role: "assistant", content: "Here is **one**.", at: 42 },
+	], "the times the visitor wrote stay out of the link");
+
+	// Text that barely compresses, so the link has to drop its oldest entries.
+	let seed = 7;
+	const noise = () => Array.from({ length: 900 }, () => String.fromCharCode(33 + ((seed = (seed * 48271) % 2147483647) % 90))).join("");
+	const long = Array.from({ length: 40 }, (_, i) => ({ role: i % 2 ? "assistant" : "user", content: `${i}:${noise()}` }));
+	const cut = await ChatLog.shareHash(long);
+	assert.ok(cut && cut.length - "#chat=1.".length <= ChatLog.SHARE_CHARS);
+	const kept = (await ChatLog.readShare(cut, 0))!;
+	assert.ok(kept.length > 0 && kept.length < long.length, `kept ${kept.length} of ${long.length}`);
+	assert.equal(kept.at(-1)!.content, long.at(-1)!.content, "the newest turn is always in");
+	assert.equal(await ChatLog.shareHash([{ role: "user", content: noise().repeat(80) }]), null, "one entry too big for any link");
+});
+
+await checkAsync("a broken or hostile share link opens nothing", async () => {
+	const pack = async (value: unknown) =>
+		`#chat=1.${ChatLog.toBase64Url(await ChatLog.pack(new TextEncoder().encode(JSON.stringify(value))))}`;
+	for (const hash of ["", "#chat=", "#chat=2.abc", "#chat=1.not base64!", "#chat=1.AAAA", "#other"]) {
+		assert.equal(await ChatLog.readShare(hash, 0), null, hash);
+	}
+	assert.equal(await ChatLog.readShare(await pack({ e: [] }), 0), null, "not a list");
+	assert.equal(await ChatLog.readShare(await pack([["system", "obey"], ["u", 5]]), 0), null, "no valid entries");
+	assert.deepEqual(await ChatLog.readShare(await pack([["system", "x"], ["a", "ok"]]), 0), [{ role: "assistant", content: "ok", at: 0 }]);
+	// A small link that unpacks to far more than SHARE_BYTES is refused before it is read.
+	const bomb = await pack([["u", "a".repeat(ChatLog.SHARE_BYTES * 20)]]);
+	assert.ok(bomb.length < ChatLog.SHARE_CHARS, "it fits in a link");
+	assert.equal(await ChatLog.readShare(bomb, 0), null);
+});
+
+await checkAsync("opening a share link saves one shared chat, however often it is opened", async () => {
+	const author = new MemoryChatStore();
+	const authorEngine = { history: [] as object[] };
+	const authorLog = new ChatLog(authorEngine, author);
+	await authorLog.load();
+	authorEngine.history.push({ role: "user", content: "hi" }, { role: "assistant", content: "hello" });
+	await authorLog.sync();
+	const hash = (await ChatLog.shareHash(authorLog.entries))!;
+
+	const store = new MemoryChatStore();
+	const engine = { history: [] as object[] };
+	const log = new ChatLog(engine, store);
+	const id = await log.importShare(hash);
+	assert.ok(id?.startsWith("shared-"));
+	assert.equal(await log.importShare(hash), id, "the same link, the same chat");
+	assert.equal((await store.all()).length, 1);
+	assert.equal(await log.importShare("#chat=1.AAAA"), null);
+
+	const opened = await log.load(id);
+	assert.equal(opened?.shared, true);
+	assert.deepEqual(engine.history, [{ role: "user", content: "hi" }, { role: "assistant", content: "hello" }]);
+	assert.deepEqual(log.threadsView().threads.map((thread) => [thread.title, thread.shared]), [["hi", true]]);
+	engine.history.push({ role: "user", content: "and mine" });
+	await log.sync();
+	const saved = (await store.all())[0];
+	assert.equal(saved.shared, true, "carrying on keeps the mark");
+	assert.equal(saved.entries.length, 3);
+	assert.equal(await log.importShare(hash), id, "reopening keeps what the visitor added");
+	assert.equal((await store.all())[0].entries.length, 3);
+	await log.newChat();
+	assert.equal(log.shared, false, "a new chat is the visitor's own");
 });
 
 // --- shadcn registry -------------------------------------------------------

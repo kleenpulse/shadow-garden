@@ -10,6 +10,12 @@
 // for the screen; the model gets only the last CONTEXT_ENTRIES, the bound engine.js
 // already puts on a live chat, so a restored chat costs no more per question than
 // one that was never reloaded. Nothing here is sent to a server.
+//
+// A chat can also be shared as a link: /ask#chat=1.<data>, where the data is the
+// chat itself, compressed. The part after # never leaves the browser, so the server
+// never sees a shared chat. Opening the link saves the chat here as a new one,
+// marked as shared: anyone can write such a link, so the screen says so, and its
+// links show where they go instead of being clickable.
 
 /**
  * The saved chats in IndexedDB, one record per chat, so a turn rewrites only its
@@ -194,6 +200,27 @@ export class ChatLog {
   static DELETE_EVENT = "mg-chat-delete";
 
   /**
+   * The event the page sends to share a chat. Its detail is {id, result}; the log
+   * sets result to a promise of the link, or of null when the chat cannot be shared.
+   */
+  static SHARE_EVENT = "mg-chat-share";
+
+  /** The page a share link opens. */
+  static SHARE_PATH = "/ask";
+
+  /** The longest share data, in characters. Longer chats share their last turns. */
+  static SHARE_CHARS = 16_000;
+
+  /** The most text a share link may hold once opened, in bytes. Guards against a link that unpacks to far more than it looks. */
+  static SHARE_BYTES = 64_000;
+
+  /** The line above a chat opened from a share link. */
+  static SHARED_LABEL = "Shared chat, opened from a link. Anyone can make a link like this, so it may not be what the assistant said.";
+
+  /** The line shown when a share link is broken. */
+  static SHARE_FAILED = "This share link could not be opened. It may be cut short or changed.";
+
+  /**
    * Sort the stored records into the chats to keep, newest first, and the ids to
    * delete: malformed, too old, empty, or past MAX_CONVERSATIONS. A bad record never
    * breaks the chat.
@@ -220,6 +247,7 @@ export class ChatLog {
         id: item.id,
         rev: typeof item.rev === "number" ? item.rev : 0,
         updatedAt: item.updatedAt,
+        shared: item.shared === true,
         entries: entries.slice(-ChatLog.MAX_ENTRIES),
       });
     }
@@ -358,6 +386,148 @@ export class ChatLog {
   }
 
   /**
+   * The share data for a chat: its entries as [role, content] pairs, without the
+   * times they were written, compressed and made safe for a URL. A chat too long
+   * for SHARE_CHARS drops its oldest entries until it fits.
+   *
+   * :param entries: A conversation's entries.
+   * :return: The hash, "#chat=1.<data>", or null when not even the last entry fits.
+   */
+  static async shareHash(entries) {
+    let rows = entries
+      .filter(ChatLog.isEntry)
+      .slice(-ChatLog.MAX_ENTRIES)
+      .map((entry) => [entry.role === "user" ? "u" : "a", entry.content]);
+    const bytes = (value) => new TextEncoder().encode(JSON.stringify(value)).length;
+    while (rows.length && bytes(rows) > ChatLog.SHARE_BYTES) {
+      rows = rows.slice(1);
+    }
+    while (rows.length) {
+      const data = ChatLog.toBase64Url(await ChatLog.pack(new TextEncoder().encode(JSON.stringify(rows))));
+      if (data.length <= ChatLog.SHARE_CHARS) {
+        return `#chat=1.${data}`;
+      }
+      // Drop about as many entries as the data is over, at least one.
+      rows = rows.slice(Math.max(1, Math.ceil(rows.length * (1 - ChatLog.SHARE_CHARS / data.length))));
+    }
+    return null;
+  }
+
+  /**
+   * Read a share hash back into entries. Anything malformed, from a link cut short
+   * to one that unpacks past SHARE_BYTES, gives null.
+   *
+   * :param hash: location.hash.
+   * :param now: The time to stamp the entries with.
+   * :return: The entries, or null.
+   */
+  static async readShare(hash, now) {
+    const match = /^#chat=1\.([A-Za-z0-9_-]+)$/.exec(hash || "");
+    if (!match || match[1].length > ChatLog.SHARE_CHARS) {
+      return null;
+    }
+    try {
+      const raw = await ChatLog.unpack(ChatLog.fromBase64Url(match[1]), ChatLog.SHARE_BYTES);
+      const rows = raw === null ? null : JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(raw));
+      if (!Array.isArray(rows)) {
+        return null;
+      }
+      const entries = rows
+        .filter((row) => Array.isArray(row) && (row[0] === "u" || row[0] === "a") && typeof row[1] === "string")
+        .slice(-ChatLog.MAX_ENTRIES)
+        .map((row) => ({ role: row[0] === "u" ? "user" : "assistant", content: row[1], at: now }));
+      return entries.length ? entries : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /**
+   * :param hash: A share hash.
+   * :return: True when the hash is a share link's, well formed or not.
+   */
+  static isShareHash(hash) {
+    return typeof hash === "string" && hash.startsWith("#chat=");
+  }
+
+  /**
+   * The id a shared chat is saved under: the same link always gives the same id,
+   * so opening it twice opens one chat instead of saving two.
+   *
+   * :param hash: A share hash.
+   * :return: The id.
+   */
+  static async shareId(hash) {
+    if (typeof crypto === "undefined" || !crypto.subtle) {
+      return ChatLog.newId();
+    }
+    const digest = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(hash)));
+    return `shared-${[...digest.slice(0, 16)].map((byte) => byte.toString(16).padStart(2, "0")).join("")}`;
+  }
+
+  /**
+   * :param bytes: A Uint8Array.
+   * :return: It, deflated.
+   */
+  static async pack(bytes) {
+    const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream("deflate-raw"));
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }
+
+  /**
+   * Inflate, stopping as soon as the output passes limit.
+   *
+   * :param bytes: Deflated bytes.
+   * :param limit: The most bytes to accept.
+   * :return: The bytes, or null when they pass limit. Rejects on bad data.
+   */
+  static async unpack(bytes, limit) {
+    const reader = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw")).getReader();
+    const chunks = [];
+    let size = 0;
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) {
+        break;
+      }
+      size += value.length;
+      if (size > limit) {
+        await reader.cancel();
+        return null;
+      }
+      chunks.push(value);
+    }
+    const out = new Uint8Array(size);
+    let at = 0;
+    for (const chunk of chunks) {
+      out.set(chunk, at);
+      at += chunk.length;
+    }
+    return out;
+  }
+
+  /**
+   * :param bytes: A Uint8Array.
+   * :return: Base64url, without padding.
+   */
+  static toBase64Url(bytes) {
+    let binary = "";
+    for (let i = 0; i < bytes.length; i += 0x8000) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+    }
+    return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  /**
+   * :param text: Base64url, with or without padding.
+   * :return: The bytes. Throws on text that is not base64.
+   */
+  static fromBase64Url(text) {
+    const binary = atob(text.replace(/-/g, "+").replace(/_/g, "/"));
+    return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  }
+
+  /**
    * :param engine: The runtime engine. Its history is read after each turn.
    * :param store: An IdbChatStore or a MemoryChatStore.
    */
@@ -390,6 +560,7 @@ export class ChatLog {
   begin(conversation) {
     this.id = conversation ? conversation.id : ChatLog.newId();
     this.rev = conversation ? conversation.rev : 0;
+    this.shared = !!(conversation && conversation.shared);
     this.entries = conversation ? conversation.entries.slice() : [];
   }
 
@@ -411,11 +582,12 @@ export class ChatLog {
    * Read the saved chats, delete the stale ones, and take the newest as this tab's,
    * with its last turns back in the engine. The screen is put back by render().
    *
+   * :param preferId: A chat to take instead of the newest, if it is saved.
    * :return: The conversation, or null when there is none.
    */
-  async load() {
+  async load(preferId = null) {
     await this.refresh();
-    const latest = this.threads[0];
+    const latest = this.threads.find((item) => item.id === preferId) || this.threads[0];
     if (latest) {
       this.adopt(latest);
     }
@@ -478,19 +650,121 @@ export class ChatLog {
    */
   async save() {
     this.entries = this.entries.slice(-ChatLog.MAX_ENTRIES);
-    let record = { id: this.id, rev: this.rev + 1, updatedAt: Date.now(), entries: this.entries.slice() };
+    let record = {
+      id: this.id,
+      rev: this.rev + 1,
+      updatedAt: Date.now(),
+      shared: this.shared,
+      entries: this.entries.slice(),
+    };
     if (!(await this.store.commit(record, this.rev))) {
       record = { ...record, id: ChatLog.newId(), rev: 1 };
       await this.store.commit(record, 0);
     }
     this.id = record.id;
     this.rev = record.rev;
+    await this.remember(record);
+  }
+
+  /**
+   * Put a just-saved record at the top of the list, and delete what falls off the end.
+   *
+   * :param record: The saved record.
+   */
+  async remember(record) {
     const threads = [record, ...this.threads.filter((item) => item.id !== record.id)];
     this.threads = threads.slice(0, ChatLog.MAX_CONVERSATIONS);
     for (const extra of threads.slice(ChatLog.MAX_CONVERSATIONS)) {
       await this.store.remove(extra.id);
     }
     this.publish();
+  }
+
+  /**
+   * Save the chat in a share hash as a shared chat. A link opened before keeps the
+   * chat it saved then, with whatever the visitor added since.
+   *
+   * :param hash: location.hash, from a share link.
+   * :return: The chat's id, or null when the link is broken.
+   */
+  async importShare(hash) {
+    const now = Date.now();
+    const entries = await ChatLog.readShare(hash, now);
+    if (!entries) {
+      return null;
+    }
+    const id = await ChatLog.shareId(hash);
+    await this.refresh();
+    if (this.threads.some((item) => item.id === id)) {
+      return id;
+    }
+    const record = { id, rev: 1, updatedAt: now, shared: true, entries };
+    // False means another tab saved this link a moment ago: the chat is there either way.
+    if (await this.store.commit(record, 0)) {
+      await this.remember(record);
+    } else {
+      await this.refresh();
+    }
+    return id;
+  }
+
+  /**
+   * Take a share hash off the address bar, so a reload or a copied address does not
+   * carry it on. The page's own history state is kept, since the router keeps its own
+   * there.
+   *
+   * :return: The hash, or null when the address holds no share link.
+   */
+  takeShare() {
+    if (typeof location === "undefined" || !ChatLog.isShareHash(location.hash)) {
+      return null;
+    }
+    const hash = location.hash;
+    history.replaceState(history.state, "", `${location.pathname}${location.search}`);
+    return hash;
+  }
+
+  /**
+   * A share link was opened in a tab where the assistant already runs: save it and
+   * put it on screen, or say the link is broken.
+   */
+  async receiveShare() {
+    const hash = this.takeShare();
+    if (!hash) {
+      return;
+    }
+    const id = await this.enqueue(() => this.importShare(hash));
+    if (id) {
+      await this.open(id);
+      return;
+    }
+    const msgs = this.root && this.root.querySelector("#ns-msgs");
+    if (msgs) {
+      ChatLog.note(msgs, ChatLog.SHARE_FAILED);
+    }
+  }
+
+  /**
+   * :param id: A saved chat.
+   * :return: A promise of its share link, or of null when it cannot be shared.
+   */
+  async shareLink(id) {
+    const conversation = this.threads.find((item) => item.id === id);
+    const hash = conversation ? await ChatLog.shareHash(conversation.entries) : null;
+    return hash ? `${location.origin}${ChatLog.SHARE_PATH}${hash}` : null;
+  }
+
+  /**
+   * :param msgs: The runtime's message list.
+   * :param text: A line to show above what follows.
+   * :return: The line.
+   */
+  static note(msgs, text) {
+    const label = document.createElement("p");
+    label.className = "mg-history-label";
+    label.textContent = text;
+    msgs.append(label);
+    return label;
   }
 
   /** New chat: start another. The one on screen stays saved, in the list. */
@@ -562,7 +836,12 @@ export class ChatLog {
   /** :return: What the page needs to list the chats. */
   threadsView() {
     return {
-      threads: this.threads.map((item) => ({ id: item.id, title: ChatLog.title(item.entries), updatedAt: item.updatedAt })),
+      threads: this.threads.map((item) => ({
+        id: item.id,
+        title: ChatLog.title(item.entries),
+        updatedAt: item.updatedAt,
+        shared: item.shared === true,
+      })),
       current: this.id,
       busy: this.busy,
     };
@@ -610,10 +889,7 @@ export class ChatLog {
       msgs.append(el);
       return el;
     };
-    const label = document.createElement("p");
-    label.className = "mg-history-label";
-    label.textContent = ChatLog.LABEL;
-    msgs.append(label);
+    const label = ChatLog.note(msgs, conversation.shared ? ChatLog.SHARED_LABEL : ChatLog.LABEL);
     for (const entry of conversation.entries) {
       const view = ChatLog.view(entry);
       if (view.kind === "user") {
@@ -634,6 +910,19 @@ export class ChatLog {
               control.disabled = true;
             }
           }
+        }
+      }
+    }
+    if (conversation.shared) {
+      // Whoever made the link wrote these words, so a link in them shows where it
+      // goes rather than taking the visitor there on a click.
+      for (let node = label.nextElementSibling; node; node = node.nextElementSibling) {
+        for (const link of node.querySelectorAll("a")) {
+          const href = link.getAttribute("href") || "";
+          const text = link.textContent || "";
+          const plain = document.createElement("span");
+          plain.textContent = !href || text === href ? text : `${text} (${href})`;
+          link.replaceWith(plain);
         }
       }
     }
@@ -665,6 +954,13 @@ export class ChatLog {
     }
     window.addEventListener(ChatLog.OPEN_EVENT, (event) => this.open(event.detail));
     window.addEventListener(ChatLog.DELETE_EVENT, (event) => this.remove(event.detail));
+    window.addEventListener(ChatLog.SHARE_EVENT, (event) => {
+      if (event.detail && typeof event.detail === "object") {
+        event.detail.result = this.shareLink(event.detail.id);
+      }
+    });
+    // A share link pasted into this tab's address bar changes only the hash.
+    window.addEventListener("hashchange", () => this.receiveShare());
     // Another tab may have saved or deleted a chat while this one was hidden.
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") {
@@ -672,10 +968,15 @@ export class ChatLog {
       }
     });
     try {
-      const conversation = await this.load();
+      const hash = this.takeShare();
+      const sharedId = hash ? await this.importShare(hash) : null;
+      const conversation = await this.load(sharedId);
       const msgs = root.querySelector("#ns-msgs");
       if (conversation && msgs) {
         await this.render(msgs, conversation);
+      }
+      if (hash && !sharedId && msgs) {
+        ChatLog.note(msgs, ChatLog.SHARE_FAILED);
       }
     } catch (error) {
       console.error("Could not restore the saved chat", error);
