@@ -16,6 +16,7 @@ import { useTheme } from "next-themes";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
+import { Sparkles } from "lucide-react";
 import PreviewBoundary from "@/components/shell/PreviewBoundary";
 import CookBookIcon from "@/components/icons/cook-book";
 import type { LandingData } from "@/components/landing/data";
@@ -417,21 +418,43 @@ export default function LandingHero({
 					{t("description")}
 				</motion.p>
 
+				<motion.p
+					variants={rise}
+					className="mt-4 max-w-xl font-sans text-sm text-ink-dim sm:text-base"
+				>
+					<span className="me-2 inline-block rounded-sm bg-accent/15 px-1.5 py-0.5 align-middle font-display text-[10px] uppercase tracking-[0.2em] text-accent">
+						{t("agentBadge")}
+					</span>
+					{t("agentLine")}
+				</motion.p>
+
+				{/* Phones get two buttons: the catalog and the assistant. The cook book
+				    joins from sm, and the row may wrap there, since some locales run
+				    long. Labels may break to two lines inside a button rather than
+				    overflow it, hence min-h instead of a fixed height. */}
 				<motion.div
 					variants={rise}
-					className="pointer-events-auto mt-10 flex  items-center gap-3 font-display text-[10px] md:text-[11px] uppercase tracking-[0.15em]"
+					className="pointer-events-auto mt-10 flex items-stretch gap-3 font-display text-[10px] uppercase tracking-[0.15em] sm:flex-wrap md:text-[11px]"
 				>
 					<Link
 						href="/components"
 						prefetch
-						className="rounded-md bg-accent px-3 w-full sm:w-auto sm:px-5 flex items-center h-8 text-on-accent transition-colors hover:bg-accent-hover"
+						className="flex min-h-8 w-full items-center justify-center rounded-md bg-accent px-3 py-1 text-center leading-tight text-on-accent transition-colors hover:bg-accent-hover sm:w-auto sm:px-5"
 					>
 						{t("ctaCatalog")}
 					</Link>
 					<Link
+						href="/ask"
+						prefetch
+						className="inline-flex min-h-8 w-full items-center justify-center gap-1.5 rounded-md border border-accent-muted px-3 py-1 text-center leading-tight text-ink transition-colors hover:border-accent hover:text-accent sm:w-auto sm:px-5"
+					>
+						<Sparkles className="size-4 shrink-0 text-accent" aria-hidden />
+						{t("ctaAsk")}
+					</Link>
+					<Link
 						href="/cookbook"
 						prefetch
-						className="rounded-md border border-hairline w-full sm:w-auto px-3 sm:px-5  h-8 text-ink-dim transition-colors hover:border-accent-muted hover:text-ink inline-flex items-center gap-1.5"
+						className="hidden min-h-8 w-auto items-center gap-1.5 rounded-md border border-hairline px-5 py-1 leading-tight text-ink-dim transition-colors hover:border-accent-muted hover:text-ink sm:inline-flex"
 					>
 						{t("ctaCookbook")}
 						<CookBookIcon className="size-5.5" aria-hidden />
